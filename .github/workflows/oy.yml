@@ -28,7 +28,10 @@ jobs:
     - name: Collect Subscribe
       id: collect
       run: |
-        cd aggregate
+        cd aggregate/data
+        mv domains.txt "domains_$(date +'%Y-%m-%d').txt"
+        mv valid-domains.txt "valid-domains_$(date +'%Y-%m-%d').txt"
+        cd ..
         python -u subscribe/collect.py
       
     - name: Create/Update Gist
