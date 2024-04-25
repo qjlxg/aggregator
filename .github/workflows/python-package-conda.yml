@@ -37,6 +37,5 @@ jobs:
       run: |
         git add aggregate/subconverter/subconverter-linux
         git add aggregate/data
-        git add aggregate/proxies.yaml
         git commit -m "Add generated output.yaml"
         git push
