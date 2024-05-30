@@ -24,6 +24,9 @@ jobs:
       run: |
         pip3 install pyYAML requests tqdm
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Remove old domains.txt
+      run: |
+        rm -f aggregate/data/domains.txt
 
     - name: Collect Subscribe
       id: collect
