@@ -1,16 +1,30 @@
 proxies:
-- cipher: aes-256-gcm
-  name: A台湾
-  password: f9166b28-151d-439b-8e61-573f2d11ad15
-  port: 37070
-  server: hinet-wap.myddns.me
+- name: 55阿什本ARM
+  password: 22c3b61a-1ce1-4cc5-ae86-943ad2830e34
+  port: 443
+  server: 55arm.1365365.xyz
+  skip-cert-verify: true
+  type: trojan
+  udp: true
+- name: 59春川AMD2
+  password: 22c3b61a-1ce1-4cc5-ae86-943ad2830e34
+  port: 443
+  server: 59amd2.1365365.xyz
+  skip-cert-verify: true
+  type: trojan
+  udp: true
+- cipher: aes-128-gcm
+  name: AU | 澳洲01
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15018
+  server: 34501.cniw4-dcc3vq.com
   type: ss
   udp: true
-- cipher: chacha20-ietf-poly1305
-  name: FG日本01|杭日|1.5X
-  password: 5236da44-831c-4f6f-a0d9-cc8baa5b98fb
-  port: 15427
-  server: hz443.ewenhot.top
+- cipher: aes-256-gcm
+  name: A台湾
+  password: 43a75b75-1c25-496b-8bb6-234d677c9b5c
+  port: 37070
+  server: hinet-wap.myddns.me
   type: ss
   udp: true
 - alterId: 0
@@ -23,11 +37,200 @@ proxies:
   tls: false
   type: vmess
   udp: true
-  uuid: f9166b28-151d-439b-8e61-573f2d11ad15
+  uuid: 43a75b75-1c25-496b-8bb6-234d677c9b5c
   ws-opts:
     headers:
       Host: usfree.1234585.xyz
     path: /
+- cipher: aes-128-gcm
+  name: HK | 香港01
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15000
+  server: 34501.cniw4-dcc3vq.com
+  type: ss
+  udp: true
+- cipher: aes-128-gcm
+  name: HK | 香港02
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15001
+  server: 34501.cniw4-dcc3vq.com
+  type: ss
+  udp: true
+- cipher: aes-128-gcm
+  name: HK | 香港03
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15002
+  server: 34501.cniw4-dcc3vq.com
+  type: ss
+  udp: true
+- cipher: aes-128-gcm
+  name: JP | 日本01
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15006
+  server: 34501.cniw4-dcc3vq.com
+  type: ss
+  udp: true
+- cipher: aes-128-gcm
+  name: JP | 日本02
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15007
+  server: 34501.cniw4-dcc3vq.com
+  type: ss
+  udp: true
+- cipher: aes-128-gcm
+  name: JP | 日本03
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15008
+  server: 34501.cniw4-dcc3vq.com
+  type: ss
+  udp: true
+- cipher: aes-128-gcm
+  name: SG | 新加坡01
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15003
+  server: 34501.cniw4-dcc3vq.com
+  type: ss
+  udp: true
+- cipher: aes-128-gcm
+  name: SG | 新加坡02
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15004
+  server: 34501.cniw4-dcc3vq.com
+  type: ss
+  udp: true
+- cipher: aes-128-gcm
+  name: SG | 新加坡03
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15005
+  server: 34501.cniw4-dcc3vq.com
+  type: ss
+  udp: true
+- cipher: aes-128-gcm
+  name: TW | 台湾01
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15011
+  server: 34501.cniw4-dcc3vq.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: UK-LONDON-01
+  network: ws
+  port: 443
+  server: cdn7.internetcdn.ggff.net
+  servername: londonengland-unitedkingdom.worldcdn.eu.org
+  skip-cert-verify: true
+  tls: true
+  type: vmess
+  udp: true
+  uuid: c7a887f8-4235-4bf2-b14c-d902727389f6
+  ws-opts:
+    headers:
+      Host: londonengland-unitedkingdom.worldcdn.eu.org
+    path: /microsoft/TG@pwsair?ed=2048
+- alterId: 0
+  cipher: auto
+  name: US | FREE6U3 | FREENODE
+  network: ws
+  port: 8880
+  server: exclusively-foriran.internetcdn.ggff.net
+  skip-cert-verify: true
+  tls: false
+  type: vmess
+  udp: true
+  uuid: c7a887f8-4235-4bf2-b14c-d902727389f6
+  ws-opts:
+    headers:
+      Host: losangeles.sanjose.xhzshop.link
+    path: /microsoft/TG@pwsair/internetcdn?ed=2048
+- cipher: aes-128-gcm
+  name: US | 美国01
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15009
+  server: 34501.cniw4-dcc3vq.com
+  type: ss
+  udp: true
+- cipher: aes-128-gcm
+  name: US | 美国02
+  password: e3624050-5045-43f9-9268-e1b36e760bf5
+  port: 15010
+  server: 34501.cniw4-dcc3vq.com
+  type: ss
+  udp: true
+- alterId: 0
+  cipher: auto
+  name: US-DRAPER-3
+  network: ws
+  port: 8080
+  server: cdnikuancdnikuan.internetcdn.ggff.net
+  skip-cert-verify: true
+  tls: false
+  type: vmess
+  udp: true
+  uuid: c7a887f8-4235-4bf2-b14c-d902727389f6
+  ws-opts:
+    headers:
+      Host: 26022940dc1234123455cf1.us.pisces.eu.org
+    path: /Microsoftupdate?ed=2048
+- alterId: 0
+  cipher: auto
+  name: US-NEWYORK2
+  network: ws
+  port: 8880
+  server: cdn.internetcdn.orgs.hk
+  skip-cert-verify: true
+  tls: false
+  type: vmess
+  udp: true
+  uuid: c7a887f8-4235-4bf2-b14c-d902727389f6
+  ws-opts:
+    headers:
+      Host: losangeles.sanjose.xhzshop.link
+    path: /microsoft/TG@pwsair/internetcdn?ed=2048
+- alterId: 0
+  cipher: auto
+  name: US-NEWYORK3
+  network: ws
+  port: 8880
+  server: cdn3.internetcdn.ggff.net
+  skip-cert-verify: true
+  tls: false
+  type: vmess
+  udp: true
+  uuid: c7a887f8-4235-4bf2-b14c-d902727389f6
+  ws-opts:
+    headers:
+      Host: losangeles.sanjose.xhzshop.link
+    path: /microsoft/TG@pwsair/internetcdn?ed=2048
+- alterId: 0
+  cipher: auto
+  name: US-NEWYORK5
+  network: ws
+  port: 8880
+  server: cdnikuancdnikuan.internetcdn.ggff.net
+  skip-cert-verify: true
+  tls: false
+  type: vmess
+  udp: true
+  uuid: c7a887f8-4235-4bf2-b14c-d902727389f6
+  ws-opts:
+    headers:
+      Host: losangeles.sanjose.xhzshop.link
+    path: /microsoft/TG@pwsair/internetcdn?ed=2048
+- cipher: chacha20-ietf-poly1305
+  name: 日本01丨山东移动优化
+  password: 4c5a697b-fcf6-4210-bdec-a6c24bc1f72b
+  port: 18434
+  server: afa007d388783f3a.cdn.jiashule.com
+  type: ss
+  udp: true
+- cipher: chacha20-ietf-poly1305
+  name: 日本01丨移动优化-02
+  password: 4c5a697b-fcf6-4210-bdec-a6c24bc1f72b
+  port: 18434
+  server: a79e3883418368ff.cdn.jiashule.com
+  type: ss
+  udp: true
 - alterId: 0
   cipher: auto
   name: 日本A
@@ -38,430 +241,68 @@ proxies:
   tls: false
   type: vmess
   udp: true
-  uuid: f9166b28-151d-439b-8e61-573f2d11ad15
+  uuid: 43a75b75-1c25-496b-8bb6-234d677c9b5c
   ws-opts:
     headers:
       Host: dpxpg5vk2nkog.cloudfront.net
     path: /
-- name: 55阿什本ARM-1A
-  password: 5fd2bdd9-0cf9-44ab-9dcb-97a185f561c9
-  port: 443
-  server: 55arm.1365365.xyz
+- alterId: 0
+  cipher: auto
+  name: 香港 1 LV0-HK
+  port: 22300
+  server: 223.113.130.62
   skip-cert-verify: true
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 8257cbea-e47c-4f42-be4e-c7ced4974207
+- name: 日本 01 直连-1A
+  password: 9a029b8a-972d-4bae-8bbc-5a08f5daa5fc
+  port: 20220
+  server: zzjp01.gutingting.com
+  skip-cert-verify: true
+  sni: zzjp01.gutingting.com
   type: trojan
   udp: true
-- name: 55阿什本ARM-1B
-  password: 13ffd0ed-9e85-4812-bcb7-bbae1a05cea2
-  port: 443
-  server: 55arm.1365365.xyz
+- name: 日本 01 直连-1B
+  password: ef72d388-ee3f-49a5-921e-dae2adf6ef73
+  port: 20220
+  server: zzjp01.gutingting.com
   skip-cert-verify: true
+  sni: zzjp01.gutingting.com
   type: trojan
   udp: true
-- name: 59春川AMD2-1A
-  password: 5fd2bdd9-0cf9-44ab-9dcb-97a185f561c9
-  port: 443
-  server: 59amd2.1365365.xyz
+- name: 日本 02 直连-1A
+  password: 9a029b8a-972d-4bae-8bbc-5a08f5daa5fc
+  port: 20221
+  server: zzjp01.gutingting.com
   skip-cert-verify: true
+  sni: zzjp01.gutingting.com
   type: trojan
   udp: true
-- name: 59春川AMD2-1B
-  password: 13ffd0ed-9e85-4812-bcb7-bbae1a05cea2
-  port: 443
-  server: 59amd2.1365365.xyz
+- name: 日本 02 直连-1B
+  password: ef72d388-ee3f-49a5-921e-dae2adf6ef73
+  port: 20221
+  server: zzjp01.gutingting.com
   skip-cert-verify: true
+  sni: zzjp01.gutingting.com
   type: trojan
   udp: true
-- cipher: aes-128-gcm
-  name: AU | 澳洲01-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15018
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: AU | 澳洲01-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15018
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: HK | 香港01-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15000
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: HK | 香港01-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15000
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: HK | 香港02-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15001
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: HK | 香港02-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15001
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: HK | 香港03-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15002
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: HK | 香港03-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15002
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: JP | 日本01-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15006
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: JP | 日本01-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15006
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: JP | 日本02-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15007
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: JP | 日本02-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15007
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: JP | 日本03-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15008
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: JP | 日本03-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15008
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: SG | 新加坡01-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15003
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: SG | 新加坡01-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15003
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: SG | 新加坡02-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15004
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: SG | 新加坡02-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15004
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: SG | 新加坡03-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15005
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: SG | 新加坡03-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15005
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: TW | 台湾01-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15011
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: TW | 台湾01-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15011
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: UK-LONDON-01-1A
-  network: ws
-  port: 443
-  server: cdn7.internetcdn.ggff.net
-  servername: londonengland-unitedkingdom.worldcdn.eu.org
+- name: 美国 01 直连-1A
+  password: 9a029b8a-972d-4bae-8bbc-5a08f5daa5fc
+  port: 20220
+  server: zzus01.gutingting.com
   skip-cert-verify: true
-  tls: true
-  type: vmess
+  sni: zzus01.gutingting.com
+  type: trojan
   udp: true
-  uuid: c2deb669-6068-467f-bd79-e81e88bd70ff
-  ws-opts:
-    headers:
-      Host: londonengland-unitedkingdom.worldcdn.eu.org
-    path: /microsoft/TG@pwsair?ed=2048
-- alterId: 0
-  cipher: auto
-  name: UK-LONDON-01-1B
-  network: ws
-  port: 443
-  server: cdn7.internetcdn.ggff.net
-  servername: londonengland-unitedkingdom.worldcdn.eu.org
+- name: 美国 01 直连-1B
+  password: ef72d388-ee3f-49a5-921e-dae2adf6ef73
+  port: 20220
+  server: zzus01.gutingting.com
   skip-cert-verify: true
-  tls: true
-  type: vmess
-  udp: true
-  uuid: 789d3c22-a328-4367-ba04-964389a85224
-  ws-opts:
-    headers:
-      Host: londonengland-unitedkingdom.worldcdn.eu.org
-    path: /microsoft/TG@pwsair?ed=2048
-- alterId: 0
-  cipher: auto
-  name: US | FREE6U3 | FREENODE-1A
-  network: ws
-  port: 8880
-  server: exclusively-foriran.internetcdn.ggff.net
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: c2deb669-6068-467f-bd79-e81e88bd70ff
-  ws-opts:
-    headers:
-      Host: losangeles.sanjose.xhzshop.link
-    path: /microsoft/TG@pwsair/internetcdn?ed=2048
-- alterId: 0
-  cipher: auto
-  name: US | FREE6U3 | FREENODE-1B
-  network: ws
-  port: 8880
-  server: exclusively-foriran.internetcdn.ggff.net
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 789d3c22-a328-4367-ba04-964389a85224
-  ws-opts:
-    headers:
-      Host: losangeles.sanjose.xhzshop.link
-    path: /microsoft/TG@pwsair/internetcdn?ed=2048
-- cipher: aes-128-gcm
-  name: US | 美国01-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15009
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: US | 美国01-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15009
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: US | 美国02-1A
-  password: ebef13d1-39b1-4c30-98db-f6ddb03c28ae
-  port: 15010
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: US | 美国02-1B
-  password: 5bcb7d0c-e52a-4ace-955e-d55e4f59a91d
-  port: 15010
-  server: 34501.cniw4-dcc3vq.com
-  type: ss
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: US-DRAPER-3-1A
-  network: ws
-  port: 8080
-  server: cdnikuancdnikuan.internetcdn.ggff.net
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: c2deb669-6068-467f-bd79-e81e88bd70ff
-  ws-opts:
-    headers:
-      Host: 26022940dc1234123455cf1.us.pisces.eu.org
-    path: /Microsoftupdate?ed=2048
-- alterId: 0
-  cipher: auto
-  name: US-DRAPER-3-1B
-  network: ws
-  port: 8080
-  server: cdnikuancdnikuan.internetcdn.ggff.net
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 789d3c22-a328-4367-ba04-964389a85224
-  ws-opts:
-    headers:
-      Host: 26022940dc1234123455cf1.us.pisces.eu.org
-    path: /Microsoftupdate?ed=2048
-- alterId: 0
-  cipher: auto
-  name: US-NEWYORK2-1A
-  network: ws
-  port: 8880
-  server: cdn.internetcdn.orgs.hk
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: c2deb669-6068-467f-bd79-e81e88bd70ff
-  ws-opts:
-    headers:
-      Host: losangeles.sanjose.xhzshop.link
-    path: /microsoft/TG@pwsair/internetcdn?ed=2048
-- alterId: 0
-  cipher: auto
-  name: US-NEWYORK2-1B
-  network: ws
-  port: 8880
-  server: cdn.internetcdn.orgs.hk
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 789d3c22-a328-4367-ba04-964389a85224
-  ws-opts:
-    headers:
-      Host: losangeles.sanjose.xhzshop.link
-    path: /microsoft/TG@pwsair/internetcdn?ed=2048
-- alterId: 0
-  cipher: auto
-  name: US-NEWYORK3-1A
-  network: ws
-  port: 8880
-  server: cdn3.internetcdn.ggff.net
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: c2deb669-6068-467f-bd79-e81e88bd70ff
-  ws-opts:
-    headers:
-      Host: losangeles.sanjose.xhzshop.link
-    path: /microsoft/TG@pwsair/internetcdn?ed=2048
-- alterId: 0
-  cipher: auto
-  name: US-NEWYORK3-1B
-  network: ws
-  port: 8880
-  server: cdn3.internetcdn.ggff.net
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 789d3c22-a328-4367-ba04-964389a85224
-  ws-opts:
-    headers:
-      Host: losangeles.sanjose.xhzshop.link
-    path: /microsoft/TG@pwsair/internetcdn?ed=2048
-- alterId: 0
-  cipher: auto
-  name: US-NEWYORK5-1A
-  network: ws
-  port: 8880
-  server: cdnikuancdnikuan.internetcdn.ggff.net
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: c2deb669-6068-467f-bd79-e81e88bd70ff
-  ws-opts:
-    headers:
-      Host: losangeles.sanjose.xhzshop.link
-    path: /microsoft/TG@pwsair/internetcdn?ed=2048
-- alterId: 0
-  cipher: auto
-  name: US-NEWYORK5-1B
-  network: ws
-  port: 8880
-  server: cdnikuancdnikuan.internetcdn.ggff.net
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 789d3c22-a328-4367-ba04-964389a85224
-  ws-opts:
-    headers:
-      Host: losangeles.sanjose.xhzshop.link
-    path: /microsoft/TG@pwsair/internetcdn?ed=2048
-- cipher: chacha20-ietf-poly1305
-  name: 日本01丨山东移动优化-1A
-  password: 6d11084a-58d2-4d78-a873-9af67f4c7560
-  port: 18434
-  server: afa007d388783f3a.cdn.jiashule.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 日本01丨山东移动优化-1B
-  password: 04f07301-911f-41c1-a190-a6dfa80b0784
-  port: 18434
-  server: afa007d388783f3a.cdn.jiashule.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 日本01丨移动优化-02-1A
-  password: 6d11084a-58d2-4d78-a873-9af67f4c7560
-  port: 18434
-  server: a79e3883418368ff.cdn.jiashule.com
-  type: ss
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: 日本01丨移动优化-02-1B
-  password: 04f07301-911f-41c1-a190-a6dfa80b0784
-  port: 18434
-  server: a79e3883418368ff.cdn.jiashule.com
-  type: ss
+  sni: zzus01.gutingting.com
+  type: trojan
   udp: true
 - alterId: 0
   cipher: auto
@@ -473,7 +314,7 @@ proxies:
   tls: false
   type: vmess
   udp: true
-  uuid: 083a56aa-3ceb-440a-b4cb-d270df374876
+  uuid: e283f27a-e6c2-4a75-8c1d-ba8287bae7f2
   ws-opts:
     headers:
       Host: kr01.appleid.bf
@@ -488,31 +329,11 @@ proxies:
   tls: false
   type: vmess
   udp: true
-  uuid: 2f80c866-5040-4654-944c-3522ed568424
+  uuid: 90165158-b49c-455f-8c4d-1eb014b0506b
   ws-opts:
     headers:
       Host: kr01.appleid.bf
     path: /ws?ed=2048
-- alterId: 0
-  cipher: auto
-  name: 香港 1 LV0-HK-1A
-  port: 22300
-  server: 223.113.130.62
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 6bdd2331-8f05-4e28-947c-91f060b230e5
-- alterId: 0
-  cipher: auto
-  name: 香港 1 LV0-HK-1B
-  port: 22300
-  server: 223.113.130.62
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 8507c087-63dd-428b-a7fa-8634e7a82057
 - alterId: 0
   cipher: auto
   name: 香港-1A
@@ -522,7 +343,7 @@ proxies:
   tls: false
   type: vmess
   udp: true
-  uuid: c9c82a3d-1bfa-4b40-bd71-ae3c939a7876
+  uuid: 4401b550-e8f4-454b-a816-99268c5784b2
 - alterId: 0
   cipher: auto
   name: 香港-1B
@@ -532,17 +353,7 @@ proxies:
   tls: false
   type: vmess
   udp: true
-  uuid: 94437240-0290-485d-a884-2522c297807d
-- alterId: 0
-  cipher: auto
-  name: 香港-1C
-  port: 10010
-  server: xg1.tcity8.buzz
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 04e65b92-4e12-42a8-b5de-65222cf38d9e
+  uuid: edeaa830-13c4-49c1-a157-c2ef908478aa
 - alterId: 0
   cipher: auto
   name: 香港3-1B
@@ -552,110 +363,4 @@ proxies:
   tls: false
   type: vmess
   udp: true
-  uuid: 94437240-0290-485d-a884-2522c297807d
-- alterId: 0
-  cipher: auto
-  name: 香港3-1C
-  port: 10010
-  server: xg3.tcity8.buzz
-  skip-cert-verify: true
-  tls: false
-  type: vmess
-  udp: true
-  uuid: 04e65b92-4e12-42a8-b5de-65222cf38d9e
-- name: 日本 01 直连-1A
-  password: 19967a06-9d2a-4a9e-9663-9a0b81bd1917
-  port: 20220
-  server: zzjp01.gutingting.com
-  skip-cert-verify: true
-  sni: zzjp01.gutingting.com
-  type: trojan
-  udp: true
-- name: 日本 01 直连-1B
-  password: 23aa20ad-194b-43b7-b18c-e97febbaaf52
-  port: 20220
-  server: zzjp01.gutingting.com
-  skip-cert-verify: true
-  sni: zzjp01.gutingting.com
-  type: trojan
-  udp: true
-- name: 日本 01 直连-1C
-  password: 8a636cf6-e1c3-4e98-9567-2befd2105ed9
-  port: 20220
-  server: zzjp01.gutingting.com
-  skip-cert-verify: true
-  sni: zzjp01.gutingting.com
-  type: trojan
-  udp: true
-- name: 日本 01 直连-1D
-  password: 8df71500-5236-4fad-acc9-c22307752840
-  port: 20220
-  server: zzjp01.gutingting.com
-  skip-cert-verify: true
-  sni: zzjp01.gutingting.com
-  type: trojan
-  udp: true
-- name: 日本 02 直连-1A
-  password: 19967a06-9d2a-4a9e-9663-9a0b81bd1917
-  port: 20221
-  server: zzjp01.gutingting.com
-  skip-cert-verify: true
-  sni: zzjp01.gutingting.com
-  type: trojan
-  udp: true
-- name: 日本 02 直连-1B
-  password: 23aa20ad-194b-43b7-b18c-e97febbaaf52
-  port: 20221
-  server: zzjp01.gutingting.com
-  skip-cert-verify: true
-  sni: zzjp01.gutingting.com
-  type: trojan
-  udp: true
-- name: 日本 02 直连-1C
-  password: 8a636cf6-e1c3-4e98-9567-2befd2105ed9
-  port: 20221
-  server: zzjp01.gutingting.com
-  skip-cert-verify: true
-  sni: zzjp01.gutingting.com
-  type: trojan
-  udp: true
-- name: 日本 02 直连-1D
-  password: 8df71500-5236-4fad-acc9-c22307752840
-  port: 20221
-  server: zzjp01.gutingting.com
-  skip-cert-verify: true
-  sni: zzjp01.gutingting.com
-  type: trojan
-  udp: true
-- name: 美国 01 直连-1A
-  password: 19967a06-9d2a-4a9e-9663-9a0b81bd1917
-  port: 20220
-  server: zzus01.gutingting.com
-  skip-cert-verify: true
-  sni: zzus01.gutingting.com
-  type: trojan
-  udp: true
-- name: 美国 01 直连-1B
-  password: 23aa20ad-194b-43b7-b18c-e97febbaaf52
-  port: 20220
-  server: zzus01.gutingting.com
-  skip-cert-verify: true
-  sni: zzus01.gutingting.com
-  type: trojan
-  udp: true
-- name: 美国 01 直连-1C
-  password: 8a636cf6-e1c3-4e98-9567-2befd2105ed9
-  port: 20220
-  server: zzus01.gutingting.com
-  skip-cert-verify: true
-  sni: zzus01.gutingting.com
-  type: trojan
-  udp: true
-- name: 美国 01 直连-1D
-  password: 8df71500-5236-4fad-acc9-c22307752840
-  port: 20220
-  server: zzus01.gutingting.com
-  skip-cert-verify: true
-  sni: zzus01.gutingting.com
-  type: trojan
-  udp: true
+  uuid: edeaa830-13c4-49c1-a157-c2ef908478aa
