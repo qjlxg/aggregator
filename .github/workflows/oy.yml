@@ -30,19 +30,22 @@ jobs:
       run: |
         cd aggregate
         python -u subscribe/collect.py
-      
+        
+    - name: Configure Git
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "actions@github.com"
+  
     - name: Create/Update Gist
       env:
         GH_TOKEN: ${{ secrets.PAT}}
       run: |
         cd aggregate/data
-          # Copy files to the aggregate/data directory
-        cp proxies.yaml aggregate/data/
-        cp subscribes.txt aggregate/data/
-        cp domains.txt aggregate/data/
-        cp valid-domains.txt aggregate/data/
-    
         gh gist edit ${{ secrets.GIST_ID }} --add "proxies.yaml"
         gh gist edit ${{ secrets.GIST_ID }} --add "subscribes.txt"
         gh gist edit ${{ secrets.GIST_ID }} --add "domains.txt"
         gh gist edit ${{ secrets.GIST_ID }} --add "valid-domains.txt"
+        git add aggregate/subconverter/subconverter-linux
+        git add aggregate/data
+        git commit -m "Add generated output.yaml"
+        git push
