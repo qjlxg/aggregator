@@ -2,7 +2,7 @@ name: Generate and Commit File
 
 on:
   schedule:
-    - cron: '0 */3 * * *'
+    - cron: '0 */6 * * *'
   workflow_dispatch: # 允许手动触发
 
 jobs:
