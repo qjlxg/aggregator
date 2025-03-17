@@ -140,7 +140,7 @@ def assign(
     # 爬取新站点列表
     if not domains or overwrite:
         candidates = crawl.collect_airport(
-            channel="jichang_list",
+            channel="freeVPNjd",
             page_num=pages,
             num_thread=num_threads,
             rigid=rigid,
