@@ -138,7 +138,7 @@ clash_use_new_field_name = true
 clash_proxies_style = "flow"
 
 [[node_pref.rename_node]]
-match = '\(?((x|X)?(\d+)(\.?\d+)?)((\s?倍率?)|(x|X))\)?'
+match = '(.*)'
 replace = "$1_您吃了吗_$1"
 
 [managed_config]
