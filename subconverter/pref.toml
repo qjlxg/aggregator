@@ -139,7 +139,7 @@ clash_proxies_style = "flow"
 
 [[node_pref.rename_node]]
 match = '\(?((x|X)?(\d+)(\.?\d+)?)((\s?倍率?)|(x|X))\)?'
-replace = "您吃了吗_$1"
+replace = "$1_您吃了吗_$1"
 
 [managed_config]
 # Append a '#!MANAGED-CONFIG' info to Surge configurations
