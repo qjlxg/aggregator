@@ -5,331 +5,335 @@ mode: Rule
 log-level: info
 external-controller: :9090
 proxies:
-  - {name: 🇪🇸 西班牙, server: time.is, port: 80, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /, headers: {Host: xby.xiaoqi555.xyz}}, udp: true}
-  - {name: B-1B, server: cokecloudus.cokecloud.top, port: 25619, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: D-1A, server: xctransfer1st.cokecloud.top, port: 33575, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: 🇯🇵 日本-新疆直连, server: xj.cokecloud.top, port: 32283, type: trojan, password: dc840432-f45d-46e7-84f1-acb1485a86df, sni: xj.cokecloud.top, skip-cert-verify: false, udp: true}
-  - {name: 🇭🇰 香港03-1B, server: gy.666666222.shop, port: 20052, type: ss, cipher: chacha20-ietf-poly1305, password: d726d93c-a839-4030-8380-0428e2044277, udp: true}
-  - {name: G | 多入口, server: xctransfer1st.cokecloud.top, port: 44489, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: 🇺🇸 圣何塞1, server: 443ip.yangmie.online, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
-  - {name: 🇭🇰 香港01-1B, server: gy.666666222.shop, port: 34338, type: ss, cipher: chacha20-ietf-poly1305, password: d726d93c-a839-4030-8380-0428e2044277, udp: true}
-  - {name: A-1L, server: idtf.cokecloud.top, port: 32725, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: A-1H, server: turtf.cokecloud.top, port: 53355, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: D-1B, server: xdtw.cokecloud.top, port: 21073, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: 🇯🇵 日本04-1B, server: gy.666666222.shop, port: 20008, type: ss, cipher: chacha20-ietf-poly1305, password: d726d93c-a839-4030-8380-0428e2044277, udp: true}
-  - {name: A-1G, server: xcsgp.cokecloud.top, port: 15447, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: A-1J, server: xcsgp.cokecloud.top, port: 17463, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: 🇩🇪 德国, server: freeyx.cloudflare88.eu.org, port: 443, type: vmess, uuid: 16f42623-0c19-45fa-897d-c187d5b541dd, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /, headers: {Host: go.daluquan.top}}, udp: true}
-  - {name: A-1D, server: cokecloudjp.cokecloud.top, port: 47393, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
+  - {name: 🇨🇳 台湾 1, server: gy.666666222.shop, port: 20032, type: ss, cipher: chacha20-ietf-poly1305, password: 317aa75a-8c92-4c24-8961-d966fef70ba5, udp: true}
+  - {name: 🇪🇸 西班牙-1A, server: time.is, port: 80, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /, headers: {Host: xby.xiaoqi555.xyz}}, udp: true}
+  - {name: 🇨🇳 台湾家宽直连 20X-1A, server: hinetiw0k.yooddns.stream, port: 26900, type: ss, cipher: chacha20-ietf-poly1305, password: c554532a-ece4-4b7a-a32b-764be9f7e18a, udp: true}
+  - {name: C | 高速2X倍率, server: xdtw.cokecloud.top, port: 53497, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: E-1A, server: xctransfer1st.cokecloud.top, port: 12672, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: 🇯🇵 日本02, server: gy.666666222.shop, port: 20004, type: ss, cipher: chacha20-ietf-poly1305, password: 317aa75a-8c92-4c24-8961-d966fef70ba5, udp: true}
+  - {name: 🇨🇳 台湾家宽直连 20X-1B, server: hinetiw0k.yooddns.stream, port: 26900, type: ss, cipher: chacha20-ietf-poly1305, password: cac56de5-40e5-4cd1-b23a-5e7e1dde311f, udp: true}
+  - {name: C | 高速.2X倍率-1B, server: cokecloudjp.cokecloud.top, port: 19439, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: D-1C, server: cokecloudjp.cokecloud.top, port: 13215, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: B | 负载均衡, server: xcsgp.cokecloud.top, port: 10420, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: E-1B, server: cokecloudus.cokecloud.top, port: 20067, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: A-1N, server: xcuk.cokecloud.top, port: 18227, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: 🇺🇸 圣何塞2-1B, server: bestcf.mfwl.art, port: 443, type: vmess, uuid: cac56de5-40e5-4cd1-b23a-5e7e1dde311f, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
+  - {name: 🇭🇰 香港03, server: gy.666666222.shop, port: 20052, type: ss, cipher: chacha20-ietf-poly1305, password: 317aa75a-8c92-4c24-8961-d966fef70ba5, udp: true}
   - {name: 🇩🇪 德国法兰克福, server: frankfurt.faforex.eu.org, port: 23451, type: vmess, uuid: 16f42623-0c19-45fa-897d-c187d5b541dd, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: "/itdog?ed=2560", headers: {Host: us-new03.daluquan.top}}, udp: true}
-  - {name: C | 高速.2X倍率-1D, server: cokecloudjp.cokecloud.top, port: 17318, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: B | 推荐-1A, server: xctransfer1st.cokecloud.top, port: 45449, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: A-1M, server: frtf.cokecloud.top, port: 15468, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: C | 高速2X倍率, server: xdtw.cokecloud.top, port: 53497, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: A | 负载均衡, server: xctransfer1st.cokecloud.top, port: 21552, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: A-1O, server: frg.cokecloud.top, port: 13646, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: A-1B, server: cokecloudjp.cokecloud.top, port: 20437, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: A-1F, server: xcsgp.cokecloud.top, port: 11277, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: A-1N, server: xcuk.cokecloud.top, port: 18227, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: A | 推荐, server: xcsgp.cokecloud.top, port: 43461, type: ss, cipher: aes-128-gcm, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: 🇺🇸 圣何塞5, server: cf.090227.xyz, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
-  - {name: 🇯🇵 日本VULTR1, server: time.is, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: jpv.xiaoqi555.xyz, network: ws, ws-opts: {path: /, headers: {Host: jpv.xiaoqi555.xyz}}, udp: true}
-  - {name: B | 推荐-1B, server: xdtw.cokecloud.top, port: 29299, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: 🇯🇵 日本03-1B, server: gy.666666222.shop, port: 20006, type: ss, cipher: chacha20-ietf-poly1305, password: d726d93c-a839-4030-8380-0428e2044277, udp: true}
-  - {name: C | 高速.2X倍率-1A, server: xctransfer1st.cokecloud.top, port: 38630, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: B | 高速.2X倍率, server: xckr.cokecloud.top, port: 28595, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: 🇺🇸 美国 纽约01-1A, server: gy.666666222.shop, port: 20013, type: ss, cipher: chacha20-ietf-poly1305, password: 9cb23639-81c9-493c-bc82-c3a83bc88509, udp: true}
-  - {name: 🇺🇸 美国 纽约2-1A, server: gy.666666222.shop, port: 20016, type: ss, cipher: chacha20-ietf-poly1305, password: 9cb23639-81c9-493c-bc82-c3a83bc88509, udp: true}
-  - {name: B | 负载均衡, server: xcsgp.cokecloud.top, port: 10420, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: 🇺🇸 美国 纽约01-1B, server: gy.666666222.shop, port: 20013, type: ss, cipher: chacha20-ietf-poly1305, password: d726d93c-a839-4030-8380-0428e2044277, udp: true}
-  - {name: B-1A, server: cokecloudjp.cokecloud.top, port: 43291, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: E-1B, server: cokecloudus.cokecloud.top, port: 20067, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: 🇭🇰 香港02-1B, server: gy.666666222.shop, port: 20035, type: ss, cipher: chacha20-ietf-poly1305, password: d726d93c-a839-4030-8380-0428e2044277, udp: true}
-  - {name: 🇯🇵 日本02-1B, server: gy.666666222.shop, port: 20004, type: ss, cipher: chacha20-ietf-poly1305, password: d726d93c-a839-4030-8380-0428e2044277, udp: true}
-  - {name: E-1A, server: xctransfer1st.cokecloud.top, port: 12672, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: 🇺🇸 圣何塞4, server: xiaoqi.yangmie.online, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
-  - {name: A-1A, server: xdtw.cokecloud.top, port: 13255, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: 🇨🇳 台湾 1-1A, server: gy.666666222.shop, port: 20032, type: ss, cipher: chacha20-ietf-poly1305, password: 9cb23639-81c9-493c-bc82-c3a83bc88509, udp: true}
-  - {name: A-1C, server: xckr.cokecloud.top, port: 33167, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: 🇭🇰 香港02-1A, server: gy.666666222.shop, port: 20035, type: ss, cipher: chacha20-ietf-poly1305, password: 9cb23639-81c9-493c-bc82-c3a83bc88509, udp: true}
-  - {name: 🇨🇳 台湾01-1A, server: gy.666666222.shop, port: 47564, type: ss, cipher: chacha20-ietf-poly1305, password: 9cb23639-81c9-493c-bc82-c3a83bc88509, udp: true}
-  - {name: 🇺🇸 圣何塞3, server: bestcf.top, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
-  - {name: 🇨🇳 台湾原生100X, server: cn2.ansh.top, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: twys.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: twys.kejixiaoqi666.store}}, udp: true}
-  - {name: C | 高速.2X倍率-1B, server: cokecloudjp.cokecloud.top, port: 19439, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: 🇨🇳 台湾 1-1B, server: gy.666666222.shop, port: 20032, type: ss, cipher: chacha20-ietf-poly1305, password: d726d93c-a839-4030-8380-0428e2044277, udp: true}
+  - {name: 🇯🇵 日本VULTR1-1B, server: time.is, port: 443, type: vmess, uuid: cac56de5-40e5-4cd1-b23a-5e7e1dde311f, alterId: 0, cipher: auto, tls: true, servername: jpv.xiaoqi555.xyz, network: ws, ws-opts: {path: /, headers: {Host: jpv.xiaoqi555.xyz}}, udp: true}
+  - {name: 🇪🇸 西班牙极速-1A, server: wenxiaohong.9sjd2dkesl2.shop, port: 26888, type: ss, cipher: chacha20-ietf-poly1305, password: c554532a-ece4-4b7a-a32b-764be9f7e18a, udp: true}
+  - {name: G | 多入口, server: xctransfer1st.cokecloud.top, port: 44489, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: 🇭🇰 香港02, server: gy.666666222.shop, port: 20035, type: ss, cipher: chacha20-ietf-poly1305, password: 317aa75a-8c92-4c24-8961-d966fef70ba5, udp: true}
+  - {name: A-1C, server: xckr.cokecloud.top, port: 33167, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: C | 高速.2X倍率-1A, server: xctransfer1st.cokecloud.top, port: 38630, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: D-1D, server: cokecloudjp.cokecloud.top, port: 40793, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: A-1M, server: frtf.cokecloud.top, port: 15468, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: 🇺🇸 美国 纽约2, server: gy.666666222.shop, port: 20016, type: ss, cipher: chacha20-ietf-poly1305, password: 317aa75a-8c92-4c24-8961-d966fef70ba5, udp: true}
+  - {name: 🇭🇰 香港01, server: gy.666666222.shop, port: 34338, type: ss, cipher: chacha20-ietf-poly1305, password: 317aa75a-8c92-4c24-8961-d966fef70ba5, udp: true}
+  - {name: B-1B, server: cokecloudus.cokecloud.top, port: 25619, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: A-1F, server: xcsgp.cokecloud.top, port: 11277, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: 🇨🇳 台湾原生100X-1A, server: cn2.ansh.top, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: twys.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: twys.kejixiaoqi666.store}}, udp: true}
+  - {name: D-1A, server: xctransfer1st.cokecloud.top, port: 33575, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: B | 高速.2X倍率, server: xckr.cokecloud.top, port: 28595, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: A-1A, server: xdtw.cokecloud.top, port: 13255, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
   - {name: 🇸🇬 新加坡西部, server: westsg2-ddns.oraclenat.cc, port: 23452, type: vmess, uuid: 16f42623-0c19-45fa-897d-c187d5b541dd, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /, headers: {Host: westsg2-ddns.oraclenat.cc}}, udp: true}
-  - {name: 🇺🇸 美国 纽约2-1B, server: gy.666666222.shop, port: 20016, type: ss, cipher: chacha20-ietf-poly1305, password: d726d93c-a839-4030-8380-0428e2044277, udp: true}
-  - {name: A-1I, server: thtf.cokecloud.top, port: 34523, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: D | 推荐, server: xcsgp.cokecloud.top, port: 25878, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: A-1L, server: idtf.cokecloud.top, port: 32725, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: 🇯🇵 日本03, server: gy.666666222.shop, port: 20006, type: ss, cipher: chacha20-ietf-poly1305, password: 317aa75a-8c92-4c24-8961-d966fef70ba5, udp: true}
+  - {name: 🇯🇵 日本V-1B, server: bookmyshow.com, port: 443, type: vmess, uuid: cac56de5-40e5-4cd1-b23a-5e7e1dde311f, alterId: 0, cipher: auto, tls: true, servername: jpv.xiaoqi555.xyz, network: ws, ws-opts: {path: /, headers: {Host: jpv.xiaoqi555.xyz}}, udp: true}
+  - {name: 🇺🇸 圣何塞3-1B, server: bestcf.top, port: 443, type: vmess, uuid: cac56de5-40e5-4cd1-b23a-5e7e1dde311f, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
+  - {name: C | 高速.2X倍率-1C, server: xcsgp.cokecloud.top, port: 29611, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: D | 推荐, server: xcsgp.cokecloud.top, port: 25878, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: 🇺🇸 圣何塞4-1B, server: xiaoqi.yangmie.online, port: 443, type: vmess, uuid: cac56de5-40e5-4cd1-b23a-5e7e1dde311f, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
+  - {name: 🇯🇵 日本V-1A, server: bookmyshow.com, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: jpv.xiaoqi555.xyz, network: ws, ws-opts: {path: /, headers: {Host: jpv.xiaoqi555.xyz}}, udp: true}
+  - {name: 🇨🇳 台湾01, server: gy.666666222.shop, port: 47564, type: ss, cipher: chacha20-ietf-poly1305, password: 317aa75a-8c92-4c24-8961-d966fef70ba5, udp: true}
+  - {name: F, server: xctransfer1st.cokecloud.top, port: 45861, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: 🇭🇰 香港3-1B, server: bevent.bilibili.tv, port: 443, type: vmess, uuid: cac56de5-40e5-4cd1-b23a-5e7e1dde311f, alterId: 0, cipher: auto, tls: true, servername: hky.xiaoqi666.xyz, network: ws, ws-opts: {path: /, headers: {Host: hky.xiaoqi666.xyz}}, udp: true}
+  - {name: 🇩🇪 德国, server: freeyx.cloudflare88.eu.org, port: 443, type: vmess, uuid: 16f42623-0c19-45fa-897d-c187d5b541dd, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /, headers: {Host: go.daluquan.top}}, udp: true}
+  - {name: 🇭🇰 香港3-1A, server: bevent.bilibili.tv, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: hky.xiaoqi666.xyz, network: ws, ws-opts: {path: /, headers: {Host: hky.xiaoqi666.xyz}}, udp: true}
+  - {name: A-1E, server: mltf.cokecloud.top, port: 13128, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: 🇺🇸 圣何塞3-1A, server: bestcf.top, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
+  - {name: A-1D, server: cokecloudjp.cokecloud.top, port: 47393, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: 🇺🇸 圣何塞5-1A, server: cf.090227.xyz, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
+  - {name: A-1P, server: rutf.cokecloud.top, port: 44753, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: 🇺🇸 圣何塞5-1B, server: cf.090227.xyz, port: 443, type: vmess, uuid: cac56de5-40e5-4cd1-b23a-5e7e1dde311f, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
+  - {name: A-1O, server: frg.cokecloud.top, port: 13646, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: 🇨🇳 台湾原生100X-1B, server: cn2.ansh.top, port: 443, type: vmess, uuid: cac56de5-40e5-4cd1-b23a-5e7e1dde311f, alterId: 0, cipher: auto, tls: true, servername: twys.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: twys.kejixiaoqi666.store}}, udp: true}
+  - {name: 🇺🇸 圣何塞4-1A, server: xiaoqi.yangmie.online, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
+  - {name: D-1B, server: xdtw.cokecloud.top, port: 21073, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: 🇺🇸 美国 纽约01, server: gy.666666222.shop, port: 20013, type: ss, cipher: chacha20-ietf-poly1305, password: 317aa75a-8c92-4c24-8961-d966fef70ba5, udp: true}
+  - {name: A-1B, server: cokecloudjp.cokecloud.top, port: 20437, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: A | 负载均衡, server: xctransfer1st.cokecloud.top, port: 21552, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: A-1I, server: thtf.cokecloud.top, port: 34523, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: C | 高速.2X倍率-1D, server: cokecloudjp.cokecloud.top, port: 17318, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: 🇯🇵 日本-新疆直连, server: xj.cokecloud.top, port: 32283, type: trojan, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, sni: xj.cokecloud.top, skip-cert-verify: false, udp: true}
+  - {name: A | 推荐, server: xcsgp.cokecloud.top, port: 43461, type: ss, cipher: aes-128-gcm, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: 🇺🇸 圣何塞2-1A, server: bestcf.mfwl.art, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
+  - {name: 🇪🇸 西班牙极速-1B, server: wenxiaohong.9sjd2dkesl2.shop, port: 26888, type: ss, cipher: chacha20-ietf-poly1305, password: cac56de5-40e5-4cd1-b23a-5e7e1dde311f, udp: true}
+  - {name: A-1G, server: xcsgp.cokecloud.top, port: 15447, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: 🇯🇵 日本04, server: gy.666666222.shop, port: 20008, type: ss, cipher: chacha20-ietf-poly1305, password: 317aa75a-8c92-4c24-8961-d966fef70ba5, udp: true}
+  - {name: A-1J, server: xcsgp.cokecloud.top, port: 17463, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
   - {name: 🇺🇸 美国, server: phx-plus-1ddns.faforex.eu.org, port: 23451, type: vmess, uuid: 16f42623-0c19-45fa-897d-c187d5b541dd, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /, headers: {Host: phx-plus-1ddns.faforex.eu.org}}, udp: true}
-  - {name: 🇯🇵 日本03-1A, server: gy.666666222.shop, port: 20006, type: ss, cipher: chacha20-ietf-poly1305, password: 9cb23639-81c9-493c-bc82-c3a83bc88509, udp: true}
-  - {name: 🇯🇵 日本V, server: bookmyshow.com, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: jpv.xiaoqi555.xyz, network: ws, ws-opts: {path: /, headers: {Host: jpv.xiaoqi555.xyz}}, udp: true}
-  - {name: 🇨🇳 台湾家宽直连 20X, server: hinetiw0k.yooddns.stream, port: 26900, type: ss, cipher: chacha20-ietf-poly1305, password: c554532a-ece4-4b7a-a32b-764be9f7e18a, udp: true}
-  - {name: 🇯🇵 日本04-1A, server: gy.666666222.shop, port: 20008, type: ss, cipher: chacha20-ietf-poly1305, password: 9cb23639-81c9-493c-bc82-c3a83bc88509, udp: true}
-  - {name: A-1E, server: mltf.cokecloud.top, port: 13128, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: 🇺🇸 圣何塞2, server: bestcf.mfwl.art, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
-  - {name: C | 高速.2X倍率-1C, server: xcsgp.cokecloud.top, port: 29611, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: 🇯🇵 日本01-1B, server: gy.666666222.shop, port: 20002, type: ss, cipher: chacha20-ietf-poly1305, password: d726d93c-a839-4030-8380-0428e2044277, udp: true}
-  - {name: 🇨🇳 台湾01-1B, server: gy.666666222.shop, port: 47564, type: ss, cipher: chacha20-ietf-poly1305, password: d726d93c-a839-4030-8380-0428e2044277, udp: true}
-  - {name: D-1C, server: cokecloudjp.cokecloud.top, port: 13215, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: 🇭🇰 香港03-1A, server: gy.666666222.shop, port: 20052, type: ss, cipher: chacha20-ietf-poly1305, password: 9cb23639-81c9-493c-bc82-c3a83bc88509, udp: true}
-  - {name: A-1K, server: autf.cokecloud.top, port: 18071, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: 🇭🇰 香港01-1A, server: gy.666666222.shop, port: 34338, type: ss, cipher: chacha20-ietf-poly1305, password: 9cb23639-81c9-493c-bc82-c3a83bc88509, udp: true}
-  - {name: D-1D, server: cokecloudjp.cokecloud.top, port: 40793, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: F, server: xctransfer1st.cokecloud.top, port: 45861, type: vmess, uuid: dc840432-f45d-46e7-84f1-acb1485a86df, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: 🇯🇵 日本02-1A, server: gy.666666222.shop, port: 20004, type: ss, cipher: chacha20-ietf-poly1305, password: 9cb23639-81c9-493c-bc82-c3a83bc88509, udp: true}
-  - {name: 🇪🇸 西班牙极速, server: wenxiaohong.9sjd2dkesl2.shop, port: 26888, type: ss, cipher: chacha20-ietf-poly1305, password: c554532a-ece4-4b7a-a32b-764be9f7e18a, udp: true}
-  - {name: A-1P, server: rutf.cokecloud.top, port: 44753, type: ss, cipher: chacha20-ietf-poly1305, password: dc840432-f45d-46e7-84f1-acb1485a86df, udp: true}
-  - {name: 🇭🇰 香港3, server: bevent.bilibili.tv, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: hky.xiaoqi666.xyz, network: ws, ws-opts: {path: /, headers: {Host: hky.xiaoqi666.xyz}}, udp: true}
-  - {name: 🇯🇵 日本01-1A, server: gy.666666222.shop, port: 20002, type: ss, cipher: chacha20-ietf-poly1305, password: 9cb23639-81c9-493c-bc82-c3a83bc88509, udp: true}
+  - {name: B | 推荐-1B, server: xdtw.cokecloud.top, port: 29299, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: 🇺🇸 圣何塞1-1A, server: 443ip.yangmie.online, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
+  - {name: 🇺🇸 圣何塞1-1B, server: 443ip.yangmie.online, port: 443, type: vmess, uuid: cac56de5-40e5-4cd1-b23a-5e7e1dde311f, alterId: 0, cipher: auto, tls: true, servername: shs111.kejixiaoqi666.store, network: ws, ws-opts: {path: /, headers: {Host: shs111.kejixiaoqi666.store}}, udp: true}
+  - {name: A-1K, server: autf.cokecloud.top, port: 18071, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: B | 推荐-1A, server: xctransfer1st.cokecloud.top, port: 45449, type: vmess, uuid: fc478a87-432b-46fa-9e14-796cc39f7b8a, alterId: 0, cipher: auto, tls: false, udp: true}
+  - {name: A-1H, server: turtf.cokecloud.top, port: 53355, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: B-1A, server: cokecloudjp.cokecloud.top, port: 43291, type: ss, cipher: chacha20-ietf-poly1305, password: fc478a87-432b-46fa-9e14-796cc39f7b8a, udp: true}
+  - {name: 🇪🇸 西班牙-1B, server: time.is, port: 80, type: vmess, uuid: cac56de5-40e5-4cd1-b23a-5e7e1dde311f, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /, headers: {Host: xby.xiaoqi555.xyz}}, udp: true}
+  - {name: 🇯🇵 日本VULTR1-1A, server: time.is, port: 443, type: vmess, uuid: c554532a-ece4-4b7a-a32b-764be9f7e18a, alterId: 0, cipher: auto, tls: true, servername: jpv.xiaoqi555.xyz, network: ws, ws-opts: {path: /, headers: {Host: jpv.xiaoqi555.xyz}}, udp: true}
+  - {name: 🇯🇵 日本01, server: gy.666666222.shop, port: 20002, type: ss, cipher: chacha20-ietf-poly1305, password: 317aa75a-8c92-4c24-8961-d966fef70ba5, udp: true}
 proxy-groups:
   - name: 🔰 节点选择
     type: select
     proxies:
       - ♻️ 自动选择
       - 🎯 全球直连
-      - 🇪🇸 西班牙
-      - B-1B
-      - D-1A
-      - 🇯🇵 日本-新疆直连
-      - 🇭🇰 香港03-1B
-      - G | 多入口
-      - 🇺🇸 圣何塞1
-      - 🇭🇰 香港01-1B
-      - A-1L
-      - A-1H
-      - D-1B
-      - 🇯🇵 日本04-1B
-      - A-1G
-      - A-1J
-      - 🇩🇪 德国
-      - A-1D
-      - 🇩🇪 德国法兰克福
-      - C | 高速.2X倍率-1D
-      - B | 推荐-1A
-      - A-1M
+      - 🇨🇳 台湾 1
+      - 🇪🇸 西班牙-1A
+      - 🇨🇳 台湾家宽直连 20X-1A
       - C | 高速2X倍率
-      - A | 负载均衡
-      - A-1O
-      - A-1B
-      - A-1F
-      - A-1N
-      - A | 推荐
-      - 🇺🇸 圣何塞5
-      - 🇯🇵 日本VULTR1
-      - B | 推荐-1B
-      - 🇯🇵 日本03-1B
-      - C | 高速.2X倍率-1A
-      - B | 高速.2X倍率
-      - 🇺🇸 美国 纽约01-1A
-      - 🇺🇸 美国 纽约2-1A
-      - B | 负载均衡
-      - 🇺🇸 美国 纽约01-1B
-      - B-1A
-      - E-1B
-      - 🇭🇰 香港02-1B
-      - 🇯🇵 日本02-1B
       - E-1A
-      - 🇺🇸 圣何塞4
-      - A-1A
-      - 🇨🇳 台湾 1-1A
-      - A-1C
-      - 🇭🇰 香港02-1A
-      - 🇨🇳 台湾01-1A
-      - 🇺🇸 圣何塞3
-      - 🇨🇳 台湾原生100X
+      - 🇯🇵 日本02
+      - 🇨🇳 台湾家宽直连 20X-1B
       - C | 高速.2X倍率-1B
-      - 🇨🇳 台湾 1-1B
-      - 🇸🇬 新加坡西部
-      - 🇺🇸 美国 纽约2-1B
-      - A-1I
-      - D | 推荐
-      - 🇺🇸 美国
-      - 🇯🇵 日本03-1A
-      - 🇯🇵 日本V
-      - 🇨🇳 台湾家宽直连 20X
-      - 🇯🇵 日本04-1A
-      - A-1E
-      - 🇺🇸 圣何塞2
-      - C | 高速.2X倍率-1C
-      - 🇯🇵 日本01-1B
-      - 🇨🇳 台湾01-1B
       - D-1C
-      - 🇭🇰 香港03-1A
-      - A-1K
-      - 🇭🇰 香港01-1A
+      - B | 负载均衡
+      - E-1B
+      - A-1N
+      - 🇺🇸 圣何塞2-1B
+      - 🇭🇰 香港03
+      - 🇩🇪 德国法兰克福
+      - 🇯🇵 日本VULTR1-1B
+      - 🇪🇸 西班牙极速-1A
+      - G | 多入口
+      - 🇭🇰 香港02
+      - A-1C
+      - C | 高速.2X倍率-1A
       - D-1D
+      - A-1M
+      - 🇺🇸 美国 纽约2
+      - 🇭🇰 香港01
+      - B-1B
+      - A-1F
+      - 🇨🇳 台湾原生100X-1A
+      - D-1A
+      - B | 高速.2X倍率
+      - A-1A
+      - 🇸🇬 新加坡西部
+      - A-1L
+      - 🇯🇵 日本03
+      - 🇯🇵 日本V-1B
+      - 🇺🇸 圣何塞3-1B
+      - C | 高速.2X倍率-1C
+      - D | 推荐
+      - 🇺🇸 圣何塞4-1B
+      - 🇯🇵 日本V-1A
+      - 🇨🇳 台湾01
       - F
-      - 🇯🇵 日本02-1A
-      - 🇪🇸 西班牙极速
+      - 🇭🇰 香港3-1B
+      - 🇩🇪 德国
+      - 🇭🇰 香港3-1A
+      - A-1E
+      - 🇺🇸 圣何塞3-1A
+      - A-1D
+      - 🇺🇸 圣何塞5-1A
       - A-1P
-      - 🇭🇰 香港3
-      - 🇯🇵 日本01-1A
+      - 🇺🇸 圣何塞5-1B
+      - A-1O
+      - 🇨🇳 台湾原生100X-1B
+      - 🇺🇸 圣何塞4-1A
+      - D-1B
+      - 🇺🇸 美国 纽约01
+      - A-1B
+      - A | 负载均衡
+      - A-1I
+      - C | 高速.2X倍率-1D
+      - 🇯🇵 日本-新疆直连
+      - A | 推荐
+      - 🇺🇸 圣何塞2-1A
+      - 🇪🇸 西班牙极速-1B
+      - A-1G
+      - 🇯🇵 日本04
+      - A-1J
+      - 🇺🇸 美国
+      - B | 推荐-1B
+      - 🇺🇸 圣何塞1-1A
+      - 🇺🇸 圣何塞1-1B
+      - A-1K
+      - B | 推荐-1A
+      - A-1H
+      - B-1A
+      - 🇪🇸 西班牙-1B
+      - 🇯🇵 日本VULTR1-1A
+      - 🇯🇵 日本01
   - name: ♻️ 自动选择
     type: url-test
     url: http://www.gstatic.com/generate_204
     interval: 300
     proxies:
-      - 🇪🇸 西班牙
-      - B-1B
-      - D-1A
-      - 🇯🇵 日本-新疆直连
-      - 🇭🇰 香港03-1B
-      - G | 多入口
-      - 🇺🇸 圣何塞1
-      - 🇭🇰 香港01-1B
-      - A-1L
-      - A-1H
-      - D-1B
-      - 🇯🇵 日本04-1B
-      - A-1G
-      - A-1J
-      - 🇩🇪 德国
-      - A-1D
-      - 🇩🇪 德国法兰克福
-      - C | 高速.2X倍率-1D
-      - B | 推荐-1A
-      - A-1M
+      - 🇨🇳 台湾 1
+      - 🇪🇸 西班牙-1A
+      - 🇨🇳 台湾家宽直连 20X-1A
       - C | 高速2X倍率
-      - A | 负载均衡
-      - A-1O
-      - A-1B
-      - A-1F
-      - A-1N
-      - A | 推荐
-      - 🇺🇸 圣何塞5
-      - 🇯🇵 日本VULTR1
-      - B | 推荐-1B
-      - 🇯🇵 日本03-1B
-      - C | 高速.2X倍率-1A
-      - B | 高速.2X倍率
-      - 🇺🇸 美国 纽约01-1A
-      - 🇺🇸 美国 纽约2-1A
-      - B | 负载均衡
-      - 🇺🇸 美国 纽约01-1B
-      - B-1A
-      - E-1B
-      - 🇭🇰 香港02-1B
-      - 🇯🇵 日本02-1B
       - E-1A
-      - 🇺🇸 圣何塞4
-      - A-1A
-      - 🇨🇳 台湾 1-1A
-      - A-1C
-      - 🇭🇰 香港02-1A
-      - 🇨🇳 台湾01-1A
-      - 🇺🇸 圣何塞3
-      - 🇨🇳 台湾原生100X
+      - 🇯🇵 日本02
+      - 🇨🇳 台湾家宽直连 20X-1B
       - C | 高速.2X倍率-1B
-      - 🇨🇳 台湾 1-1B
-      - 🇸🇬 新加坡西部
-      - 🇺🇸 美国 纽约2-1B
-      - A-1I
-      - D | 推荐
-      - 🇺🇸 美国
-      - 🇯🇵 日本03-1A
-      - 🇯🇵 日本V
-      - 🇨🇳 台湾家宽直连 20X
-      - 🇯🇵 日本04-1A
-      - A-1E
-      - 🇺🇸 圣何塞2
-      - C | 高速.2X倍率-1C
-      - 🇯🇵 日本01-1B
-      - 🇨🇳 台湾01-1B
       - D-1C
-      - 🇭🇰 香港03-1A
-      - A-1K
-      - 🇭🇰 香港01-1A
+      - B | 负载均衡
+      - E-1B
+      - A-1N
+      - 🇺🇸 圣何塞2-1B
+      - 🇭🇰 香港03
+      - 🇩🇪 德国法兰克福
+      - 🇯🇵 日本VULTR1-1B
+      - 🇪🇸 西班牙极速-1A
+      - G | 多入口
+      - 🇭🇰 香港02
+      - A-1C
+      - C | 高速.2X倍率-1A
       - D-1D
+      - A-1M
+      - 🇺🇸 美国 纽约2
+      - 🇭🇰 香港01
+      - B-1B
+      - A-1F
+      - 🇨🇳 台湾原生100X-1A
+      - D-1A
+      - B | 高速.2X倍率
+      - A-1A
+      - 🇸🇬 新加坡西部
+      - A-1L
+      - 🇯🇵 日本03
+      - 🇯🇵 日本V-1B
+      - 🇺🇸 圣何塞3-1B
+      - C | 高速.2X倍率-1C
+      - D | 推荐
+      - 🇺🇸 圣何塞4-1B
+      - 🇯🇵 日本V-1A
+      - 🇨🇳 台湾01
       - F
-      - 🇯🇵 日本02-1A
-      - 🇪🇸 西班牙极速
+      - 🇭🇰 香港3-1B
+      - 🇩🇪 德国
+      - 🇭🇰 香港3-1A
+      - A-1E
+      - 🇺🇸 圣何塞3-1A
+      - A-1D
+      - 🇺🇸 圣何塞5-1A
       - A-1P
-      - 🇭🇰 香港3
-      - 🇯🇵 日本01-1A
+      - 🇺🇸 圣何塞5-1B
+      - A-1O
+      - 🇨🇳 台湾原生100X-1B
+      - 🇺🇸 圣何塞4-1A
+      - D-1B
+      - 🇺🇸 美国 纽约01
+      - A-1B
+      - A | 负载均衡
+      - A-1I
+      - C | 高速.2X倍率-1D
+      - 🇯🇵 日本-新疆直连
+      - A | 推荐
+      - 🇺🇸 圣何塞2-1A
+      - 🇪🇸 西班牙极速-1B
+      - A-1G
+      - 🇯🇵 日本04
+      - A-1J
+      - 🇺🇸 美国
+      - B | 推荐-1B
+      - 🇺🇸 圣何塞1-1A
+      - 🇺🇸 圣何塞1-1B
+      - A-1K
+      - B | 推荐-1A
+      - A-1H
+      - B-1A
+      - 🇪🇸 西班牙-1B
+      - 🇯🇵 日本VULTR1-1A
+      - 🇯🇵 日本01
   - name: 🎥 NETFLIX
     type: select
     proxies:
       - 🔰 节点选择
       - ♻️ 自动选择
       - 🎯 全球直连
-      - 🇪🇸 西班牙
-      - B-1B
-      - D-1A
-      - 🇯🇵 日本-新疆直连
-      - 🇭🇰 香港03-1B
-      - G | 多入口
-      - 🇺🇸 圣何塞1
-      - 🇭🇰 香港01-1B
-      - A-1L
-      - A-1H
-      - D-1B
-      - 🇯🇵 日本04-1B
-      - A-1G
-      - A-1J
-      - 🇩🇪 德国
-      - A-1D
-      - 🇩🇪 德国法兰克福
-      - C | 高速.2X倍率-1D
-      - B | 推荐-1A
-      - A-1M
+      - 🇨🇳 台湾 1
+      - 🇪🇸 西班牙-1A
+      - 🇨🇳 台湾家宽直连 20X-1A
       - C | 高速2X倍率
-      - A | 负载均衡
-      - A-1O
-      - A-1B
-      - A-1F
-      - A-1N
-      - A | 推荐
-      - 🇺🇸 圣何塞5
-      - 🇯🇵 日本VULTR1
-      - B | 推荐-1B
-      - 🇯🇵 日本03-1B
-      - C | 高速.2X倍率-1A
-      - B | 高速.2X倍率
-      - 🇺🇸 美国 纽约01-1A
-      - 🇺🇸 美国 纽约2-1A
-      - B | 负载均衡
-      - 🇺🇸 美国 纽约01-1B
-      - B-1A
-      - E-1B
-      - 🇭🇰 香港02-1B
-      - 🇯🇵 日本02-1B
       - E-1A
-      - 🇺🇸 圣何塞4
-      - A-1A
-      - 🇨🇳 台湾 1-1A
-      - A-1C
-      - 🇭🇰 香港02-1A
-      - 🇨🇳 台湾01-1A
-      - 🇺🇸 圣何塞3
-      - 🇨🇳 台湾原生100X
+      - 🇯🇵 日本02
+      - 🇨🇳 台湾家宽直连 20X-1B
       - C | 高速.2X倍率-1B
-      - 🇨🇳 台湾 1-1B
-      - 🇸🇬 新加坡西部
-      - 🇺🇸 美国 纽约2-1B
-      - A-1I
-      - D | 推荐
-      - 🇺🇸 美国
-      - 🇯🇵 日本03-1A
-      - 🇯🇵 日本V
-      - 🇨🇳 台湾家宽直连 20X
-      - 🇯🇵 日本04-1A
-      - A-1E
-      - 🇺🇸 圣何塞2
-      - C | 高速.2X倍率-1C
-      - 🇯🇵 日本01-1B
-      - 🇨🇳 台湾01-1B
       - D-1C
-      - 🇭🇰 香港03-1A
-      - A-1K
-      - 🇭🇰 香港01-1A
+      - B | 负载均衡
+      - E-1B
+      - A-1N
+      - 🇺🇸 圣何塞2-1B
+      - 🇭🇰 香港03
+      - 🇩🇪 德国法兰克福
+      - 🇯🇵 日本VULTR1-1B
+      - 🇪🇸 西班牙极速-1A
+      - G | 多入口
+      - 🇭🇰 香港02
+      - A-1C
+      - C | 高速.2X倍率-1A
       - D-1D
+      - A-1M
+      - 🇺🇸 美国 纽约2
+      - 🇭🇰 香港01
+      - B-1B
+      - A-1F
+      - 🇨🇳 台湾原生100X-1A
+      - D-1A
+      - B | 高速.2X倍率
+      - A-1A
+      - 🇸🇬 新加坡西部
+      - A-1L
+      - 🇯🇵 日本03
+      - 🇯🇵 日本V-1B
+      - 🇺🇸 圣何塞3-1B
+      - C | 高速.2X倍率-1C
+      - D | 推荐
+      - 🇺🇸 圣何塞4-1B
+      - 🇯🇵 日本V-1A
+      - 🇨🇳 台湾01
       - F
-      - 🇯🇵 日本02-1A
-      - 🇪🇸 西班牙极速
+      - 🇭🇰 香港3-1B
+      - 🇩🇪 德国
+      - 🇭🇰 香港3-1A
+      - A-1E
+      - 🇺🇸 圣何塞3-1A
+      - A-1D
+      - 🇺🇸 圣何塞5-1A
       - A-1P
-      - 🇭🇰 香港3
-      - 🇯🇵 日本01-1A
+      - 🇺🇸 圣何塞5-1B
+      - A-1O
+      - 🇨🇳 台湾原生100X-1B
+      - 🇺🇸 圣何塞4-1A
+      - D-1B
+      - 🇺🇸 美国 纽约01
+      - A-1B
+      - A | 负载均衡
+      - A-1I
+      - C | 高速.2X倍率-1D
+      - 🇯🇵 日本-新疆直连
+      - A | 推荐
+      - 🇺🇸 圣何塞2-1A
+      - 🇪🇸 西班牙极速-1B
+      - A-1G
+      - 🇯🇵 日本04
+      - A-1J
+      - 🇺🇸 美国
+      - B | 推荐-1B
+      - 🇺🇸 圣何塞1-1A
+      - 🇺🇸 圣何塞1-1B
+      - A-1K
+      - B | 推荐-1A
+      - A-1H
+      - B-1A
+      - 🇪🇸 西班牙-1B
+      - 🇯🇵 日本VULTR1-1A
+      - 🇯🇵 日本01
   - name: ⛔️ 广告拦截
     type: select
     proxies:
@@ -348,348 +352,350 @@ proxy-groups:
       - 🔰 节点选择
       - ♻️ 自动选择
       - 🎯 全球直连
-      - 🇪🇸 西班牙
-      - B-1B
-      - D-1A
-      - 🇯🇵 日本-新疆直连
-      - 🇭🇰 香港03-1B
-      - G | 多入口
-      - 🇺🇸 圣何塞1
-      - 🇭🇰 香港01-1B
-      - A-1L
-      - A-1H
-      - D-1B
-      - 🇯🇵 日本04-1B
-      - A-1G
-      - A-1J
-      - 🇩🇪 德国
-      - A-1D
-      - 🇩🇪 德国法兰克福
-      - C | 高速.2X倍率-1D
-      - B | 推荐-1A
-      - A-1M
+      - 🇨🇳 台湾 1
+      - 🇪🇸 西班牙-1A
+      - 🇨🇳 台湾家宽直连 20X-1A
       - C | 高速2X倍率
-      - A | 负载均衡
-      - A-1O
-      - A-1B
-      - A-1F
-      - A-1N
-      - A | 推荐
-      - 🇺🇸 圣何塞5
-      - 🇯🇵 日本VULTR1
-      - B | 推荐-1B
-      - 🇯🇵 日本03-1B
-      - C | 高速.2X倍率-1A
-      - B | 高速.2X倍率
-      - 🇺🇸 美国 纽约01-1A
-      - 🇺🇸 美国 纽约2-1A
-      - B | 负载均衡
-      - 🇺🇸 美国 纽约01-1B
-      - B-1A
-      - E-1B
-      - 🇭🇰 香港02-1B
-      - 🇯🇵 日本02-1B
       - E-1A
-      - 🇺🇸 圣何塞4
-      - A-1A
-      - 🇨🇳 台湾 1-1A
-      - A-1C
-      - 🇭🇰 香港02-1A
-      - 🇨🇳 台湾01-1A
-      - 🇺🇸 圣何塞3
-      - 🇨🇳 台湾原生100X
+      - 🇯🇵 日本02
+      - 🇨🇳 台湾家宽直连 20X-1B
       - C | 高速.2X倍率-1B
-      - 🇨🇳 台湾 1-1B
-      - 🇸🇬 新加坡西部
-      - 🇺🇸 美国 纽约2-1B
-      - A-1I
-      - D | 推荐
-      - 🇺🇸 美国
-      - 🇯🇵 日本03-1A
-      - 🇯🇵 日本V
-      - 🇨🇳 台湾家宽直连 20X
-      - 🇯🇵 日本04-1A
-      - A-1E
-      - 🇺🇸 圣何塞2
-      - C | 高速.2X倍率-1C
-      - 🇯🇵 日本01-1B
-      - 🇨🇳 台湾01-1B
       - D-1C
-      - 🇭🇰 香港03-1A
-      - A-1K
-      - 🇭🇰 香港01-1A
+      - B | 负载均衡
+      - E-1B
+      - A-1N
+      - 🇺🇸 圣何塞2-1B
+      - 🇭🇰 香港03
+      - 🇩🇪 德国法兰克福
+      - 🇯🇵 日本VULTR1-1B
+      - 🇪🇸 西班牙极速-1A
+      - G | 多入口
+      - 🇭🇰 香港02
+      - A-1C
+      - C | 高速.2X倍率-1A
       - D-1D
+      - A-1M
+      - 🇺🇸 美国 纽约2
+      - 🇭🇰 香港01
+      - B-1B
+      - A-1F
+      - 🇨🇳 台湾原生100X-1A
+      - D-1A
+      - B | 高速.2X倍率
+      - A-1A
+      - 🇸🇬 新加坡西部
+      - A-1L
+      - 🇯🇵 日本03
+      - 🇯🇵 日本V-1B
+      - 🇺🇸 圣何塞3-1B
+      - C | 高速.2X倍率-1C
+      - D | 推荐
+      - 🇺🇸 圣何塞4-1B
+      - 🇯🇵 日本V-1A
+      - 🇨🇳 台湾01
       - F
-      - 🇯🇵 日本02-1A
-      - 🇪🇸 西班牙极速
+      - 🇭🇰 香港3-1B
+      - 🇩🇪 德国
+      - 🇭🇰 香港3-1A
+      - A-1E
+      - 🇺🇸 圣何塞3-1A
+      - A-1D
+      - 🇺🇸 圣何塞5-1A
       - A-1P
-      - 🇭🇰 香港3
-      - 🇯🇵 日本01-1A
+      - 🇺🇸 圣何塞5-1B
+      - A-1O
+      - 🇨🇳 台湾原生100X-1B
+      - 🇺🇸 圣何塞4-1A
+      - D-1B
+      - 🇺🇸 美国 纽约01
+      - A-1B
+      - A | 负载均衡
+      - A-1I
+      - C | 高速.2X倍率-1D
+      - 🇯🇵 日本-新疆直连
+      - A | 推荐
+      - 🇺🇸 圣何塞2-1A
+      - 🇪🇸 西班牙极速-1B
+      - A-1G
+      - 🇯🇵 日本04
+      - A-1J
+      - 🇺🇸 美国
+      - B | 推荐-1B
+      - 🇺🇸 圣何塞1-1A
+      - 🇺🇸 圣何塞1-1B
+      - A-1K
+      - B | 推荐-1A
+      - A-1H
+      - B-1A
+      - 🇪🇸 西班牙-1B
+      - 🇯🇵 日本VULTR1-1A
+      - 🇯🇵 日本01
   - name: 🌏 国内媒体
     type: select
     proxies:
       - 🎯 全球直连
-      - 🇭🇰 香港03-1B
-      - 🇭🇰 香港01-1B
-      - 🇭🇰 香港02-1B
-      - 🇨🇳 台湾 1-1A
-      - 🇭🇰 香港02-1A
-      - 🇨🇳 台湾01-1A
-      - 🇨🇳 台湾原生100X
-      - 🇨🇳 台湾 1-1B
-      - 🇨🇳 台湾家宽直连 20X
-      - 🇨🇳 台湾01-1B
-      - 🇭🇰 香港03-1A
-      - 🇭🇰 香港01-1A
-      - 🇭🇰 香港3
+      - 🇨🇳 台湾 1
+      - 🇨🇳 台湾家宽直连 20X-1A
+      - 🇨🇳 台湾家宽直连 20X-1B
+      - 🇭🇰 香港03
+      - 🇭🇰 香港02
+      - 🇭🇰 香港01
+      - 🇨🇳 台湾原生100X-1A
+      - 🇨🇳 台湾01
+      - 🇭🇰 香港3-1B
+      - 🇭🇰 香港3-1A
+      - 🇨🇳 台湾原生100X-1B
       - 🔰 节点选择
   - name: Ⓜ️ 微软服务
     type: select
     proxies:
       - 🎯 全球直连
       - 🔰 节点选择
-      - 🇪🇸 西班牙
-      - B-1B
-      - D-1A
-      - 🇯🇵 日本-新疆直连
-      - 🇭🇰 香港03-1B
-      - G | 多入口
-      - 🇺🇸 圣何塞1
-      - 🇭🇰 香港01-1B
-      - A-1L
-      - A-1H
-      - D-1B
-      - 🇯🇵 日本04-1B
-      - A-1G
-      - A-1J
-      - 🇩🇪 德国
-      - A-1D
-      - 🇩🇪 德国法兰克福
-      - C | 高速.2X倍率-1D
-      - B | 推荐-1A
-      - A-1M
+      - 🇨🇳 台湾 1
+      - 🇪🇸 西班牙-1A
+      - 🇨🇳 台湾家宽直连 20X-1A
       - C | 高速2X倍率
-      - A | 负载均衡
-      - A-1O
-      - A-1B
-      - A-1F
-      - A-1N
-      - A | 推荐
-      - 🇺🇸 圣何塞5
-      - 🇯🇵 日本VULTR1
-      - B | 推荐-1B
-      - 🇯🇵 日本03-1B
-      - C | 高速.2X倍率-1A
-      - B | 高速.2X倍率
-      - 🇺🇸 美国 纽约01-1A
-      - 🇺🇸 美国 纽约2-1A
-      - B | 负载均衡
-      - 🇺🇸 美国 纽约01-1B
-      - B-1A
-      - E-1B
-      - 🇭🇰 香港02-1B
-      - 🇯🇵 日本02-1B
       - E-1A
-      - 🇺🇸 圣何塞4
-      - A-1A
-      - 🇨🇳 台湾 1-1A
-      - A-1C
-      - 🇭🇰 香港02-1A
-      - 🇨🇳 台湾01-1A
-      - 🇺🇸 圣何塞3
-      - 🇨🇳 台湾原生100X
+      - 🇯🇵 日本02
+      - 🇨🇳 台湾家宽直连 20X-1B
       - C | 高速.2X倍率-1B
-      - 🇨🇳 台湾 1-1B
-      - 🇸🇬 新加坡西部
-      - 🇺🇸 美国 纽约2-1B
-      - A-1I
-      - D | 推荐
-      - 🇺🇸 美国
-      - 🇯🇵 日本03-1A
-      - 🇯🇵 日本V
-      - 🇨🇳 台湾家宽直连 20X
-      - 🇯🇵 日本04-1A
-      - A-1E
-      - 🇺🇸 圣何塞2
-      - C | 高速.2X倍率-1C
-      - 🇯🇵 日本01-1B
-      - 🇨🇳 台湾01-1B
       - D-1C
-      - 🇭🇰 香港03-1A
-      - A-1K
-      - 🇭🇰 香港01-1A
+      - B | 负载均衡
+      - E-1B
+      - A-1N
+      - 🇺🇸 圣何塞2-1B
+      - 🇭🇰 香港03
+      - 🇩🇪 德国法兰克福
+      - 🇯🇵 日本VULTR1-1B
+      - 🇪🇸 西班牙极速-1A
+      - G | 多入口
+      - 🇭🇰 香港02
+      - A-1C
+      - C | 高速.2X倍率-1A
       - D-1D
+      - A-1M
+      - 🇺🇸 美国 纽约2
+      - 🇭🇰 香港01
+      - B-1B
+      - A-1F
+      - 🇨🇳 台湾原生100X-1A
+      - D-1A
+      - B | 高速.2X倍率
+      - A-1A
+      - 🇸🇬 新加坡西部
+      - A-1L
+      - 🇯🇵 日本03
+      - 🇯🇵 日本V-1B
+      - 🇺🇸 圣何塞3-1B
+      - C | 高速.2X倍率-1C
+      - D | 推荐
+      - 🇺🇸 圣何塞4-1B
+      - 🇯🇵 日本V-1A
+      - 🇨🇳 台湾01
       - F
-      - 🇯🇵 日本02-1A
-      - 🇪🇸 西班牙极速
+      - 🇭🇰 香港3-1B
+      - 🇩🇪 德国
+      - 🇭🇰 香港3-1A
+      - A-1E
+      - 🇺🇸 圣何塞3-1A
+      - A-1D
+      - 🇺🇸 圣何塞5-1A
       - A-1P
-      - 🇭🇰 香港3
-      - 🇯🇵 日本01-1A
+      - 🇺🇸 圣何塞5-1B
+      - A-1O
+      - 🇨🇳 台湾原生100X-1B
+      - 🇺🇸 圣何塞4-1A
+      - D-1B
+      - 🇺🇸 美国 纽约01
+      - A-1B
+      - A | 负载均衡
+      - A-1I
+      - C | 高速.2X倍率-1D
+      - 🇯🇵 日本-新疆直连
+      - A | 推荐
+      - 🇺🇸 圣何塞2-1A
+      - 🇪🇸 西班牙极速-1B
+      - A-1G
+      - 🇯🇵 日本04
+      - A-1J
+      - 🇺🇸 美国
+      - B | 推荐-1B
+      - 🇺🇸 圣何塞1-1A
+      - 🇺🇸 圣何塞1-1B
+      - A-1K
+      - B | 推荐-1A
+      - A-1H
+      - B-1A
+      - 🇪🇸 西班牙-1B
+      - 🇯🇵 日本VULTR1-1A
+      - 🇯🇵 日本01
   - name: 📲 电报信息
     type: select
     proxies:
       - 🔰 节点选择
       - 🎯 全球直连
-      - 🇪🇸 西班牙
-      - B-1B
-      - D-1A
-      - 🇯🇵 日本-新疆直连
-      - 🇭🇰 香港03-1B
-      - G | 多入口
-      - 🇺🇸 圣何塞1
-      - 🇭🇰 香港01-1B
-      - A-1L
-      - A-1H
-      - D-1B
-      - 🇯🇵 日本04-1B
-      - A-1G
-      - A-1J
-      - 🇩🇪 德国
-      - A-1D
-      - 🇩🇪 德国法兰克福
-      - C | 高速.2X倍率-1D
-      - B | 推荐-1A
-      - A-1M
+      - 🇨🇳 台湾 1
+      - 🇪🇸 西班牙-1A
+      - 🇨🇳 台湾家宽直连 20X-1A
       - C | 高速2X倍率
-      - A | 负载均衡
-      - A-1O
-      - A-1B
-      - A-1F
-      - A-1N
-      - A | 推荐
-      - 🇺🇸 圣何塞5
-      - 🇯🇵 日本VULTR1
-      - B | 推荐-1B
-      - 🇯🇵 日本03-1B
-      - C | 高速.2X倍率-1A
-      - B | 高速.2X倍率
-      - 🇺🇸 美国 纽约01-1A
-      - 🇺🇸 美国 纽约2-1A
-      - B | 负载均衡
-      - 🇺🇸 美国 纽约01-1B
-      - B-1A
-      - E-1B
-      - 🇭🇰 香港02-1B
-      - 🇯🇵 日本02-1B
       - E-1A
-      - 🇺🇸 圣何塞4
-      - A-1A
-      - 🇨🇳 台湾 1-1A
-      - A-1C
-      - 🇭🇰 香港02-1A
-      - 🇨🇳 台湾01-1A
-      - 🇺🇸 圣何塞3
-      - 🇨🇳 台湾原生100X
+      - 🇯🇵 日本02
+      - 🇨🇳 台湾家宽直连 20X-1B
       - C | 高速.2X倍率-1B
-      - 🇨🇳 台湾 1-1B
-      - 🇸🇬 新加坡西部
-      - 🇺🇸 美国 纽约2-1B
-      - A-1I
-      - D | 推荐
-      - 🇺🇸 美国
-      - 🇯🇵 日本03-1A
-      - 🇯🇵 日本V
-      - 🇨🇳 台湾家宽直连 20X
-      - 🇯🇵 日本04-1A
-      - A-1E
-      - 🇺🇸 圣何塞2
-      - C | 高速.2X倍率-1C
-      - 🇯🇵 日本01-1B
-      - 🇨🇳 台湾01-1B
       - D-1C
-      - 🇭🇰 香港03-1A
-      - A-1K
-      - 🇭🇰 香港01-1A
+      - B | 负载均衡
+      - E-1B
+      - A-1N
+      - 🇺🇸 圣何塞2-1B
+      - 🇭🇰 香港03
+      - 🇩🇪 德国法兰克福
+      - 🇯🇵 日本VULTR1-1B
+      - 🇪🇸 西班牙极速-1A
+      - G | 多入口
+      - 🇭🇰 香港02
+      - A-1C
+      - C | 高速.2X倍率-1A
       - D-1D
+      - A-1M
+      - 🇺🇸 美国 纽约2
+      - 🇭🇰 香港01
+      - B-1B
+      - A-1F
+      - 🇨🇳 台湾原生100X-1A
+      - D-1A
+      - B | 高速.2X倍率
+      - A-1A
+      - 🇸🇬 新加坡西部
+      - A-1L
+      - 🇯🇵 日本03
+      - 🇯🇵 日本V-1B
+      - 🇺🇸 圣何塞3-1B
+      - C | 高速.2X倍率-1C
+      - D | 推荐
+      - 🇺🇸 圣何塞4-1B
+      - 🇯🇵 日本V-1A
+      - 🇨🇳 台湾01
       - F
-      - 🇯🇵 日本02-1A
-      - 🇪🇸 西班牙极速
+      - 🇭🇰 香港3-1B
+      - 🇩🇪 德国
+      - 🇭🇰 香港3-1A
+      - A-1E
+      - 🇺🇸 圣何塞3-1A
+      - A-1D
+      - 🇺🇸 圣何塞5-1A
       - A-1P
-      - 🇭🇰 香港3
-      - 🇯🇵 日本01-1A
+      - 🇺🇸 圣何塞5-1B
+      - A-1O
+      - 🇨🇳 台湾原生100X-1B
+      - 🇺🇸 圣何塞4-1A
+      - D-1B
+      - 🇺🇸 美国 纽约01
+      - A-1B
+      - A | 负载均衡
+      - A-1I
+      - C | 高速.2X倍率-1D
+      - 🇯🇵 日本-新疆直连
+      - A | 推荐
+      - 🇺🇸 圣何塞2-1A
+      - 🇪🇸 西班牙极速-1B
+      - A-1G
+      - 🇯🇵 日本04
+      - A-1J
+      - 🇺🇸 美国
+      - B | 推荐-1B
+      - 🇺🇸 圣何塞1-1A
+      - 🇺🇸 圣何塞1-1B
+      - A-1K
+      - B | 推荐-1A
+      - A-1H
+      - B-1A
+      - 🇪🇸 西班牙-1B
+      - 🇯🇵 日本VULTR1-1A
+      - 🇯🇵 日本01
   - name: 🍎 苹果服务
     type: select
     proxies:
       - 🔰 节点选择
       - 🎯 全球直连
       - ♻️ 自动选择
-      - 🇪🇸 西班牙
-      - B-1B
-      - D-1A
-      - 🇯🇵 日本-新疆直连
-      - 🇭🇰 香港03-1B
-      - G | 多入口
-      - 🇺🇸 圣何塞1
-      - 🇭🇰 香港01-1B
-      - A-1L
-      - A-1H
-      - D-1B
-      - 🇯🇵 日本04-1B
-      - A-1G
-      - A-1J
-      - 🇩🇪 德国
-      - A-1D
-      - 🇩🇪 德国法兰克福
-      - C | 高速.2X倍率-1D
-      - B | 推荐-1A
-      - A-1M
+      - 🇨🇳 台湾 1
+      - 🇪🇸 西班牙-1A
+      - 🇨🇳 台湾家宽直连 20X-1A
       - C | 高速2X倍率
-      - A | 负载均衡
-      - A-1O
-      - A-1B
-      - A-1F
-      - A-1N
-      - A | 推荐
-      - 🇺🇸 圣何塞5
-      - 🇯🇵 日本VULTR1
-      - B | 推荐-1B
-      - 🇯🇵 日本03-1B
-      - C | 高速.2X倍率-1A
-      - B | 高速.2X倍率
-      - 🇺🇸 美国 纽约01-1A
-      - 🇺🇸 美国 纽约2-1A
-      - B | 负载均衡
-      - 🇺🇸 美国 纽约01-1B
-      - B-1A
-      - E-1B
-      - 🇭🇰 香港02-1B
-      - 🇯🇵 日本02-1B
       - E-1A
-      - 🇺🇸 圣何塞4
-      - A-1A
-      - 🇨🇳 台湾 1-1A
-      - A-1C
-      - 🇭🇰 香港02-1A
-      - 🇨🇳 台湾01-1A
-      - 🇺🇸 圣何塞3
-      - 🇨🇳 台湾原生100X
+      - 🇯🇵 日本02
+      - 🇨🇳 台湾家宽直连 20X-1B
       - C | 高速.2X倍率-1B
-      - 🇨🇳 台湾 1-1B
-      - 🇸🇬 新加坡西部
-      - 🇺🇸 美国 纽约2-1B
-      - A-1I
-      - D | 推荐
-      - 🇺🇸 美国
-      - 🇯🇵 日本03-1A
-      - 🇯🇵 日本V
-      - 🇨🇳 台湾家宽直连 20X
-      - 🇯🇵 日本04-1A
-      - A-1E
-      - 🇺🇸 圣何塞2
-      - C | 高速.2X倍率-1C
-      - 🇯🇵 日本01-1B
-      - 🇨🇳 台湾01-1B
       - D-1C
-      - 🇭🇰 香港03-1A
-      - A-1K
-      - 🇭🇰 香港01-1A
+      - B | 负载均衡
+      - E-1B
+      - A-1N
+      - 🇺🇸 圣何塞2-1B
+      - 🇭🇰 香港03
+      - 🇩🇪 德国法兰克福
+      - 🇯🇵 日本VULTR1-1B
+      - 🇪🇸 西班牙极速-1A
+      - G | 多入口
+      - 🇭🇰 香港02
+      - A-1C
+      - C | 高速.2X倍率-1A
       - D-1D
+      - A-1M
+      - 🇺🇸 美国 纽约2
+      - 🇭🇰 香港01
+      - B-1B
+      - A-1F
+      - 🇨🇳 台湾原生100X-1A
+      - D-1A
+      - B | 高速.2X倍率
+      - A-1A
+      - 🇸🇬 新加坡西部
+      - A-1L
+      - 🇯🇵 日本03
+      - 🇯🇵 日本V-1B
+      - 🇺🇸 圣何塞3-1B
+      - C | 高速.2X倍率-1C
+      - D | 推荐
+      - 🇺🇸 圣何塞4-1B
+      - 🇯🇵 日本V-1A
+      - 🇨🇳 台湾01
       - F
-      - 🇯🇵 日本02-1A
-      - 🇪🇸 西班牙极速
+      - 🇭🇰 香港3-1B
+      - 🇩🇪 德国
+      - 🇭🇰 香港3-1A
+      - A-1E
+      - 🇺🇸 圣何塞3-1A
+      - A-1D
+      - 🇺🇸 圣何塞5-1A
       - A-1P
-      - 🇭🇰 香港3
-      - 🇯🇵 日本01-1A
+      - 🇺🇸 圣何塞5-1B
+      - A-1O
+      - 🇨🇳 台湾原生100X-1B
+      - 🇺🇸 圣何塞4-1A
+      - D-1B
+      - 🇺🇸 美国 纽约01
+      - A-1B
+      - A | 负载均衡
+      - A-1I
+      - C | 高速.2X倍率-1D
+      - 🇯🇵 日本-新疆直连
+      - A | 推荐
+      - 🇺🇸 圣何塞2-1A
+      - 🇪🇸 西班牙极速-1B
+      - A-1G
+      - 🇯🇵 日本04
+      - A-1J
+      - 🇺🇸 美国
+      - B | 推荐-1B
+      - 🇺🇸 圣何塞1-1A
+      - 🇺🇸 圣何塞1-1B
+      - A-1K
+      - B | 推荐-1A
+      - A-1H
+      - B-1A
+      - 🇪🇸 西班牙-1B
+      - 🇯🇵 日本VULTR1-1A
+      - 🇯🇵 日本01
   - name: 🎯 全球直连
     type: select
     proxies:
@@ -705,83 +711,84 @@ proxy-groups:
       - 🔰 节点选择
       - 🎯 全球直连
       - ♻️ 自动选择
-      - 🇪🇸 西班牙
-      - B-1B
-      - D-1A
-      - 🇯🇵 日本-新疆直连
-      - 🇭🇰 香港03-1B
-      - G | 多入口
-      - 🇺🇸 圣何塞1
-      - 🇭🇰 香港01-1B
-      - A-1L
-      - A-1H
-      - D-1B
-      - 🇯🇵 日本04-1B
-      - A-1G
-      - A-1J
-      - 🇩🇪 德国
-      - A-1D
-      - 🇩🇪 德国法兰克福
-      - C | 高速.2X倍率-1D
-      - B | 推荐-1A
-      - A-1M
+      - 🇨🇳 台湾 1
+      - 🇪🇸 西班牙-1A
+      - 🇨🇳 台湾家宽直连 20X-1A
       - C | 高速2X倍率
-      - A | 负载均衡
-      - A-1O
-      - A-1B
-      - A-1F
-      - A-1N
-      - A | 推荐
-      - 🇺🇸 圣何塞5
-      - 🇯🇵 日本VULTR1
-      - B | 推荐-1B
-      - 🇯🇵 日本03-1B
-      - C | 高速.2X倍率-1A
-      - B | 高速.2X倍率
-      - 🇺🇸 美国 纽约01-1A
-      - 🇺🇸 美国 纽约2-1A
-      - B | 负载均衡
-      - 🇺🇸 美国 纽约01-1B
-      - B-1A
-      - E-1B
-      - 🇭🇰 香港02-1B
-      - 🇯🇵 日本02-1B
       - E-1A
-      - 🇺🇸 圣何塞4
-      - A-1A
-      - 🇨🇳 台湾 1-1A
-      - A-1C
-      - 🇭🇰 香港02-1A
-      - 🇨🇳 台湾01-1A
-      - 🇺🇸 圣何塞3
-      - 🇨🇳 台湾原生100X
+      - 🇯🇵 日本02
+      - 🇨🇳 台湾家宽直连 20X-1B
       - C | 高速.2X倍率-1B
-      - 🇨🇳 台湾 1-1B
-      - 🇸🇬 新加坡西部
-      - 🇺🇸 美国 纽约2-1B
-      - A-1I
-      - D | 推荐
-      - 🇺🇸 美国
-      - 🇯🇵 日本03-1A
-      - 🇯🇵 日本V
-      - 🇨🇳 台湾家宽直连 20X
-      - 🇯🇵 日本04-1A
-      - A-1E
-      - 🇺🇸 圣何塞2
-      - C | 高速.2X倍率-1C
-      - 🇯🇵 日本01-1B
-      - 🇨🇳 台湾01-1B
       - D-1C
-      - 🇭🇰 香港03-1A
-      - A-1K
-      - 🇭🇰 香港01-1A
+      - B | 负载均衡
+      - E-1B
+      - A-1N
+      - 🇺🇸 圣何塞2-1B
+      - 🇭🇰 香港03
+      - 🇩🇪 德国法兰克福
+      - 🇯🇵 日本VULTR1-1B
+      - 🇪🇸 西班牙极速-1A
+      - G | 多入口
+      - 🇭🇰 香港02
+      - A-1C
+      - C | 高速.2X倍率-1A
       - D-1D
+      - A-1M
+      - 🇺🇸 美国 纽约2
+      - 🇭🇰 香港01
+      - B-1B
+      - A-1F
+      - 🇨🇳 台湾原生100X-1A
+      - D-1A
+      - B | 高速.2X倍率
+      - A-1A
+      - 🇸🇬 新加坡西部
+      - A-1L
+      - 🇯🇵 日本03
+      - 🇯🇵 日本V-1B
+      - 🇺🇸 圣何塞3-1B
+      - C | 高速.2X倍率-1C
+      - D | 推荐
+      - 🇺🇸 圣何塞4-1B
+      - 🇯🇵 日本V-1A
+      - 🇨🇳 台湾01
       - F
-      - 🇯🇵 日本02-1A
-      - 🇪🇸 西班牙极速
+      - 🇭🇰 香港3-1B
+      - 🇩🇪 德国
+      - 🇭🇰 香港3-1A
+      - A-1E
+      - 🇺🇸 圣何塞3-1A
+      - A-1D
+      - 🇺🇸 圣何塞5-1A
       - A-1P
-      - 🇭🇰 香港3
-      - 🇯🇵 日本01-1A
+      - 🇺🇸 圣何塞5-1B
+      - A-1O
+      - 🇨🇳 台湾原生100X-1B
+      - 🇺🇸 圣何塞4-1A
+      - D-1B
+      - 🇺🇸 美国 纽约01
+      - A-1B
+      - A | 负载均衡
+      - A-1I
+      - C | 高速.2X倍率-1D
+      - 🇯🇵 日本-新疆直连
+      - A | 推荐
+      - 🇺🇸 圣何塞2-1A
+      - 🇪🇸 西班牙极速-1B
+      - A-1G
+      - 🇯🇵 日本04
+      - A-1J
+      - 🇺🇸 美国
+      - B | 推荐-1B
+      - 🇺🇸 圣何塞1-1A
+      - 🇺🇸 圣何塞1-1B
+      - A-1K
+      - B | 推荐-1A
+      - A-1H
+      - B-1A
+      - 🇪🇸 西班牙-1B
+      - 🇯🇵 日本VULTR1-1A
+      - 🇯🇵 日本01
 rules:
   - DOMAIN-SUFFIX,local,🎯 全球直连
   - IP-CIDR,192.168.0.0/16,🎯 全球直连,no-resolve
