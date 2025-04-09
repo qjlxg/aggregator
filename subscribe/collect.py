@@ -172,7 +172,7 @@ def assign(
     # 爬取新站点列表
     if not domains or overwrite:
         candidates = crawl.collect_airport(
-            channel="allv2board",
+            channel="all",
             page_num=pages,
             num_thread=num_threads,
             rigid=rigid,
