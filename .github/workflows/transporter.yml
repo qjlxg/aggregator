@@ -1,0 +1,49 @@
+
+#来源于:https://github.com/eliangwww/transporter
+name: transporter
+permissions:
+  contents: write  # 允许写入权限
+
+on:
+  workflow_dispatch: # 允许手动触发工作流
+  schedule:
+    # 设置定时任务，每天00:00 UTC时间执行
+    - cron: "0 */6 * * *"
+jobs:
+  fetch-and-store:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # 获取完整的Git历史
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        pip install requests pyaes
+        
+    - name: 设置时区
+      run: sudo timedatectl set-timezone 'Asia/Shanghai'
+
+    - name: Run Python script
+      run: |
+        python subscribe/transporter.py >> data/transporter.txt
+
+    - name: Commit and push changes to main
+      run: |
+        git config --local user.email "1139523599@qq.com"
+        git config --local user.name "eliangwww"
+        git add data/transporter.txt
+        git commit -m "$(date '+%Y-%m-%d %H:%M:%S') "
+        git pull origin main --rebase || git rebase --abort
+        git push origin main
+
+    - name: Clean up working directory
+      run: |
+        git checkout main

@@ -1,0 +1,38 @@
+#https://github.com/VPNforWindowsSub/base64
+name: Base64 Conversion
+
+on:
+ schedule:
+ - cron: "0 */48 * * *"
+ workflow_dispatch:
+
+jobs:
+ convert_to_base64:
+  runs-on: ubuntu-latest
+  steps:
+   - name: Checkout repository
+     uses: actions/checkout@v2
+
+   - name: Set up Python
+     uses: actions/setup-python@v2
+     with:
+       python-version: '3.x'
+
+   - name: Install requests module
+     run: pip install requests
+
+   - name: Run conversion script
+     run: |
+       python -m pip install --upgrade pip
+       python subscribe/convert_to_base64.py
+
+   - name: Commit and push changes (only if necessary)
+     if: ${{ always() }}  # Always run this step, even on failure
+     run: |
+       git config --global user.email "actions@github.com"
+       git config --global user.name "GitHub Actions"
+       git add base64.txt
+       if [[ -n $(git status -s base64.txt) ]]; then  # Check for changes
+         git commit -m "Update base64.txt"
+         git push
+       fi

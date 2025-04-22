@@ -1,0 +1,19 @@
+name: Copy Data
+on: [push]
+
+jobs:
+  copy-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy data to subdirectory
+        run: |
+          chmod +x ./subscribe/copy_to_sub.sh
+          ./subscribe/copy_to_sub.sh
+      - name: Commit changes
+        run: |
+          git config --global user.name "GitHub Bot"
+          git config --global user.email "bot@noreply.github.com"
+          git add .
+          git commit -m "Auto-copy data files"
+          git push

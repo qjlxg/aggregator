@@ -1,0 +1,79 @@
+
+
+
+name: all
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'all.py'
+  schedule:
+    - cron: '30 0/3 * * *'  # 每天UTC时间00:00自动运行
+env:
+  GIST_PAT: ${{ secrets.GIST_PAT }}
+  GIST_LINK: ${{ secrets.GIST_LINK }}
+  CUSTOMIZE_LINK: ${{ secrets.CUSTOMIZE_LINK }}
+  ENABLE_SPECIAL_PROTOCOLS: ${{ vars.ENABLE_SPECIAL_PROTOCOLS }}
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 关键权限设置
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        # 使用SSH方式克隆仓库
+        ssh-key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        persist-credentials: true
+        
+    - name: 设置时区
+      run: sudo timedatectl set-timezone 'Asia/Shanghai'
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: pip install requests
+    - name: Check
+      run: |
+          if [ -z "$GIST_PAT" ]; then
+              echo "Error: environment 'GIST_PAT' cannot be empty"
+              exit 1
+          fi
+
+          if [ -z "$GIST_LINK" ]; then
+              echo "Error: environment 'GIST_LINK' cannot be empty"
+              exit 1
+          fi
+
+          LINK_PARTS=$(echo "$GIST_LINK" | awk -F'/' 'NF==2 && $1!="" && $2!=""')
+          if [ -z "$LINK_PARTS" ]; then
+              echo "Error: environment 'GIST_LINK' is not valid, should be 'username/gist_id' format"
+              exit 1
+          fi
+
+    - name: Run collection script
+      run: python subscribe/all.py
+
+    
+
+    - name: 提交更改
+      run: |                 
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git pull origin main
+        git add data/t.txt
+        git commit -m "$(date '+%Y-%m-%d %H:%M:%S') "
+        
+    - name: 推送更改
+      uses:  ad-m/github-push-action@master
+      with:
+        branch: main
+     
+       

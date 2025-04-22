@@ -1,0 +1,54 @@
+# w1770946466 北慕白  https://github.com/w1770946466/Auto_proxy
+name: Auto_proxy
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */36 * * *"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 迁出代码
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # 获取完整提交历史
+
+    - name: 安装Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: 加载缓存
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/run_in_Actions/requirements2.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: 设置时区
+      run: sudo timedatectl set-timezone 'Asia/Shanghai'
+
+    - name: 安装依赖
+      run: pip install -r ./requirements2.txt
+
+    - name: 执行任务
+      run: python ./TG_proxy_main.py
+
+    - name: 提交更改
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        # 添加所有生成的文件
+        git add --all
+        git commit -m "$(date '+%Y-%m-%d %H:%M:%S') Auto Update"
+        # 使用强制rebase合并
+        git pull --rebase --allow-unrelated-histories origin main
+
+    - name: 推送更改
+      uses: ad-m/github-push-action@master
+      with:
+        branch: main
+        force: true  # 如果使用rebase可能需要强制推送
