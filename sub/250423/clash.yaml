@@ -4464,7 +4464,7 @@ proxies:
   - {name: 🇯🇵 日本1-1O, server: cname03-ncpbbyhazxjnwkrx.222schweinshaxe.com, port: 51021, type: ss, cipher: chacha20-ietf-poly1305, password: 2825e882-f0b9-4710-9805-09068292934f, udp: true}
   - {name: 🇹🇭 泰国10无中转-1M, server: 62.112.143.249, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: cc113fcf-1ad9-45dd-bf3a-db941f59117c, udp: true}
   - {name: 🇺🇸 美国-4 专线 倍率2-1H, server: zjyd.bolezf.com, port: 10132, type: vless, uuid: 76f21dcc-41e5-4954-bdec-eefeab1f5c74, tls: true, flow: xtls-rprx-vision, reality-opts: {public-key: S2x_vy_rh99yUn-0DXciGYUlAbe1N-WNT8o0NCcbrA0, short-id: abed0ea4}, servername: m.media-amazon.com, client-fingerprint: chrome, network: tcp}
-  - {name: 🇺🇸 美国11, server: starlink-sfo5.2513142.xyz, port: 4433, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇺🇸 美国11, server: starlink-sfo5.2513142.xyz, port: 4433, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇩🇪 DELUXHOST法兰克福HYSTERIA2-1F, server: de.eans.top, port: 7009, type: hysteria2, password: da3700d0-266d-4bbf-b21c-3691bf96841f, auth: da3700d0-266d-4bbf-b21c-3691bf96841f, sni: de.eans.top, skip-cert-verify: false, udp: true}
   - {name: 🇦🇹 奥地利-1B, server: mmt.bjcu.donghui.tech, port: 43354, type: ss, cipher: aes-128-gcm, password: 2251b2da-7b83-426a-85e0-715d9128479d, udp: true}
   - {name: 🇯🇵 日本-高端1-1B, server: jpa1.426624.xyz, port: 19842, type: hysteria2, password: c695883e-3cd9-4522-bb1c-9af6080b7722, auth: c695883e-3cd9-4522-bb1c-9af6080b7722, sni: jpa1.426624.xyz, skip-cert-verify: false, udp: true}
@@ -4549,7 +4549,7 @@ proxies:
   - {name: 🇭🇰 香港V6|18-1F, server: hytrob.656888.xyz, port: 6668, type: vmess, uuid: a735c342-bf8c-4a3f-bc84-50bcd8219686, alterId: 0, cipher: auto, tls: false, udp: true}
   - {name: 🇦🇺 3x专线澳洲-1C, server: vip1.av8djd.top, port: 50126, type: ss, cipher: aes-128-gcm, password: d382c1e5-612f-4fac-a704-9df88021f990, udp: true}
   - {name: 🇯🇵 日本2-1R, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34327, type: ss, cipher: chacha20-ietf-poly1305, password: ca9569dd-3641-4335-be45-4c0814455ee7, udp: true}
-  - {name: 🇦🇿 阿塞拜疆2, server: starlink-fra2.2513142.xyz, port: 10003, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇦🇿 阿塞拜疆2, server: starlink-fra2.2513142.xyz, port: 10003, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇭🇰 VIP 香港1 高速-1L, server: hk05.jiasudu.buzz, port: 47015, type: ss, cipher: aes-256-gcm, password: 00d893ed-2198-459b-83b5-94cb0ba63a47, udp: true}
   - {name: 🇺🇸 美国B-1G, server: 74.48.15.53, port: 3031, type: hysteria2, password: 38346752-853c-4bf3-b137-2d543374669e, auth: 38346752-853c-4bf3-b137-2d543374669e, skip-cert-verify: true, udp: true}
   - {name: 🇦🇺 VIP 澳大利亚1-1I, server: au01.jiasudu.buzz, port: 47051, type: ss, cipher: aes-256-gcm, password: a46d90cd-6c27-44b5-9f24-cdabfbf1097d, udp: true}
@@ -4743,7 +4743,7 @@ proxies:
   - {name: 🇹🇼 台湾直连-TROJAN-1G, server: v3.nmcf.me, port: 443, type: trojan, password: 64841534-0e32-452e-a038-c443fe1fdef0, sni: v3.nmcf.me, skip-cert-verify: false, udp: true}
   - {name: 🇮🇪 爱尔兰-1H, server: ie.sinqin.net, port: 8080, type: hysteria2, password: b8d48445-8b01-4db0-a9f3-27932c7f7f62, auth: b8d48445-8b01-4db0-a9f3-27932c7f7f62, skip-cert-verify: false, udp: true}
   - {name: 🇭🇰 公益路线1-香港HK 限速50MBPS, server: jg647hf446ghvw.gym0boy.com, port: 49709, type: ss, cipher: chacha20-ietf-poly1305, password: 3c0a4b5f-4e49-4876-9b88-a5be67f73ba9, udp: true}
-  - {name: 🇳🇴 挪威, server: starlink-fra2.2513142.xyz, port: 10012, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇳🇴 挪威, server: starlink-fra2.2513142.xyz, port: 10012, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇭🇰 香港1-中转3-1A, server: bb3.wuxianliulianng.xyz, port: 443, type: trojan, password: b392bced-2765-4978-9e4c-cab4cde3b27b, sni: golinkwuxian.top, skip-cert-verify: true, network: ws, ws-opts: {path: /apple, headers: {Host: golinkwuxian.top}}, udp: true}
   - {name: 🇻🇳 V1 | 越南1-1I, server: vn91.cctv14.xyz, port: 49048, type: ss, cipher: aes-256-gcm, password: 9b7a9fad-cf3f-4231-9f13-6b82e1bd1f48, udp: true}
   - {name: 🇺🇸 IEPL 美国US 220-1L, server: 183.240.116.150, port: 16109, type: ss, cipher: chacha20-ietf-poly1305, password: 8d7165a6-3eb4-4124-a064-f717e3e6cb99, udp: true}
@@ -4789,14 +4789,14 @@ proxies:
   - {name: 🇯🇵 IEPL 日本JP 140-1E, server: 183.240.116.150, port: 16101, type: ss, cipher: chacha20-ietf-poly1305, password: 27ec2444-e755-4680-b5ed-9b5ea187217e, udp: true}
   - {name: 🇺🇸 美国东部-1G, server: hry01.2228333.xyz, port: 62525, type: ss, cipher: chacha20-ietf-poly1305, password: a1ec82c7-0e87-4faf-98fe-91c231ee9091, udp: true}
   - {name: 🇭🇰 香港1-中转1-1A, server: aa5.wuxianliulianng.xyz, port: 443, type: trojan, password: b392bced-2765-4978-9e4c-cab4cde3b27b, sni: golinkwuxian.top, skip-cert-verify: true, network: ws, ws-opts: {path: /apple, headers: {Host: golinkwuxian.top}}, udp: true}
-  - {name: 🇭🇰 香港4丨HYPER, server: starlink-hkx.2513142.xyz, port: 22300, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇭🇰 香港4丨HYPER, server: starlink-hkx.2513142.xyz, port: 22300, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇭🇰 HK 香港2-1A, server: hry200.2228333.xyz, port: 52501, type: vmess, uuid: 61032010-7c9a-4d87-bcf6-9e5155919db1, alterId: 0, cipher: auto, tls: false, udp: true}
   - {name: 🇦🇺 澳大利亚东部-1B, server: hry01.2228333.xyz, port: 62521, type: ss, cipher: chacha20-ietf-poly1305, password: 2cf7e49c-7b16-4cb5-b3af-6e83fab65fd0, udp: true}
   - {name: 🇧🇷 巴西 中转-1H, server: vip.baima360.com, port: 30752, type: ss, cipher: chacha20-ietf-poly1305, password: 3dc4440e-5665-41ca-b071-b7e32e494b47, udp: true}
   - {name: 🇩🇪 中转 德国306-1B, server: gy.58n.net, port: 20306, type: trojan, password: 4dd6096f-1193-37f3-ad62-84b43491bf7d, sni: z306.hongkongnode.top, udp: true}
   - {name: 🇹🇭 泰国4无中转-1A, server: 62.112.143.49, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: a1b4e52a-91a9-48f9-99c4-54fb21c4590c, udp: true}
   - {name: 🇹🇭 泰国6无中转-1O, server: 62.112.143.103, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 3ab66b08-a216-446e-b3ab-86dae459b6c9, udp: true}
-  - {name: 🇲🇩 摩尔多瓦, server: starlink-fra2.2513142.xyz, port: 10005, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇲🇩 摩尔多瓦, server: starlink-fra2.2513142.xyz, port: 10005, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇻🇳 越南1-1N, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34308, type: ss, cipher: chacha20-ietf-poly1305, password: cc113fcf-1ad9-45dd-bf3a-db941f59117c, udp: true}
   - {name: 🇸🇬 亚洲|新加坡CC-1D, server: rk1.nynode0.cc, port: 20643, type: ss, cipher: chacha20-ietf-poly1305, password: 8fd33e73-caaa-4232-bb51-4bdb0261bad4, udp: true}
   - {name: 🇲🇾 马来西亚3-1N, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34440, type: ss, cipher: chacha20-ietf-poly1305, password: ca9569dd-3641-4335-be45-4c0814455ee7, udp: true}
@@ -4822,7 +4822,7 @@ proxies:
   - {name: 🇸🇪 IEPL 瑞典SW 138-1F, server: 183.240.116.150, port: 16132, type: ss, cipher: chacha20-ietf-poly1305, password: e6c0b8d5-c9b8-4101-bb82-28bc0a973a86, udp: true}
   - {name: 🇫🇷 1x普线法国-1B, server: xd1.av8djd.top, port: 18663, type: ss, cipher: aes-128-gcm, password: b7753d5c-19ce-4c5c-bad4-9c7179640e6a, udp: true}
   - {name: 🇯🇵 日本-碧海云 24-1A, server: 125.94.45.119, port: 27002, type: trojan, password: fd017563-2e12-4b2f-9169-e5eebee6b9b1, sni: q08m.vgraxiw73s.hasyaf.cn, udp: true}
-  - {name: 🇮🇪 爱尔兰2, server: starlink-irl.2513142.xyz, port: 4433, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇮🇪 爱尔兰2, server: starlink-irl.2513142.xyz, port: 4433, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇸🇬 新加坡-2C, server: 47.236.119.64, port: 32919, type: vmess, uuid: 03e48087-0bb9-4eff-b9c5-56d8fca88d17, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /}, udp: true}
   - {name: 🇭🇰 香港-V6|08-1C, server: greenhk2.616626.xyz, port: 10507, type: vmess, uuid: 2876125d-3cf6-4b1d-92fb-22dcbc9e353d, alterId: 0, cipher: auto, tls: false, udp: true}
   - {name: 🇹🇭 泰国3-1I, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34337, type: ss, cipher: chacha20-ietf-poly1305, password: 85f1f3f8-aec7-46ce-b694-3c435d2e6b06, udp: true}
@@ -4874,7 +4874,7 @@ proxies:
   - {name: 🇹🇼 台湾家宽 03-1F, server: mmt.gya.zhangwei.li, port: 21205, type: ss, cipher: aes-128-gcm, password: 56a94d18-cc49-4342-ba8e-10cbfda2fe43, udp: true}
   - {name: 🇸🇬 新加坡-碧海云 19-1A, server: 183.2.150.64, port: 42881, type: trojan, password: c0ae4c86-3f91-4be5-863c-2fb36ef2c306, sni: q08m.vgraxiw73s.hasyaf.cn, udp: true}
   - {name: 🇹🇼 台湾 5-1B, server: 82.152.90.200, port: 8443, type: hysteria2, password: 99b49302-eef2-41f7-b612-63042ced0471, auth: 99b49302-eef2-41f7-b612-63042ced0471, sni: tw.bailian.uk, skip-cert-verify: false, udp: true}
-  - {name: 🇨🇿 捷克-1A, server: starlink-fra2.2513142.xyz, port: 10008, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇨🇿 捷克-1A, server: starlink-fra2.2513142.xyz, port: 10008, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇲🇳 亚洲|蒙古02-1G, server: ah.qlrk0.cc, port: 23253, type: ss, cipher: chacha20-ietf-poly1305, password: 7fd7b542-e9d0-420b-9ad3-2a83cb8ad336, udp: true}
   - {name: 🇸🇬 华为新加坡HYSTERIA2-1F, server: s.eans.top, port: 7009, type: hysteria2, password: da3700d0-266d-4bbf-b21c-3691bf96841f, auth: da3700d0-266d-4bbf-b21c-3691bf96841f, sni: s.eans.top, skip-cert-verify: false, udp: true}
   - {name: 🇮🇱 亚洲|以色列01-1F, server: hn.qlrk0.cc, port: 41788, type: ss, cipher: chacha20-ietf-poly1305, password: 8b514eb7-cc8f-4d4b-9e7f-9437719dd14b, udp: true}
@@ -5202,7 +5202,7 @@ proxies:
   - {name: 🇹🇼 国际专线 台湾TW 89 VIP-2M, server: 1.1.1.1, port: 443, type: ss, cipher: chacha20-ietf-poly1305, password: fc71b3b5-0660-4cfd-a14f-d111eaa7314b, udp: true}
   - {name: 🇹🇭 泰国2-1N, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34309, type: ss, cipher: chacha20-ietf-poly1305, password: ca9569dd-3641-4335-be45-4c0814455ee7, udp: true}
   - {name: 🇭🇰 香港1-1U, server: ppx1.6128888.xyz, port: 27824, type: vmess, uuid: ed7199b7-acc2-4db9-99fe-6e31cd8b574a, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: 🇭🇰 香港1丨HYPER, server: starlink-hkx.2513142.xyz, port: 20000, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇭🇰 香港1丨HYPER, server: starlink-hkx.2513142.xyz, port: 20000, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 文莱1, server: zz.yume.cyou, port: 10017, type: ss, cipher: 2022-blake3-aes-256-gcm, password: YWQ3Y2UxOGQ2MTkzYTU0MWMxZjVkMzUyNmM5NDNhMmQ=:ODk5NzU3MjItYjBkOS00ODUxLWJkYzctZTRlNDRkOGQ=, udp: true}
   - {name: 🇲🇾 马来西亚4-1N, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34441, type: ss, cipher: chacha20-ietf-poly1305, password: ca9569dd-3641-4335-be45-4c0814455ee7, udp: true}
   - {name: 🇿🇦 IEPL 南非ZA 177-1N, server: 183.240.116.150, port: 16122, type: ss, cipher: chacha20-ietf-poly1305, password: 9144cd8b-e0e8-4d31-ba38-3a9ac1fbabf0, udp: true}
@@ -5232,7 +5232,7 @@ proxies:
   - {name: 🇺🇸 美国东部-1K, server: hry01.2228333.xyz, port: 62525, type: ss, cipher: chacha20-ietf-poly1305, password: aa53bec8-cbbf-42f2-b983-c226bdc1eb32, udp: true}
   - {name: 🇭🇰 国际专线 香港HK 58-1V, server: 120.232.239.186, port: 39878, type: ss, cipher: chacha20-ietf-poly1305, password: 63491e69-7e3e-4bf5-9c60-f3825444de95, udp: true}
   - {name: 🇻🇳 越南 河内 04-1C, server: mmt-gybb.zhangwei.li, port: 59201, type: ss, cipher: aes-128-gcm, password: 2ff7b4c7-7c48-4605-a6ff-743f14f3dea1, udp: true}
-  - {name: 🇱🇹 立陶宛, server: starlink-fra2.2513142.xyz, port: 10011, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇱🇹 立陶宛, server: starlink-fra2.2513142.xyz, port: 10011, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇹🇼 台湾无中转5-1I, server: 103.115.109.219, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 85f1f3f8-aec7-46ce-b694-3c435d2e6b06, udp: true}
   - {name: 🇭🇰 IEPL专线-香港-1-1B, server: 59.42.247.189, port: 8007, type: vmess, uuid: 272acaf1-87b6-4e0e-b35b-98e5bfdac250, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /nmkj, headers: {Host: v7.nmcf.me}}, udp: true}
   - {name: 🇹🇼 TW-TAIPEI-N-1B, server: vtcm.vttopysk.com, port: 57015, type: ss, cipher: chacha20-ietf-poly1305, password: 5e8ddf57-79cf-4ce4-abd0-a182af3f600c, udp: true}
@@ -5657,7 +5657,7 @@ proxies:
   - {name: 🇭🇰 HONGKONG 1-1C, server: svip1.pingboy.top, port: 17993, type: vmess, uuid: 17a2370c-ab9c-40ef-877a-1e418be50ec8, alterId: 0, cipher: auto, tls: false, udp: true}
   - {name: 🇩🇪 中转 德国302-1B, server: gy.58n.net, port: 20302, type: trojan, password: 4dd6096f-1193-37f3-ad62-84b43491bf7d, sni: z302.hongkongnode.top, udp: true}
   - {name: 🇸🇪 瑞典-1B, server: se.sinqin.net, port: 8080, type: hysteria2, password: b6d7dd50-44e5-478c-b4dc-aae0974cd341, auth: b6d7dd50-44e5-478c-b4dc-aae0974cd341, skip-cert-verify: false, udp: true}
-  - {name: 🇺🇸 美国12, server: starlink-sfo6.2513142.xyz, port: 4433, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇺🇸 美国12, server: starlink-sfo6.2513142.xyz, port: 4433, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇭🇰 香港 中转-3A, server: vip.baima360.com, port: 36511, type: ss, cipher: chacha20-ietf-poly1305, password: aa3ab3eb-bafa-4a91-a63d-60df5bd9f854, udp: true}
   - {name: 🇺🇸 美国直连-VMESS-1A, server: v5.nmcf.me, port: 8002, type: vmess, uuid: 991a4234-202e-48ab-a7fd-cb64415b16c7, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
   - {name: 0.5x-1I, server: nara.189.ovh, port: 10027, type: trojan, password: da2409ae-d6b2-41f2-beb8-e865248c211a, sni: nara.189.ovh, skip-cert-verify: true, udp: true}
@@ -5735,7 +5735,7 @@ proxies:
   - {name: 🇿🇦 南非1, server: 102.219.85.236, port: 20045, type: hysteria2, password: 1, auth: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇭🇰 广港专线-美国04-1C, server: gzdx.newbee8.me, port: 35664, type: vmess, uuid: 1b5074ed-57a4-4b73-b8dd-a068ef6e8412, alterId: 0, cipher: auto, tls: false, udp: true}
   - {name: 🇰🇷 IEPL 韩国KR 242-1M, server: 183.240.116.150, port: 16116, type: ss, cipher: chacha20-ietf-poly1305, password: d4ee0622-afd9-40c1-bf25-35cc7bb32d39, udp: true}
-  - {name: 多哥2, server: 154.70.82.31, port: 20151, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 多哥2, server: 154.70.82.31, port: 20151, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇲🇾 马来西亚无中转8-1L, server: 188.64.106.101, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 94724933-8a8c-46b6-b9fd-d220de412200, udp: true}
   - {name: 🇹🇭 泰国6无中转-1A, server: 62.112.143.103, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: a1b4e52a-91a9-48f9-99c4-54fb21c4590c, udp: true}
   - {name: 🇭🇰 VM香港REALITY-1E, server: h.eans.top, port: 7008, type: vless, uuid: 7fe91b77-e4f7-40da-9f87-c1304fa2cd31, tls: true, flow: xtls-rprx-vision, reality-opts: {public-key: Oj8-fhTWXtsuOkPJxRra_9gK3K_Jnxi-Ybek148Iixs, short-id: 806ba558}, servername: addons.mozilla.org, client-fingerprint: chrome, network: tcp}
@@ -5904,7 +5904,7 @@ proxies:
   - {name: 🇹🇭 泰国4无中转-1G, server: 62.112.143.49, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 5c28cb7a-6fe3-4e71-8653-0757c5581855, udp: true}
   - {name: 🇯🇵 日本中央-1E, server: hry01.2228333.xyz, port: 62518, type: ss, cipher: chacha20-ietf-poly1305, password: be9a7f85-2d8f-4c97-b8f3-2cdafe78be98, udp: true}
   - {name: 🇭🇰 香港01 | IPLC三网直连-1D, server: dxzx.flyby-world.top, port: 59058, type: ss, cipher: aes-128-gcm, password: 4e5b1478-c408-4690-ab85-6f4c949b4414, udp: true}
-  - {name: 🇸🇦 沙特阿拉伯, server: starlink-sgp4.2513142.xyz, port: 10004, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇸🇦 沙特阿拉伯, server: starlink-sgp4.2513142.xyz, port: 10004, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇻🇳 越南2无中转-1E, server: 185.126.134.43, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 5b3fc518-3fc1-443b-8ed4-bb7c32273d64, udp: true}
   - {name: 🇯🇵 JP|日本1|IEPL-1I, server: sq.yd.3.07.cdnlinkms001.xyz, port: 20112, type: ss, cipher: chacha20-ietf-poly1305, password: ed1d9ddf-b8b9-486e-90be-6fe0ee4b2d03, udp: true}
   - {name: 🇭🇰 香港.1-1A, server: hzcm.316999.xyz, port: 32301, type: ss, cipher: chacha20-ietf-poly1305, password: 7fbfe381-cfd8-46d0-9da9-312719092c53, udp: true}
@@ -6022,7 +6022,7 @@ proxies:
   - {name: 🇸🇬 新加坡1无中转-1H, server: 176.221.19.170, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 73327258-1827-4a96-b255-abda7c13cb2c, udp: true}
   - {name: 🇹🇭 泰国13-1F, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34451, type: ss, cipher: chacha20-ietf-poly1305, password: 02e71c5f-b93a-45ca-b151-fb7334f06928, udp: true}
   - {name: 🇹🇼 TW|台湾1|IEPL-1H, server: sq.yd.3.07.cdnlinkms001.xyz, port: 20025, type: ss, cipher: chacha20-ietf-poly1305, password: e67f94cf-ac9c-456b-afed-1e1469256b3e, udp: true}
-  - {name: 🇩🇪 德国3, server: starlink-fra.2513142.xyz, port: 4433, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇩🇪 德国3, server: starlink-fra.2513142.xyz, port: 4433, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇹🇼 台湾无中转1-1H, server: 103.115.109.65, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 73327258-1827-4a96-b255-abda7c13cb2c, udp: true}
   - {name: SS-1J, server: 154.3.32.49, port: 30000, type: ss, cipher: chacha20-ietf-poly1305, password: 5b1e1bc0-539c-44d6-a55f-2eb21a3ee462, udp: true}
   - {name: 🇩🇪 德国01-免费, server: de01.sh-cloudflare.sbs, port: 2096, type: vmess, uuid: 2703867d-dd8f-4f7f-93f4-ac6e4f56c7e8, alterId: 0, cipher: auto, tls: true, servername: de01.sh-cloudflare.sbs, network: ws, ws-opts: {path: /, headers: {Host: de01.sh-cloudflare.sbs}}, udp: true}
@@ -6072,7 +6072,7 @@ proxies:
   - {name: 🇯🇵 SVPN-JAPAN-2-1B, server: japantv2.zhixiang.us, port: 56789, type: ss, cipher: aes-256-gcm, password: 3719bd2c-6978-4c36-839c-15b0b58e6b75, udp: true}
   - {name: 🇭🇰 CNFASTER香港HYSTERIA2-1H, server: cn.eans.top, port: 7009, type: hysteria2, password: 31cfa08c-e431-4476-91b6-b535bc651494, auth: 31cfa08c-e431-4476-91b6-b535bc651494, sni: h.eans.top, skip-cert-verify: true, udp: true}
   - {name: 🇸🇬 新加坡01-1K, server: hn3x.newbee8.me, port: 22252, type: vmess, uuid: ddce252f-5a34-4c83-b9ba-4f5aed7a2438, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: 🇲🇽 墨西哥, server: x-mty.2513142.xyz, port: 443, type: trojan, password: !<str> 1, sni: x-mty.2513142.xyz, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: x-mty.2513142.xyz}}, udp: true}
+  - {name: 🇲🇽 墨西哥, server: x-mty.2513142.xyz, port: 443, type: trojan, password: 1, sni: x-mty.2513142.xyz, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: x-mty.2513142.xyz}}, udp: true}
   - {name: 🇸🇬 新加坡 06-1A, server: mmt-gybb.zhangwei.li, port: 49646, type: ss, cipher: aes-128-gcm, password: 6e3b61e1-42f4-400b-8bd3-d9eb584a76e2, udp: true}
   - {name: 🇭🇰 香港直连-VMESS-1Q, server: v4.nmcf.me, port: 8001, type: vmess, uuid: 248802b7-69c9-4a81-bfbc-181fcb62ef97, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
   - {name: 🇯🇵 日本-1Z, server: vip.baima360.com, port: 15888, type: ss, cipher: chacha20-ietf-poly1305, password: 59d39c16-b991-476a-8aae-f1ac3277d8e4, udp: true}
@@ -6473,7 +6473,7 @@ proxies:
   - {name: 🇰🇷 IEPL 韩国KR 242-1D, server: 183.240.116.150, port: 16116, type: ss, cipher: chacha20-ietf-poly1305, password: 9090f5d9-a283-4da2-b110-b16c96fa2b1b, udp: true}
   - {name: 🇭🇰 香港BGP 05-1C, server: gygyd.mmt.zhangwei.li, port: 16276, type: ss, cipher: aes-128-gcm, password: 2ff7b4c7-7c48-4605-a6ff-743f14f3dea1, udp: true}
   - {name: 🇯🇵 V1 | 日本4-1C, server: jp94.cctv14.xyz, port: 49034, type: ss, cipher: aes-256-gcm, password: 4c0ac517-4a0c-4499-a552-1b036b1d5dab, udp: true}
-  - {name: 🇭🇰 香港3丨HYPER, server: starlink-hkx3.2513142.xyz, port: 20001, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇭🇰 香港3丨HYPER, server: starlink-hkx3.2513142.xyz, port: 20001, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: SS-1D, server: test.xiaoshihoukepangle.sbs, port: 1081, type: ss, cipher: chacha20-ietf-poly1305, password: 58772fb9-ba2f-4ea5-a67b-7b6d357b4d98, udp: true}
   - {name: JP01-1B, server: jp002.wsssapt.org, port: 8417, type: vless, uuid: c0d752a1-0017-4901-94fd-0e3fefa472d0, tls: true, flow: xtls-rprx-vision, reality-opts: {public-key: rQwt0CnI1E_CjNZHrHZya1sltOSqRzRabk8TOnO8FQI, short-id: 0eaf678b}, servername: v3-prime-xg-web-pc.ixigua.com, client-fingerprint: chrome, network: tcp}
   - {name: 🇲🇾 马来西亚无中转4-1A, server: 188.64.106.182, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: a1b4e52a-91a9-48f9-99c4-54fb21c4590c, udp: true}
@@ -6581,7 +6581,7 @@ proxies:
   - {name: 🇮🇪 爱尔兰-1D, server: ie.sinqin.net, port: 8080, type: hysteria2, password: dfdc4059-cd97-4a36-bc0a-828a55cff1a1, auth: dfdc4059-cd97-4a36-bc0a-828a55cff1a1, skip-cert-verify: false, udp: true}
   - {name: 🇹🇷 土耳其-3-1B, server: tk8.164165.xyz, port: 19842, type: hysteria2, password: c695883e-3cd9-4522-bb1c-9af6080b7722, auth: c695883e-3cd9-4522-bb1c-9af6080b7722, sni: tk8.164165.xyz, skip-cert-verify: false, udp: true}
   - {name: 🇺🇸 UNITED STATES 1-1B, server: svip1.pingboy.top, port: 15327, type: vmess, uuid: adcf83d9-5366-4e07-8e8b-e13e9517a9a6, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: 🇮🇳 印度4, server: starlink-blr2.2513142.xyz, port: 4433, type: ss, cipher: aes-128-gcm, password: !<str> 1, udp: true}
+  - {name: 🇮🇳 印度4, server: starlink-blr2.2513142.xyz, port: 4433, type: ss, cipher: aes-128-gcm, password: 1, udp: true}
   - {name: 🇸🇬 新加坡直连-VMESS-1E, server: v7.nmcf.me, port: 8000, type: vmess, uuid: 7365fecd-64ef-485d-bf16-838abc3dddc3, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
   - {name: HY2-1J, server: kk7k4bhwpw.tlsttl.xyz, port: 9999, type: hysteria2, password: 81c26051-7c0e-4905-b8e6-9f1ae181c9a7, auth: 81c26051-7c0e-4905-b8e6-9f1ae181c9a7, sni: kk7k4bhwpw.tlsttl.xyz, skip-cert-verify: false, udp: true}
   - {name: 🇺🇸 美洲|美国03-1B, server: hn.qlrk0.cc, port: 31408, type: ss, cipher: chacha20-ietf-poly1305, password: 13351ae1-9b52-4880-acaf-97f34432df33, udp: true}
@@ -6763,7 +6763,7 @@ proxies:
   - {name: 🇺🇸 IEPL专线-美国-1-1N, server: 59.42.247.189, port: 8008, type: vmess, uuid: 4a43979f-e5f0-4e0c-b8c3-275e713f83c2, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /nmkj, headers: {Host: v3.nmcf.me}}, udp: true}
   - {name: 🇸🇬 新加坡07|流媒体-1G, server: sg007.421421.xyz, port: 20230, type: trojan, password: fdd1d613-f234-40f6-b63d-97517e0fc4b3, sni: www.alibaba.com, skip-cert-verify: true, network: ws, ws-opts: {path: "", headers: {Host: www.alibaba.com}}, udp: true}
   - {name: 🇯🇵 日本4无中转-1C, server: 103.134.35.174, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 62db351a-d429-416a-b2b7-02c48f54de71, udp: true}
-  - {name: 🇮🇸 冰岛, server: starlink-fra2.2513142.xyz, port: 10013, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇮🇸 冰岛, server: starlink-fra2.2513142.xyz, port: 10013, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: AF|非洲2|IEPL-1K, server: sq.yd.3.07.cdnlinkms001.xyz, port: 20021, type: ss, cipher: chacha20-ietf-poly1305, password: a155ba9c-b7d8-46f1-8d94-55757bbef60a, udp: true}
   - {name: HK02 12小时联通试用线路 满意在订购-1G, server: qqb12.198139.xyz, port: 50016, type: ss, cipher: aes-128-gcm, password: 4fe36dfa-e817-49d4-8395-edb8a82ce5b1, udp: true}
   - {name: 🇯🇵 日本3-1K, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34333, type: ss, cipher: chacha20-ietf-poly1305, password: 1793f4ad-4c0a-46d9-ae84-fefe2195934f, udp: true}
@@ -7073,7 +7073,7 @@ proxies:
   - {name: 🇭🇰 HK02 X15 香港 | 深港专线 | IPLC-1H, server: mmt-clc.xuwei.hk, port: 19335, type: ss, cipher: aes-128-gcm, password: 9991c671-9720-432b-bcf1-19b97f5cfc4e, udp: true}
   - {name: 🇻🇳 越南3无中转-1A, server: 185.126.134.56, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: a1b4e52a-91a9-48f9-99c4-54fb21c4590c, udp: true}
   - {name: 🇹🇼 台湾无中转1-1E, server: 103.115.109.65, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 5b3fc518-3fc1-443b-8ed4-bb7c32273d64, udp: true}
-  - {name: 🇩🇪 德国4, server: starlink-fra2.2513142.xyz, port: 4433, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇩🇪 德国4, server: starlink-fra2.2513142.xyz, port: 4433, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 佛系解锁常规流媒体-1A, server: baipiaoyun-hongkong.baipiaoyun.site, port: 13301, type: hysteria2, password: 90958ca1-ef73-402d-81b6-ebe206d3ba85, auth: 90958ca1-ef73-402d-81b6-ebe206d3ba85, sni: apple.com, skip-cert-verify: true, obfs: salamander, obfs-password: ZDQxZDhjZDk4ZjAwYjIwNA%3D%3D, udp: true}
   - {name: 🇯🇵 日本-碧海云 32-1A, server: 45.146.232.173, port: 22271, type: trojan, password: c5ef5224-0c2b-4ffe-9684-d36b0a8574f3, sni: q08m.vgraxiw73s.hasyaf.cn, udp: true}
   - {name: 🇭🇰 香港-V6|05 0.5x-1F, server: nathk.91ai.de, port: 18002, type: vmess, uuid: a735c342-bf8c-4a3f-bc84-50bcd8219686, alterId: 0, cipher: auto, tls: false, udp: true}
@@ -7466,10 +7466,10 @@ proxies:
   - {name: 🇬🇧 英国A-1E, server: 183.236.123.34, port: 30343, type: vmess, uuid: 5af1c828-4f04-4075-be5b-a1f3ca37313b, alterId: 0, cipher: auto, tls: false, udp: true}
   - {name: 🇰🇷 IEPL专线-韩国-1-1C, server: 59.42.247.189, port: 8002, type: vmess, uuid: 8d81d467-c30d-4d67-8289-cb7f3195f439, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /nmkj, headers: {Host: v7.nmcf.me}}, udp: true}
   - {name: 🇺🇸 美国4-HY2 协议-1A, server: us4.xiaoliyu.cyou, port: 24420, type: hysteria2, password: a4c1b618-024a-42d4-b78a-1c25c337a484, auth: a4c1b618-024a-42d4-b78a-1c25c337a484, skip-cert-verify: true, ports: 22000-27000, udp: true}
-  - {name: 🇺🇸 美国16, server: x-sjs.2513142.xyz, port: 443, type: trojan, password: !<str> 1, sni: x-sjs.2513142.xyz, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: x-sjs.2513142.xyz}}, udp: true}
+  - {name: 🇺🇸 美国16, server: x-sjs.2513142.xyz, port: 443, type: trojan, password: 1, sni: x-sjs.2513142.xyz, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: x-sjs.2513142.xyz}}, udp: true}
   - {name: 🇺🇸 VIP 美国1-1C, server: us01.jiasudu.buzz, port: 47061, type: ss, cipher: aes-256-gcm, password: c8f50e23-e52c-4f0e-9acf-65862d410aaa, udp: true}
   - {name: 🇩🇪 德国-优化1-1B, server: deuf1.731732.xyz, port: 443, type: vless, uuid: c695883e-3cd9-4522-bb1c-9af6080b7722, tls: true, flow: xtls-rprx-vision, reality-opts: {public-key: PaAaDWyG_MhYTIhEHrLJusbrG35KN266mHqeISOb7n4, short-id: 8dc4a6c4}, servername: www.uni-stuttgart.de, client-fingerprint: chrome, network: tcp}
-  - {name: 🇵🇭 菲律宾1-1A, server: starlink-hkt2.2513142.xyz, port: 58661, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇵🇭 菲律宾1-1A, server: starlink-hkt2.2513142.xyz, port: 58661, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇺🇸 美国直连-TROJAN-1W, server: v12.nmcf.me, port: 443, type: trojan, password: 64bbaa0f-0e1b-423a-a52e-a3e79ba1a44e, sni: v12.nmcf.me, skip-cert-verify: false, udp: true}
   - {name: 🇭🇰 HK-02 HY-1H, server: 205.198.65.107, port: 10068, type: hysteria2, password: 3de2e89e-7ffb-4224-bfa9-4a0f693ef8ee, auth: 3de2e89e-7ffb-4224-bfa9-4a0f693ef8ee, sni: tls.drt-acs.org, skip-cert-verify: true, obfs: salamander, obfs-password: OWE3YWE4YzM3MzAyYTQ3Ng%3D%3D, udp: true}
   - {name: 🇩🇪 德国纽伦堡-1E, server: mmt.bjcu.donghui.tech, port: 14587, type: ss, cipher: aes-128-gcm, password: 5ca413de-2e43-436b-a4ed-cbc61a47d465, udp: true}
@@ -7861,7 +7861,7 @@ proxies:
   - {name: 🇹🇭 泰国6无中转-1F, server: 62.112.143.103, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 02e71c5f-b93a-45ca-b151-fb7334f06928, udp: true}
   - {name: 🇺🇸 V1 | 美国3-1I, server: us93.cctv14.xyz, port: 49063, type: ss, cipher: aes-256-gcm, password: 9b7a9fad-cf3f-4231-9f13-6b82e1bd1f48, udp: true}
   - {name: 🇹🇼 台湾-1D, server: ppx1.6128888.xyz, port: 27830, type: vmess, uuid: 9b486836-c35b-4bf4-a696-b33c5d715e82, alterId: 0, cipher: auto, tls: false, udp: true}
-  - {name: 🇺🇸 美国10, server: starlink-sfo4.2513142.xyz, port: 4433, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇺🇸 美国10, server: starlink-sfo4.2513142.xyz, port: 4433, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇹🇭 泰国8无中转-1L, server: 62.112.143.147, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 94724933-8a8c-46b6-b9fd-d220de412200, udp: true}
   - {name: 🇭🇰 广港 香港309 专线-1B, server: gyl.58n.net, port: 20309, type: trojan, password: 4dd6096f-1193-37f3-ad62-84b43491bf7d, sni: z309.hongkongnode.top, udp: true}
   - {name: 🇯🇵 3x专线日本2-1A, server: vip1.av8djd.top, port: 50211, type: ss, cipher: aes-128-gcm, password: a3d9cfc3-b9f8-45d3-aefd-ccdda6818c4b, udp: true}
@@ -8136,7 +8136,7 @@ proxies:
   - {name: 🇭🇰 香港-3 专线 倍率2-1B, server: hk-zf-03.057296.xyz, port: 39770, type: vless, uuid: cca8b1c6-a9d1-460a-9099-82115f299719, tls: true, flow: xtls-rprx-vision, reality-opts: {public-key: S2x_vy_rh99yUn-0DXciGYUlAbe1N-WNT8o0NCcbrA0, short-id: abed0ea4}, servername: m.media-amazon.com, client-fingerprint: chrome, network: tcp}
   - {name: 🇲🇾 马来西亚6-1N, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34444, type: ss, cipher: chacha20-ietf-poly1305, password: ca9569dd-3641-4335-be45-4c0814455ee7, udp: true}
   - {name: 🇭🇰 香港-碧海云 35-1B, server: 58.254.186.231, port: 10465, type: trojan, password: 8e0ac98e-6d6b-4337-b3be-aa9b500741e0, sni: q08m.vgraxiw73s.hasyaf.cn, udp: true}
-  - {name: 🇿🇦 南非3, server: jhb-01.oci.ee, port: 25131, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇿🇦 南非3, server: jhb-01.oci.ee, port: 25131, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇺🇸 UNITED STATES 2-1O, server: svip1.pingboy.top, port: 57199, type: vless, uuid: f5cdec37-9e26-422e-8791-2e19bddefea0, tls: false, network: tcp}
   - {name: 🇲🇾 马来西亚无中转6-1I, server: 188.64.106.212, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 85f1f3f8-aec7-46ce-b694-3c435d2e6b06, udp: true}
   - {name: 🇯🇵 亚洲|日本05-1D, server: hn.qlrk0.cc, port: 10616, type: ss, cipher: chacha20-ietf-poly1305, password: 8fd33e73-caaa-4232-bb51-4bdb0261bad4, udp: true}
@@ -8231,7 +8231,7 @@ proxies:
   - {name: 🇹🇷 V1 | 土耳其1-1D, server: tr91.cctv14.xyz, port: 49050, type: ss, cipher: aes-256-gcm, password: a775896a-c495-4902-8fc8-2d6659e94fb8, udp: true}
   - {name: 🇸🇬 新加坡VLESS-3-移动优化, server: sg3.interld123456789.com, port: 56702, type: vless, uuid: dcfd192c-48f1-48fa-9e27-af67ce6e428a, tls: true, flow: xtls-rprx-vision, reality-opts: {public-key: sW8BfHeovVzmbFuAnr9nH8oJaKYze6shKoKMdek5ai8, short-id: 792147b8}, servername: addons.mozilla.org, client-fingerprint: chrome, network: tcp}
   - {name: 🇯🇵 V1 | 日本2-1J, server: jp92.cctv14.xyz, port: 49032, type: ss, cipher: aes-256-gcm, password: ec135080-6232-46e3-89ae-7c28b8c3111a, udp: true}
-  - {name: 🇭🇺 匈牙利-1A, server: starlink-fra2.2513142.xyz, port: 10007, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇭🇺 匈牙利-1A, server: starlink-fra2.2513142.xyz, port: 10007, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇵🇭 菲律宾-碧海云 2-1B, server: sla.cn.964e995b760.gogodns.xin, port: 27408, type: trojan, password: 33c35688-7187-471e-966f-58affe91f9ed, sni: q08m.vgraxiw73s.hasyaf.cn, udp: true}
   - {name: 🇸🇬 新加坡1无中转-1N, server: 176.221.19.170, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: ca9569dd-3641-4335-be45-4c0814455ee7, udp: true}
   - {name: 🇭🇰 香港专线2-04-1A, server: nnertn.vxzjv.xyz, port: 24313, type: ss, cipher: chacha20-ietf-poly1305, password: e5702d0c-116d-4fa1-a391-74a743774d30, udp: true}
@@ -8245,7 +8245,7 @@ proxies:
   - {name: 🇯🇵 日本 大阪1-1E, server: gsefjkish.xuwei.hk, port: 44759, type: ss, cipher: aes-128-gcm, password: 5ca413de-2e43-436b-a4ed-cbc61a47d465, udp: true}
   - {name: 🇸🇬 新加坡1无中转-1E, server: 176.221.19.170, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 5b3fc518-3fc1-443b-8ed4-bb7c32273d64, udp: true}
   - {name: VIP 非会员体验-1M, server: gate.jiasudu.buzz, port: 47000, type: ss, cipher: aes-256-gcm, password: 189d1090-8ccc-4846-8862-6eec6f74d929, udp: true}
-  - {name: 🇳🇿 新西兰2, server: starlink-sgp4.2513142.xyz, port: 10005, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇳🇿 新西兰2, server: starlink-sgp4.2513142.xyz, port: 10005, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇺🇸 美国BGP 09-1G, server: faweda.iwe.la, port: 57756, type: ss, cipher: aes-128-gcm, password: bb8f23bc-1d58-4b13-b1f0-85497a7ec4d4, udp: true}
   - {name: 🇯🇵 日本7-1N, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34438, type: ss, cipher: chacha20-ietf-poly1305, password: ca9569dd-3641-4335-be45-4c0814455ee7, udp: true}
   - {name: 🇯🇵 日本10无中转-1G, server: 103.134.35.138, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 5c28cb7a-6fe3-4e71-8653-0757c5581855, udp: true}
@@ -8336,7 +8336,7 @@ proxies:
   - {name: 🇺🇸 US-SANJOSE-P-1A, server: vtcm.vttopysk.com, port: 57011, type: vmess, uuid: 64584b0c-fa78-4aa9-a1b0-85c5fb4434ca, alterId: 0, cipher: auto, tls: false, network: ws, ws-opts: {path: /, headers: {Host: vtcm.vttopysk.com}}, udp: true}
   - {name: 🇺🇸 美国2-443-1A, server: 777.golinkwuxian.top, port: 443, type: trojan, password: b392bced-2765-4978-9e4c-cab4cde3b27b, sni: golinkwuxian.top, skip-cert-verify: true, network: ws, ws-opts: {path: /apple, headers: {Host: golinkwuxian.top}}, udp: true}
   - {name: 🇹🇼 台湾5-1C, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 24455, type: ss, cipher: chacha20-ietf-poly1305, password: 43b877a0-2aa3-4284-84cd-db2f556fa8d8, udp: true}
-  - {name: 🇰🇬 吉尔吉斯斯坦2, server: 188.240.213.45, port: 20071, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇰🇬 吉尔吉斯斯坦2, server: 188.240.213.45, port: 20071, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇸🇬 新加坡03-隧道-1C, server: gzdx.newbee8.me, port: 35661, type: vmess, uuid: 1b5074ed-57a4-4b73-b8dd-a068ef6e8412, alterId: 0, cipher: auto, tls: false, udp: true}
   - {name: 🇺🇸 V1 | 美国1-1A, server: us91.cctv14.xyz, port: 49061, type: ss, cipher: aes-256-gcm, password: 7e0ad92a-0d81-4eb0-be69-efb5c654b2b7, udp: true}
   - {name: 🇯🇵 V1 | 日本5-1C, server: jp95.cctv14.xyz, port: 49040, type: ss, cipher: aes-256-gcm, password: 4c0ac517-4a0c-4499-a552-1b036b1d5dab, udp: true}
@@ -8368,7 +8368,7 @@ proxies:
   - {name: 🇺🇸 VIRMACH美国洛杉矶HYSTERIA2-1E, server: v.eans.top, port: 7009, type: hysteria2, password: 7fe91b77-e4f7-40da-9f87-c1304fa2cd31, auth: 7fe91b77-e4f7-40da-9f87-c1304fa2cd31, sni: v.eans.top, skip-cert-verify: false, udp: true}
   - {name: 🇹🇭 泰国8无中转-1P, server: 62.112.143.147, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 2d370af9-2809-43c8-bb28-8df6b7341cfd, udp: true}
   - {name: 🇯🇵 日本8无中转-1F, server: 103.134.35.238, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 02e71c5f-b93a-45ca-b151-fb7334f06928, udp: true}
-  - {name: 🇭🇰 香港6丨HYPER, server: starlink-hkx3.2513142.xyz, port: 28880, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇭🇰 香港6丨HYPER, server: starlink-hkx3.2513142.xyz, port: 28880, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇲🇾 马来西亚无中转3-1D, server: 188.64.106.169, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: 9a926956-9c3b-4a96-863c-643f374dde7b, udp: true}
   - {name: 🇺🇸 美国03-1E, server: us003.421421.xyz, port: 20230, type: trojan, password: f08d6a6b-a0b3-410e-a0ba-eae71b521904, sni: www.alibaba.com, skip-cert-verify: true, network: ws, ws-opts: {path: "", headers: {Host: www.alibaba.com}}, udp: true}
   - {name: 🇭🇰 HK-01-HY-1J, server: 205.198.64.79, port: 10070, type: hysteria2, password: df0271f6-0c82-46c8-82f6-10cb18d60663, auth: df0271f6-0c82-46c8-82f6-10cb18d60663, sni: hy.cjhh.mom, skip-cert-verify: false, obfs: salamander, obfs-password: OTAwYjY4Y2JlNmIxNmE2NA%3D%3D, udp: true}
@@ -8650,7 +8650,7 @@ proxies:
   - {name: 🇭🇰 亚洲|香港03-1F, server: gd.qlrk0.cc, port: 27595, type: ss, cipher: chacha20-ietf-poly1305, password: 8b514eb7-cc8f-4d4b-9e7f-9437719dd14b, udp: true}
   - {name: 🇭🇰 HK|香港2|IEPL-1C, server: sq.yd.3.07.cdnlinkms001.xyz, port: 20003, type: ss, cipher: chacha20-ietf-poly1305, password: 030203e9-c4e7-4b2f-b755-eb778490b5b4, udp: true}
   - {name: 🇫🇮 芬兰-碧海云 2-1B, server: sla.cn.964e995b760.gogodns.xin, port: 43499, type: trojan, password: c580ef2a-b7bf-4286-b19e-4b0c4e9290c6, sni: q08m.vgraxiw73s.hasyaf.cn, udp: true}
-  - {name: 🇺🇸 美国13, server: starlink-sfo7.2513142.xyz, port: 4433, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇺🇸 美国13, server: starlink-sfo7.2513142.xyz, port: 4433, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇭🇰 HONGKONG 2-1C, server: svip1.pingboy.top, port: 17367, type: vless, uuid: 17a2370c-ab9c-40ef-877a-1e418be50ec8, tls: false, network: tcp}
   - {name: 🇺🇸 美国-碧海云 27-1B, server: 183.240.116.252, port: 33505, type: trojan, password: 66933537-f010-443d-b981-d38d4d560727, sni: q08m.vgraxiw73s.hasyaf.cn, udp: true}
   - {name: 🇭🇰 香港 3号线 NETFLIX等流媒体解锁 解锁-1D, server: green2.cdntencentmusic.com, port: 28505, type: trojan, password: 54088fd2-0df5-4311-9632-d80fd40327a5, sni: green2.cdntencentmusic.com, skip-cert-verify: true, udp: true}
@@ -8876,7 +8876,7 @@ proxies:
   - {name: 🇸🇬 新加坡2无中转-1K, server: 176.221.19.131, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: aa21fdda-d83d-4860-8eeb-a4afb7a18b69, udp: true}
   - {name: 🇸🇬 1x普线新加坡-1A, server: xd1.av8djd.top, port: 18661, type: ss, cipher: aes-128-gcm, password: a3d9cfc3-b9f8-45d3-aefd-ccdda6818c4b, udp: true}
   - {name: 🇯🇵 国际专线 日本JP 114-1Q, server: 120.232.239.186, port: 39221, type: ss, cipher: chacha20-ietf-poly1305, password: 555fdc07-b63d-4042-b220-39c34740b00b, udp: true}
-  - {name: 🇪🇬 埃及, server: starlink-fra2.2513142.xyz, port: 10001, type: trojan, password: !<str> 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
+  - {name: 🇪🇬 埃及, server: starlink-fra2.2513142.xyz, port: 10001, type: trojan, password: 1, sni: www.cloudflare.com, skip-cert-verify: true, udp: true}
   - {name: 🇯🇵 日本2-1T, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34327, type: ss, cipher: chacha20-ietf-poly1305, password: 3ab66b08-a216-446e-b3ab-86dae459b6c9, udp: true}
   - {name: 🇺🇸 US-01-1A, server: jp002.wsssapt.org, port: 30002, type: vless, uuid: e4542128-54e0-40b7-a62c-07f764bad1ed, tls: true, flow: xtls-rprx-vision, reality-opts: {public-key: RTXjhI0X0cFtLtd4ds5Lp70520ZdPo-HGS-gewL6kCY, short-id: 40113f6a}, servername: v3-prime-xg-web-pc.ixigua.com, client-fingerprint: chrome, network: tcp}
   - {name: 🇮🇱 亚洲|以色列01-1G, server: hn.qlrk0.cc, port: 41788, type: ss, cipher: chacha20-ietf-poly1305, password: 7fd7b542-e9d0-420b-9ad3-2a83cb8ad336, udp: true}
