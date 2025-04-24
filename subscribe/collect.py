@@ -1,5 +1,6 @@
+
 # -*- coding: utf-8 -*-
-#https://github.com/awuaaaaa/vless-py
+
 # @Author  : wzdnzd
 # @Time    : 2022-07-15
 
@@ -58,7 +59,7 @@ def assign(
 
         if username and gist_id and access_token:
             push_tool = push.PushToGist(token=access_token)
-            url = push_tool.raw_url(push_conf={"username": username, "gistid": gist_id, "filename": filename})
+            url = push_tool.raw_url(config={"username": username, "gistid": gist_id, "filename": filename})
 
             content = utils.http_get(url=url, timeout=30)
             items = re.findall(pattern, content, flags=re.M)
@@ -89,12 +90,13 @@ def assign(
             if not line or line.startswith("#"):
                 continue
 
-            words = line.rsplit(delimiter, maxsplit=2)
+            words = line.rsplit(delimiter, maxsplit=3)
             address = utils.trim(words[0])
             coupon = utils.trim(words[1]) if len(words) > 1 else ""
             invite_code = utils.trim(words[2]) if len(words) > 2 else ""
+            api_prefix = utils.trim(words[3]) if len(words) > 3 else ""
 
-            records[address] = {"coupon": coupon, "invite_code": invite_code}
+            records[address] = {"coupon": coupon, "invite_code": invite_code, "api_prefix": api_prefix}
 
         return records
 
@@ -140,7 +142,7 @@ def assign(
     # 爬取新站点列表
     if not domains or overwrite:
         candidates = crawl.collect_airport(
-            channel="ji",
+            channel="jichang_list",
             page_num=pages,
             num_thread=num_threads,
             rigid=rigid,
@@ -153,7 +155,7 @@ def assign(
         if candidates:
             for k, v in candidates.items():
                 item = domains.get(k, {})
-                item["coupon"] = v
+                item.update(v)
 
                 domains[k] = item
 
@@ -185,6 +187,7 @@ def assign(
                 domain=domain,
                 coupon=param.get("coupon", ""),
                 invite_code=param.get("invite_code", ""),
+                api_prefix=param.get("api_prefix", ""),
                 bin_name=bin_name,
                 rigid=rigid,
                 chuck=chuck,
@@ -317,6 +320,7 @@ def aggregate(args: argparse.Namespace) -> None:
         os.remove(supplier)
 
     with open(supplier, "w+", encoding="utf8") as f:
+        yaml.add_representer(clash.QuotedStr, clash.quoted_scalar)
         yaml.dump(data, f, allow_unicode=True)
 
     if os.path.exists(generate_conf) and os.path.isfile(generate_conf):
@@ -383,7 +387,7 @@ def aggregate(args: argparse.Namespace) -> None:
 
     # 如有必要，上传至 Gist
     if gist_id and access_token:
-        files, push_conf = {}, {"gistid": gist_id, "filename": list(records.keys())[0]}
+        files, config = {}, {"gistid": gist_id, "filename": list(records.keys())[0]}
 
         for k, v in records.items():
             if os.path.exists(v) and os.path.isfile(v):
@@ -397,7 +401,7 @@ def aggregate(args: argparse.Namespace) -> None:
             push_client = push.PushToGist(token=access_token)
 
             # 上传
-            success = push_client.push_to(content="", push_conf=push_conf, payload={"files": files}, group="collect")
+            success = push_client.push_to(content="", config=config, payload={"files": files}, group="collect")
             if success:
                 logger.info(f"upload proxies and subscriptions to gist successed")
             else:
