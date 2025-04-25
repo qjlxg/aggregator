@@ -36,9 +36,7 @@ def convert_multiple_to_base64(urls):
 
 if __name__ == "__main__":
     urls = [
-        "https://raw.githubusercontent.com/qjlxg/cheemsar/refs/heads/main/trial",
-        "https://raw.githubusercontent.com/qjlxg/cheemsar-2/refs/heads/main/trial",
-        "https://raw.githubusercontent.com/qjlxg/tor/refs/heads/main/data/api.txt",
-        "https://raw.githubusercontent.com/qjlxg/tor/refs/heads/main/data/ss.txt"
+        "https://raw.githubusercontent.com/qjlxg/tor/refs/heads/main/data/ss.txt",
+        
     ]
     convert_multiple_to_base64(urls)
