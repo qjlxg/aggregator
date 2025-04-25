@@ -148,7 +148,7 @@ singbox_add_clash_modes = true
 
 [[node_pref.rename_node]]
 match = '\(?((x|X)?(\d+)(\.?\d+)?)((\s?倍率?)|(x|X))\)?'
-replace = "$1x"
+replace = "CONFIG"
 
 [managed_config]
 # Append a '#!MANAGED-CONFIG' info to Surge configurations
