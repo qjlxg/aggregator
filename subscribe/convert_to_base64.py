@@ -37,6 +37,8 @@ def convert_multiple_to_base64(urls):
 if __name__ == "__main__":
     urls = [
         "https://raw.githubusercontent.com/qjlxg/tor/refs/heads/main/tools/t",
+        "https://raw.githubusercontent.com/qjlxg/tor/refs/heads/main/data/transporter.txt",
+        
         
     ]
     convert_multiple_to_base64(urls)
