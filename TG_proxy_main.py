@@ -15,8 +15,47 @@ import chardet
 
 #试用机场链接
 home_urls =(
+'https://37cdn.ski9.cn',
+'http://vpn1.fengniaocloud.top',
+'http://vpn1.fnvpn.top',
+'https://abc.wisky.lat',
+'http://subuu.xfxvpn.me',
+'https://sub.juejie.store',
+'https://www.zygcloud.net',
+'https://www.zygcloud.com',
+'https://link.sunsun.icu',
+'http://vpn.bigbears.top',
+'http://daxiongyun.net',
+'https://liuliugoo.755r.cn',
+'https://by1.liuliugo.cfd',
+'https://by2.liuliugo.cfd',
+'https://sub.skrspc.org',
+'https://api.skrspc.org',
+'https://3by.liuliugo.cfd',
+'https://www.songbug.cloud',
+'https://dobcloud.com',
+'https://hn1r5k7322.bitmusttw.com',
+'http://uuvpn.me',
+'https://yun.dashiba.com',
+'https://5gsieutoc.fun',
+'https://app.1130.net',
+'https://panel.darkbaz.com',
+'https://full.kddi.best',
+'https://ikanned.com:12000',
+'https://apanel.allbatech.net',
+'https://abbabav2board.foxspirit.vip',
+'https://xunyungogogo.xyz',
+'https://www.kuaidianlianjienode.sbs',
 'https://20242024.dilala.xyz',
 'https://yhl.yinghuas.sbs',
+'https://api-hd.hd-yun.cn',
+'https://cc.drchi.icu',
+'https://rioo.nai99.top',
+'https://kog.nai99.top',
+'https://kk.nai99.top',
+'https://api.hd-yun.cn',
+'https://joo.nai99.top',
+'https://hd-yun.cn',
 'http://sub11.xn--54qu5qypuo1o.xn--fiqs8s',
 'http://gtacdnsub.work',
 'https://v2s.ip-ddns.com',
@@ -38,7 +77,6 @@ home_urls =(
 'https://g15311cec.cdn.uunode.com',
 'https://proxy.tizishangwang.xyz',
 'https://loopp.bigdog.click',
-'https://37cdn.ski9.cn',
 'http://111.173.106.156:8899',
 'http://139.162.31.189:7022',
 'http://175.178.9.20',
@@ -274,7 +312,6 @@ home_urls =(
 'https://dingmei2.bajie1.me',
 'https://dingyue.xjay.xyz',
 'https://dns.mytonxs.uk',
-'https://dobcloud.com',
 'https://doucat.top',
 'https://download.chaincloud.top',
 'https://dy.lime5.xyz',
@@ -312,7 +349,6 @@ home_urls =(
 'https://guanwang.me',
 'https://guobaotegong.me',
 'https://haoba.cloud',
-'https://hn1r5k7322.bitmusttw.com',
 'https://home.wkyuns.xyz',
 'https://hongxingdl.com',
 'https://hongxingdl.love',
@@ -428,7 +464,6 @@ home_urls =(
 'https://oukasou.xyz',
 'https://ov2rayo.top',
 'https://page.sulink.one',
-'https://panel.darkbaz.com',
 'https://panel.darkbaz.org',
 'https://panel.fast8888.com',
 'https://panel.keleofficial.com',
@@ -728,15 +763,15 @@ home_urls =(
 #文件路径
 update_path = "./sub/"
 #所有的clash订阅链接
-end_list_clash = ['https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/all_clash.txt','https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/all_clash.txt','https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/api.txt','https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/transporter.txt']
+end_list_clash = []
 #所有的v2ray订阅链接
-end_list_v2ray = ['https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/all_clash.txt','https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/all_clash.txt','https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/api.txt','https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/transporter.txt']
+end_list_v2ray = []
 #所有的节点明文信息
 end_bas64 = []
 #获得格式化后的链接
 new_list = []
 #永久订阅
-e_sub = ['https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/all_clash.txt','https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/all_clash.txt','https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/api.txt','https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/transporter.txt']
+e_sub = ['']
 #频道
 urls =[]
 #线程池
@@ -983,7 +1018,7 @@ def write_document():
 #获取clash订阅
 def get_yaml():
     print("开始获取clsah订阅")
-    urls = ['https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/all_clash.txt','https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/all_clash.txt','https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/api.txt','https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/transporter.txt']
+    urls = []
     n = 1
     for i in urls:
         response = requests.get(i)
