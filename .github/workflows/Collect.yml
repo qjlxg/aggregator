@@ -3,7 +3,7 @@ name: Collect
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */25 * * *"
+    - cron: '0 22 * * *' # 每天 UTC 时间 21:00 执行
 
 jobs:
   collect:
