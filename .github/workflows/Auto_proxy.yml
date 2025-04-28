@@ -4,7 +4,7 @@ name: Auto_proxy
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */36 * * *"
+    - cron: '0 21 * * *' # 每天 UTC 时间 21:00 执行
 
 jobs:
   deploy:
