@@ -127,14 +127,17 @@ def parse_hysteria2(link):
             print(f"解析 hysteria2:// 链接失败: {e}")
     return None
 
-# 提取国旗符号并添加空格，或使用 bing 命名
+# 修改后的 extract_flag 函数
 def extract_flag(name):
     global bing_counter
-    match = re.match(r'^[🇦-🇿]{2}', name)
-    if match:
-        return match.group(0) + ' ' + name[2:]  # 保留国旗后的名称并加空格
     bing_counter += 1
-    return f"bing{bing_counter} "  # 没有国旗时使用 bing 命名并加空格
+    # 匹配开头的国旗 emoji（由两个区域指示符组成）
+    match = re.match(r'^([\U0001F1E6-\U0001F1FF]{2})', name)
+    if match:
+        flag = match.group(1)  # 提取国旗
+        return f"{flag} bing{bing_counter}"  # 保留国旗并添加 bing 加计数器
+    else:
+        return f"bing{bing_counter}"  # 无国旗时直接使用 bing 加计数器
 
 # 生成符合指定格式的 YAML 字符串
 def generate_yaml(proxies):
