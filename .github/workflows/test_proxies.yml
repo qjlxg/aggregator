@@ -20,7 +20,7 @@ jobs:
 
       - name: Ensure Clash is executable
         run: |
-          chmod +x clash/  # 确保 Clash 二进制文件可执行
+          chmod +x ./clash/clash-linux  # 确保 Clash 二进制文件可执行
 
       - name: Run proxy test script
         run: |
