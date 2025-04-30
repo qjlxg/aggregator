@@ -1,7 +1,6 @@
 name: Test Proxies
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -16,11 +15,11 @@ jobs:
     steps:
     # 检出代码
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3  # 更新到 v3
 
     # 设置 Python 环境
     - name: Set up Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4  # 更新到 v4
       with:
         python-version: '3.x'
 
@@ -36,15 +35,19 @@ jobs:
         gunzip clash-linux-amd64-v1.18.0.gz
         chmod +x clash-linux-amd64-v1.18.0
         sudo mv clash-linux-amd64-v1.18.0 /usr/local/bin/clash
-        clash -v  # 验证安装
+        clash -v
 
     # 运行代理测试脚本
     - name: Run proxy test script
       run: python test_proxies.py
 
+    # 调试：检查文件是否存在
+    - name: Check output file
+      run: ls -l data/2.yaml
+
     # 上传测试结果
     - name: Upload results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3  # 更新到 v3
       with:
         name: available-proxies
         path: data/2.yaml
