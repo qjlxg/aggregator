@@ -39,7 +39,7 @@ def main():
         yaml.safe_dump(temp_config, f, default_flow_style=False)
 
     # 3. 启动 Clash 进程
-    clash_binary = './clash/clash'  # Clash 二进制文件路径
+    clash_binary = './clash/'  # Clash 二进制文件路径
     if not os.path.exists(clash_binary):
         print(f"错误: Clash 二进制文件 {clash_binary} 不存在")
         return
