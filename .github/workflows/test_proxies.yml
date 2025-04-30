@@ -20,7 +20,7 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         # 使用SSH方式克隆仓库
         ssh-key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
