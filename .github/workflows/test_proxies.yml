@@ -17,6 +17,21 @@ jobs:
       - name: Install dependencies
         run: |
           pip install pyyaml requests  # 安装脚本依赖
+          
+      
+      - name: 安装Country.mmdb - ip库
+        run: |        
+         wget -O Country.mmdb https://github.com/Dreamacro/maxmind-geoip/releases/latest/download/Country.mmdb
+      - name: 安装订阅转换工具-subconverter
+        run: |
+         wget -O subconverter.tar.gz https://github.com/tindy2013/subconverter/releases/latest/download/subconverter_linux64.tar.gz
+         tar -zxvf subconverter.tar.gz -C ./
+         chmod +x ./subconverter/subconverter && nohup ./subconverter/subconverter >./subconverter.log 2>&1 &
+      - name: 安装测速工具-clash
+        run: |
+         wget -O clash-linuxamd64.gz https://github.com/Dreamacro/clash/releases/download/v1.11.8/clash-linux-amd64-v1.11.8.gz
+         gunzip clash-linuxamd64.gz
+         chmod +x ./clash-linuxamd64 && ./clash-linuxamd64 &
 
       - name: Ensure Clash is executable
         run: |
