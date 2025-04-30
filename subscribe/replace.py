@@ -327,8 +327,8 @@ def main(urls):
 if __name__ == "__main__":
     urls = [
         'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml',
-       'https://github.com/qjlxg/aggregator/raw/refs/heads/main/all_clash.txt',
-       # 'https://github.com/qjlxg/aggregator/raw/refs/heads/main/base64.txt',
+       #'https://github.com/qjlxg/aggregator/raw/refs/heads/main/all_clash.txt',
+        'https://github.com/qjlxg/aggregator/raw/refs/heads/main/base64.txt',
       #  'https://github.com/qjlxg/aggregator/raw/refs/heads/main/Long_term_subscription_num',
       #  'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml',
        # 'https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/transporter.txt',
