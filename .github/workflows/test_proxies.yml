@@ -1,7 +1,7 @@
 name: Test Proxies
 
-on: [push]  # 触发条件：每次 push 时运行
-
+on:  
+  workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest  # 使用 Ubuntu 环境
