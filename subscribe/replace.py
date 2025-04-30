@@ -1,3 +1,4 @@
+
 import base64
 import requests
 import yaml
@@ -38,16 +39,6 @@ def extract_proxies(data):
     if yaml_data and isinstance(yaml_data, dict) and 'proxies' in yaml_data:
         return yaml_data['proxies']
     return []
-
-# 处理 server 字段：移除中文字符，替换域名
-def process_server(server):
-    # 移除中文字符（Unicode 范围 \u4e00-\u9fff）
-    server = re.sub(r'[\u4e00-\u9fff]', '', server)
-    # 判断是否为 IP 地址
-    if re.match(r'^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$', server):
-        return server  # 如果是 IP 地址，保持不变
-    else:
-        return 'yandex'  # 如果是域名，替换为 "yandex"
 
 # 解析 ss:// 链接
 def parse_ss(link):
@@ -137,14 +128,17 @@ def parse_hysteria2(link):
             print(f"解析 hysteria2:// 链接失败: {e}")
     return None
 
-# 提取国旗符号并添加空格，或使用 bing 命名
+# 修改后的 extract_flag 函数
 def extract_flag(name):
     global bing_counter
-    match = re.match(r'^[🇦-🇿]{2}', name)
-    if match:
-        return match.group(0) + ' ' + name[2:]  # 保留国旗后的名称并加空格
     bing_counter += 1
-    return f"bing{bing_counter} "  # 没有国旗时使用 bing 命名并加空格
+    # 匹配开头的国旗 emoji（由两个区域指示符组成）
+    match = re.match(r'^([\U0001F1E6-\U0001F1FF]{2})', name)
+    if match:
+        flag = match.group(1)  # 提取国旗
+        return f"{flag} bing{bing_counter}"  # 保留国旗并添加 bing 加计数器
+    else:
+        return f"bing{bing_counter}"  # 无国旗时直接使用 bing 加计数器
 
 # 生成符合指定格式的 YAML 字符串
 def generate_yaml(proxies):
@@ -182,8 +176,6 @@ def main(urls):
             for proxy in yaml_proxies:
                 if not isinstance(proxy, dict) or 'server' not in proxy or 'port' not in proxy:
                     continue
-                # 处理 server 字段
-                proxy['server'] = process_server(proxy['server'])
                 identifier = (proxy['server'], proxy['port'])
                 if identifier not in seen:
                     seen.add(identifier)
@@ -205,8 +197,6 @@ def main(urls):
                 elif link.startswith('hysteria2://'):
                     proxy = parse_hysteria2(link)
                 if proxy:
-                    # 处理 server 字段
-                    proxy['server'] = process_server(proxy['server'])
                     identifier = (proxy['server'], proxy['port'])
                     if identifier not in seen:
                         seen.add(identifier)
@@ -235,5 +225,6 @@ if __name__ == "__main__":
         'https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/data/transporter.txt',
         'https://raw.githubusercontent.com/qjlxg/cheemsar/refs/heads/main/Long_term_subscription_num',
         'https://raw.githubusercontent.com/qjlxg/cheemsar-2/refs/heads/main/Long_term_subscription_num',
+        'https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt',
     ]
     main(urls)
