@@ -1,56 +1,49 @@
-
-
-name: test_proxies
+name: Test Proxies
 
 on:
-  workflow_dispatch:
   push:
-    branches: [ "main" ]
-    paths:
-      - 'all_clash.py'
-  schedule:
-    - cron: '30 0/3 * * *'  # 每天UTC时间00:00自动运行
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  collect:
+  test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write  # 关键权限设置
-    
+
     steps:
+    # 检出代码
     - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        # 使用SSH方式克隆仓库
-        ssh-key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        persist-credentials: true
-        
-    - name: 设置时区
-      run: sudo timedatectl set-timezone 'Asia/Shanghai'
-      
+      uses: actions/checkout@v2
+
+    # 设置 Python 环境
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v2
       with:
-        python-version: '3.10'
+        python-version: '3.x'
 
+    # 安装 Python 依赖
     - name: Install dependencies
-      run: 
-           pip install requests pyyaml
+      run: |
+        pip install requests pyyaml
 
-    - name: Run collection script
+    # 下载并安装 Clash
+    - name: Download and install Clash
+      run: |
+        wget https://github.com/Dreamacro/clash/releases/download/v1.18.0/clash-linux-amd64-v1.18.0.gz
+        gunzip clash-linux-amd64-v1.18.0.gz
+        chmod +x clash-linux-amd64-v1.18.0
+        sudo mv clash-linux-amd64-v1.18.0 /usr/local/bin/clash
+        clash -v  # 验证安装
+
+    # 运行代理测试脚本
+    - name: Run proxy test script
       run: python test_proxies.py
 
-    - name: 提交更改
-      run: |                 
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
-        git add data/all_clash.txt
-        git add . 
-        git commit -m "$(date '+%Y-%m-%d %H:%M:%S') "
-        
-    - name: 推送更改
-      uses:  ad-m/github-push-action@master
+    # 上传测试结果
+    - name: Upload results
+      uses: actions/upload-artifact@v2
       with:
-        branch: main
-     
-       
+        name: available-proxies
+        path: data/2.yaml
