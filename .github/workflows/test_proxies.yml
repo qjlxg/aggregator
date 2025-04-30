@@ -1,30 +1,40 @@
+
+
 name: Test Proxies
+
 
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
+    paths:
+      - 'all_clash.py'
+  schedule:
+    - cron: '30 0/3 * * *'  # 每天UTC时间00:00自动运行
 
 jobs:
-  test:
+  collect:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write  # 关键权限设置
+    
     steps:
-    # 检出代码
     - name: Checkout code
-      uses: actions/checkout@v3  # 更新到 v3
-
-    # 设置 Python 环境
-    - name: Set up Python
-      uses: actions/setup-python@v4  # 更新到 v4
+      uses: actions/checkout@v4
       with:
-        python-version: '3.x'
+        # 使用SSH方式克隆仓库
+        ssh-key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        persist-credentials: true
+        
+    - name: 设置时区
+      run: sudo timedatectl set-timezone 'Asia/Shanghai'
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
 
-    # 安装 Python 依赖
+   # 安装 Python 依赖
     - name: Install dependencies
       run: |
         pip install requests pyyaml
