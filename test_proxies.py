@@ -4,13 +4,18 @@ import time
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
+import os
 
 # 全局锁，确保 API 调用线程安全
 api_lock = threading.Lock()
 
 def main():
     # 1. 解析 clash.yaml 文件
-    with open('data/clash.yaml', 'r', encoding='utf-8') as f:
+    clash_config_path = 'clash/clash.yaml'  # 假设配置文件在仓库的 clash 目录下
+    if not os.path.exists(clash_config_path):
+        print(f"错误: {clash_config_path} 不存在")
+        return
+    with open(clash_config_path, 'r', encoding='utf-8') as f:
         config = yaml.safe_load(f)
     proxies = config['proxies']
     proxy_names = [proxy['name'] for proxy in proxies]
@@ -29,15 +34,22 @@ def main():
         temp_config['external-controller'] = '127.0.0.1:9090'
     if 'port' not in temp_config:
         temp_config['port'] = 7890  # 默认 HTTP 代理端口
-    with open('data/temp_clash.yaml', 'w', encoding='utf-8') as f:
+    temp_config_path = 'clash/temp_clash.yaml'
+    with open(temp_config_path, 'w', encoding='utf-8') as f:
         yaml.safe_dump(temp_config, f, default_flow_style=False)
 
     # 3. 启动 Clash 进程
-    clash_process = subprocess.Popen(['clash', '-f', 'data/temp_clash.yaml'])
+    clash_binary = './clash/clash'  # Clash 二进制文件路径
+    if not os.path.exists(clash_binary):
+        print(f"错误: Clash 二进制文件 {clash_binary} 不存在")
+        return
+    clash_process = subprocess.Popen([clash_binary, '-f', temp_config_path])
     api_url = 'http://127.0.0.1:9090'
 
     # 等待 Clash 启动
-    while True:
+    max_wait = 30  # 最大等待时间（秒）
+    start_time = time.time()
+    while time.time() - start_time < max_wait:
         try:
             response = requests.get(f'{api_url}/version', timeout=5)
             if response.status_code == 200:
@@ -46,10 +58,14 @@ def main():
         except requests.exceptions.RequestException:
             pass
         time.sleep(1)
+    else:
+        print("Clash 启动超时")
+        clash_process.terminate()
+        return
 
     # 4. 使用多线程测试代理
     available_proxies = []
-    with ThreadPoolExecutor(max_workers=5) as executor:  # 限制最大线程数，避免 API 冲突
+    with ThreadPoolExecutor(max_workers=5) as executor:
         future_to_proxy = {
             executor.submit(test_single_proxy, api_url, proxy['name']): proxy
             for proxy in proxies
@@ -72,15 +88,16 @@ def main():
     available_proxy_configs = [
         proxy for proxy in proxies if proxy['name'] in available_proxies
     ]
-    with open('data/2.yaml', 'w', encoding='utf-8') as f:
+    output_path = 'clash/2.yaml'
+    with open(output_path, 'w', encoding='utf-8') as f:
         yaml.safe_dump({'proxies': available_proxy_configs}, f, default_flow_style=False)
-    print("可用代理已保存到 data/2.yaml")
+    print(f"可用代理已保存到 {output_path}")
 
 def select_proxy(api_url, proxy_name):
     """通过 Clash API 选择代理"""
     url = f'{api_url}/proxies/test-group'
     data = {'name': proxy_name}
-    with api_lock:  # 确保线程安全
+    with api_lock:
         try:
             response = requests.put(url, json=data, timeout=5)
             if response.status_code != 200:
