@@ -34,6 +34,7 @@ jobs:
 
     - name: Install dependencies
       run: pip install requests
+           pip install requests tqdm
 
     - name: Run collection script
       run: python subscribe/all_clash.py
