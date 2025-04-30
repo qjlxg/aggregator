@@ -8,7 +8,7 @@ on:
     paths:
       - 'all_clash.py'
   schedule:
-    - cron: '30 0/3 * * *'  # 每天UTC时间00:00自动运行
+    - cron: '0 */6 * * *'
 
 jobs:
   collect:
