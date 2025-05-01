@@ -1,0 +1,32 @@
+name: Test Proxies
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        pip install requests PyYAML
+
+    - name: Download Clash
+      run: |
+        wget https://github.com/Dreamacro/clash/releases/download/v1.11.4/clash-linux-amd64-v1.11.4.gz
+        gunzip clash-linux-amd64-v1.11.4.gz
+        mv clash-linux-amd64-v1.11.4 clash
+        chmod +x clash
+
+    - name: Run Clash and test script
+      run: |
+        ./clash -f data/clash.yaml &
+        sleep 10
+        python test_proxies.py
