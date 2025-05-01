@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-
 # https://github.com/awuaaaaa/vless-py
-
 # @Author  : wzdnzd
-
 # @Time    : 2022-07-15
 
 import argparse
@@ -21,6 +18,7 @@ from urllib.parse import urlparse
 
 import crawl
 import executable
+import push
 import utils
 import workflow
 import yaml
@@ -45,7 +43,7 @@ def assign(
     num_threads: int = 0,
     **kwargs,
 ) -> List[TaskConfig]:
-    def load_exist(filename: str) -> List[str]:
+    def load_exist(username: str, gist_id: str, access_token: str, filename: str) -> List[str]:
         if not filename:
             return []
 
@@ -58,6 +56,14 @@ def assign(
             with open(local_file, "r", encoding="utf8") as f:
                 items = re.findall(pattern, str(f.read()), flags=re.M)
                 subscriptions.update(items)
+
+        # 从 Gist 加载订阅
+        if username and gist_id and access_token:
+            push_tool = push.PushToGist(token=access_token)
+            url = push_tool.raw_url(push_conf={"username": username, "gistid": gist_id, "filename": filename})
+            content = utils.http_get(url=url, timeout=30)
+            items = re.findall(pattern, content, flags=re.M)
+            subscriptions.update(items)
 
         logger.info("start checking whether existing subscriptions have expired")
 
@@ -93,10 +99,13 @@ def assign(
         return records
 
     subscribes_file = utils.trim(kwargs.get("subscribes_file", ""))
+    access_token = utils.trim(kwargs.get("access_token", ""))
+    gist_id = utils.trim(kwargs.get("gist_id", ""))
+    username = utils.trim(kwargs.get("username", ""))
     chuck = kwargs.get("chuck", False)
 
     # 加载已有订阅（已去重）
-    subscriptions = load_exist(subscribes_file)
+    subscriptions = load_exist(username, gist_id, access_token, subscribes_file)
     logger.info(f"load exists subscription finished, count: {len(subscriptions)}")
 
     special_protocols = AirPort.enable_special_protocols()
@@ -142,25 +151,16 @@ def assign(
                 domains[k] = item
             overwrite = True
 
-    # 加载自定义机场列表（支持多个URL）
-    customize_links = [utils.trim(link) for link in kwargs.get("customize_links", "").split(",") if utils.trim(link)]
-    for customize_link in customize_links:
+    # 加载自定义机场列表
+    customize_link = utils.trim(kwargs.get("customize_link", ""))
+    if customize_link:
         if isurl(customize_link):
             domains.update(parse_domains(content=utils.http_get(url=customize_link)))
         else:
             local_file = os.path.join(DATA_BASE, customize_link)
-            if os.path.exists(local_file) and os.path.isfile(local_file):
+            if local_file != fullpath and os.path.exists(local_file) and os.path.isfile(local_file):
                 with open(local_file, "r", encoding="UTF8") as f:
                     domains.update(parse_domains(content=str(f.read())))
-
-    # 加载 /data/local_airports.txt 中的 URL 内容
-    local_airports_file = "/data/local_airports.txt"
-    if os.path.exists(local_airports_file) and os.path.isfile(local_airports_file):
-        with open(local_airports_file, "r", encoding="utf8") as f:
-            for line in f:
-                url = utils.trim(line)
-                if url and isurl(url):
-                    domains.update(parse_domains(content=utils.http_get(url=url)))
 
     if not domains:
         logger.error("cannot collect any new airport for free use")
@@ -191,9 +191,18 @@ def assign(
     return tasks
 
 def aggregate(args: argparse.Namespace) -> None:
+    def parse_gist_link(link: str) -> Tuple[str, str]:
+        words = utils.trim(link).split("/", maxsplit=1)
+        if len(words) != 2:
+            logger.error("cannot extract username and gist id due to invalid github gist link")
+            return "", ""
+        return utils.trim(words[0]), utils.trim(words[1])
+
     clash_bin, subconverter_bin = executable.which_bin()
     display = not args.invisible
     subscribes_file = "subscribes.txt"
+    access_token = utils.trim(args.key)
+    username, gist_id = parse_gist_link(args.gist)
 
     tasks = assign(
         bin_name=subconverter_bin,
@@ -205,8 +214,11 @@ def aggregate(args: argparse.Namespace) -> None:
         num_threads=args.num,
         refresh=args.refresh,
         chuck=args.chuck,
+        username=username,
+        gist_id=gist_id,
+        access_token=access_token,
         subscribes_file=subscribes_file,
-        customize_links=args.yourself,
+        customize_link=args.yourself,
     )
 
     if not tasks:
@@ -247,7 +259,6 @@ def aggregate(args: argparse.Namespace) -> None:
 
         logger.info(f"startup clash now, workspace: {workspace}, config: {confif_file}")
         process = subprocess.Popen([binpath, "-d", workspace, "-f", os.path.join(workspace, confif_file)])
-
         logger.info(f"clash start success, begin check proxies, num: {len(unique_proxies)}")
 
         time.sleep(random.randint(3, 6))
@@ -331,8 +342,25 @@ def aggregate(args: argparse.Namespace) -> None:
     domains = [utils.extract_domain(url=x, include_protocal=True) for x in urls]
     utils.write_file(filename=os.path.join(DATA_BASE, "valid-domains.txt"), lines=list(set(domains)))
 
+    # 上传到 Gist
+    if gist_id and access_token:
+        files, push_conf = {}, {"gistid": gist_id, "filename": list(records.keys())[0]}
+        for k, v in records.items():
+            if os.path.exists(v) and os.path.isfile(v):
+                with open(v, "r", encoding="utf8") as f:
+                    files[k] = {"content": f.read(), "filename": k}
+
+        if urls:
+            files[subscribes_file] = {"content": "\n".join(urls), "filename": subscribes_file}
+
+        if files:
+            push_client = push.PushToGist(token=access_token)
+            success = push_client.push_to(content="", push_conf=push_conf, payload={"files": files}, group="collect")
+            logger.info(f"upload proxies and subscriptions to gist {'successed' if success else 'failed'}")
+
     workflow.cleanup(workspace, [])
 
+# 其余代码（CustomHelpFormatter 和 main 部分）保持不变
 class CustomHelpFormatter(argparse.HelpFormatter):
     def _format_action_invocation(self, action):
         if action.choices:
@@ -357,7 +385,9 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--delay", type=int, required=False, default=5000, help="proxies max delay allowed")
     parser.add_argument("-e", "--easygoing", dest="easygoing", action="store_true", default=False, help="try registering with a gmail alias when you encounter a whitelisted mailbox")
     parser.add_argument("-f", "--flow", type=int, required=False, default=0, help="remaining traffic available for use, unit: GB")
+    parser.add_argument("-g", "--gist", type=str, required=False, default=os.environ.get("GIST_LINK", ""), help="github username and gist id, separated by '/'")
     parser.add_argument("-i", "--invisible", dest="invisible", action="store_true", default=False, help="don't show check progress bar")
+    parser.add_argument("-k", "--key", type=str, required=False, default=os.environ.get("GIST_PAT", ""), help="github personal access token for editing gist")
     parser.add_argument("-l", "--life", type=int, required=False, default=0, help="remaining life time, unit: hours")
     parser.add_argument("-n", "--num", type=int, required=False, default=64, help="threads num for check proxy")
     parser.add_argument("-o", "--overwrite", dest="overwrite", action="store_true", default=False, help="overwrite domains")
@@ -367,6 +397,6 @@ if __name__ == "__main__":
     parser.add_argument("-t", "--targets", nargs="+", choices=subconverter.CONVERT_TARGETS, default=["clash", "v2ray", "singbox"], help=f"choose one or more generated profile type. default to clash, v2ray and singbox. supported: {subconverter.CONVERT_TARGETS}")
     parser.add_argument("-u", "--url", type=str, required=False, default="https://www.google.com/generate_204", help="test url")
     parser.add_argument("-v", "--vitiate", dest="vitiate", action="store_true", default=False, help="ignoring default proxies filter rules")
-    parser.add_argument("-y", "--yourself", type=str, required=False, default=os.environ.get("CUSTOMIZE_LINK", ""), help="comma-separated list of URLs or local files to the lists of airports that you maintain yourself")
+    parser.add_argument("-y", "--yourself", type=str, required=False, default=os.environ.get("CUSTOMIZE_LINK", ""), help="the url to the list of airports that you maintain yourself")
 
     aggregate(args=parser.parse_args())
