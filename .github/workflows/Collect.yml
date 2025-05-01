@@ -24,7 +24,7 @@ jobs:
         pip3 install tqdm
 
     - name: Execute Python script
-      run:  python -y subscribe/collect.py -s "https://raw.githubusercontent.com/qjlxg/collectSub/refs/heads/main/sub/sub_all_clash.txt",
+      run:  python  subscribe/collect.py -y "https://raw.githubusercontent.com/qjlxg/collectSub/refs/heads/main/sub/sub_all_clash.txt",
                                               "https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/tools/ss-url"
      # run: python -u subscribe/collect.py -s
 
