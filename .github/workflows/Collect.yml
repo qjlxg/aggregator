@@ -42,4 +42,37 @@ jobs:
         git diff --staged --quiet || git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
         git push origin HEAD:main
         
-  
+    - name: Install dependencies
+      run: 
+           pip install requests tqdm
+
+    - name: Run collection script
+      run: python subscribe/all_clash.py
+
+    - name: 提交更改
+      run: |                 
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add data/all_clash.txt
+        git add . 
+        git commit -m "$(date '+%Y-%m-%d %H:%M:%S') "
+        
+    - name: 推送更改
+      uses:  ad-m/github-push-action@master
+      with:
+        branch: main
+          
+    - name: Execute Python script
+      run: python -u subscribe/replace.py -s
+      
+    - name: Setup Git
+      run: |
+         git config --global user.email "actions@github.com"
+         git config --global user.name "GitHub Action"
+         
+    - name: Commit Changes
+      run: |
+         git config core.ignorecase false
+         git add .
+         git diff --staged --quiet || git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
+         git push origin HEAD:main
