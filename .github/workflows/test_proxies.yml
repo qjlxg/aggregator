@@ -20,7 +20,7 @@ jobs:
 
     - name: Download Clash
       run: |
-        wget https://github.com/Dreamacro/clash/releases/download/v1.11.4/clash-linux-amd64-v1.11.4.gz
+        wget https://raw.githubusercontent.com/rxsweet/all/main/githubTools/clash-linux-amd64-v1.11.4.gz
         gunzip clash-linux-amd64-v1.11.4.gz
         mv clash-linux-amd64-v1.11.4 clash
         chmod +x clash
