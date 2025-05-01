@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+
 # https://github.com/awuaaaaa/vless-py
+
 # @Author  : wzdnzd
+
 # @Time    : 2022-07-15
 
 import argparse
@@ -150,6 +153,15 @@ def assign(
                 with open(local_file, "r", encoding="UTF8") as f:
                     domains.update(parse_domains(content=str(f.read())))
 
+    # 加载 /data/local_airports.txt 中的 URL 内容
+    local_airports_file = "/data/local_airports.txt"
+    if os.path.exists(local_airports_file) and os.path.isfile(local_airports_file):
+        with open(local_airports_file, "r", encoding="utf8") as f:
+            for line in f:
+                url = utils.trim(line)
+                if url and isurl(url):
+                    domains.update(parse_domains(content=utils.http_get(url=url)))
+
     if not domains:
         logger.error("cannot collect any new airport for free use")
         return tasks
@@ -235,6 +247,7 @@ def aggregate(args: argparse.Namespace) -> None:
 
         logger.info(f"startup clash now, workspace: {workspace}, config: {confif_file}")
         process = subprocess.Popen([binpath, "-d", workspace, "-f", os.path.join(workspace, confif_file)])
+
         logger.info(f"clash start success, begin check proxies, num: {len(unique_proxies)}")
 
         time.sleep(random.randint(3, 6))
