@@ -24,7 +24,7 @@ jobs:
         pip3 install tqdm
 
     - name: Execute Python script7
-      run:  python -y subscribe/collect.py "https://raw.githubusercontent.com/qjlxg/collectSub/refs/heads/main/sub/sub_all_clash.txt,https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/tools/ss-url"
+      run:  python subscribe/collect.py -y "https://raw.githubusercontent.com/qjlxg/collectSub/refs/heads/main/sub/sub_all_clash.txt,https://raw.githubusercontent.com/qjlxg/license/r7efs/heads/main/tools/ss-url"7
      # run: python -u subscribe/collect.py -s
 
     - name: Setup Git
