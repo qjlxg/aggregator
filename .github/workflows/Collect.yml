@@ -24,8 +24,8 @@ jobs:
         pip3 install tqdm
 
     - name: Execute Python script7
-      run:  python subscribe/collect.py -y "https://raw.githubusercontent.com/qjlxg/collectSub/refs/heads/main/sub/sub_all_clash.txt,https://raw.githubusercontent.com/qjlxg/license/r7efs/heads/main/tools/ss-url"7
-     # run: python -u subscribe/collect.py -s
+     # run:  python subscribe/collect.py -y "https://raw.githubusercontent.com/qjlxg/collectSub/refs/heads/main/sub/sub_all_clash.txt,https://raw.githubusercontent.com/qjlxg/license/r7efs/heads/main/tools/ss-url"
+      run: python -u subscribe/collect.py -s
 
     - name: Setup Git
       run: |
@@ -42,19 +42,4 @@ jobs:
         git diff --staged --quiet || git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
         git push origin HEAD:main
         
-    - name: Execute Python script
-      run: python -u subscribe/replace.py -s
-      
-    - name: Setup Git
-      run: |
-         git config --global user.email "actions@github.com"
-         git config --global user.name "GitHub Action"
-         
-    - name: Commit Changes
-      run: |
-         git config core.ignorecase false
-         git add .
-         git diff --staged --quiet || git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
-         git push origin HEAD:main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
