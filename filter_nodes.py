@@ -115,5 +115,5 @@ def main():
     else:
         logging.info("没有有效节点，未生成文件。")
 
-if __name__ == '__main__
-
+if __name__ == "__main__":
+    main()
