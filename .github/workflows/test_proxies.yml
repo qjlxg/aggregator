@@ -1,49 +1,32 @@
 name: Filter Clash Nodes
-
 on:
   push:
     branches:
       - main
   workflow_dispatch:
-
 jobs:
   filter-nodes:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-
       - name: Install dependencies
         run: |
           pip install pyyaml requests
-
       - name: Create data directory
         run: |
           mkdir -p data
-
-      - name: Make Clash executable
-        run: |
-          chmod +x ./clash/clash-linux
-
       - name: Test network connectivity
         run: |
           curl -I https://www.cloudflare.com || echo "无法访问 Cloudflare"
           curl -I https://www.github.com || echo "无法访问 GitHub"
-
       - name: Run filter script
         run: |
           python filter_nodes.py
-
-      - name: Check data directory
-        run: |
-          ls -l data/ || echo "data/ directory not found"
-
       - name: Upload result as artifact
         uses: actions/upload-artifact@v4
         with:
