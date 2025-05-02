@@ -1,6 +1,4 @@
-
-
-name: replace 
+name: filter_nodess 
 
 on:
   workflow_dispatch:
@@ -14,6 +12,12 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+
+    - name: 清理缓存
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache
+        key: ${{ runner.os }}-cache-clear
 
     - name: Set up Python
       uses: actions/setup-python@v2
