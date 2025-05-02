@@ -23,16 +23,29 @@ jobs:
         run: |
           pip install pyyaml requests
 
+      - name: Create data directory
+        run: |
+          mkdir -p data
+
       - name: Make Clash executable
         run: |
           chmod +x ./clash/clash-linux
+
+      - name: Test network connectivity
+        run: |
+          curl -I https://www.google.com || echo "无法访问 Google"
+          curl -I https://www.youtube.com || echo "无法访问 YouTube"
 
       - name: Run filter script
         run: |
           python filter_nodes.py
 
+      - name: Check data directory
+        run: |
+          ls -l data/ || echo "data/ directory not found"
+
       - name: Upload result as artifact
-        uses: actions/upload-artifact@v4  # 更新到 v4
+        uses: actions/upload-artifact@v4
         with:
           name: google-yaml
           path: data/google.yaml
