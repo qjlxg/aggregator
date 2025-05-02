@@ -19,6 +19,8 @@ jobs:
           
       - name: 安装依赖
         run: pip install -r ./requirements.txt
+      - name:  安装 pysocks
+        run: pip install pysocks
         
       - name: Install dependencies
         run: |
