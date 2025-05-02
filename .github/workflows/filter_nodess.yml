@@ -47,7 +47,7 @@ jobs:
           fi
 
       - name: 上传输出文件
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: filtered-nodes
           path: data/google.yaml
