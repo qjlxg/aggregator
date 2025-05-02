@@ -31,15 +31,8 @@ jobs:
       - name: Run node filtering script
         run: |
           python filter_nodes.py
-      - name: Check output file
-        run: |
-          if [ -f data/google.yaml ]; then
-            echo "Output file exists"
-            cat data/google.yaml
-          else
-            echo "Output file does not exist"
-          fi
-      - name: Upload output file
+          
+      - name: Upload filtered nodes
         uses: actions/upload-artifact@v3
         with:
           name: filtered-nodes
