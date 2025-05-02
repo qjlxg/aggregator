@@ -1,51 +1,47 @@
-name: Clash 节点过滤并测试
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+ name: Clash 节点过滤并测试
 
-jobs:
-  filter_nodes:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+ on:
+   push:
+     branches:
+       - main
+   workflow_dispatch:
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: 安装依赖
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: 创建 data 目录
-        run: |
-          mkdir -p data
-          chmod 777 data
-
-      - name: 使 Clash 可执行
-        run: |
-          chmod +x clash/clash-linux clash/clash-windows.exe clash/clash-darwin-amd clash/clash-darwin-arm
-
-      - name: 运行节点过滤脚本
-        run: |
-          python filter_nodes.py
-
-      - name: 查看输出
-        run: |
-          if [ -f data/google.yaml ]; then
-            echo "有效节点："
-            cat data/google.yaml
-          else
-            echo "未生成 data/google.yaml"
-          fi
-
-      - name: 上传输出文件
-        uses: actions/upload-artifact@v3
-        with:
-          name: filtered-nodes
-          path: data/google.yaml
+ jobs:
+   filter_nodes:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v3
+       - name: Set up Python
+         uses: actions/setup-python@v4
+         with:
+           python-version: '3.x'
+       - name: 安装依赖
+         run: |
+           python -m pip install --upgrade pip
+           pip install -r requirements.txt
+       - name: 创建 data 目录
+         run: |
+           mkdir -p data
+           chmod 777 data
+       - name: 使 Clash 可执行
+         run: |
+           chmod +x clash/clash-linux clash/clash-windows.exe clash/clash-darwin-amd clash/clash-darwin-arm
+       - name: 运行节点过滤脚本
+         run: |
+           python filter_nodes.py
+       - name: 查看输出
+         run: |
+           if [ -f data/google.yaml ]; then
+             echo "有效节点："
+             cat data/google.yaml
+           else
+             echo "未生成 data/google.yaml"
+           fi
+       - name: 上传输出文件
+         uses: actions/upload-artifact@v3
+       - name: 上传输出文件
+         uses: actions/upload-artifact@v2
+         with:
+           name: filtered-nodes
+           path: data/google.yaml
