@@ -1,7 +1,7 @@
 name: Test Proxies
 
-on: [push]
-
+on:
+     workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest
