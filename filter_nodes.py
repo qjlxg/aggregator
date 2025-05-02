@@ -15,10 +15,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # 常量定义
 BASE_PORT = 10000
-TEST_URLS = [
-    "http://www.bing.com",
-    "http://www.wikipedia.org"
-]
+TEST_URLS = ["http://cp.cloudflare.com/"]
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
 
 def load_yaml(file_path):
@@ -160,7 +157,7 @@ def start_clash(node, port, clash_binary="clash-linux"):
             stderr=subprocess.PIPE,
             preexec_fn=os.setsid
         )
-        time.sleep(5)  # 增加等待时间，确保 Clash 完全启动
+        time.sleep(5)  # 确保 Clash 完全启动
         if process.poll() is not None:
             stderr = process.stderr.read().decode()
             logging.error(f"Clash 启动失败，端口 {port}，错误: {stderr}")
@@ -190,7 +187,7 @@ def test_proxy_connectivity_with_requests(node_name, port):
         "http": f"socks5://127.0.0.1:{port + 1}",
         "https": f"socks5://127.0.0.1:{port + 1}"
     }
-    for url in TEST_URLS:
+    for url in TEST_URLS:  # 只有一个元素 http://cp.cloudflare.com/
         logging.info(f"测试节点 {node_name}，URL: {url}，代理: {proxies}")
         try:
             response = requests.get(url, proxies=proxies, timeout=20)
