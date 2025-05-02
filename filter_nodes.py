@@ -1,23 +1,21 @@
-import yaml
 import os
+import json
+import base64
+import urllib.parse
+import yaml
 import subprocess
 import time
-import base64
-import json
-import urllib.parse
 import signal
-import socket
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from dns.resolver import Resolver
+import logging
 
-# 支持的节点类型
-SUPPORTED_TYPES = ['vmess', 'ss', 'hysteria2', 'trojan', 'vless']
+# 设置日志
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# 测试的域名
-TEST_DOMAINS = ['www.google.com', 'www.youtube.com']
-
-# 基础端口号（每个线程递增）
-BASE_PORT = 7890
+# 常量定义
+BASE_PORT = 10000  # 基础端口
+TEST_DOMAINS = ['www.google.com', 'www.youtube.com', 'www.facebook.com']
+SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
 
 def load_yaml(file_path):
     """加载 YAML 文件"""
@@ -25,23 +23,27 @@ def load_yaml(file_path):
         with open(file_path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
     except Exception as e:
-        print(f"加载 {file_path} 失败: {e}")
+        logging.error(f"加载 {file_path} 失败: {e}")
         return None
 
 def save_yaml(data, file_path):
     """保存 YAML 文件"""
     try:
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
         with open(file_path, 'w', encoding='utf-8') as f:
             yaml.dump(data, f, allow_unicode=True)
+        logging.info(f"成功保存到 {file_path}")
     except Exception as e:
-        print(f"保存 {file_path} 失败: {e}")
+        logging.error(f"保存 {file_path} 失败: {e}")
 
 def parse_node(node):
     """验证节点配置"""
+    required_fields = ['server', 'port', 'type']
+    if not all(field in node for field in required_fields):
+        logging.warning(f"节点配置缺少必要字段: {node}")
+        return None
     node_type = node.get('type', '').lower()
     if node_type not in SUPPORTED_TYPES:
-        print(f"不支持的节点类型: {node_type}")
+        logging.warning(f"不支持的节点类型: {node_type}")
         return None
     return node
 
@@ -122,7 +124,7 @@ def parse_url_node(url):
         else:
             return None
     except Exception as e:
-        print(f"解析节点 {url} 失败: {e}")
+        logging.error(f"解析节点 {url} 失败: {e}")
         return None
 
 def start_clash(node, port, clash_binary="clash-linux"):
@@ -154,9 +156,13 @@ def start_clash(node, port, clash_binary="clash-linux"):
             preexec_fn=os.setsid
         )
         time.sleep(2)  # 等待 Clash 启动
+        if process.poll() is not None:
+            logging.error(f"Clash 启动失败，端口 {port}")
+            return None, temp_config_file
+        logging.info(f"Clash 启动成功，PID: {process.pid}，端口: {port}")
         return process, temp_config_file
     except Exception as e:
-        print(f"启动 Clash（端口 {port}）失败: {e}")
+        logging.error(f"启动 Clash（端口 {port}）失败: {e}")
         return None, temp_config_file
 
 def terminate_clash(process, temp_config_file):
@@ -168,59 +174,46 @@ def terminate_clash(process, temp_config_file):
         except (subprocess.TimeoutExpired, ProcessLookupError):
             os.killpg(os.getpgid(process.pid), signal.SIGKILL)
         except Exception as e:
-            print(f"终止 Clash 失败: {e}")
+            logging.error(f"终止 Clash 失败: {e}")
     if os.path.exists(temp_config_file):
         os.remove(temp_config_file)
 
-def test_proxy_dns(node_name, port):
-    """通过代理测试 DNS 解析"""
-    resolver = Resolver()
-    resolver.nameservers = ['8.8.8.8']  # 使用 Google DNS
-    resolver.port = port + 1  # 使用 socks 端口
-    resolver.timeout = 5
-    resolver.lifetime = 5
-
-    # 配置代理
-    os.environ['ALL_PROXY'] = f'socks5://127.0.0.1:{port + 1}'
-
-    for domain in TEST_DOMAINS:
-        try:
-            answers = resolver.resolve(domain, 'A')
-            ips = [rdata.address for rdata in answers]
-            print(f"节点 {node_name} 成功解析 {domain}: {ips}")
-            # 简单验证 IP（可根据需要扩展）
-            if not ips:
-                print(f"节点 {node_name} 解析 {domain} 失败：无 IP 返回")
-                return False
-        except Exception as e:
-            print(f"节点 {node_name} 解析 {domain} 失败: {e}")
+def test_proxy_connectivity(node_name, port):
+    """通过代理测试网络连通性"""
+    url = "http://www.google.com"
+    cmd = ["curl", "-x", f"socks5://127.0.0.1:{port + 1}", "--connect-timeout", "10", url]
+    try:
+        result = subprocess.run(cmd, timeout=15, capture_output=True, text=True)
+        if result.returncode == 0:
+            logging.info(f"节点 {node_name} 连接成功")
+            return True
+        else:
+            logging.warning(f"节点 {node_name} 连接失败: {result.stderr}")
             return False
-        finally:
-            os.environ.pop('ALL_PROXY', None)
-    return True
+    except subprocess.TimeoutExpired:
+        logging.warning(f"节点 {node_name} 连接超时")
+        return False
+    except Exception as e:
+        logging.error(f"测试节点 {node_name} 出错: {e}")
+        return False
 
 def test_node(node, thread_index):
     """测试单个节点"""
-    port = BASE_PORT + thread_index * 2  # 动态分配端口
+    port = BASE_PORT + (thread_index % 4) * 2  # 限制端口范围
     node_name = node['name']
     
-    print(f"线程 {thread_index} 测试节点: {node_name}（端口 {port}）")
+    logging.info(f"线程 {thread_index} 测试节点: {node_name}（端口 {port}）")
     
     clash_process, temp_config_file = start_clash(node, port, clash_binary='clash-linux')
     if not clash_process:
-        print(f"节点 {node_name} 无法启动 Clash")
+        logging.error(f"节点 {node_name} 无法启动 Clash")
         return None
     
     try:
-        if test_proxy_dns(node_name, port):
-            print(f"节点 {node_name} 测试通过")
+        if test_proxy_connectivity(node_name, port):
             return node
         else:
-            print(f"节点 {node_name} 测试失败")
             return None
-    except Exception as e:
-        print(f"测试节点 {node_name} 出错: {e}")
-        return None
     finally:
         terminate_clash(clash_process, temp_config_file)
         time.sleep(1)  # 确保端口释放
@@ -230,19 +223,19 @@ def main():
     output_path = 'data/google.yaml'
 
     if not os.path.exists(input_path):
-        print(f"输入文件 {input_path} 不存在")
+        logging.error(f"输入文件 {input_path} 不存在")
         return
 
     clash_data = load_yaml(input_path)
     if not clash_data or 'proxies' not in clash_data:
-        print(f"{input_path} 中未找到代理节点")
+        logging.error(f"{input_path} 中未找到代理节点")
         return
 
     proxies = clash_data.get('proxies', [])
     valid_nodes = []
 
-    # 使用线程池并行测试
-    max_workers = 4  # 控制最大线程数，避免资源耗尽
+    # 使用线程池并行测试，限制最大线程数
+    max_workers = 4
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_node = {
             executor.submit(test_node, node, idx): node
@@ -255,13 +248,12 @@ def main():
             if node:
                 valid_nodes.append(node)
 
-    print(f"共测试 {len(proxies)} 个节点，{len(valid_nodes)} 个通过测试")
+    logging.info(f"共测试 {len(proxies)} 个节点，{len(valid_nodes)} 个通过测试")
     
     if valid_nodes:
         save_yaml({'proxies': valid_nodes}, output_path)
-        print(f"通过测试的节点已保存到 {output_path}")
     else:
-        print("没有节点通过测试，未生成输出文件")
+        logging.info("没有节点通过测试，未生成输出文件")
 
 if __name__ == "__main__":
     main()
