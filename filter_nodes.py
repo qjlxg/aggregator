@@ -38,6 +38,7 @@ def save_yaml(data, file_path):
         logging.info(f"成功保存到 {file_path}")
     except Exception as e:
         logging.error(f"保存 {file_path} 失败: {e}")
+        raise  # 抛出异常以便上层捕获
 
 def parse_node(node):
     """验证节点配置"""
@@ -198,7 +199,7 @@ def test_proxy_connectivity(node_name, port):
                 http_code, time_total = output[0], float(output[1])
                 if result.returncode == 0 and http_code == "200":
                     logging.info(f"节点 {node_name} 访问 {url} 成功，HTTP状态码: {http_code}，耗时: {time_total:.2f}s")
-                    break  # 该站点测试成功，跳到下一个站点
+                    break
                 else:
                     logging.warning(f"节点 {node_name} 访问 {url} 失败（尝试 {attempt + 1}），HTTP状态码: {http_code}")
                     if attempt == max_retries:
@@ -239,6 +240,14 @@ def main():
     input_path = 'data/clash.yaml'
     output_path = 'data/google.yaml'
 
+    # 创建 data 目录（如果不存在）
+    os.makedirs('data', exist_ok=True)
+
+    # 检查写入权限
+    if not os.access('data', os.W_OK):
+        logging.error("无权写入 data 目录")
+        return
+
     if not os.path.exists(input_path):
         logging.error(f"输入文件 {input_path} 不存在")
         return
@@ -265,10 +274,16 @@ def main():
             if node:
                 valid_nodes.append(node)
 
+    # 打印测试结果和待保存的节点
     logging.info(f"共测试 {len(proxies)} 个节点，{len(valid_nodes)} 个通过测试")
-    
     if valid_nodes:
-        save_yaml({'proxies': valid_nodes}, output_path)
+        logging.info(f"通过测试的节点数量: {len(valid_nodes)}")
+        for node in valid_nodes:
+            logging.info(f"通过的节点: {node['name']}")
+        try:
+            save_yaml({'proxies': valid_nodes}, output_path)
+        except Exception as e:
+            logging.error(f"保存节点到 {output_path} 时发生错误: {e}")
     else:
         logging.info("没有节点通过测试，未生成输出文件")
 
