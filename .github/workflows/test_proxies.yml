@@ -19,8 +19,7 @@ jobs:
           
       - name: 安装依赖
         run: pip install -r ./requirements.txt
-
-      - name: 安装 pysocks
+      - name:  安装 pysocks
         run: pip install pysocks
         
       - name: Install dependencies
@@ -35,7 +34,7 @@ jobs:
       - name: Run node filtering script
         run: |
           python filter_nodes.py
-
+          
       - name: 验证文件生成
         run: |
           if [ -f "data/google.yaml" ]; then
