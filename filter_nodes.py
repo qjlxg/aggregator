@@ -1,88 +1,63 @@
-import logging
+import time
 import requests
 import yaml
-from queue import Queue
-from threading import Thread
 import os
-import sys
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# 等待 Clash 启动
+def wait_for_clash():
+    while True:
+        try:
+            response = requests.get("http://127.0.0.1:9090/version")
+            if response.status_code == 200:
+                break
+        except:
+            pass
+        time.sleep(1)
 
-# Define test URL
-TEST_URLS = {
-    "GitHub": "https://www.github.com"
+# 启动 Clash 在后台运行
+os.system("./clash/clash-linux -f data/clash.yaml &")
+wait_for_clash()
+
+# 读取 Clash 配置文件
+with open("data/clash.yaml", "r") as f:
+    config = yaml.safe_load(f)
+proxies_list = config["proxies"]
+
+# 配置代理，使用 Clash 默认的代理端口 7890
+proxies = {
+    "http": "http://127.0.0.1:7890",
+    "https": "http://127.0.0.1:7890",
 }
 
-def load_nodes(input_file):
-    """Load Clash nodes from a configuration file."""
-    with open(input_file, 'r', encoding='utf-8') as f:
-        data = yaml.safe_load(f)
-    return data.get("proxies", [])
+available_proxies = []
+for proxy in proxies_list:
+    # 通过 API 切换到当前代理节点
+    requests.put("http://127.0.0.1:9090/proxies/GLOBAL", json={"name": proxy["name"]})
 
-def test_proxy(proxy, result_queue):
-    """Test the connectivity of a single proxy node."""
+    # 测试 Google
     try:
-        proxies = {
-            "http": f"http://{proxy['server']}:{proxy['port']}",
-            "https": f"http://{proxy['server']}:{proxy['port']}"
-        }
-        success = True
-        for name, url in TEST_URLS.items():
-            try:
-                response = requests.get(url, proxies=proxies, timeout=20)
-                if response.status_code != 200:
-                    success = False
-                    logging.info(f"Node {proxy['name']} cannot access {name}")
-                    break
-            except Exception as e:
-                success = False
-                logging.info(f"Node {proxy['name']} failed to test {name}: {e}")
-                break
-        if success:
-            result_queue.put(proxy)
-            logging.info(f"Node {proxy['name']} passed the test")
-    except Exception as e:
-        logging.error(f"Error testing node {proxy['name']}: {e}")
+        response = requests.get("https://www.google.com", proxies=proxies, timeout=30)
+        google_ok = response.status_code == 200
+    except:
+        google_ok = False
 
-def save_results(proxies, output_file):
-    """Save the tested proxies to an output file."""
-    with open(output_file, 'w', encoding='utf-8') as f:
-        yaml.safe_dump({"proxies": proxies}, f)
+    # 测试 YouTube
+    try:
+        response = requests.get("https://www.youtube.com", proxies=proxies, timeout=30)
+        youtube_ok = response.status_code == 200
+    except:
+        youtube_ok = False
 
-def main():
-    """Main function to coordinate node loading, testing, and saving results."""
-    input_file = "data/clash.yaml"
-    output_file = "data/google.yaml"
+    # 如果两个网站都能访问，则记录该节点
+    if google_ok and youtube_ok:
+        available_proxies.append(proxy)
     
-    if not os.path.exists(input_file):
-        logging.error(f"Input file {input_file} does not exist")
-        sys.exit(1)
-    
-    nodes = load_nodes(input_file)
-    logging.info(f"Loaded {len(nodes)} nodes")
-    
-    result_queue = Queue()
-    threads = []
-    for node in nodes:
-        t = Thread(target=test_proxy, args=(node, result_queue))
-        t.start()
-        threads.append(t)
-    
-    for t in threads:
-        t.join()
-    
-    available_proxies = []
-    while not result_queue.empty():
-        available_proxies.append(result_queue.get())
-    
-    if available_proxies:
-        save_results(available_proxies, output_file)
-        logging.info(f"Found {len(available_proxies)} available nodes")
-    else:
-        logging.warning("No available nodes found, generating an empty file")
-        with open(output_file, 'w', encoding='utf-8') as f:
-            yaml.safe_dump({"proxies": []}, f)
+    # 避免请求过快被封锁
+    time.sleep(1)
 
-if __name__ == "__main__":
-    main()
+# 将可用节点写入 data/google.yaml
+with open("data/google.yaml", "w") as f:
+    yaml.dump({"proxies": available_proxies}, f)
+
+# 停止 Clash 进程
+os.system("pkill clash-linux")
