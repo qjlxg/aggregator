@@ -13,16 +13,19 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Install PyYAML
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pyyaml
+          pip install pyyaml requests
+
+      - name: Make Clash binary executable
+        run: |
+          chmod +x clash/clash-linux
 
       - name: Run node filtering script
         run: |
-          # 在仓库中已有 filter_nodes.py 文件
           python filter_nodes.py
