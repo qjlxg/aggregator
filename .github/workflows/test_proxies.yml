@@ -46,7 +46,7 @@ jobs:
           fi
 
       - name: Upload filtered nodes
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: filtered-nodes
           path: data/google.yaml
