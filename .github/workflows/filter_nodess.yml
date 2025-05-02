@@ -36,13 +36,24 @@ jobs:
         run: |
           python filter_nodes.py
 
-      - name: 验证并显示文件内容
+      - name: Debug file location
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "List of files in current directory:"
+          ls -la
+          echo "List of files in data directory:"
+          ls -la data/
+          echo "Full path of google.yaml:"
+          find $(pwd) -name "google.yaml"
+
+      - name: Display file content
         run: |
           if [ -f "data/google.yaml" ]; then
-            echo "文件已生成：data/google.yaml"
-            echo "文件内容："
+            echo "File exists at data/google.yaml"
+            echo "File content:"
             cat data/google.yaml
+            echo "File size: $(stat -f%z data/google.yaml) bytes"
           else
-            echo "文件未生成"
+            echo "File not found at data/google.yaml"
             exit 1
           fi
