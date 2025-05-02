@@ -1,32 +1,38 @@
-name: Test Proxies
+name: Filter Clash Nodes
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  filter-nodes:
+    runs-on: ubuntu-latest  # 使用 Ubuntu 环境
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
-    - name: Install dependencies
-      run: |
-        pip install requests PyYAML
+      - name: Install dependencies
+        run: |
+          pip install pyyaml requests
 
-    - name: Download Clash
-      run: |
-        wget https://raw.githubusercontent.com/rxsweet/all/main/githubTools/clash-linux-amd64-v1.11.4.gz
-        gunzip clash-linux-amd64-v1.11.4.gz
-        mv clash-linux-amd64-v1.11.4 clash
-        chmod +x clash
+      - name: Make Clash executable
+        run: |
+          chmod +x ./clash/clash-linux
 
-    - name: Run Clash and test script
-      run: |
-        ./clash -f data/clash.yaml &
-        sleep 10
-        python test_proxies.py
+      - name: Run filter script
+        run: |
+          python filter_nodes.py
+
+      - name: Upload result as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: google-yaml
+          path: data/google.yaml
