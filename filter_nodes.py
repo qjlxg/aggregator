@@ -160,9 +160,10 @@ def start_clash(node, port, clash_binary="clash-linux"):
             stderr=subprocess.PIPE,
             preexec_fn=os.setsid
         )
-        time.sleep(3)  # 增加等待时间，确保 Clash 完全启动
+        time.sleep(5)  # 增加等待时间，确保 Clash 完全启动
         if process.poll() is not None:
-            logging.error(f"Clash 启动失败，端口 {port}")
+            stderr = process.stderr.read().decode()
+            logging.error(f"Clash 启动失败，端口 {port}，错误: {stderr}")
             return None, temp_config_file
         logging.info(f"Clash 启动成功，PID: {process.pid}，端口: {port}")
         return process, temp_config_file
@@ -190,16 +191,14 @@ def test_proxy_connectivity_with_requests(node_name, port):
         "https": f"socks5://127.0.0.1:{port + 1}"
     }
     for url in TEST_URLS:
-        logging.info(f"正在测试节点 {node_name}，URL: {url}，代理端口: {port + 1}")
+        logging.info(f"测试节点 {node_name}，URL: {url}，代理: {proxies}")
         try:
-            response = requests.get(url, proxies=proxies, timeout=10)
+            response = requests.get(url, proxies=proxies, timeout=20)
+            logging.info(f"响应状态码: {response.status_code}")
             if response.status_code == 200:
-                logging.info(f"节点 {node_name} 访问 {url} 成功，HTTP状态码: {response.status_code}")
                 return True
-            else:
-                logging.warning(f"节点 {node_name} 访问 {url} 失败，HTTP状态码: {response.status_code}")
         except requests.exceptions.RequestException as e:
-            logging.error(f"节点 {node_name} 访问 {url} 出错: {e}")
+            logging.error(f"连接错误: {e}")
     return False
 
 def test_node(node, thread_index):
@@ -208,6 +207,7 @@ def test_node(node, thread_index):
     node_name = node['name']
     
     logging.info(f"线程 {thread_index} 测试节点: {node_name}（端口 {port}）")
+    logging.info(f"节点配置: {node}")
     
     clash_process, temp_config_file = start_clash(node, port, clash_binary='clash-linux')
     if not clash_process:
