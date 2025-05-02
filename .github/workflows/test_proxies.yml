@@ -1,32 +1,72 @@
-name: Test Proxies
+name: Filter Clash Nodes
 
 on:
-     workflow_dispatch:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
 jobs:
-  test:
+  filter_nodes:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install requests pyyaml
+      - name: Install PyYAML
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
 
-    - name: Make clash executable
-      run: chmod +x clash/clash-linux
+      - name: Run node filtering script
+        run: |
+          echo "import yaml
+import os
 
-    - name: Run script
-      run: python test_proxies.py
+SUPPORTED_TYPES = ['vmess', 'ss', 'hysteria2', 'trojan', 'vless']
+TARGET_DOMAINS = ['google.com', 'youtube.com']
 
-    - name: Upload google.yaml
-      uses: actions/upload-artifact@v2
-      with:
-        name: google.yaml
-        path: data/google.yaml
+def load_yaml(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        return yaml.safe_load(f)
+
+def save_yaml(data, file_path):
+    with open(file_path, 'w', encoding='utf-8') as f:
+        yaml.dump(data, f, allow_unicode=True)
+
+def node_can_access(node):
+    name = node.get('name', '').lower()
+    for domain in TARGET_DOMAINS:
+        domain_keyword = domain.replace('.', '')
+        if domain_keyword in name:
+            return True
+    return False
+
+def main():
+    clash_yaml_path = 'data/clash.yaml'
+    output_yaml_path = 'data/google.yaml'
+    if not os.path.exists(clash_yaml_path):
+        print(f\"文件不存在: {clash_yaml_path}\")
+        return
+    clash_data = load_yaml(clash_yaml_path)
+    proxies = clash_data.get('proxies', [])
+    valid_nodes = []
+    for node in proxies:
+        node_type = node.get('type', '').lower()
+        if node_type in SUPPORTED_TYPES:
+            if node_can_access(node):
+                valid_nodes.append(node)
+    output_yaml = {'proxies': valid_nodes}
+    os.makedirs(os.path.dirname(output_yaml_path), exist_ok=True)
+    save_yaml(output_yaml, output_yaml_path)
+    print(f\"符合条件的节点已保存到 {output_yaml_path}\")
+
+if __name__ == \"__main__\":
+    main()
+" > filter_nodes.py
+
+          python filter_nodes.py
