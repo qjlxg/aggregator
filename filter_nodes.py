@@ -8,6 +8,7 @@ import time
 import signal
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import logging
+import requests  # 新增，用于替代 curl 测试代理
 
 # 设置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -183,37 +184,23 @@ def terminate_clash(process, temp_config_file):
     if os.path.exists(temp_config_file):
         os.remove(temp_config_file)
 
-def test_proxy_connectivity(node_name, port):
-    """通过代理测试网络连通性"""
-    max_retries = 2
+def test_proxy_connectivity_with_requests(node_name, port):
+    """通过代理测试网络连通性（使用 requests）"""
+    proxies = {
+        "http": f"socks5://127.0.0.1:{port + 1}",
+        "https": f"socks5://127.0.0.1:{port + 1}"
+    }
     for url in TEST_URLS:
-        for attempt in range(max_retries + 1):
-            cmd = [
-                "curl", "-x", f"socks5://127.0.0.1:{port + 1}",
-                "--connect-timeout", "5", "--max-time", "10",
-                "-s", "-w", "%{http_code}|%{time_total}", url
-            ]
-            try:
-                result = subprocess.run(cmd, timeout=15, capture_output=True, text=True)
-                output = result.stdout.strip().split('|')
-                http_code, time_total = output[0], float(output[1])
-                if result.returncode == 0 and http_code == "200":
-                    logging.info(f"节点 {node_name} 访问 {url} 成功，HTTP状态码: {http_code}，耗时: {time_total:.2f}s")
-                    break
-                else:
-                    logging.warning(f"节点 {node_name} 访问 {url} 失败（尝试 {attempt + 1}），HTTP状态码: {http_code}")
-                    if attempt == max_retries:
-                        return False
-            except subprocess.TimeoutExpired:
-                logging.warning(f"节点 {node_name} 访问 {url} 超时（尝试 {attempt + 1}）")
-                if attempt == max_retries:
-                    return False
-            except Exception as e:
-                logging.error(f"测试节点 {node_name} 访问 {url} 出错（尝试 {attempt + 1}）: {e}")
-                if attempt == max_retries:
-                    return False
-            time.sleep(1)  # 重试间隔
-    return True
+        try:
+            response = requests.get(url, proxies=proxies, timeout=10)
+            if response.status_code == 200:
+                logging.info(f"节点 {node_name} 访问 {url} 成功，HTTP状态码: {response.status_code}")
+                return True
+            else:
+                logging.warning(f"节点 {node_name} 访问 {url} 失败，HTTP状态码: {response.status_code}")
+        except requests.exceptions.RequestException as e:
+            logging.error(f"节点 {node_name} 访问 {url} 出错: {e}")
+    return False
 
 def test_node(node, thread_index):
     """测试单个节点"""
@@ -228,7 +215,7 @@ def test_node(node, thread_index):
         return None
     
     try:
-        if test_proxy_connectivity(node_name, port):
+        if test_proxy_connectivity_with_requests(node_name, port):
             return node
         else:
             return None
