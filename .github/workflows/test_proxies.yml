@@ -1,3 +1,4 @@
+
 name: Filter Clash Nodes
 
 on:
@@ -19,8 +20,7 @@ jobs:
           
       - name: 安装依赖
         run: pip install -r ./requirements.txt
-
-      - name: 安装 pysocks
+      - name:  安装 pysocks
         run: pip install pysocks
         
       - name: Install dependencies
@@ -35,9 +35,10 @@ jobs:
       - name: Run node filtering script
         run: |
           python filter_nodes.py
-
-      - name: Upload filtered nodes
-        uses: actions/upload-artifact@v3
-        with:
-          name: filtered-nodes
-          path: data/google.yaml
+      - name: 提交更改
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add data/google.yaml
+          git commit -m "${{ github.workflow }} https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          git pull --rebase
