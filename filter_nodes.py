@@ -19,6 +19,27 @@ TEST_URLS = [
     "http://www.google.com",
     "http://www.youtube.com",
     "http://www.facebook.com"
+    "http://www.wikipedia.org"
+]
+
+def test_proxy_connectivity_with_requests(node_name, port):
+    """通过代理测试网络连通性（使用 requests）"""
+    proxies = {
+        "http": f"socks5://127.0.0.1:{port + 1}",
+        "https": f"socks5://127.0.0.1:{port + 1}"
+    }
+    for url in TEST_URLS:
+        logging.info(f"正在测试节点 {node_name}，URL: {url}，代理端口: {port + 1}")
+        try:
+            response = requests.get(url, proxies=proxies, timeout=10)
+            if response.status_code == 200:
+                logging.info(f"节点 {node_name} 访问 {url} 成功，HTTP状态码: {response.status_code}")
+                return True
+            else:
+                logging.warning(f"节点 {node_name} 访问 {url} 失败，HTTP状态码: {response.status_code}")
+        except requests.exceptions.RequestException as e:
+            logging.error(f"节点 {node_name} 访问 {url} 出错: {e}")
+    return False"
 ]
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
 
