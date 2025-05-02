@@ -13,8 +13,12 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # 常量定义
-BASE_PORT = 10000  # 基础端口
-TEST_DOMAINS = ['www.google.com', 'www.youtube.com', 'www.facebook.com']
+BASE_PORT = 10000
+TEST_URLS = [
+    "http://www.google.com",
+    "http://www.youtube.com",
+    "http://www.facebook.com"
+]
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
 
 def load_yaml(file_path):
@@ -155,7 +159,7 @@ def start_clash(node, port, clash_binary="clash-linux"):
             stderr=subprocess.PIPE,
             preexec_fn=os.setsid
         )
-        time.sleep(2)  # 等待 Clash 启动
+        time.sleep(3)  # 增加等待时间，确保 Clash 完全启动
         if process.poll() is not None:
             logging.error(f"Clash 启动失败，端口 {port}")
             return None, temp_config_file
@@ -180,26 +184,39 @@ def terminate_clash(process, temp_config_file):
 
 def test_proxy_connectivity(node_name, port):
     """通过代理测试网络连通性"""
-    url = "http://www.google.com"
-    cmd = ["curl", "-x", f"socks5://127.0.0.1:{port + 1}", "--connect-timeout", "10", url]
-    try:
-        result = subprocess.run(cmd, timeout=15, capture_output=True, text=True)
-        if result.returncode == 0:
-            logging.info(f"节点 {node_name} 连接成功")
-            return True
-        else:
-            logging.warning(f"节点 {node_name} 连接失败: {result.stderr}")
-            return False
-    except subprocess.TimeoutExpired:
-        logging.warning(f"节点 {node_name} 连接超时")
-        return False
-    except Exception as e:
-        logging.error(f"测试节点 {node_name} 出错: {e}")
-        return False
+    max_retries = 2
+    for url in TEST_URLS:
+        for attempt in range(max_retries + 1):
+            cmd = [
+                "curl", "-x", f"socks5://127.0.0.1:{port + 1}",
+                "--connect-timeout", "5", "--max-time", "10",
+                "-s", "-w", "%{http_code}|%{time_total}", url
+            ]
+            try:
+                result = subprocess.run(cmd, timeout=15, capture_output=True, text=True)
+                output = result.stdout.strip().split('|')
+                http_code, time_total = output[0], float(output[1])
+                if result.returncode == 0 and http_code == "200":
+                    logging.info(f"节点 {node_name} 访问 {url} 成功，HTTP状态码: {http_code}，耗时: {time_total:.2f}s")
+                    break  # 该站点测试成功，跳到下一个站点
+                else:
+                    logging.warning(f"节点 {node_name} 访问 {url} 失败（尝试 {attempt + 1}），HTTP状态码: {http_code}")
+                    if attempt == max_retries:
+                        return False
+            except subprocess.TimeoutExpired:
+                logging.warning(f"节点 {node_name} 访问 {url} 超时（尝试 {attempt + 1}）")
+                if attempt == max_retries:
+                    return False
+            except Exception as e:
+                logging.error(f"测试节点 {node_name} 访问 {url} 出错（尝试 {attempt + 1}）: {e}")
+                if attempt == max_retries:
+                    return False
+            time.sleep(1)  # 重试间隔
+    return True
 
 def test_node(node, thread_index):
     """测试单个节点"""
-    port = BASE_PORT + (thread_index % 4) * 2  # 限制端口范围
+    port = BASE_PORT + (thread_index % 2) * 2  # 限制为2个并发线程的端口范围
     node_name = node['name']
     
     logging.info(f"线程 {thread_index} 测试节点: {node_name}（端口 {port}）")
@@ -235,7 +252,7 @@ def main():
     valid_nodes = []
 
     # 使用线程池并行测试，限制最大线程数
-    max_workers = 4
+    max_workers = 2
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         future_to_node = {
             executor.submit(test_node, node, idx): node
