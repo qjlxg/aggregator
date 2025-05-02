@@ -34,10 +34,17 @@ jobs:
       - name: Run node filtering script
         run: |
           python filter_nodes.py
-      - name: 提交更改
+      - name: 验证文件生成
         run: |
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Actions"
-          git add data/google.yaml
-          git commit -m "${{ github.workflow }} https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          git pull --rebase
+          if [ -f "data/google.yaml" ]; then
+            echo "文件已生成：data/google.yaml"
+          else
+            echo "文件未生成"
+            exit 1
+          fi
+
+      - name: Upload filtered nodes
+        uses: actions/upload-artifact@v3
+        with:
+          name: filtered-nodes
+          path: data/google.yaml
