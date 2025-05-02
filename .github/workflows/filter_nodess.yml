@@ -17,17 +17,12 @@ jobs:
         run: pip install -r ./requirements.txt
       - name: 安装 pysocks
         run: pip install pysocks
+        
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pyyaml dnspython
-      - name: 创建数据目录
-        run: |
-          mkdir -p data
-          chmod 777 data
-      - name: Make Clash binary executable
-        run: |
-          chmod +x clash/clash-linux
+      
       - name: Run node filtering script
         run: |
           python filter_nodes.py
