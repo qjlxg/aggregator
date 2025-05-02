@@ -22,8 +22,13 @@ jobs:
           mkdir -p data
       - name: Test network connectivity
         run: |
-          curl -I https://www.cloudflare.com || echo "无法访问 Cloudflare"
           curl -I https://www.github.com || echo "无法访问 GitHub"
+      - name: Test proxy server connectivity
+        run: |
+          for proxy in $(grep 'server:' data/clash.yaml | awk '{print $2}'); do
+            echo "Testing $proxy"
+            curl -m 5 http://$proxy || echo "无法访问 $proxy"
+          done
       - name: Run filter script
         run: |
           python filter_nodes.py
