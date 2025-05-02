@@ -19,7 +19,8 @@ jobs:
           
       - name: 安装依赖
         run: pip install -r ./requirements.txt
-      - name:  安装 pysocks
+
+      - name: 安装 pysocks
         run: pip install pysocks
         
       - name: Install dependencies
@@ -34,17 +35,14 @@ jobs:
       - name: Run node filtering script
         run: |
           python filter_nodes.py
-      - name: 验证文件生成
+
+      - name: 验证并显示文件内容
         run: |
           if [ -f "data/google.yaml" ]; then
             echo "文件已生成：data/google.yaml"
+            echo "文件内容："
+            cat data/google.yaml
           else
             echo "文件未生成"
             exit 1
           fi
-
-      - name: Upload filtered nodes
-        uses: actions/upload-artifact@v3
-        with:
-          name: filtered-nodes
-          path: data/google.yaml
