@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:
 
 jobs:
   filter-nodes:
-    runs-on: ubuntu-latest  # 使用 Ubuntu 环境
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -32,7 +32,7 @@ jobs:
           python filter_nodes.py
 
       - name: Upload result as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # 更新到 v4
         with:
           name: google-yaml
           path: data/google.yaml
