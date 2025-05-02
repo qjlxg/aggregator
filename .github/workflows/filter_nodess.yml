@@ -28,6 +28,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install pyyaml dnspython
 
+      - name: 创建数据目录
+        run: |
+          mkdir -p data
+          chmod 777 data
+
       - name: Make Clash binary executable
         run: |
           chmod +x clash/clash-linux
@@ -36,24 +41,31 @@ jobs:
         run: |
           python filter_nodes.py
 
-      - name: Debug file location
+      - name: 调试文件位置和权限
         run: |
-          echo "Current directory: $(pwd)"
-          echo "List of files in current directory:"
+          echo "当前工作目录："
+          pwd
+          echo "当前目录文件列表："
           ls -la
-          echo "List of files in data directory:"
-          ls -la data/
-          echo "Full path of google.yaml:"
-          find $(pwd) -name "google.yaml"
+          echo "data 目录内容："
+          ls -la data/ || echo "data 目录不存在"
+          echo "查找 google.yaml 文件："
+          find . -name "google.yaml" -ls || echo "未找到 google.yaml 文件"
+          echo "文件系统权限："
+          df -h .
 
-      - name: Display file content
+      - name: 显示文件内容（如果存在）
         run: |
           if [ -f "data/google.yaml" ]; then
-            echo "File exists at data/google.yaml"
-            echo "File content:"
+            echo "文件存在于 data/google.yaml"
+            echo "文件内容："
             cat data/google.yaml
-            echo "File size: $(stat -f%z data/google.yaml) bytes"
+            echo "文件大小：$(stat -c%s data/google.yaml) 字节"
+            echo "文件权限："
+            ls -l data/google.yaml
           else
-            echo "File not found at data/google.yaml"
+            echo "在 data/google.yaml 未找到文件"
+            echo "尝试在其他位置查找："
+            find . -name "google.yaml"
             exit 1
           fi
