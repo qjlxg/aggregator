@@ -1,4 +1,4 @@
-name: Filter Clash Nodess
+name: Filter Clash Nodesw
 
 on:
   push:
@@ -41,31 +41,27 @@ jobs:
         run: |
           python filter_nodes.py
 
-      - name: 调试文件位置和权限
+      - name: 验证文件
         run: |
-          echo "当前工作目录："
-          pwd
-          echo "当前目录文件列表："
-          ls -la
-          echo "data 目录内容："
-          ls -la data/ || echo "data 目录不存在"
-          echo "查找 google.yaml 文件："
-          find . -name "google.yaml" -ls || echo "未找到 google.yaml 文件"
-          echo "文件系统权限："
-          df -h .
-
-      - name: 显示文件内容（如果存在）
-        run: |
-          if [ -f "data/google.yaml" ]; then
-            echo "文件存在于 data/google.yaml"
-            echo "文件内容："
-            cat data/google.yaml
-            echo "文件大小：$(stat -c%s data/google.yaml) 字节"
-            echo "文件权限："
-            ls -l data/google.yaml
+          # 使用绝对路径
+          WORKSPACE="${GITHUB_WORKSPACE}"
+          FILE_PATH="${WORKSPACE}/data/google.yaml"
+          
+          echo "检查文件: ${FILE_PATH}"
+          
+          if [ -f "${FILE_PATH}" ]; then
+            echo "文件存在"
+            echo "文件信息:"
+            ls -l "${FILE_PATH}"
+            echo "文件内容:"
+            cat "${FILE_PATH}"
+            echo "文件权限:"
+            stat "${FILE_PATH}"
           else
-            echo "在 data/google.yaml 未找到文件"
-            echo "尝试在其他位置查找："
-            find . -name "google.yaml"
+            echo "文件不存在: ${FILE_PATH}"
+            echo "当前目录内容:"
+            ls -la "${WORKSPACE}"
+            echo "data 目录内容:"
+            ls -la "${WORKSPACE}/data"
             exit 1
           fi
