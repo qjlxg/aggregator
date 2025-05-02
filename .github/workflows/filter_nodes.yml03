@@ -34,3 +34,10 @@ jobs:
       - name: Run node filtering script
         run: |
           python filter_nodes.py
+      - name: 提交更改
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add data/google.yaml
+          git commit -m "${{ github.workflow }} https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          git pull --rebase
