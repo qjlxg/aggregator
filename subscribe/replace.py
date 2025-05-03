@@ -16,7 +16,13 @@ def fetch_data(url):
         print(f"无法从 {url} 获取数据: {e}")
         return None
 
-def decode_base64(data):
+def decode_base64_if_needed(data):
+    """自动判断并解码base64格式，否则原文返回"""
+    # 只要包含节点协议头就直接返回原文
+    if any(proto in data for proto in ['vmess://', 'ss://', 'trojan://', 'vless://', 'hysteria2://', 'tuic://', 'hysteria://', 'hy2://']):
+        print("检测到明文节点格式，直接返回")
+        return data
+    # 否则尝试base64解码
     try:
         decoded = base64.b64decode(data).decode('utf-8')
         print(f"Base64解码成功，长度: {len(decoded)}")
@@ -264,7 +270,7 @@ def main(urls):
         if raw_data is None:
             continue
 
-        decoded_data = decode_base64(raw_data)
+        decoded_data = decode_base64_if_needed(raw_data)
         print(f"解码后数据长度: {len(decoded_data) if decoded_data else 0}")
         yaml_proxies = extract_proxies(decoded_data)
         print(f"YAML解析得到节点数: {len(yaml_proxies) if yaml_proxies else 0}")
@@ -324,5 +330,7 @@ if __name__ == "__main__":
     urls = [
         'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml',
         'https://github.com/qjlxg/aggregator/raw/refs/heads/main/base64.txt',
+        'https://github.com/qjlxg/aggregator/raw/refs/heads/main/all_clash.txt',
+       'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/all_clash.txt',
     ]
     main(urls)
