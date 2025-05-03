@@ -16,17 +16,31 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # 常量
 BASE_PORT = 10000
-TEST_URLS = ["https://www.google.com", "https://www.youtube.com"]  # 测试 Google 和 YouTube
+TEST_URLS = ["https://www.google.com", "https://www.youtube.com"]
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
-MAX_WORKERS = 20  # 增加并发数
-REQUEST_TIMEOUT = 10  # 减少请求超时时间（秒）
-STARTUP_DELAY = 2  # 减少 Clash 启动等待时间（秒）
+MAX_WORKERS = 20
+REQUEST_TIMEOUT = 10
+STARTUP_DELAY = 2
 
-# 自定义 YAML Dumper 用于横排格式
+# 定义每种代理类型的字段顺序
+FIELD_ORDERS = {
+    'vmess': ['name', 'server', 'port', 'type', 'uuid', 'alterId', 'cipher', 'tls', 'network', 'ws-opts', 'udp'],
+    'ss': ['name', 'server', 'port', 'type', 'cipher', 'password', 'udp'],
+    'hysteria2': ['name', 'server', 'port', 'type', 'password', 'auth', 'sni', 'skip-cert-verify', 'udp'],
+    'trojan': ['name', 'server', 'port', 'type', 'password', 'sni', 'skip-cert-verify', 'udp'],
+    'vless': ['name', 'server', 'port', 'type', 'uuid', 'tls', 'servername', 'network', 'reality-opts', 'client-fingerprint', 'udp']
+}
+
+# 自定义 YAML Dumper 用于固定字段顺序和横排格式
 class CustomDumper(yaml.Dumper):
     def represent_mapping(self, tag, mapping, flow_style=None):
         if isinstance(mapping, dict) and 'name' in mapping and 'server' in mapping:
-            return super().represent_mapping(tag, mapping, flow_style=True)
+            # 获取代理类型
+            proxy_type = mapping.get('type', 'ss')  # 默认 ss 如果类型缺失
+            order = FIELD_ORDERS.get(proxy_type, ['name', 'server', 'port', 'type'])  # 默认顺序
+            # 按定义的顺序重新组织字段
+            ordered_mapping = {key: mapping[key] for key in order if key in mapping}
+            return super().represent_mapping(tag, ordered_mapping, flow_style=True)
         else:
             return super().represent_mapping(tag, mapping, flow_style=False)
 
