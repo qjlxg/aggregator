@@ -22,7 +22,7 @@ jobs:
     - name: Install dependencies
       run: |
           pip install requests pyyaml
-          
+          pip install geoip2
       
     - name: Execute Python script
       run: python -u subscribe/replace.py -s
