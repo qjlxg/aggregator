@@ -15,7 +15,7 @@ import geoip2.database
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-BASE_PORT = 383838
+BASE_PORT = 38383
 TEST_URL = "https://www.google.com"
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
 MAX_WORKERS = 25
