@@ -40,8 +40,10 @@ jobs:
     - name: Commit Changes
       run: |
          git config core.ignorecase false
+         git config rebase.autostash true
+         git pull --rebase origin main
          git add data/google.yaml
          git diff --staged --quiet || git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S')"
-         git push origin HEAD:main
+         git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
