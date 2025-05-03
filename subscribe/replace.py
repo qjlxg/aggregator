@@ -3,6 +3,7 @@ import requests
 import yaml
 import os
 import re
+import json
 
 bing_counter = 0
 
@@ -21,7 +22,7 @@ def decode_base64_if_needed(data):
         print("检测到明文节点格式，直接返回")
         return data
     try:
-        decoded = base64.b64decode(data).decode('utf-8')
+        decoded = base64.b64decode(data).decode('utf-8', errors='ignore')
         print(f"Base64解码成功，长度: {len(decoded)}")
         return decoded
     except Exception:
@@ -58,15 +59,19 @@ def parse_ss(link):
             if '@' not in body:
                 # ss://base64?plugin=xxx#name
                 base64_part = body.split('#')[0].split('?')[0]
-                decoded = base64.urlsafe_b64decode(base64_part + '=' * (-len(base64_part) % 4)).decode('utf-8')
-                method, rest = decoded.split(':', 1)
-                password, server_port = rest.rsplit('@', 1)
-                server, port = server_port.split(':')
+                decoded = base64.urlsafe_b64decode(base64_part + '=' * (-len(base64_part) % 4)).decode('utf-8', errors='ignore')
+                if '@' in decoded:
+                    method, rest = decoded.split(':', 1)
+                    password, server_port = rest.rsplit('@', 1)
+                    server, port = server_port.split(':')
+                else:
+                    print("ss:// base64解码后格式不对，跳过")
+                    return None
                 name = link.split('#')[1] if '#' in link else server
             else:
                 parts = body.split('@')
-                method_password = base64.urlsafe_b64decode(parts[0] + '=' * (-len(parts[0]) % 4)).decode('utf-8')
-                method, password = method_password.split(':')
+                method_password = base64.urlsafe_b64decode(parts[0] + '=' * (-len(parts[0]) % 4)).decode('utf-8', errors='ignore')
+                method, password = method_password.split(':', 1)
                 server_port = parts[1].split('#')
                 server, port = server_port[0].split(':')
                 name = server_port[1] if len(server_port) > 1 else server
@@ -87,8 +92,14 @@ def parse_ss(link):
 def parse_vmess(link):
     if link.startswith('vmess://'):
         try:
-            vmess_data = base64.urlsafe_b64decode(link.split('://')[1] + '=' * (-len(link.split('://')[1]) % 4)).decode('utf-8')
-            vmess_json = yaml.safe_load(vmess_data)
+            raw = link.split('://')[1]
+            raw += '=' * (-len(raw) % 4)
+            vmess_data = base64.urlsafe_b64decode(raw)
+            try:
+                vmess_json = json.loads(vmess_data.decode('utf-8', errors='ignore'))
+            except Exception:
+                print("vmess base64解码后不是合法json或utf-8，跳过")
+                return None
             return {
                 'name': vmess_json.get('ps', vmess_json.get('add')),
                 'server': vmess_json['add'],
