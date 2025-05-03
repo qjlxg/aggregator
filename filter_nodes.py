@@ -18,11 +18,10 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # 常量
 BASE_PORT = 10000
-TEST_URLS = ["https://www.google.com", "https://www.youtube.com"]
+TEST_URLS = ["https://www.google.com"]  # 只测一个目标，加快速度
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
-MAX_WORKERS = 50
+MAX_WORKERS = 20  # 并发适中，防止资源耗尽
 REQUEST_TIMEOUT = 3
-STARTUP_DELAY = 3
 GEOIP_DB_PATH = './clash/Country.mmdb'
 CLASH_PATH = './clash/clash-linux'
 
@@ -34,7 +33,6 @@ COUNTRY_FLAGS = {
     'AU': '🇦🇺', 'FR': '🇫🇷', 'IT': '🇮🇹', 'NL': '🇳🇱',
 }
 
-# 每种代理类型的字段顺序
 FIELD_ORDERS = {
     'vmess': ['name', 'server', 'port', 'type', 'uuid', 'alterId', 'cipher', 'tls', 'network', 'ws-opts', 'udp'],
     'ss': ['name', 'server', 'port', 'type', 'cipher', 'password', 'udp'],
@@ -43,7 +41,6 @@ FIELD_ORDERS = {
     'vless': ['name', 'server', 'port', 'type', 'uuid', 'tls', 'servername', 'network', 'reality-opts', 'client-fingerprint', 'udp']
 }
 
-# 自定义 YAML Dumper，保证字段顺序和单行输出
 class CustomDumper(yaml.Dumper):
     def represent_mapping(self, tag, mapping, flow_style=None):
         if isinstance(mapping, dict) and 'name' in mapping and 'server' in mapping:
@@ -54,12 +51,10 @@ class CustomDumper(yaml.Dumper):
         return super().represent_mapping(tag, mapping, flow_style=False)
 
 def load_yaml(path):
-    """加载 YAML 文件"""
     with open(path, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f)
 
 def save_yaml(data, path):
-    """保存代理配置为单行 YAML 格式"""
     try:
         with open(path, 'w', encoding='utf-8') as f:
             f.write("proxies:\n")
@@ -72,7 +67,6 @@ def save_yaml(data, path):
         logging.error(f"保存文件失败: {e}")
 
 def parse_url_node(url):
-    """解析代理 URL 节点"""
     try:
         if url.startswith('vmess://'):
             data = json.loads(base64.b64decode(url[8:]).decode())
@@ -143,8 +137,20 @@ def parse_url_node(url):
         logging.warning(f"解析节点失败: {e}")
     return None
 
+def wait_port(port, timeout=8):
+    """等待端口开放"""
+    start = time.time()
+    while time.time() - start < timeout:
+        s = socket.socket()
+        try:
+            s.connect(('127.0.0.1', port))
+            s.close()
+            return True
+        except Exception:
+            time.sleep(0.2)
+    return False
+
 def start_clash(node, port):
-    """启动 Clash 实例测试节点"""
     if not os.path.isfile(CLASH_PATH) or not os.access(CLASH_PATH, os.X_OK):
         logging.error(f"Clash 可执行文件 {CLASH_PATH} 不存在或不可执行")
         return None, None
@@ -162,10 +168,9 @@ def start_clash(node, port):
     try:
         p = subprocess.Popen([CLASH_PATH, '-f', fname, '-d', './clash'],
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
-        time.sleep(STARTUP_DELAY)
-        if p.poll() is not None:
-            err = p.stderr.read().decode()
-            logging.error(f"Clash 启动失败: {err}")
+        if not wait_port(port + 1, timeout=8):
+            logging.error(f"Clash 启动端口 {port+1} 超时")
+            stop_clash(p, fname)
             return None, fname
         return p, fname
     except Exception as e:
@@ -173,7 +178,6 @@ def start_clash(node, port):
         return None, fname
 
 def stop_clash(p, fname):
-    """停止 Clash 实例并清理临时文件"""
     if p:
         try:
             os.killpg(os.getpgid(p.pid), signal.SIGTERM)
@@ -184,7 +188,7 @@ def stop_clash(p, fname):
         os.remove(fname)
 
 def test_node(node, idx):
-    """测试节点是否可用"""
+    """只要能访问目标网站就判定为可用，不再强制要求 IP 变化"""
     port = BASE_PORT + (idx % 100) * 2
     logging.info(f"测试节点: {node['name']} (端口: {port})")
     p, cfg = start_clash(node, port)
@@ -193,37 +197,25 @@ def test_node(node, idx):
         stop_clash(p, cfg)
         return None
 
-    # 获取本地 IP（不使用代理）
-    try:
-        local_ip = requests.get("https://api.ipify.org", timeout=5).text
-    except Exception:
-        local_ip = "未知"
-
-    # 通过代理测试
     proxies = {'http': f'socks5://127.0.0.1:{port + 1}', 'https': f'socks5://127.0.0.1:{port + 1}'}
+    ok = False
     for url in TEST_URLS:
         try:
             r = requests.get(url, proxies=proxies, timeout=REQUEST_TIMEOUT)
-            if r.status_code != 200:
-                logging.info(f"节点 {node['name']} 测试失败: {url} 返回 {r.status_code}")
-                stop_clash(p, cfg)
-                return None
-            proxy_ip = requests.get("https://api.ipify.org", proxies=proxies, timeout=5).text
-            if proxy_ip == local_ip:
-                logging.info(f"节点 {node['name']} 测试失败: 代理未生效 (IP 未变化)")
-                stop_clash(p, cfg)
-                return None
+            if r.status_code == 200:
+                ok = True
+                break
         except Exception as e:
-            logging.info(f"节点 {node['name']} 测试失败: {url} - {e}")
-            stop_clash(p, cfg)
-            return None
-
-    logging.info(f"节点 {node['name']} 测试成功")
+            continue
     stop_clash(p, cfg)
-    return node
+    if ok:
+        logging.info(f"节点 {node['name']} 测试成功")
+        return node
+    else:
+        logging.info(f"节点 {node['name']} 测试失败: 无法访问目标网站")
+        return None
 
 def get_country_flag(ip_or_domain):
-    """根据 IP 或域名获取国旗 emoji"""
     try:
         if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', ip_or_domain):
             ip = socket.gethostbyname(ip_or_domain)
@@ -239,7 +231,6 @@ def get_country_flag(ip_or_domain):
         return '🏁'
 
 def main():
-    """主函数：处理代理节点并生成 YAML 文件"""
     os.makedirs('data', exist_ok=True)
     inp = 'data/clash.yaml'
     out = 'data/google.yaml'
