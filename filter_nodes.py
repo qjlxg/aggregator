@@ -35,10 +35,8 @@ FIELD_ORDERS = {
 class CustomDumper(yaml.Dumper):
     def represent_mapping(self, tag, mapping, flow_style=None):
         if isinstance(mapping, dict) and 'name' in mapping and 'server' in mapping:
-            # 获取代理类型
-            proxy_type = mapping.get('type', 'ss')  # 默认 ss 如果类型缺失
-            order = FIELD_ORDERS.get(proxy_type, ['name', 'server', 'port', 'type'])  # 默认顺序
-            # 按定义的顺序重新组织字段
+            proxy_type = mapping.get('type', 'ss')
+            order = FIELD_ORDERS.get(proxy_type, ['name', 'server', 'port', 'type'])
             ordered_mapping = {key: mapping[key] for key in order if key in mapping}
             return super().represent_mapping(tag, ordered_mapping, flow_style=True)
         else:
@@ -57,97 +55,48 @@ def parse_url_node(url):
     try:
         if url.startswith('vmess://'):
             data = json.loads(base64.b64decode(url[8:]).decode())
-            return {'name': data.get('ps'), 'type':'vmess', 'server':data['add'], 'port':int(data['port']), 'uuid':data['id'], 'alterId':int(data.get('aid',0)), 'cipher':data.get('scy','auto'), 'network':data.get('net','tcp'), 'tls':bool(data.get('tls',False))}
+            return {
+                'name': data.get('ps'), 
+                'server': data['add'], 
+                'port': int(data['port']), 
+                'type': 'vmess', 
+                'uuid': data['id'], 
+                'alterId': int(data.get('aid', 0)), 
+                'cipher': data.get('scy', 'auto'), 
+                'network': data.get('net', 'tcp'), 
+                'tls': bool(data.get('tls', False))
+            }
         if url.startswith('ss://'):
             parsed = urllib.parse.urlparse(url)
             method_pass = base64.b64decode(parsed.netloc.split('@')[0]).decode()
-            method,passwd = method_pass.split(':')
-            server,port = parsed.netloc.split('@')[1].split(':')
-            return {'name':urllib.parse.unquote(parsed.fragment) or 'ss', 'type':'ss', 'server':server, 'port':int(port), 'cipher':method, 'password':passwd}
+            method, passwd = method_pass.split(':')
+            server, port = parsed.netloc.split('@')[1].split(':')
+            cipher = method
+            if cipher == 'aes-128-gcm':
+                cipher = 'chacha20-ietf-poly1305'
+            return {
+                'name': urllib.parse.unquote(parsed.fragment) or 'ss', 
+                'server': server, 
+                'port': int(port), 
+                'type': 'ss', 
+                'cipher': cipher, 
+                'password': passwd
+            }
         if url.startswith('trojan://'):
             p = urllib.parse.urlparse(url)
             pwd = p.netloc.split('@')[0]
-            server,port = p.netloc.split('@')[1].split(':')
-            return {'name':urllib.parse.unquote(p.fragment) or 'trojan', 'type':'trojan', 'server':server, 'port':int(port), 'password':pwd, 'sni':server}
+            server, port = p.netloc.split('@')[1].split(':')
+            return {
+                'name': urllib.parse.unquote(p.fragment) or 'trojan', 
+                'server': server, 
+                'port': int(port), 
+                'type': 'trojan', 
+                'password': pwd, 
+                'sni': server
+            }
         if url.startswith('vless://'):
             p = urllib.parse.urlparse(url)
             uuid = p.netloc.split('@')[0]
-            server,port = p.netloc.split('@')[1].split(':')
-            return {'name':urllib.parse.unquote(p.fragment) or 'vless', 'type':'vless', 'server':server, 'port':int(port), 'uuid':uuid, 'tls':True, 'servername':server}
-        if url.startswith('hysteria2://'):
-            p = urllib.parse.urlparse(url)
-            pwd = p.netloc.split('@')[0]
-            server,port = p.netloc.split('@')[1].split(':')
-            return {'name':urllib.parse.unquote(p.fragment) or 'hysteria2', 'type':'hysteria2', 'server':server, 'port':int(port), 'password':pwd}
-    except Exception as e:
-        logging.warning(f"解析节点失败: {e}")
-    return None
-
-def start_clash(node, port):
-    cfg = {'port':port, 'socks-port':port+1, 'mode':'global', 'proxies':[node], 'proxy-groups':[{'name':'Proxy','type':'select','proxies':[node['name']]}], 'rules':['MATCH,Proxy']}
-    fname = f'temp_{port}.yaml'
-    with open(fname,'w',encoding='utf-8') as f: yaml.dump(cfg,f,allow_unicode=True)
-    p = subprocess.Popen(['./clash/clash-linux','-f',fname,'-d','clash'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-    time.sleep(STARTUP_DELAY)
-    return p, fname
-
-def stop_clash(p, fname):
-    try:
-        os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-    except:
-        pass
-    if os.path.exists(fname): os.remove(fname)
-
-def test_node(node, idx):
-    port = BASE_PORT + (idx % 100) * 2
-    p, cfg = start_clash(node, port)
-    ok = True
-    for url in TEST_URLS:
-        try:
-            r = requests.get(url, proxies={'http':f'socks5://127.0.0.1:{port+1}','https':f'socks5://127.0.0.1:{port+1}'}, timeout=REQUEST_TIMEOUT)
-            if r.status_code != 200:
-                ok = False
-                break
-        except:
-            ok = False
-            break
-    stop_clash(p, cfg)
-    if ok: return node
-    return None
-
-def main():
-    os.makedirs('data', exist_ok=True)
-    inp = 'data/clash.yaml'
-    out = 'data/google.yaml'
-    d = load_yaml(inp)
-    nodes = []
-    for x in d.get('proxies',[]):
-        n = parse_url_node(x) if isinstance(x,str) else x if x.get('type') in SUPPORTED_TYPES else None
-        if n: nodes.append(n)
-    valid = []
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
-        futures = [ex.submit(test_node, node, idx) for idx, node in enumerate(nodes)]
-        for future in as_completed(futures):
-            result = future.result()
-            if result:
-                valid.append(result)
-    if valid:
-        flags = []
-        for proxy in valid:
-            name = proxy['name']
-            match = re.match(r'^([\U0001F1E6-\U0001F1FF][\U0001F1E6-\U0001F1FF])', name)
-            if match:
-                flags.append(match.group(1))
-            else:
-                flags.append('')
-        for i in range(len(valid)):
-            if flags[i]:
-                valid[i]['name'] = flags[i] + ' bing' + str(i + 1)
-            else:
-                valid[i]['name'] = 'bing' + str(i + 1)
-        save_yaml({'proxies': valid}, out)
-    else:
-        logging.info("没有有效节点，未生成文件。")
-
-if __name__ == "__main__":
-    main()
+            server, port = p.netloc.split('@')[1].split(':')
+            return {
+                'name': urllib.parse.unquote
