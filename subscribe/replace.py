@@ -10,6 +10,7 @@ def fetch_data(url):
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
+        print(f"已获取 {url}，长度: {len(response.text)}")
         return response.text
     except requests.RequestException as e:
         print(f"无法从 {url} 获取数据: {e}")
@@ -17,22 +18,27 @@ def fetch_data(url):
 
 def decode_base64(data):
     try:
-        return base64.b64decode(data).decode('utf-8')
+        decoded = base64.b64decode(data).decode('utf-8')
+        print(f"Base64解码成功，长度: {len(decoded)}")
+        return decoded
     except Exception:
+        print("Base64解码失败，直接返回原文")
         return data
 
 def parse_yaml(data):
     try:
-        return yaml.safe_load(data)
+        result = yaml.safe_load(data)
+        print("YAML解析成功")
+        return result
     except yaml.YAMLError as e:
         print(f"YAML 解析错误: {e}")
         return None
 
 def extract_proxies(data):
-    # 只在内容以 proxies: 开头时才尝试 YAML 解析
     if data.lstrip().startswith('proxies:'):
         yaml_data = parse_yaml(data)
         if yaml_data and isinstance(yaml_data, dict) and 'proxies' in yaml_data:
+            print(f"YAML中proxies数量: {len(yaml_data['proxies'])}")
             return yaml_data['proxies']
     return []
 
@@ -252,12 +258,16 @@ def main(urls):
     seen = set()
 
     for url in urls:
+        print(f"正在处理URL: {url}")
         raw_data = fetch_data(url)
+        print(f"获取到原始数据长度: {len(raw_data) if raw_data else 0}")
         if raw_data is None:
             continue
 
         decoded_data = decode_base64(raw_data)
+        print(f"解码后数据长度: {len(decoded_data) if decoded_data else 0}")
         yaml_proxies = extract_proxies(decoded_data)
+        print(f"YAML解析得到节点数: {len(yaml_proxies) if yaml_proxies else 0}")
         
         if yaml_proxies:
             for proxy in yaml_proxies:
@@ -270,6 +280,7 @@ def main(urls):
                     all_proxies.append(proxy)
         else:
             links = decoded_data.splitlines()
+            print(f"逐行处理节点链接，行数: {len(links)}")
             for link in links:
                 link = link.strip()
                 if not link or link.startswith('#') or ':' not in link:
