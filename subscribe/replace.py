@@ -4,10 +4,8 @@ import yaml
 import os
 import re
 
-# 全局计数器用于 bing 命名
 bing_counter = 0
 
-# 从 URL 获取数据的函数
 def fetch_data(url):
     try:
         response = requests.get(url, timeout=10)
@@ -17,14 +15,12 @@ def fetch_data(url):
         print(f"无法从 {url} 获取数据: {e}")
         return None
 
-# 解码 Base64 数据的函数
 def decode_base64(data):
     try:
         return base64.b64decode(data).decode('utf-8')
     except Exception:
         return data
 
-# 解析 YAML 数据的函数
 def parse_yaml(data):
     try:
         return yaml.safe_load(data)
@@ -32,14 +28,14 @@ def parse_yaml(data):
         print(f"YAML 解析错误: {e}")
         return None
 
-# 从数据中提取代理配置的函数
 def extract_proxies(data):
-    yaml_data = parse_yaml(data)
-    if yaml_data and isinstance(yaml_data, dict) and 'proxies' in yaml_data:
-        return yaml_data['proxies']
+    # 只在内容以 proxies: 开头时才尝试 YAML 解析
+    if data.lstrip().startswith('proxies:'):
+        yaml_data = parse_yaml(data)
+        if yaml_data and isinstance(yaml_data, dict) and 'proxies' in yaml_data:
+            return yaml_data['proxies']
     return []
 
-# 解析 ss:// 链接
 def parse_ss(link):
     if link.startswith('ss://'):
         try:
@@ -62,7 +58,6 @@ def parse_ss(link):
             print(f"解析 ss:// 链接失败: {e}")
     return None
 
-# 解析 vmess:// 链接
 def parse_vmess(link):
     if link.startswith('vmess://'):
         try:
@@ -83,7 +78,6 @@ def parse_vmess(link):
             print(f"解析 vmess:// 链接失败: {e}")
     return None
 
-# 解析 trojan:// 链接
 def parse_trojan(link):
     if link.startswith('trojan://'):
         try:
@@ -105,7 +99,6 @@ def parse_trojan(link):
             print(f"解析 trojan:// 链接失败: {e}")
     return None
 
-# 解析 hysteria2:// 链接
 def parse_hysteria2(link):
     if link.startswith('hysteria2://'):
         try:
@@ -127,7 +120,6 @@ def parse_hysteria2(link):
             print(f"解析 hysteria2:// 链接失败: {e}")
     return None
 
-# 解析 vless:// 链接
 def parse_vless(link):
     if link.startswith('vless://'):
         try:
@@ -142,7 +134,7 @@ def parse_vless(link):
             param_dict = {}
             if params:
                 for param in params.split('&'):
-                    k, v = param.split('=')
+                    k, v = param.split('=') if '=' in param else (param, '')
                     param_dict[k] = v
             security = param_dict.get('security', 'none')
             type_ = param_dict.get('type', 'tcp')
@@ -160,7 +152,6 @@ def parse_vless(link):
             print(f"解析 vless:// 链接失败: {e}")
     return None
 
-# 解析 tuic:// 链接
 def parse_tuic(link):
     if link.startswith('tuic://'):
         try:
@@ -177,7 +168,7 @@ def parse_tuic(link):
             param_dict = {}
             if params:
                 for param in params.split('&'):
-                    k, v = param.split('=')
+                    k, v = param.split('=') if '=' in param else (param, '')
                     param_dict[k] = v
             return {
                 'name': name,
@@ -192,7 +183,6 @@ def parse_tuic(link):
             print(f"解析 tuic:// 链接失败: {e}")
     return None
 
-# 解析 hysteria:// 链接（假设为 Hysteria1）
 def parse_hysteria(link):
     if link.startswith('hysteria://'):
         try:
@@ -205,7 +195,7 @@ def parse_hysteria(link):
             param_dict = {}
             if params:
                 for param in params.split('&'):
-                    k, v = param.split('=')
+                    k, v = param.split('=') if '=' in param else (param, '')
                     param_dict[k] = v
             auth = param_dict.get('auth', '')
             upmbps = param_dict.get('upmbps', 10)
@@ -224,13 +214,11 @@ def parse_hysteria(link):
             print(f"解析 hysteria:// 链接失败: {e}")
     return None
 
-# 解析 hy2:// 链接（假设与 hysteria2:// 相同）
 def parse_hy2(link):
     if link.startswith('hy2://'):
         return parse_hysteria2(link.replace('hy2://', 'hysteria2://'))
     return None
 
-# 修改后的 extract_flag 函数
 def extract_flag(name):
     global bing_counter
     bing_counter += 1
@@ -241,7 +229,6 @@ def extract_flag(name):
     else:
         return f"bing{bing_counter}"
 
-# 生成符合指定格式的 YAML 字符串
 def generate_yaml(proxies):
     yaml_str = "proxies:\n"
     for proxy in proxies:
@@ -249,19 +236,18 @@ def generate_yaml(proxies):
         items = []
         for key, value in proxy.items():
             if isinstance(value, dict):
-                nested_str = ', '.join([f"{k}: {repr(v)}" if isinstance(v, str) else f"{k}: {v}" for k, v in value.items()])
+                nested_str = ', '.join([f"{k}: '{v}'" if isinstance(v, str) else f"{k}: {v}" for k, v in value.items()])
                 items.append(f"{key}: {{{nested_str}}}")
             else:
-                items.append(f"{key}: {repr(value)}" if isinstance(value, str) else f"{key}: {value}")
+                items.append(f"{key}: '{value}'" if isinstance(value, str) else f"{key}: {value}")
         proxy_str += ', '.join(items)
         proxy_str += '}\n'
         yaml_str += proxy_str
     return yaml_str
 
-# 主函数
 def main(urls):
     global bing_counter
-    bing_counter = 0  # 重置计数器
+    bing_counter = 0
     all_proxies = []
     seen = set()
 
@@ -286,7 +272,7 @@ def main(urls):
             links = decoded_data.splitlines()
             for link in links:
                 link = link.strip()
-                if not link:
+                if not link or link.startswith('#') or ':' not in link:
                     continue
                 proxy = None
                 if link.startswith('ss://'):
@@ -323,17 +309,9 @@ def main(urls):
         f.write(yaml_content)
     print(f"Clash 配置文件已保存到 {output_path}")
 
-
 if __name__ == "__main__":
     urls = [
         'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml',
-       #'https://github.com/qjlxg/aggregator/raw/refs/heads/main/all_clash.txt',
         'https://github.com/qjlxg/aggregator/raw/refs/heads/main/base64.txt',
-      #  'https://github.com/qjlxg/aggregator/raw/refs/heads/main/Long_term_subscription_num',
-      #  'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml',
-       # 'https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/transporter.txt',
-      #  'https://raw.githubusercontent.com/qjlxg/cheemsar/refs/heads/main/Long_term_subscription_num',
-       # 'https://raw.githubusercontent.com/qjlxg/cheemsar-2/refs/heads/main/Long_term_subscription_num',
-      #  'https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt',
     ]
     main(urls)
