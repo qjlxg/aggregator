@@ -23,7 +23,7 @@ SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
 MAX_WORKERS = 20
 REQUEST_TIMEOUT = 10
 STARTUP_DELAY = 2
-GEOIP_DB_PATH = './GeoLite2-Country.mmdb'  # GeoIP2 数据库路径
+GEOIP_DB_PATH = './clash/Country.mmdb'  # 修改为正确的路径
 
 # 国家代码到国旗 emoji 的映射
 COUNTRY_FLAGS = {
@@ -218,7 +218,7 @@ def main():
 
     # 检查 GeoIP 数据库是否存在
     if not os.path.exists(GEOIP_DB_PATH):
-        logging.error(f"GeoIP 数据库文件 {GEOIP_DB_PATH} 不存在，请下载 GeoLite2-Country.mmdb")
+        logging.error(f"GeoIP 数据库文件 {GEOIP_DB_PATH} 不存在，请确保文件存在")
         return
 
     # 加载输入文件
@@ -238,20 +238,4 @@ def main():
             if result:
                 valid.append(result)
 
-    # 处理有效节点并保存
-    if valid:
-        for i, proxy in enumerate(valid):
-            name = proxy['name']
-            # 检查是否已有国旗
-            match = re.match(r'^([\U0001F1E6-\U0001F1FF][\U0001F1E6-\U0001F1FF])', name)
-            if match:
-                flag = match.group(1)  # 保留原有国旗
-            else:
-                flag = get_country_flag(proxy['server'])  # 使用 GeoIP2 生成国旗
-            proxy['name'] = f"{flag} bing{i + 1}"
-        save_yaml({'proxies': valid}, out)
-    else:
-        logging.info("没有有效节点，未生成文件。")
-
-if __name__ == "__main__":
-    main()
+    # 处理
