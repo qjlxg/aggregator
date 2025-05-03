@@ -1,313 +1,228 @@
-import os
-import json
 import base64
-import urllib.parse
-import yaml
-import subprocess
-import time
-import signal
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import logging
 import requests
+import yaml
+import os
 import re
-import socket
-import geoip2.database
-from collections import OrderedDict
 
-# 让 PyYAML 忽略所有未知 tag（如 !<str>、!!str），防止解析 clash.yaml 时报错
-def ignore_unknown_tag(loader, tag_suffix, node):
-    return loader.construct_scalar(node)
-yaml.SafeLoader.add_multi_constructor('', ignore_unknown_tag)
+# 全局计数器用于 bing 命名
+bing_counter = 0
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-BASE_PORT = 10000
-TEST_URL = "https://www.tiktok.com"
-SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
-MAX_WORKERS = 25
-REQUEST_TIMEOUT = 5
-RETRY_TIMES = 2
-GEOIP_DB_PATH = './clash/Country.mmdb'
-CLASH_PATH = './clash/clash-linux'
-
-COUNTRY_FLAGS = {
-    'CN': '🇨🇳', 'HK': '🇭🇰', 'TW': '🇹🇼', 'JP': '🇯🇵',
-    'KR': '🇰🇷', 'SG': '🇸🇬', 'US': '🇺🇸', 'GB': '🇬🇧',
-    'RU': '🇷🇺', 'IN': '🇮🇳', 'DE': '🇩🇪', 'CA': '🇨🇦',
-    'AU': '🇦🇺', 'FR': '🇫🇷', 'IT': '🇮🇹', 'NL': '🇳🇱',
-}
-
-# 字段顺序，name在首位，cipher在最后
-FIELD_ORDERS = {
-    'vmess': ['name', 'server', 'port', 'type', 'uuid', 'alterId', 'tls', 'network', 'ws-opts', 'udp', 'cipher'],
-    'ss': ['name', 'server', 'port', 'type', 'password', 'udp', 'cipher'],
-    'hysteria2': ['name', 'server', 'port', 'type', 'password', 'auth', 'sni', 'skip-cert-verify', 'udp'],
-    'trojan': ['name', 'server', 'port', 'type', 'password', 'sni', 'skip-cert-verify', 'udp'],
-    'vless': ['name', 'server', 'port', 'type', 'uuid', 'tls', 'servername', 'network', 'reality-opts', 'client-fingerprint', 'udp']
-}
-
-class CustomDumper(yaml.Dumper):
-    def represent_mapping(self, tag, mapping, flow_style=None):
-        # 保证字段顺序
-        if isinstance(mapping, dict) and 'name' in mapping and 'server' in mapping:
-            proxy_type = mapping.get('type', 'ss')
-            order = FIELD_ORDERS.get(proxy_type, list(mapping.keys()))
-            ordered_mapping = OrderedDict()
-            for key in order:
-                if key in mapping:
-                    ordered_mapping[key] = mapping[key]
-            # 加入未在 order 中的字段
-            for key in mapping:
-                if key not in ordered_mapping:
-                    ordered_mapping[key] = mapping[key]
-            return super().represent_mapping(tag, ordered_mapping, flow_style=True)
-        return super().represent_mapping(tag, mapping, flow_style=True)
-
-def load_yaml(path):
-    with open(path, 'r', encoding='utf-8') as f:
-        return yaml.safe_load(f)
-
-def save_yaml(data, path):
+# 从 URL 获取数据的函数
+def fetch_data(url):
     try:
-        with open(path, 'w', encoding='utf-8') as f:
-            f.write("proxies:\n")
-            for proxy in data['proxies']:
-                # 只 dump 单个 dict，保证一行一个节点
-                proxy_str = yaml.dump(proxy, Dumper=CustomDumper, allow_unicode=True, default_flow_style=True, sort_keys=False)
-                proxy_str = proxy_str.strip('\n')
-                f.write(f" - {proxy_str}\n")
-        logging.info(f"已保存 {path}")
-    except Exception as e:
-        logging.error(f"保存文件失败: {e}")
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        return response.text
+    except requests.RequestException as e:
+        print(f"无法从 {url} 获取数据: {e}")
+        return None
 
-def parse_url_node(url):
+# 解码 Base64 数据的函数
+def decode_base64(data):
     try:
-        if url.startswith('vmess://'):
-            try:
-                vmess_raw = url[8:]
-                vmess_raw += '=' * (-len(vmess_raw) % 4)
-                data = json.loads(base64.b64decode(vmess_raw).decode('utf-8', errors='ignore'))
-            except Exception as e:
-                logging.warning(f"vmess解析失败: {e}")
-                return None
+        return base64.b64decode(data).decode('utf-8')
+    except Exception:
+        return data
+
+# 解析 YAML 数据的函数
+def parse_yaml(data):
+    try:
+        return yaml.safe_load(data)
+    except yaml.YAMLError as e:
+        print(f"YAML 解析错误: {e}")
+        return None
+
+# 从数据中提取代理配置的函数
+def extract_proxies(data):
+    yaml_data = parse_yaml(data)
+    if yaml_data and isinstance(yaml_data, dict) and 'proxies' in yaml_data:
+        return yaml_data['proxies']
+    return []
+
+# 解析 ss:// 链接
+def parse_ss(link):
+    if link.startswith('ss://'):
+        try:
+            parts = link.split('://')[1].split('@')
+            method_password = base64.urlsafe_b64decode(parts[0] + '=' * (-len(parts[0]) % 4)).decode('utf-8')
+            method, password = method_password.split(':')
+            server_port = parts[1].split('#')
+            server, port = server_port[0].split(':')
+            name = server_port[1] if len(server_port) > 1 else server
             return {
-                'name': data.get('ps'),
-                'server': data['add'],
-                'port': int(data['port']),
-                'type': 'vmess',
-                'uuid': data['id'],
-                'alterId': int(data.get('aid', 0)),
-                'cipher': data.get('scy', 'auto'),
-                'network': data.get('net', 'tcp'),
-                'tls': bool(data.get('tls', False))
+                'name': name,
+                'server': server,
+                'port': int(port),
+                'type': 'ss',
+                'cipher': method,
+                'password': password,
+                'udp': True
             }
-        if url.startswith('ss://'):
-            try:
-                parsed = urllib.parse.urlparse(url)
-                base64_part = parsed.netloc.split('@')[0]
-                method_pass = base64.b64decode(base64_part + '=' * (-len(base64_part) % 4)).decode('utf-8', errors='ignore')
-                if '@' in parsed.netloc:
-                    method, passwd = method_pass.split(':', 1)
-                    server, port = parsed.netloc.split('@')[1].split(':')
-                else:
-                    # ss://base64?plugin=xxx#name
-                    method, rest = method_pass.split(':', 1)
-                    passwd, server_port = rest.rsplit('@', 1)
-                    server, port = server_port.split(':')
-                cipher = method
-                if cipher == 'aes-128-gcm':
-                    cipher = 'chacha20-ietf-poly1305'
-                return {
-                    'name': urllib.parse.unquote(parsed.fragment) or 'ss',
-                    'server': server,
-                    'port': int(port),
-                    'type': 'ss',
-                    'password': passwd,
-                    'udp': True,
-                    'cipher': cipher
-                }
-            except Exception as e:
-                logging.warning(f"ss解析失败: {e}")
-                return None
-        if url.startswith('trojan://'):
-            try:
-                p = urllib.parse.urlparse(url)
-                pwd = p.netloc.split('@')[0]
-                server, port = p.netloc.split('@')[1].split(':')
-                return {
-                    'name': urllib.parse.unquote(p.fragment) or 'trojan',
-                    'server': server,
-                    'port': int(port),
-                    'type': 'trojan',
-                    'password': pwd,
-                    'sni': server
-                }
-            except Exception as e:
-                logging.warning(f"trojan解析失败: {e}")
-                return None
-        if url.startswith('vless://'):
-            try:
-                p = urllib.parse.urlparse(url)
-                uuid = p.netloc.split('@')[0]
-                server, port = p.netloc.split('@')[1].split(':')
-                return {
-                    'name': urllib.parse.unquote(p.fragment) or 'vless',
-                    'server': server,
-                    'port': int(port),
-                    'type': 'vless',
-                    'uuid': uuid,
-                    'tls': True,
-                    'servername': server
-                }
-            except Exception as e:
-                logging.warning(f"vless解析失败: {e}")
-                return None
-        if url.startswith('hysteria2://'):
-            try:
-                p = urllib.parse.urlparse(url)
-                pwd = p.netloc.split('@')[0]
-                server, port = p.netloc.split('@')[1].split(':')
-                return {
-                    'name': urllib.parse.unquote(p.fragment) or 'hysteria2',
-                    'server': server,
-                    'port': int(port),
-                    'type': 'hysteria2',
-                    'password': pwd
-                }
-            except Exception as e:
-                logging.warning(f"hysteria2解析失败: {e}")
-                return None
-    except Exception as e:
-        logging.warning(f"解析节点失败: {e}")
+        except Exception as e:
+            print(f"解析 ss:// 链接失败: {e}")
     return None
 
-def wait_port(port, timeout=8):
-    start = time.time()
-    while time.time() - start < timeout:
-        s = socket.socket()
+# 解析 vmess:// 链接
+def parse_vmess(link):
+    if link.startswith('vmess://'):
         try:
-            s.connect(('127.0.0.1', port))
-            s.close()
-            return True
-        except Exception:
-            time.sleep(0.2)
-    return False
-
-def start_clash(node, port):
-    if not os.path.isfile(CLASH_PATH) or not os.access(CLASH_PATH, os.X_OK):
-        logging.error(f"Clash 可执行文件 {CLASH_PATH} 不存在或不可执行")
-        return None, None
-    cfg = {
-        'port': port,
-        'socks-port': port + 1,
-        'mode': 'global',
-        'proxies': [node],
-        'proxy-groups': [{'name': 'Proxy', 'type': 'select', 'proxies': [node['name']]}],
-        'rules': ['MATCH,Proxy']
-    }
-    fname = f'temp_{port}.yaml'
-    with open(fname, 'w', encoding='utf-8') as f:
-        yaml.dump(cfg, f, allow_unicode=True)
-    try:
-        p = subprocess.Popen([CLASH_PATH, '-f', fname, '-d', './clash'],
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
-        if not wait_port(port + 1, timeout=8):
-            logging.error(f"Clash 启动端口 {port+1} 超时")
-            stop_clash(p, fname)
-            return None, fname
-        return p, fname
-    except Exception as e:
-        logging.error(f"启动 Clash 失败: {e}")
-        return None, fname
-
-def stop_clash(p, fname):
-    if p:
-        try:
-            os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-            p.wait(timeout=2)
+            vmess_data = base64.urlsafe_b64decode(link.split('://')[1] + '=' * (-len(link.split('://')[1]) % 4)).decode('utf-8')
+            vmess_json = yaml.safe_load(vmess_data)
+            return {
+                'name': vmess_json.get('ps', vmess_json.get('add')),
+                'server': vmess_json['add'],
+                'port': int(vmess_json['port']),
+                'type': 'vmess',
+                'uuid': vmess_json['id'],
+                'alterId': int(vmess_json['aid']),
+                'cipher': 'auto',
+                'tls': vmess_json.get('tls', False),
+                'udp': True
+            }
         except Exception as e:
-            logging.warning(f"停止 Clash 失败: {e}")
-    if fname and os.path.exists(fname):
-        os.remove(fname)
+            print(f"解析 vmess:// 链接失败: {e}")
+    return None
 
-def test_node(node, idx):
-    port = BASE_PORT + (idx % 100) * 2
-    logging.info(f"测试节点: {node['name']} (端口: {port})")
-    p, cfg = start_clash(node, port)
-    if not p:
-        logging.error(f"节点 {node['name']} 测试失败: Clash 未启动")
-        stop_clash(p, cfg)
-        return None
-
-    proxies = {'http': f'socks5://127.0.0.1:{port + 1}', 'https': f'socks5://127.0.0.1:{port + 1}'}
-    ok = False
-    for _ in range(RETRY_TIMES):
+# 解析 trojan:// 链接
+def parse_trojan(link):
+    if link.startswith('trojan://'):
         try:
-            r = requests.get(TEST_URL, proxies=proxies, timeout=REQUEST_TIMEOUT, allow_redirects=True)
-            if r.status_code in [200, 301, 302, 403, 429]:
-                ok = True
-                break
-        except Exception:
-            continue
-    stop_clash(p, cfg)
-    if ok:
-        logging.info(f"节点 {node['name']} 测试成功")
-        return node
+            parts = link.split('://')[1].split('@')
+            password = parts[0]
+            server_port = parts[1].split('?')[0].split(':')
+            server = server_port[0]
+            port = int(server_port[1])
+            name = link.split('#')[1] if '#' in link else server
+            return {
+                'name': name,
+                'server': server,
+                'port': port,
+                'type': 'trojan',
+                'password': password,
+                'udp': True
+            }
+        except Exception as e:
+            print(f"解析 trojan:// 链接失败: {e}")
+    return None
+
+# 解析 hysteria2:// 链接
+def parse_hysteria2(link):
+    if link.startswith('hysteria2://'):
+        try:
+            parts = link.split('://')[1].split('@')
+            password = parts[0]
+            server_port = parts[1].split('?')[0].split(':')
+            server = server_port[0]
+            port = int(server_port[1])
+            name = link.split('#')[1] if '#' in link else server
+            return {
+                'name': name,
+                'server': server,
+                'port': port,
+                'type': 'hysteria2',
+                'password': password,
+                'udp': True
+            }
+        except Exception as e:
+            print(f"解析 hysteria2:// 链接失败: {e}")
+    return None
+
+# 修改后的 extract_flag 函数
+def extract_flag(name):
+    global bing_counter
+    bing_counter += 1
+    # 匹配开头的国旗 emoji（由两个区域指示符组成）
+    match = re.match(r'^([\U0001F1E6-\U0001F1FF]{2})', name)
+    if match:
+        flag = match.group(1)  # 提取国旗
+        return f"{flag} bing{bing_counter}"  # 保留国旗并添加 bing 加计数器
     else:
-        logging.info(f"节点 {node['name']} 测试失败: 无法访问 TikTok")
-        return None
+        return f"bing{bing_counter}"  # 无国旗时直接使用 bing 加计数器
 
-def get_country_flag(ip_or_domain):
-    try:
-        ip_or_domain = str(ip_or_domain)
-        if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', ip_or_domain):
-            ip = socket.gethostbyname(ip_or_domain)
-            logging.info(f"域名 {ip_or_domain} 解析为 IP: {ip}")
+# 生成符合指定格式的 YAML 字符串
+def generate_yaml(proxies):
+    yaml_str = "proxies:\n"
+    for proxy in proxies:
+        proxy_str = ' - {'
+        items = []
+        for key, value in proxy.items():
+            if isinstance(value, dict):
+                nested_str = ', '.join([f"{k}: {repr(v)}" if isinstance(v, str) else f"{k}: {v}" for k, v in value.items()])
+                items.append(f"{key}: {{{nested_str}}}")
+            else:
+                items.append(f"{key}: {repr(value)}" if isinstance(value, str) else f"{key}: {value}")
+        proxy_str += ', '.join(items)
+        proxy_str += '}\n'
+        yaml_str += proxy_str
+    return yaml_str
+
+# 主函数
+def main(urls):
+    global bing_counter
+    bing_counter = 0  # 重置计数器
+    all_proxies = []
+    seen = set()
+
+    for url in urls:
+        raw_data = fetch_data(url)
+        if raw_data is None:
+            continue
+
+        decoded_data = decode_base64(raw_data)
+        yaml_proxies = extract_proxies(decoded_data)
+        
+        if yaml_proxies:
+            for proxy in yaml_proxies:
+                if not isinstance(proxy, dict) or 'server' not in proxy or 'port' not in proxy:
+                    continue
+                identifier = (proxy['server'], proxy['port'])
+                if identifier not in seen:
+                    seen.add(identifier)
+                    proxy['name'] = extract_flag(proxy['name'])
+                    all_proxies.append(proxy)
         else:
-            ip = ip_or_domain
-        with geoip2.database.Reader(GEOIP_DB_PATH) as reader:
-            response = reader.country(ip)
-            country_code = response.country.iso_code
-            return COUNTRY_FLAGS.get(country_code, '🏁')
-    except Exception as e:
-        logging.warning(f"GeoIP 查询失败: {e}")
-        return '🏁'
+            links = decoded_data.splitlines()
+            for link in links:
+                link = link.strip()
+                if not link:
+                    continue
+                proxy = None
+                if link.startswith('ss://'):
+                    proxy = parse_ss(link)
+                elif link.startswith('vmess://'):
+                    proxy = parse_vmess(link)
+                elif link.startswith('trojan://'):
+                    proxy = parse_trojan(link)
+                elif link.startswith('hysteria2://'):
+                    proxy = parse_hysteria2(link)
+                if proxy:
+                    identifier = (proxy['server'], proxy['port'])
+                    if identifier not in seen:
+                        seen.add(identifier)
+                        proxy['name'] = extract_flag(proxy['name'])
+                        all_proxies.append(proxy)
 
-def main():
-    os.makedirs('data', exist_ok=True)
-    inp = 'data/clash.yaml'
-    out = 'data/google.yaml'
-
-    if not os.path.exists(GEOIP_DB_PATH):
-        logging.error(f"GeoIP 数据库文件 {GEOIP_DB_PATH} 不存在")
+    if not all_proxies:
+        print("未找到有效的代理配置！")
         return
 
-    d = load_yaml(inp)
-    nodes = []
-    for x in d.get('proxies', []):
-        n = parse_url_node(x) if isinstance(x, str) else x if x.get('type') in SUPPORTED_TYPES else None
-        if n:
-            nodes.append(n)
-    logging.info(f"加载 {len(nodes)} 个节点")
+    os.makedirs('data', exist_ok=True)
+    yaml_content = generate_yaml(all_proxies)
+    output_path = 'data/clash.yaml'
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(yaml_content)
+    print(f"Clash 配置文件已保存到 {output_path}")
 
-    valid = []
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
-        futures = [ex.submit(test_node, node, idx) for idx, node in enumerate(nodes)]
-        for future in as_completed(futures):
-            result = future.result()
-            if result:
-                valid.append(result)
-
-    if valid:
-        for i, proxy in enumerate(valid):
-            name = str(proxy['name'])
-            match = re.match(r'^([\U0001F1E6-\U0001F1E6-\U0001F1FF])', name)
-            flag = match.group(1) if match else get_country_flag(proxy['server'])
-            proxy['name'] = f"{flag} bing{i + 1}"
-        save_yaml({'proxies': valid}, out)
-        logging.info(f"有效节点数: {len(valid)}")
-    else:
-        logging.info("没有有效节点，未生成文件。")
-
+# 示例运行
 if __name__ == "__main__":
-    main()
+    urls = [
+        'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml',
+        'https://github.com/qjlxg/license/raw/refs/heads/main/all_clash.txt',
+        'https://github.com/qjlxg/license/raw/refs/heads/main/base64.txt',
+        'https://github.com/qjlxg/license/raw/refs/heads/main/Long_term_subscription_num',
+        'https://github.com/qjlxg/license/raw/refs/heads/main/data/clash.yaml',
+        'https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/data/transporter.txt',
+        'https://raw.githubusercontent.com/qjlxg/cheemsar/refs/heads/main/Long_term_subscription_num',
+        'https://raw.githubusercontent.com/qjlxg/cheemsar-2/refs/heads/main/Long_term_subscription_num',
+    ]
+    main(urls)
