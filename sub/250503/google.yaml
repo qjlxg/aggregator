@@ -1,158 +1,43 @@
 proxies:
-- cipher: chacha20-ietf-poly1305
-  name: 🇿🇦 bing1
-  password: d1650796-19c6-4919-ac5a-832d9fe016e8
-  port: 16122
-  server: 183.240.116.150
-  type: ss
-  udp: true
-- auth: 8c90cc48-d570-4324-adac-f4a903d48194
-  name: 🇸🇬 bing2
-  password: 8c90cc48-d570-4324-adac-f4a903d48194
-  port: 19842
-  server: sg2.731732.xyz
-  skip-cert-verify: false
-  sni: sg2.731732.xyz
-  type: hysteria2
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: bing3
-  port: 12672
-  server: xctransfer1st.cokecloud.top
-  tls: false
-  type: vmess
-  udp: true
-  uuid: e17e725f-a9d9-43ff-a3eb-a4f5914c4b98
-- alterId: 0
-  cipher: auto
-  name: bing4
-  network: ws
-  port: 16893
-  server: xb-vm-hk.718181.xyz
-  tls: false
-  type: vmess
-  udp: true
-  uuid: b21406d9-3c61-4c7b-8e70-b25ee71e0deb
-  ws-opts:
-    headers:
-      Host: tms.dingtalk.com
-    path: /
-- cipher: aes-256-gcm
-  name: bing5
-  password: b7169cc4-8263-416b-a62b-05a75adddf10
-  port: 49020
-  server: hk9a.cctv14.xyz
-  type: ss
-  udp: true
-- cipher: aes-128-gcm
-  name: bing6
-  password: 6aa08a1b-595c-4286-a9b7-9e7ec0aea29c
-  port: 1
-  server: 1
-  type: ss
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: bing7
-  network: ws
-  port: 61213
-  server: 183.240.180.26
-  tls: false
-  type: vmess
-  udp: true
-  uuid: cb513db4-3918-467c-9382-3f0c455b9647
-  ws-opts:
-    headers:
-      Host: shop.1357.pics
-    path: /
-- name: bing8
-  password: b8c99169-2998-4e2c-895c-eb2cfb7a3fdd
-  port: 10027
-  server: netcp4.616626.xyz
-  skip-cert-verify: true
-  sni: netcp4.616626.xyz
-  type: trojan
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: bing9
-  password: ca40255e-610a-4b4f-b769-97ec760abe67
-  port: 26044
-  server: diao.arken8379.com
-  type: ss
-  udp: true
-- name: bing10
-  password: f57f01e6-9bb1-4277-a5cb-75ad0ce1fa11
-  port: 21102
-  server: 125.94.40.162
-  type: trojan
-  udp: true
-- alterId: 0
-  cipher: auto
-  name: bing11
-  port: 13255
-  server: xdtw.cokecloud.top
-  tls: false
-  type: vmess
-  udp: true
-  uuid: e17e725f-a9d9-43ff-a3eb-a4f5914c4b98
-- cipher: chacha20-ietf-poly1305
-  name: 🇯🇵 bing12
-  password: b5132e2d-aa1d-41f5-880d-e7358d295e1b
-  port: 49101
-  server: ambnds00.dorabbb.top
-  type: ss
-  udp: true
-- name: 🇭🇰 bing14
-  password: 7b78869a-441c-40ce-aba7-0a5d77dbd6f9
-  port: 39978
-  server: cdntwa.xiaomispeed.com
-  skip-cert-verify: true
-  sni: cdntwa.xiaomispeed.com
-  type: trojan
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: bing15
-  password: 888af515-e2d1-4803-8f9d-dfcf44e32980
-  port: 15642
-  server: gya.tangu.win
-  type: ss
-  udp: true
-- name: bing16
-  password: f57f01e6-9bb1-4277-a5cb-75ad0ce1fa11
-  port: 21156
-  server: 125.94.40.162
-  type: trojan
-  udp: true
-- cipher: chacha20-ietf-poly1305
-  name: bing17
-  password: ca40255e-610a-4b4f-b769-97ec760abe67
-  port: 26038
-  server: diao.arken8379.com
-  type: ss
-  udp: true
-- auth: 1cd029f2-35e5-415e-875a-2df7f5f1cbbe
-  name: bing18
-  password: 1cd029f2-35e5-415e-875a-2df7f5f1cbbe
-  port: 20903
-  server: lbsjb.huojian.wiki
-  skip-cert-verify: false
-  sni: lbsjb.huojian.wiki
-  type: hysteria2
-  udp: true
-- name: 🇹🇼 bing19
-  password: 00bf4273-e304-4083-bec9-dadbcf43f9d0
-  port: 23342
-  server: tw5.376897.xyz
-  skip-cert-verify: false
-  sni: tw5.376897.xyz
-  type: trojan
-  udp: true
-- auth: ce7d67ee-938c-4488-ae34-42b205f8ea6f
-  name: bing20
-  password: ce7d67ee-938c-4488-ae34-42b205f8ea6f
-  port: 3031
-  server: 58.152.186.13
-  skip-cert-verify: true
-  type: hysteria2
-  udp: true
+- {alterId: 0, cipher: auto, name: bing1, port: 12672, server: xctransfer1st.cokecloud.top,
+  tls: false, type: vmess, udp: true, uuid: e17e725f-a9d9-43ff-a3eb-a4f5914c4b98}
+- {auth: 8c90cc48-d570-4324-adac-f4a903d48194, name: 🇸🇬 bing2, password: 8c90cc48-d570-4324-adac-f4a903d48194,
+  port: 19842, server: sg2.731732.xyz, skip-cert-verify: false, sni: sg2.731732.xyz,
+  type: hysteria2, udp: true}
+- {cipher: chacha20-ietf-poly1305, name: 🇿🇦 bing3, password: d1650796-19c6-4919-ac5a-832d9fe016e8,
+  port: 16122, server: 183.240.116.150, type: ss, udp: true}
+- {alterId: 0, cipher: auto, name: bing4, network: ws, port: 16893, server: xb-vm-hk.718181.xyz,
+  tls: false, type: vmess, udp: true, uuid: b21406d9-3c61-4c7b-8e70-b25ee71e0deb,
+  ws-opts: {headers: {Host: tms.dingtalk.com}, path: /}}
+- {cipher: aes-256-gcm, name: bing5, password: b7169cc4-8263-416b-a62b-05a75adddf10,
+  port: 49020, server: hk9a.cctv14.xyz, type: ss, udp: true}
+- {cipher: aes-128-gcm, name: bing6, password: 6aa08a1b-595c-4286-a9b7-9e7ec0aea29c,
+  port: 1, server: 1, type: ss, udp: true}
+- {cipher: chacha20-ietf-poly1305, name: bing7, password: ca40255e-610a-4b4f-b769-97ec760abe67,
+  port: 26044, server: diao.arken8379.com, type: ss, udp: true}
+- {name: bing8, password: b8c99169-2998-4e2c-895c-eb2cfb7a3fdd, port: 10027, server: netcp4.616626.xyz,
+  skip-cert-verify: true, sni: netcp4.616626.xyz, type: trojan, udp: true}
+- {alterId: 0, cipher: auto, name: bing9, network: ws, port: 61213, server: 183.240.180.26,
+  tls: false, type: vmess, udp: true, uuid: cb513db4-3918-467c-9382-3f0c455b9647,
+  ws-opts: {headers: {Host: shop.1357.pics}, path: /}}
+- {name: bing10, password: f57f01e6-9bb1-4277-a5cb-75ad0ce1fa11, port: 21102, server: 125.94.40.162,
+  type: trojan, udp: true}
+- {alterId: 0, cipher: auto, name: bing11, port: 13255, server: xdtw.cokecloud.top,
+  tls: false, type: vmess, udp: true, uuid: e17e725f-a9d9-43ff-a3eb-a4f5914c4b98}
+- {cipher: chacha20-ietf-poly1305, name: 🇯🇵 bing12, password: b5132e2d-aa1d-41f5-880d-e7358d295e1b,
+  port: 49101, server: ambnds00.dorabbb.top, type: ss, udp: true}
+- {cipher: chacha20-ietf-poly1305, name: bing13, password: 888af515-e2d1-4803-8f9d-dfcf44e32980,
+  port: 15642, server: gya.tangu.win, type: ss, udp: true}
+- {name: 🇭🇰 bing14, password: 7b78869a-441c-40ce-aba7-0a5d77dbd6f9, port: 39978, server: cdntwa.xiaomispeed.com,
+  skip-cert-verify: true, sni: cdntwa.xiaomispeed.com, type: trojan, udp: true}
+- {name: bing15, password: f57f01e6-9bb1-4277-a5cb-75ad0ce1fa11, port: 21156, server: 125.94.40.162,
+  type: trojan, udp: true}
+- {cipher: chacha20-ietf-poly1305, name: bing16, password: ca40255e-610a-4b4f-b769-97ec760abe67,
+  port: 26038, server: diao.arken8379.com, type: ss, udp: true}
+- {name: 🇹🇼 bing17, password: 00bf4273-e304-4083-bec9-dadbcf43f9d0, port: 23342, server: tw5.376897.xyz,
+  skip-cert-verify: false, sni: tw5.376897.xyz, type: trojan, udp: true}
+- {auth: 1cd029f2-35e5-415e-875a-2df7f5f1cbbe, name: bing18, password: 1cd029f2-35e5-415e-875a-2df7f5f1cbbe,
+  port: 20903, server: lbsjb.huojian.wiki, skip-cert-verify: false, sni: lbsjb.huojian.wiki,
+  type: hysteria2, udp: true}
+- {auth: ce7d67ee-938c-4488-ae34-42b205f8ea6f, name: bing19, password: ce7d67ee-938c-4488-ae34-42b205f8ea6f,
+  port: 3031, server: 58.152.186.13, skip-cert-verify: true, type: hysteria2, udp: true}
