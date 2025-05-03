@@ -1,7 +1,4 @@
 import os
-import json
-import base64
-import urllib.parse
 import yaml
 import subprocess
 import time
@@ -107,69 +104,23 @@ def test_node(node, idx):
     
     return is_working
 
-# 解析代理节点（简化的解析逻辑）
-def parse_node(node_str):
-    if not isinstance(node_str, str):
-        logging.error(f"Invalid node format: {node_str}")
-        return None
-    
-    node = {}
-    if node_str.startswith('vmess://'):
-        try:
-            vmess_data = base64.urlsafe_b64decode(node_str[8:]).decode('utf-8')
-            vmess = json.loads(vmess_data)
-            node = {
-                'name': vmess.get('ps', 'unnamed'),
-                'server': vmess['add'],
-                'port': int(vmess['port']),
-                'type': 'vmess',
-                'uuid': vmess['id'],
-                'alterId': vmess.get('aid', 0),
-                'cipher': vmess.get('scy', 'auto'),
-                'tls': vmess.get('tls', False),
-                'network': vmess.get('net', 'tcp'),
-                'udp': True
-            }
-        except Exception as e:
-            logging.error(f"Failed to parse vmess node: {e}")
-            return None
-    elif node_str.startswith('ss://'):
-        try:
-            parts = node_str[5:].split('#')
-            auth_server = parts[0].split('@')
-            auth = base64.urlsafe_b64decode(auth_server[0]).decode('utf-8').split(':')
-            server_port = auth_server[1].split(':')
-            node = {
-                'name': urllib.parse.unquote(parts[1]) if len(parts) > 1 else 'unnamed',
-                'server': server_port[0],
-                'port': int(server_port[1]),
-                'type': 'ss',
-                'cipher': auth[0],
-                'password': auth[1],
-                'udp': True
-            }
-        except Exception as e:
-            logging.error(f"Failed to parse ss node: {e}")
-            return None
-    # 其他类型（trojan, vless, hysteria2）可类似扩展
-    
-    if node.get('type') not in SUPPORTED_TYPES:
-        logging.warning(f"Unsupported proxy type: {node.get('type')}")
-        return None
-    
-    return node
-
 # 主函数
 def main():
-    # 读取节点列表（假设从文件中读取）
-    with open('nodes.txt', 'r', encoding='utf-8') as f:
-        node_strings = [line.strip() for line in f if line.strip()]
+    # 读取源文件 data/clash.yaml
+    try:
+        with open('data/clash.yaml', 'r', encoding='utf-8') as f:
+            config = yaml.safe_load(f)
+            nodes = config.get('proxies', [])
+    except FileNotFoundError:
+        logging.error("源文件 data/clash.yaml 不存在")
+        return
+    except yaml.YAMLError as e:
+        logging.error(f"解析 data/clash.yaml 失败: {e}")
+        return
     
-    nodes = []
-    for node_str in node_strings:
-        node = parse_node(node_str)
-        if node:
-            nodes.append(node)
+    if not nodes:
+        logging.warning("data/clash.yaml 中未找到代理节点（proxies 字段为空）")
+        return
     
     # 并行测试节点
     working_nodes = []
@@ -181,15 +132,17 @@ def main():
                 if future.result():
                     working_nodes.append(node)
             except Exception as e:
-                logging.error(f"Error testing node {node['name']}: {e}")
+                logging.error(f"测试节点 {node['name']} 时出错: {e}")
     
-    # 保存可用节点到 YAML 文件
+    # 保存可用节点到 data/google.yaml
     if working_nodes:
-        with open('working_nodes.yaml', 'w', encoding='utf-8') as f:
+        output_path = 'data/google.yaml'
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)  # 确保 data 目录存在
+        with open(output_path, 'w', encoding='utf-8') as f:
             yaml.dump({'proxies': working_nodes}, f, allow_unicode=True)
-        logging.info(f"Saved {len(working_nodes)} working nodes to working_nodes.yaml")
+        logging.info(f"保存 {len(working_nodes)} 个可用节点到 {output_path}")
     else:
-        logging.warning("No working nodes found")
+        logging.warning("未找到可用节点")
 
 if __name__ == "__main__":
     main()
