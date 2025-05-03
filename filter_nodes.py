@@ -54,6 +54,7 @@ class CustomDumper(yaml.Dumper):
             return super().represent_mapping(tag, mapping, flow_style=False)
 
 def load_yaml(path):
+    """加载 YAML 文件"""
     with open(path, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f)
 
@@ -63,9 +64,7 @@ def save_yaml(data, path):
         with open(path, 'w', encoding='utf-8') as f:
             f.write("proxies:\n")
             for proxy in data['proxies']:
-                # 使用 CustomDumper 确保单行输出
                 proxy_str = yaml.dump([proxy], Dumper=CustomDumper, allow_unicode=True, default_flow_style=True)
-                # 去除多余符号并写入单行
                 proxy_str = proxy_str.strip('[]\n')
                 f.write(f" - {proxy_str}\n")
         logging.info(f"已保存 {path}")
@@ -73,6 +72,7 @@ def save_yaml(data, path):
         logging.error(f"保存文件失败: {e}")
 
 def parse_url_node(url):
+    """解析代理 URL 节点"""
     try:
         if url.startswith('vmess://'):
             data = json.loads(base64.b64decode(url[8:]).decode())
@@ -144,6 +144,7 @@ def parse_url_node(url):
     return None
 
 def start_clash(node, port):
+    """启动 Clash 实例测试节点"""
     cfg = {
         'port': port,
         'socks-port': port + 1,
@@ -161,6 +162,7 @@ def start_clash(node, port):
     return p, fname
 
 def stop_clash(p, fname):
+    """停止 Clash 实例并清理临时文件"""
     try:
         os.killpg(os.getpgid(p.pid), signal.SIGTERM)
     except:
@@ -169,6 +171,7 @@ def stop_clash(p, fname):
         os.remove(fname)
 
 def test_node(node, idx):
+    """测试节点是否可用"""
     port = BASE_PORT + (idx % 100) * 2
     p, cfg = start_clash(node, port)
     ok = True
@@ -192,7 +195,6 @@ def test_node(node, idx):
 def get_country_flag(ip_or_domain):
     """根据 IP 或域名获取国旗 emoji"""
     try:
-        # 如果不是 IP 地址，尝试解析为 IP
         if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', ip_or_domain):
             try:
                 ip = socket.gethostbyname(ip_or_domain)
@@ -202,7 +204,6 @@ def get_country_flag(ip_or_domain):
                 return '🏁'
         else:
             ip = ip_or_domain
-        # 使用 GeoIP2 查询国家代码
         with geoip2.database.Reader(GEOIP_DB_PATH) as reader:
             response = reader.country(ip)
             country_code = response.country.iso_code
@@ -212,6 +213,7 @@ def get_country_flag(ip_or_domain):
         return '🏁'
 
 def main():
+    """主函数：处理代理节点并生成 YAML 文件"""
     os.makedirs('data', exist_ok=True)
     inp = 'data/clash.yaml'
     out = 'data/google.yaml'
@@ -238,4 +240,19 @@ def main():
             if result:
                 valid.append(result)
 
-    # 处理
+    # 处理有效节点并保存
+    if valid:
+        for i, proxy in enumerate(valid):
+            name = proxy['name']
+            match = re.match(r'^([\U0001F1E6-\U0001F1FF][\U0001F1E6-\U0001F1FF])', name)
+            if match:
+                flag = match.group(1)  # 保留原有国旗
+            else:
+                flag = get_country_flag(proxy['server'])  # 使用 GeoIP2 生成国旗
+            proxy['name'] = f"{flag} bing{i + 1}"
+        save_yaml({'proxies': valid}, out)
+    else:
+        logging.info("没有有效节点，未生成文件。")
+
+if __name__ == "__main__":
+    main()
