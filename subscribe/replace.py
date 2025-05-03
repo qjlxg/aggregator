@@ -14,6 +14,11 @@ import socket
 import geoip2.database
 from collections import OrderedDict
 
+# 让 PyYAML 忽略所有未知 tag（如 !<str>、!!str），防止解析 clash.yaml 时报错
+def ignore_unknown_tag(loader, tag_suffix, node):
+    return loader.construct_scalar(node)
+yaml.SafeLoader.add_multi_constructor('', ignore_unknown_tag)
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 BASE_PORT = 10000
@@ -32,6 +37,7 @@ COUNTRY_FLAGS = {
     'AU': '🇦🇺', 'FR': '🇫🇷', 'IT': '🇮🇹', 'NL': '🇳🇱',
 }
 
+# 字段顺序，name在首位，cipher在最后
 FIELD_ORDERS = {
     'vmess': ['name', 'server', 'port', 'type', 'uuid', 'alterId', 'tls', 'network', 'ws-opts', 'udp', 'cipher'],
     'ss': ['name', 'server', 'port', 'type', 'password', 'udp', 'cipher'],
@@ -42,6 +48,7 @@ FIELD_ORDERS = {
 
 class CustomDumper(yaml.Dumper):
     def represent_mapping(self, tag, mapping, flow_style=None):
+        # 保证字段顺序
         if isinstance(mapping, dict) and 'name' in mapping and 'server' in mapping:
             proxy_type = mapping.get('type', 'ss')
             order = FIELD_ORDERS.get(proxy_type, list(mapping.keys()))
@@ -65,6 +72,7 @@ def save_yaml(data, path):
         with open(path, 'w', encoding='utf-8') as f:
             f.write("proxies:\n")
             for proxy in data['proxies']:
+                # 只 dump 单个 dict，保证一行一个节点
                 proxy_str = yaml.dump(proxy, Dumper=CustomDumper, allow_unicode=True, default_flow_style=True, sort_keys=False)
                 proxy_str = proxy_str.strip('\n')
                 f.write(f" - {proxy_str}\n")
@@ -293,7 +301,7 @@ def main():
     if valid:
         for i, proxy in enumerate(valid):
             name = str(proxy['name'])
-            match = re.match(r'^([\U0001F1E6-\U0001F1FF][\U0001F1E6-\U0001F1FF])', name)
+            match = re.match(r'^([\U0001F1E6-\U0001F1E6-\U0001F1FF])', name)
             flag = match.group(1) if match else get_country_flag(proxy['server'])
             proxy['name'] = f"{flag} bing{i + 1}"
         save_yaml({'proxies': valid}, out)
