@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 BASE_PORT = 10000
 TEST_URL = "https://www.google.com/generate_204"
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
-MAX_WORKERS = 2
+MAX_WORKERS = 10  # TCP检测可以大并发
 BATCH_SIZE = 30
 REQUEST_TIMEOUT = 8
 RETRY_TIMES = 2
@@ -170,6 +170,13 @@ def parse_url_node(url):
         return None
     return None
 
+def tcp_ping(host, port, timeout=3):
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except Exception:
+        return False
+
 def wait_port(port, timeout=30):
     start = time.time()
     while time.time() - start < timeout:
@@ -210,16 +217,7 @@ def start_clash(node, port):
             logging.error(f"Clash 启动端口 {port+1} 超时")
             stop_clash(p, fname)
             return None, fname
-        time.sleep(3)  # 启动后再等几秒，确保节点加载
-        # 输出clash日志
-        try:
-            out, err = p.communicate(timeout=1)
-            if out:
-                logging.debug(f"Clash stdout: {out.decode(errors='ignore')}")
-            if err:
-                logging.debug(f"Clash stderr: {err.decode(errors='ignore')}")
-        except Exception:
-            pass
+        time.sleep(3)
         return p, fname
     except Exception as e:
         logging.error(f"启动 Clash 失败: {e}")
@@ -293,6 +291,7 @@ def main():
     os.makedirs('data', exist_ok=True)
     inp = 'data/clash.yaml'
     out = 'data/google.yaml'
+    tcp_out = 'data/tcp_checked.yaml'
 
     d = load_yaml(inp)
     nodes = []
@@ -302,12 +301,30 @@ def main():
             nodes.append(n)
     logging.info(f"加载 {len(nodes)} 个节点")
 
+    # 1. 先用TCP端口检测法快速筛选
+    def tcp_check(node):
+        host, port = node['server'], node['port']
+        ok = tcp_ping(host, port)
+        logging.info(f"TCP检测 {host}:{port} {'可用' if ok else '不可用'}")
+        return ok
+
+    tcp_valid = []
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
+        futures = [ex.submit(tcp_check, node) for node in nodes]
+        for idx, future in enumerate(as_completed(futures)):
+            if future.result():
+                tcp_valid.append(nodes[idx])
+
+    logging.info(f"TCP检测通过节点数: {len(tcp_valid)}")
+    save_yaml({'proxies': tcp_valid}, tcp_out)
+
+    # 2. 再用 Clash 检测剩下的节点
     valid = []
-    total = len(nodes)
+    total = len(tcp_valid)
     for batch_start in range(0, total, BATCH_SIZE):
-        batch = nodes[batch_start:batch_start+BATCH_SIZE]
-        logging.info(f"处理第 {batch_start+1} ~ {batch_start+len(batch)} 个节点")
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
+        batch = tcp_valid[batch_start:batch_start+BATCH_SIZE]
+        logging.info(f"Clash检测第 {batch_start+1} ~ {batch_start+len(batch)} 个节点")
+        with ThreadPoolExecutor(max_workers=2) as ex:
             futures = [ex.submit(test_node, node, idx+batch_start) for idx, node in enumerate(batch)]
             for future in as_completed(futures):
                 result = future.result()
@@ -315,7 +332,7 @@ def main():
                     valid.append(result)
         time.sleep(2)
 
-    # 节点去重（按 server+port+type 唯一）
+    # 节点去重
     seen = set()
     deduped = []
     for node in valid:
@@ -330,7 +347,7 @@ def main():
 
     if deduped:
         save_yaml({'proxies': deduped}, out)
-        logging.info(f"有效节点数: {len(deduped)}")
+        logging.info(f"最终有效节点数: {len(deduped)}")
     else:
         logging.info("没有有效节点，未生成文件。")
 
