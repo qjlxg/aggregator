@@ -17,12 +17,9 @@ def fetch_data(url):
         return None
 
 def decode_base64_if_needed(data):
-    """自动判断并解码base64格式，否则原文返回"""
-    # 只要包含节点协议头就直接返回原文
     if any(proto in data for proto in ['vmess://', 'ss://', 'trojan://', 'vless://', 'hysteria2://', 'tuic://', 'hysteria://', 'hy2://']):
         print("检测到明文节点格式，直接返回")
         return data
-    # 否则尝试base64解码
     try:
         decoded = base64.b64decode(data).decode('utf-8')
         print(f"Base64解码成功，长度: {len(decoded)}")
@@ -48,19 +45,36 @@ def extract_proxies(data):
             return yaml_data['proxies']
     return []
 
+def extract_port(port_str):
+    match = re.match(r'^(\d+)', port_str)
+    if match:
+        return int(match.group(1))
+    raise ValueError(f"无效端口: {port_str}")
+
 def parse_ss(link):
     if link.startswith('ss://'):
         try:
-            parts = link.split('://')[1].split('@')
-            method_password = base64.urlsafe_b64decode(parts[0] + '=' * (-len(parts[0]) % 4)).decode('utf-8')
-            method, password = method_password.split(':')
-            server_port = parts[1].split('#')
-            server, port = server_port[0].split(':')
-            name = server_port[1] if len(server_port) > 1 else server
+            body = link[5:]
+            if '@' not in body:
+                # ss://base64?plugin=xxx#name
+                base64_part = body.split('#')[0].split('?')[0]
+                decoded = base64.urlsafe_b64decode(base64_part + '=' * (-len(base64_part) % 4)).decode('utf-8')
+                method, rest = decoded.split(':', 1)
+                password, server_port = rest.rsplit('@', 1)
+                server, port = server_port.split(':')
+                name = link.split('#')[1] if '#' in link else server
+            else:
+                parts = body.split('@')
+                method_password = base64.urlsafe_b64decode(parts[0] + '=' * (-len(parts[0]) % 4)).decode('utf-8')
+                method, password = method_password.split(':')
+                server_port = parts[1].split('#')
+                server, port = server_port[0].split(':')
+                name = server_port[1] if len(server_port) > 1 else server
+            port = extract_port(port)
             return {
                 'name': name,
                 'server': server,
-                'port': int(port),
+                'port': port,
                 'type': 'ss',
                 'cipher': method,
                 'password': password,
@@ -78,10 +92,10 @@ def parse_vmess(link):
             return {
                 'name': vmess_json.get('ps', vmess_json.get('add')),
                 'server': vmess_json['add'],
-                'port': int(vmess_json['port']),
+                'port': extract_port(str(vmess_json['port'])),
                 'type': 'vmess',
                 'uuid': vmess_json['id'],
-                'alterId': int(vmess_json['aid']),
+                'alterId': int(vmess_json.get('aid', 0)),
                 'cipher': 'auto',
                 'tls': vmess_json.get('tls', False),
                 'udp': True
@@ -97,7 +111,7 @@ def parse_trojan(link):
             password = parts[0]
             server_port = parts[1].split('?')[0].split(':')
             server = server_port[0]
-            port = int(server_port[1])
+            port = extract_port(server_port[1])
             name = link.split('#')[1] if '#' in link else server
             return {
                 'name': name,
@@ -118,7 +132,7 @@ def parse_hysteria2(link):
             password = parts[0]
             server_port = parts[1].split('?')[0].split(':')
             server = server_port[0]
-            port = int(server_port[1])
+            port = extract_port(server_port[1])
             name = link.split('#')[1] if '#' in link else server
             return {
                 'name': name,
@@ -140,7 +154,7 @@ def parse_vless(link):
             server_port_params = parts[1].split('?')
             server_port = server_port_params[0].split(':')
             server = server_port[0]
-            port = int(server_port[1])
+            port = extract_port(server_port[1])
             params = server_port_params[1].split('#')[0] if len(server_port_params) > 1 else ''
             name = link.split('#')[1] if '#' in link else server
             param_dict = {}
@@ -174,7 +188,7 @@ def parse_tuic(link):
             server_port_params = parts[1].split('?')
             server_port = server_port_params[0].split(':')
             server = server_port[0]
-            port = int(server_port[1])
+            port = extract_port(server_port[1])
             params = server_port_params[1].split('#')[0] if len(server_port_params) > 1 else ''
             name = link.split('#')[1] if '#' in link else server
             param_dict = {}
@@ -201,7 +215,7 @@ def parse_hysteria(link):
             parts = link.split('://')[1].split('?')
             server_port = parts[0].split(':')
             server = server_port[0]
-            port = int(server_port[1])
+            port = extract_port(server_port[1])
             params = parts[1].split('#')[0] if len(parts) > 1 else ''
             name = link.split('#')[1] if '#' in link else server
             param_dict = {}
@@ -331,6 +345,5 @@ if __name__ == "__main__":
         'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml',
         'https://github.com/qjlxg/aggregator/raw/refs/heads/main/base64.txt',
         'https://github.com/qjlxg/aggregator/raw/refs/heads/main/all_clash.txt',
-       'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/all_clash.txt',
     ]
     main(urls)
