@@ -10,6 +10,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import logging
 import requests
 import re
+import socket
+import geoip2.database
 
 # 日志配置
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -21,6 +23,15 @@ SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
 MAX_WORKERS = 20
 REQUEST_TIMEOUT = 10
 STARTUP_DELAY = 2
+GEOIP_DB_PATH = './GeoLite2-Country.mmdb'  # GeoIP2 数据库路径
+
+# 国家代码到国旗 emoji 的映射
+COUNTRY_FLAGS = {
+    'CN': '🇨🇳', 'HK': '🇭🇰', 'TW': '🇹🇼', 'JP': '🇯🇵',
+    'KR': '🇰🇷', 'SG': '🇸🇬', 'US': '🇺🇸', 'GB': '🇬🇧',
+    'RU': '🇷🇺', 'IN': '🇮🇳', 'DE': '🇩🇪', 'CA': '🇨🇦',
+    'AU': '🇦🇺', 'FR': '🇫🇷', 'IT': '🇮🇹', 'NL': '🇳🇱',
+}
 
 # 定义每种代理类型的字段顺序
 FIELD_ORDERS = {
@@ -47,23 +58,33 @@ def load_yaml(path):
         return yaml.safe_load(f)
 
 def save_yaml(data, path):
-    with open(path, 'w', encoding='utf-8') as f:
-        yaml.dump(data, f, Dumper=CustomDumper, allow_unicode=True)
-    logging.info(f"已保存 {path}")
+    """保存代理配置为单行 YAML 格式"""
+    try:
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write("proxies:\n")
+            for proxy in data['proxies']:
+                # 使用 CustomDumper 确保单行输出
+                proxy_str = yaml.dump([proxy], Dumper=CustomDumper, allow_unicode=True, default_flow_style=True)
+                # 去除多余符号并写入单行
+                proxy_str = proxy_str.strip('[]\n')
+                f.write(f" - {proxy_str}\n")
+        logging.info(f"已保存 {path}")
+    except Exception as e:
+        logging.error(f"保存文件失败: {e}")
 
 def parse_url_node(url):
     try:
         if url.startswith('vmess://'):
             data = json.loads(base64.b64decode(url[8:]).decode())
             return {
-                'name': data.get('ps'), 
-                'server': data['add'], 
-                'port': int(data['port']), 
-                'type': 'vmess', 
-                'uuid': data['id'], 
-                'alterId': int(data.get('aid', 0)), 
-                'cipher': data.get('scy', 'auto'), 
-                'network': data.get('net', 'tcp'), 
+                'name': data.get('ps'),
+                'server': data['add'],
+                'port': int(data['port']),
+                'type': 'vmess',
+                'uuid': data['id'],
+                'alterId': int(data.get('aid', 0)),
+                'cipher': data.get('scy', 'auto'),
+                'network': data.get('net', 'tcp'),
                 'tls': bool(data.get('tls', False))
             }
         if url.startswith('ss://'):
@@ -75,11 +96,11 @@ def parse_url_node(url):
             if cipher == 'aes-128-gcm':
                 cipher = 'chacha20-ietf-poly1305'
             return {
-                'name': urllib.parse.unquote(parsed.fragment) or 'ss', 
-                'server': server, 
-                'port': int(port), 
-                'type': 'ss', 
-                'cipher': cipher, 
+                'name': urllib.parse.unquote(parsed.fragment) or 'ss',
+                'server': server,
+                'port': int(port),
+                'type': 'ss',
+                'cipher': cipher,
                 'password': passwd
             }
         if url.startswith('trojan://'):
@@ -87,11 +108,11 @@ def parse_url_node(url):
             pwd = p.netloc.split('@')[0]
             server, port = p.netloc.split('@')[1].split(':')
             return {
-                'name': urllib.parse.unquote(p.fragment) or 'trojan', 
-                'server': server, 
-                'port': int(port), 
-                'type': 'trojan', 
-                'password': pwd, 
+                'name': urllib.parse.unquote(p.fragment) or 'trojan',
+                'server': server,
+                'port': int(port),
+                'type': 'trojan',
+                'password': pwd,
                 'sni': server
             }
         if url.startswith('vless://'):
@@ -99,12 +120,12 @@ def parse_url_node(url):
             uuid = p.netloc.split('@')[0]
             server, port = p.netloc.split('@')[1].split(':')
             return {
-                'name': urllib.parse.unquote(p.fragment) or 'vless', 
-                'server': server, 
-                'port': int(port), 
-                'type': 'vless', 
-                'uuid': uuid, 
-                'tls': True, 
+                'name': urllib.parse.unquote(p.fragment) or 'vless',
+                'server': server,
+                'port': int(port),
+                'type': 'vless',
+                'uuid': uuid,
+                'tls': True,
                 'servername': server
             }
         if url.startswith('hysteria2://'):
@@ -112,10 +133,10 @@ def parse_url_node(url):
             pwd = p.netloc.split('@')[0]
             server, port = p.netloc.split('@')[1].split(':')
             return {
-                'name': urllib.parse.unquote(p.fragment) or 'hysteria2', 
-                'server': server, 
-                'port': int(port), 
-                'type': 'hysteria2', 
+                'name': urllib.parse.unquote(p.fragment) or 'hysteria2',
+                'server': server,
+                'port': int(port),
+                'type': 'hysteria2',
                 'password': pwd
             }
     except Exception as e:
@@ -124,17 +145,17 @@ def parse_url_node(url):
 
 def start_clash(node, port):
     cfg = {
-        'port': port, 
-        'socks-port': port + 1, 
-        'mode': 'global', 
-        'proxies': [node], 
-        'proxy-groups': [{'name': 'Proxy', 'type': 'select', 'proxies': [node['name']]}], 
+        'port': port,
+        'socks-port': port + 1,
+        'mode': 'global',
+        'proxies': [node],
+        'proxy-groups': [{'name': 'Proxy', 'type': 'select', 'proxies': [node['name']]}],
         'rules': ['MATCH,Proxy']
     }
     fname = f'temp_{port}.yaml'
     with open(fname, 'w', encoding='utf-8') as f:
         yaml.dump(cfg, f, allow_unicode=True)
-    p = subprocess.Popen(['./clash/clash-linux', '-f', fname, '-d', 'clash'], 
+    p = subprocess.Popen(['./clash/clash-linux', '-f', fname, '-d', 'clash'],
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
     time.sleep(STARTUP_DELAY)
     return p, fname
@@ -154,7 +175,7 @@ def test_node(node, idx):
     for url in TEST_URLS:
         try:
             r = requests.get(url, proxies={
-                'http': f'socks5://127.0.0.1:{port + 1}', 
+                'http': f'socks5://127.0.0.1:{port + 1}',
                 'https': f'socks5://127.0.0.1:{port + 1}'
             }, timeout=REQUEST_TIMEOUT)
             if r.status_code != 200:
@@ -168,16 +189,47 @@ def test_node(node, idx):
         return node
     return None
 
+def get_country_flag(ip_or_domain):
+    """根据 IP 或域名获取国旗 emoji"""
+    try:
+        # 如果不是 IP 地址，尝试解析为 IP
+        if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', ip_or_domain):
+            try:
+                ip = socket.gethostbyname(ip_or_domain)
+                logging.info(f"域名 {ip_or_domain} 解析为 IP: {ip}")
+            except Exception as e:
+                logging.warning(f"域名解析失败: {e}")
+                return '🏁'
+        else:
+            ip = ip_or_domain
+        # 使用 GeoIP2 查询国家代码
+        with geoip2.database.Reader(GEOIP_DB_PATH) as reader:
+            response = reader.country(ip)
+            country_code = response.country.iso_code
+            return COUNTRY_FLAGS.get(country_code, '🏁')
+    except Exception as e:
+        logging.warning(f"GeoIP 查询失败: {e}")
+        return '🏁'
+
 def main():
     os.makedirs('data', exist_ok=True)
     inp = 'data/clash.yaml'
     out = 'data/google.yaml'
+
+    # 检查 GeoIP 数据库是否存在
+    if not os.path.exists(GEOIP_DB_PATH):
+        logging.error(f"GeoIP 数据库文件 {GEOIP_DB_PATH} 不存在，请下载 GeoLite2-Country.mmdb")
+        return
+
+    # 加载输入文件
     d = load_yaml(inp)
     nodes = []
     for x in d.get('proxies', []):
         n = parse_url_node(x) if isinstance(x, str) else x if x.get('type') in SUPPORTED_TYPES else None
         if n:
             nodes.append(n)
+
+    # 测试节点有效性
     valid = []
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
         futures = [ex.submit(test_node, node, idx) for idx, node in enumerate(nodes)]
@@ -185,8 +237,9 @@ def main():
             result = future.result()
             if result:
                 valid.append(result)
+
+    # 处理有效节点并保存
     if valid:
-        default_flag = '🇨🇳'  # 默认国旗
         for i, proxy in enumerate(valid):
             name = proxy['name']
             # 检查是否已有国旗
@@ -194,7 +247,7 @@ def main():
             if match:
                 flag = match.group(1)  # 保留原有国旗
             else:
-                flag = default_flag  # 添加默认国旗
+                flag = get_country_flag(proxy['server'])  # 使用 GeoIP2 生成国旗
             proxy['name'] = f"{flag} bing{i + 1}"
         save_yaml({'proxies': valid}, out)
     else:
