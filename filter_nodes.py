@@ -18,11 +18,13 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 BASE_PORT = 10000
 TEST_URLS = ["https://www.google.com", "https://www.youtube.com"]  # 测试 Google 和 YouTube
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
+MAX_WORKERS = 20  # 增加并发数
+REQUEST_TIMEOUT = 10  # 减少请求超时时间（秒）
+STARTUP_DELAY = 2  # 减少 Clash 启动等待时间（秒）
 
 # 自定义 YAML Dumper 用于横排格式
 class CustomDumper(yaml.Dumper):
     def represent_mapping(self, tag, mapping, flow_style=None):
-        # 对包含 'name' 和 'server' 的字典（即 proxy）使用 flow style
         if isinstance(mapping, dict) and 'name' in mapping and 'server' in mapping:
             return super().represent_mapping(tag, mapping, flow_style=True)
         else:
@@ -72,22 +74,23 @@ def start_clash(node, port):
     fname = f'temp_{port}.yaml'
     with open(fname,'w',encoding='utf-8') as f: yaml.dump(cfg,f,allow_unicode=True)
     p = subprocess.Popen(['./clash/clash-linux','-f',fname,'-d','clash'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
-    time.sleep(5)
+    time.sleep(STARTUP_DELAY)
     return p, fname
 
 def stop_clash(p, fname):
     try:
         os.killpg(os.getpgid(p.pid), signal.SIGTERM)
-    except: pass
+    except:
+        pass
     if os.path.exists(fname): os.remove(fname)
 
 def test_node(node, idx):
-    port = BASE_PORT + (idx % 10) * 2
+    port = BASE_PORT + (idx % 100) * 2
     p, cfg = start_clash(node, port)
     ok = True
     for url in TEST_URLS:
         try:
-            r = requests.get(url, proxies={'http':f'socks5://127.0.0.1:{port+1}','https':f'socks5://127.0.0.1:{port+1}'}, timeout=15)
+            r = requests.get(url, proxies={'http':f'socks5://127.0.0.1:{port+1}','https':f'socks5://127.0.0.1:{port+1}'}, timeout=REQUEST_TIMEOUT)
             if r.status_code != 200:
                 ok = False
                 break
@@ -108,25 +111,21 @@ def main():
         n = parse_url_node(x) if isinstance(x,str) else x if x.get('type') in SUPPORTED_TYPES else None
         if n: nodes.append(n)
     valid = []
-    with ThreadPoolExecutor(max_workers=5) as ex:
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
         futures = [ex.submit(test_node, node, idx) for idx, node in enumerate(nodes)]
         for future in as_completed(futures):
             result = future.result()
             if result:
                 valid.append(result)
     if valid:
-        # 修改 name 字段
         flags = []
-        # 提取国旗（如果有）
         for proxy in valid:
             name = proxy['name']
-            # 使用正则表达式匹配开头的国旗 emoji（两个区域指示符号）
             match = re.match(r'^([\U0001F1E6-\U0001F1FF][\U0001F1E6-\U0001F1FF])', name)
             if match:
-                flags.append(match.group(1))  # 保留国旗
+                flags.append(match.group(1))
             else:
-                flags.append('')  # 无国旗
-        # 生成新的 name
+                flags.append('')
         for i in range(len(valid)):
             if flags[i]:
                 valid[i]['name'] = flags[i] + ' bing' + str(i + 1)
