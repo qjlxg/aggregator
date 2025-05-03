@@ -10,84 +10,11 @@ import requests
 import logging
 import re
 import socket
-import geoip2.database
+import asyncio
 from collections import OrderedDict
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
-def ignore_unknown_tag(loader, tag_suffix, node):
-    return loader.construct_scalar(node)
-yaml.SafeLoader.add_multi_constructor('', ignore_unknown_tag)
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-BASE_PORT = 10000
-CLASH_API_PORT = 11234
-TEST_URL = "https://www.google.com/generate_204"
+# ----------- TCP异步检测部分 -----------
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
-REQUEST_TIMEOUT = 8
-RETRY_TIMES = 2
-GEOIP_DB_PATH = './clash/Country.mmdb'
-TCP_MAX_WORKERS = 20
-
-def get_clash_path():
-    plat = sys.platform
-    if plat.startswith('win'):
-        return os.path.join('clash', 'clash-windows.exe')
-    elif plat == 'darwin':
-        if 'arm' in os.uname().machine:
-            return os.path.join('clash', 'clash-darwin-arm')
-        else:
-            return os.path.join('clash', 'clash-darwin-amd')
-    else:
-        return os.path.join('clash', 'clash-linux')
-
-CLASH_PATH = get_clash_path()
-
-COUNTRY_FLAGS = {
-    'CN': '🇨🇳', 'HK': '🇭🇰', 'TW': '🇹🇼', 'JP': '🇯🇵',
-    'KR': '🇰🇷', 'SG': '🇸🇬', 'US': '🇺🇸', 'GB': '🇬🇧',
-    'RU': '🇷🇺', 'IN': '🇮🇳', 'DE': '🇩🇪', 'CA': '🇨🇦',
-    'AU': '🇦🇺', 'FR': '🇫🇷', 'IT': '🇮🇹', 'NL': '🇳🇱',
-}
-
-FIELD_ORDERS = {
-    'vmess': ['name', 'server', 'port', 'type', 'uuid', 'alterId', 'tls', 'network', 'ws-opts', 'udp', 'cipher'],
-    'ss': ['name', 'server', 'port', 'type', 'password', 'udp', 'cipher'],
-    'hysteria2': ['name', 'server', 'port', 'type', 'password', 'auth', 'sni', 'skip-cert-verify', 'udp'],
-    'trojan': ['name', 'server', 'port', 'type', 'password', 'sni', 'skip-cert-verify', 'udp'],
-    'vless': ['name', 'server', 'port', 'type', 'uuid', 'tls', 'servername', 'network', 'reality-opts', 'client-fingerprint', 'udp']
-}
-
-class CustomDumper(yaml.Dumper):
-    def represent_mapping(self, tag, mapping, flow_style=None):
-        if isinstance(mapping, dict) and 'name' in mapping and 'server' in mapping:
-            proxy_type = mapping.get('type', 'ss')
-            order = FIELD_ORDERS.get(proxy_type, list(mapping.keys()))
-            ordered_mapping = OrderedDict()
-            for key in order:
-                if key in mapping:
-                    ordered_mapping[key] = mapping[key]
-            for key in mapping:
-                if key not in ordered_mapping:
-                    ordered_mapping[key] = mapping[key]
-            return super().represent_mapping(tag, ordered_mapping, flow_style=True)
-        return super().represent_mapping(tag, mapping, flow_style=True)
-
-def load_yaml(path):
-    with open(path, 'r', encoding='utf-8') as f:
-        return yaml.safe_load(f)
-
-def save_yaml(data, path):
-    try:
-        with open(path, 'w', encoding='utf-8') as f:
-            f.write("proxies:\n")
-            for proxy in data['proxies']:
-                proxy_str = yaml.dump(proxy, Dumper=CustomDumper, allow_unicode=True, default_flow_style=True, sort_keys=False)
-                proxy_str = proxy_str.strip('\n')
-                f.write(f" - {proxy_str}\n")
-        logging.info(f"已保存 {path}")
-    except Exception as e:
-        logging.error(f"保存文件失败: {e}")
 
 def parse_url_node(url):
     try:
@@ -118,8 +45,6 @@ def parse_url_node(url):
                 passwd, server_port = rest.rsplit('@', 1)
                 server, port = server_port.split(':')
             cipher = method
-            if cipher == 'aes-128-gcm':
-                cipher = 'chacha20-ietf-poly1305'
             return {
                 'name': urllib.parse.unquote(parsed.fragment) or 'ss',
                 'server': server,
@@ -169,35 +94,70 @@ def parse_url_node(url):
         return None
     return None
 
-def tcp_ping(host, port, timeout=3):
+async def tcp_ping(host, port, timeout=0.5):
     try:
-        with socket.create_connection((host, port), timeout=timeout):
-            return True
+        loop = asyncio.get_event_loop()
+        fut = loop.create_connection(lambda: asyncio.Protocol(), host, port)
+        _, writer = await asyncio.wait_for(fut, timeout=timeout)
+        writer.close()
+        return True
     except Exception:
         return False
 
-def get_country_flag(ip_or_domain):
-    try:
-        ip_or_domain = str(ip_or_domain)
-        if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', ip_or_domain):
-            ip = socket.gethostbyname(ip_or_domain)
-        else:
-            ip = ip_or_domain
-        with geoip2.database.Reader(GEOIP_DB_PATH) as reader:
-            response = reader.country(ip)
-            country_code = response.country.iso_code
-            return COUNTRY_FLAGS.get(country_code, '🏁')
-    except Exception:
-        return '🏁'
+async def batch_tcp_check(nodes, max_concurrent=500):
+    import re
+    sem = asyncio.Semaphore(max_concurrent)
+    results = []
 
-def format_node_name(node, idx):
-    name = str(node.get('name', ''))
-    match = re.match(r'^([\U0001F1E6-\U0001F1FF][\U0001F1E6-\U0001F1FF])', name)
-    if match:
-        flag = match.group(1)
+    async def check_one(node):
+        async with sem:
+            host, port = node['server'], node['port']
+            # DNS resolve
+            try:
+                if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', str(host)):
+                    host = socket.gethostbyname(host)
+            except Exception:
+                return None
+            ok = await tcp_ping(host, port)
+            if ok:
+                return node
+            return None
+
+    tasks = [check_one(node) for node in nodes]
+    for fut in asyncio.as_completed(tasks):
+        result = await fut
+        if result:
+            results.append(result)
+    return results
+
+def load_yaml(path):
+    with open(path, 'r', encoding='utf-8') as f:
+        return yaml.safe_load(f)
+
+def save_yaml(data, path):
+    with open(path, 'w', encoding='utf-8') as f:
+        yaml.dump(data, f, allow_unicode=True)
+
+# ----------- Clash检测部分 -----------
+BASE_PORT = 10000
+CLASH_API_PORT = 11234
+TEST_URL = "https://www.google.com/generate_204"
+REQUEST_TIMEOUT = 8
+RETRY_TIMES = 2
+
+def get_clash_path():
+    plat = sys.platform
+    if plat.startswith('win'):
+        return os.path.join('clash', 'clash-windows.exe')
+    elif plat == 'darwin':
+        if 'arm' in os.uname().machine:
+            return os.path.join('clash', 'clash-darwin-arm')
+        else:
+            return os.path.join('clash', 'clash-darwin-amd')
     else:
-        flag = get_country_flag(node['server'])
-    return f"{flag} bing{idx+1}"
+        return os.path.join('clash', 'clash-linux')
+
+CLASH_PATH = get_clash_path()
 
 def wait_port(port, timeout=30):
     start = time.time()
@@ -238,7 +198,7 @@ def start_clash_with_all_nodes(nodes):
     p = subprocess.Popen([CLASH_PATH, '-f', fname, '-d', './clash'],
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if not wait_port(BASE_PORT + 1, timeout=30):
-        logging.error(f"Clash 启动端口 {BASE_PORT+1} 超时")
+        print(f"Clash 启动端口 {BASE_PORT+1} 超时")
         p.terminate()
         return None, fname
     time.sleep(3)
@@ -250,12 +210,12 @@ def stop_clash(p, fname):
             p.terminate()
             p.wait(timeout=2)
         except Exception as e:
-            logging.warning(f"停止 Clash 失败: {e}")
+            print(f"停止 Clash 失败: {e}")
     if fname and os.path.exists(fname):
         try:
             os.remove(fname)
         except Exception as e:
-            logging.warning(f"删除配置文件失败: {fname} {e}")
+            print(f"删除配置文件失败: {fname} {e}")
 
 def switch_proxy_api(proxy_name):
     url = f"http://127.0.0.1:{CLASH_API_PORT}/proxies/Proxy"
@@ -269,35 +229,39 @@ def switch_proxy_api(proxy_name):
         r2 = requests.put(url, json={"name": proxy_name}, timeout=5)
         return r2.status_code == 204
     except Exception as e:
-        logging.warning(f"切换节点到 {proxy_name} 失败: {e}")
+        print(f"切换节点到 {proxy_name} 失败: {e}")
         return False
 
 def test_node_api(node, idx):
     proxy_name = node['name']
     if not switch_proxy_api(proxy_name):
-        logging.info(f"切换到节点 {proxy_name} 失败")
+        print(f"切换到节点 {proxy_name} 失败")
         return None
     proxies = {'http': f'socks5://127.0.0.1:{BASE_PORT + 1}', 'https': f'socks5://127.0.0.1:{BASE_PORT + 1}'}
     ok = False
     for _ in range(RETRY_TIMES):
         try:
             r = requests.get(TEST_URL, proxies=proxies, timeout=REQUEST_TIMEOUT, allow_redirects=True)
-            logging.info(f"节点 {proxy_name} 返回码: {r.status_code}")
+            print(f"节点 {proxy_name} 返回码: {r.status_code}")
             if r.status_code in [200, 204, 301, 302, 403, 429]:
                 ok = True
                 break
         except Exception as e:
-            logging.error(f"节点 {proxy_name} 请求异常: {e}")
+            print(f"节点 {proxy_name} 请求异常: {e}")
     if ok:
-        logging.info(f"节点 {proxy_name} 测试成功")
+        print(f"节点 {proxy_name} 测试成功")
         return node
     else:
-        logging.info(f"节点 {proxy_name} 测试失败: 无法访问 {TEST_URL}")
+        print(f"节点 {proxy_name} 测试失败: 无法访问 {TEST_URL}")
         return None
+
+def format_node_name(node, idx):
+    return f"bing{idx+1}"
 
 def main():
     os.makedirs('data', exist_ok=True)
     inp = 'data/clash.yaml'
+    tcp_out = 'data/tcp_checked.yaml'
     out = 'data/google.yaml'
 
     # 1. 读取所有节点
@@ -307,36 +271,25 @@ def main():
         n = parse_url_node(x) if isinstance(x, str) else x if x.get('type') in SUPPORTED_TYPES else None
         if n:
             nodes.append(n)
-    logging.info(f"加载 {len(nodes)} 个节点")
+    print(f"加载 {len(nodes)} 个节点，开始异步TCP检测...")
 
-    # 2. 先用TCP端口检测法快速筛选
-    def tcp_check(node):
-        host, port = node['server'], node['port']
-        ok = tcp_ping(host, port)
-        logging.info(f"TCP检测 {host}:{port} {'可用' if ok else '不可用'}")
-        return ok
+    # 2. 异步TCP检测
+    valid_nodes = asyncio.run(batch_tcp_check(nodes, max_concurrent=500))
+    print(f"TCP检测通过节点数: {len(valid_nodes)}")
+    save_yaml({'proxies': valid_nodes}, tcp_out)
 
-    tcp_valid = []
-    with ThreadPoolExecutor(max_workers=TCP_MAX_WORKERS) as ex:
-        futures = [ex.submit(tcp_check, node) for node in nodes]
-        for idx, future in enumerate(as_completed(futures)):
-            if future.result():
-                tcp_valid.append(nodes[idx])
-
-    logging.info(f"TCP检测通过节点数: {len(tcp_valid)}")
-
-    # 3. 用一个Clash实例+API切换节点检测
-    if not tcp_valid:
-        logging.info("没有通过TCP检测的节点，未生成文件。")
+    # 3. 用Clash检测
+    if not valid_nodes:
+        print("没有通过TCP检测的节点，未生成文件。")
         return
 
-    clash_proc, clash_cfg = start_clash_with_all_nodes(tcp_valid)
+    clash_proc, clash_cfg = start_clash_with_all_nodes(valid_nodes)
     if not clash_proc:
-        logging.error("Clash 启动失败，无法检测")
+        print("Clash 启动失败，无法检测")
         return
 
     valid = []
-    for idx, node in enumerate(tcp_valid):
+    for idx, node in enumerate(valid_nodes):
         node['name'] = format_node_name(node, idx)
         result = test_node_api(node, idx)
         if result:
@@ -356,9 +309,9 @@ def main():
 
     if deduped:
         save_yaml({'proxies': deduped}, out)
-        logging.info(f"最终有效节点数: {len(deduped)}")
+        print(f"最终有效节点数: {len(deduped)}，已保存到 {out}")
     else:
-        logging.info("没有有效节点，未生成文件。")
+        print("没有有效节点，未生成文件。")
 
 if __name__ == "__main__":
     main()
