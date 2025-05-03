@@ -20,8 +20,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 BASE_PORT = 10000
 TEST_URLS = ["https://www.google.com", "https://www.youtube.com"]
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
-MAX_WORKERS = 10
-REQUEST_TIMEOUT = 5
+MAX_WORKERS = 50
+REQUEST_TIMEOUT = 3
 STARTUP_DELAY = 3
 GEOIP_DB_PATH = './clash/Country.mmdb'
 CLASH_PATH = './clash/clash-linux'
