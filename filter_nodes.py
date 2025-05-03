@@ -6,12 +6,12 @@ import yaml
 import subprocess
 import time
 import signal
-from concurrent.futures import ThreadPoolExecutor, as_completed
 import logging
 import requests
 import re
 import socket
 import geoip2.database
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -20,7 +20,6 @@ TEST_URL = "https://www.tiktok.com"
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
 MAX_WORKERS = 25
 REQUEST_TIMEOUT = 5
-RETRY_TIMES = 2
 GEOIP_DB_PATH = './clash/Country.mmdb'
 CLASH_PATH = './clash/clash-linux'
 
@@ -67,13 +66,9 @@ def save_yaml(data, path):
 def parse_url_node(url):
     try:
         if url.startswith('vmess://'):
-            try:
-                vmess_raw = url[8:]
-                vmess_raw += '=' * (-len(vmess_raw) % 4)
-                data = json.loads(base64.b64decode(vmess_raw).decode('utf-8', errors='ignore'))
-            except Exception as e:
-                logging.warning(f"vmess解析失败: {e}")
-                return None
+            vmess_raw = url[8:]
+            vmess_raw += '=' * (-len(vmess_raw) % 4)
+            data = json.loads(base64.b64decode(vmess_raw).decode('utf-8', errors='ignore'))
             return {
                 'name': data.get('ps'),
                 'server': data['add'],
@@ -86,80 +81,63 @@ def parse_url_node(url):
                 'tls': bool(data.get('tls', False))
             }
         if url.startswith('ss://'):
-            try:
-                parsed = urllib.parse.urlparse(url)
-                base64_part = parsed.netloc.split('@')[0]
-                method_pass = base64.b64decode(base64_part + '=' * (-len(base64_part) % 4)).decode('utf-8', errors='ignore')
-                if '@' in parsed.netloc:
-                    method, passwd = method_pass.split(':', 1)
-                    server, port = parsed.netloc.split('@')[1].split(':')
-                else:
-                    # ss://base64?plugin=xxx#name
-                    method, rest = method_pass.split(':', 1)
-                    passwd, server_port = rest.rsplit('@', 1)
-                    server, port = server_port.split(':')
-                cipher = method
-                if cipher == 'aes-128-gcm':
-                    cipher = 'chacha20-ietf-poly1305'
-                return {
-                    'name': urllib.parse.unquote(parsed.fragment) or 'ss',
-                    'server': server,
-                    'port': int(port),
-                    'type': 'ss',
-                    'cipher': cipher,
-                    'password': passwd
-                }
-            except Exception as e:
-                logging.warning(f"ss解析失败: {e}")
-                return None
+            parsed = urllib.parse.urlparse(url)
+            base64_part = parsed.netloc.split('@')[0]
+            method_pass = base64.b64decode(base64_part + '=' * (-len(base64_part) % 4)).decode('utf-8', errors='ignore')
+            if '@' in parsed.netloc:
+                method, passwd = method_pass.split(':', 1)
+                server, port = parsed.netloc.split('@')[1].split(':')
+            else:
+                method, rest = method_pass.split(':', 1)
+                passwd, server_port = rest.rsplit('@', 1)
+                server, port = server_port.split(':')
+            cipher = method
+            if cipher == 'aes-128-gcm':
+                cipher = 'chacha20-ietf-poly1305'
+            return {
+                'name': urllib.parse.unquote(parsed.fragment) or 'ss',
+                'server': server,
+                'port': int(port),
+                'type': 'ss',
+                'cipher': cipher,
+                'password': passwd
+            }
         if url.startswith('trojan://'):
-            try:
-                p = urllib.parse.urlparse(url)
-                pwd = p.netloc.split('@')[0]
-                server, port = p.netloc.split('@')[1].split(':')
-                return {
-                    'name': urllib.parse.unquote(p.fragment) or 'trojan',
-                    'server': server,
-                    'port': int(port),
-                    'type': 'trojan',
-                    'password': pwd,
-                    'sni': server
-                }
-            except Exception as e:
-                logging.warning(f"trojan解析失败: {e}")
-                return None
+            p = urllib.parse.urlparse(url)
+            pwd = p.netloc.split('@')[0]
+            server, port = p.netloc.split('@')[1].split(':')
+            return {
+                'name': urllib.parse.unquote(p.fragment) or 'trojan',
+                'server': server,
+                'port': int(port),
+                'type': 'trojan',
+                'password': pwd,
+                'sni': server
+            }
         if url.startswith('vless://'):
-            try:
-                p = urllib.parse.urlparse(url)
-                uuid = p.netloc.split('@')[0]
-                server, port = p.netloc.split('@')[1].split(':')
-                return {
-                    'name': urllib.parse.unquote(p.fragment) or 'vless',
-                    'server': server,
-                    'port': int(port),
-                    'type': 'vless',
-                    'uuid': uuid,
-                    'tls': True,
-                    'servername': server
-                }
-            except Exception as e:
-                logging.warning(f"vless解析失败: {e}")
-                return None
+            p = urllib.parse.urlparse(url)
+            uuid = p.netloc.split('@')[0]
+            server, port = p.netloc.split('@')[1].split(':')
+            return {
+                'name': urllib.parse.unquote(p.fragment) or 'vless',
+                'server': server,
+                'port': int(port),
+                'type': 'vless',
+                'uuid': uuid,
+                'tls': True,
+                'servername': server
+            }
         if url.startswith('hysteria2://'):
-            try:
-                p = urllib.parse.urlparse(url)
-                pwd = p.netloc.split('@')[0]
-                server, port = p.netloc.split('@')[1].split(':')
-                return {
-                    'name': urllib.parse.unquote(p.fragment) or 'hysteria2',
-                    'server': server,
-                    'port': int(port),
-                    'type': 'hysteria2',
-                    'password': pwd
-                }
-            except Exception as e:
-                logging.warning(f"hysteria2解析失败: {e}")
-                return None
+            p = urllib.parse.urlparse(url)
+            pwd = p.netloc.split('@')[0]
+            server, port = p.netloc.split('@')[1].split(':')
+            return {
+                'name': urllib.parse.unquote(p.fragment) or 'hysteria2',
+                'server': server,
+                'port': int(port),
+                'type': 'hysteria2',
+                'password': pwd
+            }
     except Exception as e:
         logging.warning(f"解析节点失败: {e}")
     return None
@@ -176,7 +154,7 @@ def wait_port(port, timeout=8):
             time.sleep(0.2)
     return False
 
-def start_clash(node, port):
+def start_clash(nodes, port):
     if not os.path.isfile(CLASH_PATH) or not os.access(CLASH_PATH, os.X_OK):
         logging.error(f"Clash 可执行文件 {CLASH_PATH} 不存在或不可执行")
         return None, None
@@ -184,11 +162,11 @@ def start_clash(node, port):
         'port': port,
         'socks-port': port + 1,
         'mode': 'global',
-        'proxies': [node],
-        'proxy-groups': [{'name': 'Proxy', 'type': 'select', 'proxies': [node['name']]}],
+        'proxies': nodes,
+        'proxy-groups': [{'name': 'Proxy', 'type': 'select', 'proxies': [node['name'] for node in nodes]}],
         'rules': ['MATCH,Proxy']
     }
-    fname = f'temp_{port}.yaml'
+    fname = 'temp_clash.yaml'
     with open(fname, 'w', encoding='utf-8') as f:
         yaml.dump(cfg, f, allow_unicode=True)
     try:
@@ -213,34 +191,57 @@ def stop_clash(p, fname):
     if fname and os.path.exists(fname):
         os.remove(fname)
 
-def test_node(node, idx):
-    port = BASE_PORT + (idx % 100) * 2
-    logging.info(f"测试节点: {node['name']} (端口: {port})")
-    p, cfg = start_clash(node, port)
+def test_nodes(nodes, port):
+    p, cfg = start_clash(nodes, port)
     if not p:
-        logging.error(f"节点 {node['name']} 测试失败: Clash 未启动")
-        stop_clash(p, cfg)
-        return None
+        logging.error("Clash 未启动，测试中止")
+        return []
 
-    proxies = {'http': f'socks5://127.0.0.1:{port + 1}', 'https': f'socks5://127.0.0.1:{port + 1}'}
-    ok = False
-    for _ in range(RETRY_TIMES):
-        try:
-            r = requests.get(TEST_URL, proxies=proxies, timeout=REQUEST_TIMEOUT, allow_redirects=True)
-            if r.status_code in [200, 301, 302, 403, 429]:
-                ok = True
-                break
-        except Exception:
-            continue
+    socks_port = port + 1
+    clash_api_url = f"http://127.0.0.1:{port}/proxies"
+    valid_nodes = []
+
+    # 获取所有代理节点的延迟
+    try:
+        response = requests.get(clash_api_url, timeout=5)
+        response.raise_for_status()
+        proxies_data = response.json().get('proxies', {})
+        proxy_names = [node['name'] for node in nodes]
+
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            futures = {executor.submit(test_proxy_delay, name, socks_port): name for name in proxy_names}
+            for future in as_completed(futures):
+                name = futures[future]
+                delay = future.result()
+                if delay and delay < 5000:  # 延迟小于 5 秒的节点视为有效
+                    for node in nodes:
+                        if node['name'] == name:
+                            logging.info(f"节点 {name} 测试成功，延迟: {delay}ms")
+                            valid_nodes.append(node)
+                            break
+                else:
+                    logging.info(f"节点 {name} 测试失败，延迟: {delay if delay else '超时'}")
+    except Exception as e:
+        logging.error(f"访问 Clash API 失败: {e}")
+
     stop_clash(p, cfg)
-    if ok:
-        logging.info(f"节点 {node['name']} 测试成功")
-        return node
-    else:
-        logging.info(f"节点 {node['name']} 测试失败: 无法访问 TikTok")
-        return None
+    return valid_nodes
 
-def get_country_flag(ip_or_domain):
+def test_proxy_delay(proxy_name, socks_port):
+    proxies = {'http': f'socks5://127.0.0.1:{socks_port}', 'https': f'socks5://127.0.0.1:{socks_port}'}
+    start_time = time.time()
+    try:
+        r = requests.get(TEST_URL, proxies=proxies, timeout=REQUEST_TIMEOUT, allow_redirects=True)
+        if r.status_code in [200, 301, 302, 403, 429]:
+            delay = int((time.time() - start_time) * 1000)
+            return delay
+    except Exception:
+        return None
+    return None
+
+def get_country_flag(ip_or_domain, cache={}):
+    if ip_or_domain in cache:
+        return cache[ip_or_domain]
     try:
         ip_or_domain = str(ip_or_domain)
         if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', ip_or_domain):
@@ -251,7 +252,9 @@ def get_country_flag(ip_or_domain):
         with geoip2.database.Reader(GEOIP_DB_PATH) as reader:
             response = reader.country(ip)
             country_code = response.country.iso_code
-            return COUNTRY_FLAGS.get(country_code, '🏁')
+            flag = COUNTRY_FLAGS.get(country_code, '🏁')
+            cache[ip_or_domain] = flag
+            return flag
     except Exception as e:
         logging.warning(f"GeoIP 查询失败: {e}")
         return '🏁'
@@ -273,22 +276,20 @@ def main():
             nodes.append(n)
     logging.info(f"加载 {len(nodes)} 个节点")
 
-    valid = []
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
-        futures = [ex.submit(test_node, node, idx) for idx, node in enumerate(nodes)]
-        for future in as_completed(futures):
-            result = future.result()
-            if result:
-                valid.append(result)
+    if not nodes:
+        logging.info("没有可测试的节点")
+        return
 
-    if valid:
-        for i, proxy in enumerate(valid):
+    valid_nodes = test_nodes(nodes, BASE_PORT)
+    
+    if valid_nodes:
+        for i, proxy in enumerate(valid_nodes):
             name = str(proxy['name'])
             match = re.match(r'^([\U0001F1E6-\U0001F1FF][\U0001F1E6-\U0001F1FF])', name)
             flag = match.group(1) if match else get_country_flag(proxy['server'])
             proxy['name'] = f"{flag} bing{i + 1}"
-        save_yaml({'proxies': valid}, out)
-        logging.info(f"有效节点数: {len(valid)}")
+        save_yaml({'proxies': valid_nodes}, out)
+        logging.info(f"有效节点数: {len(valid_nodes)}")
     else:
         logging.info("没有有效节点，未生成文件。")
 
