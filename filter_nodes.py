@@ -12,6 +12,7 @@ import requests
 import re
 import socket
 import geoip2.database
+from collections import OrderedDict
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -31,9 +32,10 @@ COUNTRY_FLAGS = {
     'AU': '🇦🇺', 'FR': '🇫🇷', 'IT': '🇮🇹', 'NL': '🇳🇱',
 }
 
+# 字段顺序，name在首位，cipher在最后
 FIELD_ORDERS = {
-    'vmess': ['name', 'server', 'port', 'type', 'uuid', 'alterId', 'cipher', 'tls', 'network', 'ws-opts', 'udp'],
-    'ss': ['name', 'server', 'port', 'type', 'cipher', 'password', 'udp'],
+    'vmess': ['name', 'server', 'port', 'type', 'uuid', 'alterId', 'tls', 'network', 'ws-opts', 'udp', 'cipher'],
+    'ss': ['name', 'server', 'port', 'type', 'password', 'udp', 'cipher'],
     'hysteria2': ['name', 'server', 'port', 'type', 'password', 'auth', 'sni', 'skip-cert-verify', 'udp'],
     'trojan': ['name', 'server', 'port', 'type', 'password', 'sni', 'skip-cert-verify', 'udp'],
     'vless': ['name', 'server', 'port', 'type', 'uuid', 'tls', 'servername', 'network', 'reality-opts', 'client-fingerprint', 'udp']
@@ -41,24 +43,50 @@ FIELD_ORDERS = {
 
 class CustomDumper(yaml.Dumper):
     def represent_mapping(self, tag, mapping, flow_style=None):
+        # 保证字段顺序
         if isinstance(mapping, dict) and 'name' in mapping and 'server' in mapping:
             proxy_type = mapping.get('type', 'ss')
-            order = FIELD_ORDERS.get(proxy_type, ['name', 'server', 'port', 'type'])
-            ordered_mapping = {key: mapping[key] for key in order if key in mapping}
+            order = FIELD_ORDERS.get(proxy_type, list(mapping.keys()))
+            ordered_mapping = OrderedDict()
+            for key in order:
+                if key in mapping:
+                    ordered_mapping[key] = mapping[key]
+            # 加入未在 order 中的字段
+            for key in mapping:
+                if key not in ordered_mapping:
+                    ordered_mapping[key] = mapping[key]
             return super().represent_mapping(tag, ordered_mapping, flow_style=True)
-        return super().represent_mapping(tag, mapping, flow_style=False)
+        return super().represent_mapping(tag, mapping, flow_style=True)
 
 def load_yaml(path):
-    with open(path, 'r', encoding='utf-8') as f:
-        return yaml.safe_load(f)
+    # 兼容异常行，遇到解析错误时跳过
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            return yaml.safe_load(f)
+    except yaml.YAMLError as e:
+        logging.error(f"YAML解析失败: {e}")
+        # 尝试逐行过滤掉有问题的行
+        with open(path, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+        good_lines = []
+        for line in lines:
+            if '!!str' in line or 'tag:' in line:
+                continue
+            good_lines.append(line)
+        try:
+            return yaml.safe_load(''.join(good_lines))
+        except Exception as e:
+            logging.error(f"YAML修复后仍解析失败: {e}")
+            return {}
 
 def save_yaml(data, path):
     try:
         with open(path, 'w', encoding='utf-8') as f:
             f.write("proxies:\n")
             for proxy in data['proxies']:
-                proxy_str = yaml.dump([proxy], Dumper=CustomDumper, allow_unicode=True, default_flow_style=True)
-                proxy_str = proxy_str.strip('[]\n')
+                # 只 dump 单个 dict，保证一行一个节点
+                proxy_str = yaml.dump(proxy, Dumper=CustomDumper, allow_unicode=True, default_flow_style=True, sort_keys=False)
+                proxy_str = proxy_str.strip('\n')
                 f.write(f" - {proxy_str}\n")
         logging.info(f"已保存 {path}")
     except Exception as e:
@@ -67,7 +95,13 @@ def save_yaml(data, path):
 def parse_url_node(url):
     try:
         if url.startswith('vmess://'):
-            data = json.loads(base64.b64decode(url[8:]).decode())
+            try:
+                vmess_raw = url[8:]
+                vmess_raw += '=' * (-len(vmess_raw) % 4)
+                data = json.loads(base64.b64decode(vmess_raw).decode('utf-8', errors='ignore'))
+            except Exception as e:
+                logging.warning(f"vmess解析失败: {e}")
+                return None
             return {
                 'name': data.get('ps'),
                 'server': data['add'],
@@ -80,57 +114,81 @@ def parse_url_node(url):
                 'tls': bool(data.get('tls', False))
             }
         if url.startswith('ss://'):
-            parsed = urllib.parse.urlparse(url)
-            method_pass = base64.b64decode(parsed.netloc.split('@')[0]).decode()
-            method, passwd = method_pass.split(':')
-            server, port = parsed.netloc.split('@')[1].split(':')
-            cipher = method
-            if cipher == 'aes-128-gcm':
-                cipher = 'chacha20-ietf-poly1305'
-            return {
-                'name': urllib.parse.unquote(parsed.fragment) or 'ss',
-                'server': server,
-                'port': int(port),
-                'type': 'ss',
-                'cipher': cipher,
-                'password': passwd
-            }
+            try:
+                parsed = urllib.parse.urlparse(url)
+                base64_part = parsed.netloc.split('@')[0]
+                method_pass = base64.b64decode(base64_part + '=' * (-len(base64_part) % 4)).decode('utf-8', errors='ignore')
+                if '@' in parsed.netloc:
+                    method, passwd = method_pass.split(':', 1)
+                    server, port = parsed.netloc.split('@')[1].split(':')
+                else:
+                    # ss://base64?plugin=xxx#name
+                    method, rest = method_pass.split(':', 1)
+                    passwd, server_port = rest.rsplit('@', 1)
+                    server, port = server_port.split(':')
+                cipher = method
+                if cipher == 'aes-128-gcm':
+                    cipher = 'chacha20-ietf-poly1305'
+                return {
+                    'name': urllib.parse.unquote(parsed.fragment) or 'ss',
+                    'server': server,
+                    'port': int(port),
+                    'type': 'ss',
+                    'password': passwd,
+                    'udp': True,
+                    'cipher': cipher
+                }
+            except Exception as e:
+                logging.warning(f"ss解析失败: {e}")
+                return None
         if url.startswith('trojan://'):
-            p = urllib.parse.urlparse(url)
-            pwd = p.netloc.split('@')[0]
-            server, port = p.netloc.split('@')[1].split(':')
-            return {
-                'name': urllib.parse.unquote(p.fragment) or 'trojan',
-                'server': server,
-                'port': int(port),
-                'type': 'trojan',
-                'password': pwd,
-                'sni': server
-            }
+            try:
+                p = urllib.parse.urlparse(url)
+                pwd = p.netloc.split('@')[0]
+                server, port = p.netloc.split('@')[1].split(':')
+                return {
+                    'name': urllib.parse.unquote(p.fragment) or 'trojan',
+                    'server': server,
+                    'port': int(port),
+                    'type': 'trojan',
+                    'password': pwd,
+                    'sni': server
+                }
+            except Exception as e:
+                logging.warning(f"trojan解析失败: {e}")
+                return None
         if url.startswith('vless://'):
-            p = urllib.parse.urlparse(url)
-            uuid = p.netloc.split('@')[0]
-            server, port = p.netloc.split('@')[1].split(':')
-            return {
-                'name': urllib.parse.unquote(p.fragment) or 'vless',
-                'server': server,
-                'port': int(port),
-                'type': 'vless',
-                'uuid': uuid,
-                'tls': True,
-                'servername': server
-            }
+            try:
+                p = urllib.parse.urlparse(url)
+                uuid = p.netloc.split('@')[0]
+                server, port = p.netloc.split('@')[1].split(':')
+                return {
+                    'name': urllib.parse.unquote(p.fragment) or 'vless',
+                    'server': server,
+                    'port': int(port),
+                    'type': 'vless',
+                    'uuid': uuid,
+                    'tls': True,
+                    'servername': server
+                }
+            except Exception as e:
+                logging.warning(f"vless解析失败: {e}")
+                return None
         if url.startswith('hysteria2://'):
-            p = urllib.parse.urlparse(url)
-            pwd = p.netloc.split('@')[0]
-            server, port = p.netloc.split('@')[1].split(':')
-            return {
-                'name': urllib.parse.unquote(p.fragment) or 'hysteria2',
-                'server': server,
-                'port': int(port),
-                'type': 'hysteria2',
-                'password': pwd
-            }
+            try:
+                p = urllib.parse.urlparse(url)
+                pwd = p.netloc.split('@')[0]
+                server, port = p.netloc.split('@')[1].split(':')
+                return {
+                    'name': urllib.parse.unquote(p.fragment) or 'hysteria2',
+                    'server': server,
+                    'port': int(port),
+                    'type': 'hysteria2',
+                    'password': pwd
+                }
+            except Exception as e:
+                logging.warning(f"hysteria2解析失败: {e}")
+                return None
     except Exception as e:
         logging.warning(f"解析节点失败: {e}")
     return None
@@ -185,7 +243,6 @@ def stop_clash(p, fname):
         os.remove(fname)
 
 def test_node(node, idx):
-    """只要能访问 TikTok 首页就判定为可用，允许重试"""
     port = BASE_PORT + (idx % 100) * 2
     logging.info(f"测试节点: {node['name']} (端口: {port})")
     p, cfg = start_clash(node, port)
@@ -199,11 +256,10 @@ def test_node(node, idx):
     for _ in range(RETRY_TIMES):
         try:
             r = requests.get(TEST_URL, proxies=proxies, timeout=REQUEST_TIMEOUT, allow_redirects=True)
-            # 只要能连通就算通过，不要求状态码200
             if r.status_code in [200, 301, 302, 403, 429]:
                 ok = True
                 break
-        except Exception as e:
+        except Exception:
             continue
     stop_clash(p, cfg)
     if ok:
