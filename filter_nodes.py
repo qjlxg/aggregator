@@ -11,17 +11,18 @@ import requests
 import re
 import socket
 import geoip2.database
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import asyncio
+import aiohttp
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-BASE_PORT = 10000
-TEST_URL = "https://www.tiktok.com"
+BASE_PORT = 20080  # 更改为未被占用的端口
+TEST_URL = "http://cp.cloudflare.com/"
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
-MAX_WORKERS = 25
 REQUEST_TIMEOUT = 5
 GEOIP_DB_PATH = './clash/Country.mmdb'
 CLASH_PATH = './clash/clash-linux'
+BATCH_SIZE = 500  # 每批测试的节点数量
 
 COUNTRY_FLAGS = {
     'CN': '🇨🇳', 'HK': '🇭🇰', 'TW': '🇹🇼', 'JP': '🇯🇵',
@@ -166,7 +167,7 @@ def start_clash(nodes, port):
         'proxy-groups': [{'name': 'Proxy', 'type': 'select', 'proxies': [node['name'] for node in nodes]}],
         'rules': ['MATCH,Proxy']
     }
-    fname = 'temp_clash.yaml'
+    fname = f'temp_clash_{port}.yaml'
     with open(fname, 'w', encoding='utf-8') as f:
         yaml.dump(cfg, f, allow_unicode=True)
     try:
@@ -187,111 +188,4 @@ def stop_clash(p, fname):
             os.killpg(os.getpgid(p.pid), signal.SIGTERM)
             p.wait(timeout=2)
         except Exception as e:
-            logging.warning(f"停止 Clash 失败: {e}")
-    if fname and os.path.exists(fname):
-        os.remove(fname)
-
-def test_nodes(nodes, port):
-    p, cfg = start_clash(nodes, port)
-    if not p:
-        logging.error("Clash 未启动，测试中止")
-        return []
-
-    socks_port = port + 1
-    clash_api_url = f"http://127.0.0.1:{port}/proxies"
-    valid_nodes = []
-
-    # 获取所有代理节点的延迟
-    try:
-        response = requests.get(clash_api_url, timeout=5)
-        response.raise_for_status()
-        proxies_data = response.json().get('proxies', {})
-        proxy_names = [node['name'] for node in nodes]
-
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            futures = {executor.submit(test_proxy_delay, name, socks_port): name for name in proxy_names}
-            for future in as_completed(futures):
-                name = futures[future]
-                delay = future.result()
-                if delay and delay < 5000:  # 延迟小于 5 秒的节点视为有效
-                    for node in nodes:
-                        if node['name'] == name:
-                            logging.info(f"节点 {name} 测试成功，延迟: {delay}ms")
-                            valid_nodes.append(node)
-                            break
-                else:
-                    logging.info(f"节点 {name} 测试失败，延迟: {delay if delay else '超时'}")
-    except Exception as e:
-        logging.error(f"访问 Clash API 失败: {e}")
-
-    stop_clash(p, cfg)
-    return valid_nodes
-
-def test_proxy_delay(proxy_name, socks_port):
-    proxies = {'http': f'socks5://127.0.0.1:{socks_port}', 'https': f'socks5://127.0.0.1:{socks_port}'}
-    start_time = time.time()
-    try:
-        r = requests.get(TEST_URL, proxies=proxies, timeout=REQUEST_TIMEOUT, allow_redirects=True)
-        if r.status_code in [200, 301, 302, 403, 429]:
-            delay = int((time.time() - start_time) * 1000)
-            return delay
-    except Exception:
-        return None
-    return None
-
-def get_country_flag(ip_or_domain, cache={}):
-    if ip_or_domain in cache:
-        return cache[ip_or_domain]
-    try:
-        ip_or_domain = str(ip_or_domain)
-        if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', ip_or_domain):
-            ip = socket.gethostbyname(ip_or_domain)
-            logging.info(f"域名 {ip_or_domain} 解析为 IP: {ip}")
-        else:
-            ip = ip_or_domain
-        with geoip2.database.Reader(GEOIP_DB_PATH) as reader:
-            response = reader.country(ip)
-            country_code = response.country.iso_code
-            flag = COUNTRY_FLAGS.get(country_code, '🏁')
-            cache[ip_or_domain] = flag
-            return flag
-    except Exception as e:
-        logging.warning(f"GeoIP 查询失败: {e}")
-        return '🏁'
-
-def main():
-    os.makedirs('data', exist_ok=True)
-    inp = 'data/clash.yaml'
-    out = 'data/google.yaml'
-
-    if not os.path.exists(GEOIP_DB_PATH):
-        logging.error(f"GeoIP 数据库文件 {GEOIP_DB_PATH} 不存在")
-        return
-
-    d = load_yaml(inp)
-    nodes = []
-    for x in d.get('proxies', []):
-        n = parse_url_node(x) if isinstance(x, str) else x if x.get('type') in SUPPORTED_TYPES else None
-        if n:
-            nodes.append(n)
-    logging.info(f"加载 {len(nodes)} 个节点")
-
-    if not nodes:
-        logging.info("没有可测试的节点")
-        return
-
-    valid_nodes = test_nodes(nodes, BASE_PORT)
-    
-    if valid_nodes:
-        for i, proxy in enumerate(valid_nodes):
-            name = str(proxy['name'])
-            match = re.match(r'^([\U0001F1E6-\U0001F1FF][\U0001F1E6-\U0001F1FF])', name)
-            flag = match.group(1) if match else get_country_flag(proxy['server'])
-            proxy['name'] = f"{flag} bing{i + 1}"
-        save_yaml({'proxies': valid_nodes}, out)
-        logging.info(f"有效节点数: {len(valid_nodes)}")
-    else:
-        logging.info("没有有效节点，未生成文件。")
-
-if __name__ == "__main__":
-    main()
+            logging
