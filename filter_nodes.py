@@ -217,6 +217,7 @@ def test_node(node, idx):
 
 def get_country_flag(ip_or_domain):
     try:
+        ip_or_domain = str(ip_or_domain)  # 强制转为字符串，防止 int 报错
         if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', ip_or_domain):
             ip = socket.gethostbyname(ip_or_domain)
             logging.info(f"域名 {ip_or_domain} 解析为 IP: {ip}")
