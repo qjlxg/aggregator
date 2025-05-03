@@ -12,6 +12,7 @@ import re
 import socket
 import geoip2.database
 from collections import OrderedDict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def ignore_unknown_tag(loader, tag_suffix, node):
     return loader.construct_scalar(node)
@@ -26,6 +27,7 @@ SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
 REQUEST_TIMEOUT = 8
 RETRY_TIMES = 2
 GEOIP_DB_PATH = './clash/Country.mmdb'
+TCP_MAX_WORKERS = 20
 
 def get_clash_path():
     plat = sys.platform
@@ -167,6 +169,13 @@ def parse_url_node(url):
         return None
     return None
 
+def tcp_ping(host, port, timeout=3):
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except Exception:
+        return False
+
 def get_country_flag(ip_or_domain):
     try:
         ip_or_domain = str(ip_or_domain)
@@ -191,7 +200,6 @@ def format_node_name(node, idx):
     return f"{flag} bing{idx+1}"
 
 def wait_port(port, timeout=30):
-    import socket
     start = time.time()
     while time.time() - start < timeout:
         s = socket.socket()
@@ -289,26 +297,46 @@ def test_node_api(node, idx):
 
 def main():
     os.makedirs('data', exist_ok=True)
-    inp = 'data/tcp_checked.yaml'
+    inp = 'data/clash.yaml'
     out = 'data/google.yaml'
 
+    # 1. 读取所有节点
     d = load_yaml(inp)
     nodes = []
     for x in d.get('proxies', []):
-        n = x if x.get('type') in SUPPORTED_TYPES else None
+        n = parse_url_node(x) if isinstance(x, str) else x if x.get('type') in SUPPORTED_TYPES else None
         if n:
             nodes.append(n)
     logging.info(f"加载 {len(nodes)} 个节点")
 
-    # 启动一个Clash实例，所有节点都写进去
-    clash_proc, clash_cfg = start_clash_with_all_nodes(nodes)
+    # 2. 先用TCP端口检测法快速筛选
+    def tcp_check(node):
+        host, port = node['server'], node['port']
+        ok = tcp_ping(host, port)
+        logging.info(f"TCP检测 {host}:{port} {'可用' if ok else '不可用'}")
+        return ok
+
+    tcp_valid = []
+    with ThreadPoolExecutor(max_workers=TCP_MAX_WORKERS) as ex:
+        futures = [ex.submit(tcp_check, node) for node in nodes]
+        for idx, future in enumerate(as_completed(futures)):
+            if future.result():
+                tcp_valid.append(nodes[idx])
+
+    logging.info(f"TCP检测通过节点数: {len(tcp_valid)}")
+
+    # 3. 用一个Clash实例+API切换节点检测
+    if not tcp_valid:
+        logging.info("没有通过TCP检测的节点，未生成文件。")
+        return
+
+    clash_proc, clash_cfg = start_clash_with_all_nodes(tcp_valid)
     if not clash_proc:
         logging.error("Clash 启动失败，无法检测")
         return
 
-    # 逐个切换节点检测
     valid = []
-    for idx, node in enumerate(nodes):
+    for idx, node in enumerate(tcp_valid):
         node['name'] = format_node_name(node, idx)
         result = test_node_api(node, idx)
         if result:
