@@ -192,7 +192,13 @@ def start_clash(node, port):
         'mode': 'global',
         'proxies': [node],
         'proxy-groups': [{'name': 'Proxy', 'type': 'select', 'proxies': [node['name']]}],
-        'rules': ['MATCH,Proxy']
+        'rules': ['MATCH,Proxy'],
+        'dns': {
+            'enable': True,
+            'listen': '0.0.0.0:53',
+            'default-nameserver': ['8.8.8.8', '1.1.1.1'],
+            'nameserver': ['8.8.8.8', '1.1.1.1']
+        }
     }
     fname = f'temp_{port}.yaml'
     with open(fname, 'w', encoding='utf-8') as f:
@@ -204,6 +210,16 @@ def start_clash(node, port):
             logging.error(f"Clash 启动端口 {port+1} 超时")
             stop_clash(p, fname)
             return None, fname
+        time.sleep(3)  # 启动后再等几秒，确保节点加载
+        # 输出clash日志
+        try:
+            out, err = p.communicate(timeout=1)
+            if out:
+                logging.debug(f"Clash stdout: {out.decode(errors='ignore')}")
+            if err:
+                logging.debug(f"Clash stderr: {err.decode(errors='ignore')}")
+        except Exception:
+            pass
         return p, fname
     except Exception as e:
         logging.error(f"启动 Clash 失败: {e}")
@@ -237,14 +253,11 @@ def get_country_flag(ip_or_domain):
         return '🏁'
 
 def format_node_name(node, idx):
-    # 优先保留国旗，其它字符全部用bing代替
     name = str(node.get('name', ''))
-    # 匹配国旗
     match = re.match(r'^([\U0001F1E6-\U0001F1FF][\U0001F1E6-\U0001F1FF])', name)
     if match:
         flag = match.group(1)
     else:
-        # 没有国旗，尝试geoip
         flag = get_country_flag(node['server'])
     return f"{flag} bing{idx+1}"
 
@@ -262,11 +275,12 @@ def test_node(node, idx):
     for _ in range(RETRY_TIMES):
         try:
             r = requests.get(TEST_URL, proxies=proxies, timeout=REQUEST_TIMEOUT, allow_redirects=True)
-            if r.status_code in [200, 301, 302, 403, 429]:
+            logging.info(f"节点 {node['name']} 返回码: {r.status_code}")
+            if r.status_code in [200, 204, 301, 302, 403, 429]:
                 ok = True
                 break
-        except Exception:
-            continue
+        except Exception as e:
+            logging.error(f"节点 {node['name']} 请求异常: {e}")
     stop_clash(p, cfg)
     if ok:
         logging.info(f"节点 {node['name']} 测试成功")
