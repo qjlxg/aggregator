@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 BASE_PORT = 10000
 TEST_URL = "https://www.tiktok.com"
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
-MAX_WORKERS = 5  # 并发数建议调小，防止资源耗尽
+MAX_WORKERS = 2  # 并发数进一步降低，防止资源耗尽
 REQUEST_TIMEOUT = 5
 RETRY_TIMES = 2
 GEOIP_DB_PATH = './clash/Country.mmdb'
@@ -176,7 +176,7 @@ def parse_url_node(url):
         logging.warning(f"解析节点失败: {e}")
     return None
 
-def wait_port(port, timeout=15):  # 启动等待时间延长
+def wait_port(port, timeout=30):  # 启动等待时间加大
     start = time.time()
     while time.time() - start < timeout:
         s = socket.socket()
@@ -206,7 +206,7 @@ def start_clash(node, port):
     try:
         p = subprocess.Popen([CLASH_PATH, '-f', fname, '-d', './clash'],
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
-        if not wait_port(port + 1, timeout=15):
+        if not wait_port(port + 1, timeout=30):
             logging.error(f"Clash 启动端口 {port+1} 超时")
             stop_clash(p, fname)
             return None, fname
@@ -222,7 +222,6 @@ def stop_clash(p, fname):
             p.wait(timeout=2)
         except Exception as e:
             logging.warning(f"停止 Clash 失败: {e}")
-    # 优化：删除前判断文件是否存在
     if fname and os.path.exists(fname):
         try:
             os.remove(fname)
