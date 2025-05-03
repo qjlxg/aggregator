@@ -22,7 +22,7 @@ yaml.SafeLoader.add_multi_constructor('', ignore_unknown_tag)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 BASE_PORT = 10000
-TEST_URL = "http://cp.cloudflare.com/"
+TEST_URL = "https://www.google.com/generate_204"
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
 MAX_WORKERS = 2
 BATCH_SIZE = 30
