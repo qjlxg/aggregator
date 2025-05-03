@@ -5,9 +5,10 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 import argparse
+import os
 
 # 配置日志
-logging.basicConfig(filename='error.log', level=logging.ERROR, 
+logging.basicConfig(filename='error.log', level=logging.ERROR,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 headers = {
@@ -18,19 +19,20 @@ headers = {
 # 命令行参数
 parser = argparse.ArgumentParser(description="URL内容获取脚本，支持多个URL来源")
 parser.add_argument('--max_success', type=int, default=99999, help="目标成功数量")
-parser.add_argument('--timeout', type=int, default=256, help="请求超时时间（秒）")
+parser.add_argument('--timeout', type=int, default=60, help="请求超时时间（秒）")
+parser.add_argument('--output', type=str, default='data/all_clash.txt', help="输出文件路径")
 args = parser.parse_args()
 
 MAX_SUCCESS = args.max_success
 TIMEOUT = args.timeout
-OUTPUT_FILE = 'all_clash.txt'
+OUTPUT_FILE = args.output
 
 def is_valid_url(url):
     """验证URL格式是否合法"""
     try:
         result = urlparse(url)
         return all([result.scheme in ['http', 'https'], result.netloc])
-    except:
+    except Exception:
         return False
 
 def get_url_list(url_source):
@@ -38,7 +40,7 @@ def get_url_list(url_source):
     try:
         response = requests.get(url_source, headers=headers, timeout=10)
         response.raise_for_status()
-        raw_urls = response.text.splitlines()
+        raw_urls = [line.strip() for line in response.text.splitlines() if line.strip()]
         print(f"从 {url_source} 获取到 {len(raw_urls)} 个URL")
         return raw_urls
     except Exception as e:
@@ -51,10 +53,16 @@ def fetch_url(url):
         resp = requests.get(url, headers=headers, timeout=TIMEOUT)
         resp.raise_for_status()
         content = resp.text.strip()
-        if len(content) < 10 or "DOMAIN" in content or "port" in content or "proxies" in content:
+        # 过滤明显无效内容
+        if len(content) < 10 or any(x in content for x in ["DOMAIN", "port", "proxies", "[]", "{}"]):
             return None
-        decoded_content = base64.b64decode(content).decode('utf-8')
-        return decoded_content
+        # 尝试base64解码
+        try:
+            decoded_content = base64.b64decode(content).decode('utf-8')
+            return decoded_content
+        except Exception:
+            # 如果不是base64，直接返回原内容
+            return content if len(content) > 10 else None
     except Exception as e:
         logging.error(f"处理失败: {url} - {e}")
         return None
@@ -63,7 +71,6 @@ def fetch_url(url):
 url_sources = [
     'https://raw.githubusercontent.com/qjlxg/collectSub/refs/heads/main/sub/sub_all_clash.txt',
     'https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/tools/ss-url'
-   
 ]
 
 # 获取所有URL来源的URL列表
@@ -73,20 +80,23 @@ for source in url_sources:
     all_raw_urls.extend(raw_urls)
 
 # 去重并验证URL
-unique_urls = list(set(all_raw_urls))
-valid_urls = [url.strip() for url in unique_urls if is_valid_url(url.strip())]
+unique_urls = list({url.strip() for url in all_raw_urls if url.strip()})
+valid_urls = [url for url in unique_urls if is_valid_url(url)]
 print(f"合并后唯一URL数量：{len(unique_urls)}")
 print(f"经过格式验证的有效URL数量：{len(valid_urls)}")
+
+# 确保输出目录存在
+os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
 
 # 处理URL
 success_count = 0
 with open(OUTPUT_FILE, 'w', encoding='utf-8') as out_file:
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=16) as executor:
         future_to_url = {executor.submit(fetch_url, url): url for url in valid_urls}
         for future in tqdm(as_completed(future_to_url), total=len(valid_urls), desc="处理URL"):
             result = future.result()
             if result and success_count < MAX_SUCCESS:
-                out_file.write(result)
+                out_file.write(result.strip() + '\n')
                 success_count += 1
 
 # 最终结果报告
