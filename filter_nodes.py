@@ -243,7 +243,7 @@ def main():
     # 处理有效节点并保存
     if valid:
         for i, proxy in enumerate(valid):
-            name = proxy['name']
+            name = str(proxy['name'])  # 确保 name 是字符串
             match = re.match(r'^([\U0001F1E6-\U0001F1FF][\U0001F1E6-\U0001F1FF])', name)
             if match:
                 flag = match.group(1)  # 保留原有国旗
