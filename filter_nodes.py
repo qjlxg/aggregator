@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 BASE_PORT = 10000
 TEST_URL = "https://www.tiktok.com"
 SUPPORTED_TYPES = ['vmess', 'ss', 'trojan', 'vless', 'hysteria2']
-MAX_WORKERS = 25
+MAX_WORKERS = 5  # 并发数建议调小，防止资源耗尽
 REQUEST_TIMEOUT = 5
 RETRY_TIMES = 2
 GEOIP_DB_PATH = './clash/Country.mmdb'
@@ -37,7 +37,6 @@ COUNTRY_FLAGS = {
     'AU': '🇦🇺', 'FR': '🇫🇷', 'IT': '🇮🇹', 'NL': '🇳🇱',
 }
 
-# 字段顺序，name在首位，cipher在最后
 FIELD_ORDERS = {
     'vmess': ['name', 'server', 'port', 'type', 'uuid', 'alterId', 'tls', 'network', 'ws-opts', 'udp', 'cipher'],
     'ss': ['name', 'server', 'port', 'type', 'password', 'udp', 'cipher'],
@@ -48,7 +47,6 @@ FIELD_ORDERS = {
 
 class CustomDumper(yaml.Dumper):
     def represent_mapping(self, tag, mapping, flow_style=None):
-        # 保证字段顺序
         if isinstance(mapping, dict) and 'name' in mapping and 'server' in mapping:
             proxy_type = mapping.get('type', 'ss')
             order = FIELD_ORDERS.get(proxy_type, list(mapping.keys()))
@@ -56,7 +54,6 @@ class CustomDumper(yaml.Dumper):
             for key in order:
                 if key in mapping:
                     ordered_mapping[key] = mapping[key]
-            # 加入未在 order 中的字段
             for key in mapping:
                 if key not in ordered_mapping:
                     ordered_mapping[key] = mapping[key]
@@ -72,7 +69,6 @@ def save_yaml(data, path):
         with open(path, 'w', encoding='utf-8') as f:
             f.write("proxies:\n")
             for proxy in data['proxies']:
-                # 只 dump 单个 dict，保证一行一个节点
                 proxy_str = yaml.dump(proxy, Dumper=CustomDumper, allow_unicode=True, default_flow_style=True, sort_keys=False)
                 proxy_str = proxy_str.strip('\n')
                 f.write(f" - {proxy_str}\n")
@@ -110,7 +106,6 @@ def parse_url_node(url):
                     method, passwd = method_pass.split(':', 1)
                     server, port = parsed.netloc.split('@')[1].split(':')
                 else:
-                    # ss://base64?plugin=xxx#name
                     method, rest = method_pass.split(':', 1)
                     passwd, server_port = rest.rsplit('@', 1)
                     server, port = server_port.split(':')
@@ -181,7 +176,7 @@ def parse_url_node(url):
         logging.warning(f"解析节点失败: {e}")
     return None
 
-def wait_port(port, timeout=8):
+def wait_port(port, timeout=15):  # 启动等待时间延长
     start = time.time()
     while time.time() - start < timeout:
         s = socket.socket()
@@ -211,7 +206,7 @@ def start_clash(node, port):
     try:
         p = subprocess.Popen([CLASH_PATH, '-f', fname, '-d', './clash'],
                              stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
-        if not wait_port(port + 1, timeout=8):
+        if not wait_port(port + 1, timeout=15):
             logging.error(f"Clash 启动端口 {port+1} 超时")
             stop_clash(p, fname)
             return None, fname
@@ -227,8 +222,12 @@ def stop_clash(p, fname):
             p.wait(timeout=2)
         except Exception as e:
             logging.warning(f"停止 Clash 失败: {e}")
+    # 优化：删除前判断文件是否存在
     if fname and os.path.exists(fname):
-        os.remove(fname)
+        try:
+            os.remove(fname)
+        except Exception as e:
+            logging.warning(f"删除配置文件失败: {fname} {e}")
 
 def test_node(node, idx):
     port = BASE_PORT + (idx % 100) * 2
