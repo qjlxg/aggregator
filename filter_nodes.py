@@ -14,6 +14,11 @@ import socket
 import geoip2.database
 from collections import OrderedDict
 
+# 解决 clash.yaml 中出现 !<str> 或 !!str 等未知 tag 导致 YAML 解析失败的问题
+def ignore_unknown_tag(loader, tag_suffix, node):
+    return loader.construct_scalar(node)
+yaml.SafeLoader.add_multi_constructor('', ignore_unknown_tag)
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 BASE_PORT = 10000
@@ -59,25 +64,8 @@ class CustomDumper(yaml.Dumper):
         return super().represent_mapping(tag, mapping, flow_style=True)
 
 def load_yaml(path):
-    # 兼容异常行，遇到解析错误时跳过
-    try:
-        with open(path, 'r', encoding='utf-8') as f:
-            return yaml.safe_load(f)
-    except yaml.YAMLError as e:
-        logging.error(f"YAML解析失败: {e}")
-        # 尝试逐行过滤掉有问题的行
-        with open(path, 'r', encoding='utf-8') as f:
-            lines = f.readlines()
-        good_lines = []
-        for line in lines:
-            if '!!str' in line or 'tag:' in line:
-                continue
-            good_lines.append(line)
-        try:
-            return yaml.safe_load(''.join(good_lines))
-        except Exception as e:
-            logging.error(f"YAML修复后仍解析失败: {e}")
-            return {}
+    with open(path, 'r', encoding='utf-8') as f:
+        return yaml.safe_load(f)
 
 def save_yaml(data, path):
     try:
