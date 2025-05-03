@@ -99,4 +99,106 @@ def parse_url_node(url):
             uuid = p.netloc.split('@')[0]
             server, port = p.netloc.split('@')[1].split(':')
             return {
-                'name': urllib.parse.unquote
+                'name': urllib.parse.unquote(p.fragment) or 'vless', 
+                'server': server, 
+                'port': int(port), 
+                'type': 'vless', 
+                'uuid': uuid, 
+                'tls': True, 
+                'servername': server
+            }
+        if url.startswith('hysteria2://'):
+            p = urllib.parse.urlparse(url)
+            pwd = p.netloc.split('@')[0]
+            server, port = p.netloc.split('@')[1].split(':')
+            return {
+                'name': urllib.parse.unquote(p.fragment) or 'hysteria2', 
+                'server': server, 
+                'port': int(port), 
+                'type': 'hysteria2', 
+                'password': pwd
+            }
+    except Exception as e:
+        logging.warning(f"解析节点失败: {e}")
+    return None
+
+def start_clash(node, port):
+    cfg = {
+        'port': port, 
+        'socks-port': port + 1, 
+        'mode': 'global', 
+        'proxies': [node], 
+        'proxy-groups': [{'name': 'Proxy', 'type': 'select', 'proxies': [node['name']]}], 
+        'rules': ['MATCH,Proxy']
+    }
+    fname = f'temp_{port}.yaml'
+    with open(fname, 'w', encoding='utf-8') as f:
+        yaml.dump(cfg, f, allow_unicode=True)
+    p = subprocess.Popen(['./clash/clash-linux', '-f', fname, '-d', 'clash'], 
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, preexec_fn=os.setsid)
+    time.sleep(STARTUP_DELAY)
+    return p, fname
+
+def stop_clash(p, fname):
+    try:
+        os.killpg(os.getpgid(p.pid), signal.SIGTERM)
+    except:
+        pass
+    if os.path.exists(fname):
+        os.remove(fname)
+
+def test_node(node, idx):
+    port = BASE_PORT + (idx % 100) * 2
+    p, cfg = start_clash(node, port)
+    ok = True
+    for url in TEST_URLS:
+        try:
+            r = requests.get(url, proxies={
+                'http': f'socks5://127.0.0.1:{port + 1}', 
+                'https': f'socks5://127.0.0.1:{port + 1}'
+            }, timeout=REQUEST_TIMEOUT)
+            if r.status_code != 200:
+                ok = False
+                break
+        except:
+            ok = False
+            break
+    stop_clash(p, cfg)
+    if ok:
+        return node
+    return None
+
+def main():
+    os.makedirs('data', exist_ok=True)
+    inp = 'data/clash.yaml'
+    out = 'data/google.yaml'
+    d = load_yaml(inp)
+    nodes = []
+    for x in d.get('proxies', []):
+        n = parse_url_node(x) if isinstance(x, str) else x if x.get('type') in SUPPORTED_TYPES else None
+        if n:
+            nodes.append(n)
+    valid = []
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as ex:
+        futures = [ex.submit(test_node, node, idx) for idx, node in enumerate(nodes)]
+        for future in as_completed(futures):
+            result = future.result()
+            if result:
+                valid.append(result)
+    if valid:
+        default_flag = '🇨🇳'  # 默认国旗
+        for i, proxy in enumerate(valid):
+            name = proxy['name']
+            # 检查是否已有国旗
+            match = re.match(r'^([\U0001F1E6-\U0001F1FF][\U0001F1E6-\U0001F1FF])', name)
+            if match:
+                flag = match.group(1)  # 保留原有国旗
+            else:
+                flag = default_flag  # 添加默认国旗
+            proxy['name'] = f"{flag} bing{i + 1}"
+        save_yaml({'proxies': valid}, out)
+    else:
+        logging.info("没有有效节点，未生成文件。")
+
+if __name__ == "__main__":
+    main()
