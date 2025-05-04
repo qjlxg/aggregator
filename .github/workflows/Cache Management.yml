@@ -21,7 +21,7 @@ jobs:
         run: pip install -r requirements.txt  # 如果有 requirements.txt
 
       - name: Run cache.py
-        run: python cache.py
+        run: python subscribe/cache.py
 
       - name: Commit changes (if any)
         run: |
