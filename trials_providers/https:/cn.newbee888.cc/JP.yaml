@@ -1,6 +1,6 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 🇯🇵 日本01 - NewBee国际机场, server: hn3x.newbee8.me, port: 22253, type: vmess, uuid: c2ee4f97-abc0-49cb-b30a-d62a028d5046, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇯🇵 日本02 - NewBee国际机场, server: hn3x.newbee8.me, port: 22253, type: vmess, uuid: c2ee4f97-abc0-49cb-b30a-d62a028d5046, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇯🇵 日本03-隧道 - NewBee国际机场, server: gzdx.newbee8.me, port: 35662, type: vmess, uuid: c2ee4f97-abc0-49cb-b30a-d62a028d5046, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本01 - NewBee国际机场, server: hn3x.newbee8.me, port: 22253, tfo: true, type: vmess, uuid: 156f1d3d-a235-4023-8f1e-8821cb305e88, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本02 - NewBee国际机场, server: hn3x.newbee8.me, port: 22253, tfo: true, type: vmess, uuid: 156f1d3d-a235-4023-8f1e-8821cb305e88, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本03-隧道 - NewBee国际机场, server: gzdx.newbee8.me, port: 35662, tfo: true, type: vmess, uuid: 156f1d3d-a235-4023-8f1e-8821cb305e88, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
