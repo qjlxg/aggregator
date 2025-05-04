@@ -30,7 +30,7 @@ jobs:
           pip install -r requirements.txt
       
     - name: Execute Python script
-      run: python filter_nodes.py
+      run: python subscribe/filter_nodes.py
       
     - name: Setup Git
       run: |
