@@ -1,7 +1,7 @@
 name: Run esc.py
 
 on:
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:
 
 jobs:
   run-script:
@@ -22,3 +22,12 @@ jobs:
 
     - name: Run esc.py
       run: python esc.py
+
+    - name: Upload result files
+      uses: actions/upload-artifact@v4
+      with:
+        name: result-files
+        path: |
+          data/A.txt
+          data/c.yml
+          data.b.cvs
