@@ -3,7 +3,7 @@ name: Collect
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # 改为每天午夜执行
+    - cron: '0 0 * * *'  # 每天午夜执行
 
 jobs:
   collect:
@@ -16,7 +16,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.12  # 更新为 Python 3.12
+        python-version: 3.12  # 使用 Python 3.12
 
     - name: Install dependencies
       run: |
@@ -40,9 +40,7 @@ jobs:
         git config core.ignorecase false
 
     - name: Pull latest changes
-      run: |
-        git pull origin main --rebase
-      continue-on-error: true  # 如果拉取失败，继续执行
+      run: git pull origin main --rebase --autostash
 
     - name: Commit and Push Changes
       run: |
