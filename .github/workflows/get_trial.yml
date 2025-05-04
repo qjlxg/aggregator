@@ -20,8 +20,13 @@ jobs:
           python-version: '3.10'
       - name: Prepare
         run: pip install requests beautifulsoup4 ruamel.yaml json5
+        
+      - name: Run urls.py.py #检测网址
+        run: python urls.py.py
+        
       - name: Run get_trial.py
         run: python get_trial.py
+        
       - name: Commit
         id: commit
         continue-on-error: true
