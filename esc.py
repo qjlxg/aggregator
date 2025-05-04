@@ -9,11 +9,11 @@ import requests
 import geoip2.database
 
 # 配置
-URL_LIST_PATH = '/data/1.list'
-RAW_OUTPUT_PATH = '/data/A.txt'
-CLASH_OUTPUT_PATH = '/data/c.yml'
-CSV_OUTPUT_PATH = '/data.b.cvs'
-GEOIP_DB_PATH = '/clash/Country.mmdb'
+URL_LIST_PATH = 'data/1.list'
+RAW_OUTPUT_PATH = 'data/A.txt'
+CLASH_OUTPUT_PATH = 'data/c.yml'
+CSV_OUTPUT_PATH = 'data.b.cvs'
+GEOIP_DB_PATH = 'clash/Country.mmdb'
 
 SUPPORTED_SCHEMES = ['vmess://', 'ss://', 'trojan://', 'vless://', 'hysteria2://']
 COUNTRY_FLAGS = {
