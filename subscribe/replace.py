@@ -127,10 +127,11 @@ def parse_hysteria2(link):
             print(f"解析 hysteria2:// 链接失败: {e}")
     return None
 
-# 修改后的 extract_flag 函数
+# 修改后的 extract_flag 函数，修复 TypeError
 def extract_flag(name):
     global bing_counter
     bing_counter += 1
+    name = str(name)  # 确保 name 是字符串，避免 TypeError
     # 匹配开头的国旗 emoji（由两个区域指示符组成）
     match = re.match(r'^([\U0001F1E6-\U0001F1FF]{2})', name)
     if match:
