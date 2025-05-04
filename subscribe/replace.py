@@ -5,6 +5,7 @@ import os
 import re
 
 bing_counter = 0
+vmess_errors = set()
 
 def fetch_data(url):
     try:
@@ -22,11 +23,9 @@ def decode_base64(data):
         return data
 
 def extract_host_port(server_port):
-    # IPv6: [xxxx:xxxx:...]:port
     m = re.match(r'^\[?([0-9a-fA-F:.]+)\]?:([0-9]+)$', server_port)
     if m:
         return m.group(1), int(m.group(2))
-    # IPv4: host:port
     parts = server_port.rsplit(':', 1)
     if len(parts) == 2 and parts[1].isdigit():
         return parts[0], int(parts[1])
@@ -71,24 +70,31 @@ def parse_vmess(link):
         return None
     try:
         b64 = link[8:]
-        # 只保留base64合法字符
         b64 = re.sub(r'[^A-Za-z0-9+/=]', '', b64)
-        # 补齐base64长度
         b64 += '=' * (-len(b64) % 4)
         try:
             raw = base64.b64decode(b64)
         except Exception as e:
-            print(f"解析 vmess:// 链接失败: base64解码错误: {e}")
+            err = f"base64解码错误: {e}"
+            if err not in vmess_errors:
+                print(f"解析 vmess:// 链接失败: {err}")
+                vmess_errors.add(err)
             return None
         try:
             vmess_data = raw.decode('utf-8')
         except Exception as e:
-            print(f"解析 vmess:// 链接失败: utf-8解码错误: {e}")
+            err = f"utf-8解码错误: {e}"
+            if err not in vmess_errors:
+                print(f"解析 vmess:// 链接失败: {err}")
+                vmess_errors.add(err)
             return None
         try:
             vmess_json = yaml.safe_load(vmess_data)
         except Exception as e:
-            print(f"解析 vmess:// 链接失败: JSON解析错误: {e}")
+            err = f"JSON解析错误: {e}"
+            if err not in vmess_errors:
+                print(f"解析 vmess:// 链接失败: {err}")
+                vmess_errors.add(err)
             return None
         return {
             'name': vmess_json.get('ps', vmess_json.get('add')),
@@ -102,7 +108,10 @@ def parse_vmess(link):
             'udp': True
         }
     except Exception as e:
-        print(f"解析 vmess:// 链接失败: {e}")
+        err = f"{e}"
+        if err not in vmess_errors:
+            print(f"解析 vmess:// 链接失败: {err}")
+            vmess_errors.add(err)
         return None
 
 def parse_trojan(link):
@@ -226,9 +235,7 @@ def main(urls):
         if raw_data is None:
             continue
 
-        # 先尝试base64解码
         decoded_data = decode_base64(raw_data)
-        # 逐行处理
         lines = decoded_data.splitlines()
         for line in lines:
             line = line.strip()
@@ -246,7 +253,6 @@ def main(urls):
             elif line.startswith('hysteria2://'):
                 proxy = parse_hysteria2(line)
             elif line.startswith('proxies:'):
-                # 处理clash yaml格式
                 try:
                     yaml_data = yaml.safe_load('\n'.join(lines))
                     if isinstance(yaml_data, dict) and 'proxies' in yaml_data:
