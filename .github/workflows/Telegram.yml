@@ -19,7 +19,8 @@ jobs:
 
       - name: Install dependencies
         run: pip install requests
-
+             pip install --upgrade pip
+             
       - name: Run t.py
         run: python t.py
 
