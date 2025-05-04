@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # https://github.com/awuaaaaa/vless-py
-# @Author  : wzdnzd
-# @Time    : 2022-07-15
+# @Author  : wzdnzd（优化及节点去重功能由优化者添加）
+# @Time    : 2022-07-15（原始时间）, 优化时间2025-05-05
 
 import argparse
 import itertools
@@ -48,7 +48,7 @@ class SubscriptionManager:
         if os.path.exists(local_file) and os.path.isfile(local_file):
             with open(local_file, "r", encoding="utf8") as f:
                 subscriptions.update(re.findall(pattern, f.read(), flags=re.M))
-        logger.info("start checking whether existing subscriptions have expired")
+        logger.info("开始校验现有订阅是否失效")
         links = list(subscriptions)
         results = utils.multi_thread_run(
             func=crawl.check_status,
@@ -61,7 +61,7 @@ class SubscriptionManager:
     def parse_domains(self, content: str) -> Dict[str, Dict[str, str]]:
         """解析机场域名列表"""
         if not content or not isinstance(content, str):
-            logger.warning("cannot found any domain due to content is empty or not string")
+            logger.warning("内容为空或非字符串，无法解析域名")
             return {}
         records = {}
         for line in content.split("\n"):
@@ -77,13 +77,13 @@ class SubscriptionManager:
 
     def assign(self, domains_file: str = "", overwrite: bool = False, pages: int = sys.maxsize, rigid: bool = True, chuck: bool = False, subscribes_file: str = "", refresh: bool = False, customize_link: str = "") -> List[TaskConfig]:
         subscriptions = self.load_exist(subscribes_file)
-        logger.info(f"load exists subscription finished, count: {len(subscriptions)}")
+        logger.info(f"加载现有订阅完成，数量: {len(subscriptions)}")
         tasks = [
             TaskConfig(name=utils.random_chars(length=8), sub=x, bin_name=self.bin_name, special_protocols=self.special_protocols)
             for x in subscriptions if x
         ] if subscriptions else []
         if tasks and refresh:
-            logger.info("skip registering new accounts, will use existing subscriptions for refreshing")
+            logger.info("跳过注册新账号，将使用现有订阅刷新")
             return tasks
         domains_file = utils.trim(domains_file) or "domains.txt"
         fullpath = os.path.join(DATA_BASE, domains_file)
@@ -117,7 +117,7 @@ class SubscriptionManager:
                     with open(local_file, "r", encoding="UTF8") as f:
                         domains.update(self.parse_domains(f.read()))
         if not domains:
-            logger.error("cannot collect any new airport for free use")
+            logger.error("无法收集到新的可免费使用的机场信息")
             return tasks
         if overwrite:
             crawl.save_candidates(candidates=domains, filepath=fullpath, delimiter=self.delimiter)
@@ -156,45 +156,49 @@ def aggregate(args: argparse.Namespace) -> None:
         customize_link=args.yourself,
     )
     if not tasks:
-        logger.error("cannot found any valid config, exit")
+        logger.error("找不到任何有效配置，退出")
         sys.exit(0)
     old_subscriptions = {t.sub for t in tasks if t.sub}
-    logger.info(f"start generate subscribes information, tasks: {len(tasks)}")
+    logger.info(f"开始生成订阅信息，任务总数: {len(tasks)}")
     generate_conf = os.path.join(PATH, "subconverter", "generate.ini")
     if os.path.exists(generate_conf) and os.path.isfile(generate_conf):
         os.remove(generate_conf)
     results = utils.multi_thread_run(func=workflow.executewrapper, tasks=tasks, num_threads=args.num)
     proxies = list(itertools.chain.from_iterable([x[1] for x in results if x]))
     if not proxies:
-        logger.error("exit because cannot fetch any proxy node")
+        logger.error("未获取到任何节点，退出")
         sys.exit(0)
-    unique_proxies, seen_proxies = [], set()
+    # 节点去重处理
+    unique_proxies = []
+    seen_proxies = set()
     for proxy in proxies:
+        # 构造节点唯一标识：名称+服务器+端口
         proxy_key = proxy.get("name", "") + proxy.get("server", "") + str(proxy.get("port", ""))
         if proxy_key and proxy_key not in seen_proxies:
             unique_proxies.append(proxy)
             seen_proxies.add(proxy_key)
-    nodes, workspace = [], os.path.join(PATH, "clash")
+    nodes = []
+    workspace = os.path.join(PATH, "clash")
     if args.skip:
         nodes = clash.filter_proxies(unique_proxies).get("proxies", [])
     else:
         binpath = os.path.join(workspace, clash_bin)
-        confif_file = "config.yaml"
-        clash.generate_config(workspace, unique_proxies, confif_file)
+        config_file = "config.yaml"
+        clash.generate_config(workspace, unique_proxies, config_file)
         utils.chmod(binpath)
-        logger.info(f"startup clash now, workspace: {workspace}, config: {confif_file}")
-        process = subprocess.Popen([binpath, "-d", workspace, "-f", os.path.join(workspace, confif_file)])
-        logger.info(f"clash start success, begin check proxies, num: {len(unique_proxies)}")
+        logger.info(f"启动 clash, 工作目录: {workspace}, 配置文件: {config_file}")
+        process = subprocess.Popen([binpath, "-d", workspace, "-f", os.path.join(workspace, config_file)])
+        logger.info(f"clash启动成功，开始检测节点, 节点数: {len(unique_proxies)}")
         time.sleep(random.randint(3, 6))
         params = [[p, clash.EXTERNAL_CONTROLLER, 5000, args.url, args.delay, False] for p in unique_proxies if isinstance(p, dict)]
         masks = utils.multi_thread_run(func=clash.check, tasks=params, num_threads=args.num, show_progress=display)
         try:
             process.terminate()
-        except:
-            logger.error("terminate clash process error")
+        except Exception:
+            logger.error("终止 clash 进程失败")
         nodes = [unique_proxies[i] for i in range(len(unique_proxies)) if masks[i]]
         if not nodes:
-            logger.error("cannot fetch any proxy")
+            logger.error("未获取到任何可用节点")
             sys.exit(0)
     subscriptions = {p.pop("sub", "") for p in unique_proxies if p.get("sub", "")}
     for p in unique_proxies:
@@ -221,7 +225,7 @@ def aggregate(args: argparse.Namespace) -> None:
     for t in targets:
         success = subconverter.generate_conf(generate_conf, t[0], source, t[1], t[2], True, t[3], t[4])
         if not success:
-            logger.error(f"cannot generate subconverter config file for target: {t[2]}")
+            logger.error(f"无法为目标生成 subconverter 配置文件: {t[2]}")
             continue
         if subconverter.convert(binname=subconverter_bin, artifact=t[0]):
             filepath = os.path.join(DATA_BASE, t[1])
@@ -230,19 +234,19 @@ def aggregate(args: argparse.Namespace) -> None:
     if records:
         os.remove(supplier)
     else:
-        logger.error(f"all targets convert failed, you can view the temporary file: {supplier}")
+        logger.error(f"所有目标转换失败，可查看临时文件: {supplier}")
         sys.exit(1)
-    logger.info(f"found {len(nodes)} proxies, save it to {list(records.values())}")
+    logger.info(f"共找到 {len(nodes)} 个节点，已保存到 {list(records.values())}")
     life, traffic = max(0, args.life), max(0, args.flow)
     if life > 0 or traffic > 0:
         new_subscriptions = [x for x in urls if x not in old_subscriptions]
-        tasks = [[x, 2, traffic, life, 0, True] for x in new_subscriptions]
-        results = utils.multi_thread_run(func=crawl.check_status, tasks=tasks, num_threads=args.num, show_progress=display)
+        tasks_check = [[x, 2, traffic, life, 0, True] for x in new_subscriptions]
+        results = utils.multi_thread_run(func=crawl.check_status, tasks=tasks_check, num_threads=args.num, show_progress=display)
         total = len(urls)
         urls = [new_subscriptions[i] for i in range(len(new_subscriptions)) if results[i][0] and not results[i][1]]
-        discard = len(tasks) - len(urls)
+        discard = len(tasks_check) - len(urls)
         urls.extend(old_subscriptions)
-        logger.info(f"filter subscriptions finished, total: {total}, found: {len(urls)}, discard: {discard}")
+        logger.info(f"订阅过滤完成，总数: {total}, 保留: {len(urls)}, 丢弃: {discard}")
     utils.write_file(filename=os.path.join(DATA_BASE, subscribes_file), lines=urls)
     domains = [utils.extract_domain(url=x, include_protocal=True) for x in urls]
     utils.write_file(filename=os.path.join(DATA_BASE, "valid-domains.txt"), lines=list(set(domains)))
@@ -267,22 +271,22 @@ class CustomHelpFormatter(argparse.HelpFormatter):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(formatter_class=CustomHelpFormatter)
-    parser.add_argument("-a", "--all", dest="all", action="store_true", default=False, help="generate full configuration for clash")
-    parser.add_argument("-c", "--chuck", dest="chuck", action="store_true", default=False, help="discard candidate sites that may require human-authentication")
-    parser.add_argument("-d", "--delay", type=int, required=False, default=5000, help="proxies max delay allowed")
-    parser.add_argument("-e", "--easygoing", dest="easygoing", action="store_true", default=False, help="try registering with a gmail alias when you encounter a whitelisted mailbox")
-    parser.add_argument("-f", "--flow", type=int, required=False, default=0, help="remaining traffic available for use, unit: GB")
-    parser.add_argument("-g", "--gist", type=str, required=False, default=os.environ.get("GIST_LINK", ""), help="github username and gist id, separated by '/'")
-    parser.add_argument("-i", "--invisible", dest="invisible", action="store_true", default=False, help="don't show check progress bar")
-    parser.add_argument("-k", "--key", type=str, required=False, default=os.environ.get("GIST_PAT", ""), help="github personal access token for editing gist")
-    parser.add_argument("-l", "--life", type=int, required=False, default=0, help="remaining life time, unit: hours")
-    parser.add_argument("-n", "--num", type=int, required=False, default=64, help="threads num for check proxy")
-    parser.add_argument("-o", "--overwrite", dest="overwrite", action="store_true", default=False, help="overwrite domains")
-    parser.add_argument("-p", "--pages", type=int, required=False, default=sys.maxsize, help="max page number when crawling telegram")
-    parser.add_argument("-r", "--refresh", dest="refresh", action="store_true", default=False, help="refresh and remove expired proxies with existing subscriptions")
-    parser.add_argument("-s", "--skip", dest="skip", action="store_true", default=False, help="skip usability checks")
-    parser.add_argument("-t", "--targets", nargs="+", choices=subconverter.CONVERT_TARGETS, default=["clash", "v2ray", "singbox"], help=f"choose one or more generated profile type. default to clash, v2ray and singbox. supported: {subconverter.CONVERT_TARGETS}")
-    parser.add_argument("-u", "--url", type=str, required=False, default="https://www.google.com/generate_204", help="test url")
-    parser.add_argument("-v", "--vitiate", dest="vitiate", action="store_true", default=False, help="ignoring default proxies filter rules")
-    parser.add_argument("-y", "--yourself", type=str, required=False, default=os.environ.get("CUSTOMIZE_LINK", ""), help="the url to the list of airports that you maintain yourself")
+    parser.add_argument("-a", "--all", dest="all", action="store_true", default=False, help="生成 clash 完整配置")
+    parser.add_argument("-c", "--chuck", dest="chuck", action="store_true", default=False, help="丢弃可能需要人工验证的候选网站")
+    parser.add_argument("-d", "--delay", type=int, required=False, default=5000, help="允许的代理最大延迟")
+    parser.add_argument("-e", "--easygoing", dest="easygoing", action="store_true", default=False, help="遇到邮箱白名单问题时尝试使用 Gmail 别名")
+    parser.add_argument("-f", "--flow", type=int, required=False, default=0, help="可用剩余流量，单位: GB")
+    parser.add_argument("-g", "--gist", type=str, required=False, default=os.environ.get("GIST_LINK", ""), help="GitHub 用户名和 gist id，用 '/' 分隔")
+    parser.add_argument("-i", "--invisible", dest="invisible", action="store_true", default=False, help="不显示检测进度条")
+    parser.add_argument("-k", "--key", type=str, required=False, default=os.environ.get("GIST_PAT", ""), help="用于编辑 gist 的 GitHub personal access token")
+    parser.add_argument("-l", "--life", type=int, required=False, default=0, help="剩余可用时长，单位: 小时")
+    parser.add_argument("-n", "--num", type=int, required=False, default=64, help="检测代理使用的线程数")
+    parser.add_argument("-o", "--overwrite", dest="overwrite", action="store_true", default=False, help="覆盖已存在的域名")
+    parser.add_argument("-p", "--pages", type=int, required=False, default=sys.maxsize, help="爬取 Telegram 时的最大页数")
+    parser.add_argument("-r", "--refresh", dest="refresh", action="store_true", default=False, help="使用现有订阅刷新并剔除过期节点")
+    parser.add_argument("-s", "--skip", dest="skip", action="store_true", default=False, help="跳过可用性检测")
+    parser.add_argument("-t", "--targets", nargs="+", choices=subconverter.CONVERT_TARGETS, default=["clash", "v2ray", "singbox"], help=f"选择要生成的配置类型，默认为 clash, v2ray 和 singbox，支持: {subconverter.CONVERT_TARGETS}")
+    parser.add_argument("-u", "--url", type=str, required=False, default="https://www.google.com/generate_204", help="测试 URL")
+    parser.add_argument("-v", "--vitiate", dest="vitiate", action="store_true", default=False, help="忽略默认代理过滤规则")
+    parser.add_argument("-y", "--yourself", type=str, required=False, default=os.environ.get("CUSTOMIZE_LINK", ""), help="你维护的机场列表的 URL")
     aggregate(args=parser.parse_args())
