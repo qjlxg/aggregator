@@ -76,6 +76,6 @@ def test_urls(urls, timeout=10):
     return ok, fail
 
 if __name__ == "__main__":
-    channels = ["oneclickvpnkeys", "another_channel"]
+    channels = ["oneclickvpnkeys", "data_proxy","cpy_teel","wbnet","vpn_proxy66","hack_proxy","vlessfreevpn",]
     urls, nodes = fetch_telegram_subscribe_links(channels, max_pages=10)
     test_urls(urls)
