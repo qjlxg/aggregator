@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # https://github.com/awuaaaaa/vless-py
-# @Author  : wzdnzd（优化及节点去重功能由优化者添加）
-# @Time    : 2022-07-15（原始时间）, 优化时间2025-05-05
+# @Author  : wzdnzd（原始作者），优化及节点去重修改 by 优化者
+# @Time    : 2022-07-15（原始时间）, 2025-05-05（优化时间）
 
 import argparse
 import itertools
@@ -168,12 +168,14 @@ def aggregate(args: argparse.Namespace) -> None:
     if not proxies:
         logger.error("未获取到任何节点，退出")
         sys.exit(0)
-    # 节点去重处理
+    # 改进节点去重：对name、server、port字段去掉前后空格，统一为小写，再构造唯一标识
     unique_proxies = []
     seen_proxies = set()
     for proxy in proxies:
-        # 构造节点唯一标识：名称+服务器+端口
-        proxy_key = proxy.get("name", "") + proxy.get("server", "") + str(proxy.get("port", ""))
+        name = proxy.get("name", "").strip().lower()
+        server = proxy.get("server", "").strip().lower()
+        port = str(proxy.get("port", "")).strip()
+        proxy_key = f"{name}-{server}-{port}"
         if proxy_key and proxy_key not in seen_proxies:
             unique_proxies.append(proxy)
             seen_proxies.add(proxy_key)
@@ -188,7 +190,7 @@ def aggregate(args: argparse.Namespace) -> None:
         utils.chmod(binpath)
         logger.info(f"启动 clash, 工作目录: {workspace}, 配置文件: {config_file}")
         process = subprocess.Popen([binpath, "-d", workspace, "-f", os.path.join(workspace, config_file)])
-        logger.info(f"clash启动成功，开始检测节点, 节点数: {len(unique_proxies)}")
+        logger.info(f"clash启动成功，开始检测节点，节点数: {len(unique_proxies)}")
         time.sleep(random.randint(3, 6))
         params = [[p, clash.EXTERNAL_CONTROLLER, 5000, args.url, args.delay, False] for p in unique_proxies if isinstance(p, dict)]
         masks = utils.multi_thread_run(func=clash.check, tasks=params, num_threads=args.num, show_progress=display)
