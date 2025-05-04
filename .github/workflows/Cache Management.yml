@@ -2,7 +2,7 @@ name: Cache Management
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天 UTC 00:00 运行
+    - cron: '0 */1 * * *'  # 每天 UTC 00:00 运行
   workflow_dispatch:  # 允许手动触发
 
 jobs:
