@@ -6,6 +6,7 @@ TRIAL_CFG_PATH = 'trial.cfg'
 MAX_WORKERS = 8  # 并发线程数
 
 def read_trial_cfg(path):
+    """读取 trial.cfg，返回网址列表，自动跳过空行和注释。"""
     urls = []
     try:
         with open(path, 'r', encoding='utf-8') as f:
@@ -20,6 +21,7 @@ def read_trial_cfg(path):
     return urls
 
 def fetch_url(url):
+    """请求网址，返回状态码或错误信息。"""
     try:
         resp = requests.get(url, timeout=10)
         resp.raise_for_status()
@@ -28,6 +30,9 @@ def fetch_url(url):
         return url, None
 
 def main():
+    print("当前目录:", os.getcwd())
+    print("trial.cfg 路径:", os.path.abspath(TRIAL_CFG_PATH))
+
     urls = read_trial_cfg(TRIAL_CFG_PATH)
     if not urls:
         print("没有可用网址，退出。")
@@ -44,6 +49,7 @@ def main():
             else:
                 print(f"{url}: 不可用（已过滤）")
 
+    print("可用网址数量:", len(valid_urls))
     # 覆盖写回 trial.cfg，只保留可用网址
     with open(TRIAL_CFG_PATH, 'w', encoding='utf-8') as f:
         for url in valid_urls:
