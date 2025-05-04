@@ -1,21 +1,18 @@
 import os
 import re
 import requests
-import base64
 
 output_file = "data/9.txt"
-github_url = "https://github.com/qjlxg/cheemsar/blob/main/trial.cache"
+raw_url = "https://github.com/qjlxg/cheemsar/blob/main/trial.cache"
 
-def extract_api_urls_from_github(github_url, output_file):
+def extract_api_urls_from_raw(raw_url, output_file):
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    # 匹配包含 api/v1/client/subscribe?token= 的网址
     pattern = re.compile(r'https?://[^\s"]*api/v1/client/subscribe\?token=[^\s"]+')
 
     try:
-        resp = requests.get(github_url)
+        resp = requests.get(raw_url, headers={"User-Agent": "Mozilla/5.0"})
         resp.raise_for_status()
-        content = resp.json()['content']
-        text = base64.b64decode(content).decode('utf-8')
+        text = resp.text
 
         urls = []
         for line in text.splitlines():
@@ -32,4 +29,4 @@ def extract_api_urls_from_github(github_url, output_file):
         print(f"处理失败: {e}")
 
 if __name__ == "__main__":
-    extract_api_urls_from_github(github_url, output_file)
+    extract_api_urls_from_raw(raw_url, output_file)
