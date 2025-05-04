@@ -22,8 +22,8 @@ jobs:
         run: pip install requests beautifulsoup4 ruamel.yaml json5 pyyaml
              
         
-      - name: Run urls.py #检测网址
-        run: python urls.py
+     # - name: Run urls.py #检测网址
+     #   run: python urls.py
         
       - name: Run get_trial.py
         run: python get_trial.py
