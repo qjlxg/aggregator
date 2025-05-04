@@ -1,0 +1,6 @@
+%YAML 1.1
+---
+proxies:
+- {name: '🇺🇸 [ss]联通线路-美国01 - 机场', server: zz002.airport.lat, port: 26111, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7d1d62ce-b7fa-4703-b50f-8f30a878449d, udp: true}
+- {name: '🇺🇸 [ss]移动线路-美国01 - 机场', server: zz001.airport.lat, port: 20830, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7d1d62ce-b7fa-4703-b50f-8f30a878449d, udp: true}
+- {name: '🇺🇸 [ss]直连-美国01 - 机场', server: us01.airport.lat, port: 20830, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7d1d62ce-b7fa-4703-b50f-8f30a878449d, udp: true}

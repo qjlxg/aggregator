@@ -1,7 +1,7 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 🇸🇬 CN中转|新加坡ISP住宅① - 夜光云 BLUECLOUD, server: slsap.talends.top, port: 20023, type: vmess, uuid: 3c25bc28-df0d-3357-8d3d-c4de7bfcedc4, alterId: 1, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /v2ray, headers: {Host: sg1v2.ipclouds.top}}, udp: true}
-- {name: 🇸🇬 新加坡｜高速TⅦ住宅ISP② - 夜光云 BLUECLOUD, server: gzyd.talends.top, port: 20018, type: vmess, uuid: 3c25bc28-df0d-3357-8d3d-c4de7bfcedc4, alterId: 1, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /v2ray, headers: {Host: sg2.cloudbb.loan}}, udp: true}
-- {name: 🇸🇬 CN高速|新加坡ISP住宅② - 夜光云 BLUECLOUD, server: sing1.cloudbb.cyou, port: 20022, type: trojan, password: 3c25bc28-df0d-3357-8d3d-c4de7bfcedc4, sni: sing1.cloudbb.cyou, skip-cert-verify: true, udp: true}
-- {name: 🇸🇬 新加坡｜国际TⅦ住宅ISP② - 夜光云 BLUECLOUD, server: sgt2.cloudbb.loan, port: 20022, type: trojan, password: 3c25bc28-df0d-3357-8d3d-c4de7bfcedc4, sni: sgt2.cloudbb.loan, skip-cert-verify: true, udp: true}
+- {name: 🇸🇬 CN中转|新加坡ISP住宅① - 夜光云 BLUECLOUD, server: slsap.talends.top, port: 20023, tfo: true, type: vmess, uuid: 030d9739-7ed4-35d9-a21f-ea85ce86c9c2, alterId: 1, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /v2ray, headers: {Host: sg1v2.ipclouds.top}}, udp: true}
+- {name: 🇸🇬 新加坡｜高速TⅦ住宅ISP② - 夜光云 BLUECLOUD, server: gzyd.talends.top, port: 20018, tfo: true, type: vmess, uuid: 030d9739-7ed4-35d9-a21f-ea85ce86c9c2, alterId: 1, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /v2ray, headers: {Host: sg2.cloudbb.loan}}, udp: true}
+- {name: 🇸🇬 CN高速|新加坡ISP住宅② - 夜光云 BLUECLOUD, server: sing1.cloudbb.cyou, port: 20022, tfo: true, type: trojan, password: 030d9739-7ed4-35d9-a21f-ea85ce86c9c2, sni: sing1.cloudbb.cyou, skip-cert-verify: true, udp: true}
+- {name: 🇸🇬 新加坡｜国际TⅦ住宅ISP② - 夜光云 BLUECLOUD, server: sgt2.cloudbb.loan, port: 20022, tfo: true, type: trojan, password: 030d9739-7ed4-35d9-a21f-ea85ce86c9c2, sni: sgt2.cloudbb.loan, skip-cert-verify: true, udp: true}

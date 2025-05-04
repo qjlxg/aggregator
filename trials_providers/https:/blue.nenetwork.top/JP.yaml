@@ -1,7 +1,7 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 🇯🇵 CN中转|日本① - 夜光云 BLUECLOUD, server: madpr.talends.top, port: 20040, type: vmess, uuid: 3c25bc28-df0d-3357-8d3d-c4de7bfcedc4, alterId: 1, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /v2ray, headers: {Host: xby1v.ipclouds.top}}, udp: true}
-- {name: 🇯🇵 CN中转|日本③ISP住宅 - 夜光云 BLUECLOUD, server: gzyd.talends.top, port: 20041, type: vmess, uuid: 3c25bc28-df0d-3357-8d3d-c4de7bfcedc4, alterId: 1, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /downloads, headers: {Host: jp2.cloudbb.loan}}, udp: true}
-- {name: 🇯🇵 CN高速|日本②ISP住宅 - 夜光云 BLUECLOUD, server: jp2trojan.cloudbb.loan, port: 20022, type: trojan, password: 3c25bc28-df0d-3357-8d3d-c4de7bfcedc4, sni: jp2trojan.cloudbb.loan, skip-cert-verify: true, udp: true}
-- {name: 🇯🇵 日本｜国际TⅦ住宅ISP② - 夜光云 BLUECLOUD, server: jp3trojan.cloudbb.loan, port: 20022, type: trojan, password: 3c25bc28-df0d-3357-8d3d-c4de7bfcedc4, sni: jp3trojan.cloudbb.loan, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 CN中转|日本① - 夜光云 BLUECLOUD, server: madpr.talends.top, port: 20040, tfo: true, type: vmess, uuid: 030d9739-7ed4-35d9-a21f-ea85ce86c9c2, alterId: 1, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /v2ray, headers: {Host: xby1v.ipclouds.top}}, udp: true}
+- {name: 🇯🇵 CN中转|日本③ISP住宅 - 夜光云 BLUECLOUD, server: gzyd.talends.top, port: 20041, tfo: true, type: vmess, uuid: 030d9739-7ed4-35d9-a21f-ea85ce86c9c2, alterId: 1, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /downloads, headers: {Host: jp2.cloudbb.loan}}, udp: true}
+- {name: 🇯🇵 CN高速|日本②ISP住宅 - 夜光云 BLUECLOUD, server: jp2trojan.cloudbb.loan, port: 20022, tfo: true, type: trojan, password: 030d9739-7ed4-35d9-a21f-ea85ce86c9c2, sni: jp2trojan.cloudbb.loan, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本｜国际TⅦ住宅ISP② - 夜光云 BLUECLOUD, server: jp3trojan.cloudbb.loan, port: 20022, tfo: true, type: trojan, password: 030d9739-7ed4-35d9-a21f-ea85ce86c9c2, sni: jp3trojan.cloudbb.loan, skip-cert-verify: true, udp: true}

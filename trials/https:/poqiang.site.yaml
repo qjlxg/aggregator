@@ -54,7 +54,7 @@ proxy-groups:
   - 🛩️ ‍墙内
   - 💩 ‍广告
 proxies:
-- {name: '[ss]SS - 破墙网', server: 154.3.32.49, port: 30000, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 97fc2ce9-178d-4a40-8954-5364d2ac1e2a, udp: true}
+- {name: '[ss]SS - 破墙网', server: 154.3.32.49, port: 30000, type: ss, cipher: chacha20-ietf-poly1305, password: 97fc2ce9-178d-4a40-8954-5364d2ac1e2a, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
