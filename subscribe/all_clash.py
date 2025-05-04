@@ -69,8 +69,8 @@ def fetch_url(url):
 
 # 定义多个URL来源
 url_sources = [
-    'https://raw.githubusercontent.com/qjlxg/collectSub/refs/heads/main/sub/sub_all_clash.txt',
-    'https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/tools/ss-url'
+    'https://github.com/qjlxg/cheemsar/raw/refs/heads/main/trial.cache',
+    'https://github.com/qjlxg/cheemsar-2/raw/refs/heads/main/trial.cache'
 ]
 
 # 获取所有URL来源的URL列表
