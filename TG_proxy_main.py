@@ -15,7 +15,38 @@ import chardet
 
 #试用机场链接
 home_urls =(
-    # ...你的 home_urls 列表内容不变...
+'https://37cdn.ski9.cn',
+'http://vpn1.fengniaocloud.top',
+'http://vpn1.fnvpn.top',
+'https://abc.wisky.lat',
+'http://subuu.xfxvpn.me',
+'https://sub.juejie.store',
+'https://www.zygcloud.net',
+'https://www.zygcloud.com',
+'https://link.sunsun.icu',
+'http://vpn.bigbears.top',
+'http://daxiongyun.net',
+'https://liuliugoo.755r.cn',
+'https://by1.liuliugo.cfd',
+'https://by2.liuliugo.cfd',
+'https://sub.skrspc.org',
+'https://api.skrspc.org',
+'https://3by.liuliugo.cfd',
+'https://www.songbug.cloud',
+'https://dobcloud.com',
+'https://hn1r5k7322.bitmusttw.com',
+'http://uuvpn.me',
+'https://yun.dashiba.com',
+'https://5gsieutoc.fun',
+'https://app.1130.net',
+'https://panel.darkbaz.com',
+'https://full.kddi.best',
+'https://ikanned.com:12000',
+'https://apanel.allbatech.net',
+'https://abbabav2board.foxspirit.vip',
+'https://xunyungogogo.xyz',
+'https://www.kuaidianlianjienode.sbs',
+'https://20242024.dilala.xyz',
 )
 
 #文件路径
