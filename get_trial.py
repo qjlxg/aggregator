@@ -1,180 +1,424 @@
-import requests
-import threading
-import logging
-import yaml
-import time
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
-from typing import Optional, Dict, List
+import os
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
+from datetime import timedelta
+from random import choice, randint
+from time import time
+from urllib.parse import urlsplit, urlunsplit
 
-# 配置日志
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s %(levelname)s %(message)s',
-    datefmt='%a, %d %b %Y %H:%M:%S GMT'
-)
-logger = logging.getLogger(__name__)
+from apis import PanelSession, TempEmail, guess_panel, panel_class_map
+from subconverter import gen_base64_and_clash_config, get
+from utils import (clear_files, g0, keep, list_file_paths, list_folder_paths,
+                   rand_id, read, read_cfg, remove, size2str, str2timestamp,
+                   timestamp2str, to_zero, write, write_cfg)
 
-# 会话管理类，用于处理认证和请求
-class SubscriptionSession:
-    def __init__(self):
-        self.session = requests.Session()
-        # 设置重试机制
-        retries = Retry(total=3, backoff_factor=1, status_forcelist=[403, 500, 502, 503, 504])
-        self.session.mount('http://', HTTPAdapter(max_retries=retries))
-        self.session.mount('https://', HTTPAdapter(max_retries=retries))
-        self.is_authenticated = False
+MAX_WORKERS = 16
+MAX_TASK_TIMEOUT = 45  # 单任务最大等待时间（秒）
 
-    def login(self, email: str = "", password: str = "") -> bool:
-        """模拟登录逻辑，根据实际情况替换"""
+def get_sub(session: PanelSession, opt: dict, cache: dict[str, list[str]]):
+    url = cache['sub_url'][0]
+    suffix = ' - ' + g0(cache, 'name')
+    if 'speed_limit' in opt:
+        suffix += ' ⚠️限速 ' + opt['speed_limit']
+    try:
+        info, *rest = get(url, suffix)
+    except Exception:
+        origin = urlsplit(session.origin)[:2]
+        url = '|'.join(urlunsplit(origin + urlsplit(part)[2:]) for part in url.split('|'))
+        info, *rest = get(url, suffix)
+        cache['sub_url'][0] = url
+    if not info and hasattr(session, 'get_sub_info'):
+        session.login(cache['email'][0])
+        info = session.get_sub_info()
+    return info, *rest
+
+def should_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]]):
+    if 'sub_url' not in cache:
+        return 1,
+
+    now = time()
+    try:
+        info, *rest = get_sub(session, opt, cache)
+    except Exception as e:
+        msg = str(e)
+        if '邮箱' in msg and ('不存在' in msg or '禁' in msg or '黑' in msg):
+            if (d := cache['email'][0].split('@')[1]) not in ('gmail.com', 'qq.com', g0(cache, 'email_domain')):
+                cache['banned_domains'].append(d)
+            return 2,
+        raise e
+
+    return int(
+        not info
+        or opt.get('turn') == 'always'
+        or float(info['total']) - (float(info['upload']) + float(info['download'])) < (1 << 28)
+        or (opt.get('expire') != 'never' and info.get('expire') and str2timestamp(info.get('expire')) - now < ((now - str2timestamp(cache['time'][0])) / 7 if 'reg_limit' in opt else 2400))
+    ), info, *rest
+
+def _register(session: PanelSession, email, *args, **kwargs):
+    try:
+        return session.register(email, *args, **kwargs)
+    except Exception as e:
+        raise Exception(f'注册失败({email}): {e}')
+
+def _get_email_and_email_code(kwargs, session: PanelSession, opt: dict, cache: dict[str, list[str]]):
+    retry = 0
+    while retry < 5:
+        tm = TempEmail(banned_domains=cache.get('banned_domains'))
         try:
-            # 假设需要登录某个端点，替换为实际的登录 URL 和参数
-            response = self.session.post(
-                "https://example.com/login",
-                data={"email": email, "password": password},
-                timeout=10
-            )
-            response.raise_for_status()
-            self.is_authenticated = True
-            logger.info("登录成功")
-            return True
-        except requests.RequestException as e:
-            logger.error(f"登录失败: {e}")
-            self.is_authenticated = False
-            return False
-
-    def ensure_authenticated(self) -> None:
-        """确保会话已认证"""
-        if not self.is_authenticated:
-            self.login()
-
-    def get(self, url: str, timeout: int = 10) -> Optional[requests.Response]:
-        """带超时和错误处理的 GET 请求"""
-        try:
-            self.ensure_authenticated()
-            response = self.session.get(url, timeout=timeout)
-            response.raise_for_status()
-            return response
-        except requests.exceptions.SSLError as e:
-            logger.error(f"SSL 证书验证失败({url}): {e}")
-            return None
-        except requests.RequestException as e:
-            logger.error(f"获取 {url} 页面失败: {e}")
-            return None
-
-# 订阅管理类
-class SubscriptionManager:
-    def __init__(self):
-        self.session = SubscriptionSession()
-        self.lock = threading.Lock()
-
-    def fetch_subscription(self, domain: str, url: str) -> Optional[Dict]:
-        """获取订阅信息"""
-        response = self.session.get(url)
-        if response is None:
-            logger.error(f"获取订阅失败({domain})({url}): 响应为空")
-            return None
-        try:
-            content = response.text
-            if not content:
-                raise ValueError("响应内容为空")
-            # 假设返回的是 JSON 或其他格式，根据实际调整解析逻辑
-            data = {"content": content, "node_count": self._count_nodes(content)}
-            logger.info(f"{url} 节点数 +{data['node_count']} ({data['node_count']})")
-            return data
+            email = kwargs['email'] = tm.email
         except Exception as e:
-            logger.error(f"获取订阅失败({domain})({url}): {e}")
-            return None
-
-    def _count_nodes(self, content: str) -> int:
-        """计算节点数量，需根据实际订阅格式调整"""
-        # 示例：假设每行一个节点
-        return len(content.splitlines()) if content else 0
-
-    def save_subscription(self, domain: str, url: str, clash_url: str) -> bool:
-        """保存 base64/clash 订阅"""
-        subscription = self.fetch_subscription(domain, url)
-        if not subscription:
-            return False
+            raise Exception(f'获取邮箱失败: {e}')
         try:
-            # 获取 clash 格式订阅
-            response = self.session.get(clash_url)
-            if response is None:
+            session.send_email_code(email)
+        except Exception as e:
+            msg = str(e)
+            if '禁' in msg or '黑' in msg:
+                cache['banned_domains'].append(email.split('@')[1])
+                retry += 1
+                continue
+            raise Exception(f'发送邮箱验证码失败({email}): {e}')
+        email_code = tm.get_email_code(g0(cache, 'name'))
+        if not email_code:
+            cache['banned_domains'].append(email.split('@')[1])
+            retry += 1
+            continue
+        kwargs['email_code'] = email_code
+        return email
+    raise Exception('获取邮箱验证码失败，重试次数过多')
+
+def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list) -> bool:
+    kwargs = keep(opt, 'name_eq_email', 'reg_fmt', 'aff')
+
+    if 'invite_code' in cache:
+        kwargs['invite_code'] = cache['invite_code'][0]
+    elif 'invite_code' in opt:
+        kwargs['invite_code'] = choice(opt['invite_code'].split())
+
+    email = kwargs['email'] = f"{rand_id()}@{g0(cache, 'email_domain', default='gmail.com')}"
+    retry = 0
+    while retry < 5:
+        if not (msg := _register(session, **kwargs)):
+            if g0(cache, 'auto_invite', 'T') == 'T' and hasattr(session, 'get_invite_info'):
+                if 'buy' not in opt and 'invite_code' not in kwargs:
+                    session.login()
+                    try:
+                        code, num, money = session.get_invite_info()
+                    except Exception as e:
+                        if g0(cache, 'auto_invite') == 'T':
+                            log.append(f'{session.host}({email}): {e}')
+                        if '邀请' in str(e):
+                            cache['auto_invite'] = 'F'
+                        return False
+                    if 'auto_invite' not in cache:
+                        if not money:
+                            cache['auto_invite'] = 'F'
+                            return False
+                        balance = session.get_balance()
+                        plan = session.get_plan(min_price=balance + 0.01, max_price=balance + money)
+                        if not plan:
+                            cache['auto_invite'] = 'F'
+                            return False
+                        cache['auto_invite'] = 'T'
+                    cache['invite_code'] = [code, num]
+                    kwargs['invite_code'] = code
+
+                    session.reset()
+
+                    if 'email_code' in kwargs:
+                        email = _get_email_and_email_code(kwargs, session, opt, cache)
+                    else:
+                        email = kwargs['email'] = f"{rand_id()}@{email.split('@')[1]}"
+
+                    if (msg := _register(session, **kwargs)):
+                        break
+
+                if 'invite_code' in kwargs:
+                    if 'invite_code' not in cache or int(cache['invite_code'][1]) == 1 or randint(0, 1):
+                        session.login()
+                        try_buy(session, opt, cache, log)
+                        try:
+                            cache['invite_code'] = [*session.get_invite_info()[:2]]
+                        except Exception as e:
+                            if 'invite_code' not in cache:
+                                cache['auto_invite'] = 'F'
+                            else:
+                                log.append(f'{session.host}({email}): {e}')
+                        return True
+                    else:
+                        n = int(cache['invite_code'][1])
+                        if n > 0:
+                            cache['invite_code'][1] = n - 1
+            return False
+        if '后缀' in msg:
+            if email.split('@')[1] != 'gmail.com':
+                break
+            email = kwargs['email'] = f'{rand_id()}@qq.com'
+        elif '验证码' in msg:
+            email = _get_email_and_email_code(kwargs, session, opt, cache)
+        elif '联' in msg:
+            kwargs['im_type'] = True
+        elif (
+            '邀请人' in msg
+            and g0(cache, 'invite_code', '') == kwargs.get('invite_code')
+        ):
+            del cache['invite_code']
+            if 'invite_code' in opt:
+                kwargs['invite_code'] = choice(opt['invite_code'].split())
+            else:
+                del kwargs['invite_code']
+        else:
+            break
+        retry += 1
+    if retry >= 5:
+        raise Exception(f'注册失败({email}): {msg}{" " + kwargs.get("invite_code") if "邀" in msg else ""}')
+    return True
+
+def is_checkin(session, opt: dict):
+    return hasattr(session, 'checkin') and opt.get('checkin') != 'F'
+
+def try_checkin(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list):
+    if is_checkin(session, opt) and cache.get('email'):
+        if len(cache['last_checkin']) < len(cache['email']):
+            cache['last_checkin'] += ['0'] * (len(cache['email']) - len(cache['last_checkin']))
+        last_checkin = to_zero(str2timestamp(cache['last_checkin'][0]))
+        now = time()
+        if now - last_checkin > 24.5 * 3600:
+            try:
+                session.login(cache['email'][0])
+                session.checkin()
+                cache['last_checkin'][0] = timestamp2str(now)
+                cache.pop('尝试签到失败', None)
+            except Exception as e:
+                cache['尝试签到失败'] = [e]
+                log.append(f'尝试签到失败({session.host}): {e}')
+    else:
+        cache.pop('last_checkin', None)
+
+def try_buy(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list):
+    try:
+        if (plan := opt.get('buy')):
+            return session.buy(plan)
+        if (plan := g0(cache, 'buy')):
+            if plan == 'pass':
                 return False
-            clash_content = response.text
-            # 验证 YAML 格式
-            yaml.safe_load(clash_content)
-            # 保存逻辑（根据实际需求替换，例如写入文件）
-            with self.lock:
-                with open(f"{domain}_clash.yaml", "w", encoding="utf-8") as f:
-                    f.write(clash_content)
-            logger.info(f"成功保存 clash 订阅: {domain}")
-            return True
-        except yaml.YAMLError as e:
-            logger.error(f"保存base64/clash订阅失败({domain})({url})({clash_url}): YAML 解析错误 - {e}")
-            return False
-        except Exception as e:
-            logger.error(f"保存base64/clash订阅失败({domain})({url})({clash_url}): {e}")
-            return False
+            try:
+                return session.buy(plan)
+            except Exception as e:
+                del cache['buy']
+                cache.pop('auto_invite', None)
+                cache.pop('invite_code', None)
+                log.append(f'上次购买成功但这次购买失败({session.host}): {e}')
+        plan = session.buy()
+        cache['buy'] = plan or 'pass'
+        return plan
+    except Exception as e:
+        log.append(f'购买失败({session.host}): {e}')
+    return False
 
-    def process_subscription(self, domain: str, url: str, clash_url: str = None) -> None:
-        """处理单个订阅"""
-        logger.info(f"更新订阅链接(新注册)({domain}) {url}")
-        subscription = self.fetch_subscription(domain, url)
-        if subscription and clash_url:
-            self.save_subscription(domain, url, clash_url)
+def do_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list, force_reg=False) -> bool:
+    is_new_reg = False
+    login_and_buy_ok = False
+    reg_limit = opt.get('reg_limit')
+    if not reg_limit:
+        login_and_buy_ok = register(session, opt, cache, log)
+        is_new_reg = True
+        cache['email'] = [session.email]
+        if is_checkin(session, opt):
+            cache['last_checkin'] = ['0']
+    else:
+        reg_limit = int(reg_limit)
+        if len(cache['email']) < reg_limit or force_reg:
+            login_and_buy_ok = register(session, opt, cache, log)
+            is_new_reg = True
+            cache['email'].append(session.email)
+            if is_checkin(session, opt):
+                cache['last_checkin'] += ['0'] * (len(cache['email']) - len(cache['last_checkin']))
+        if len(cache['email']) > reg_limit:
+            del cache['email'][:-reg_limit]
+            if is_checkin(session, opt):
+                del cache['last_checkin'][:-reg_limit]
 
-# 多线程工作类
-class WorkerThread(threading.Thread):
-    def __init__(self, manager: SubscriptionManager, domain: str, url: str, clash_url: str = None):
-        super().__init__()
-        self.manager = manager
-        self.domain = domain
-        self.url = url
-        self.clash_url = clash_url
+        cache['email'] = cache['email'][-1:] + cache['email'][:-1]
+        if is_checkin(session, opt):
+            cache['last_checkin'] = cache['last_checkin'][-1:] + cache['last_checkin'][:-1]
 
-    def run(self):
+    if not login_and_buy_ok:
         try:
-            self.manager.process_subscription(self.domain, self.url, self.clash_url)
+            session.login(cache['email'][0])
         except Exception as e:
-            logger.error(f"线程处理失败({self.domain}): {e}")
+            raise Exception(f'登录失败: {e}')
+        try_buy(session, opt, cache, log)
 
-# 主函数
-def main():
-    manager = SubscriptionManager()
-    subscriptions = [
-        # 示例订阅列表，根据日志填充
-        {
-            "domain": "na.bxox.cc",
-            "url": "http://mbxx.zhunchuanpb.com/s/d6304ccad840f71af79bb60e1c925fa4",
-            "clash_url": None  # 如果有 clash URL，可添加
-        },
-        {
-            "domain": "xbd.iftballs.com",
-            "url": "https://xbd.iftballs.com/api/v1/client/subscribe?token=db28bf9a912452e6de23ae135b5351d5",
-            "clash_url": None
-        },
-        {
-            "domain": "aa.bxox.cc",
-            "url": "http://mbxx.zhunchuanpb.com/s/2e72e68cad20b6bc00a2d5a28f975ce0",
-            "clash_url": "https://api.tsutsu.one/sub?target=clash&udp=true&scv=true&expand=false&classic=true&config=https://raw.githubusercontent.com/zsokami/ACL4SSR/5e8aa297ef067467b51b5611a9e954c8d043babf/ACL4SSR_Online_Full_Mannix.ini&url=http%3A//mbxx.zhunchuanpb.com/s/2e72e68cad20b6bc00a2d5a28f975ce0%231745977675.7762744&rename=%24%40%20-%20MBOXX"
-        },
-        # 根据日志添加更多订阅...
-    ]
+    try_checkin(session, opt, cache, log)
+    cache['sub_url'] = [session.get_sub_url(**opt)]
+    cache['time'] = [timestamp2str(time())]
+    log.append(f'{"更新订阅链接(新注册)" if is_new_reg else "续费续签"}({session.host}) {cache["sub_url"][0]}')
 
-    threads: List[WorkerThread] = []
-    for sub in subscriptions:
-        thread = WorkerThread(manager, sub["domain"], sub["url"], sub.get("clash_url"))
-        threads.append(thread)
-        thread.start()
+def try_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list):
+    cache.pop('更新旧订阅失败', None)
+    cache.pop('更新订阅链接/续费续签失败', None)
+    cache.pop('获取订阅失败', None)
 
-    # 等待所有线程完成
-    for thread in threads:
-        thread.join(timeout=30)  # 设置超时防止卡住
-        if thread.is_alive():
-            logger.warning(f"线程处理 {thread.domain} 超时")
+    try:
+        turn, *sub = should_turn(session, opt, cache)
+    except Exception as e:
+        cache['更新旧订阅失败'] = [e]
+        log.append(f'更新旧订阅失败({session.host})({cache["sub_url"][0]}): {e}')
+        return None
 
-    logger.info("所有订阅处理完成")
+    if turn:
+        try:
+            do_turn(session, opt, cache, log, force_reg=turn == 2)
+        except Exception as e:
+            cache['更新订阅链接/续费续签失败'] = [e]
+            log.append(f'更新订阅链接/续费续签失败({session.host}): {e}')
+            return sub
+        try:
+            sub = get_sub(session, opt, cache)
+        except Exception as e:
+            cache['获取订阅失败'] = [e]
+            log.append(f'获取订阅失败({session.host})({cache["sub_url"][0]}): {e}')
 
-if __name__ == "__main__":
-    main()
+    return sub
+
+def cache_sub_info(info, opt: dict, cache: dict[str, list[str]]):
+    if not info:
+        raise Exception('no sub info')
+    used = float(info["upload"]) + float(info["download"])
+    total = float(info["total"])
+    rest = '(剩余 ' + size2str(total - used)
+    if opt.get('expire') == 'never' or not info.get('expire'):
+        expire = '永不过期'
+    else:
+        ts = str2timestamp(info['expire'])
+        expire = timestamp2str(ts)
+        rest += ' ' + str(timedelta(seconds=ts - time()))
+    rest += ')'
+    cache['sub_info'] = [size2str(used), size2str(total), expire, rest]
+
+def save_sub_base64_and_clash(base64, clash, host, opt: dict):
+    return gen_base64_and_clash_config(
+        base64_path=f'trials/{host}',
+        clash_path=f'trials/{host}.yaml',
+        providers_dir=f'trials_providers/{host}',
+        base64=base64,
+        clash=clash,
+        exclude=opt.get('exclude')
+    )
+
+def save_sub(info, base64, clash, base64_url, clash_url, host, opt: dict, cache: dict[str, list[str]], log: list):
+    cache.pop('保存订阅信息失败', None)
+    cache.pop('保存base64/clash订阅失败', None)
+
+    try:
+        cache_sub_info(info, opt, cache)
+    except Exception as e:
+        cache['保存订阅信息失败'] = [e]
+        log.append(f'保存订阅信息失败({host})({clash_url}): {e}')
+    try:
+        node_n = save_sub_base64_and_clash(base64, clash, host, opt)
+        if (d := node_n - int(g0(cache, 'node_n', 0))) != 0:
+            log.append(f'{host} 节点数 {"+" if d > 0 else ""}{d} ({node_n})')
+        cache['node_n'] = node_n
+    except Exception as e:
+        cache['保存base64/clash订阅失败'] = [e]
+        log.append(f'保存base64/clash订阅失败({host})({base64_url})({clash_url}): {e}')
+
+def get_and_save(session: PanelSession, host, opt: dict, cache: dict[str, list[str]], log: list):
+    try:
+        try_checkin(session, opt, cache, log)
+        sub = try_turn(session, opt, cache, log)
+        if sub:
+            save_sub(*sub, host, opt, cache, log)
+    except Exception as e:
+        log.append(f"{host} get_and_save 异常: {e}")
+
+def new_panel_session(host, cache: dict[str, list[str]], log: list) -> PanelSession | None:
+    try:
+        if 'type' not in cache:
+            info = guess_panel(host)
+            if 'type' not in info:
+                if (e := info.get('error')):
+                    log.append(f"{host} 判别类型失败: {e}")
+                else:
+                    log.append(f"{host} 未知类型")
+                return None
+            cache.update(info)
+        return panel_class_map[g0(cache, 'type')](g0(cache, 'api_host', host), **keep(cache, 'auth_path', getitem=g0))
+    except Exception as e:
+        log.append(f"{host} new_panel_session 异常: {e}")
+        return None
+
+def get_trial(host, opt: dict, cache: dict[str, list[str]]):
+    log = []
+    try:
+        session = new_panel_session(host, cache, log)
+        if session:
+            get_and_save(session, host, opt, cache, log)
+            if hasattr(session, 'redirect_origin') and session.redirect_origin:
+                cache['api_host'] = session.host
+    except Exception as e:
+        log.append(f"{host} 处理异常: {e}")
+    return log
+
+def build_options(cfg):
+    opt = {
+        host: dict(zip(opt[::2], opt[1::2]))
+        for host, *opt in cfg
+    }
+    return opt
+
+if __name__ == '__main__':
+    pre_repo = read('.github/repo_get_trial')
+    cur_repo = os.getenv('GITHUB_REPOSITORY')
+    if pre_repo != cur_repo:
+        remove('trial.cache')
+        write('.github/repo_get_trial', cur_repo)
+
+    cfg = read_cfg('trial.cfg')['default']
+    opt = build_options(cfg)
+    cache = read_cfg('trial.cache', dict_items=True)
+
+    for host in [*cache]:
+        if host not in opt:
+            del cache[host]
+
+    for path in list_file_paths('trials'):
+        host, ext = os.path.splitext(os.path.basename(path))
+        if ext != '.yaml':
+            host += ext
+        else:
+            host = host.split('_')[0]
+        if host not in opt:
+            remove(path)
+
+    for path in list_folder_paths('trials_providers'):
+        host = os.path.basename(path)
+        if '.' in host and host not in opt:
+            clear_files(path)
+            remove(path)
+
+    with ThreadPoolExecutor(MAX_WORKERS) as executor:
+        futures = []
+        args = [(h, opt[h], cache[h]) for h, *_ in cfg]
+        for h, o, c in args:
+            futures.append(executor.submit(get_trial, h, o, c))
+        for future in as_completed(futures):
+            try:
+                log = future.result(timeout=MAX_TASK_TIMEOUT)
+                for line in log:
+                    print(line, flush=True)
+            except TimeoutError:
+                print("有任务超时（超过45秒未完成），已跳过。", flush=True)
+            except Exception as e:
+                print(f"任务异常: {e}", flush=True)
+
+    total_node_n = gen_base64_and_clash_config(
+        base64_path='trial',
+        clash_path='trial.yaml',
+        providers_dir='trials_providers',
+        base64_paths=(path for path in list_file_paths('trials') if os.path.splitext(path)[1].lower() != '.yaml'),
+        providers_dirs=(path for path in list_folder_paths('trials_providers') if '.' in os.path.basename(path))
+    )
+
+    print('总节点数', total_node_n)
+    write_cfg('trial.cache', cache)
