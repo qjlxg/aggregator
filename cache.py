@@ -3,7 +3,8 @@ import re
 import requests
 
 output_file = "data/subscribes.txt"
-raw_url = "https://github.com/qjlxg/cheemsar/blob/main/trial.cache"
+raw_url = "https://github.com/qjlxg/cheemsar/blob/main/trial.cache",
+          "https://github.com/qjlxg/cheemsar-2/blob/main/trial.cache",
 
 def extract_and_append_unique_urls(raw_url, output_file):
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
