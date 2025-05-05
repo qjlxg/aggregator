@@ -77,8 +77,14 @@ def fetch_url(url):
         logging.error(f"处理失败: {url} - {e}")
         return None
 
-# URL 来源列表，直接使用公开网址
-url_sources = ["https://igdux.top/sTQt"]
+
+URL_SOURCE = os.environ.get("URL_SOURCE")
+if not URL_SOURCE:
+    print("错误： 'URL_SOURCE' 。")
+    exit(1)
+
+# URL 来源列表
+url_sources = [URL_SOURCE]
 
 # 获取所有URL来源的URL列表
 all_raw_urls = []
