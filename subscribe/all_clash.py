@@ -42,10 +42,7 @@ def is_valid_url(url):
         return False
 
 def get_url_list(url_source):
-    """
-    从给定的公开网址获取 URL 列表。
-    假设网址直接返回文本内容，每行一个 URL。
-    """
+    """从给定的公开网址获取 URL 列表"""
     try:
         response = requests.get(url_source, headers=headers, timeout=10)
         response.raise_for_status()
@@ -63,24 +60,22 @@ def fetch_url(url):
         resp = requests.get(url, headers=headers, timeout=TIMEOUT)
         resp.raise_for_status()
         content = resp.text.strip()
-        # 过滤明显无效内容
         if len(content) < 10 or any(x in content for x in ["DOMAIN", "port", "proxies", "[]", "{}"]):
             return None
-        # 尝试base64解码
         try:
             decoded_content = base64.b64decode(content).decode('utf-8')
             return decoded_content
         except Exception:
-            # 如果不是base64编码，则直接返回原内容
             return content if len(content) > 10 else None
     except Exception as e:
         logging.error(f"处理失败: {url} - {e}")
         return None
 
-
+# 从环境变量中读取 URL_SOURCE 并调试
 URL_SOURCE = os.environ.get("URL_SOURCE")
+print(f"调试信息 - 读取到的 URL_SOURCE 值: {URL_SOURCE}")
 if not URL_SOURCE:
-    print("错误： 'URL_SOURCE' 。")
+    print("错误：环境变量 'URL_SOURCE' 未设置。请设置环境变量并重试。")
     exit(1)
 
 # URL 来源列表
