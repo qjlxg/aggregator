@@ -7,11 +7,11 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     env:
-      CHANNEL_URLS: ${{ secrets.CHANNEL_URLS }}  
+      CHANNEL_URLS: ${{ secrets.CHANNEL_URLS }}  # 从 secrets 获取频道链接
     steps:
       - uses: actions/checkout@v2
 
-      - name: 设置Python
+      - name: 设置 Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
@@ -21,27 +21,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install selenium requests
 
-      - name: 安装Chrome
+      - name: 安装 Chrome
         run: |
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
 
-      - name: 安装ChromeDriver
-        run: |
-          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1-3)
-          echo "检测到的Chrome版本: $CHROME_VERSION"
-          CHROMEDRIVER_VERSION=$(curl -sS "http://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-          if [ -z "$CHROMEDRIVER_VERSION" ] || echo "$CHROMEDRIVER_VERSION" | grep -q "<Error>"; then
-            echo "未能获取ChromeDriver版本，使用备用版本: 114.0.5735.90"
-            CHROMEDRIVER_VERSION="114.0.5735.90"
-          else
-            echo "获取到的ChromeDriver版本: $CHROMEDRIVER_VERSION"
-          fi
-          wget -N --tries=3 --retry-connrefused "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/bin/chromedriver
-          sudo chown root:root /usr/bin/chromedriver
-          sudo chmod +x /usr/bin/chromedriver
+      - name: 移除现有的 ChromeDriver
+        run: sudo rm -f /usr/bin/chromedriver  # 确保删除旧版本
+
+      - name: 设置 ChromeDriver
+        id: chromedriver
+        uses: browser-actions/setup-chromedriver@v1  # 自动安装匹配版本
 
       - name: 运行脚本
         run: python script.py
+        env:
+          CHROMEDRIVER_PATH: ${{ steps.chromedriver.outputs.chromedriver-path }}  # 传递 ChromeDriver 路径
