@@ -6,7 +6,7 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'all_clash.py'
+      - 'ss.py'
   schedule:
     - cron: '0 */6 * * *'
 
@@ -45,7 +45,7 @@ jobs:
       run: |                 
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-        git add data/all_ss.txt
+        git add data/ss.txt
         git add . 
         git commit -m "$(date '+%Y-%m-%d %H:%M:%S')" || echo "Nothing to commit"
 
