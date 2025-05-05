@@ -2,14 +2,12 @@ name: Scrape Telegram URLs
 
 on:
   workflow_dispatch:  # 手动触发工作流
-    inputs:
-      channel_url:
-        description: 'Telegram 频道 URL'
-        required: true
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    env:
+      CHANNEL_URLS: ${{ secrets.CHANNEL_URLS }}  
     steps:
       - uses: actions/checkout@v2
 
@@ -39,4 +37,4 @@ jobs:
           sudo chmod +x /usr/bin/chromedriver
 
       - name: 运行脚本
-        run: python script.py ${{ github.event.inputs.channel_url }}
+        run: python script.py
