@@ -26,9 +26,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
 
-      - name: 移除现有的 ChromeDriver
-        run: sudo rm -f /usr/bin/chromedriver  # 确保删除旧版本
-
       - name: 设置 ChromeDriver
         id: chromedriver
         uses: browser-actions/setup-chromedriver@v1  # 自动安装匹配版本
@@ -36,4 +33,4 @@ jobs:
       - name: 运行脚本
         run: python script.py
         env:
-          CHROMEDRIVER_PATH: ${{ steps.chromedriver.outputs.chromedriver-path }}  # 传递 ChromeDriver 路径
+          CHROMEDRIVER_PATH: ${{ steps.chromedriver.outputs.chromedriver-path }}
