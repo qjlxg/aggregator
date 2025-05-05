@@ -1,83 +1,92 @@
 import os
-import sys
-import time
 import requests
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-import base64
+from bs4 import BeautifulSoup
+import time
 
-# 从环境变量获取 ChromeDriver 路径
-chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
-if not chromedriver_path:
-    print("环境变量 CHROMEDRIVER_PATH 未设置，请检查工作流配置")
-    sys.exit(1)
+# 配置
+BASE_URL = 'https://t.me/dingyue_center'  
+NEXT_PAGE_PARAM = 'page'  # 翻页参数名
+DATA_DIR = 'data'
+OUTPUT_FILE = os.path.join(DATA_DIR, 't.txt')
 
-# 从环境变量获取 Telegram 频道 URL
-channel_urls_str = os.getenv('CHANNEL_URLS')
-if not channel_urls_str:
-    print("环境变量 CHANNEL_URLS 未设置，请在 GitHub Secrets 中配置")
-    sys.exit(1)
-channel_urls = channel_urls_str.split(',')
+# 确保数据目录存在
+os.makedirs(DATA_DIR, exist_ok=True)
 
-# 设置 Chrome 无头模式选项
-chrome_options = Options()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+}
 
-# 初始化 Selenium WebDriver
-service = Service(executable_path=chromedriver_path)
-driver = webdriver.Chrome(service=service, options=chrome_options)
+# 存储所有提取的链接
+extracted_links = set()
 
-# Base64 编码的搜索关键字
-encoded_search_keyword = "L2FwaS92MS9jbGllbnQvc3Vic2NyaWJlP3Rva2VuPQ=="
-
-try:
-    all_urls = set()
-    for channel_url in channel_urls:
-        driver.get(channel_url)
-
-        # 滚动页面以加载所有消息
-        last_height = driver.execute_script("return document.body.scrollHeight")
-        while True:
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(2)  # 等待新内容加载
-            new_height = driver.execute_script("return document.body.scrollHeight")
-            if new_height == last_height:  # 如果页面高度不再变化，说明已加载所有消息
-                break
-            last_height = new_height
-
-        # 解码搜索关键字
-        search_keyword = base64.b64decode(encoded_search_keyword).decode()
-
-        # 提取含有特定模式的超链接
-        elements = driver.find_elements(By.CSS_SELECTOR, f'a[href*="{search_keyword}"]')
-        for element in elements:
-            url = element.get_attribute('href')
-            if url and url.startswith('http'):  # 确保是绝对 URL
-                all_urls.add(url)
-
-finally:
-    # 关闭浏览器
-    driver.quit()
-
-# 测试每个 URL 的连通性
-reachable_urls = []
-for url in all_urls:
+def fetch_page(url, params=None):
     try:
-        response = requests.get(url, timeout=5)  # 设置 5 秒超时
-        if response.status_code == 200:
-            reachable_urls.append(url)
-    except requests.exceptions.RequestException:
-        # 如果请求失败（超时、连接错误等），跳过该 URL
-        pass
+        response = requests.get(url, headers=headers, params=params, timeout=10)
+        response.raise_for_status()
+        return response.text
+    except Exception as e:
+        print(f"请求失败 {url}: {e}")
+        return None
 
-# 保存可连通的 URL 到文件
-os.makedirs('data', exist_ok=True)  # 创建 data 目录（如果不存在）
-with open('data/t.txt', 'w') as f:
-    for url in reachable_urls:
-        f.write(url + '\n')
+def extract_links(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    links = set()
+    for a in soup.find_all('a', href=True):
+        href = a['href']
+        if '/api/v1/client/subscribe?token=' in href:
+            links.add(href)
+    return links
 
-print(f"已提取并保存 {len(reachable_urls)} 个可连通的 URL 到 data/t.txt")
+def test_url(url):
+    try:
+        r = requests.get(url, headers=headers, timeout=10)
+        if r.status_code == 200:
+            return True
+        else:
+            return False
+    except:
+        return False
+
+def main():
+    page_number = 1
+    has_next = True
+    current_url = BASE_URL
+
+    while has_next:
+        print(f"正在抓取第{page_number}页内容...")
+        html = fetch_page(current_url)
+        if not html:
+            break
+        links = extract_links(html)
+        print(f"找到 {len(links)} 个潜在链接。")
+        for link in links:
+            if link not in extracted_links:
+                print(f"检测链接：{link}")
+                if test_url(link):
+                    print("链接有效，保存中...")
+                    with open(OUTPUT_FILE, 'a', encoding='utf-8') as f:
+                        f.write(link + '\n')
+                    extracted_links.add(link)
+                else:
+                    print("链接失效，跳过。")
+        # 翻页逻辑（请根据实际页面结构调整）
+        # 这里假设有个“下一页”链接或参数
+        # 例如，网址中增加页码参数
+        page_number += 1
+        # 如果没有下一页，可以通过分析html中的“下一页”元素来判断
+        # 这里简化为计数，或自行实现检测逻辑
+        # 你需要根据页面实际情况调整
+        # 例如：
+        # next_link = soup.find('a', text='下一页')
+        # if next_link:
+        #     current_url = next_link['href']
+        # else:
+        #     has_next = False
+        # 为简化演示，假设有限页数
+        if page_number > 50:
+            has_next = False
+        time.sleep(1)  # 礼貌性暂停
+
+if __name__ == '__main__':
+    main()
+    print("抓取完成，结果已保存。")
