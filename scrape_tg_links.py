@@ -7,7 +7,7 @@ import time
 BASE_URL = 'https://t.me/s/dingyue_center'  # 确保是 /s/ 格式的链接
 DATA_DIR = 'data'
 OUTPUT_FILE = os.path.join(DATA_DIR, 't.txt')
-MAX_PAGES = 10
+MAX_PAGES = 100
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
