@@ -13,20 +13,22 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-BASE_URL = os.environ.get("ALL_CLASH_BASE_URL")
-TOKEN = os.environ.get("ALL_CLASH")
+ALL_CLASH_BASE_URL = os.environ.get("ALL_CLASH_BASE_URL")
+ALL_CLASH = os.environ.get("ALL_CLASH")
 
 
-PRIVATE_URL = f"{BASE_URL}?token={TOKEN}"
+PRIVATE_URL = f"{ALL_CLASH_BASE_URL}?token={ALL_CLASH}"
 
 # 配置日志
 logging.basicConfig(filename='error.log', level=logging.ERROR,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 headers = {
-    'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-                   'AppleWebKit/537.36 (KHTML, like Gecko) '
-                   'Chrome/91.0.4472.124 Safari/537.36'),
+    'User-Agent': (
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+        'AppleWebKit/537.36 (KHTML, like Gecko) '
+        'Chrome/91.0.4472.124 Safari/537.36'
+    ),
     'Accept-Encoding': 'gzip, deflate'
 }
 
@@ -75,13 +77,13 @@ def fetch_url(url):
             decoded_content = base64.b64decode(content).decode('utf-8')
             return decoded_content
         except Exception:
-            # 如果不是base64，直接返回原内容
+            # 如果不是base64编码，则直接返回原内容
             return content if len(content) > 10 else None
     except Exception as e:
         logging.error(f"处理失败: {url} - {e}")
         return None
 
-
+# URL 来源列表，这里使用通过环境变量隐藏后的私有仓库文件 URL
 url_sources = [
     PRIVATE_URL,
 ]
