@@ -9,15 +9,15 @@ from tqdm import tqdm
 import argparse
 from dotenv import load_dotenv
 
-
+# 加载 .env 文件中的环境变量
 load_dotenv()
 
 
 ALL_CLASH_BASE_URL = os.environ.get("ALL_CLASH_BASE_URL")
-ALL_CLASH = os.environ.get("ALL_CLASH")
+GIST_PAT = os.environ.get("GIST_PAT")
 
 
-PRIVATE_URL = f"{ALL_CLASH_BASE_URL}?token={ALL_CLASH}"
+PRIVATE_URL = f"{ALL_CLASH_BASE_URL}?token={GIST_PAT}"
 
 # 配置日志
 logging.basicConfig(filename='error.log', level=logging.ERROR,
