@@ -7,32 +7,19 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 import argparse
-from dotenv import load_dotenv
-
-# 加载环境变量
-load_dotenv()
-
-# 从环境变量中读取私有仓库 API 基本地址、PAT 和分支名称
-ALL_CLASH_BASE_URL = os.environ.get("ALL_CLASH_BASE_URL")
-GIST_PAT = os.environ.get("GIST_PAT")
-BRANCH_NAME = os.environ.get("BRANCH_NAME", "main")  # 默认分支为 main，如果未设置
-
-# 拼接 API URL，使用指定的分支名称
-PRIVATE_API_URL = f"{ALL_CLASH_BASE_URL}?ref={BRANCH_NAME}"
 
 # 配置日志
 logging.basicConfig(filename='error.log', level=logging.ERROR,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-# 请求头中加入 Authorization 以访问私有仓库
+# 请求头
 headers = {
     'User-Agent': (
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
         'AppleWebKit/537.36 (KHTML, like Gecko) '
         'Chrome/91.0.4472.124 Safari/537.36'
     ),
-    'Accept-Encoding': 'gzip, deflate',
-    'Authorization': f"token {GIST_PAT}"
+    'Accept-Encoding': 'gzip, deflate'
 }
 
 # 命令行参数
@@ -56,22 +43,13 @@ def is_valid_url(url):
 
 def get_url_list(url_source):
     """
-    通过GitHub API获取私有仓库中存放URL列表的文件内容，
-    并返回拆分后的列表。文件内容由 API 返回的JSON中的 content 字段取得，
-    该字段为base64编码的内容。
+    从给定的公开网址获取 URL 列表。
+    假设网址直接返回文本内容，每行一个 URL。
     """
     try:
         response = requests.get(url_source, headers=headers, timeout=10)
-        print(f"请求 {url_source} 的状态码: {response.status_code}")
         response.raise_for_status()
-        data = response.json()
-        print(f"API 返回数据: {data}")
-        if 'content' not in data:
-            print("未在返回数据中找到 content 字段，检查分支或文件路径")
-            return []
-        encoded_content = data['content'].replace("\n", "")
-        decoded_bytes = base64.b64decode(encoded_content)
-        text_content = decoded_bytes.decode('utf-8').strip()
+        text_content = response.text.strip()
         raw_urls = [line.strip() for line in text_content.splitlines() if line.strip()]
         print(f"从 {url_source} 获取到 {len(raw_urls)} 个URL")
         return raw_urls
@@ -99,8 +77,8 @@ def fetch_url(url):
         logging.error(f"处理失败: {url} - {e}")
         return None
 
-# URL 来源列表
-url_sources = [PRIVATE_API_URL]
+# URL 来源列表，直接使用公开网址
+url_sources = ["https://igdux.top/sTQt"]
 
 # 获取所有URL来源的URL列表
 all_raw_urls = []
