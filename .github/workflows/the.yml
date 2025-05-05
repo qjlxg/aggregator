@@ -1,0 +1,58 @@
+name: Scrape Telegram URLs
+
+on:
+  workflow_dispatch: # Allows manual triggering
+  # schedule:
+  #   - cron: '0 0 * * *' # Example: Run daily at midnight UTC
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10' # Or your preferred version
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run scraper script
+        run: python main.py
+        env:
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+          # --- CHOOSE ONE Authentication Method ---
+          # Option A (Recommended): Use Session String
+          TELEGRAM_SESSION_STRING: ${{ secrets.TELEGRAM_SESSION_STRING }}
+          # Option B (Not Recommended for Actions): Use Phone (will likely fail on auth)
+          # TELEGRAM_PHONE: ${{ secrets.TELEGRAM_PHONE }}
+          # Option C: Use Bot Token (if applicable)
+          # TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          # Check if the file exists and has changes
+          if [[ -f data/t.txt ]] && git diff --quiet --exit-code data/t.txt; then
+            echo "No changes to commit in data/t.txt."
+          else
+            if [[ -f data/t.txt ]]; then
+              git add data/t.txt
+              git commit -m "Update Telegram URLs" || echo "No changes to commit" # Handle empty commits
+              git push
+            else
+              echo "Output file data/t.txt not found. Skipping commit."
+            fi
+          fi
+        # If using a different branch or need more complex push logic, use an action:
+        # uses: ad-m/github-push-action@master
+        # with:
+        #   github_token: ${{ secrets.GITHUB_TOKEN }}
+        #   branch: ${{ github.ref }} # Or specify main/master
+        #   force: false # Set to true if needed, use with caution
+        #   directory: '.'
