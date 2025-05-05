@@ -26,7 +26,10 @@ jobs:
         pip3 install python-dotenv tqdm
 
     - name: Execute Python script
-      run: python -u subscribe/collect.py -s
+      env:
+       ALL_CLASH_DATA_API: https://api.github.com/repos/qjlxg/362/contents/data
+       GIST_PAT: ${{ secrets.GIST_PAT }}
+       run: python -u subscribe/collect.py -s
 
     - name: Check script execution
       run: |
