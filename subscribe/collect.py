@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-# https://github.com/awuaaaaa/vless-py
-# @Author  : wzdnzd（原始作者），优化及节点去重修改 by 优化者
-# @Time    : 2022-07-15（原始时间）, 2025-05-05（优化时间）
-
 import argparse
 import itertools
 import os
@@ -31,18 +27,19 @@ import clash
 import subconverter
 
 from dotenv import load_dotenv
-# 加载 .env 文件中的环境变量或系统环境变量
 load_dotenv()
 
-# 定义项目根目录和 data 目录，本地文件存放位置
 PATH = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 DATA_BASE = os.path.join(PATH, "data")
 
-# 用于通过 GitHub API 获取私有仓库中 data 目录下文件的 API 地址
-ALL_CLASH_DATA_API = os.environ.get("ALL_CLASH_DATA_API")  # 例如：https://api.github.com/repos/qjlxg/362/contents/data
+ALL_CLASH_DATA_API = os.environ.get("ALL_CLASH_DATA_API")
 GIST_PAT = os.environ.get("GIST_PAT")
 
-# 配置用于私有仓库请求的请求头（Authorization 必须设置）
+if not ALL_CLASH_DATA_API or not GIST_PAT:
+    print("环境变量 ALL_CLASH_DATA_API 或 GIST_PAT 未设置！")
+    print("ALL_CLASH_DATA_API 应为：https://api.github.com/repos/qjlxg/362/contents/data")
+    sys.exit(1)
+
 api_headers = {
     'User-Agent': 'Mozilla/5.0',
     'Authorization': f"token {GIST_PAT}"
@@ -67,7 +64,6 @@ def push_repo_file(filename, content):
     """将内容直接推送到私有仓库data目录，异常时记录日志"""
     try:
         url = f"{ALL_CLASH_DATA_API}/{filename}"
-        # 获取 sha
         sha = None
         try:
             resp = requests.get(url, headers=api_headers, timeout=10)
@@ -95,10 +91,9 @@ class SubscriptionManager:
         self.display = display
         self.delimiter = "@#@#"
         self.special_protocols = AirPort.enable_special_protocols()
-        self.repo_files = repo_files  # 传入内存中的文件内容
+        self.repo_files = repo_files
 
     def load_exist(self, filename: str) -> List[str]:
-        """只从内存加载订阅并去重、过滤失效"""
         if not filename or filename not in self.repo_files:
             return []
         subscriptions: Set[str] = set()
@@ -116,7 +111,6 @@ class SubscriptionManager:
         return [links[i] for i in range(len(links)) if results[i][0] and not results[i][1]]
 
     def parse_domains(self, content: str) -> Dict[str, Dict[str, str]]:
-        """解析机场域名列表"""
         if not content or not isinstance(content, str):
             logger.warning("内容为空或非字符串，无法解析域名")
             return {}
@@ -132,7 +126,7 @@ class SubscriptionManager:
             records[address] = {"coupon": coupon, "invite_code": invite_code}
         return records
 
-    def assign(self, domains_file: str = "", overwrite: bool = False, pages: int = sys.maxsize, rigid: bool = True, chuck: bool = False, subscribes_file: str = "", refresh: bool = False, customize_link: str = "") -> List[TaskConfig]:
+    def assign(self, domains_file: str = "", overwrite: bool = False, pages: int = sys.maxsize, rigid: bool = True, chuck: bool = False, subscribes_file: str = "", refresh: bool = False, customize_link: str = "") -> (List[TaskConfig], dict):
         subscriptions = self.load_exist(subscribes_file)
         logger.info(f"加载现有订阅完成，数量: {len(subscriptions)}")
         tasks = [
@@ -141,9 +135,8 @@ class SubscriptionManager:
         ] if subscriptions else []
         if tasks and refresh:
             logger.info("跳过注册新账号，将使用现有订阅刷新")
-            return tasks
+            return tasks, {}
         domains_file = utils.trim(domains_file) or "domains.txt"
-        # 直接从内存读取 domains.txt
         try:
             domains_content = self.repo_files.get(domains_file, "")
             domains = self.parse_domains(domains_content)
@@ -157,7 +150,7 @@ class SubscriptionManager:
                 num_thread=self.num_threads,
                 rigid=rigid,
                 display=self.display,
-                filepath="coupons.txt",  # 只做标记，不会写本地
+                filepath="coupons.txt",
                 delimiter=self.delimiter,
                 chuck=chuck,
             )
@@ -172,8 +165,7 @@ class SubscriptionManager:
                 domains.update(self.parse_domains(utils.http_get(url=customize_link)))
         if not domains:
             logger.error("无法收集到新的可免费使用的机场信息")
-            return tasks
-        # 不再写本地文件
+            return tasks, domains
         task_set = {task.sub for task in tasks if task.sub}
         for domain, param in domains.items():
             name = crawl.naming_task(url=domain)
@@ -194,7 +186,6 @@ class SubscriptionManager:
         return tasks, domains
 
 def aggregate(args: argparse.Namespace) -> None:
-    # 1. 运行前先从私有仓库读取四个文件到内存
     repo_files = {}
     for fname in ["coupons.txt", "domains.txt", "subscribes.txt", "valid-domains.txt"]:
         repo_files[fname] = fetch_repo_file(fname)
@@ -305,7 +296,7 @@ def aggregate(args: argparse.Namespace) -> None:
         urls.extend(old_subscriptions)
         logger.info(f"订阅过滤完成，总数: {total}, 保留: {len(urls)}, 丢弃: {discard}")
 
-    # 运行结束后，直接推送新内容到私有仓库
+    # 推送新内容到私有仓库
     try:
         push_repo_file("subscribes.txt", "\n".join(urls))
     except Exception as e:
@@ -316,7 +307,6 @@ def aggregate(args: argparse.Namespace) -> None:
     except Exception as e:
         logger.error(f"推送 valid-domains.txt 失败: {e}")
     try:
-        # domains_dict 可能需要重新格式化为文本
         domains_txt_content = ""
         for k, v in domains_dict.items():
             line = k
@@ -327,7 +317,6 @@ def aggregate(args: argparse.Namespace) -> None:
     except Exception as e:
         logger.error(f"推送 domains.txt 失败: {e}")
     try:
-        # coupons.txt 可能需要你根据实际业务生成内容，这里示例用原内容
         push_repo_file("coupons.txt", repo_files.get("coupons.txt", ""))
     except Exception as e:
         logger.error(f"推送 coupons.txt 失败: {e}")
