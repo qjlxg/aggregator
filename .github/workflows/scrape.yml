@@ -30,8 +30,8 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          if [ -f data/t.txt ]; then
-            git add data/t.txt
+          if [ -f data/valid_links.txt ]; then
+            git add data/valid_links.txt
           fi
           git commit -m "Update t.txt with latest links" || echo "No changes to commit"
           git push origin main || echo "Push failed, possibly no changes"
