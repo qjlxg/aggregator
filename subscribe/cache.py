@@ -3,7 +3,7 @@ import re
 import requests
 import base64
 
-CLASH_API = os.environ.get("CLASH_API", "").strip()
+CLASH_API = os.environ.get("CLASH_API_cache", "").strip()
 GIST_PAT = os.environ.get("GIST_PAT", "").strip()
 
 
