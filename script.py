@@ -4,14 +4,19 @@ import time
 import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+import base64
 
-# 检查命令行参数，获取 Telegram 频道 URL
-if len(sys.argv) < 2:
-    print("请提供 Telegram 频道 URL，例如：https://t.me/somechannel")
+
+channel_urls_str = os.getenv('CHANNEL_URLS')
+if not channel_urls_str:
+    print("环境变量 CHANNEL_URLS 未设置，请在 GitHub Secrets 中配置")
     sys.exit(1)
-channel_url = sys.argv[1]
+channel_urls = channel_urls_str.split(',')
 
-# 设置 Chrome 无头模式选项，适应 GitHub Actions 环境
+
+encoded_search_keyword = "L2FwaS92MS9jbGllbnQvc3Vic2NyaWJlP3Rva2VuPQ=="  
+
+# 设置 Chrome 无头模式选项
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
@@ -21,26 +26,30 @@ chrome_options.add_argument("--disable-dev-shm-usage")
 driver = webdriver.Chrome(options=chrome_options)
 
 try:
-    # 访问 Telegram 频道页面
-    driver.get(channel_url)
+    all_urls = set()
+    for channel_url in channel_urls:
+       
+        driver.get(channel_url)
 
-    # 滚动页面以加载所有消息
-    last_height = driver.execute_script("return document.body.scrollHeight")
-    while True:
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)  # 等待新内容加载
-        new_height = driver.execute_script("return document.body.scrollHeight")
-        if new_height == last_height:  # 如果页面高度不再变化，说明已加载所有消息
-            break
-        last_height = new_height
+        # 滚动页面以加载所有消息
+        last_height = driver.execute_script("return document.body.scrollHeight")
+        while True:
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(2)  # 等待新内容加载
+            new_height = driver.execute_script("return document.body.scrollHeight")
+            if new_height == last_height:  # 如果页面高度不再变化，说明已加载所有消息
+                break
+            last_height = new_height
 
-    # 提取含有特定模式的超链接
-    urls = set()
-    elements = driver.find_elements_by_css_selector('a[href*="/api/v1/client/subscribe?token="]')
-    for element in elements:
-        url = element.get_attribute('href')
-        if url and url.startswith('http'):  # 确保是绝对 URL
-            urls.add(url)
+        # 解码搜索关键字
+        search_keyword = base64.b64decode(encoded_search_keyword).decode()
+
+        # 提取含有特定模式的超链接
+        elements = driver.find_elements_by_css_selector(f'a[href*="{search_keyword}"]')
+        for element in elements:
+            url = element.get_attribute('href')
+            if url and url.startswith('http'):  # 确保是绝对 URL
+                all_urls.add(url)
 
 finally:
     # 关闭浏览器
@@ -48,7 +57,7 @@ finally:
 
 # 测试每个 URL 的连通性
 reachable_urls = []
-for url in urls:
+for url in all_urls:
     try:
         response = requests.get(url, timeout=5)  # 设置 5 秒超时
         if response.status_code == 200:
