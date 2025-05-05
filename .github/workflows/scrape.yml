@@ -2,8 +2,8 @@ name: Scrape TG Links
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天0点运行
-  workflow_dispatch: # 手动触发
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   scrape:
@@ -23,8 +23,6 @@ jobs:
           pip install requests beautifulsoup4
 
       - name: Run scraper
-        env:
-          BASE_URL: https://t.me/dingyue_center 
         run: |
           python scrape_tg_links.py
 
@@ -32,6 +30,8 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add data/t.txt
+          if [ -f data/t.txt ]; then
+            git add data/t.txt
+          fi
           git commit -m "Update t.txt with latest links" || echo "No changes to commit"
-          git push origin main
+          git push origin main || echo "Push failed, possibly no changes"
