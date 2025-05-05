@@ -1,41 +1,41 @@
 name: Scrape Telegram URLs
 
 on:
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:  # 手动触发
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
     env:
-      CHANNEL_URLS: ${{ secrets.CHANNEL_URLS }}  # From secrets
+      CHANNEL_URLS: ${{ secrets.CHANNEL_URLS }}  
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python
+      - name: 设置Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 
-      - name: Install dependencies
+      - name: 安装依赖
         run: |
           python -m pip install --upgrade pip
           pip install selenium requests
 
-      - name: Install Chrome
+      - name: 安装Chrome
         run: |
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
 
-      - name: Install ChromeDriver
+      - name: 安装ChromeDriver
         run: |
           CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1-3)
-          echo "Detected Chrome version: $CHROME_VERSION"
+          echo "检测到的Chrome版本: $CHROME_VERSION"
           CHROMEDRIVER_VERSION=$(curl -sS "http://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-          if [ -z "$CHROMEDRIVER_VERSION" ]; then
-            echo "Failed to fetch ChromeDriver version. Using fallback: 135.0.7049.81"
-            CHROMEDRIVER_VERSION="135.0.7049.81"
+          if [ -z "$CHROMEDRIVER_VERSION" ] || echo "$CHROMEDRIVER_VERSION" | grep -q "<Error>"; then
+            echo "未能获取ChromeDriver版本，使用备用版本: 114.0.5735.90"
+            CHROMEDRIVER_VERSION="114.0.5735.90"
           else
-            echo "Fetched ChromeDriver version: $CHROMEDRIVER_VERSION"
+            echo "获取到的ChromeDriver版本: $CHROMEDRIVER_VERSION"
           fi
           wget -N --tries=3 --retry-connrefused "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
           unzip chromedriver_linux64.zip
@@ -43,5 +43,5 @@ jobs:
           sudo chown root:root /usr/bin/chromedriver
           sudo chmod +x /usr/bin/chromedriver
 
-      - name: Run script
+      - name: 运行脚本
         run: python script.py
