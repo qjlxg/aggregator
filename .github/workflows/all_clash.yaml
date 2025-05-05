@@ -37,6 +37,9 @@ jobs:
         pip install python-dotenv tqdm
         
     - name: Run collection script
+      env:
+          URL_SOURCE: ${{ secrets.URL_SOURCE }}
+          
       run: python subscribe/all_clash.py
 
     - name: 提交更改
