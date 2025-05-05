@@ -34,7 +34,8 @@ jobs:
     - name: Install dependencies
       run: |
         pip install requests tqdm
-
+        pip install python-dotenv tqdm
+        
     - name: Run collection script
       run: python subscribe/all_clash.py
 
