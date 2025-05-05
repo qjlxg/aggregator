@@ -16,8 +16,8 @@ config.read('config.ini')
 
 BASE_URL = config.get('settings', 'base_url')
 DATA_DIR = config.get('settings', 'data_dir')
-OUTPUT_VALID_FILE = os.path.join(DATA_DIR, 'valid_links.txt')
-OUTPUT_INVALID_FILE = os.path.join(DATA_DIR, 'invalid_links.txt')
+OUTPUT_VALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_valid_file'))
+OUTPUT_INVALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_invalid_file'))
 MAX_PAGES = int(config.get('settings', 'max_pages'))
 MAX_WORKERS = int(config.get('settings', 'max_workers'))
 
@@ -65,6 +65,13 @@ def process_link(link):
 
 def main():
     os.makedirs(DATA_DIR, exist_ok=True)
+    # 如果文件不存在，则创建空文件
+    if not os.path.exists(OUTPUT_VALID_FILE):
+        with open(OUTPUT_VALID_FILE, 'w') as f:
+            pass
+    if not os.path.exists(OUTPUT_INVALID_FILE):
+        with open(OUTPUT_INVALID_FILE, 'w') as f:
+            pass
 
     current_url = BASE_URL
     collected_links = set()
