@@ -22,7 +22,7 @@ jobs:
 
       - name: Run cache.py
         env:
-         CLASH_API: ${{ secrets.CLASH_API }}
+         CLASH_API_cache: ${{ secrets.CLASH_API }}
          GIST_PAT: ${{ secrets.GIST_PAT }}
          RAW_URLS: ${{ secrets.RAW_URLS }}
         run: python subscribe/cache.py
