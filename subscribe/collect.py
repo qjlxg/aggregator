@@ -46,7 +46,7 @@ api_headers = {
 }
 
 def fetch_repo_file(filename):
-    """从私有仓库data目录读取文件内容，异常时返回空字符串"""
+    
     try:
         url = f"{ALL_CLASH_DATA_API}/{filename}?ref=main"
         resp = requests.get(url, headers=api_headers, timeout=10)
@@ -61,7 +61,7 @@ def fetch_repo_file(filename):
         return ""
 
 def push_repo_file(filename, content):
-    """将内容直接推送到私有仓库data目录，异常时记录日志"""
+   
     try:
         url = f"{ALL_CLASH_DATA_API}/{filename}"
         sha = None
@@ -296,7 +296,7 @@ def aggregate(args: argparse.Namespace) -> None:
         urls.extend(old_subscriptions)
         logger.info(f"订阅过滤完成，总数: {total}, 保留: {len(urls)}, 丢弃: {discard}")
 
-    # 推送新内容到私有仓库
+   
     try:
         push_repo_file("subscribes.txt", "\n".join(urls))
     except Exception as e:
