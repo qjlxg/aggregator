@@ -48,49 +48,63 @@ api_headers = {
     'Authorization': f"token {GIST_PAT}"
 }
 
-def get_file_from_repo(filename: str) -> str:
-    """
-    获取私有仓库 data 目录下的指定文件，如果本地不存在则通过 GitHub API 下载到本地
-    特殊文件 data/clash.yaml 不覆盖（直接返回本地路径）
-    """
-    # data/clash.yaml 保持输出目录不变
-    if filename == "clash.yaml":
-        return os.path.join(DATA_BASE, filename)
-    local_path = os.path.join(DATA_BASE, filename)
-    if not os.path.exists(local_path):
-        # 拼接 API URL，例如：https://api.github.com/repos/qjlxg/362/contents/data/domains.txt?ref=main
-        file_url = f"{ALL_CLASH_DATA_API}/{filename}?ref=main"
-        r = requests.get(file_url, headers=api_headers, timeout=10)
-        r.raise_for_status()
-        data = r.json()
+def fetch_repo_file(filename):
+    """从私有仓库data目录读取文件内容，异常时返回空字符串"""
+    try:
+        url = f"{ALL_CLASH_DATA_API}/{filename}?ref=main"
+        resp = requests.get(url, headers=api_headers, timeout=10)
+        resp.raise_for_status()
+        data = resp.json()
         if "content" not in data:
-            raise ValueError(f"未能在返回数据中找到 content 字段: {file_url}")
-        # GitHub 返回的 content 是 base64 编码
-        encoded = data["content"].replace("\n", "")
-        decoded = base64.b64decode(encoded).decode("utf-8")
-        os.makedirs(DATA_BASE, exist_ok=True)
-        with open(local_path, "w", encoding="utf-8") as f:
-            f.write(decoded)
-    return local_path
+            logger.warning(f"{filename} 无 content 字段")
+            return ""
+        return base64.b64decode(data["content"].replace("\n", "")).decode("utf-8")
+    except Exception as e:
+        logger.error(f"读取 {filename} 失败: {e}")
+        return ""
+
+def push_repo_file(filename, content):
+    """将内容直接推送到私有仓库data目录，异常时记录日志"""
+    try:
+        url = f"{ALL_CLASH_DATA_API}/{filename}"
+        # 获取 sha
+        sha = None
+        try:
+            resp = requests.get(url, headers=api_headers, timeout=10)
+            if resp.status_code == 200:
+                sha = resp.json().get("sha")
+        except Exception as e:
+            logger.warning(f"获取 {filename} sha 失败: {e}")
+        payload = {
+            "message": f"Update {filename} via script",
+            "content": base64.b64encode(content.encode("utf-8")).decode("utf-8"),
+            "branch": "main"
+        }
+        if sha:
+            payload["sha"] = sha
+        resp = requests.put(url, json=payload, headers=api_headers, timeout=10)
+        resp.raise_for_status()
+        logger.info(f"{filename} 已推送到私有仓库")
+    except Exception as e:
+        logger.error(f"推送 {filename} 到私有仓库失败: {e}")
 
 class SubscriptionManager:
-    def __init__(self, bin_name: str, num_threads: int, display: bool):
+    def __init__(self, bin_name: str, num_threads: int, display: bool, repo_files: dict):
         self.bin_name = bin_name
         self.num_threads = num_threads
         self.display = display
         self.delimiter = "@#@#"
         self.special_protocols = AirPort.enable_special_protocols()
+        self.repo_files = repo_files  # 传入内存中的文件内容
 
     def load_exist(self, filename: str) -> List[str]:
-        """只从本地文件加载订阅并去重、过滤失效"""
-        if not filename:
+        """只从内存加载订阅并去重、过滤失效"""
+        if not filename or filename not in self.repo_files:
             return []
         subscriptions: Set[str] = set()
         pattern = r"^https?:\/\/[^\s]+"
-        local_file = os.path.join(DATA_BASE, filename)
-        if os.path.exists(local_file) and os.path.isfile(local_file):
-            with open(local_file, "r", encoding="utf8") as f:
-                subscriptions.update(re.findall(pattern, f.read(), flags=re.M))
+        content = self.repo_files.get(filename, "")
+        subscriptions.update(re.findall(pattern, content, flags=re.M))
         logger.info("开始校验现有订阅是否失效")
         links = list(subscriptions)
         results = utils.multi_thread_run(
@@ -129,11 +143,10 @@ class SubscriptionManager:
             logger.info("跳过注册新账号，将使用现有订阅刷新")
             return tasks
         domains_file = utils.trim(domains_file) or "domains.txt"
-        # 修改：通过 get_file_from_repo 从私有仓库（data目录）获取文件
+        # 直接从内存读取 domains.txt
         try:
-            fullpath = get_file_from_repo(domains_file)
-            with open(fullpath, "r", encoding="UTF8") as f:
-                domains = self.parse_domains(f.read())
+            domains_content = self.repo_files.get(domains_file, "")
+            domains = self.parse_domains(domains_content)
         except Exception as e:
             logger.error(f"读取 {domains_file} 失败: {e}")
             domains = {}
@@ -144,7 +157,7 @@ class SubscriptionManager:
                 num_thread=self.num_threads,
                 rigid=rigid,
                 display=self.display,
-                filepath=os.path.join(DATA_BASE, "coupons.txt"),
+                filepath="coupons.txt",  # 只做标记，不会写本地
                 delimiter=self.delimiter,
                 chuck=chuck,
             )
@@ -157,16 +170,10 @@ class SubscriptionManager:
         if customize_link:
             if isurl(customize_link):
                 domains.update(self.parse_domains(utils.http_get(url=customize_link)))
-            else:
-                local_file = os.path.join(DATA_BASE, customize_link)
-                if local_file != fullpath and os.path.exists(local_file) and os.path.isfile(local_file):
-                    with open(local_file, "r", encoding="UTF8") as f:
-                        domains.update(self.parse_domains(f.read()))
         if not domains:
             logger.error("无法收集到新的可免费使用的机场信息")
             return tasks
-        if overwrite:
-            crawl.save_candidates(candidates=domains, filepath=fullpath, delimiter=self.delimiter)
+        # 不再写本地文件
         task_set = {task.sub for task in tasks if task.sub}
         for domain, param in domains.items():
             name = crawl.naming_task(url=domain)
@@ -184,14 +191,18 @@ class SubscriptionManager:
                     )
                 )
                 task_set.add(domain)
-        return tasks
+        return tasks, domains
 
 def aggregate(args: argparse.Namespace) -> None:
+    # 1. 运行前先从私有仓库读取四个文件到内存
+    repo_files = {}
+    for fname in ["coupons.txt", "domains.txt", "subscribes.txt", "valid-domains.txt"]:
+        repo_files[fname] = fetch_repo_file(fname)
     clash_bin, subconverter_bin = executable.which_bin()
     display = not args.invisible
     subscribes_file = "subscribes.txt"
-    manager = SubscriptionManager(subconverter_bin, args.num, display)
-    tasks = manager.assign(
+    manager = SubscriptionManager(subconverter_bin, args.num, display, repo_files)
+    tasks, domains_dict = manager.assign(
         domains_file="domains.txt",
         overwrite=args.overwrite,
         pages=args.pages,
@@ -214,7 +225,6 @@ def aggregate(args: argparse.Namespace) -> None:
     if not proxies:
         logger.error("未获取到任何节点，退出")
         sys.exit(0)
-    # 改进节点去重：对name、server、port字段去掉前后空格，统一为小写，再构造唯一标识
     unique_proxies = []
     seen_proxies = set()
     for proxy in proxies:
@@ -255,7 +265,6 @@ def aggregate(args: argparse.Namespace) -> None:
     data = {"proxies": nodes}
     urls = list(subscriptions)
     source = "proxies.yaml"
-    os.makedirs(DATA_BASE, exist_ok=True)
     supplier = os.path.join(PATH, "subconverter", source)
     if os.path.exists(supplier) and os.path.isfile(supplier):
         os.remove(supplier)
@@ -295,9 +304,34 @@ def aggregate(args: argparse.Namespace) -> None:
         discard = len(tasks_check) - len(urls)
         urls.extend(old_subscriptions)
         logger.info(f"订阅过滤完成，总数: {total}, 保留: {len(urls)}, 丢弃: {discard}")
-    utils.write_file(filename=os.path.join(DATA_BASE, subscribes_file), lines=urls)
-    domains = [utils.extract_domain(url=x, include_protocal=True) for x in urls]
-    utils.write_file(filename=os.path.join(DATA_BASE, "valid-domains.txt"), lines=list(set(domains)))
+
+    # 运行结束后，直接推送新内容到私有仓库
+    try:
+        push_repo_file("subscribes.txt", "\n".join(urls))
+    except Exception as e:
+        logger.error(f"推送 subscribes.txt 失败: {e}")
+    try:
+        domains_lines = [utils.extract_domain(url=x, include_protocal=True) for x in urls]
+        push_repo_file("valid-domains.txt", "\n".join(list(set(domains_lines))))
+    except Exception as e:
+        logger.error(f"推送 valid-domains.txt 失败: {e}")
+    try:
+        # domains_dict 可能需要重新格式化为文本
+        domains_txt_content = ""
+        for k, v in domains_dict.items():
+            line = k
+            if v.get("coupon") or v.get("invite_code"):
+                line += f"{manager.delimiter}{v.get('coupon','')}{manager.delimiter}{v.get('invite_code','')}"
+            domains_txt_content += line + "\n"
+        push_repo_file("domains.txt", domains_txt_content.strip())
+    except Exception as e:
+        logger.error(f"推送 domains.txt 失败: {e}")
+    try:
+        # coupons.txt 可能需要你根据实际业务生成内容，这里示例用原内容
+        push_repo_file("coupons.txt", repo_files.get("coupons.txt", ""))
+    except Exception as e:
+        logger.error(f"推送 coupons.txt 失败: {e}")
+
     workflow.cleanup(workspace, [])
 
 class CustomHelpFormatter(argparse.HelpFormatter):
