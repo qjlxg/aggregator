@@ -12,13 +12,13 @@ from dotenv import load_dotenv
 # 加载环境变量
 load_dotenv()
 
-# 从环境变量中读取私有仓库 API 基本地址和 PAT
-# 例如 ALL_CLASH_BASE_URL=https://api.github.com/repos/qjlxg/362/contents/ss-url
+# 从环境变量中读取私有仓库 API 基本地址、PAT 和分支名称
 ALL_CLASH_BASE_URL = os.environ.get("ALL_CLASH_BASE_URL")
 GIST_PAT = os.environ.get("GIST_PAT")
+BRANCH_NAME = os.environ.get("BRANCH_NAME", "main")  # 默认分支为 main，如果未设置
 
-# 拼接 API URL（使用 main 分支，如有需要请修改 ref 参数）
-PRIVATE_API_URL = f"{ALL_CLASH_BASE_URL}?ref=main"
+# 拼接 API URL，使用指定的分支名称
+PRIVATE_API_URL = f"{ALL_CLASH_BASE_URL}?ref={BRANCH_NAME}"
 
 # 配置日志
 logging.basicConfig(filename='error.log', level=logging.ERROR,
@@ -62,17 +62,16 @@ def get_url_list(url_source):
     """
     try:
         response = requests.get(url_source, headers=headers, timeout=10)
+        print(f"请求 {url_source} 的状态码: {response.status_code}")
         response.raise_for_status()
-        # API返回的是JSON数据
         data = response.json()
+        print(f"API 返回数据: {data}")
         if 'content' not in data:
-            print("未在返回数据中找到内容字段。")
+            print("未在返回数据中找到 content 字段，检查分支或文件路径")
             return []
-        # GitHub API返回的content字段中可能包含换行符，先去除换行再base64解码
         encoded_content = data['content'].replace("\n", "")
         decoded_bytes = base64.b64decode(encoded_content)
         text_content = decoded_bytes.decode('utf-8').strip()
-        # 将内容按行拆分，并过滤空行
         raw_urls = [line.strip() for line in text_content.splitlines() if line.strip()]
         print(f"从 {url_source} 获取到 {len(raw_urls)} 个URL")
         return raw_urls
@@ -100,10 +99,8 @@ def fetch_url(url):
         logging.error(f"处理失败: {url} - {e}")
         return None
 
-# URL 来源列表，使用从私有仓库中获取URL列表的文件的API URL
-url_sources = [
-    PRIVATE_API_URL,
-]
+# URL 来源列表
+url_sources = [PRIVATE_API_URL]
 
 # 获取所有URL来源的URL列表
 all_raw_urls = []
