@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import requests
 from urllib.parse import urlparse
@@ -6,21 +7,28 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 import argparse
+from dotenv import load_dotenv
+
+# 加载.env文件中的环境变量
+load_dotenv()
+
+# 从环境变量中读取基本地址和 token
+BASE_URL = os.environ.get("ALL_CLASH_BASE_URL")
+TOKEN = os.environ.get("ALL_CLASH")
+
+# 拼接最终的私有仓库文件 URL（完整地址不会在源码中明文显示）
+PRIVATE_URL = f"{BASE_URL}?token={TOKEN}"
 
 # 配置日志
 logging.basicConfig(filename='error.log', level=logging.ERROR,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-
-GITHUB_TOKEN = os.environ.get("all_clash_TOKEN", "")
-
 headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+    'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                   'AppleWebKit/537.36 (KHTML, like Gecko) '
+                   'Chrome/91.0.4472.124 Safari/537.36'),
     'Accept-Encoding': 'gzip, deflate'
 }
-
-
-PRIVATE_URL = f"https://raw.githubusercontent.com/qjlxg/362/refs/heads/main/ss-url?token={GITHUB_TOKEN}"
 
 # 命令行参数
 parser = argparse.ArgumentParser(description="URL内容获取脚本，支持多个URL来源")
@@ -73,7 +81,7 @@ def fetch_url(url):
         logging.error(f"处理失败: {url} - {e}")
         return None
 
-# 定义多个URL来源，这里以私有仓库文件 URL 为例
+# URL 来源列表，这里使用通过环境变量隐藏后的私有仓库文件 URL
 url_sources = [
     PRIVATE_URL,
 ]
@@ -84,7 +92,7 @@ for source in url_sources:
     raw_urls = get_url_list(source)
     all_raw_urls.extend(raw_urls)
 
-# 去重并验证URL
+# 去重并验证URL格式
 unique_urls = list({url.strip() for url in all_raw_urls if url.strip()})
 valid_urls = [url for url in unique_urls if is_valid_url(url)]
 print(f"合并后唯一URL数量：{len(unique_urls)}")
@@ -93,7 +101,7 @@ print(f"经过格式验证的有效URL数量：{len(valid_urls)}")
 # 确保输出目录存在
 os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
 
-# 处理URL
+# 处理URL内容
 success_count = 0
 with open(OUTPUT_FILE, 'w', encoding='utf-8') as out_file:
     with ThreadPoolExecutor(max_workers=16) as executor:
@@ -106,10 +114,11 @@ with open(OUTPUT_FILE, 'w', encoding='utf-8') as out_file:
 
 # 最终结果报告
 print("\n" + "=" * 50)
-print(f"最终结果：")
+print("最终结果：")
 print(f"处理URL总数：{len(valid_urls)}")
 print(f"成功获取内容数：{success_count}")
-print(f"有效内容率：{success_count/len(valid_urls):.1%}" if len(valid_urls) > 0 else "无有效URL")
+if len(valid_urls) > 0:
+    print(f"有效内容率：{success_count/len(valid_urls):.1%}")
 if success_count < MAX_SUCCESS:
-    print(f"警告：未能达到目标数量，原始列表可能有效URL不足")
+    print("警告：未能达到目标数量，原始列表可能有效URL不足")
 print(f"结果文件已保存至：{OUTPUT_FILE}")
