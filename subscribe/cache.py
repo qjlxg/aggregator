@@ -13,18 +13,23 @@ def fetch_repo_file(api_url, headers):
         print(f"Fetching from: {api_url}")
         resp = requests.get(api_url, headers=headers, timeout=10)
         print(f"Status Code: {resp.status_code}")
-        print(f"Response: {resp.text}")
         if resp.status_code == 200:
             data = resp.json()
+            if isinstance(data, list):
+                print("错误：CLASH_API_cache 指向目录而非文件")
+                return "", None
             content = base64.b64decode(data["content"].replace("\n", "")).decode("utf-8")
             sha = data.get("sha")
             return content, sha
         elif resp.status_code == 404:
             print("文件不存在，将创建新文件")
             return "", None
+        else:
+            print(f"API 请求失败: {resp.status_code} {resp.text}")
+            return "", None
     except Exception as e:
         print(f"读取仓库文件失败: {e}")
-    return "", None
+        return "", None
 
 def push_repo_file(api_url, content, sha, headers):
     try:
@@ -35,13 +40,15 @@ def push_repo_file(api_url, content, sha, headers):
         }
         if sha:
             payload["sha"] = sha
-        else:
-            payload.pop("sha", None)  # 文件不存在时创建新文件
         resp = requests.put(api_url, json=payload, headers=headers, timeout=10)
-        resp.raise_for_status()
-        print("subscribes.txt 已推送")
+        if resp.status_code in (200, 201):
+            print("subscribes.txt 已推送")
+        else:
+            print(f"推送到仓库失败: {resp.status_code} {resp.text}")
+            raise Exception("推送失败，未更新文件")
     except Exception as e:
         print(f"推送到仓库失败: {e}")
+        raise
 
 def extract_and_append_unique_urls(raw_urls, api_url, headers):
     pattern = re.compile(r'https?://[^\s"]*api/v1/client/subscribe\?token=[^\s"]+')
