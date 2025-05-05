@@ -11,9 +11,9 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
-  - 🇸🇬 ‍新加坡
+  - 🇭🇰 ‍香港
   - 🎏 ‍其他
-  - 👆🏻🇸🇬 ‍新加坡
+  - 👆🏻🇭🇰 ‍香港
   - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
@@ -23,9 +23,9 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇸🇬 新加坡① - 灵境
-  - 🇸🇬 新加坡② - 灵境
-  - 🇸🇬 新加坡③ - 灵境
+  - 🇭🇰 香港 - 灵境
+  - 🇭🇰 香港 - 灵境 2
+  - 🇭🇰 香港 - 灵境 3
   - ℹ️ 欢迎使用灵境 - 灵境
 - name: 👆🏻 ‍指定
   type: select
@@ -46,15 +46,15 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
+  - 🇭🇰 ‍香港
   - ✈️ ‍起飞
+  - 👆🏻🇭🇰 ‍香港
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🇸🇬 ‍新加坡
   - 🎏 ‍其他
   - ✈️ ‍起飞
-  - 👆🏻🇸🇬 ‍新加坡
   - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
@@ -64,15 +64,15 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇸🇬 ‍新加坡
+- name: 🇭🇰 ‍香港
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id002
-  - 🇸🇬 新加坡① - 灵境
-  - 🇸🇬 新加坡② - 灵境
-  - 🇸🇬 新加坡③ - 灵境
+  - 🇭🇰 香港 - 灵境
+  - 🇭🇰 香港 - 灵境 2
+  - 🇭🇰 香港 - 灵境 3
 - name: 🎏 ‍其他
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -80,17 +80,17 @@ proxy-groups:
   tolerance: 100
   proxies: &id003
   - ℹ️ 欢迎使用灵境 - 灵境
-- name: 👆🏻🇸🇬 ‍新加坡
+- name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
 - name: 👆🏻🎏 ‍其他
   type: select
   proxies: *id003
 proxies:
-- {name: ℹ️ 欢迎使用灵境 - 灵境, server: jwlingjing.shop, port: 888, type: vmess, uuid: 94f55f46-64d6-46f9-8143-0cee52fa66c0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: jwlingjing.shop}}, udp: true}
-- {name: 🇸🇬 新加坡① - 灵境, server: 47.236.119.64, port: 44555, type: vmess, uuid: 94f55f46-64d6-46f9-8143-0cee52fa66c0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
-- {name: 🇸🇬 新加坡② - 灵境, server: 47.236.119.64, port: 44555, type: vmess, uuid: 94f55f46-64d6-46f9-8143-0cee52fa66c0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
-- {name: 🇸🇬 新加坡③ - 灵境, server: 47.236.119.64, port: 44555, type: vmess, uuid: 94f55f46-64d6-46f9-8143-0cee52fa66c0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
+- {name: ℹ️ 欢迎使用灵境 - 灵境, server: 45.192.107.32, port: 888, type: vmess, uuid: 94f55f46-64d6-46f9-8143-0cee52fa66c0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
+- {name: 🇭🇰 香港 - 灵境, server: 45.192.107.32, port: 34344, type: ss, cipher: chacha20-ietf-poly1305, password: 94f55f46-64d6-46f9-8143-0cee52fa66c0, udp: true}
+- {name: 🇭🇰 香港 - 灵境 2, server: 45.192.107.32, port: 34344, type: ss, cipher: chacha20-ietf-poly1305, password: 94f55f46-64d6-46f9-8143-0cee52fa66c0, udp: true}
+- {name: 🇭🇰 香港 - 灵境 3, server: 45.192.107.32, port: 34344, type: ss, cipher: chacha20-ietf-poly1305, password: 94f55f46-64d6-46f9-8143-0cee52fa66c0, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
