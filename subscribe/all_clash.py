@@ -9,14 +9,14 @@ from tqdm import tqdm
 import argparse
 from dotenv import load_dotenv
 
-# 加载.env文件中的环境变量
+
 load_dotenv()
 
-# 从环境变量中读取基本地址和 token
+
 BASE_URL = os.environ.get("ALL_CLASH_BASE_URL")
 TOKEN = os.environ.get("ALL_CLASH")
 
-# 拼接最终的私有仓库文件 URL（完整地址不会在源码中明文显示）
+
 PRIVATE_URL = f"{BASE_URL}?token={TOKEN}"
 
 # 配置日志
@@ -81,7 +81,7 @@ def fetch_url(url):
         logging.error(f"处理失败: {url} - {e}")
         return None
 
-# URL 来源列表，这里使用通过环境变量隐藏后的私有仓库文件 URL
+
 url_sources = [
     PRIVATE_URL,
 ]
