@@ -3,7 +3,7 @@ import re
 import requests
 import base64
 
-CLASH_API = os.environ.get("CLASH_API_cache", "").strip()
+CLASH_API_cache = os.environ.get("CLASH_API_cache", "").strip()
 GIST_PAT = os.environ.get("GIST_PAT", "").strip()
 
 
@@ -65,11 +65,11 @@ def extract_and_append_unique_urls(raw_urls, api_url, headers):
     print(f"追加并去重完成，共 {len(all_urls)} 个网址，已推送到私有仓库")
 
 if __name__ == "__main__":
-    if not CLASH_API or not GIST_PAT or not raw_urls:
-        print("请设置环境变量 CLASH_API、GIST_PAT 和 RAW_URLS")
+    if not CLASH_API_cache or not GIST_PAT or not raw_urls:
+        print("请设置环境变量 CLASH_API_cache、GIST_PAT 和 RAW_URLS")
         exit(1)
     headers = {
         'User-Agent': 'Mozilla/5.0',
         'Authorization': f"token {GIST_PAT}"
     }
-    extract_and_append_unique_urls(raw_urls, CLASH_API, headers)
+    extract_and_append_unique_urls(raw_urls, CLASH_API_cache, headers)
