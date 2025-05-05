@@ -6,8 +6,8 @@ import time
 
 BASE_URL = 'https://t.me/s/dingyue_center'  # 确保是 /s/ 格式的链接
 DATA_DIR = 'data'
-OUTPUT_FILE = os.path.join(DATA_DIR, 't.txt')
-MAX_PAGES = 100
+OUTPUT_FILE = os.path.join(DATA_DIR, 'all_links.txt')
+MAX_PAGES = 50
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
@@ -22,12 +22,10 @@ def fetch_page(url):
         print(f"请求失败 {url}: {e}")
         return None
 
-def extract_links(html):
+def extract_all_links(html):
     pattern = r'https?://[^\s\'"<>]+'
     all_urls = re.findall(pattern, html)
-    target_links = [url for url in all_urls if '/api/v1/client/subscribe?token=' in url]
-    print(f"页面源码中的链接示例：{all_urls[:5]}")  # 打印前5个链接，用于调试
-    return target_links
+    return all_urls
 
 def test_url(url):
     try:
@@ -57,8 +55,8 @@ def main():
         if not html:
             break
 
-        links = extract_links(html)
-        print(f"找到 {len(links)} 个目标链接。")
+        links = extract_all_links(html)
+        print(f"找到 {len(links)} 个链接。")
 
         for link in links:
             if link not in collected_links:
@@ -66,6 +64,9 @@ def main():
                     with open(OUTPUT_FILE, 'a', encoding='utf-8') as f:
                         f.write(link + '\n')
                     collected_links.add(link)
+                    print(f"有效链接：{link}")
+                else:
+                    print(f"无效链接：{link}")
                 time.sleep(0.5)
 
         current_url = get_next_page_url(html, current_url)
@@ -74,7 +75,6 @@ def main():
 
     print(f"全部完成，共抓取到 {len(collected_links)} 个有效链接。")
 
-    # 如果没有生成 t.txt，则创建一个空文件
     if not os.path.exists(OUTPUT_FILE):
         with open(OUTPUT_FILE, 'w') as f:
             pass  # 创建空文件
