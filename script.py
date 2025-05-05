@@ -33,7 +33,7 @@ def extract_links(html):
     links = set()
     for a in soup.find_all('a', href=True):
         href = a['href']
-        if '/api/v1/client/subscribe?token=' in href:
+        if '/api/' in href:
             links.add(href)
     return links
 
