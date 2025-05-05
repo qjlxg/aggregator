@@ -19,7 +19,7 @@ SESSION_NAME = "telegram_session" # Name for the session file
 # Target Telegram channel(s) - use the username or t.me link
 # Example: 'mychannelusername' or 'https://t.me/mychannelusername'
 # Can be a list: ['channel1', 'channel2']
-TARGET_CHANNELS = ['PublicTestChannel'] # <<< --- CHANGE THIS TO YOUR TARGET CHANNEL(S)
+TARGET_CHANNELS = ['jichang_list'] # <<< --- CHANGE THIS TO YOUR TARGET CHANNEL(S)
 
 OUTPUT_DIR = "data"
 OUTPUT_FILE = os.path.join(OUTPUT_DIR, "t.txt")
