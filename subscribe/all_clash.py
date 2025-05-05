@@ -1,3 +1,4 @@
+import os
 import requests
 from urllib.parse import urlparse
 import base64
@@ -5,16 +6,21 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 import argparse
-import os
 
 # 配置日志
 logging.basicConfig(filename='error.log', level=logging.ERROR,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
+
+GITHUB_TOKEN = os.environ.get("all_clash_TOKEN", "")
+
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     'Accept-Encoding': 'gzip, deflate'
 }
+
+
+PRIVATE_URL = f"https://raw.githubusercontent.com/qjlxg/362/refs/heads/main/ss-url?token={GITHUB_TOKEN}"
 
 # 命令行参数
 parser = argparse.ArgumentParser(description="URL内容获取脚本，支持多个URL来源")
@@ -67,10 +73,9 @@ def fetch_url(url):
         logging.error(f"处理失败: {url} - {e}")
         return None
 
-# 定义多个URL来源
+# 定义多个URL来源，这里以私有仓库文件 URL 为例
 url_sources = [
-    'https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/tools/ss-url',
-    
+    PRIVATE_URL,
 ]
 
 # 获取所有URL来源的URL列表
