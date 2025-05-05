@@ -1,36 +1,30 @@
-name: Scrape Telegram URLs
+name: Scrape Telegram Links
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *'  # 每天午夜运行一次（可调整）
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    env:
-      CHANNEL_URLS: ${{ secrets.CHANNEL_URLS }}
+
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: 设置 Python
-        uses: actions/setup-python@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v3
         with:
-          python-version: '3.x'
+          python-version: '3.8'
 
-      - name: 安装依赖
+      - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install selenium requests
+          pip install requests beautifulsoup4
 
-      - name: 安装 Chrome
+      - name: Run scraping script
         run: |
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
-
-      - name: 设置 ChromeDriver
-        id: chromedriver
-        uses: browser-actions/setup-chromedriver@v1  # 确保版本存在
-
-      - name: 运行脚本
-        run: python script.py
-        env:
-          CHROMEDRIVER_PATH: ${{ steps.chromedriver.outputs.chromedriver-path }}
+          python script.py
