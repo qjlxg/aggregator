@@ -4,7 +4,7 @@ name: Auto_proxy
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */3 * * *'
+    - cron: '0 */8 * * *'
 jobs:
   deploy:
     runs-on: ubuntu-latest
