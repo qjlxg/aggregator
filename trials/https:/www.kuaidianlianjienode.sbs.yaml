@@ -37,22 +37,18 @@ proxy-groups:
   - 🇭🇰 香港02 - 迅云加速
   - 🇭🇰 香港03 - 迅云加速
   - 🇭🇰 香港04 - 迅云加速
-  - 🇭🇰 香港05 - 迅云加速
   - 🇹🇼 台湾01 - 迅云加速
   - 🇹🇼 台湾02 - 迅云加速
   - 🇹🇼 台湾03 - 迅云加速
   - 🇹🇼 台湾04 - 迅云加速
-  - 🇹🇼 台湾05 - 迅云加速
   - 🇸🇬 新加坡01 - 迅云加速
   - 🇸🇬 新加坡02 - 迅云加速
   - 🇸🇬 新加坡03 - 迅云加速
   - 🇸🇬 新加坡04 - 迅云加速
-  - 🇸🇬 新加坡05 - 迅云加速
   - 🇯🇵 日本01 - 迅云加速
   - 🇯🇵 日本02 - 迅云加速
   - 🇯🇵 日本03 - 迅云加速
   - 🇯🇵 日本04 - 迅云加速
-  - 🇯🇵 日本05 - 迅云加速
   - 🇺🇸 美国01 - 迅云加速
   - 🇺🇸 美国02 - 迅云加速
   - 🇺🇸 美国03 - 迅云加速
@@ -125,7 +121,6 @@ proxy-groups:
   - 🇭🇰 香港02 - 迅云加速
   - 🇭🇰 香港03 - 迅云加速
   - 🇭🇰 香港04 - 迅云加速
-  - 🇭🇰 香港05 - 迅云加速
 - name: 🇹🇼 ‍台湾
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -136,7 +131,6 @@ proxy-groups:
   - 🇹🇼 台湾02 - 迅云加速
   - 🇹🇼 台湾03 - 迅云加速
   - 🇹🇼 台湾04 - 迅云加速
-  - 🇹🇼 台湾05 - 迅云加速
 - name: 🇨🇳 ‍中国
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -147,12 +141,10 @@ proxy-groups:
   - 🇭🇰 香港02 - 迅云加速
   - 🇭🇰 香港03 - 迅云加速
   - 🇭🇰 香港04 - 迅云加速
-  - 🇭🇰 香港05 - 迅云加速
   - 🇹🇼 台湾01 - 迅云加速
   - 🇹🇼 台湾02 - 迅云加速
   - 🇹🇼 台湾03 - 迅云加速
   - 🇹🇼 台湾04 - 迅云加速
-  - 🇹🇼 台湾05 - 迅云加速
 - name: 🇸🇬 ‍新加坡
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -163,7 +155,6 @@ proxy-groups:
   - 🇸🇬 新加坡02 - 迅云加速
   - 🇸🇬 新加坡03 - 迅云加速
   - 🇸🇬 新加坡04 - 迅云加速
-  - 🇸🇬 新加坡05 - 迅云加速
 - name: 🇯🇵 ‍日本
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -174,7 +165,6 @@ proxy-groups:
   - 🇯🇵 日本02 - 迅云加速
   - 🇯🇵 日本03 - 迅云加速
   - 🇯🇵 日本04 - 迅云加速
-  - 🇯🇵 日本05 - 迅云加速
 - name: 🇺🇸 ‍美国
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -226,35 +216,31 @@ proxies:
 - {name: 🇯🇵 日本01 - 迅云加速, server: node1.cenidcbf.ink, port: 19688, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇯🇵 日本02 - 迅云加速, server: node2.cenidcbf.ink, port: 23746, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇯🇵 日本03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 47376, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
-- {name: 🇯🇵 日本04 - 迅云加速, server: xz-exec5ej7an7khyzt.bestzumo.com, port: 47173, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
-- {name: 🇯🇵 日本05 - 迅云加速, server: 183.36.41.41, port: 57701, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
+- {name: 🇯🇵 日本04 - 迅云加速, server: 120.233.146.220, port: 20910, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇭🇰 香港01 - 迅云加速, server: node1.cenidcbf.ink, port: 13058, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇭🇰 香港02 - 迅云加速, server: node2.cenidcbf.ink, port: 14202, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇭🇰 香港03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 42341, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
-- {name: 🇭🇰 香港04 - 迅云加速, server: xz-exec5ej7an7khyzt.bestzumo.com, port: 28441, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
-- {name: 🇭🇰 香港05 - 迅云加速, server: 183.36.41.41, port: 57701, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
+- {name: 🇭🇰 香港04 - 迅云加速, server: 120.233.146.220, port: 19634, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇸🇬 新加坡01 - 迅云加速, server: node1.cenidcbf.ink, port: 14195, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇸🇬 新加坡02 - 迅云加速, server: node2.cenidcbf.ink, port: 43105, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇸🇬 新加坡03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 49593, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
-- {name: 🇸🇬 新加坡04 - 迅云加速, server: xz-exec5ej7an7khyzt.bestzumo.com, port: 55960, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
-- {name: 🇸🇬 新加坡05 - 迅云加速, server: 183.36.41.41, port: 30371, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
+- {name: 🇸🇬 新加坡04 - 迅云加速, server: 120.233.146.220, port: 33277, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇹🇼 台湾01 - 迅云加速, server: node1.cenidcbf.ink, port: 16755, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇹🇼 台湾02 - 迅云加速, server: node2.cenidcbf.ink, port: 32007, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇹🇼 台湾03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 13456, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
-- {name: 🇹🇼 台湾04 - 迅云加速, server: xz-exec5ej7an7khyzt.bestzumo.com, port: 13456, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
-- {name: 🇹🇼 台湾05 - 迅云加速, server: 183.36.41.41, port: 12092, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
+- {name: 🇹🇼 台湾04 - 迅云加速, server: 120.233.146.220, port: 11184, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇬🇧 英国01 - 迅云加速, server: node1.cenidcbf.ink, port: 17587, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇬🇧 英国02 - 迅云加速, server: node2.cenidcbf.ink, port: 22194, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇬🇧 英国03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 25586, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
-- {name: 🇬🇧 英国04 - 迅云加速, server: xz-exec5ej7an7khyzt.bestzumo.com, port: 25035, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
+- {name: 🇬🇧 英国04 - 迅云加速, server: 120.233.146.220, port: 25911, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇺🇸 美国01 - 迅云加速, server: node1.cenidcbf.ink, port: 45823, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇺🇸 美国02 - 迅云加速, server: node2.cenidcbf.ink, port: 15628, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇺🇸 美国03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 35651, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
-- {name: 🇺🇸 美国04 - 迅云加速, server: xz-exec5ej7an7khyzt.bestzumo.com, port: 15576, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
+- {name: 🇺🇸 美国04 - 迅云加速, server: 120.233.146.220, port: 40729, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇨🇦 加拿大01 - 迅云加速, server: node1.cenidcbf.ink, port: 44306, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇨🇦 加拿大02 - 迅云加速, server: node2.cenidcbf.ink, port: 34927, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 - {name: 🇨🇦 加拿大03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 49883, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
-- {name: 🇨🇦 加拿大04 - 迅云加速, server: xz-exec5ej7an7khyzt.bestzumo.com, port: 17128, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
+- {name: 🇨🇦 加拿大04 - 迅云加速, server: 120.233.146.220, port: 24308, type: ss, cipher: chacha20-ietf-poly1305, password: b4ba302f-e6dc-43ff-a392-965d3123b86f, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
