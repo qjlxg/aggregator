@@ -7,7 +7,7 @@ def fetch_links(url):
     """从指定 URL 抓取所有动态加载的链接，排除以 'https://t.me' 开头的链接"""
     try:
         options = Options()
-        options.add_argument('--headless')
+        options.add_argument('--headless')  # 无头模式
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
         driver = webdriver.Chrome(options=options)
@@ -23,7 +23,7 @@ def fetch_links(url):
 def is_valid_link(link):
     """测试链接是否有效（返回状态码 200）"""
     try:
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
         response = requests.get(link, headers=headers, allow_redirects=True, timeout=5)
         return response.status_code == 200
     except requests.RequestException:
@@ -62,4 +62,9 @@ def main():
         print("错误：未找到 GITHUB_TOKEN，请检查 GitHub Actions 配置")
 
 if __name__ == '__main__':
+    try:
+        from selenium import webdriver
+    except ModuleNotFoundError:
+        print("错误：Selenium 未安装，请确保在环境中运行 'pip install selenium'")
+        exit(1)
     main()
