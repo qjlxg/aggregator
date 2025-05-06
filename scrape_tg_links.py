@@ -43,11 +43,14 @@ def extract_all_links(html, base_url):
         href = a_tag['href']
         absolute_url = urljoin(base_url, href)
         if absolute_url.startswith('http') and not absolute_url.startswith('https://t.me'):
-            links.add(absolute_url)
-    # 尝试使用更宽松的正则匹配补充提取
+            # 排除常见的非网页链接类型
+            if not absolute_url.endswith(('.jpg', '.jpeg', '.png', '.gif', '.svg', '.xml', '.css', '.js')):
+                links.add(absolute_url)
+
+    # 尝试使用更宽松的正则匹配补充提取，并排除特定后缀
     pattern = r'https?://[^\s\'"<>]+'
     for link in re.findall(pattern, html):
-        if not link.startswith('https://t.me'):
+        if not link.startswith('https://t.me') and not link.endswith(('.jpg', '.jpeg', '.png', '.gif', '.svg', '.xml', '.css', '.js')):
             links.add(link)
     return list(links)
 
