@@ -15,12 +15,13 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 config = configparser.ConfigParser()
 config.read('config.ini')
 
+BASE_DIR = os.environ.get('GITHUB_WORKSPACE', '.') # 获取 GitHub 工作区路径，默认为当前目录
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+OUTPUT_VALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_valid_file', 'valid_links.txt')) # 提供默认值
+OUTPUT_INVALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_invalid_file', 'invalid_links.txt')) # 提供默认值
+MAX_PAGES = int(config.get('settings', 'max_pages', '10')) # 提供默认值
+MAX_WORKERS = int(config.get('settings', 'max_workers', '5')) # 提供默认值
 BASE_URL = config.get('settings', 'base_url')
-DATA_DIR = config.get('settings', 'data_dir')
-OUTPUT_VALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_valid_file'))
-OUTPUT_INVALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_invalid_file'))
-MAX_PAGES = int(config.get('settings', 'max_pages'))
-MAX_WORKERS = int(config.get('settings', 'max_workers'))
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
@@ -82,10 +83,12 @@ def process_link(link):
         with open(OUTPUT_VALID_FILE, 'a', encoding='utf-8') as f:
             f.write(link + '\n')
         logging.info(f"有效链接：{link}")
+        print(f"有效链接 (控制台): {link}")
     else:
         with open(OUTPUT_INVALID_FILE, 'a', encoding='utf-8') as f:
             f.write(link + '\n')
         logging.info(f"无效链接：{link}")
+        print(f"无效链接 (控制台): {link}")
 
 def main():
     os.makedirs(DATA_DIR, exist_ok=True)
