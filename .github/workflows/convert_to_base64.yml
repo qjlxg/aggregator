@@ -2,9 +2,10 @@
 name: Base64 Conversion
 
 on:
+ workflow_dispatch:
+
  schedule:
  - cron: "0 */1 * * *"
- workflow_dispatch:
 
 jobs:
  convert_to_base64:
