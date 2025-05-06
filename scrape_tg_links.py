@@ -36,7 +36,9 @@ def fetch_page(url):
 
 def extract_all_links(html):
     pattern = r'https?://[^\s\'"<>]+'
-    return re.findall(pattern, html)
+    all_links = re.findall(pattern, html)
+    filtered_links = [link for link in all_links if not link.startswith('https://t.me')]
+    return filtered_links
 
 def test_url(url):
     try:
@@ -54,6 +56,9 @@ def get_next_page_url(html, current_url):
     return None
 
 def process_link(link):
+    if link.startswith('https://t.me'):
+        logging.info(f"跳过t.me链接：{link}")
+        return
     if test_url(link):
         with open(OUTPUT_VALID_FILE, 'a', encoding='utf-8') as f:
             f.write(link + '\n')
@@ -84,7 +89,7 @@ def main():
             break
 
         links = extract_all_links(html)
-        logging.info(f"找到 {len(links)} 个链接。")
+        logging.info(f"找到 {len(links)} 个非t.me链接。")
 
         new_links = [link for link in links if link not in collected_links]
         collected_links.update(new_links)
@@ -96,7 +101,7 @@ def main():
         page_count += 1
         time.sleep(1)
 
-    logging.info(f"全部完成，共抓取到 {len(collected_links)} 个链接。")
+    logging.info(f"全部完成，共抓取到 {len(collected_links)} 个非t.me链接。")
 
 if __name__ == '__main__':
     main()
