@@ -12,12 +12,12 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 # 配置参数
 BASE_URL = 'https://t.me/s/jichang_list'
 OUTPUT_FILE = 'data/ji.txt'
-MAX_PAGES = 50  # 抓取至少50个页面
+MAX_PAGES = 50  
 MAX_WORKERS = 10  # 并发测试链接的最大线程数
 
 def init_playwright():
     """
-    初始化Playwright，返回浏览器实例，避免每次请求都启动关闭。
+    初始化Playwright，返回浏览器实例。
     """
     p = sync_playwright().start()
     browser = p.chromium.launch(headless=True)
@@ -33,11 +33,31 @@ def close_playwright(p, browser):
 def fetch_page_content(browser, url):
     """
     使用已初始化的浏览器请求页面内容
+    增加模拟“展开”按钮的点击逻辑。
     """
     try:
         page = browser.new_page()
         page.goto(url)
-        page.wait_for_load_state('networkidle', timeout=15000)  # 等待页面加载完成
+        page.wait_for_load_state('networkidle', timeout=15000)  # 等待完全加载
+
+        # 这里替换成你的“加载更多”按钮的选择器（如果存在）
+        load_more_selector = '.load-more'  
+
+        # 循环点击“加载更多”直到没有按钮
+        while True:
+            try:
+                load_more_button = page.query_selector(load_more_selector)
+                if load_more_button:
+                    load_more_button.click()
+                    # 等待内容加载
+                    page.wait_for_load_state('networkidle', timeout=15000)
+                    time.sleep(1)  # 等待内容加载完成
+                else:
+                    break
+            except Exception:
+                # 没有按钮或点击失败
+                break
+
         content = page.content()
         page.close()
         return content
@@ -59,7 +79,7 @@ def extract_links(html):
 
 def get_next_page_url(html):
     """
-    获取下一页链接
+    获取下一页链接（可选，依赖页面结构）
     """
     soup = BeautifulSoup(html, 'html.parser')
     next_page_tag = soup.find('a', attrs={'data-nav': 'next'})
@@ -102,10 +122,10 @@ def main():
         logging.info(f"第 {page_count + 1} 页找到 {len(links)} 个非 t.me 链接")
         collected_links.update(links)
 
-        # 获取下一页
+        # 获取下一页（根据实际页面结构调整）
         current_url = get_next_page_url(html)
         page_count += 1
-        time.sleep(1)  # 避免请求过快
+        time.sleep(1)
 
     # 关闭playwright
     close_playwright(p, browser)
@@ -125,7 +145,7 @@ def main():
             except Exception:
                 pass
 
-    # 保存
+    # 保存到文件
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         for url in valid_links:
             f.write(url + '\n')
