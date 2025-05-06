@@ -1,77 +1,58 @@
 import os
 import requests
-
-# 引入selenium相关库
-try:
-    from selenium import webdriver
-    from selenium.webdriver.chrome.options import Options
-except ModuleNotFoundError:
-    print("错误：未安装selenium包，请确保在环境中运行 pip install selenium")
-    exit(1)
+from bs4 import BeautifulSoup
 
 def fetch_links(url):
-    """通过selenium抓取所有链接，排除以 https://t.me 开头的链接"""
+    headers = {'User-Agent': 'Mozilla/5.0'}
     try:
-        options = Options()
-        options.add_argument('--headless')
-        options.add_argument('--no-sandbox')
-        options.add_argument('--disable-dev-shm-usage')
-        driver = webdriver.Chrome(options=options)
-        driver.get(url)
-
+        resp = requests.get(url, headers=headers, timeout=10)
+        resp.raise_for_status()
+        soup = BeautifulSoup(resp.text, 'html.parser')
         links = set()
-        for a in driver.find_elements_by_tag_name('a'):
-            href = a.get_attribute('href')
-            if href and not href.startswith('https://t.me'):
+        for a in soup.find_all('a', href=True):
+            href = a['href']
+            if not href.startswith('https://t.me'):
                 links.add(href)
-        driver.quit()
         return list(links)
     except Exception as e:
-        print(f"抓取页面失败: {e}")
+        print(f"抓取网页失败：{e}")
         return []
 
-def is_valid_link(link):
-    """测试链接是否有效"""
-    headers = {
-        'User-Agent': 'Mozilla/5.0'
-    }
+def validate_link(link):
     try:
-        resp = requests.get(link, headers=headers, timeout=5)
+        resp = requests.head(link, timeout=5)
         return resp.status_code == 200
     except:
         return False
 
-def append_links(file_path, links):
-    """过滤、验证后，追加到文件"""
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    existing = set()
-    if os.path.exists(file_path):
-        with open(file_path, 'r', encoding='utf-8') as f:
-            existing = set(line.strip() for line in f)
-    with open(file_path, 'a', encoding='utf-8') as f:
-        for link in set(links):
-            if link not in existing and is_valid_link(link):
-                f.write(link + '\n')
-                existing.add(link)
-
 def main():
     url = os.environ.get('BASE_URL', 'https://t.me/dingyue_center')
-    file_path = 'data/subscribes.txt'
-
+    output_file = 'data/subscribes.txt'
     links = fetch_links(url)
-    append_links(file_path, links)
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
-    # 提交更新
-    os.system('git config --global user.name "github-actions[bot]"')
-    os.system('git config --global user.email "github-actions[bot]@users.noreply.github.com"')
-    os.system(f'git add {file_path}')
-    os.system('git commit -m "自动更新订阅链接" || true')  # 备选：如果无变更不报错
+    existing_links = set()
+    if os.path.exists(output_file):
+        with open(output_file, 'r', encoding='utf-8') as f:
+            existing_links = set(line.strip() for line in f)
 
-    token = os.environ.get('GITHUB_TOKEN')
-    if token:
-        os.system(f'git push https://x-access-token:{token}@github.com/qjlxg/362.git main')
-    else:
-        print("未找到GITHUB_TOKEN，无法推送结果到仓库。")
+    new_links = []
+    for link in links:
+        if link not in existing_links and validate_link(link):
+            new_links.append(link)
+
+    if new_links:
+        with open(output_file, 'a', encoding='utf-8') as f:
+            for link in new_links:
+                f.write(link + '\n')
+
+    # 自动提交推送
+    if 'GITHUB_TOKEN' in os.environ:
+        os.system('git config --global user.name "github-actions[bot]"')
+        os.system('git config --global user.email "github-actions[bot]@users.noreply.github.com"')
+        os.system(f'git add {output_file}')
+        os.system('git commit -m "自动更新订阅链接" || true')
+        os.system(f'git push https://x-access-token:{os.environ["GITHUB_TOKEN"]}@github.com/qjlxg/362.git main')
 
 if __name__ == '__main__':
     main()
