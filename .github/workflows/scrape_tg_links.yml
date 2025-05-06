@@ -1,37 +1,23 @@
-name: scrape_tg_link
+name: Update Subscribes
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
+    - cron: '0 8 * * *'  # 每天 UTC 时间 8:00 运行（即北京时间 16:00）
 
 jobs:
-  scrape:
+  update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4
 
-      - name: Run scraper
-        run: |
-          python scrape_tg_links.py
-
-      - name: Commit changes
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          if [ -f data/valid_links.txt ]; then
-            git add data/valid_links.txt
-          fi
-          git commit -m "Update t.txt with latest links" || echo "No changes to commit"
-          git push origin main || echo "Push failed, possibly no changes"
+      - name: Run script to update subscribes.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BASE_URL: ${{ secrets.BASE_URL }}
+        run: python scrape_tg_links.py
