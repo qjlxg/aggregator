@@ -1,58 +1,81 @@
-import os
-import requests
-from bs4 import BeautifulSoup
-
-def fetch_links(url):
-    headers = {'User-Agent': 'Mozilla/5.0'}
-    try:
-        resp = requests.get(url, headers=headers, timeout=10)
-        resp.raise_for_status()
-        soup = BeautifulSoup(resp.text, 'html.parser')
-        links = set()
-        for a in soup.find_all('a', href=True):
-            href = a['href']
-            if not href.startswith('https://t.me'):
-                links.add(href)
-        return list(links)
-    except Exception as e:
-        print(f"抓取网页失败：{e}")
-        return []
-
-def validate_link(link):
-    try:
-        resp = requests.head(link, timeout=5)
-        return resp.status_code == 200
-    except:
-        return False
-
-def main():
-    url = os.environ.get('BASE_URL', 'https://t.me/dingyue_center')
-    output_file = 'data/subscribes.txt'
-    links = fetch_links(url)
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-
-    existing_links = set()
-    if os.path.exists(output_file):
-        with open(output_file, 'r', encoding='utf-8') as f:
-            existing_links = set(line.strip() for line in f)
-
-    new_links = []
-    for link in links:
-        if link not in existing_links and validate_link(link):
-            new_links.append(link)
-
-    if new_links:
-        with open(output_file, 'a', encoding='utf-8') as f:
-            for link in new_links:
-                f.write(link + '\n')
-
-    # 自动提交推送
-    if 'GITHUB_TOKEN' in os.environ:
-        os.system('git config --global user.name "github-actions[bot]"')
-        os.system('git config --global user.email "github-actions[bot]@users.noreply.github.com"')
-        os.system(f'git add {output_file}')
-        os.system('git commit -m "自动更新订阅链接" || true')
-        os.system(f'git push https://x-access-token:{os.environ["GITHUB_TOKEN"]}@github.com/qjlxg/362.git main')
-
-if __name__ == '__main__':
-    main()
+@@ -4,16 +4,11 @@
+ from bs4 import BeautifulSoup
+ import time
+ 
+ # 配置信息
+ BASE_URL = 'https://t.me/dingyue_center'  # 替换为你的Telegram公开频道地址
+ BASE_URL = 'https://t.me/s/dingyue_center'  # 确保是 /s/ 格式的链接
+ DATA_DIR = 'data'
+ OUTPUT_FILE = os.path.join(DATA_DIR, 't.txt')
+ MAX_PAGES = 50  # 最大抓取页数，Telegram单次最多返回50条消息（大约2-3页）
+ MAX_PAGES = 10
+ 
+ # 确保数据目录存在
+ os.makedirs(DATA_DIR, exist_ok=True)
+ 
+ # 请求头
+ headers = {
+     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+ }
+ @@ -31,15 +26,13 @@ def extract_links(html):
+     pattern = r'https?://[^\s\'"<>]+'
+     all_urls = re.findall(pattern, html)
+     target_links = [url for url in all_urls if '/api/v1/client/subscribe?token=' in url]
+     print(f"页面源码中的链接示例：{all_urls[:5]}")  # 打印前5个链接，用于调试
+     return target_links
+ 
+ def test_url(url):
+     try:
+         r = requests.get(url, headers=headers, timeout=10)
+         if r.status_code == 200:
+             return True
+         else:
+             return False
+         return r.status_code == 200
+     except:
+         return False
+ 
+ @@ -56,34 +49,35 @@ def main():
+     collected_links = set()
+     page_count = 0
+ 
+     os.makedirs(DATA_DIR, exist_ok=True)
+ 
+     while current_url and page_count < MAX_PAGES:
+         print(f"抓取页面：{current_url}")
+         html = fetch_page(current_url)
+         if not html:
+             print("页面抓取失败，跳过。")
+             break
+ 
+         links = extract_links(html)
+         print(f"找到 {len(links)} 个目标链接。")
+ 
+         for link in links:
+             if link not in collected_links:
+                 print(f"测试链接：{link}")
+                 if test_url(link):
+                     print(f"链接有效，保存：{link}")
+                     with open(OUTPUT_FILE, 'a', encoding='utf-8') as f:
+                         f.write(link + '\n')
+                     collected_links.add(link)
+                 else:
+                     print(f"链接无效，跳过：{link}")
+                 time.sleep(0.5)  # 避免请求过快被限制
+                 time.sleep(0.5)
+ 
+         # 获取下一页URL
+         current_url = get_next_page_url(html, current_url)
+         page_count += 1
+         time.sleep(1)  # 适当的抓取间隔
+         time.sleep(1)
+ 
+     print(f"全部完成，共抓取到 {len(collected_links)} 个有效链接。")
+ 
+     # 如果没有生成 t.txt，则创建一个空文件
+     if not os.path.exists(OUTPUT_FILE):
+         with open(OUTPUT_FILE, 'w') as f:
+             pass  # 创建空文件
+ 
+ if __name__ == '__main__':
+     main()
