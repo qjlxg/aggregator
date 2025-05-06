@@ -36,7 +36,7 @@ def convert_multiple_to_base64(urls):
 
 if __name__ == "__main__":
     urls = [
-        #"https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/data/ss.txt",
+        "https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/ss.txt",
         "https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/data/transporter.txt",
         #"https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/data/clash.yaml",
         "https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/base.txt",
