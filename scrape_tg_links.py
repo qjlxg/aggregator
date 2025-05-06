@@ -60,6 +60,12 @@ def extract_all_links(html, base_url):
                     links.add(link)
                     break
 
+    # 进一步改进正则匹配，更精确匹配目标URL模式
+    pattern = r'https?://[^\s\'"<>]*(/api/[^\s\'"<>]*\??[^\s\'"<>]*|oken=[^\s\'"<>]*\??[^\s\'"<>]*|/s/[^\s\'"<>]*)'
+    for link in re.findall(pattern, html):
+        if not link.startswith('https://t.me') and not link.endswith(excluded_extensions):
+          links.add(link)
+
     return list(links)
 
 def test_url(url):
