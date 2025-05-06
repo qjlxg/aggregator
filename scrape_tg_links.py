@@ -1,12 +1,13 @@
 import os
 import re
-import requests
-from bs4 import BeautifulSoup
-import time
 import logging
-import concurrent.futures
 import configparser
 from urllib.parse import urljoin
+from pyppeteer import launch
+from bs4 import BeautifulSoup
+import asyncio
+import time
+import concurrent.futures
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -23,34 +24,14 @@ MAX_PAGES = int(config.get('settings', 'max_pages', fallback='10')) # 提供默�
 MAX_WORKERS = int(config.get('settings', 'max_workers', fallback='5')) # 提供默认值
 BASE_URL = config.get('settings', 'base_url')
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
-}
+excluded_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.svg', '.xml', '.css', '.js')
 
-def fetch_page(url):
-    try:
-        response = requests.get(url, headers=headers, timeout=15)
-        response.raise_for_status()
-        return response.text
-    except requests.exceptions.RequestException as e:
-        logging.error(f"请求失败 {url}: {e}")
-        return None
-
-def extract_all_links(html, base_url):
+async def extract_all_links_pyppeteer(page, base_url):
+    content = await page.content()
+    soup = BeautifulSoup(content, 'html.parser')
     links = set()
     keywords = ['/api/', 'oken=', '/s/']
-    excluded_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.svg', '.xml', '.css', '.js')
 
-    # 直接在 HTML 文本中搜索符合模式的链接
-    pattern = r'(https?://[^\s\'"<>]*(/api/[^\s\'"<>]*(?:\?[^\s\'"<>]+)?|oken=[^\s\'"<>]*(?:\?[^\s\'"<>]+)?|/s/[^\s\'"<>]*))'
-    found_links = re.findall(pattern, html)
-    for link_tuple in found_links:
-        link = link_tuple[0]
-        if not link.startswith('https://t.me') and not link.endswith(excluded_extensions):
-            links.add(link)
-
-    # 仍然尝试从 <a> 标签中提取，以防链接在标签内
-    soup = BeautifulSoup(html, 'html.parser')
     for a_tag in soup.find_all('a', href=True):
         href = a_tag['href']
         absolute_url = urljoin(base_url, href)
@@ -60,57 +41,50 @@ def extract_all_links(html, base_url):
                     links.add(absolute_url)
                     break
 
+    # 直接在页面内容中搜索符合模式的链接
+    pattern = r'(https?://[^\s\'"<>]*(/api/[^\s\'"<>]*(?:\?[^\s\'"<>]+)?|oken=[^\s\'"<>]*(?:\?[^\s\'"<>]+)?|/s/[^\s\'"<>]*))'
+    found_links = re.findall(pattern, content)
+    for link_tuple in found_links:
+        link = link_tuple[0]
+        if not link.startswith('https://t.me') and not link.endswith(excluded_extensions):
+            links.add(link)
+
     return list(links)
 
-def test_url(url):
+async def test_url_pyppeteer(url):
     try:
-        r = requests.get(url, headers=headers, timeout=10)
-        return r.status_code == 200
-    except requests.exceptions.RequestException as e:
+        browser = await launch(headless=True)
+        page = await browser.newPage()
+        response = await page.goto(url, timeout=30000)
+        await browser.close()
+        return response is not None and response.status == 200
+    except Exception as e:
         logging.debug(f"测试链接失败 {url}: {e}")
         return False
 
-def get_next_page_url(html, current_url):
-    soup = BeautifulSoup(html, 'html.parser')
-    # 优先查找 data-nav="next" 的链接
-    next_page = soup.find('a', attrs={'data-nav': 'next'})
-    if next_page and 'href' in next_page.attrs:
-        return urljoin('https://t.me', next_page['href'])
-
-    # 尝试查找包含特定文本的 "下一页" 链接
-    next_page_texts = ["下一页", "Next", ">", "»"]
-    for text in next_page_texts:
-        next_link = soup.find('a', string=re.compile(text))
-        if next_link and 'href' in next_link.attrs:
-            return urljoin(current_url, next_link['href'])
-        next_link = soup.find('a', title=re.compile(text))
-        if next_link and 'href' in next_link.attrs:
-            return urljoin(current_url, next_link['href'])
-
-    return None
-
 def process_link(link):
-    if test_url(link):
-        try:
-            with open(OUTPUT_VALID_FILE, 'a', encoding='utf-8') as f:
-                f.write(link + '\n')
-            logging.info(f"有效链接：{link}")
-            print(f"有效链接 (控制台): {link}")
-        except Exception as e:
-            logging.error(f"写入有效链接文件失败 {OUTPUT_VALID_FILE}: {e}")
-    else:
-        try:
-            with open(OUTPUT_INVALID_FILE, 'a', encoding='utf-8') as f:
-                f.write(link + '\n')
-            logging.info(f"无效链接：{link}")
-            print(f"无效链接 (控制台): {link}")
-        except Exception as e:
-            logging.error(f"写入无效链接文件失败 {OUTPUT_INVALID_FILE}: {e}")
+    async def _process(link):
+        if await test_url_pyppeteer(link):
+            try:
+                with open(OUTPUT_VALID_FILE, 'a', encoding='utf-8') as f:
+                    f.write(link + '\n')
+                logging.info(f"有效链接 (Pyppeteer测试通过): {link}")
+                print(f"有效链接 (Pyppeteer测试通过): {link}")
+            except Exception as e:
+                logging.error(f"写入有效链接文件失败 {OUTPUT_VALID_FILE}: {e}")
+        else:
+            try:
+                with open(OUTPUT_INVALID_FILE, 'a', encoding='utf-8') as f:
+                    f.write(link + '\n')
+                logging.info(f"无效链接 (Pyppeteer测试失败): {link}")
+                print(f"无效链接 (Pyppeteer测试失败): {link}")
+            except Exception as e:
+                logging.error(f"写入无效链接文件失败 {OUTPUT_INVALID_FILE}: {e}")
+    asyncio.run(_process(link))
 
-def main():
-    logging.info(f"DATA_DIR is: {DATA_DIR}") # 添加这行
+async def main():
+    logging.info(f"DATA_DIR is: {DATA_DIR}")
     os.makedirs(DATA_DIR, exist_ok=True)
-    # 如果文件不存在，则创建空文件
     if not os.path.exists(OUTPUT_VALID_FILE):
         with open(OUTPUT_VALID_FILE, 'w') as f:
             pass
@@ -122,26 +96,44 @@ def main():
     collected_links = set()
     page_count = 0
 
-    while current_url and page_count < MAX_PAGES:
-        logging.info(f"抓取页面：{current_url}")
-        html = fetch_page(current_url)
-        if not html:
-            break
+    try:
+        browser = await launch(headless=True)
+        page = await browser.newPage()
 
-        links = extract_all_links(html, current_url)
-        logging.info(f"找到 {len(links)} 个非t.me链接。")
+        while current_url and page_count < MAX_PAGES:
+            logging.info(f"使用 Pyppeteer 抓取页面：{current_url}")
+            try:
+                await page.goto(current_url, timeout=30000)
+                await asyncio.sleep(5) # 等待页面加载完成
 
-        new_links = [link for link in links if link not in collected_links]
-        collected_links.update(new_links)
+                links = await extract_all_links_pyppeteer(page, current_url)
+                logging.info(f"使用 Pyppeteer 在页面上找到 {len(links)} 个非t.me链接。")
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            executor.map(process_link, new_links)
+                new_links = [link for link in links if link not in collected_links]
+                collected_links.update(new_links)
 
-        current_url = get_next_page_url(html, current_url)
-        page_count += 1
-        time.sleep(1)
+                with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+                    executor.map(process_link, new_links)
 
-    logging.info(f"全部完成，共抓取到 {len(collected_links)} 个非t.me链接。")
+                page_count += 1
+                if page_count < MAX_PAGES:
+                    # 模拟向下滚动加载更多内容
+                    await page.evaluate('window.scrollTo(0, document.body.scrollHeight)')
+                    await asyncio.sleep(5)
+                else:
+                    break
+
+            except Exception as e:
+                logging.error(f"Pyppeteer 抓取页面 {current_url} 失败: {e}")
+                break
+
+    except Exception as e:
+        logging.error(f"初始化 Pyppeteer 失败: {e}")
+    finally:
+        if 'browser' in locals() and browser:
+            await browser.close()
+
+    logging.info(f"全部完成，共使用 Pyppeteer 抓取到 {len(collected_links)} 个非t.me链接。")
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())
