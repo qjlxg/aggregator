@@ -30,23 +30,18 @@ jobs:
 
     - name: Run web crawler
       env:
-        BASE_URL: ${{ secrets.BASE_URL }} # 从 Secrets 获取 BASE_URL
-        DATA_DIR: ${{ github.workspace }}/data # 设置 DATA_DIR 环境变量
-        OUTPUT_VALID_FILE: valid_links.txt # 从 config.ini 读取，或使用默认值
-        OUTPUT_INVALID_FILE: invalid_links.txt # 从 config.ini 读取，或使用默认值
-        MAX_PAGES: ${{ secrets.MAX_PAGES }} # 从 Secrets 获取 MAX_PAGES
-        MAX_WORKERS: ${{ secrets.MAX_WORKERS }} # 从 Secrets 获取 MAX_WORKERS
+        BASE_URL: ${{ secrets.BASE_URL }}
+        DATA_DIR: ${{ github.workspace }}/data
+        OUTPUT_VALID_FILE: valid_links.txt
+        OUTPUT_INVALID_FILE: invalid_links.txt
+        MAX_PAGES: ${{ secrets.MAX_PAGES }}
+        MAX_WORKERS: ${{ secrets.MAX_WORKERS }}
       run: python ${{ github.workspace }}/scrape_tg_links.py
 
-    - name: Upload valid links
-      uses: actions/upload-artifact@v4
-      with:
-        name: valid-links
-        path: ${{ github.workspace }}/data/valid_links.txt
-
-    - name: Upload invalid links
-      if: always() # 即使任务失败也上传
-      uses: actions/upload-artifact@v4
-      with:
-        name: invalid-links
-        path: ${{ github.workspace }}/data/invalid_links.txt
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "GitHub Actions Bot"
+        git add data/valid_links.txt data/invalid_links.txt
+        git commit -m "Add crawled links [skip ci]" || echo "No changes to commit"
+        git push origin main
