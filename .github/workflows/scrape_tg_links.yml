@@ -36,7 +36,7 @@ jobs:
         OUTPUT_INVALID_FILE: invalid_links.txt
         MAX_PAGES: ${{ secrets.MAX_PAGES }} # 从 Secrets 获取 MAX_PAGES
         MAX_WORKERS: ${{ secrets.MAX_WORKERS }} # 从 Secrets 获取 MAX_WORKERS
-      run: python scrape_tg_links.py
+      run: python ${{ github.workspace }}/scrape_tg_links.py # 注意这里的文件名
 
     - name: Upload valid links
       uses: actions/upload-artifact@v4
