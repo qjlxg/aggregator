@@ -17,10 +17,10 @@ config.read('config.ini')
 
 BASE_DIR = os.environ.get('GITHUB_WORKSPACE', '.') # 获取 GitHub 工作区路径，默认为当前目录
 DATA_DIR = os.path.join(BASE_DIR, 'data')
-OUTPUT_VALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_valid_file', 'valid_links.txt')) # 提供默认值
-OUTPUT_INVALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_invalid_file', 'invalid_links.txt')) # 提供默认值
-MAX_PAGES = int(config.get('settings', 'max_pages', '10')) # 提供默认值
-MAX_WORKERS = int(config.get('settings', 'max_workers', '5')) # 提供默认值
+OUTPUT_VALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_valid_file', fallback='valid_links.txt'))
+OUTPUT_INVALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_invalid_file', fallback='invalid_links.txt'))
+MAX_PAGES = int(config.get('settings', 'max_pages', fallback='10')) # 提供默认值
+MAX_WORKERS = int(config.get('settings', 'max_workers', fallback='5')) # 提供默认值
 BASE_URL = config.get('settings', 'base_url')
 
 headers = {
