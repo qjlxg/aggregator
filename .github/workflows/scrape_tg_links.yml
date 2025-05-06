@@ -1,46 +1,52 @@
- 
- name: Scrape TG Links
- 
- on:
-   workflow_dispatch:
-   push:
-     branches:
-       - main
-   schedule:
-     - cron: '0 0 * * *'  # 每天午夜运行一次（可调整）
-   
- 
- 
- jobs:
-   scrape:
-     runs-on: ubuntu-latest
- 
-     steps:
-       
-       - name: Checkout code
-         uses: actions/checkout@v3
- 
-       - name: Set up Python 3.8
-         uses: actions/setup-python@v3
-    
- 
-       - name: Install dependencies
-         run: |
-           python -m pip install --upgrade pip
-           pip install requests beautifulsoup4
- 
-      
-       - name: Run scraper
-         env:
-           BASE_URL: https://t.me/dingyue_center 
-         run: |
-           python scrape_tg_links.py
- 
-       - name: Commit changes
-         run: |
-           python script.py
-           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-           git config --local user.name "github-actions[bot]"
-           git add data/t.txt
-           git commit -m "Update t.txt with latest links" || echo "No changes to commit"
-           git push origin main
+name: Run Web Crawler
+
+on:
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 0 * * *' # 每天 UTC 00:00 运行
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Set up data directory
+      run: |
+        mkdir -p data
+
+    - name: Run web crawler
+      env:
+        BASE_URL: ${{ secrets.BASE_URL }} # 从 Secrets 获取 BASE_URL
+        DATA_DIR: ${{ github.workspace }}/data
+        OUTPUT_VALID_FILE: valid_links.txt
+        OUTPUT_INVALID_FILE: invalid_links.txt
+        MAX_PAGES: ${{ secrets.MAX_PAGES }} # 从 Secrets 获取 MAX_PAGES
+        MAX_WORKERS: ${{ secrets.MAX_WORKERS }} # 从 Secrets 获取 MAX_WORKERS
+      run: python main.py
+
+    - name: Upload valid links
+      uses: actions/upload-artifact@v4
+      with:
+        name: valid-links
+        path: ${{ github.workspace }}/data/valid_links.txt
+
+    - name: Upload invalid links
+      if: always() # 即使任务失败也上传
+      uses: actions/upload-artifact@v4
+      with:
+        name: invalid-links
+        path: ${{ github.workspace }}/data/invalid_links.txt
