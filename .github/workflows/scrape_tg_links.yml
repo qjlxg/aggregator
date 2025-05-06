@@ -1,6 +1,7 @@
 name: Update Subscribes
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 8 * * *'  # 每天 UTC 时间 8:00 运行（即北京时间 16:00）
 
