@@ -31,12 +31,12 @@ jobs:
     - name: Run web crawler
       env:
         BASE_URL: ${{ secrets.BASE_URL }} # 从 Secrets 获取 BASE_URL
-        DATA_DIR: ${{ github.workspace }}/data
-        OUTPUT_VALID_FILE: valid_links.txt
-        OUTPUT_INVALID_FILE: invalid_links.txt
+        DATA_DIR: ${{ github.workspace }}/data # 设置 DATA_DIR 环境变量
+        OUTPUT_VALID_FILE: valid_links.txt # 从 config.ini 读取，或使用默认值
+        OUTPUT_INVALID_FILE: invalid_links.txt # 从 config.ini 读取，或使用默认值
         MAX_PAGES: ${{ secrets.MAX_PAGES }} # 从 Secrets 获取 MAX_PAGES
         MAX_WORKERS: ${{ secrets.MAX_WORKERS }} # 从 Secrets 获取 MAX_WORKERS
-      run: python ${{ github.workspace }}/scrape_tg_links.py # 注意这里的文件名
+      run: python ${{ github.workspace }}/scrape_tg_links.py
 
     - name: Upload valid links
       uses: actions/upload-artifact@v4
