@@ -1,13 +1,13 @@
 import os
-import re
 import requests
+from bs4 import BeautifulSoup
 
 def fetch_links(url):
     try:
         response = requests.get(url)
-        response.raise_for_status() # Raise an exception for bad status codes
+        response.raise_for_status()  # Raise an exception for bad status codes
         soup = BeautifulSoup(response.text, 'html.parser')
-
+        
         # 抓取链接，假设链接都在 <a> 标签内
         links = []
         for a in soup.find_all('a', href=True):
@@ -46,11 +46,22 @@ def update_subscribes(links, file_path):
            f.write(link + '\n')
 
 def main():
-     base_url=os.environ.get('BASE_URL','https://t.me/dingyue_center')
-     file_path=os.environ.get('FILE_PATH','data/subscribes.txt')
+  environment_change_work='/home/runner/work/362/362'
+  base_url=os.environ.get('BASE_URL','https://t.me/dingyue_center')
+  
+(steps-step_reading):
+#Fetch
+links=fetch_links(base_url)
 
-     links=fetch_links(base_url)
-     update_subscribes(links,file_path)
+(steps-step_disbling_filtered_codes_snippet_review):
+update_subscribes(links,file_path+='data/subscribes.txt')
 
-if __name__=='__main__':
-     main()
+(steps-step_pushcosnhisallorequperate_chain_vals_parade):
+gitconfiglocaluser.name"qjlxg"
+gitconfiglocaluser.email"qjlxg@qjlxg.com"
+gitadd.
+gitcommit-m"Update subscribes."
+gitreshape-originmain"
+
+if,name=='__main__':
+main()
