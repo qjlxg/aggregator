@@ -80,17 +80,24 @@ def get_next_page_url(html, current_url):
 
 def process_link(link):
     if test_url(link):
-        with open(OUTPUT_VALID_FILE, 'a', encoding='utf-8') as f:
-            f.write(link + '\n')
-        logging.info(f"有效链接：{link}")
-        print(f"有效链接 (控制台): {link}")
+        try:
+            with open(OUTPUT_VALID_FILE, 'a', encoding='utf-8') as f:
+                f.write(link + '\n')
+            logging.info(f"有效链接：{link}")
+            print(f"有效链接 (控制台): {link}")
+        except Exception as e:
+            logging.error(f"写入有效链接文件失败 {OUTPUT_VALID_FILE}: {e}")
     else:
-        with open(OUTPUT_INVALID_FILE, 'a', encoding='utf-8') as f:
-            f.write(link + '\n')
-        logging.info(f"无效链接：{link}")
-        print(f"无效链接 (控制台): {link}")
+        try:
+            with open(OUTPUT_INVALID_FILE, 'a', encoding='utf-8') as f:
+                f.write(link + '\n')
+            logging.info(f"无效链接：{link}")
+            print(f"无效链接 (控制台): {link}")
+        except Exception as e:
+            logging.error(f"写入无效链接文件失败 {OUTPUT_INVALID_FILE}: {e}")
 
 def main():
+    logging.info(f"DATA_DIR is: {DATA_DIR}") # 添加这行
     os.makedirs(DATA_DIR, exist_ok=True)
     # 如果文件不存在，则创建空文件
     if not os.path.exists(OUTPUT_VALID_FILE):
