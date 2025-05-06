@@ -39,19 +39,27 @@ def fetch_page(url):
 def extract_all_links(html, base_url):
     soup = BeautifulSoup(html, 'html.parser')
     links = set()
+    keywords = ['/api/', 'oken=', '/s/']
+    excluded_extensions = ('.jpg', '.jpeg', '.png', '.gif', '.svg', '.xml', '.css', '.js')
+
     for a_tag in soup.find_all('a', href=True):
         href = a_tag['href']
         absolute_url = urljoin(base_url, href)
-        if absolute_url.startswith('http') and not absolute_url.startswith('https://t.me'):
-            # 排除常见的非网页链接类型
-            if not absolute_url.endswith(('.jpg', '.jpeg', '.png', '.gif', '.svg', '.xml', '.css', '.js')):
-                links.add(absolute_url)
+        if absolute_url.startswith('http') and not absolute_url.startswith('https://t.me') and not absolute_url.endswith(excluded_extensions):
+            for keyword in keywords:
+                if keyword in absolute_url:
+                    links.add(absolute_url)
+                    break
 
-    # 尝试使用更宽松的正则匹配补充提取，并排除特定后缀
+    # 尝试使用更宽松的正则匹配补充提取，并检查关键词和排除后缀
     pattern = r'https?://[^\s\'"<>]+'
     for link in re.findall(pattern, html):
-        if not link.startswith('https://t.me') and not link.endswith(('.jpg', '.jpeg', '.png', '.gif', '.svg', '.xml', '.css', '.js')):
-            links.add(link)
+        if not link.startswith('https://t.me') and not link.endswith(excluded_extensions):
+            for keyword in keywords:
+                if keyword in link:
+                    links.add(link)
+                    break
+
     return list(links)
 
 def test_url(url):
