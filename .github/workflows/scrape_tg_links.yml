@@ -1,5 +1,4 @@
-
- name: Scrape Telegram Links
+ 
  name: Scrape TG Links
  
  on:
@@ -9,8 +8,8 @@
        - main
    schedule:
      - cron: '0 0 * * *'  # 每天午夜运行一次（可调整）
-     - cron: '0 0 * * *'  # 每天0点运行
-   workflow_dispatch: # 手动触发
+   
+ 
  
  jobs:
    scrape:
@@ -26,7 +25,7 @@
        - name: Set up Python
          uses: actions/setup-python@v4
          with:
-           python-version: '3.8'
+          
            python-version: '3.10'
  
        - name: Install dependencies
