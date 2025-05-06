@@ -52,7 +52,13 @@ def main():
     os.system('git config --global user.email "github-actions[bot]@users.noreply.github.com"')
     os.system(f'git add {file_path}')
     os.system('git commit -m "Update subscribes.txt with new links" || echo "No changes to commit"')
-    os.system(f'git push https://x-access-token:{os.environ["GITHUB_TOKEN"]}@github.com/qjlxg/362.git main')
+    
+    # 安全获取 GITHUB_TOKEN
+    github_token = os.environ.get('GITHUB_TOKEN')
+    if github_token:
+        os.system(f'git push https://x-access-token:{github_token}@github.com/qjlxg/362.git main')
+    else:
+        print("错误：未找到 GITHUB_TOKEN 环境变量，请检查 GitHub Actions 配置")
 
 if __name__ == '__main__':
     main()
