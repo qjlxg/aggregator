@@ -1,36 +1,41 @@
 import os
 import requests
-from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 def fetch_links(url):
-    """从指定 URL 抓取所有链接，排除以 'https://t.me' 开头的链接"""
+    """从指定 URL 抓取所有动态加载的链接，排除以 'https://t.me' 开头的链接"""
     try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()  # 如果请求失败，抛出异常
-        soup = BeautifulSoup(response.text, 'html.parser')
-        links = [a['href'] for a in soup.find_all('a', href=True) if not a['href'].startswith('https://t.me')]
+        options = Options()
+        options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        driver = webdriver.Chrome(options=options)
+        driver.get(url)
+        links = [a.get_attribute('href') for a in driver.find_elements_by_tag_name('a') 
+                 if a.get_attribute('href') and not a.get_attribute('href').startswith('https://t.me')]
+        driver.quit()
         return links
-    except requests.RequestException as e:
-        print(f"无法获取 {url}: {e}")
+    except Exception as e:
+        print(f"抓取 {url} 时出错: {e}")
         return []
 
 def is_valid_link(link):
     """测试链接是否有效（返回状态码 200）"""
     try:
-        response = requests.head(link, allow_redirects=True, timeout=5)
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+        response = requests.get(link, headers=headers, allow_redirects=True, timeout=5)
         return response.status_code == 200
     except requests.RequestException:
         return False
 
 def append_to_file(file_path, new_links):
     """将新链接追加到文件中，避免重复"""
-    # 读取现有链接
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
     existing_links = set()
     if os.path.exists(file_path):
         with open(file_path, 'r', encoding='utf-8') as f:
             existing_links = set(line.strip() for line in f if line.strip())
-
-    # 过滤并追加新链接
     with open(file_path, 'a', encoding='utf-8') as f:
         for link in new_links:
             if link not in existing_links and is_valid_link(link):
@@ -38,27 +43,23 @@ def append_to_file(file_path, new_links):
                 existing_links.add(link)
 
 def main():
-    # 从环境变量获取配置
-    base_url = os.environ.get('BASE_URL', 'https://t.me/dingyue_center')  # 默认值仅用于本地测试
+    base_url = os.environ.get('BASE_URL', 'https://t.me/dingyue_center')
     file_path = 'data/subscribes.txt'
     
-    # 抓取链接并处理
     links = fetch_links(base_url)
     unique_links = list(set(links))  # 去重
     append_to_file(file_path, unique_links)
     
-    # 配置 Git 并推送
     os.system('git config --global user.name "github-actions[bot]"')
     os.system('git config --global user.email "github-actions[bot]@users.noreply.github.com"')
     os.system(f'git add {file_path}')
     os.system('git commit -m "Update subscribes.txt with new links" || echo "No changes to commit"')
     
-    # 安全获取 GITHUB_TOKEN
     github_token = os.environ.get('GITHUB_TOKEN')
     if github_token:
         os.system(f'git push https://x-access-token:{github_token}@github.com/qjlxg/362.git main')
     else:
-        print("错误：未找到 GITHUB_TOKEN 环境变量，请检查 GitHub Actions 配置")
+        print("错误：未找到 GITHUB_TOKEN，请检查 GitHub Actions 配置")
 
 if __name__ == '__main__':
     main()
