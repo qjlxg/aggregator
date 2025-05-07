@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import logging
 from urllib.parse import urljoin
+import time
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -16,12 +17,17 @@ os.makedirs(DATA_DIR, exist_ok=True)
 SEARCH_KEYWORDS = ['/api/v1/client/subscribe?token=', 'token=', '/s/']
 SEARCH_ENGINE_BASE_URL = 'https://www.google.com/search'
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    'Referer': 'https://www.google.com/'
 }
+REQUEST_DELAY = 1 # 设置请求延迟 (秒)
 
-def search_google(query, num_results=5): # 减少搜索结果数量，加快处理速度
+def search_google(query, num_results=5):
     params = {'q': query, 'num': num_results}
     try:
+        time.sleep(REQUEST_DELAY) # 增加延迟
         response = requests.get(SEARCH_ENGINE_BASE_URL, params=params, headers=HEADERS, timeout=10)
         response.raise_for_status()
         return response.text
@@ -40,6 +46,7 @@ def extract_links_from_page_content(html, keywords):
 
 def browse_page(url, query):
     try:
+        time.sleep(REQUEST_DELAY) # 增加延迟
         response = requests.get(url, headers=HEADERS, timeout=10)
         response.raise_for_status()
         return response.text
