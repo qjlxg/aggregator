@@ -57,16 +57,4 @@ def extract_all_links_requests(html, base_url, excluded_extensions):
             links.add(absolute_url)
     pattern = r'https?://[^\s\'"<>]+'
     for link in re.findall(pattern, html):
-        if not link.startswith('https://t.me') and not link.endswith(excluded_extensions) and 'telegram' not in link.lower():
-            links.add(link)
-    return list(links)
-
-def test_url(url):
-    try:
-        r = requests.get(url, headers=headers, timeout=10)
-        return r.status_code == 200
-    except requests.exceptions.RequestException as e:
-        logging.debug(f"测试链接失败 {url}: {e}")
-        return False
-
-def get
+        if not link.startswith('https://t.me')
