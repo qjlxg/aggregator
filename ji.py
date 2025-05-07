@@ -86,7 +86,7 @@ def save_urls_to_file(urls, filename='data/ji.txt'):
         logging.error(f"保存 URL 到文件 {filename} 失败: {e}")
 
 
-def main(base_url='https://t.me/s/proxyshareCN', max_pages=10):
+def main(base_url='https://t.me/s/wxdy666', max_pages=10):
     """主函数，控制抓取流程"""
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36'
@@ -126,6 +126,6 @@ def main(base_url='https://t.me/s/proxyshareCN', max_pages=10):
     save_urls_to_file(valid_urls, 'data/ji.txt')
 
 if __name__ == '__main__':
-    start_url = 'https://t.me/s/proxyshareCN'  # 你可以修改起始 URL
-    max_pages_to_crawl = 20  # 你可以修改最大抓取页数
+    start_url = 'https://t.me/s/wxdy666'  # 你可以修改起始 URL
+    max_pages_to_crawl = 40  # 你可以修改最大抓取页数
     main(start_url, max_pages_to_crawl)
