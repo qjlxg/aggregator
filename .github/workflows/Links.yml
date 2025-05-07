@@ -27,7 +27,7 @@ jobs:
       - name: Run scraper
         env:
           TELEGRAM_CHANNEL_URL: 'https://t.me/s/dingyue_center'  # 设置你的 Telegram 频道 URL
-        run: python scrape_tg_links_requests.py
+        run: python scrape_tg_links.py
 
       - name: Commit and push changes
         run: |
