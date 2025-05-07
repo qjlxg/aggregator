@@ -1,107 +1,87 @@
 import os
+import asyncio
 import re
 import requests
-from bs4 import BeautifulSoup
-import time
-import logging
-import concurrent.futures
-import configparser
+from telethon import TelegramClient
+from telethon.tl.functions.messages import GetHistoryRequest
 
-# 配置日志
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# 从环境变量中获取 API ID 和 Hash （GitHub Actions Secrets）
+api_id = int(os.environ.get("TELEGRAM_API_ID"))
+api_hash = os.environ.get("TELEGRAM_API_HASH")
+channel_username = "dingyue_center"  # 替换为你的频道用户名
+output_file = "data/subscribes.txt"
 
-# 读取配置
-config = configparser.ConfigParser()
-config.read('config.ini')
+async def scrape_channel(api_id, api_hash, channel_username, output_file):
+    """
+    从 Telegram 频道抓取链接，去重，验证并保存。
+    """
 
-BASE_URL = config.get('settings', 'base_url')
-DATA_DIR = config.get('settings', 'data_dir')
-OUTPUT_VALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_valid_file'))
-OUTPUT_INVALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_invalid_file'))
-MAX_PAGES = int(config.get('settings', 'max_pages'))
-MAX_WORKERS = int(config.get('settings', 'max_workers'))
+    client = TelegramClient('anon', api_id, api_hash)
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
-}
+    async with client:
+        try:
+            channel = await client.get_entity(channel_username)
+        except Exception as e:
+            print(f"Error getting channel: {e}")
+            return
 
-def fetch_page(url):
-    try:
-        response = requests.get(url, headers=headers, timeout=15)
-        response.raise_for_status()
-        return response.text
-    except Exception as e:
-        logging.error(f"请求失败 {url}: {e}")
-        return None
+        all_messages = []
+        offset_id = 0
+        limit = 100
 
-def extract_all_links(html):
-    pattern = r'https?://[^\s\'"<>]+'
-    all_links = re.findall(pattern, html)
-    filtered_links = [link for link in all_links if not link.startswith('https://t.me')]
-    return filtered_links
+        while True:
+            print(f"Fetching messages from offset {offset_id}...")
+            history = await client(GetHistoryRequest(
+                peer=channel,
+                offset_id=offset_id,
+                offset_date=None,
+                add_offset=0,
+                limit=limit,
+                max_id=0,
+                min_id=0,
+                hash=0
+            ))
+            if not history.messages:
+                break
+            messages = history.messages
+            all_messages.extend(messages)
+            offset_id = messages[-1].id
+            if len(messages) < limit:
+                break
 
-def test_url(url):
-    try:
-        r = requests.get(url, headers=headers, timeout=10)
-        return r.status_code == 200
-    except Exception as e:
-        logging.debug(f"测试链接失败 {url}: {e}")
-        return False
+        urls = set()  # 用于去重
 
-def get_next_page_url(html, current_url):
-    soup = BeautifulSoup(html, 'html.parser')
-    next_page = soup.find('a', attrs={'data-nav': 'next'})
-    if next_page and 'href' in next_page.attrs:
-        return 'https://t.me' + next_page['href']
-    return None
+        for message in all_messages:
+            if message.message:
+                # 使用正则表达式提取链接
+                found_urls = re.findall(r'(https?://\S+)', message.message)
+                for url in found_urls:
+                    urls.add(url.strip())
 
-def process_link(link):
-    if link.startswith('https://t.me'):
-        logging.info(f"跳过t.me链接：{link}")
-        return
-    if test_url(link):
-        with open(OUTPUT_VALID_FILE, 'a', encoding='utf-8') as f:
-            f.write(link + '\n')
-        logging.info(f"有效链接：{link}")
-    else:
-        with open(OUTPUT_INVALID_FILE, 'a', encoding='utf-8') as f:
-            f.write(link + '\n')
-        logging.info(f"无效链接：{link}")
+        valid_urls = []
+        for url in urls:
+            try:
+                response = requests.head(url, timeout=5)  # 使用 HEAD 请求，更快
+                if response.status_code < 400:  # 认为 400+ 的状态码是无效链接
+                    valid_urls.append(url)
+                    print(f"Valid URL: {url}")
+                else:
+                    print(f"Invalid URL (Status {response.status_code}): {url}")
+            except requests.exceptions.RequestException as e:
+                print(f"Error checking URL {url}: {e}")
 
-def main():
-    os.makedirs(DATA_DIR, exist_ok=True)
-    # 如果文件不存在，则创建空文件
-    if not os.path.exists(OUTPUT_VALID_FILE):
-        with open(OUTPUT_VALID_FILE, 'w') as f:
-            pass
-    if not os.path.exists(OUTPUT_INVALID_FILE):
-        with open(OUTPUT_INVALID_FILE, 'w') as f:
-            pass
 
-    current_url = BASE_URL
-    collected_links = set()
-    page_count = 0
+        # 保存到文件
+        os.makedirs(os.path.dirname(output_file), exist_ok=True) # 确保目录存在
+        with open(output_file, "w", encoding="utf-8") as f:
+            for url in valid_urls:
+                f.write(url + "\n")
 
-    while current_url and page_count < MAX_PAGES:
-        logging.info(f"抓取页面：{current_url}")
-        html = fetch_page(current_url)
-        if not html:
-            break
+        print(f"Saved {len(valid_urls)} valid URLs to {output_file}")
 
-        links = extract_all_links(html)
-        logging.info(f"找到 {len(links)} 个非t.me链接。")
 
-        new_links = [link for link in links if link not in collected_links]
-        collected_links.update(new_links)
+async def main():
+    await scrape_channel(api_id, api_hash, channel_username, output_file)
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            executor.map(process_link, new_links)
-
-        current_url = get_next_page_url(html, current_url)
-        page_count += 1
-        time.sleep(1)
-
-    logging.info(f"全部完成，共抓取到 {len(collected_links)} 个非t.me链接。")
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    asyncio.run(main())
