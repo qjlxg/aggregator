@@ -1,9 +1,8 @@
 import os
-import re
-import requests
-from bs4 import BeautifulSoup
 import logging
-from urllib.parse import urljoin
+import undetected_chromedriver as uc
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 import time
 
 # 配置日志
@@ -16,135 +15,48 @@ os.makedirs(DATA_DIR, exist_ok=True)
 
 SEARCH_KEYWORDS = ['/api/v1/client/subscribe?token=', 'token=', '/s/']
 SEARCH_ENGINES = {
-    'google': 'https://www.google.com/search',
-    'duckduckgo': 'https://duckduckgo.com/html/',
-    'bing': 'https://www.bing.com/search',
-    'yandex': 'https://yandex.com/search/',
-    'yahoo': 'https://search.yahoo.com/search'
+    'google': 'https://www.google.com/'
 }
-HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-    'Referer': 'https://www.google.com/'
-}
-REQUEST_DELAY = 1 # 设置请求延迟 (秒)
+SEARCH_DELAY = 2 # 搜索后等待时间 (秒)
+SCROLL_PAUSE_TIME = 1 # 滚动加载等待时间 (秒)
+NUM_SCROLLS = 3 # 滚动次数
 
-def search(engine_name, base_url, query, num_results=5):
-    params = {}
-    if engine_name == 'google':
-        params = {'q': query, 'num': num_results}
-    elif engine_name == 'duckduckgo':
-        params = {'q': query}
-    elif engine_name == 'bing':
-        params = {'q': query, 'count': num_results}
-    elif engine_name == 'yandex':
-        params = {'text': query, 'lr': 213} # lr=213 for China, may need adjustment
-    elif engine_name == 'yahoo':
-        params = {'p': query, 'n': num_results}
-
-    try:
-        time.sleep(REQUEST_DELAY)
-        response = requests.get(base_url, params=params, headers=HEADERS, timeout=10)
-        response.raise_for_status()
-        return response.text
-    except requests.exceptions.RequestException as e:
-        logging.error(f"{engine_name.capitalize()} 搜索失败，关键词: '{query}': {e}")
-        return None
-
-def extract_links_from_google_results(html):
-    soup = BeautifulSoup(html, 'html.parser')
+def extract_links_selenium(driver, keywords):
     links = set()
-    for link in soup.find_all('a', href=True):
-        href = link['href']
-        if href.startswith('/url?q='):
-            href = href.split('/url?q=')[1].split('&')[0]
-        if href.startswith('http') and 'google' not in href:
+    elements = driver.find_elements(By.TAG_NAME, 'a')
+    for element in elements:
+        href = element.get_attribute('href')
+        if href and href.startswith('http') and 'telegram' not in href.lower() and any(keyword in href for keyword in keywords):
             links.add(href)
     return list(links)
-
-def extract_links_from_duckduckgo_results(html):
-    soup = BeautifulSoup(html, 'html.parser')
-    links = set()
-    for link in soup.find_all('a', class_='result__a', href=True):
-        href = link['href']
-        if href.startswith('http') and 'duckduckgo' not in href.lower():
-            links.add(href)
-    return list(links)
-
-def extract_links_from_bing_results(html):
-    soup = BeautifulSoup(html, 'html.parser')
-    links = set()
-    for link in soup.find_all('a', {'class': 'b_algo'}): # Adjust class if needed
-        href = link.get('href')
-        if href and href.startswith('http') and 'bing' not in href.lower():
-            links.add(href)
-    return list(links)
-
-def extract_links_from_yandex_results(html):
-    soup = BeautifulSoup(html, 'html.parser')
-    links = set()
-    for link in soup.find_all('a', {'class': 'Link', 'data-stat': 'search-result__title'}): # Adjust class and data-stat if needed
-        href = link.get('href')
-        if href and href.startswith('http') and 'yandex' not in href.lower():
-            links.add(href)
-    return list(links)
-
-def extract_links_from_yahoo_results(html):
-    soup = BeautifulSoup(html, 'html.parser')
-    links = set()
-    for link in soup.find_all('a', class_='js-algo-title', href=True): # Adjust class if needed
-        href = link['href']
-        if href.startswith('http') and 'yahoo' not in href.lower():
-            links.add(href)
-    return list(links)
-
-def extract_links_from_page_content(html, keywords):
-    soup = BeautifulSoup(html, 'html.parser')
-    links = set()
-    for a_tag in soup.find_all('a', href=True):
-        href = a_tag['href']
-        if href.startswith('http') and 'telegram' not in href.lower() and any(keyword in href for keyword in keywords):
-            links.add(href)
-    return list(links)
-
-def browse_page(url):
-    try:
-        time.sleep(REQUEST_DELAY)
-        response = requests.get(url, headers=HEADERS, timeout=10)
-        response.raise_for_status()
-        return response.text
-    except requests.exceptions.RequestException as e:
-        logging.error(f"浏览页面失败 {url}: {e}")
-        return None
 
 def main():
     all_found_links = set()
-    for keyword in SEARCH_KEYWORDS:
-        for engine_name, base_url in SEARCH_ENGINES.items():
-            logging.info(f"正在使用 {engine_name.capitalize()} 搜索: {keyword}")
-            search_results_html = search(engine_name, base_url, keyword)
-            if search_results_html:
-                search_result_links = []
-                if engine_name == 'google':
-                    search_result_links = extract_links_from_google_results(search_results_html)
-                elif engine_name == 'duckduckgo':
-                    search_result_links = extract_links_from_duckduckgo_results(search_results_html)
-                elif engine_name == 'bing':
-                    search_result_links = extract_links_from_bing_results(search_results_html)
-                elif engine_name == 'yandex':
-                    search_result_links = extract_links_from_yandex_results(search_results_html)
-                elif engine_name == 'yahoo':
-                    search_result_links = extract_links_from_yahoo_results(search_results_html)
+    try:
+        driver = uc.Chrome()
+        for keyword in SEARCH_KEYWORDS:
+            for engine_name, base_url in SEARCH_ENGINES.items():
+                search_url = f"{base_url}search?q={keyword}"
+                logging.info(f"使用 Selenium 在 {engine_name.capitalize()} 上搜索: {keyword}")
+                driver.get(search_url)
+                time.sleep(SEARCH_DELAY)
 
-                for search_result_link in search_result_links:
-                    logging.info(f"正在浏览 {engine_name.capitalize()} 搜索结果页面: {search_result_link}")
-                    page_content = browse_page(search_result_link)
-                    if page_content:
-                        extracted_links = extract_links_from_page_content(page_content, SEARCH_KEYWORDS)
-                        for link in extracted_links:
-                            all_found_links.add(link)
-                            logging.info(f"找到潜在链接: {link}")
+                # 模拟滚动加载更多结果
+                body = driver.find_element(By.TAG_NAME, 'body')
+                for _ in range(NUM_SCROLLS):
+                    body.send_keys(Keys.PAGE_DOWN)
+                    time.sleep(SCROLL_PAUSE_TIME)
+
+                extracted_links = extract_links_selenium(driver, SEARCH_KEYWORDS)
+                for link in extracted_links:
+                    all_found_links.add(link)
+                    logging.info(f"找到潜在链接: {link}")
+
+    except Exception as e:
+        logging.error(f"Selenium 过程中发生错误: {e}")
+    finally:
+        if 'driver' in locals() and driver:
+            driver.quit()
 
     if all_found_links:
         with open(OUTPUT_VALID_FILE, 'w', encoding='utf-8') as f:
