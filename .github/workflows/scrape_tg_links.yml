@@ -38,7 +38,7 @@ jobs:
           TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
           TELEGRAM_SESSION_STRING: ${{ secrets.TELEGRAM_SESSION_STRING }} # Wenn Sie Session-Strings verwenden
           # PYTHONIOENCODING: "utf-8" # Sicherstellen der UTF-8-Ausgabe
-        run: python telegram_scraper.py
+        run: python scrape_tg_links.py
 
       - name: Upload results
         uses: actions/upload-artifact@v4
