@@ -1,144 +1,94 @@
-import asyncio
-import re
+import requests
+import threading
+import json
 import os
-import logging
-from telethon import TelegramClient
-from telethon.sessions import StringSession # Für GitHub Actions, um die Session als String zu laden
-import aiohttp
+import time
+import random
+import re
+from bs4 import BeautifulSoup
+from datetime import datetime
 
-# Konfiguration
-API_ID = os.environ.get('TELEGRAM_API_ID')
-API_HASH = os.environ.get('TELEGRAM_API_HASH')
-# Session-String: Erzeugen Sie diesen lokal und speichern Sie ihn als GitHub Secret (z.B. TELEGRAM_SESSION_STRING)
-# Führen Sie dazu lokal ein Skript aus, das `client.session.save()` aufruft, nachdem Sie sich angemeldet haben,
-# oder drucken Sie `client.session.save()` (was den String zurückgibt) und kopieren Sie ihn.
-# Beispiel für lokale Generierung des Session Strings:
-# async with TelegramClient(StringSession(), API_ID, API_HASH) as client:
-#     print("Bitte geben Sie Ihre Telefonnummer ein oder bestätigen Sie mit dem QR-Code...")
-#     await client.start()
-#     print("Erfolgreich angemeldet.")
-#     print("Ihr Session-String ist:", client.session.save())
-#     await client.disconnect()
-# WICHTIG: Wenn Sie den Session-String nicht verwenden, verwendet Telethon eine lokale Datei session_name.session
-# Dies funktioniert in GitHub Actions nur, wenn Sie die Session-Datei zwischen Läufen cachen.
-# Der Session-String ist oft die bessere Methode für kurzlebige Umgebungen wie Actions.
-SESSION_STRING = os.environ.get('TELEGRAM_SESSION_STRING')
-SESSION_NAME = "default_session" # Wird verwendet, wenn kein SESSION_STRING vorhanden ist
+# 禁用 SSL 警告并设置 requests 请求
+requests.get = lambda url, **kwargs: requests.request(
+    method="GET", url=url, verify=False, **kwargs
+)
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
-CHANNEL_USERNAME = 'dingyue_center'
-OUTPUT_FILE = 'data/t.txt'
-URL_REGEX = r'https?://[^\s<>"\']+|www\.[^\s<>"\']+'
+# 清屏
+os.system('cls' if os.name == 'nt' else 'clear')
 
-# Logging-Konfiguration
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+# 定义加载 JSON 文件的函数
+def json_load(path):
+    with open(path, 'r', encoding="utf-8") as file:
+        list_content = json.load(file)
+    return list_content
 
-async def fetch_all_urls(client):
-    """Holt alle Nachrichten aus dem Kanal und extrahiert URLs."""
-    urls = set()
-    try:
-        entity = await client.get_entity(CHANNEL_USERNAME)
-        logger.info(f"Beginne mit dem Abrufen von Nachrichten aus {CHANNEL_USERNAME}...")
-        # Das Abrufen aller Nachrichten (limit=None) kann bei großen Kanälen sehr lange dauern.
-        # Für Tests oder regelmäßige Läufe sollten Sie dies ggf. begrenzen (z.B. die letzten X Nachrichten).
-        # z.B. messages = await client.get_messages(entity, limit=1000)
-        async for message in client.iter_messages(entity, limit=None): # limit=None für alle Nachrichten
-            if message.text:
-                found_urls = re.findall(URL_REGEX, message.text)
-                for url in found_urls:
-                    # Einfache Normalisierung: füge http hinzu, wenn es fehlt und mit www. beginnt
-                    if url.startswith("www."):
-                        url = "http://" + url
-                    urls.add(url.strip('.').strip(',')) # Entferne übliche Satzzeichen am Ende
-        logger.info(f"{len(urls)} einzigartige URLs aus Nachrichten extrahiert.")
-    except Exception as e:
-        logger.error(f"Fehler beim Abrufen von Nachrichten oder Extrahieren von URLs: {e}")
-    return list(urls)
+# 从 telegram channels.json 加载频道名称
+tg_name_json = json_load('telegram channels.json')
 
-async def check_url_validity(session, url):
-    """Prüft, ob eine URL erreichbar ist (Status < 400)."""
-    try:
-        # Ein Timeout ist wichtig, um nicht ewig zu warten
-        async with session.head(url, timeout=10, allow_redirects=True) as response:
-            is_valid = response.status < 400
-            if is_valid:
-                logger.debug(f"URL {url} ist gültig (Status: {response.status}).")
+# 获取用户输入
+thrd_pars = int(input('\nThreads for parsing: '))
+pars_dp = int(input('\nParsing depth (1dp = 20 last tg posts): '))
+
+print(f'\nTotal channel names in telegram channels.json - {len(tg_name_json)}')
+
+# 记录开始时间
+start_time = datetime.now()
+
+# 设置线程信号量
+sem_pars = threading.Semaphore(thrd_pars)
+
+# 用于存储提取的链接
+links = []
+
+print(f'\nStart Parsing...\n')
+
+# 定义处理频道的函数，只提取链接
+def process(i_url):
+    sem_pars.acquire()
+    html_pages = []   
+    cur_url = i_url
+    for itter in range(1, pars_dp + 1):
+        while True:
+            try:
+                response = requests.get(f'https://t.me/s/{cur_url}')
+            except:
+                time.sleep(random.randint(5, 25))
+                continue
             else:
-                logger.debug(f"URL {url} ist ungültig (Status: {response.status}).")
-            return url, is_valid
-    except aiohttp.ClientError as e: # Behandelt Verbindungsfehler, SSL-Fehler etc.
-        logger.debug(f"Client-Fehler beim Überprüfen der URL {url}: {type(e).__name__}")
-        return url, False
-    except asyncio.TimeoutError:
-        logger.debug(f"Timeout beim Überprüfen der URL {url}.")
-        return url, False
-    except Exception as e:
-        logger.warning(f"Unerwarteter Fehler beim Überprüfen der URL {url}: {e}")
-        return url, False
+                if itter == pars_dp:
+                    print(f'{tg_name_json.index(i_url) + 1} of {len(tg_name_json)} - {i_url}')
+                html_pages.append(response.text)
+                last_datbef = re.findall(r'(?:data-before=")(\d*)', response.text)
+                break
+        if not last_datbef:
+            break
+        cur_url = f'{i_url}?before={last_datbef[0]}'
+    for page in html_pages:
+        soup = BeautifulSoup(page, 'html.parser')
+        # 提取所有 <a> 标签中的 href 属性
+        a_tags = soup.find_all('a')
+        for tag in a_tags:
+            href = tag.get('href')
+            if href:  # 确保 href 不为空
+                links.append(href)
+    sem_pars.release()
 
-async def main():
-    """Hauptfunktion zum Ausführen des Skripts."""
-    if not API_ID or not API_HASH:
-        logger.error("TELEGRAM_API_ID und TELEGRAM_API_HASH müssen als Umgebungsvariablen gesetzt sein.")
-        return
+# 启动多线程处理每个频道
+for url in tg_name_json:
+    threading.Thread(target=process, args=(url,)).start()
 
-    if SESSION_STRING:
-        client = TelegramClient(StringSession(SESSION_STRING), int(API_ID), API_HASH)
-    else:
-        # Verwendet eine lokale Session-Datei. In GitHub Actions muss diese gecacht werden
-        # oder der SESSION_STRING-Ansatz wird empfohlen.
-        logger.info(f"Verwende lokale Session-Datei: {SESSION_NAME}.session")
-        client = TelegramClient(SESSION_NAME, int(API_ID), API_HASH)
+# 等待所有线程完成
+while threading.active_count() > 1:
+    time.sleep(1)
 
-    try:
-        logger.info("Verbinde mit Telegram...")
-        await client.connect()
-        if not await client.is_user_authorized() and not SESSION_STRING: # Bei SESSION_STRING wird keine erneute Auth benötigt
-            logger.warning("Nicht autorisiert. Lokale Ausführung? Bitte authentifizieren.")
-            # In einer GitHub Action würde dies fehlschlagen, wenn keine gültige Session vorhanden ist.
-            # Hier könnte man versuchen, sich anzumelden, aber das ist für Actions nicht ideal.
-            # await client.start() # Dies würde eine interaktive Anmeldung erfordern
-            logger.error("Autorisierung fehlgeschlagen. Stellen Sie eine gültige Session-Datei oder einen Session-String bereit.")
-            return
+print(f'\nParsing completed - {str(datetime.now() - start_time).split(".")[0]}')
 
-        logger.info("Erfolgreich mit Telegram verbunden.")
+# 保存提取的链接到文件
+print(f'\nSaving extracted links...')
+with open("extracted_links.txt", "w", encoding="utf-8") as file:
+    for link in links:
+        file.write(link + "\n")
 
-        all_urls = await fetch_all_urls(client)
-        if not all_urls:
-            logger.info("Keine URLs gefunden.")
-            return
-
-        logger.info(f"Beginne mit der Validierung von {len(all_urls)} URLs...")
-        valid_urls = []
-        # Connector mit Limit, um nicht zu viele gleichzeitige Verbindungen zu öffnen
-        conn = aiohttp.TCPConnector(limit=20) # Limit für gleichzeitige Anfragen
-        async with aiohttp.ClientSession(connector=conn) as http_session:
-            tasks = [check_url_validity(http_session, url) for url in all_urls]
-            results = await asyncio.gather(*tasks) # Führt alle Checks parallel aus
-
-            for url, is_valid in results:
-                if is_valid:
-                    valid_urls.append(url)
-        
-        logger.info(f"{len(valid_urls)} gültige URLs gefunden.")
-
-        # Erstelle das data-Verzeichnis, falls es nicht existiert
-        os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
-
-        with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-            for url in sorted(valid_urls): # Sortiert für konsistente Ausgabe
-                f.write(url + '\n')
-        logger.info(f"Gültige URLs wurden in {OUTPUT_FILE} gespeichert.")
-
-    except Exception as e:
-        logger.error(f"Ein Fehler ist im Hauptprozess aufgetreten: {e}", exc_info=True)
-    finally:
-        if client.is_connected():
-            logger.info("Schließe die Telegram-Verbindung.")
-            await client.disconnect()
-        logger.info("Skript beendet.")
-
-if __name__ == '__main__':
-    # In Python 3.7+ kann asyncio.run() verwendet werden
-    # Für ältere Versionen: loop = asyncio.get_event_loop(); loop.run_until_complete(main())
-    asyncio.run(main())
+print(f'\nTime spent - {str(datetime.now() - start_time).split(".")[0]}')
+input('\nPress Enter to finish ...')
