@@ -1,40 +1,47 @@
-name: Run URL 
+name:  Links
 
 on:
   schedule:
-    - cron: 0 0 * * *  # 每天运行一次
-  workflow_dispatch:  # 允许手动触发
+    - cron: '0 0 * * *'  # 每天 UTC 时间 00:00 运行 (北京时间 08:00)
 
 jobs:
-  run-scraper:
+  scrape:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.x'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
+          pip install selenium beautifulsoup4
+          # 安装 Chrome WebDriver (与 Chrome 浏览器版本匹配)
+          # 这是一个示例; 你可能需要根据实际情况选择正确的 WebDriver 版本
+          # 并且确认版本与 github action 预装的chrome版本对应
+          # 可以使用 `google-chrome --version` 命令获得
+          #chromedriver --version 也可以查看chromedriver 的版本
+          # 可以参考https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2204-README.md 查看预装软件
+          sudo apt-get update
+          sudo apt-get install -y chromium-driver
+          sudo apt-get install -y chromium-browser
+          sudo cp /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+          chmod +x /usr/bin/chromedriver
 
-      - name: Create data directory
-        run: |
-          mkdir -p data
+      - name: Run scraper
+        env:
+          TELEGRAM_CHANNEL_URL: 'https://t.me/s/dingyue_center'  # 设置你的 Telegram 频道 URL
+        run: python scrape_tg_links.py
 
-      - name: Run Python script
-        run: |
-          python scrape_tg_links.py
       - name: Commit and push changes
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
           git add data/ji2.txt
-          git commit -m "Update ji2.txt" || echo "No changes to commit"
+          git commit -m "Update scraped links" || echo "No changes to commit"
           git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
