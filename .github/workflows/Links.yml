@@ -1,4 +1,5 @@
-name:  Links
+
+name: Scrape Telegram Links
 
 on:
   workflow_dispatch:
@@ -24,14 +25,22 @@ jobs:
           pip install selenium beautifulsoup4
           # 安装 Chrome WebDriver (与 Chrome 浏览器版本匹配)
           # 这是一个示例; 你可能需要根据实际情况选择正确的 WebDriver 版本
-          # 并且确认版本与 github action 预装的chrome版本对应
-          # 可以使用 `google-chrome --version` 命令获得
-          #chromedriver --version 也可以查看chromedriver 的版本
-          # 可以参考https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2204-README.md 查看预装软件
+
           sudo apt-get update
-          sudo apt-get install -y chromium-driver
-          sudo apt-get install -y chromium-browser
-          sudo cp /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+          sudo apt-get install -y chromium-browser  # 确保安装了 chromium-browser
+
+      - name: Check Chromium and ChromeDriver versions # 确认版本
+        run: |
+          chromium-browser --version
+          chromedriver --version
+
+      - name: Download ChromeDriver  #下载指定版本,  如果步骤4版本检查显示不匹配
+        run: |
+          CHROMIUM_VERSION=$(chromium-browser --version | sed 's/Chromium //g' | cut -d '.' -f 1)
+          CHROMEDRIVER_VERSION=${CHROMIUM_VERSION}.0.0.0
+          wget --tries=3 "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" # 添加重试
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/bin/chromedriver
           chmod +x /usr/bin/chromedriver
 
       - name: Run scraper
