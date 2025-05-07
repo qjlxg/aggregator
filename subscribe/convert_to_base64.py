@@ -36,14 +36,8 @@ def convert_multiple_to_base64(urls):
 
 if __name__ == "__main__":
     urls = [
-        #"https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/ss.txt",
-       # "https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/data/transporter.txt",
-        "https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/data/ss.yaml",
-       # "https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/base.txt",
-       # "https://raw.githubusercontent.com/qjlxg/cheemsar/refs/heads/main/Long_term_subscription_num",
-       # "https://raw.githubusercontent.com/qjlxg/cheemsar-2/refs/heads/main/Long_term_subscription_num",
-       # "https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/Long_term_subscription_num",
-       # "https://raw.githubusercontent.com/qjlxg/license/refs/heads/main/all_clash.txt",
+        "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml",
+    
         
     ]
     convert_multiple_to_base64(urls)
