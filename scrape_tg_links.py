@@ -69,30 +69,4 @@ def test_url(url):
         logging.debug(f"测试链接失败 {url}: {e}")
         return False
 
-def get_next_page_url(html, current_url):
-    soup = BeautifulSoup(html, 'html.parser')
-    next_page = soup.find('a', attrs={'data-nav': 'next'})
-    if next_page and 'href' in next_page.attrs:
-        return urljoin('https://t.me', next_page['href'])
-    next_page_texts = ["下一页", "Next", ">", "»"]
-    for text in next_page_texts:
-        next_link = soup.find('a', string=re.compile(text))
-        if next_link and 'href' in next_link.attrs:
-            return urljoin(current_url, next_link['href'])
-        next_link = soup.find('a', title=re.compile(text))
-        if next_link and 'href' in next_link.attrs:
-            return urljoin(current_url, next_link['href'])
-    return None
-
-def process_link(link):
-    if test_url(link):
-        try:
-            with open(OUTPUT_VALID_FILE, 'a', encoding='utf-8') as f:
-                f.write(link + '\n')
-            logging.info(f"有效链接：{link}")
-            print(f"有效链接 (控制台): {link}")
-        except Exception as e:
-            logging.error(f"写入有效链接文件失败 {OUTPUT_VALID_FILE}: {e}")
-    else:
-        try:
-            with open(OUTPUT_INVALID_FILE, 'a', encoding='utf-8') as
+def get
