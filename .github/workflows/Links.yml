@@ -1,15 +1,15 @@
-name:  Links
+name: Run URL 
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # Runs daily at midnight UTC
+    - cron: 0 0 * * *  # 每天运行一次
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
-  scrape:
+  run-scraper:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Python
@@ -22,14 +22,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests beautifulsoup4
 
-      - name: Run scrape script
+      - name: Create data directory
         run: |
-          echo -e "5\n2\n" | python scrape_tg_links.py
+          mkdir -p data
 
-      - name: Commit and push if changed
+      - name: Run Python script
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add extracted_links.txt
-          git commit -m "Update extracted links" || echo "No changes to commit"
-          git push
+          python scrape_tg_links.py
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/ji2.txt
+          git commit -m "Update ji2.txt" || echo "No changes to commit"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
