@@ -1,80 +1,67 @@
-import os
-import re
 import requests
 from bs4 import BeautifulSoup
-import time
-import logging
-import concurrent.futures
-import configparser
-from urllib.parse import urljoin
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
-import tempfile
-import shutil
+import re
 
-# 配置日志
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-# 读取配置
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-BASE_DIR = os.environ.get('GITHUB_WORKSPACE', '.') # 获取 GitHub 工作区路径，默认为当前目录
-DATA_DIR = os.path.join(BASE_DIR, 'data')
-OUTPUT_VALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_valid_file', fallback='valid_links.txt'))
-OUTPUT_INVALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_invalid_file', fallback='invalid_links.txt'))
-MAX_PAGES = int(config.get('settings', 'max_pages', fallback='1')) # Selenium 方式通常不需要大量翻页
-MAX_WORKERS = int(config.get('settings', 'max_workers', fallback='5'))
-BASE_URL = config.get('settings', 'base_url', fallback='') # 可以设置一个默认的 base_url
-TARGET_URL = config.get('settings', 'target_url', fallback='https://t.me/s/dingyue_center') # 目标 Telegram 频道 URL
-SCROLL_PAUSE_TIME = int(config.get('settings', 'scroll_pause_time', fallback='3')) # 滚动暂停时间
-NUM_SCROLLS = int(config.get('settings', 'num_scrolls', fallback='10')) # 滚动次数
-
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+CHANNEL_URL = 'https://t.me/s/dingyue_center'  # 频道网页版
+OUTPUT_FILE = 'data/subscribes.txt'
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (compatible; GitHubAction/1.0)'
 }
 
-def fetch_page(url):
-    try:
-        response = requests.get(url, headers=headers, timeout=15)
-        response.raise_for_status()
-        return response.text
-    except requests.exceptions.RequestException as e:
-        logging.error(f"请求失败 {url}: {e}")
-        return None
+def fetch_channel_pages():
+    # Telegram 频道网页版只显示有限消息，示例仅拿第一页内容
+    resp = requests.get(CHANNEL_URL, headers=HEADERS)
+    resp.raise_for_status()
+    return resp.text
 
-def extract_all_links_requests(html, base_url, excluded_extensions):
+def extract_links(html):
     soup = BeautifulSoup(html, 'html.parser')
+    # Telegram频道中所有链接
     links = set()
-    for a_tag in soup.find_all('a', href=True):
-        href = a_tag['href']
-        absolute_url = urljoin(base_url, href)
-        if absolute_url.startswith('http') and not absolute_url.startswith('https://t.me') and not absolute_url.endswith(excluded_extensions) and 'telegram' not in absolute_url.lower():
-            links.add(absolute_url)
-    pattern = r'https?://[^\s\'"<>]+'
-    for link in re.findall(pattern, html):
-        if not link.startswith('https://t.me') and not link.endswith(excluded_extensions) and 'telegram' not in link.lower():
-            links.add(link)
-    return list(links)
+    for a in soup.find_all('a', href=True):
+        href = a['href']
+        # 过滤 t.me 开头的网址，保留其他网址
+        if not href.startswith('https://t.me') and not href.startswith('http://t.me') and re.match(r'https?://', href):
+            links.add(href)
+    return links
 
-def test_url(url):
+def is_link_valid(url):
     try:
-        r = requests.get(url, headers=headers, timeout=10)
-        return r.status_code == 200
-    except requests.exceptions.RequestException as e:
-        logging.debug(f"测试链接失败 {url}: {e}")
+        r = requests.head(url, timeout=5, allow_redirects=True)
+        if r.status_code == 200:
+            return True
+    except Exception:
         return False
+    return False
 
-def get_next_page_url(html, current_url):
-    soup = BeautifulSoup(html, 'html.parser')
-    next_page = soup.find('a', attrs={'data-nav': 'next'})
-    if next_page and 'href' in next_page.attrs:
-        return urljoin('https://t.me', next_page['href'])
-    next_page_texts = ["下一页", "Next", ">", "»"]
-    for text in next_page_texts:
-        next_link = soup.find('a', string=re.compile(text))
-        if next_link and 'href' in next_link.attrs:
+def load_existing_links():
+    try:
+        with open(OUTPUT_FILE, 'r') as f:
+            return set(line.strip() for line in f if line.strip())
+    except FileNotFoundError:
+        return set()
+
+def main():
+    html = fetch_channel_pages()
+    new_links = extract_links(html)
+    existing_links = load_existing_links()
+    all_links = existing_links.union(new_links)
+
+    # 测试所有新链接有效性，只测试新增的，过滤已存在的
+    valid_links = set()
+    for link in new_links:
+        if link not in existing_links:
+            if is_link_valid(link):
+                valid_links.add(link)
+    if not valid_links:
+        print('无有效新链接。')
+        return
+
+    # 追加有效新链接到文件（避免重复）
+    with open(OUTPUT_FILE, 'a') as f:
+        for link in sorted(valid_links):
+            f.write(link + '\n')
+    print(f'追加有效链接数量：{len(valid_links)}')
+
+if __name__ == '__main__':
+    main()
