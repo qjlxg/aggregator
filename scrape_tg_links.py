@@ -1,101 +1,85 @@
 import requests
-import threading
-import json
-import os
-import time
-import random
-import re
 from bs4 import BeautifulSoup
-from datetime import datetime
-from urllib.parse import urljoin
+import re
+import time
 
-# 禁用 SSL 警告并配置 requests
-requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
-requests.get = lambda url, **kwargs: requests.request(
-    method="GET", url=url, verify=False, **kwargs
-)
+def get_urls_from_html(html):
+    """从HTML中提取URLs"""
+    soup = BeautifulSoup(html, 'html.parser')
+    targets = soup.find_all(class_=[
+        'tgme_widget_message_text',
+        'tgme_widget_message_photo',
+        'tgme_widget_message_video',
+        'tgme_widget_message_document',
+        'tgme_widget_message_poll',
+    ])
 
-# 加载 JSON 文件
-def json_load(path):
-    with open(path, 'r', encoding="utf-8") as file:
-        return json.load(file)
+    all_urls = []
+    for target in targets:
+        text = target.get_text(separator=' ', strip=True)
+        urls = re.findall(r'(?:https?://|www\.)[^\s]+', text)
+        all_urls.extend([url for url in urls if not url.startswith(('https://t.me', 'http://t.me', 't.me'))])
 
-# 读取 Telegram 频道名称
-tg_name_json = json_load('telegram_channels.json')
+    return all_urls
 
-# 从环境变量获取线程数和解析深度，设置默认值
-thrd_pars = int(os.environ.get('THREADS', 5))
-pars_dp = int(os.environ.get('DEPTH', 2))
+def test_url_connectivity(url):
+    """测试URL是否可连通"""
+    try:
+        response = requests.head(url, timeout=5)
+        return response.status_code < 400
+    except requests.RequestException:
+        return False
 
-print(f'\nTotal channel names in telegram_channels.json - {len(tg_name_json)}')
+def get_next_page_url(html):
+    """从HTML中提取下一页的URL（如果有）"""
+    soup = BeautifulSoup(html, 'html.parser')
+    load_more = soup.find('a', class_='tme_messages_more')
+    if load_more:
+        return 'https://t.me' + load_more['href']
+    return None
 
-# 记录开始时间
-start_time = datetime.now()
 
-# 设置线程信号量
-sem_pars = threading.Semaphore(thrd_pars)
+def main():
+    base_url = 'https://t.me/s/dingyue_center'
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36'
+    }
 
-# 存储提取的链接
-links = set()
-links_lock = threading.Lock()  # 线程安全锁
+    all_urls = []
+    current_url = base_url
+    page_count = 0
+    max_pages = 10  # 设置最大抓取页数，防止无限循环
 
-print(f'\nStart Parsing...\n')
+    try:
+        while current_url and page_count < max_pages:
+            print(f"正在抓取页面: {current_url}")
+            response = requests.get(current_url, headers=headers, timeout=10)
+            response.raise_for_status()
 
-# 处理单个频道并提取链接
-def process(i_url):
-    sem_pars.acquire()
-    html_pages = []
-    cur_url = i_url
-    for itter in range(1, pars_dp + 1):
-        while True:
-            try:
-                response = requests.get(f'https://t.me/s/{cur_url}')
-                base_url = response.url  # 使用最终的重定向 URL
-            except Exception as e:
-                print(f"Failed to fetch page for {i_url}: {e}")
-                time.sleep(random.randint(5, 25))
-                continue
-            else:
-                if itter == pars_dp:
-                    print(f'{tg_name_json.index(i_url) + 1} of {len(tg_name_json)} - {i_url}')
-                html_pages.append(response.text)
-                last_datbef = re.findall(r'(?:data-before=")(\d*)', response.text)
-                break
-        if not last_datbef:
-            break
-        cur_url = f'{i_url}?before={last_datbef[0]}'
-    for page in html_pages:
-        soup = BeautifulSoup(page, 'html.parser')
-        # 仅从消息内容提取链接
-        message_texts = soup.find_all(class_='tgme_widget_message_text')
-        for message_text in message_texts:
-            a_tags = message_text.find_all('a')
-            for tag in a_tags:
-                href = tag.get('href')
-                if href:
-                    # 转换为绝对 URL
-                    absolute_url = urljoin(base_url, href)
-                    # 筛选以 http:// 或 https:// 开头的链接
-                    if absolute_url.startswith(('http://', 'https://')):
-                        with links_lock:
-                            links.add(absolute_url)
-    sem_pars.release()
+            all_urls.extend(get_urls_from_html(response.text))
 
-# 为每个频道启动线程
-for url in tg_name_json:
-    threading.Thread(target=process, args=(url,)).start()
+            next_page_url = get_next_page_url(response.text)
+            current_url = next_page_url
+            page_count += 1
+            time.sleep(38)  # 礼貌地延迟一段时间，避免请求过快
 
-# 等待所有线程完成
-while threading.active_count() > 1:
-    time.sleep(1)
+        unique_urls = list(set(all_urls))
+        valid_urls = [url for url in unique_urls if test_url_connectivity(url)]
 
-print(f'\nParsing completed - {str(datetime.now() - start_time).split(".")[0]}')
+        print(f"共抓取 {page_count} 页")
+        print(f"找到的有效URL数量: {len(valid_urls)}")
 
-# 保存唯一链接
-unique_links = sorted(list(links))
-print(f'\nSaving {len(unique_links)} unique extracted links...')
-with open("extracted_links.txt", "w", encoding="utf-8") as file:
-    for link in unique_links:
-        file.write(link + "\n")
+        with open('data/ji.txt', 'w', encoding='utf-8') as f:
+            for url in valid_urls:
+                f.write(url + '\n')
 
-print(f'\nTime spent - {str(datetime.now() - start_time).split(".")[0]}')
+        print("URL已保存到 data/ji.txt")
+
+    except requests.exceptions.RequestException as e:
+        print(f"请求失败: {e}")
+    except Exception as e:
+        print(f"发生错误: {e}")
+
+
+if __name__ == '__main__':
+    main()
