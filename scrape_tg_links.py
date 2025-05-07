@@ -59,4 +59,27 @@ def extract_all_links_requests(html, base_url, keywords, excluded_extensions):
                 if keyword in absolute_url:
                     links.add(absolute_url)
                     break
-    pattern = r'
+    pattern = r'https?://[^\s\'"<>]+' # 修复了这一行
+    for link in re.findall(pattern, html):
+        if not link.startswith('https://t.me') and not link.endswith(excluded_extensions):
+            for keyword in link:
+                if keyword in link:
+                    links.add(link)
+                    break
+    return list(links)
+
+def test_url(url):
+    try:
+        r = requests.get(url, headers=headers, timeout=10)
+        return r.status_code == 200
+    except requests.exceptions.RequestException as e:
+        logging.debug(f"测试链接失败 {url}: {e}")
+        return False
+
+def get_next_page_url(html, current_url):
+    soup = BeautifulSoup(html, 'html.parser')
+    next_page = soup.find('a', attrs={'data-nav': 'next'})
+    if next_page and 'href' in next_page.attrs:
+        return urljoin('https://t.me', next_page['href'])
+    next_page_texts = ["下一页", "Next", ">", "»"]
+    for text in
