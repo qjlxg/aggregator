@@ -1,291 +1,74 @@
-import asyncio
-import aiohttp
-import re
-import yaml
 import os
-import base64
-from urllib.parse import quote
-from tqdm import tqdm
-from loguru import logger
-from typing import List, Dict, Optional
-from tenacity import retry, stop_after_attempt, wait_exponential  # 如果需要重试
+import re
+import requests
+from bs4 import BeautifulSoup
+import logging
+from urllib.parse import urljoin
 
-# 全局配置
-RE_URL = r"https?://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]"
-CHECK_NODE_URL_STR = "https://{}/sub?target={}&url={}&insert=false&config=config%2FACL4SSR.ini"
-CHECK_URL_LIST = ['api.dler.io', 'sub.xeton.dev', 'sub.id9.cc', 'sub.maoxiongnet.com']
+# 配置日志
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# -------------------------------
-# 配置文件操作
-# -------------------------------
-def load_yaml_config(path_yaml: str) -> Dict:
-    """读取 YAML 配置文件，如文件不存在则返回默认结构"""
-    if os.path.exists(path_yaml):
-        with open(path_yaml, 'r', encoding='utf-8') as f:
-            config = yaml.safe_load(f)
-    else:
-        config = {
-            "机场订阅": [],
-            "clash订阅": [],
-            "v2订阅": [],
-            "开心玩耍": [],
-            "tgchannel": []
-        }
-    return config
+BASE_DIR = os.environ.get('GITHUB_WORKSPACE', '.') # 获取 GitHub 工作区路径，默认为当前目录
+DATA_DIR = os.path.join(BASE_DIR, 'data')
+OUTPUT_VALID_FILE = os.path.join(DATA_DIR, 'searched_links.txt') # 输出到新的文件
+os.makedirs(DATA_DIR, exist_ok=True)
 
+KEYWORDS = ['/api/v1/client/subscribe?token=', 'token=', '/s/']
+SEARCH_ENGINE_BASE_URL = 'https://www.google.com/search'
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+}
 
-def save_yaml_config(config: Dict, path_yaml: str) -> None:
-    """保存配置到 YAML 文件"""
-    with open(path_yaml, 'w', encoding='utf-8') as f:
-        yaml.dump(config, f, allow_unicode=True)
-
-
-def get_config_channels(config_file: str = 'config.yaml') -> List[str]:
-    """
-    从配置文件中获取 Telegram 频道链接，
-    将类似 https://t.me/univstar 转换为 https://t.me/s/univstar 格式
-    """
-    config = load_yaml_config(config_file)
-    tgchannels = config.get('tgchannel', [])
-    new_list = [f'https://t.me/s/{url.strip().split("/")[-1]}' for url in tgchannels if url.strip().split("/")]  # 列表推导式简化
-    return new_list
-
-# -------------------------------
-# 异步 HTTP 请求辅助函数
-# -------------------------------
-
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))  #重试机制(可选)
-async def fetch_content(url: str, session: aiohttp.ClientSession, method: str = 'GET', headers: Optional[Dict] = None, timeout: int = 15) -> Optional[str]:
-    """获取指定 URL 的文本内容"""
+def search_google(query, num_results=10):
+    params = {'q': query, 'num': num_results}
     try:
-        async with session.request(method, url, headers=headers, timeout=timeout) as response:
-            if response.status == 200:
-                text = await response.text()
-                return text
-            else:
-                logger.warning(f"URL {url} 返回状态 {response.status}")
-                return None
-    except aiohttp.ClientError as e:  # 更具体的异常处理
-        logger.error(f"请求 {url} 异常: {type(e).__name__} - {e}") #打印错误类型
-        return None
-    except Exception as e:
-        logger.error(f"请求 {url} 异常: {type(e).__name__} - {e}")
+        response = requests.get(SEARCH_ENGINE_BASE_URL, params=params, headers=HEADERS, timeout=10)
+        response.raise_for_status()
+        return response.text
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Google 搜索失败，关键词: '{query}': {e}")
         return None
 
-# -------------------------------
-# 频道抓取及订阅检查
-# -------------------------------
-async def get_channel_urls(channel_url: str, session: aiohttp.ClientSession) -> List[str]:
-    """从 Telegram 频道页面抓取所有订阅链接，并过滤无关链接"""
-    content = await fetch_content(channel_url, session)
-    if content:
-        all_urls = re.findall(RE_URL, content)
-        filtered = [u for u in all_urls if "//t.me/" not in u and "cdn-telegram.org" not in u]
-        logger.info(f"从 {channel_url} 提取 {len(filtered)} 个链接")
-        return filtered
+def extract_links_from_search_results(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    links = set()
+    for link in soup.find_all('a', href=True):
+        href = link['href']
+        # 清理 Google 搜索结果中的包装链接
+        if href.startswith('/url?q='):
+            href = href.split('/url?q=')[1].split('&')[0]
+        if href.startswith('http') and 'google' not in href:
+            links.add(href)
+    return list(links)
+
+def is_likely_target_link(url, keywords):
+    for keyword in keywords:
+        if keyword in url:
+            return True
+    return False
+
+def main():
+    all_found_links = set()
+    for keyword in KEYWORDS:
+        search_query = f"site:t.me {keyword}" # 搜索 t.me 域名下包含关键词的页面
+        logging.info(f"正在搜索: {search_query}")
+        search_results_html = search_google(search_query)
+        if search_results_html:
+            extracted_links = extract_links_from_search_results(search_results_html)
+            for link in extracted_links:
+                if is_likely_target_link(link, KEYWORDS) and 'telegram' not in link.lower():
+                    all_found_links.add(link)
+                    logging.info(f"找到潜在链接: {link}")
+
+    if all_found_links:
+        with open(OUTPUT_VALID_FILE, 'w', encoding='utf-8') as f:
+            for link in sorted(list(all_found_links)):
+                f.write(link + '\n')
+        logging.info(f"找到 {len(all_found_links)} 个潜在链接并已保存到 {OUTPUT_VALID_FILE}")
+        print(f"找到 {len(all_found_links)} 个潜在链接并已保存到 {OUTPUT_VALID_FILE}")
     else:
-        logger.warning(f"无法获取 {channel_url} 的内容")
-        return []
-
-async def sub_check(url: str, session: aiohttp.ClientSession) -> Optional[Dict]:
-    """
-    检查订阅链接的有效性：
-      - 判断响应头中的 subscription-userinfo 用于机场订阅
-      - 判断内容中是否包含 'proxies:' 判定 clash 订阅
-      - 尝试 base64 解码判断 v2 订阅（识别 ss://、ssr://、vmess://、trojan://）
-    返回一个字典：{"url": ..., "type": ..., "info": ...}
-    """
-    headers = {'User-Agent': 'ClashforWindows/0.18.1'}
-    try:
-        async with session.get(url, headers=headers, timeout=10) as response:
-            return await process_response(url, response)
-
-    except aiohttp.ClientError as e:
-       logger.error(f"订阅检查 {url} 异常: {type(e).__name__} - {e}")
-       return None
-    except Exception as e:
-        logger.error(f"订阅检查 {url} 异常: {type(e).__name__} - {e}")
-        return None
-
-async def process_response(url: str, response: aiohttp.ClientResponse) -> Optional[Dict]:
-    if response.status == 200:
-        text = await response.text()
-        result = {"url": url, "type": None, "info": None}
-
-        # 判断机场订阅（检查流量信息）
-        sub_info = response.headers.get('subscription-userinfo')
-        if sub_info:
-            nums = re.findall(r'\d+', sub_info)
-            if len(nums) >= 3:
-                upload, download, total = map(int, nums[:3])
-                unused = (total - upload - download) / (1024 ** 3)
-                if unused > 0:
-                    result["type"] = "机场订阅"
-                    result["info"] = f"可用流量: {round(unused, 2)} GB"
-                    return result
-
-        # 判断 clash 订阅
-        if "proxies:" in text:
-            result["type"] = "clash订阅"
-            return result
-
-        # 判断 v2 订阅，通过 base64 解码检测
-        try:
-            if len(text) > 64: #避免切片错误
-                sample = text[:64]
-                #if is_base64(sample): # 增加 Base64 格式检查
-                try:
-                  decoded = base64.b64decode(sample).decode('utf-8', errors='ignore')
-                  if any(decoded.startswith(proto) for proto in ['ss://', 'ssr://', 'vmess://', 'trojan://']): #优化proto检查
-                      result["type"] = "v2订阅"
-                      return result
-                except:
-                  pass
-
-        except Exception :
-          pass
-        # 若都不满足，则返回未知类型但视为有效
-        result["type"] = "未知订阅"
-        return result
-    else:
-        logger.warning(f"订阅检查 {url} 返回状态 {response.status}")
-        return None
-
-
-# def is_base64(s: str) -> bool: # 辅助函数，检查是否是 Base64 字符串
-#     try:
-#         base64.b64decode(s)
-#         return True
-#     except:
-#         return False
-
-# -------------------------------
-# 节点有效性检测（根据多个检测入口）
-# -------------------------------
-
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=4, max=10))  #重试机制(可选)
-async def url_check_valid(url: str, target: str, session: aiohttp.ClientSession) -> Optional[str]:
-    """
-    通过遍历多个检测入口检查订阅节点有效性，
-    如果任一检测返回状态 200，则认为该节点有效。
-    """
-    encoded_url = quote(url, safe='')
-    for check_base in CHECK_URL_LIST:
-        check_url = CHECK_NODE_URL_STR.format(check_base, target, encoded_url)
-        try:
-            async with session.get(check_url, timeout=15) as resp:
-                if resp.status == 200:
-                    return url
-        except aiohttp.ClientError as e:
-            logger.error(f"节点检查 {url} 异常: {type(e).__name__} - {e}")
-            continue
-
-        except Exception as e:
-            logger.error(f"节点检查 {url} 异常: {type(e).__name__} - {e}")
-            continue
-    return None
-
-# -------------------------------
-# 主流程：更新订阅与合并
-# -------------------------------
-async def update_today_sub(session: aiohttp.ClientSession) -> List[str]:
-    """
-    从 Telegram 频道获取最新订阅链接，
-    返回一个去重后的 URL 列表
-    """
-    tg_channels = get_config_channels('config.yaml')
-    all_urls = []
-    for channel in tg_channels:
-        urls = await get_channel_urls(channel, session)
-        all_urls.extend(urls)
-    return list(set(all_urls))
-
-async def check_subscriptions(urls: List[str]) -> List[Dict]:
-    """
-    异步检查所有订阅链接的有效性，
-    返回检查结果列表，每个结果为字典 {url, type, info}
-    """
-    results = []
-    async with aiohttp.ClientSession() as session:
-        tasks = [sub_check(url, session) for url in urls]
-        for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc="订阅筛选"):
-            res = await coro
-            if res:
-                results.append(res)
-    return results
-
-async def check_nodes(urls: List[str], target: str) -> List[str]:
-    """
-    异步检查每个订阅节点的有效性，
-    返回检测有效的节点 URL 列表
-    """
-    valid_urls = []
-    async with aiohttp.ClientSession() as session:
-        tasks = [url_check_valid(url, target, session) for url in urls]
-        for coro in tqdm(asyncio.as_completed(tasks), total=len(tasks), desc="节点检测"):
-            res = await coro
-            if res:
-                valid_urls.append(res)
-    return valid_urls
-
-def write_url_list(url_list: List[str], file_path: str) -> None:
-    """将 URL 列表写入文本文件"""
-    with open(file_path, 'w', encoding='utf-8') as f:
-        f.write("\n".join(url_list))
-    logger.info(f"已保存 {len(url_list)} 个链接到 {file_path}")
-
-# -------------------------------
-# 主函数入口
-# -------------------------------
-async def main():
-    config_path = 'config.yaml'
-    config = load_yaml_config(config_path)
-
-    # 使用单个 ClientSession 获取 Telegram 频道订阅链接
-    async with aiohttp.ClientSession() as session:
-        today_urls = await update_today_sub(session)
-    logger.info(f"从 Telegram 频道获得 {len(today_urls)} 个链接")
-
-    # 异步检查订阅链接的有效性
-    sub_results = await check_subscriptions(today_urls)
-    # 根据检查结果按类型分类
-    subs   = [res["url"] for res in sub_results if res and res["type"] == "机场订阅"]
-    clash  = [res["url"] for res in sub_results if res and res["type"] == "clash订阅"]
-    v2     = [res["url"] for res in sub_results if res and res["type"] == "v2订阅"]
-    play   = [f'{res["info"]} {res["url"]}' for res in sub_results if res and res["type"] == "机场订阅" and res["info"]]
-    print("subs:",subs)
-    print("clash:",clash)
-    print("v2:",v2)
-    print("play:",play)
-    # 合并并更新配置（与原有数据合并）
-    config["机场订阅"] = sorted(list(set(config.get("机场订阅", []) + subs)))
-    config["clash订阅"] = sorted(list(set(config.get("clash订阅", []) + clash)))
-    config["v2订阅"] = sorted(list(set(config.get("v2订阅", []) + v2)))
-    config["开心玩耍"] = sorted(list(set(config.get("开心玩耍", []) + play)))
-    save_yaml_config(config, config_path)
-    logger.info("配置文件已更新。")
-
-    # 写入订阅存储文件（包含流量信息和机场订阅链接）
-    sub_store_file = config_path.replace('.yaml', '_sub_store.txt')
-    content = "-- play_list --\n\n" + "\n".join(play) + "\n\n-- sub_list --\n\n" + "\n".join(subs)
-    with open(sub_store_file, 'w', encoding='utf-8') as f:
-        f.write(content)
-    logger.info(f"订阅存储文件已保存至 {sub_store_file}")
-
-    # 检测“机场订阅”中节点的有效性（例如目标 target 为 "loon"）
-    valid_nodes = await check_nodes(subs, "loon")
-    valid_file = config_path.replace('.yaml', '_loon.txt')
-    write_url_list(valid_nodes, valid_file)
-
-    # 检测“机场订阅”中节点的有效性（例如目标 target 为 "clash"）
-    valid_nodes = await check_nodes(clash, "clash")
-    valid_file = config_path.replace('.yaml', '_clash.txt')
-    write_url_list(valid_nodes, valid_file)
-
-    # 检测“机场订阅”中节点的有效性（例如目标 target 为 "clash"）
-    valid_nodes = await check_nodes(v2, "v2ray")
-    valid_file = config_path.replace('.yaml', '_v2.txt')
-    write_url_list(valid_nodes, valid_file)
+        logging.info("未找到符合条件的潜在链接。")
+        print("未找到符合条件的潜在链接。")
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    main()
