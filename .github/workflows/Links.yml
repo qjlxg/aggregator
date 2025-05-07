@@ -1,38 +1,39 @@
-# .github/workflows/scrape_telegram_requests.yml
-name: Scrape Telegram Links (Requests)
+name: Telegram Channel Scraper
 
 on:
-  workflow_dispatch: # 允许手动触发 workflow
   schedule:
-    - cron: '0 0 * * *'  # 每天 UTC 时间 00:00 运行 (北京时间 08:00)
+    - cron: '0 0 * * *'  # 每天 00:00 UTC 运行
+  workflow_dispatch:  # 添加 workflow_dispatch 触发器
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
         with:
-          python-version: '3.x'
+          python-version: 3.9
+
+      - name: Get pip path
+        run: echo "PIP_PATH=$(which pip)" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
+          ${{ env.PIP_PATH }} install --no-cache-dir telethon requests
 
-      - name: Run scraper
+      - name: Run Telegram scraper
         env:
-          TELEGRAM_CHANNEL_URL: 'https://t.me/s/dingyue_center'  # 设置你的 Telegram 频道 URL
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
         run: python scrape_tg_links.py
 
-      - name: Commit and push changes
+      - name: Commit and push if changed
         run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add data/ji2.txt
-          git commit -m "Update scraped links" || echo "No changes to commit"
-          git push origin main
+          git config --global user.email "your-email@example.com"  # 替换为你的邮箱
+          git config --global user.name "Your Name"             # 替换为你的名字
+          git add data/subscribes.txt
+          git commit -m "Update subscriptions list" || exit 0
+          git push
