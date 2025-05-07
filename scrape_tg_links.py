@@ -73,7 +73,7 @@ def main():
             for url in valid_urls:
                 f.write(url + '\n')
 
-        print("URL已保存到 data/ji.txt")
+        print("URL已保存到 data/ji2.txt")
 
     except requests.exceptions.RequestException as e:
         print(f"请求失败: {e}")
