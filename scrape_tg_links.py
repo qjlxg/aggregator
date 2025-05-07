@@ -27,10 +27,10 @@ BASE_DIR = os.environ.get('GITHUB_WORKSPACE', '.') # 获取 GitHub 工作区路�
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 OUTPUT_VALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_valid_file', fallback='valid_links.txt'))
 OUTPUT_INVALID_FILE = os.path.join(DATA_DIR, config.get('settings', 'output_invalid_file', fallback='invalid_links.txt'))
-MAX_PAGES = int(config.get('settings', 'max_pages', fallback='10')) # 提供默认值
-MAX_WORKERS = int(config.get('settings', 'max_workers', fallback='5')) # 提供默认值
-BASE_URL = config.get('settings', 'base_url')
-TARGET_URL = config.get('settings', 'target_url', 'https://t.me/s/dingyue_center') # 目标 Telegram 频道 URL
+MAX_PAGES = int(config.get('settings', 'max_pages', fallback='1')) # Selenium 方式通常不需要大量翻页
+MAX_WORKERS = int(config.get('settings', 'max_workers', fallback='5'))
+BASE_URL = config.get('settings', 'base_url', fallback='') # 可以设置一个默认的 base_url
+TARGET_URL = config.get('settings', 'target_url', fallback='https://t.me/s/dingyue_center') # 目标 Telegram 频道 URL
 KEYWORDS = [kw.strip() for kw in config.get('settings', 'keywords', '/api/,oken=,/s/').split(',')] # 从配置读取关键词
 SCROLL_PAUSE_TIME = int(config.get('settings', 'scroll_pause_time', '3')) # 滚动暂停时间
 NUM_SCROLLS = int(config.get('settings', 'num_scrolls', '10')) # 滚动次数
