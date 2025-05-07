@@ -1,5 +1,4 @@
 import time
-import re
 import requests
 from urllib.parse import urlparse
 from selenium import webdriver
@@ -8,8 +7,8 @@ from collections import Counter
 
 CHANNEL_URL = "https://t.me/s/dingyue_center"
 OUTPUT_FILE = "data/subscribes.txt"
-SCROLL_PAUSE_TIME = 2  # 等待页面加载秒数
-MAX_SCROLLS = 30       # 最大滚动次数
+SCROLL_PAUSE_TIME = 2
+MAX_SCROLLS = 30
 
 def init_driver():
     chrome_options = Options()
@@ -22,7 +21,7 @@ def init_driver():
 
 def scroll_to_bottom(driver):
     last_height = driver.execute_script("return document.body.scrollHeight")
-    for i in range(MAX_SCROLLS):
+    for _ in range(MAX_SCROLLS):
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(SCROLL_PAUSE_TIME)
         new_height = driver.execute_script("return document.body.scrollHeight")
@@ -84,26 +83,20 @@ def main():
     print("提取所有链接...")
     scraped_links = extract_links(driver)
 
-    print_domains_stat(scraped_links)
+    # 只保留包含 '/api/' 的链接
+    api_links = set(l for l in scraped_links if "/api/" in l)
 
-    # 示例过滤，如果你想排除 t.me 和 telegram.org 可以在这里加过滤条件
-    filtered_links = set(
-        l for l in scraped_links if not l.startswith("https://t.me") and not l.startswith("http://t.me")
-    )
-    # 如果你还想排除 telegram.org，解开下面注释：
-    # filtered_links = set(l for l in filtered_links if not l.startswith("https://telegram.org") and not l.startswith("http://telegram.org"))
-
-    print(f"过滤后链接数量：{len(filtered_links)}")
+    print_domains_stat(api_links)
 
     existing_links = load_existing_links()
-    new_links = filtered_links - existing_links
+    new_links = api_links - existing_links
 
     if not new_links:
         print("无有效新链接。")
         driver.quit()
         return
 
-    print(f"新链接数量{len(new_links)}，开始测试有效性...")
+    print(f"新链接数量 {len(new_links)}，开始测试有效性...")
 
     valid_links = set()
     for link in new_links:
