@@ -1,10 +1,10 @@
-name: Scrape Telegram Links (Search Engine)
+name: Scrape Telegram Links (Selenium - Google Only)
 
 on:
   push:
     branches: [ main ]
   schedule:
-    - cron: '0 0 * * *' # 每天 UTC 00:00 运行 (北京时间早上 8:00)
+    - cron: '0 0 * * *' # 每天 UTC 00:00 运行
   workflow_dispatch:
 
 jobs:
@@ -18,17 +18,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'
+        python-version: '3.11' # 将 Python 版本设置为 3.11
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests beautifulsoup4
-        
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install requests beautifulsoup4 undetected-chromedriver
+        pip install undetected-chromedriver selenium
 
     - name: Run Python script
       run: python xujw3.py
