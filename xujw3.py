@@ -8,25 +8,23 @@ import time
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-BASE_DIR = os.environ.get('GITHUB_WORKSPACE', '.') # 获取 GitHub 工作区路径，默认为当前目录
+BASE_DIR = os.environ.get('GITHUB_WORKSPACE', '.') # 获取 GitHub 工作区路径
 DATA_DIR = os.path.join(BASE_DIR, 'data')
-OUTPUT_VALID_FILE = os.path.join(DATA_DIR, 'searched_links.txt') # 输出到新的文件
+OUTPUT_VALID_FILE = os.path.join(DATA_DIR, 'searched_links.txt')
 os.makedirs(DATA_DIR, exist_ok=True)
 
 SEARCH_KEYWORDS = ['/api/v1/client/subscribe?token=', 'token=', '/s/']
-SEARCH_ENGINES = {
-    'google': 'https://www.google.com/'
-}
-SEARCH_DELAY = 2 # 搜索后等待时间 (秒)
-SCROLL_PAUSE_TIME = 1 # 滚动加载等待时间 (秒)
-NUM_SCROLLS = 3 # 滚动次数
+GOOGLE_SEARCH_URL = 'https://www.google.com/search?q='
+SEARCH_DELAY = 2
+SCROLL_PAUSE_TIME = 1
+NUM_SCROLLS = 3
 
-def extract_links_selenium(driver, keywords):
+def extract_links_from_google_search(driver, keywords):
     links = set()
-    elements = driver.find_elements(By.TAG_NAME, 'a')
-    for element in elements:
+    search_result_elements = driver.find_elements(By.CSS_SELECTOR, 'a') # 查找所有链接
+    for element in search_result_elements:
         href = element.get_attribute('href')
-        if href and href.startswith('http') and 'telegram' not in href.lower() and any(keyword in href for keyword in keywords):
+        if href and href.startswith('http') and 'google' not in href.lower() and 'telegram' not in href.lower() and any(keyword in href for keyword in keywords):
             links.add(href)
     return list(links)
 
@@ -35,22 +33,21 @@ def main():
     try:
         driver = uc.Chrome()
         for keyword in SEARCH_KEYWORDS:
-            for engine_name, base_url in SEARCH_ENGINES.items():
-                search_url = f"{base_url}search?q={keyword}"
-                logging.info(f"使用 Selenium 在 {engine_name.capitalize()} 上搜索: {keyword}")
-                driver.get(search_url)
-                time.sleep(SEARCH_DELAY)
+            search_url = GOOGLE_SEARCH_URL + keyword
+            logging.info(f"使用 Selenium 在 Google 上搜索: {keyword}")
+            driver.get(search_url)
+            time.sleep(SEARCH_DELAY)
 
-                # 模拟滚动加载更多结果
-                body = driver.find_element(By.TAG_NAME, 'body')
-                for _ in range(NUM_SCROLLS):
-                    body.send_keys(Keys.PAGE_DOWN)
-                    time.sleep(SCROLL_PAUSE_TIME)
+            # 模拟滚动加载更多结果
+            body = driver.find_element(By.TAG_NAME, 'body')
+            for _ in range(NUM_SCROLLS):
+                body.send_keys(Keys.PAGE_DOWN)
+                time.sleep(SCROLL_PAUSE_TIME)
 
-                extracted_links = extract_links_selenium(driver, SEARCH_KEYWORDS)
-                for link in extracted_links:
-                    all_found_links.add(link)
-                    logging.info(f"找到潜在链接: {link}")
+            extracted_links = extract_links_from_google_search(driver, SEARCH_KEYWORDS)
+            for link in extracted_links:
+                all_found_links.add(link)
+                logging.info(f"找到潜在链接: {link}")
 
     except Exception as e:
         logging.error(f"Selenium 过程中发生错误: {e}")
