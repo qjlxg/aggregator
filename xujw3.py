@@ -13,7 +13,7 @@ DATA_DIR = os.path.join(BASE_DIR, 'data')
 OUTPUT_VALID_FILE = os.path.join(DATA_DIR, 'searched_links.txt') # 输出到新的文件
 os.makedirs(DATA_DIR, exist_ok=True)
 
-KEYWORDS = ['/api/v1/client/subscribe?token=', 'token=', '/s/']
+SEARCH_KEYWORDS = ['技术 订阅', 'VPN 订阅', '代理 订阅'] # 组合关键词进行搜索
 SEARCH_ENGINE_BASE_URL = 'https://www.google.com/search'
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
@@ -37,28 +37,21 @@ def extract_links_from_search_results(html):
         # 清理 Google 搜索结果中的包装链接
         if href.startswith('/url?q='):
             href = href.split('/url?q=')[1].split('&')[0]
-        if href.startswith('http') and 'google' not in href:
+        if href.startswith('http') and 'google' not in href and 'telegram' not in href.lower():
             links.add(href)
     return list(links)
 
-def is_likely_target_link(url, keywords):
-    for keyword in keywords:
-        if keyword in url:
-            return True
-    return False
-
 def main():
     all_found_links = set()
-    for keyword in KEYWORDS:
+    for keyword in SEARCH_KEYWORDS:
         search_query = f"site:t.me {keyword}" # 搜索 t.me 域名下包含关键词的页面
         logging.info(f"正在搜索: {search_query}")
         search_results_html = search_google(search_query)
         if search_results_html:
             extracted_links = extract_links_from_search_results(search_results_html)
             for link in extracted_links:
-                if is_likely_target_link(link, KEYWORDS) and 'telegram' not in link.lower():
-                    all_found_links.add(link)
-                    logging.info(f"找到潜在链接: {link}")
+                all_found_links.add(link)
+                logging.info(f"找到潜在链接: {link}")
 
     if all_found_links:
         with open(OUTPUT_VALID_FILE, 'w', encoding='utf-8') as f:
