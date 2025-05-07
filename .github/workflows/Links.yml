@@ -1,8 +1,8 @@
-
-name: Scrape Telegram Links
+# .github/workflows/scrape_telegram_requests.yml
+name: Scrape Telegram Links (Requests)
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # 允许手动触发 workflow
   schedule:
     - cron: '0 0 * * *'  # 每天 UTC 时间 00:00 运行 (北京时间 08:00)
 
@@ -22,31 +22,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install selenium beautifulsoup4
-          # 安装 Chrome WebDriver (与 Chrome 浏览器版本匹配)
-          # 这是一个示例; 你可能需要根据实际情况选择正确的 WebDriver 版本
-
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser  # 确保安装了 chromium-browser
-
-      - name: Check Chromium and ChromeDriver versions # 确认版本
-        run: |
-          chromium-browser --version
-          chromedriver --version
-
-      - name: Download ChromeDriver  #下载指定版本,  如果步骤4版本检查显示不匹配
-        run: |
-          CHROMIUM_VERSION=$(chromium-browser --version | sed 's/Chromium //g' | cut -d '.' -f 1)
-          CHROMEDRIVER_VERSION=${CHROMIUM_VERSION}.0.0.0
-          wget --tries=3 "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" # 添加重试
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/bin/chromedriver
-          chmod +x /usr/bin/chromedriver
+          pip install requests beautifulsoup4
 
       - name: Run scraper
         env:
           TELEGRAM_CHANNEL_URL: 'https://t.me/s/dingyue_center'  # 设置你的 Telegram 频道 URL
-        run: python scrape_tg_links.py
+        run: python scrape_tg_links_requests.py
 
       - name: Commit and push changes
         run: |
