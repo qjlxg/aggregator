@@ -59,7 +59,7 @@ def extract_all_links_requests(html, base_url, keywords, excluded_extensions):
                 if keyword in absolute_url:
                     links.add(absolute_url)
                     break
-    pattern = r'https?://[^\s\'"<>]+' # 修复了这一行
+    pattern = r'https?://[^\s\'"<>]+'
     for link in re.findall(pattern, html):
         if not link.startswith('https://t.me') and not link.endswith(excluded_extensions):
             for keyword in link:
@@ -82,4 +82,29 @@ def get_next_page_url(html, current_url):
     if next_page and 'href' in next_page.attrs:
         return urljoin('https://t.me', next_page['href'])
     next_page_texts = ["下一页", "Next", ">", "»"]
-    for text in
+    for text in next_page_texts: # 修复了这一行
+        next_link = soup.find('a', string=re.compile(text))
+        if next_link and 'href' in next_link.attrs:
+            return urljoin(current_url, next_link['href'])
+        next_link = soup.find('a', title=re.compile(text))
+        if next_link and 'href' in next_link.attrs:
+            return urljoin(current_url, next_link['href'])
+    return None
+
+def process_link(link):
+    if test_url(link):
+        try:
+            with open(OUTPUT_VALID_FILE, 'a', encoding='utf-8') as f:
+                f.write(link + '\n')
+            logging.info(f"有效链接：{link}")
+            print(f"有效链接 (控制台): {link}")
+        except Exception as e:
+            logging.error(f"写入有效链接文件失败 {OUTPUT_VALID_FILE}: {e}")
+    else:
+        try:
+            with open(OUTPUT_INVALID_FILE, 'a', encoding='utf-8') as f:
+                f.write(link + '\n')
+            logging.info(f"无效链接：{link}")
+            print(f"无效链接 (控制台): {link}")
+        except Exception as e:
+            logging.error
