@@ -69,7 +69,7 @@ def test_url(url):
         logging.debug(f"测试链接失败 {url}: {e}")
         return False
 
-def get_next_page_url(html, current_url): # 添加括号 ()
+def get_next_page_url(html, current_url):
     soup = BeautifulSoup(html, 'html.parser')
     next_page = soup.find('a', attrs={'data-nav': 'next'})
     if next_page and 'href' in next_page.attrs:
@@ -78,39 +78,3 @@ def get_next_page_url(html, current_url): # 添加括号 ()
     for text in next_page_texts:
         next_link = soup.find('a', string=re.compile(text))
         if next_link and 'href' in next_link.attrs:
-            return urljoin(current_url, next_link['href'])
-        next_link = soup.find('a', title=re.compile(text))
-        if next_link and 'href' in next_link.attrs:
-            return urljoin(current_url, next_link['href'])
-    return None
-
-def process_link(link):
-    if test_url(link):
-        try:
-            with open(OUTPUT_VALID_FILE, 'a', encoding='utf-8') as f_valid:
-                f_valid.write(link + '\n')
-            logging.info(f"有效链接：{link}")
-            print(f"有效链接 (控制台): {link}")
-        except Exception as e:
-            logging.error(f"写入有效链接文件失败 {OUTPUT_VALID_FILE}: {e}")
-    else:
-        try:
-            with open(OUTPUT_INVALID_FILE, 'a', encoding='utf-8') as f_invalid:
-                f_invalid.write(link + '\n')
-            logging.info(f"无效链接：{link}")
-            print(f"无效链接 (控制台): {link}")
-        except Exception as e:
-            logging.error(f"写入无效链接文件失败 {OUTPUT_INVALID_FILE}: {e}")
-
-def extract_links_selenium_with_scroll(url, scroll_pause_time=2, num_scrolls=5):
-    """
-    使用 Selenium 抓取页面，滚动加载更多内容，并提取所有非 Telegram 的外部链接，并排除包含 "telegram" 的链接。
-    """
-    chrome_options = Options()
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
-    user_data_dir = tempfile.mkdtemp()
-    chrome_options.add_argument(f'--user-data-dir={user_data_dir}')
-
-    driver = webdriver.Chrome(service=Chrome
