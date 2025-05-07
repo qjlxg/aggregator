@@ -281,7 +281,7 @@ def main(urls):
 
     os.makedirs('data', exist_ok=True)
     yaml_content = generate_yaml(all_proxies)
-    output_path = 'data/clash.yaml'
+    output_path = 'data/ss.yaml'
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(yaml_content)
     print(f"Clash 配置文件已保存到 {output_path}")
