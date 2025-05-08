@@ -1,246 +1,265 @@
-# -*- coding: utf-8 -*-
-import subprocess
 import yaml
+import subprocess
+import requests
 import os
+import platform
 import time
-import threading
-from typing import List, Dict
+import shutil
+import socket
 
-# 定义路径
-DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
-CLASH_CONFIG_PATH = os.path.join(DATA_DIR, "clash.yaml")
-SP_PATH = os.path.join(DATA_DIR, "sp.yaml")
-CLASH_BIN_PATH = {
-    'Linux': os.path.join(os.path.dirname(os.path.abspath(__file__)), 'clash', 'clash-linux'),  # 假设 clash-linux 在 clash 目录下
-    'Darwin-AMD64': os.path.join(os.path.dirname(os.path.abspath(__file__)), 'clash', 'clash-darwin-amd'), # 假设 clash-darwin-amd 在 clash 目录下
-    'Darwin-ARM64': os.path.join(os.path.dirname(os.path.abspath(__file__)), 'clash', 'clash-darwin-arm'), # 假设 clash-darwin-arm 在 clash 目录下
-}
-COUNTRY_MMDB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'clash', 'Country.mmdb')  # 假设 Country.mmdb 在 clash 目录下
+# --- Configuration ---
+INPUT_YAML_PATH = os.path.join('data', 'clash.yaml')
+OUTPUT_YAML_PATH = os.path.join('data', 'sp.yaml')
+CLASH_DIR = 'clash'
+COUNTRY_MMDB_NAME = 'Country.mmdb'
+TEMP_CONFIG_NAME = 'temp_clash_test_config.yaml'
 
-# 加载 clash 配置文件
-def load_clash_config(config_path: str) -> Dict:
-    """
-    加载 clash 配置文件.
+# Proxy types to test as specified in the prompt
+# Note: "ss://" is represented as type "ss" in Clash config, "vmess://" as "vmess", etc.
+# Hysteria2 is type "hysteria2"
+TARGET_PROXY_TYPES = ["vmess", "ss", "vless", "trojan", "hysteria2"]
 
-    参数:
-        config_path (str): clash 配置文件路径.
+# Test URL: light, fast, returns HTTP 204 No Content on success
+TEST_URL = "http://www.gstatic.com/generate_204"
+REQUEST_TIMEOUT_SECONDS = 10  # Timeout for the test request
+CLASH_STARTUP_WAIT_SECONDS = 3 # Time to wait for Clash to start
 
-    返回:
-        Dict: 配置字典，加载失败返回空字典.
-    """
+# --- Helper Functions ---
+
+def find_free_port():
+    """Finds an available port on localhost."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(('', 0))
+        return s.getsockname()[1]
+
+def select_clash_binary():
+    """Selects the appropriate Clash binary based on OS and architecture."""
+    system = platform.system()
+    machine = platform.machine()
+    binary_path = None
+
+    if system == 'Linux':
+        # Assuming clash-linux is for x86_64, common for Linux servers/desktops
+        # If you have a specific arm64 linux binary, add logic here
+        if 'aarch64' in machine or 'arm64' in machine:
+            # The prompt did not specify a clash-linux-arm binary.
+            # If you have one, e.g., 'clash-linux-arm', update here.
+            print("Warning: No specific ARM64 Linux Clash binary specified in prompt. Trying generic 'clash-linux'.")
+            binary_path = os.path.join(CLASH_DIR, 'clash-linux')
+        else: # x86_64, amd64
+            binary_path = os.path.join(CLASH_DIR, 'clash-linux')
+    elif system == 'Darwin': # macOS
+        if 'arm64' in machine: # Apple Silicon
+            binary_path = os.path.join(CLASH_DIR, 'clash-darwin-arm')
+        elif 'x86_64' in machine: # Intel
+            binary_path = os.path.join(CLASH_DIR, 'clash-darwin-amd')
+    else:
+        raise OSError(f"Unsupported operating system: {system}")
+
+    if binary_path and os.path.exists(binary_path):
+        # Ensure the binary is executable
+        try:
+            os.chmod(binary_path, 0o755)
+        except OSError as e:
+            print(f"Warning: Could not set executable permission on {binary_path}: {e}")
+        return os.path.abspath(binary_path)
+    elif binary_path:
+        raise FileNotFoundError(f"Clash binary not found at: {binary_path}")
+    else:
+        raise OSError(f"Could not determine Clash binary for {system} {machine}")
+
+def load_clash_config(file_path):
+    """Loads the Clash configuration from a YAML file."""
     try:
-        with open(config_path, "r", encoding="utf-8") as f:
-            config = yaml.safe_load(f)
-        return config
-    except Exception as e:
-        print(f"Error loading clash config: {e}")
-        return {}
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return yaml.safe_load(f)
+    except FileNotFoundError:
+        print(f"Error: Input YAML file not found at {file_path}")
+        return None
+    except yaml.YAMLError as e:
+        print(f"Error: Could not parse input YAML file {file_path}: {e}")
+        return None
 
-# 提取指定类型的节点
-def extract_nodes(config: Dict, protocols: List[str]) -> List[Dict]:
+def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, country_mmdb_path):
     """
-    从 clash 配置中提取指定类型的节点.
-
-    参数:
-        config (Dict): clash 配置字典.
-        protocols (List[str]): 需要提取的协议类型列表.
-
-    返回:
-        List[Dict]: 提取出的节点列表.
+    Tests a single proxy node by starting a Clash instance.
+    Returns True if the proxy is valid, False otherwise.
     """
-    nodes = []
-    if not config or "proxies" not in config:
-        return nodes
-    for proxy in config["proxies"]:
-        if proxy.get("type") in protocols:
-            nodes.append(proxy)
-    return nodes
+    proxy_name = proxy_config.get('name', 'UnnamedProxy')
+    print(f"  Testing node: {proxy_name} (type: {proxy_config.get('type')})")
 
-# 检查节点连通性
-def check_node(node: Dict, clash_bin: str) -> bool:
-    """
-    检查单个节点是否连通.
+    # Find free ports for Clash
+    http_port = find_free_port()
+    # socks_port = find_free_port() # If needed
+    # external_controller_port = find_free_port() # If needed
 
-    参数:
-        node (Dict): 节点信息.
-        clash_bin (str): clash 运行程序的路径
-
-    返回:
-        bool: 节点是否连通.
-    """
-    # 生成一个临时的 clash 配置文件，仅包含当前要测试的节点
-    temp_config = {
-        "mode": "Direct",  # 设置为 Direct 模式，避免影响其他连接
-        "proxies": [node],
-        "proxy-groups": [
-            {
-                "name": "test",
-                "type": "select",
-                "proxies": [node.get("name", "")]
-            }
-        ],
-        "rules": [
-            {"type": "GLOBAL", "proxy": "test"}
-        ]
+    temp_config_content = {
+        'port': http_port,
+        # 'socks-port': socks_port,
+        'allow-lan': False,
+        'mode': 'rule', # or 'global'
+        'log-level': 'silent', # or 'error' for debugging
+        # 'external-controller': f'127.0.0.1:{external_controller_port}',
+        'dns': {
+            'enable': True,
+            'ipv6': False,
+            'listen': '0.0.0.0:53', # Clash might need a DNS listen port
+            'nameserver': ['114.114.114.114', '8.8.8.8'],
+            'fallback': ['1.1.1.1', 'dns.google:53'],
+            'enhanced-mode': 'redir-host', # or fake-ip
+        },
+        'geoip': True, # Tells Clash to look for Country.mmdb in its data directory
+        'proxies': [proxy_config],
+        'proxy-groups': [{
+            'name': 'TEST_GROUP',
+            'type': 'select',
+            'proxies': [proxy_name]
+        }],
+        'rules': [f'MATCH,TEST_GROUP']
     }
-    temp_config_path = os.path.join(DATA_DIR, "temp_config.yaml")
+
+    temp_config_file_path = os.path.join(clash_work_dir, TEMP_CONFIG_NAME)
     try:
-        with open(temp_config_path, "w", encoding="utf-8") as f:
-            yaml.dump(temp_config, f, allow_unicode=True)
-    except Exception as e:
-        print(f"Error creating temp config: {e}")
+        with open(temp_config_file_path, 'w', encoding='utf-8') as f:
+            yaml.dump(temp_config_content, f)
+    except IOError as e:
+        print(f"    Error creating temporary config: {e}")
         return False
 
-    # 构造 clash 命令，使用外部控制器和 127.0.0.1:65535
-    command = [
-        clash_bin,
-        "-c", temp_config_path,
-        "-d", DATA_DIR,  # 指定配置目录
-    ]
-
+    clash_process = None
     try:
-        # 启动 clash
-        process = subprocess.Popen(
-            command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            # 添加 env 参数，确保 clash 能够找到 Country.mmdb
-            env={"CLASH_MMDB_PATH": COUNTRY_MMDB_PATH}
-        )
+        # -d sets the working directory for Clash (where Country.mmdb, etc. are)
+        # -f specifies the configuration file
+        # Ensure paths are absolute or correctly relative
+        cmd = [clash_binary_path, '-d', os.path.abspath(clash_work_dir), '-f', temp_config_file_path]
+        # print(f"    Starting Clash with command: {' '.join(cmd)}")
+        clash_process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        # print(f"    Clash PID: {clash_process.pid}. Waiting {CLASH_STARTUP_WAIT_SECONDS}s for startup...")
+        time.sleep(CLASH_STARTUP_WAIT_SECONDS)
 
-        # 等待 clash 启动，这里简单等待 2 秒，更严谨的做法是检查 clash 的输出
-        time.sleep(2)
-        # 检查节点连通性，这里使用 curl 访问一个简单的网站
-        curl_command = ["curl", "-m", "5", "http://www.google.com"] # 超时设置为 5 秒
-        curl_process = subprocess.Popen(
-            curl_command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-        curl_process.communicate()
-        if curl_process.returncode == 0:
-            return True
-        else:
+        # Check if Clash process is still running
+        if clash_process.poll() is not None:
+            print(f"    Error: Clash process terminated prematurely. Exit code: {clash_process.returncode}")
+            # You might want to capture stderr from Clash here for detailed errors
             return False
 
+        proxies_for_request = {
+            'http': f'http://127.0.0.1:{http_port}',
+            'https': f'http://127.0.0.1:{http_port}' # HTTPS requests also go through the HTTP proxy port
+        }
+
+        # print(f"    Making request to {TEST_URL} via proxy 127.0.0.1:{http_port}")
+        response = requests.get(TEST_URL, proxies=proxies_for_request, timeout=REQUEST_TIMEOUT_SECONDS, verify=True)
+
+        if response.status_code == 204:
+            print(f"    SUCCESS: Node {proxy_name} is valid.")
+            return True
+        else:
+            print(f"    FAILED: Node {proxy_name} returned status {response.status_code}.")
+            return False
+
+    except requests.exceptions.Timeout:
+        print(f"    FAILED: Node {proxy_name} timed out after {REQUEST_TIMEOUT_SECONDS}s.")
+        return False
+    except requests.exceptions.RequestException as e:
+        print(f"    FAILED: Node {proxy_name} request error: {e}")
+        return False
     except Exception as e:
-        print(f"Error checking node: {e}")
+        print(f"    An unexpected error occurred while testing {proxy_name}: {e}")
         return False
     finally:
-        # 确保 clash 进程被终止
-        if process:
-            process.terminate()
-        # 删除临时配置文件
-        if os.path.exists(temp_config_path):
-            os.remove(temp_config_path)
+        if clash_process:
+            try:
+                clash_process.terminate()
+                clash_process.wait(timeout=5) # Wait for termination
+            except subprocess.TimeoutExpired:
+                print(f"    Clash process for {proxy_name} did not terminate gracefully, killing.")
+                clash_process.kill()
+            except Exception as e:
+                print(f"    Error terminating Clash process for {proxy_name}: {e}")
+        if os.path.exists(temp_config_file_path):
+            try:
+                os.remove(temp_config_file_path)
+            except OSError as e:
+                print(f"    Warning: Could not remove temporary config file {temp_config_file_path}: {e}")
 
-def test_nodes(nodes: List[Dict], clash_bin: str) -> List[Dict]:
-    """
-    批量测试节点连通性.
-
-    参数:
-        nodes (List[Dict]): 节点列表.
-        clash_bin (str): clash可执行文件的路径
-
-    返回:
-        List[Dict]: 连通的节点列表.
-    """
-    connected_nodes = []
-    threads = []
-    results = []  # 用于保存每个节点的测试结果，保证顺序
-
-    def check_and_append(node: Dict):
-        """
-        用于在线程中执行节点检查，并将结果添加到 results 列表中.
-        """
-        if check_node(node, clash_bin):
-            results.append((True, node))  # (True, node) 表示连通
-        else:
-            results.append((False, node)) # (False, node) 表示不连通
-
-    # 为每个节点创建一个线程
-    for node in nodes:
-        thread = threading.Thread(target=check_and_append, args=(node,))
-        threads.append(thread)
-        thread.start()
-
-    # 等待所有线程执行完成
-    for thread in threads:
-        thread.join()
-
-    # 按照原始 nodes 列表的顺序，提取连通的节点
-    for i, node in enumerate(nodes):
-        if results[i][0]:
-            connected_nodes.append(results[i][1])
-    return connected_nodes
-
-# 保存测试结果
-def save_results(results: List[Dict], output_path: str) -> bool:
-    """
-    保存节点测试结果到文件.
-
-    参数:
-        results (List[Dict]): 节点测试结果列表.
-        output_path (str): 输出文件路径.
-
-    返回:
-        bool: 保存是否成功.
-    """
+def save_valid_proxies(valid_proxies, file_path):
+    """Saves the list of valid proxies to a YAML file."""
+    output_data = {'proxies': valid_proxies}
     try:
-        with open(output_path, "w", encoding="utf-8") as f:
-            yaml.dump({"proxies": results}, f, allow_unicode=True, sort_keys=False)
-        return True
-    except Exception as e:
-        print(f"Error saving results: {e}")
-        return False
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path, 'w', encoding='utf-8') as f:
+            yaml.dump(output_data, f, allow_unicode=True, sort_keys=False)
+        print(f"\nSuccessfully saved {len(valid_proxies)} valid proxies to {file_path}")
+    except IOError as e:
+        print(f"Error: Could not write output YAML file {file_path}: {e}")
 
+# --- Main Execution ---
 def main():
-    """
-    主函数，完成节点测试并保存结果.
-    """
-    # 确定操作系统，选择对应的 clash 可执行文件
-    system = os.uname().sysname
-    machine = os.uname().machine
-    if system == "Linux":
-        clash_bin = CLASH_BIN_PATH["Linux"]
-    elif system == "Darwin" and machine == "x86_64":
-        clash_bin = CLASH_BIN_PATH["Darwin-AMD64"]
-    elif system == "Darwin" and machine == "arm64":
-        clash_bin = CLASH_BIN_PATH["Darwin-ARM64"]
+    print("Starting Clash proxy node testing process...")
+
+    # 1. Select Clash Binary
+    try:
+        clash_binary = select_clash_binary()
+        print(f"Using Clash binary: {clash_binary}")
+    except (OSError, FileNotFoundError) as e:
+        print(f"Error selecting Clash binary: {e}")
+        return
+
+    # Check for Country.mmdb
+    country_mmdb_full_path = os.path.abspath(os.path.join(CLASH_DIR, COUNTRY_MMDB_NAME))
+    if not os.path.exists(country_mmdb_full_path):
+        print(f"Error: {COUNTRY_MMDB_NAME} not found in {CLASH_DIR}/ directory.")
+        print(f"Expected at: {country_mmdb_full_path}")
+        return
+    print(f"Found GeoIP database: {country_mmdb_full_path}")
+
+
+    # 2. Load Proxies from input clash.yaml
+    clash_config = load_clash_config(INPUT_YAML_PATH)
+    if not clash_config or 'proxies' not in clash_config:
+        print(f"No 'proxies' section found in {INPUT_YAML_PATH} or file is invalid.")
+        return
+
+    all_proxies = clash_config['proxies']
+    if not isinstance(all_proxies, list):
+        print(f"Error: 'proxies' section in {INPUT_YAML_PATH} is not a list.")
+        return
+
+    print(f"Loaded {len(all_proxies)} proxies from {INPUT_YAML_PATH}.")
+
+    # 3. Filter and Test Proxies
+    nodes_to_test = [p for p in all_proxies if isinstance(p, dict) and p.get('type') in TARGET_PROXY_TYPES]
+
+    if not nodes_to_test:
+        print(f"No proxies matching the target types ({', '.join(TARGET_PROXY_TYPES)}) found.")
+        return
+
+    print(f"Found {len(nodes_to_test)} proxies matching target types. Starting tests...\n")
+
+    valid_proxies_configs = []
+    for i, proxy_node_config in enumerate(nodes_to_test):
+        print(f"Processing proxy {i+1}/{len(nodes_to_test)}:")
+        is_valid = test_single_proxy(proxy_node_config, clash_binary, CLASH_DIR, country_mmdb_full_path)
+        if is_valid:
+            valid_proxies_configs.append(proxy_node_config)
+        print("-" * 30) # Separator
+
+    # 4. Save Valid Proxies to output sp.yaml
+    if valid_proxies_configs:
+        save_valid_proxies(valid_proxies_configs, OUTPUT_YAML_PATH)
     else:
-        print(f"Unsupported system: {system} {machine}")
-        return
+        print("\nNo valid proxies found after testing.")
+        # Create an empty sp.yaml or one with an empty proxies list
+        save_valid_proxies([], OUTPUT_YAML_PATH)
 
-    # 检查 clash 可执行文件是否存在
-    if not os.path.exists(clash_bin):
-        print(f"Clash binary not found at {clash_bin}")
-        return
+    print("\nProxy testing process finished.")
 
-    # 加载 clash 配置文件
-    clash_config = load_clash_config(CLASH_CONFIG_PATH)
-    if not clash_config:
-        print("Failed to load clash config.")
-        return
-
-    # 提取指定类型的节点
-    protocols = ["vmess", "ss", "vless", "trojan", "hysteria2"]
-    nodes = extract_nodes(clash_config, protocols)
-    if not nodes:
-        print(f"No nodes found with protocols: {protocols}")
-        return
-
-    print(f"Found {len(nodes)} nodes to test.")
-
-    # 测试节点连通性
-    connected_nodes = test_nodes(nodes, clash_bin)
-    print(f"Found {len(connected_nodes)} connected nodes.")
-
-    # 保存测试结果
-    if save_results(connected_nodes, SP_PATH):
-        print(f"Results saved to {SP_PATH}")
+if __name__ == '__main__':
+    # Ensure the data directory exists for output, if not already for input
+    if not os.path.exists('data'):
+        os.makedirs('data')
+    if not os.path.exists(CLASH_DIR):
+        print(f"Error: Clash directory '{CLASH_DIR}' not found. Please create it and place Clash binaries and Country.mmdb inside.")
     else:
-        print("Failed to save results.")
-
-if __name__ == "__main__":
-    main()
-
+        main()
