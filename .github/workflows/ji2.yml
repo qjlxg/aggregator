@@ -27,5 +27,4 @@ jobs:
           python ji.py
         env:
           GITHUB_TOKEN: ${{ secrets.OKEN }}
-          REPO_URL: 'https://github.com/qjlxg/362'
-          BRANCH: 'main'  # 根据实际分支调整为 'main' 或 'master'
+          BRANCH: 'main'  # 如果分支不是 'main'，改为正确名称，例如 'master'
