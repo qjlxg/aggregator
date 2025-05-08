@@ -252,7 +252,7 @@ def aggregate(args: argparse.Namespace) -> None:
         domains_file="domains.txt",
         overwrite=args.overwrite,
         pages=args.pages,
-        rigid=not args.easygoing,
+        rigid=args.rigid,
         chuck=args.chuck,
         subscribes_file=subscribes_file,
         refresh=args.refresh,
@@ -455,4 +455,26 @@ if __name__ == "__main__":
     parser.add_argument("-g", "--gist", type=str, required=False, default=os.environ.get("GIST_LINK", ""),
                         help="GitHub 用户名和 gist id，用 '/' 分隔")
     parser.add_argument("-i", "--invisible", dest="invisible", action="store_true", default=False, help="不显示检测进度条")
-    parser.add_argument("-k", "--key", type=str, required=False, default=os.environ.get("GIST_
+    # 修改后的行：
+    parser.add_argument("-k", "--key", type=str, required=False, default=os.environ.get("GIST_PAT", ""), help="用于编辑 gist 的 GitHub personal access token")
+    parser.add_argument("-l", "--liveness", dest="liveness", action="store_false", default=True,
+                        help="跳过 chatgpt liveness check")
+    parser.add_argument("-n", "--number", dest="num", type=int, required=False, default=5, help="并发数量")
+    parser.add_argument("-o", "--overwrite", dest="overwrite", action="store_true", default=False, help="强制刷新机场列表")
+    parser.add_argument("-p", "--page", dest="pages", type=int, required=False, default=sys.maxsize,
+                        help="自动注册账号时最大页数")
+    parser.add_argument("-r", "--refresh", dest="refresh", action="store_true", default=False, help="使用现有订阅刷新")
+    parser.add_argument("-s", "--skip", dest="skip", action="store_true", default=False, help="跳过 clash 筛选")
+    parser.add_argument("-t", "--targets", nargs="+", required=False, default=["mixed"],
+                        choices=["mixed", "clash", "surfboard", "quantumult", "quantumultx", "loon", "surge", "shadowrocket", "v2ray", "sing-box", "ss"],
+                        help="选择要生成的目标配置")
+    parser.add_argument("-u", "--url", type=str, required=False, default="https://www.google.com", help="测试连通性的 URL")
+    parser.add_argument("-v", "--vitiate", dest="vitiate", action="store_true", default=False,
+                        help="删除 subconverter 配置文件中的注释")
+    parser.add_argument("-w", "--life", type=int, required=False, default=0, help="订阅最短有效期，单位: 天")
+    parser.add_argument("-y", "--yourself", type=str, required=False,
+                        default="",
+                        help="自定义 Clash VERGE 订阅链接")
+    parser.add_argument("--rigid", dest="rigid", action="store_false", default=True, help="严格模式")
+    args = parser.parse_args()
+    aggregate(args)
