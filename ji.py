@@ -7,7 +7,7 @@ import logging
 import os
 import threading
 from queue import Queue
-import configparser  # 用于解析 config.ini
+import base64
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -79,7 +79,7 @@ def fetch_page(url, headers, timeout=10, max_retries=3):
     """抓取页面内容，带重试机制"""
     for attempt in range(max_retries):
         try:
-            response = requests.get(url, headers=headers, timeout=timeout) # Removed proxies
+            response = requests.get(url, headers=headers, timeout=timeout)
             response.raise_for_status()
             return response.text
         except requests.RequestException as e:
@@ -103,13 +103,13 @@ def save_urls_to_file(urls, filename='data/ji.txt'):
         logging.error(f"保存 {filename} 失败: {e}")
 
 
-def crawl_single_source(start_url, headers, max_pages, url_queue):  # Removed proxies
+def crawl_single_source(start_url, headers, max_pages, url_queue):
     """抓取单个来源的URL"""
     current_url = start_url
     page_count = 0
     while current_url and page_count < max_pages:
         logging.info(f"抓取: {current_url} (第 {page_count + 1}/{max_pages} 页，来源: {start_url})")
-        html = fetch_page(current_url, headers)  # Removed proxies
+        html = fetch_page(current_url, headers)
         if html is None:
             break
         new_urls = get_urls_from_html(html)
@@ -135,11 +135,12 @@ def worker(url_queue, valid_urls, lock):
 def get_file_from_github(token, file_path, branch='main'):
     """从 GitHub 获取文件内容"""
     api_url = f"https://api.github.com/repos/qjlxg/362/contents/{file_path}?ref={branch}"
+    masked_url = re.sub(r'https://api\.github\.com/repos/.*?/contents/.*?\?ref=.*', r'https://api.github.com/repos/<repo>/contents/<file>?ref=<branch>', api_url)
     headers = {
         'Authorization': f'token {token}',
         'Accept': 'application/vnd.github.v3.raw'
     }
-    logging.info(f"尝试访问: {api_url}")
+    logging.info(f"尝试访问: {masked_url}")
     try:
         response = requests.get(api_url, headers=headers, timeout=10)
         response.raise_for_status()  # 检查 HTTP 状态码
@@ -153,6 +154,7 @@ def append_to_github_file(token, file_path, content, branch='main'):
     """将内容追加到 GitHub 仓库的文件中"""
     # 获取仓库信息和文件 SHA
     api_url = f"https://api.github.com/repos/qjlxg/362/contents/{file_path}?ref={branch}"
+    masked_url = re.sub(r'https://api\.github\.com/repos/.*?/contents/.*?\?ref=.*', r'https://api.github.com/repos/<repo>/contents/<file>?ref=<branch>', api_url)
     headers = {
         'Authorization': f'token {token}',
         'Accept': 'application/vnd.github.v3+json'
@@ -197,23 +199,16 @@ def main(max_pages=10, num_threads=5):
         logging.error("未设置 GITHUB_TOKEN 环境变量")
         return
 
-    # 从 config.ini 读取 start_urls_list
-    config_content = get_file_from_github(token, 'data/config.ini')
+    # 从 config.txt 读取 start_urls_list
+    config_content = get_file_from_github(token, 'data/config.txt')
     if not config_content:
-        logging.error("无法从 GitHub 读取 config.ini")
+        logging.error("无法从 GitHub 读取 config.txt")
         return
 
-    # 解析 config.ini
-    config = configparser.ConfigParser()
-    config.read_string(config_content)
-    try:
-        start_urls_str = config['DEFAULT']['start_urls']
-        start_urls_list = [url.strip() for url in start_urls_str.split(',') if url.strip()]
-    except KeyError:
-        logging.error("config.ini 中没有找到 start_urls")
-        return
+    # 将文件内容按行分割为 URL 列表
+    start_urls_list = [url.strip() for url in config_content.splitlines() if url.strip()]
 
-    logging.info(f"从 config.ini 读取到的 start_urls: {start_urls_list}")
+    logging.info(f"从 config.txt 读取到的 start_urls: {start_urls_list}")
 
     url_queue = Queue()
     valid_urls = set()
@@ -228,9 +223,8 @@ def main(max_pages=10, num_threads=5):
 
     # 创建爬取线程
     for start_url in start_urls_list:
-        # Removed proxies
         headers = get_random_headers()
-        t = threading.Thread(target=crawl_single_source, args=(start_url, headers, max_pages, url_queue)) # Removed proxies
+        t = threading.Thread(target=crawl_single_source, args=(start_url, headers, max_pages, url_queue))
         t.start()
         threads.append(t)
 
