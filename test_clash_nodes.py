@@ -12,7 +12,7 @@ import aiohttp
 # --- Configuration ---
 INPUT_YAML_PATH = os.path.join('data', 'clash.yaml')
 OUTPUT_YAML_PATH = os.path.join('data', 'sp.yaml')
-CLASH_DIR = 'clash'
+CLASH_DIR = 'aggregator/clash'  # 修改 CLASH_DIR
 COUNTRY_MMDB_NAME = 'Country.mmdb'
 TEMP_CONFIG_NAME = 'temp_clash_test_config.yaml'
 
@@ -39,17 +39,19 @@ def select_clash_binary():
     machine = platform.machine()
     binary_path = None
 
+    clash_dir_abs = os.path.abspath(CLASH_DIR) # 使用绝对路径
+
     if system == 'Linux':
         if 'aarch64' in machine or 'arm64' in machine:
             print("Warning: No specific ARM64 Linux Clash binary specified in prompt. Trying generic 'clash-linux'.")
-            binary_path = os.path.join(CLASH_DIR, 'clash-linux')
+            binary_path = os.path.join(clash_dir_abs, 'clash-linux')
         else:
-            binary_path = os.path.join(CLASH_DIR, 'clash-linux')
+            binary_path = os.path.join(clash_dir_abs, 'clash-linux')
     elif system == 'Darwin':
         if 'arm64' in machine:
-            binary_path = os.path.join(CLASH_DIR, 'clash-darwin-arm')
+            binary_path = os.path.join(clash_dir_abs, 'clash-darwin-arm')
         elif 'x86_64' in machine:
-            binary_path = os.path.join(CLASH_DIR, 'clash-darwin-amd')
+            binary_path = os.path.join(clash_dir_abs, 'clash-darwin-amd')
     else:
         raise OSError(f"Unsupported operating system: {system}")
 
@@ -229,6 +231,7 @@ if __name__ == '__main__':
     # Ensure the data directory exists for output
     if not os.path.exists('data'):
         os.makedirs('data')
+    # 检查 CLASH_DIR 是否存在，现在 CLASH_DIR 是 'aggregator/clash'
     if not os.path.exists(CLASH_DIR):
         print(f"Error: Clash directory '{CLASH_DIR}' not found. Please create it and place Clash binaries and Country.mmdb inside.")
     else:
