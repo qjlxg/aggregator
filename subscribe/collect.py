@@ -27,7 +27,6 @@ import clash
 import subconverter
 
 from dotenv import load_dotenv
-
 load_dotenv()
 
 PATH = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
@@ -46,8 +45,8 @@ api_headers = {
     'Authorization': f"token {GIST_PAT}"
 }
 
-
 def fetch_repo_file(filename):
+    
     try:
         url = f"{ALL_CLASH_DATA_API}/{filename}?ref=main"
         resp = requests.get(url, headers=api_headers, timeout=10)
@@ -57,15 +56,12 @@ def fetch_repo_file(filename):
             logger.warning(f"{filename} 无 content 字段")
             return ""
         return base64.b64decode(data["content"].replace("\n", "")).decode("utf-8")
-    except requests.exceptions.RequestException as e:
-        logger.error(f"读取 {filename} 失败 (网络错误): {e}")
-        return ""
     except Exception as e:
         logger.error(f"读取 {filename} 失败: {e}")
         return ""
 
-
 def push_repo_file(filename, content):
+   
     try:
         url = f"{ALL_CLASH_DATA_API}/{filename}"
         sha = None
@@ -73,11 +69,8 @@ def push_repo_file(filename, content):
             resp = requests.get(url, headers=api_headers, timeout=10)
             if resp.status_code == 200:
                 sha = resp.json().get("sha")
-        except requests.exceptions.RequestException as e:
-            logger.warning(f"获取 {filename} sha 失败 (网络错误): {e}")
         except Exception as e:
             logger.warning(f"获取 {filename} sha 失败: {e}")
-
         payload = {
             "message": f"Update {filename} via script",
             "content": base64.b64encode(content.encode("utf-8")).decode("utf-8"),
@@ -88,11 +81,8 @@ def push_repo_file(filename, content):
         resp = requests.put(url, json=payload, headers=api_headers, timeout=10)
         resp.raise_for_status()
         logger.info(f"{filename} 已推送到仓库")
-    except requests.exceptions.RequestException as e:
-        logger.error(f"推送 {filename} 到仓库失败 (网络错误): {e}")
     except Exception as e:
         logger.error(f"推送 {filename} 到仓库失败: {e}")
-
 
 class SubscriptionManager:
     def __init__(self, bin_name: str, num_threads: int, display: bool, repo_files: dict):
@@ -136,14 +126,11 @@ class SubscriptionManager:
             records[address] = {"coupon": coupon, "invite_code": invite_code}
         return records
 
-    def assign(self, domains_file: str = "", overwrite: bool = False, pages: int = sys.maxsize,
-               rigid: bool = True, chuck: bool = False, subscribes_file: str = "", refresh: bool = False,
-               customize_link: str = "") -> (List[TaskConfig], dict):
+    def assign(self, domains_file: str = "", overwrite: bool = False, pages: int = sys.maxsize, rigid: bool = True, chuck: bool = False, subscribes_file: str = "", refresh: bool = False, customize_link: str = "") -> (List[TaskConfig], dict):
         subscriptions = self.load_exist(subscribes_file)
         logger.info(f"加载现有订阅完成，数量: {len(subscriptions)}")
         tasks = [
-            TaskConfig(name=utils.random_chars(length=8), sub=x, bin_name=self.bin_name,
-                       special_protocols=self.special_protocols)
+            TaskConfig(name=utils.random_chars(length=8), sub=x, bin_name=self.bin_name, special_protocols=self.special_protocols)
             for x in subscriptions if x
         ] if subscriptions else []
         if tasks and refresh:
@@ -198,85 +185,37 @@ class SubscriptionManager:
                 task_set.add(domain)
         return tasks, domains
 
-
-def is_clash_running(port: int) -> bool:
-    """检查 Clash 是否正在运行."""
-    try:
-        response = requests.get(f"http://127.0.0.1:{port}/", timeout=3)
-        return response.status_code == 200
-    except requests.exceptions.RequestException:
-        return False
-
-
-def wait_for_clash(port: int, timeout: int = 30, initial_delay: float = 1, backoff_factor: float = 1.5) -> bool:
-    """使用指数退避等待 Clash 启动."""
-    delay = initial_delay
-    start_time = time.time()
-
-    while time.time() - start_time < timeout:
-        if is_clash_running(port):
-            logger.info("Clash 启动成功!")
-            return True
-
-        logger.info(f"等待 Clash 启动... (延迟 {delay:.2f} 秒)")
-        time.sleep(delay)
-        delay *= backoff_factor  # 指数退避
-        if delay > 5:
-            delay = 5
-
-    logger.warning("等待 Clash 启动超时.")
-    return False
-
-
-def validate_args(args: argparse.Namespace) -> None:
-    """校验命令行参数."""
-    if args.delay <= 0:
-        raise ValueError("延迟必须是正数.")
-    if not isurl(args.url):
-        raise ValueError("URL 格式不正确.")
-
-
 def aggregate(args: argparse.Namespace) -> None:
-    validate_args(args)  # 校验参数
-
     repo_files = {}
     for fname in ["coupons.txt", "domains.txt", "subscribes.txt", "valid-domains.txt"]:
         repo_files[fname] = fetch_repo_file(fname)
-
     clash_bin, subconverter_bin = executable.which_bin()
     display = not args.invisible
     subscribes_file = "subscribes.txt"
     manager = SubscriptionManager(subconverter_bin, args.num, display, repo_files)
-
     tasks, domains_dict = manager.assign(
         domains_file="domains.txt",
         overwrite=args.overwrite,
         pages=args.pages,
-        rigid=args.rigid,
+        rigid=not args.easygoing,
         chuck=args.chuck,
         subscribes_file=subscribes_file,
         refresh=args.refresh,
         customize_link=args.yourself,
     )
-
     if not tasks:
         logger.error("找不到任何有效配置，退出")
         sys.exit(0)
-
     old_subscriptions = {t.sub for t in tasks if t.sub}
     logger.info(f"开始生成订阅信息，任务总数: {len(tasks)}")
-
     generate_conf = os.path.join(PATH, "subconverter", "generate.ini")
     if os.path.exists(generate_conf) and os.path.isfile(generate_conf):
         os.remove(generate_conf)
-
     results = utils.multi_thread_run(func=workflow.executewrapper, tasks=tasks, num_threads=args.num)
     proxies = list(itertools.chain.from_iterable([x[1] for x in results if x]))
-
     if not proxies:
         logger.error("未获取到任何节点，退出")
         sys.exit(0)
-
     unique_proxies = []
     seen_proxies = set()
     for proxy in proxies:
@@ -287,66 +226,33 @@ def aggregate(args: argparse.Namespace) -> None:
         if proxy_key and proxy_key not in seen_proxies:
             unique_proxies.append(proxy)
             seen_proxies.add(proxy_key)
-
     nodes = []
     workspace = os.path.join(PATH, "clash")
-    clash_process = None  # 用于存储Clash进程对象
-
-    try:
-        if args.skip:
-            nodes = clash.filter_proxies(unique_proxies).get("proxies", [])
-        else:
-            binpath = os.path.join(workspace, clash_bin)
-            config_file = "config.yaml"
-            clash.generate_config(workspace, unique_proxies, config_file)
-            utils.chmod(binpath)
-            logger.info(f"启动 clash, 工作目录: {workspace}, 配置文件: {config_file}")
-
-            # 启动 Clash 进程
-            try:
-                clash_process = subprocess.Popen([binpath, "-d", workspace, "-f", os.path.join(workspace, config_file)])
-                logger.info(f"Clash 启动成功, PID: {clash_process.pid}")
-            except Exception as e:
-                logger.error(f"启动 Clash 失败: {e}")
-                raise  # 重新抛出异常，以便在外部的 try...finally 块中处理
-
-            # 等待 Clash 启动完成
-            if not wait_for_clash(clash.EXTERNAL_CONTROLLER):
-                logger.error("Clash 启动超时， 无法进行后续节点检测")
-                raise Exception("Clash 启动超时")
-
-            logger.info(f"Clash启动成功，开始检测节点，节点数: {len(unique_proxies)}")
-            params = [[p, clash.EXTERNAL_CONTROLLER, 5000, args.url, args.delay, False] for p in
-                      unique_proxies if isinstance(p, dict)]
-            masks = utils.multi_thread_run(func=clash.check, tasks=params, num_threads=args.num, show_progress=display)
-            nodes = [unique_proxies[i] for i in range(len(unique_proxies)) if masks[i]]
-            if not nodes:
-                logger.error("未获取到任何可用节点")
-                sys.exit(0)
-
-    except Exception as e:
-        logger.exception("检测节点过程中发生错误")
-        sys.exit(1)
-
-    finally:
-        # 确保 Clash 进程被终止
-        if clash_process:
-            logger.info("终止 Clash 进程...")
-            try:
-                clash_process.terminate()
-                clash_process.wait(timeout=10)  # 等待进程正常退出
-
-            except subprocess.TimeoutExpired:
-                logger.warning("Clash 进程终止超时，尝试强制杀死...")
-                clash_process.kill()
-            except Exception as e:
-                logger.error(f"终止 Clash 进程失败: {e}")
-
+    if args.skip:
+        nodes = clash.filter_proxies(unique_proxies).get("proxies", [])
+    else:
+        binpath = os.path.join(workspace, clash_bin)
+        config_file = "config.yaml"
+        clash.generate_config(workspace, unique_proxies, config_file)
+        utils.chmod(binpath)
+        logger.info(f"启动 clash, 工作目录: {workspace}, 配置文件: {config_file}")
+        process = subprocess.Popen([binpath, "-d", workspace, "-f", os.path.join(workspace, config_file)])
+        logger.info(f"clash启动成功，开始检测节点，节点数: {len(unique_proxies)}")
+        time.sleep(random.randint(3, 6))
+        params = [[p, clash.EXTERNAL_CONTROLLER, 5000, args.url, args.delay, False] for p in unique_proxies if isinstance(p, dict)]
+        masks = utils.multi_thread_run(func=clash.check, tasks=params, num_threads=args.num, show_progress=display)
+        try:
+            process.terminate()
+        except Exception:
+            logger.error("终止 clash 进程失败")
+        nodes = [unique_proxies[i] for i in range(len(unique_proxies)) if masks[i]]
+        if not nodes:
+            logger.error("未获取到任何可用节点")
+            sys.exit(0)
     subscriptions = {p.pop("sub", "") for p in unique_proxies if p.get("sub", "")}
     for p in unique_proxies:
         p.pop("chatgpt", False)
         p.pop("liveness", True)
-
     data = {"proxies": nodes}
     urls = list(subscriptions)
     source = "proxies.yaml"
@@ -355,10 +261,8 @@ def aggregate(args: argparse.Namespace) -> None:
         os.remove(supplier)
     with open(supplier, "w+", encoding="utf8") as f:
         yaml.dump(data, f, allow_unicode=True)
-
     if os.path.exists(generate_conf) and os.path.isfile(generate_conf):
         os.remove(generate_conf)
-
     targets, records = [], {}
     for target in args.targets:
         target = utils.trim(target).lower()
@@ -366,7 +270,6 @@ def aggregate(args: argparse.Namespace) -> None:
         filename = subconverter.get_filename(target=target)
         list_only = False if target in ("v2ray", "mixed") or "ss" in target else not args.all
         targets.append((convert_name, filename, target, list_only, args.vitiate))
-
     for t in targets:
         success = subconverter.generate_conf(generate_conf, t[0], source, t[1], t[2], True, t[3], t[4])
         if not success:
@@ -376,37 +279,33 @@ def aggregate(args: argparse.Namespace) -> None:
             filepath = os.path.join(DATA_BASE, t[1])
             shutil.move(os.path.join(PATH, "subconverter", t[1]), filepath)
             records[t[1]] = filepath
-
     if records:
         os.remove(supplier)
     else:
         logger.error(f"所有目标转换失败，可查看临时文件: {supplier}")
         sys.exit(1)
-
     logger.info(f"共找到 {len(nodes)} 个节点，已保存到 {list(records.values())}")
     life, traffic = max(0, args.life), max(0, args.flow)
     if life > 0 or traffic > 0:
         new_subscriptions = [x for x in urls if x not in old_subscriptions]
         tasks_check = [[x, 2, traffic, life, 0, True] for x in new_subscriptions]
-        results = utils.multi_thread_run(func=crawl.check_status, tasks=tasks_check, num_threads=args.num,
-                                        show_progress=display)
+        results = utils.multi_thread_run(func=crawl.check_status, tasks=tasks_check, num_threads=args.num, show_progress=display)
         total = len(urls)
         urls = [new_subscriptions[i] for i in range(len(new_subscriptions)) if results[i][0] and not results[i][1]]
         discard = len(tasks_check) - len(urls)
         urls.extend(old_subscriptions)
         logger.info(f"订阅过滤完成，总数: {total}, 保留: {len(urls)}, 丢弃: {discard}")
 
+   
     try:
         push_repo_file("subscribes.txt", "\n".join(urls))
     except Exception as e:
         logger.error(f"推送 subscribes.txt 失败: {e}")
-
     try:
         domains_lines = [utils.extract_domain(url=x, include_protocal=True) for x in urls]
         push_repo_file("valid-domains.txt", "\n".join(list(set(domains_lines))))
     except Exception as e:
         logger.error(f"推送 valid-domains.txt 失败: {e}")
-
     try:
         domains_txt_content = ""
         for k, v in domains_dict.items():
@@ -417,14 +316,12 @@ def aggregate(args: argparse.Namespace) -> None:
         push_repo_file("domains.txt", domains_txt_content.strip())
     except Exception as e:
         logger.error(f"推送 domains.txt 失败: {e}")
-
     try:
         push_repo_file("coupons.txt", repo_files.get("coupons.txt", ""))
     except Exception as e:
         logger.error(f"推送 coupons.txt 失败: {e}")
 
     workflow.cleanup(workspace, [])
-
 
 class CustomHelpFormatter(argparse.HelpFormatter):
     def _format_action_invocation(self, action):
@@ -443,38 +340,24 @@ class CustomHelpFormatter(argparse.HelpFormatter):
         else:
             return super()._format_action_invocation(action)
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(formatter_class=CustomHelpFormatter)
     parser.add_argument("-a", "--all", dest="all", action="store_true", default=False, help="生成 clash 完整配置")
     parser.add_argument("-c", "--chuck", dest="chuck", action="store_true", default=False, help="丢弃可能需要人工验证的候选网站")
     parser.add_argument("-d", "--delay", type=int, required=False, default=5000, help="允许的代理最大延迟")
-    parser.add_argument("-e", "--easygoing", dest="easygoing", action="store_true", default=False,
-                        help="遇到邮箱白名单问题时尝试使用 Gmail 别名")
+    parser.add_argument("-e", "--easygoing", dest="easygoing", action="store_true", default=False, help="遇到邮箱白名单问题时尝试使用 Gmail 别名")
     parser.add_argument("-f", "--flow", type=int, required=False, default=0, help="可用剩余流量，单位: GB")
-    parser.add_argument("-g", "--gist", type=str, required=False, default=os.environ.get("GIST_LINK", ""),
-                        help="GitHub 用户名和 gist id，用 '/' 分隔")
+    parser.add_argument("-g", "--gist", type=str, required=False, default=os.environ.get("GIST_LINK", ""), help="GitHub 用户名和 gist id，用 '/' 分隔")
     parser.add_argument("-i", "--invisible", dest="invisible", action="store_true", default=False, help="不显示检测进度条")
-    # 修改后的行：
     parser.add_argument("-k", "--key", type=str, required=False, default=os.environ.get("GIST_PAT", ""), help="用于编辑 gist 的 GitHub personal access token")
-    parser.add_argument("-l", "--liveness", dest="liveness", action="store_false", default=True,
-                        help="跳过 chatgpt liveness check")
-    parser.add_argument("-n", "--number", dest="num", type=int, required=False, default=5, help="并发数量")
-    parser.add_argument("-o", "--overwrite", dest="overwrite", action="store_true", default=False, help="强制刷新机场列表")
-    parser.add_argument("-p", "--page", dest="pages", type=int, required=False, default=sys.maxsize,
-                        help="自动注册账号时最大页数")
-    parser.add_argument("-r", "--refresh", dest="refresh", action="store_true", default=False, help="使用现有订阅刷新")
-    parser.add_argument("-s", "--skip", dest="skip", action="store_true", default=False, help="跳过 clash 筛选")
-    parser.add_argument("-t", "--targets", nargs="+", required=False, default=["mixed"],
-                        choices=["mixed", "clash", "surfboard", "quantumult", "quantumultx", "loon", "surge", "shadowrocket", "v2ray", "sing-box", "ss"],
-                        help="选择要生成的目标配置")
-    parser.add_argument("-u", "--url", type=str, required=False, default="https://www.google.com", help="测试连通性的 URL")
-    parser.add_argument("-v", "--vitiate", dest="vitiate", action="store_true", default=False,
-                        help="删除 subconverter 配置文件中的注释")
-    parser.add_argument("-w", "--life", type=int, required=False, default=0, help="订阅最短有效期，单位: 天")
-    parser.add_argument("-y", "--yourself", type=str, required=False,
-                        default="",
-                        help="自定义 Clash VERGE 订阅链接")
-    parser.add_argument("--rigid", dest="rigid", action="store_false", default=True, help="严格模式")
-    args = parser.parse_args()
-    aggregate(args)
+    parser.add_argument("-l", "--life", type=int, required=False, default=0, help="剩余可用时长，单位: 小时")
+    parser.add_argument("-n", "--num", type=int, required=False, default=64, help="检测代理使用的线程数")
+    parser.add_argument("-o", "--overwrite", dest="overwrite", action="store_true", default=False, help="覆盖已存在的域名")
+    parser.add_argument("-p", "--pages", type=int, required=False, default=sys.maxsize, help="爬取 Telegram 时的最大页数")
+    parser.add_argument("-r", "--refresh", dest="refresh", action="store_true", default=False, help="使用现有订阅刷新并剔除过期节点")
+    parser.add_argument("-s", "--skip", dest="skip", action="store_true", default=False, help="跳过可用性检测")
+    parser.add_argument("-t", "--targets", nargs="+", choices=subconverter.CONVERT_TARGETS, default=["clash", "v2ray", "singbox"], help=f"选择要生成的配置类型，默认为 clash, v2ray 和 singbox，支持: {subconverter.CONVERT_TARGETS}")
+    parser.add_argument("-u", "--url", type=str, required=False, default="https://www.google.com/generate_204", help="测试 URL")
+    parser.add_argument("-v", "--vitiate", dest="vitiate", action="store_true", default=False, help="忽略默认代理过滤规则")
+    parser.add_argument("-y", "--yourself", type=str, required=False, default=os.environ.get("CUSTOMIZE_LINK", ""), help="你维护的机场列表的 URL")
+    aggregate(args=parser.parse_args())
