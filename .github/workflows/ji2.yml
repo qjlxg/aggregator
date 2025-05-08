@@ -1,33 +1,39 @@
-name: My Workflow
+name: Scrape and Save Telegram Subscriptions
 
 on:
-  workflow_dispatch:  # 允许手动触发
   push:
-    branches:
-      - main  # 当推送到 main 分支时触发
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * *' # 每天 UTC 00:00 运行 (北京时间早上 8:00)
+  workflow_dispatch:
 
 jobs:
-  build:
+  scrape:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 检出代码
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: 设置 Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'  # 你喜欢的 Python 版本 (例如 '3.9')
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
 
-      - name: 安装依赖
-        run: |
-          python -m pip install --upgrade pip
-          pip install python-dotenv  # 如果你使用 .env 文件
-          pip install requests beautifulsoup4
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4 PyGithub
 
-      - name: 运行脚本
-        run: python ji.py
-        env:
-          CONFIG_URL: ${{ secrets.CONFIG_URL }}
-          SUBSCRIBE_URL: ${{ secrets.SUBSCRIBE_URL }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # 确保这个 Secret 已设置!
+    - name: Run Python script
+      env:
+        GT_TOKEN: ${{ secrets.GT_TOKEN }}
+      run: python ji.py
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "GitHub Actions Bot"
+        git add data/subscribes.txt
+        git commit -m "Update Telegram subscriptions [skip ci]" || echo "No changes to commit"
+        git push origin main
