@@ -20,11 +20,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests beautifulsoup4
+          pip install requests beautifulsoup4 configparser
 
       - name: Run Python script
         run: |
           python ji.py
         env:
           GITHUB_TOKEN: ${{ secrets.OKEN }}
-          BRANCH: 'main'  # 如果分支不是 'main'，改为正确名称，例如 'master'
