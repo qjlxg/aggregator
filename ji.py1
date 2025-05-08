@@ -1,107 +1,150 @@
-import os
 import requests
 from bs4 import BeautifulSoup
-from playwright.sync_api import sync_playwright
+import re
+import time
+import random
 import logging
-import concurrent.futures
+import os
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# 配置参数
-BASE_URL = 'https://t.me/s/jichang_list'
-OUTPUT_FILE = 'data/ji.txt'
-MAX_PAGES = 50  # 抓取至少50个页面
-MAX_WORKERS = 10  # 并发测试链接的最大线程数
+def is_valid_url(url):
+    """判断URL是否有效"""
+    invalid_prefixes = ('https://t.me', 'http://t.me', 't.me')
+    return not any(url.startswith(prefix) for prefix in invalid_prefixes)
 
-# 获取 Telegram 页面内容
-def fetch_page(url):
-    try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page()
-            page.goto(url)
-            page.wait_for_load_state('networkidle')  # 等待页面加载完成
-            content = page.content()
-            browser.close()
-        return content
-    except Exception as e:
-        logging.error(f"获取页面内容失败 {url}: {e}")
-        return None
-
-# 提取非 t.me 的链接
-def extract_links(html):
+def get_urls_from_html(html):
+    """从HTML中提取 URLs (改进了效率)"""
     soup = BeautifulSoup(html, 'html.parser')
-    links = set()  # 使用 set 去重
-    for a in soup.find_all('a', href=True):
-        href = a['href']
-        if href.startswith('http') and not href.startswith('https://t.me'):
-            links.add(href)
-    return links
+    targets = soup.find_all(class_=[
+        'tgme_widget_message_text',
+        'tgme_widget_message_photo',
+        'tgme_widget_message_video',
+        'tgme_widget_message_document',
+        'tgme_widget_message_poll',
+    ])
 
-# 获取下一页链接
-def get_next_page_url(html):
-    soup = BeautifulSoup(html, 'html.parser')
-    next_page = soup.find('a', attrs={'data-nav': 'next'})
-    if next_page and 'href' in next_page.attrs:
-        return 'https://t.me' + next_page['href']
-    return None
+    urls = set()  # 使用集合存储 URLs，加速去重和判断
 
-# 测试链接是否可以连接
-def test_url(url):
+    for target in targets:
+        text = target.get_text(separator=' ', strip=True)
+        found_urls = re.findall(r'(?:https?://|www\.)[^\s]+', text)
+        urls.update(url for url in found_urls if is_valid_url(url))  # 添加非 Telegram  URL
+
+    return list(urls)
+
+
+def test_url_connectivity(url, timeout=5):
+    """测试 URL 是否可连通 (增加超时)"""
     try:
-        r = requests.get(url, timeout=10)
-        return r.status_code == 200
-    except Exception as e:
-        logging.debug(f"测试链接失败 {url}: {e}")
+        response = requests.head(url, timeout=timeout)
+        response.raise_for_status()  # 抛出 HTTPError，如果状态码 >= 400
+        return True
+    except requests.RequestException as e:
+        logging.warning(f"URL {url} 连接测试失败: {e}")
         return False
 
-# 主函数
-def main():
-    # 创建输出目录
-    os.makedirs('data', exist_ok=True)
 
-    current_url = BASE_URL
-    collected_links = set()  # 存储所有非 t.me 链接
+def get_next_page_url(html):
+    """从HTML中提取下一页的URL"""
+    soup = BeautifulSoup(html, 'html.parser')
+    load_more = soup.find('a', class_='tme_messages_more')
+    if load_more:
+        next_page_url = 'https://t.me' + load_more['href']
+        return next_page_url
+    return None
+
+
+def fetch_page(url, headers, timeout=10, max_retries=3):
+    """抓取页面内容，带有重试机制"""
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers, timeout=timeout)
+            response.raise_for_status()  # 确保状态码是 200
+            return response.text
+        except requests.exceptions.RequestException as e:
+            logging.warning(f"抓取页面 {url} 尝试 {attempt + 1}/{max_retries} 失败: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(random.uniform(5, 10))  # 重试前随机等待
+            else:
+                logging.error(f"抓取页面 {url} 失败，超出最大重试次数")
+                return None
+    return None  # 如果所有重试都失败
+
+def save_urls_to_file(urls, filename='data/ji.txt'):
+    """保存 URL 到文件"""
+    # 确保目录存在
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+
+    try:
+        with open(filename, 'w', encoding='utf-8') as f:
+            for url in urls:
+                f.write(url + '\n')
+        logging.info(f"URL 已保存到 {filename}")
+    except IOError as e:
+        logging.error(f"保存 URL 到文件 {filename} 失败: {e}")
+
+
+def crawl_single_source(start_url, headers, max_pages):
+    """抓取单个来源的 URL"""
+    all_urls = set()
+    current_url = start_url
     page_count = 0
 
-    # 抓取至少50个页面
-    while current_url and page_count < MAX_PAGES:
-        logging.info(f"正在抓取第 {page_count + 1} 页：{current_url}")
-        html = fetch_page(current_url)
-        if not html:
-            logging.error(f"页面 {current_url} 获取失败，停止抓取")
-            break
+    while current_url and page_count < max_pages:
+        logging.info(f"正在抓取页面: {current_url} (第 {page_count + 1}/{max_pages} 页，来源: {start_url})")
 
-        # 提取链接并去重
-        links = extract_links(html)
-        logging.info(f"第 {page_count + 1} 页找到 {len(links)} 个非 t.me 链接")
-        collected_links.update(links)
+        html = fetch_page(current_url, headers)
+        if html is None:
+            break  # 抓取失败，停止
 
-        # 获取下一页链接
-        current_url = get_next_page_url(html)
+        new_urls = get_urls_from_html(html)
+        all_urls.update(new_urls)
+
+        next_page_url = get_next_page_url(html)
+        current_url = next_page_url
+
         page_count += 1
+        time.sleep(random.uniform(35, 45))  # 礼貌地随机延迟，避免被封
 
-    logging.info(f"总共抓取 {page_count} 个页面，发现 {len(collected_links)} 个唯一非 t.me 链接")
+    return all_urls
 
-    # 测试链接有效性
-    valid_links = []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        future_to_url = {executor.submit(test_url, link): link for link in collected_links}
-        for future in concurrent.futures.as_completed(future_to_url):
-            url = future_to_url[future]
-            try:
-                if future.result():
-                    valid_links.append(url)
-                    logging.info(f"有效链接：{url}")
-            except Exception as e:
-                logging.error(f"测试链接失败 {url}: {e}")
 
-    # 保存有效链接到文件
-    with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-        for link in valid_links:
-            f.write(link + '\n')
-    logging.info(f"保存了 {len(valid_links)} 个有效链接到 {OUTPUT_FILE}")
+def main(start_urls, max_pages=10):
+    """主函数，控制多个来源的抓取流程"""
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36'
+    }
+
+    all_urls = set()
+
+    for start_url in start_urls:
+        logging.info(f"开始处理来源: {start_url}")
+        source_urls = crawl_single_source(start_url, headers, max_pages)
+        all_urls.update(source_urls)
+        logging.info(f"完成来源: {start_url}，找到 {len(source_urls)} 个 URL")
+        time.sleep(random.uniform(60, 90)) # 每个来源抓取完毕后增加延迟
+
+        # 保存中间结果
+        save_urls_to_file(list(all_urls), 'data/ji_partial.txt')
+
+    # 验证 URL连通性
+    valid_urls = [url for url in all_urls if test_url_connectivity(url)]
+
+    logging.info(f"所有来源抓取完毕")
+    logging.info(f"找到的 URL 总数: {len(all_urls)}")
+    logging.info(f"有效的 URL 数量: {len(valid_urls)}")
+
+    # 保存最终结果
+    save_urls_to_file(valid_urls, 'data/ji.txt')
 
 if __name__ == '__main__':
-    main()
+    # 可以将多个起始 URL 放入列表中
+    start_urls_list = [
+        'https://t.me/s/aak_vpn',
+        'https://t.me/s/dujuapp',
+        # 添加更多 Telegram 频道 URL
+    ]
+    max_pages_to_crawl = 40  # 你可以修改每个来源的最大抓取页数
+    main(start_urls_list, max_pages_to_crawl)
