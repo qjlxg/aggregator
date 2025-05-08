@@ -1,4 +1,4 @@
-name: Scrape and Save Telegram Subscriptions
+name: Telegram Subscriptions
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
     - name: Run Python script
       env:
         GT_TOKEN: ${{ secrets.GT_TOKEN }}
-      run: python ji.py
+      run: python Telegram Subscriptions.py
 
     - name: Configure Git
       run: |
