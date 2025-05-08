@@ -30,10 +30,16 @@ jobs:
         GT_TOKEN: ${{ secrets.GT_TOKEN }}
       run: python ji.py
 
-    - name: Commit and push changes
+    - name: Configure Git
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "GitHub Actions Bot"
+
+    - name: Pull latest changes
+      run: git pull origin main
+
+    - name: Commit and push changes
+      run: |
         git add data/subscribes.txt
         git commit -m "Update Telegram subscriptions [skip ci]" || echo "No changes to commit"
         git push origin main
