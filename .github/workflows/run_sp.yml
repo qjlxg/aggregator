@@ -20,6 +20,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install aiohttp
           pip install pyyaml requests # 安装脚本所需的库
 
       - name: Verify required files and directories
