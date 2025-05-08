@@ -80,9 +80,9 @@ def push_repo_file(filename, content):
             payload["sha"] = sha
         resp = requests.put(url, json=payload, headers=api_headers, timeout=10)
         resp.raise_for_status()
-        logger.info(f"{filename} 已推送到私有仓库")
+        logger.info(f"{filename} 已推送到仓库")
     except Exception as e:
-        logger.error(f"推送 {filename} 到私有仓库失败: {e}")
+        logger.error(f"推送 {filename} 到仓库失败: {e}")
 
 class SubscriptionManager:
     def __init__(self, bin_name: str, num_threads: int, display: bool, repo_files: dict):
