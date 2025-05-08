@@ -1,6 +1,7 @@
 name: My Workflow
 
-on:
+on: 
+  workflow_dispatch:
   push:
     branches:
       - main  # Or your branch name
