@@ -1,4 +1,4 @@
-name: Run URL ji2
+name: Run URL ji
 
 on:
   schedule:
@@ -27,3 +27,4 @@ jobs:
           python ji.py
         env:
           GITHUB_TOKEN: ${{ secrets.OKEN }}
+          REPO_URL: 'https://github.com/qjlxg/362'
