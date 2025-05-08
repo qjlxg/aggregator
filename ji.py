@@ -7,10 +7,6 @@ import logging
 import os
 import threading
 from queue import Queue
-from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -109,7 +105,7 @@ def get_start_urls_from_config(config_url):
         return []
 
 def save_urls_to_github(urls, repo_url, github_token):
-    
+    """保存URL到 GitHub 仓库，并隐藏链接"""
     try:
         # GitHub API 需要去掉 raw
         api_url = repo_url.replace('/raw/refs/heads/main', '/contents/data/subscribes.txt')
@@ -144,7 +140,7 @@ def save_urls_to_github(urls, repo_url, github_token):
 
         put_response = requests.put(api_url, headers=headers, json=data)
         put_response.raise_for_status()
-        logging.info("URL 已追加保存到 GitHub 仓库 .")
+        logging.info("URL 已追加保存到 GitHub 仓库 (链接已隐藏).")
 
     except requests.RequestException as e:
         logging.error(f"保存到 GitHub 仓库失败: {e}")
@@ -224,9 +220,9 @@ def main(config_url, subscribe_url, github_token, max_pages=10, num_threads=5):
 
 
 if __name__ == '__main__':
-    config_url = os.getenv(CONFIG_URL_ENV)
-    subscribe_url = os.getenv(SUBSCRIBE_URL_ENV)
-    github_token = os.getenv(GITHUB_TOKEN_ENV)
+    config_url = os.environ.get(CONFIG_URL_ENV)
+    subscribe_url = os.environ.get(SUBSCRIBE_URL_ENV)
+    github_token = os.environ.get(GITHUB_TOKEN_ENV)  #or os.environ.get("JI_GITHUB_TOKEN") if your secret setting has that name.
 
     if not config_url or not subscribe_url or not github_token:
         logging.error("请设置 CONFIG_URL, SUBSCRIBE_URL 和 GITHUB_TOKEN 环境变量。")
