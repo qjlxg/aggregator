@@ -7,8 +7,7 @@ import logging
 import os
 import threading
 from queue import Queue
-from urllib.parse import urlparse
-import base64
+from github import Github
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -31,20 +30,16 @@ USER_AGENTS = [
     'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0' #added
 ]
 
-# Constants
-GITHUB_CONFIG_URL_ENCODED = "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3FqbHhnLzM2Mi9tYWluL2RhdGEvY29uZmlnLnR4dA=="  # Base64 encoded (main branch)
-GITHUB_SUBSCRIBES_URL_ENCODED = "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3FqbHhnLzM2Mi9tYWluL2RhdGEvc3Vic2NyaWJlcy50eHQ=" # Base64 encoded (main branch)
-CONFIG_URL_DECODED = base64.b64decode(GITHUB_CONFIG_URL_ENCODED).decode('utf-8')
-SUBSCRIBES_URL_DECODED = base64.b64decode(GITHUB_SUBSCRIBES_URL_ENCODED).decode('utf-8') #add
-
 def get_random_headers():
     """获取随机请求头"""
     return {'User-Agent': random.choice(USER_AGENTS)}
+
 
 def is_valid_url(url):
     """判断URL是否有效"""
     invalid_prefixes = ('https://t.me', 'http://t.me', 't.me')
     return not any(url.startswith(prefix) for prefix in invalid_prefixes)
+
 
 def get_urls_from_html(html):
     """从HTML中提取URL"""
@@ -61,6 +56,7 @@ def get_urls_from_html(html):
         urls.update(url for url in found_urls if is_valid_url(url))
     return list(urls)
 
+
 def test_url_connectivity(url, timeout=5):
     """测试URL是否可连通"""
     try:
@@ -71,17 +67,19 @@ def test_url_connectivity(url, timeout=5):
         logging.warning(f"URL {url} 连接测试失败: {e}")
         return False
 
+
 def get_next_page_url(html):
     """提取下一页URL"""
     soup = BeautifulSoup(html, 'html.parser')
     load_more = soup.find('a', class_='tme_messages_more')
     return 'https://t.me' + load_more['href'] if load_more else None
 
+
 def fetch_page(url, headers, timeout=10, max_retries=3):
     """抓取页面内容，带重试机制"""
     for attempt in range(max_retries):
         try:
-            response = requests.get(url, headers=headers, timeout=timeout) # Removed proxies
+            response = requests.get(url, headers=headers, timeout=timeout)
             response.raise_for_status()
             return response.text
         except requests.RequestException as e:
@@ -93,47 +91,28 @@ def fetch_page(url, headers, timeout=10, max_retries=3):
                 return None
 
 
-def append_urls_to_github(urls, github_url):
-    """将 URL 追加保存到 GitHub 文件"""
+def save_urls_to_github(repo_name, file_path, content, github_token):
+    """保存内容到 GitHub 私有仓库"""
+    g = Github(github_token)
+    repo = g.get_user().get_repo(repo_name)
     try:
-        # 获取文件内容
-        response = requests.get(github_url)
-        response.raise_for_status()
-        existing_content = response.text
+        contents = repo.get_contents(file_path)
+        updated_content = contents.decoded_content.decode('utf-8') + '\n' + '\n'.join(content)
+        repo.update_file(contents.path, "Add new subscriptions", updated_content.encode('utf-8'), contents.sha)
+        logging.info(f"URL 追加保存到 GitHub: {repo_name}/{file_path}")
+    except Exception as e:
+        repo.create_file(file_path, "Initial subscriptions", '\n'.join(content).encode('utf-8'))
+        logging.info(f"URL 首次保存到 GitHub: {repo_name}/{file_path}")
+    return True
 
-        # 追加 URL (去重)
-        existing_urls = set(existing_content.splitlines())
-        new_urls = set(urls) - existing_urls
-        updated_content = existing_content + "\n" + "\n".join(new_urls)
 
-        # 将 content 再次上传到 GitHub (这里只是模拟. 上传需要 GitHub API 认证，这里省略)
-        # Real implementation would involve using GitHub API to update the file.
-        # For demonstration, we just print the content to be uploaded.
-        logging.info(f"Content to be appended to {github_url}:\n{updated_content}")
-        print(f"Content to be appended to {github_url}:\n{updated_content}")  # for actual use replace this line with GitHub API calls
-        return updated_content #return the updated content to write file locally.
-    except requests.RequestException as e:
-        logging.error(f"追加到 {github_url} 失败: {e}")
-        return None
-
-def save_urls_to_file(urls, filename='data/ji.txt'):
-    """保存URL到文件"""
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
-    try:
-        with open(filename, 'w', encoding='utf-8') as f:
-            for url in urls:
-                f.write(url + '\n')
-        logging.info(f"URL 已保存到 {filename}")
-    except IOError as e:
-        logging.error(f"保存 {filename} 失败: {e}")
-
-def crawl_single_source(start_url, headers, max_pages, url_queue):  # Removed proxies
+def crawl_single_source(start_url, headers, max_pages, url_queue):
     """抓取单个来源的URL"""
     current_url = start_url
     page_count = 0
     while current_url and page_count < max_pages:
         logging.info(f"抓取: {current_url} (第 {page_count + 1}/{max_pages} 页，来源: {start_url})")
-        html = fetch_page(current_url, headers)  # Removed proxies
+        html = fetch_page(current_url, headers)
         if html is None:
             break
         new_urls = get_urls_from_html(html)
@@ -141,7 +120,8 @@ def crawl_single_source(start_url, headers, max_pages, url_queue):  # Removed pr
             url_queue.put(url)
         current_url = get_next_page_url(html)
         page_count += 1
-        time.sleep(random.uniform(35, 45))  # 随机延迟
+        time.sleep(random.uniform(35, 45)) # 随机延迟
+
 
 def worker(url_queue, valid_urls, lock):
     """工作线程：验证URL"""
@@ -155,20 +135,8 @@ def worker(url_queue, valid_urls, lock):
         url_queue.task_done()
 
 
-def main(max_pages=10, num_threads=5):
+def main(start_urls, max_pages=10, num_threads=5, github_token=None):
     """主函数：多线程抓取"""
-
-    # Get start_urls from the config file
-    try:
-        response = requests.get(CONFIG_URL_DECODED)
-        response.raise_for_status()
-        start_urls = [url.strip() for url in response.text.splitlines() if url.strip()]
-        print(f"Loaded start URLs from config: {start_urls}")  # Debug print
-    except requests.RequestException as e:
-        logging.error(f"Failed to fetch start URLs from {CONFIG_URL_DECODED}: {e}")
-        return  # Exit if cannot fetch start urls
-
-
     url_queue = Queue()
     valid_urls = set()
     lock = threading.Lock()
@@ -182,9 +150,8 @@ def main(max_pages=10, num_threads=5):
 
     # 创建爬取线程
     for start_url in start_urls:
-        # Removed proxies
         headers = get_random_headers()
-        t = threading.Thread(target=crawl_single_source, args=(start_url, headers, max_pages, url_queue)) # Removed proxies
+        t = threading.Thread(target=crawl_single_source, args=(start_url, headers, max_pages, url_queue))
         t.start()
         threads.append(t)
 
@@ -201,74 +168,31 @@ def main(max_pages=10, num_threads=5):
     logging.info(f"所有来源抓取完毕")
     logging.info(f"有效 URL 数量: {len(valid_urls)}")
 
-    #append and Save the result to Github repo.
-    updated_content = append_urls_to_github(list(valid_urls), SUBSCRIBES_URL_DECODED)
-
-    #save to local file temporarily
-    if updated_content:
-        filename = 'data/subscribes.txt'
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-        try:
-            with open(filename, 'w', encoding='utf-8') as f:
-                f.write(updated_content)
-            logging.info(f"URL 已保存到 {filename}")
-        except IOError as e:
-            logging.error(f"保存 {filename} 失败: {e}")
-
-
-import base64
-import requests
-import os
-
-def update_github_file(github_url, content, github_token):
-
-    owner, repo, path = extract_github_info(github_url)
-    api_url = f"https://api.github.com/repos/{owner}/{repo}/contents/{path}"
-
-    # 1. Get the file's SHA
-    headers = {"Authorization": f"token {github_token}", "Accept": "application/vnd.github.v3+json"}
-    response = requests.get(api_url, headers=headers)
-    response.raise_for_status()
-    file_data = response.json()
-    sha = file_data["sha"]
-
-    # 2. Encode the updated content
-    encoded_content = base64.b64encode(content.encode("utf-8")).decode("utf-8")
-
-    # 3. Prepare the update payload
-    payload = {
-        "message": "Update subscribes.txt",
-        "content": encoded_content,
-        "sha": sha,
-        "branch": "main"
-    }
-
-    # 4. Update the file
-    response = requests.put(api_url, headers=headers, json=payload)
-    response.raise_for_status() # Raise HTTPError for bad responses (4xx or 5xx)
-
-    logging.info("File updated successfully in GitHub.")
-
-
-def extract_github_info(github_url):
-    """Parses a github raw url to extract owner, repo, and path."""
-    parts = github_url.replace("https://github.com/", "").replace("https://raw.githubusercontent.com/", "").split("/")
-    owner = parts[0]
-    repo = parts[1]
-    path = "/".join(parts[4:])
-    return owner, repo, path
+    if github_token:
+        repo_name = 'qjlxg/362' #
+        file_path = 'data/subscribes.txt' # 
+        save_urls_to_github(repo_name, file_path, list(valid_urls), github_token)
 
 
 if __name__ == '__main__':
-    import os
+    github_token = os.environ.get('GT_TOKEN') # 使用 GT_TOKEN
 
-    github_token = os.environ.get("GITHUB_TOKEN") #set this up correctly!
+  
+    config_repo_name = 'qjlxg/362' # 
+    config_file_path = 'data/config.txt' # 
+    start_urls_list = []
 
-    if not github_token:
-       logging.error("GiHub token Missing!")
-       exit()
+    try:
+        g = Github(github_token)
+        repo = g.get_user().get_repo(config_repo_name)
+        config_content_file = repo.get_contents(config_file_path)
+        config_content = config_content_file.decoded_content.decode('utf-8')
+        start_urls_list = [url.strip() for url in config_content.strip().split('\n') if url.strip()]
+        logging.info(f"从 GitHub 读取到 {len(start_urls_list)} 个起始 URL")
+    except Exception as e:
+        logging.error(f"无法从 GitHub 读取配置文件: {e}")
+        # 如果无法读取，可以使用一个空的列表作为备用
+        start_urls_list = []
 
     max_pages_to_crawl = 10
-
-    # Your main function call
-    main(max_pages_to_crawl)
+    main(start_urls_list, max_pages_to_crawl, github_token=github_token)
