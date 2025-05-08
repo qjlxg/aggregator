@@ -32,8 +32,8 @@ USER_AGENTS = [
 ]
 
 # Constants
-GITHUB_CONFIG_URL_ENCODED = "aHR0cHM6Ly9naXRodWIuY29tL3FqbHhnLzM2Mi9yYXcvcmVmcy9oZWFkcy9tYWluL2RhdGEvY29uZmlnLnR4dA=="  # Base64 encoded
-GITHUB_SUBSCRIBES_URL_ENCODED = "aHR0cHM6Ly9naXRodWIuY29tL3FqbHhnLzM2Mi9yYXcvcmVmcy9oZWFkcy9tYWluL2RhdGEvc3Vic2NyaWJlcy50eHQ=" # Base64 encoded
+GITHUB_CONFIG_URL_ENCODED = "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3FqbHhnLzM2Mi9yZWZzL2hlYWRzL21haW4vZGF0YS9jb25maWcudHh0"  # Base64 encoded
+GITHUB_SUBSCRIBES_URL_ENCODED = "aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3FqbHhnLzM2Mi9yZWZzL2hlYWRzL21haW4vZGF0YS9zdWJzY3JpYmVzLnR4dA==" # Base64 encoded
 CONFIG_URL_DECODED = base64.b64decode(GITHUB_CONFIG_URL_ENCODED).decode('utf-8')
 SUBSCRIBES_URL_DECODED = base64.b64decode(GITHUB_SUBSCRIBES_URL_ENCODED).decode('utf-8') #add
 
@@ -216,7 +216,59 @@ def main(max_pages=10, num_threads=5):
             logging.error(f"保存 {filename} 失败: {e}")
 
 
+import base64
+import requests
+import os
+
+def update_github_file(github_url, content, github_token):
+
+    owner, repo, path = extract_github_info(github_url)
+    api_url = f"https://api.github.com/repos/{owner}/{repo}/contents/{path}"
+
+    # 1. Get the file's SHA
+    headers = {"Authorization": f"token {github_token}", "Accept": "application/vnd.github.v3+json"}
+    response = requests.get(api_url, headers=headers)
+    response.raise_for_status()
+    file_data = response.json()
+    sha = file_data["sha"]
+
+    # 2. Encode the updated content
+    encoded_content = base64.b64encode(content.encode("utf-8")).decode("utf-8")
+
+    # 3. Prepare the update payload
+    payload = {
+        "message": "Update subscribes.txt",
+        "content": encoded_content,
+        "sha": sha,
+        "branch": "main"
+    }
+
+    # 4. Update the file
+    response = requests.put(api_url, headers=headers, json=payload)
+    response.raise_for_status() # Raise HTTPError for bad responses (4xx or 5xx)
+
+    logging.info("File updated successfully in GitHub.")
+
+
+def extract_github_info(github_url):
+    """Parses a github raw url to extract owner, repo, and path."""
+    parts = github_url.replace("https://github.com/", "").replace("https://raw.githubusercontent.com/", "").split("/")
+    owner = parts[0]
+    repo = parts[1]
+    path = "/".join(parts[4:])
+    return owner, repo, path
+
 
 if __name__ == '__main__':
+    import os
+
+    github_token = os.environ.get("GITHUB_TOKEN") #set this up correctly!
+
+    if not github_token:
+       logging.error("GiHub token Missing!")
+       exit()
+
     max_pages_to_crawl = 10
+
+    # Your main function call
     main(max_pages_to_crawl)
