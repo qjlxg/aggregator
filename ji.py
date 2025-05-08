@@ -142,8 +142,41 @@ def main(start_urls, max_pages=10):
 if __name__ == '__main__':
     # 可以将多个起始 URL 放入列表中
     start_urls_list = [
-        'https://t.me/s/aak_vpn',
-        'https://t.me/s/dujuapp',
+'https://t.me/s/vpn_3000',
+'https://t.me/s/academi_vpn',
+'https://t.me/s/dingyue_center',
+'https://t.me/s/freedatazone1',
+'https://t.me/s/freev2rayi',
+'https://t.me/s/mypremium98',
+'https://t.me/s/tigervpn_free',
+'https://t.me/s/inikotesla',
+'https://t.me/s/iSegaro',
+'https://t.me/s/v2rayngalpha',
+'https://t.me/s/v2rayngalphagamer',
+'https://t.me/s/jiedian_share',
+'https://t.me/s/vpn_mafia',
+'https://t.me/s/dr_v2ray',
+'https://t.me/s/litevp',
+'https://t.me/s/allv2board',
+'https://t.me/s/bigsmoke_config',
+'https://t.me/s/vpn_443',
+'https://t.me/s/prossh',
+'https://t.me/s/mftizi',
+'https://t.me/s/qun521',
+'https://t.me/s/haoshangle',
+'https://t.me/s/v2rayng_my2',
+'https://t.me/s/go4sharing',
+'https://t.me/s/wearestand',
+'https://t.me/s/trand_farsi',
+'https://t.me/s/tongtiange',
+'https://t.me/s/v2raycollectordonate',
+'https://t.me/s/V2rayCollectorDonate',
+'https://t.me/s/vpnplusee_free',
+'https://t.me/s/hadowsocks_s',
+'https://t.me/s/freekankan',
+'https://t.me/s/vpnfail_news',
+'https://t.me/s/awxdy666',
+
         # 添加更多 Telegram 频道 URL
     ]
     max_pages_to_crawl = 40  # 你可以修改每个来源的最大抓取页数
