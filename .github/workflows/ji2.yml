@@ -1,29 +1,29 @@
-name: Run URL ji
+name: My Workflow
 
 on:
-  schedule:
-    - cron: 0 0 * * *  # 每天运行一次
-  workflow_dispatch:  # 允许手动触发
+  push:
+    branches:
+      - main  # Or your branch name
 
 jobs:
-  run-scraper:
+  build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.x'  # Replace with your desired Python version
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests beautifulsoup4 configparser
+          pip install python-dotenv
+          # Install any other dependencies your project needs here
+          pip install requests beautifulsoup4
 
-      - name: Run Python script
-        run: |
-          python ji.py
-        env:
-          GITHUB_TOKEN: ${{ secrets.OKEN }}
+      - name: Run your script
+        run: python ji.py
