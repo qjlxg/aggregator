@@ -8,8 +8,7 @@ import os
 import threading
 from queue import Queue
 from github import Github
-import base64
-#base64
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 USER_AGENTS = [
@@ -133,59 +132,6 @@ def crawl_single_source(start_url, headers, max_pages, url_queue):
         logging.info(f"等待 {sleep_time:.2f} 秒后抓取下一页")
         time.sleep(sleep_time)
 
-def process_url(url, headers):
-    """
-    Fetches the data from a URL, decodes base64, and checks traffic.
-    Returns True if traffic > 0, False otherwise, or None if an error occured.
-    """
-    try:
-        response = requests.get(url, headers=headers, timeout=10)  # Adjust timeout as needed
-        response.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
-        content = response.text
-
-        # Attempt base64 decoding.  Wrap in try..except for robustness
-        try:
-            decoded_content = base64.b64decode(content).decode('utf-8')
-        except Exception as e:
-            logging.warning(f"URL {url}: Base64 decoding failed: {e}")
-            return None
-
-        # Search for keywords and extract the traffic value.  This needs to be robust.
-        if "剩余流量" in decoded_content or "流量" in decoded_content:
-            #  Example: "剩余流量：1024MB"， "流量还剩: 2GB"
-            match = re.search(r"(剩余流量|流量)[:：]\s*([\d.]+)\s*([GMK]?B)", decoded_content) #more general
-            if match:
-                value = float(match.group(2)) #流量数值
-                unit = match.group(3).upper() #单位
-
-                if unit == "GB":
-                    value *= 1024
-                elif unit == "MB":
-                    pass #流量单位是MB，不用改变
-                elif unit == "KB":
-                    value /= 1024 #转化为MB
-                # Only return True if traffic > 0
-                if value > 0:
-                    logging.info(f"URL {url}: Traffic found: {value}MB. Keeping.")
-                    return True
-                else:
-                    logging.info(f"URL {url}: Traffic found: {value}MB. Discarding (<= 0).")
-                    return False
-            else:
-                logging.warning(f"URL {url}: Keywords found, but no traffic value could be extracted.")
-                return None #Couldn't extract traffic value
-        else:
-            logging.info(f"URL {url}: Keywords '剩余流量' or '流量' not found.")
-            return False # No keywords found
-
-    except requests.RequestException as e:
-        logging.warning(f"URL {url}: Request failed: {e}")
-        return None
-    except Exception as e:
-        logging.error(f"URL {url}: An unexpected error occurred: {e}")
-        return None
-
-
 def worker(url_queue, valid_urls, lock):
     while True:
         url = url_queue.get()
@@ -193,25 +139,17 @@ def worker(url_queue, valid_urls, lock):
             logging.info("worker 收到停止信号，退出")
             break
         try:
-
-            headers = get_random_headers()
-            result = process_url(url, headers)
-
-            if result is True: #explicitly check for True
+            if test_url_connectivity(url):
                 with lock:
                     valid_urls.add(url)
-                logging.info(f"URL {url} has traffic > 0, added to valid URLs.")
-            elif result is False:
-                 logging.info(f"URL {url} discarded due to low or no traffic or no keywords.")
+                logging.info(f"URL {url} 有效，已添加到有效 URL 集合")
             else:
-                logging.warning(f"URL {url} skipped due to error during processing.")
+                logging.warning(f"URL {url} 连接测试失败")
 
         except Exception as e:
-             logging.error(f"测试和处理 URL {url} 时发生错误: {e}")
+             logging.error(f"测试 URL {url} 的连接性时发生错误: {e}")
         finally:
             url_queue.task_done()
-
-
 
 def main(start_urls, max_pages=10, num_threads=5, github_token=None):
 
