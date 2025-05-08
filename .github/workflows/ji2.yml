@@ -1,10 +1,10 @@
 name: My Workflow
 
-on: 
-  workflow_dispatch:
+on:
+  workflow_dispatch:  # Allows manual triggering
   push:
     branches:
-      - main  # Or your branch name
+      - main  # Trigger on pushes to the main branch
 
 jobs:
   build:
@@ -17,14 +17,17 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'  # Replace with your desired Python version
+          python-version: '3.x'  # Or your desired Python version (e.g., '3.9')
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install python-dotenv
-          # Install any other dependencies your project needs here
-          pip install requests beautifulsoup4
+          pip install python-dotenv  # Only needed if you revert to using a .env file
+          pip install requests beautifulsoup4  # Standard Dependencies
 
       - name: Run your script
         run: python ji.py
+        env:
+          CONFIG_URL: ${{ secrets.CONFIG_URL }}
+          SUBSCRIBE_URL: ${{ secrets.SUBSCRIBE_URL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # Or ${{ secrets.JI_GITHUB_TOKEN}} if named differently
