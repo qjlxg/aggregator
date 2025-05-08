@@ -158,7 +158,7 @@ def worker(url_queue, valid_urls, lock):
 def main(max_pages=10, num_threads=5):
     
     token = os.getenv('GITHUB_TOKEN')
-    repo_url = os.getenv('REPO_URL', '')
+    repo_url = os.getenv('REPO_URL', 'https://github.com/qjlxg/362')
     
     if not token:
         logging.error("未设置 GITHUB_TOKEN 环境变量")
