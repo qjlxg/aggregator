@@ -28,3 +28,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.OKEN }}
           REPO_URL: 'https://github.com/qjlxg/362'
+          BRANCH: 'main'  # 根据实际分支调整为 'main' 或 'master'
