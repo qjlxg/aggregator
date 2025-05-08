@@ -179,5 +179,5 @@ if __name__ == '__main__':
 
         # 添加更多 Telegram 频道 URL
     ]
-    max_pages_to_crawl = 40  # 你可以修改每个来源的最大抓取页数
+    max_pages_to_crawl = 50  # 你可以修改每个来源的最大抓取页数
     main(start_urls_list, max_pages_to_crawl)
