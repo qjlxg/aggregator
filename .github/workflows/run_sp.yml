@@ -1,0 +1,26 @@
+# GitHub Actions workflow 文件，用于手动触发执行 sp.py 脚本
+name: Run sp.py # 工作流的名称，可以自定义
+
+on:
+  workflow_dispatch: # 定义触发条件，workflow_dispatch 表示可以手动触发
+
+jobs:
+  run_script: # 定义一个 job，名称为 run_script
+    runs-on: ubuntu-latest # 指定运行环境为 Ubuntu 最新版
+    steps:
+      - name: Checkout repository # 定义一个 step，名称为 Checkout repository
+        uses: actions/checkout@v4 # 使用 actions/checkout@v4 这个 action，作用是将代码仓库检出到 runner 中
+
+      - name: Set up Python # 定义一个 step，名称为 Set up Python
+        uses: actions/setup-python@v5 # 使用 actions/setup-python@v5 这个 action，作用是配置 Python 环境
+        with:
+          python-version: '3.9' # 指定 Python 版本为 3.9，您可以根据需要修改
+
+      - name: Install dependencies # 定义一个 step，名称为 Install dependencies
+        run: |
+          python -m pip install --upgrade pip # 升级 pip
+          pip install -r requirements.txt # 安装 requirements.txt 中的依赖，如果您的脚本没有依赖，可以删除这一行
+          pip install PyYAML # 确保安装了 PyYAML，因为您的脚本中使用了它
+
+      - name: Run sp.py # 定义一个 step，名称为 Run sp.py
+        run: python sp.py # 运行 sp.py 脚本
