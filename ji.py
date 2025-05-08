@@ -7,7 +7,10 @@ import logging
 import os
 import threading
 from queue import Queue
-import base64
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -29,6 +32,11 @@ USER_AGENTS = [
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:90.0) Gecko/20100101 Firefox/90.0',#added
     'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0' #added
 ]
+
+# 环境变量 Keys
+CONFIG_URL_ENV = "CONFIG_URL"
+SUBSCRIBE_URL_ENV = "SUBSCRIBE_URL"
+GITHUB_TOKEN_ENV = "GITHUB_TOKEN"
 
 def get_random_headers():
     """获取随机请求头"""
@@ -79,7 +87,7 @@ def fetch_page(url, headers, timeout=10, max_retries=3):
     """抓取页面内容，带重试机制"""
     for attempt in range(max_retries):
         try:
-            response = requests.get(url, headers=headers, timeout=timeout)
+            response = requests.get(url, headers=headers, timeout=timeout) # Removed proxies
             response.raise_for_status()
             return response.text
         except requests.RequestException as e:
@@ -90,26 +98,67 @@ def fetch_page(url, headers, timeout=10, max_retries=3):
                 logging.error(f"抓取 {url} 失败，超出最大重试次数")
                 return None
 
-
-def save_urls_to_file(urls, filename='data/ji.txt'):
-    """保存URL到文件"""
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+def get_start_urls_from_config(config_url):
+    """从配置URL获取起始URL列表"""
     try:
-        with open(filename, 'w', encoding='utf-8') as f:
-            for url in urls:
-                f.write(url + '\n')
-        logging.info(f"URL 已保存到 {filename}")
-    except IOError as e:
-        logging.error(f"保存 {filename} 失败: {e}")
+        response = requests.get(config_url)
+        response.raise_for_status()
+        return response.text.strip().splitlines()
+    except requests.RequestException as e:
+        logging.error(f"获取配置失败: {e}")
+        return []
+
+def save_urls_to_github(urls, repo_url, github_token):
+    
+    try:
+        # GitHub API 需要去掉 raw
+        api_url = repo_url.replace('/raw/refs/heads/main', '/contents/data/subscribes.txt')
+        headers = {
+            "Authorization": f"token {github_token}",
+            "Accept": "application/vnd.github.v3+json"
+        }
+
+        # 获取现有文件内容和 sha 值
+        get_response = requests.get(api_url, headers=headers)
+        get_response.raise_for_status()
+        existing_data = get_response.json()
+        sha = existing_data['sha']
+        content = existing_data.get('content', '')
+        if content:
+            import base64
+            content = base64.b64decode(content).decode('utf-8')
+
+        updated_content = content + "\n".join(urls) + "\n"
+
+        # Base64 编码新内容
+        import base64
+        updated_content_encoded = base64.b64encode(updated_content.encode('utf-8')).decode('utf-8')
+
+        # 构建更新请求
+        data = {
+            "message": "Add new URLs",
+            "content": updated_content_encoded,
+            "sha": sha,
+            "branch": "main"
+        }
+
+        put_response = requests.put(api_url, headers=headers, json=data)
+        put_response.raise_for_status()
+        logging.info("URL 已追加保存到 GitHub 仓库 .")
+
+    except requests.RequestException as e:
+        logging.error(f"保存到 GitHub 仓库失败: {e}")
+    except KeyError as e:
+        logging.error(f"解析 GitHub API 响应失败: {e}")
 
 
-def crawl_single_source(start_url, headers, max_pages, url_queue):
+def crawl_single_source(start_url, headers, max_pages, url_queue):  # Removed proxies
     """抓取单个来源的URL"""
     current_url = start_url
     page_count = 0
     while current_url and page_count < max_pages:
         logging.info(f"抓取: {current_url} (第 {page_count + 1}/{max_pages} 页，来源: {start_url})")
-        html = fetch_page(current_url, headers)
+        html = fetch_page(current_url, headers)  # Removed proxies
         if html is None:
             break
         new_urls = get_urls_from_html(html)
@@ -132,83 +181,12 @@ def worker(url_queue, valid_urls, lock):
         url_queue.task_done()
 
 
-def get_file_from_github(token, file_path, branch='main'):
-    """从 GitHub 获取文件内容"""
-    api_url = f"https://api.github.com/repos/qjlxg/362/contents/{file_path}?ref={branch}"
-    masked_url = re.sub(r'https://api\.github\.com/repos/.*?/contents/.*?\?ref=.*', r'https://api.github.com/repos/<repo>/contents/<file>?ref=<branch>', api_url)
-    headers = {
-        'Authorization': f'token {token}',
-        'Accept': 'application/vnd.github.v3.raw'
-    }
-    logging.info(f"尝试访问: {masked_url}")
-    try:
-        response = requests.get(api_url, headers=headers, timeout=10)
-        response.raise_for_status()  # 检查 HTTP 状态码
-        return response.text
-    except requests.RequestException as e:
-        logging.error(f"获取 {file_path} 失败: {e}")
-        return None
-
-
-def append_to_github_file(token, file_path, content, branch='main'):
-    """将内容追加到 GitHub 仓库的文件中"""
-    # 获取仓库信息和文件 SHA
-    api_url = f"https://api.github.com/repos/qjlxg/362/contents/{file_path}?ref={branch}"
-    masked_url = re.sub(r'https://api\.github\.com/repos/.*?/contents/.*?\?ref=.*', r'https://api.github.com/repos/<repo>/contents/<file>?ref=<branch>', api_url)
-    headers = {
-        'Authorization': f'token {token}',
-        'Accept': 'application/vnd.github.v3+json'
-    }
-    try:
-        response = requests.get(api_url, headers=headers)
-        response.raise_for_status()
-        file_data = response.json()
-        sha = file_data['sha']
-
-        # 获取现有文件内容
-        existing_content_encoded = file_data.get('content', '')
-        if existing_content_encoded:
-            existing_content = base64.b64decode(existing_content_encoded).decode('utf-8')
-        else:
-            existing_content = ''
-
-        # 追加新内容
-        updated_content = existing_content + content
-
-        # 编码新内容
-        updated_content_encoded = base64.b64encode(updated_content.encode('utf-8')).decode('utf-8')
-
-        # 构建 PUT 请求
-        put_data = {
-            "message": f"Append to {file_path}",
-            "content": updated_content_encoded,
-            "sha": sha,
-            "branch": branch
-        }
-        put_response = requests.put(api_url, headers=headers, json=put_data)
-        put_response.raise_for_status()
-        logging.info(f"成功追加到 {file_path}")
-    except requests.RequestException as e:
-        logging.error(f"追加到 {file_path} 失败: {e}")
-
-
-def main(max_pages=10, num_threads=5):
+def main(config_url, subscribe_url, github_token, max_pages=10, num_threads=5):
     """主函数：多线程抓取"""
-    token = os.getenv('GITHUB_TOKEN')
-    if not token:
-        logging.error("未设置 GITHUB_TOKEN 环境变量")
+    start_urls = get_start_urls_from_config(config_url)
+    if not start_urls:
+        logging.error("未获取到起始 URL，程序终止。")
         return
-
-    # 从 config.txt 读取 start_urls_list
-    config_content = get_file_from_github(token, 'data/config.txt')
-    if not config_content:
-        logging.error("无法从 GitHub 读取 config.txt")
-        return
-
-    # 将文件内容按行分割为 URL 列表
-    start_urls_list = [url.strip() for url in config_content.splitlines() if url.strip()]
-
-    logging.info(f"从 config.txt 读取到的 start_urls: {start_urls_list}")
 
     url_queue = Queue()
     valid_urls = set()
@@ -222,9 +200,10 @@ def main(max_pages=10, num_threads=5):
         threads.append(t)
 
     # 创建爬取线程
-    for start_url in start_urls_list:
+    for start_url in start_urls:
+        # Removed proxies
         headers = get_random_headers()
-        t = threading.Thread(target=crawl_single_source, args=(start_url, headers, max_pages, url_queue))
+        t = threading.Thread(target=crawl_single_source, args=(start_url, headers, max_pages, url_queue)) # Removed proxies
         t.start()
         threads.append(t)
 
@@ -240,12 +219,17 @@ def main(max_pages=10, num_threads=5):
 
     logging.info(f"所有来源抓取完毕")
     logging.info(f"有效 URL 数量: {len(valid_urls)}")
+    save_urls_to_github(list(valid_urls), subscribe_url, github_token)
 
-    # 将结果追加保存到 subscribes.txt
-    results_string = '\n'.join(valid_urls) + '\n'
-    append_to_github_file(token, 'data/subscribes.txt', results_string)
 
 
 if __name__ == '__main__':
-    max_pages_to_crawl = 10
-    main(max_pages_to_crawl)
+    config_url = os.getenv(CONFIG_URL_ENV)
+    subscribe_url = os.getenv(SUBSCRIBE_URL_ENV)
+    github_token = os.getenv(GITHUB_TOKEN_ENV)
+
+    if not config_url or not subscribe_url or not github_token:
+        logging.error("请设置 CONFIG_URL, SUBSCRIBE_URL 和 GITHUB_TOKEN 环境变量。")
+    else:
+        max_pages_to_crawl = 10
+        main(config_url, subscribe_url, github_token, max_pages_to_crawl)
