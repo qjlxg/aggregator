@@ -1,514 +1,265 @@
-# coding=utf-8
-import base64
+import yaml
+import subprocess
 import requests
-import re
-import time
 import os
-import threading
-from tqdm import tqdm
-import random, string
-import datetime
-from time import sleep
-import chardet
-from bs4 import BeautifulSoup
-from concurrent.futures import ThreadPoolExecutor
+import platform
+import time
+import shutil
+import socket
 
+# --- Configuration ---
+INPUT_YAML_PATH = os.path.join('data', 'clash.yaml')
+OUTPUT_YAML_PATH = os.path.join('data', 'sp.yaml')
+CLASH_DIR = 'clash'
+COUNTRY_MMDB_NAME = 'Country.mmdb'
+TEMP_CONFIG_NAME = 'temp_clash_test_config.yaml'
 
-#试用机场链接
-url_try = "https://raw.githubusercontent.com/PangTouY00/aggregator/refs/heads/main/data/valid-domains.txt"
+# Proxy types to test as specified in the prompt
+# Note: "ss://" is represented as type "ss" in Clash config, "vmess://" as "vmess", etc.
+# Hysteria2 is type "hysteria2"
+TARGET_PROXY_TYPES = ["vmess", "ss", "vless", "trojan", "hysteria2"]
 
-# 发送GET请求获取内容
-response = requests.get(url_try)
+# Test URL: light, fast, returns HTTP 204 No Content on success
+TEST_URL = "http://www.gstatic.com/generate_204"
+REQUEST_TIMEOUT_SECONDS = 10  # Timeout for the test request
+CLASH_STARTUP_WAIT_SECONDS = 3 # Time to wait for Clash to start
 
-# 检查请求是否成功
-if response.status_code == 200:
-    # 按行分割内容并存入列表
-    home_urls = response.text.splitlines()
-else:
-    home_urls = (
-    'https://ch.louwangzhiyu.xyz',   #100G  永久
-    'https://dashuai.us',            #2G  1天
-    'https://xiaofeiyun7.top',
-    'https://vt.louwangzhiyu.xyz',
-    'https://sulink.pro',
-    'https://lanmaoyun.icu',
-    'https://xueyejiasu.com',
-    'https://metacloud.eu.org',
-    'https://free.colacloud.free.hr',
-    'https://needss.link',
-    'https://qingyun.zybs.eu.org',
-    'https://vpn.127414.xyz',
-    'https://hy-2.com',
-    'https://666666222.xyz',
-    'https://xiaofeiyun3.cfd',
-    )
+# --- Helper Functions ---
 
+def find_free_port():
+    """Finds an available port on localhost."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(('', 0))
+        return s.getsockname()[1]
 
-#文件路径
-update_path = "./sub/"
-#所有的clash订阅链接
-end_list_clash = ['https://paste.gg/p/jimbob/e33da6f7c8484ec6adb184f0f5fd058c/files/a7cd0b4e32304d9987fc15d386136e20/raw']
-#所有的v2ray订阅链接
-end_list_v2ray = []
-#所有的节点明文信息
-end_bas64 = []
-#获得格式化后的链接
-new_list = []
-#永久订阅
-e_sub = ['https://sub.789.st/sub?target=v2ray&url=https://raw.githubusercontent.com/go4sharing/sub/main/sub.yaml&sort=true&_=1710174203726','https://raw.githubusercontent.com/yaney01/Yaney01/main/temporary','https://raw.githubusercontent.com/hkaa0/permalink/main/proxy/V2ray','https://raw.githubusercontent.com/Pawdroid/Free-servers/main/sub','https://raw.githubusercontent.com/ripaojiedian/freenode/main/sub','https://raw.githubusercontent.com/aiboboxx/v2rayfree/main/v2',"https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/master/list.txt"]
-#e_sub = ['https://pastebin.com/raw/dmnL3uAR','https://openit.uitsrt.top/long','https://raw.githubusercontent.com/freefq/free/master/v2','https://raw.githubusercontent.com/ripaojiedian/freenode/main/sub','https://raw.githubusercontent.com/aiboboxx/v2rayfree/main/v2','https://raw.githubusercontent.com/kxswa/k/k/base64']
-#频道
-urls =["https://t.me/s/freeVPNjd","https://t.me/s/FProxies","https://t.me/s/wxdy666","https://t.me/s/fq521","https://t.me/s/go4sharing","https://t.me/s/helloworld_1024","https://t.me/s/dingyue_Center","https://t.me/s/ZDYZ2","https://t.me/s/wangcai_8","https://t.me/s/zyfxlnn","https://t.me/s/fqzw9","https://t.me/s/sdffnkl","https://t.me/s/ShareCentrePro","https://t.me/s/hkaa0"]
-#机场链接
-plane_sub = ['https://www.prop.cf/?name=paimon&client=base64']
-#机场试用链接
-try_sub = []
-#获取频道订阅的个数
-sub_n = -5
-#试用节点明文
-end_try = []
-#线程池
-threads = []
-# 设置超时时间(秒)
-TIMEOUT = 500
+def select_clash_binary():
+    """Selects the appropriate Clash binary based on OS and architecture."""
+    system = platform.system()
+    machine = platform.machine()
+    binary_path = None
 
-#获取群组聊天中的HTTP链接
-def get_channel_http(url):
-    headers = {
-        'sec-ch-ua': '".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"',
-        'Accept': 'application/json, text/javascript, */*; q=0.01',
-        'Referer': 'https://t.me/s/wbnet',
-        'X-Requested-With': 'XMLHttpRequest',
-        'sec-ch-ua-mobile': '?0',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
-        'sec-ch-ua-platform': '"Windows"',
-    }
-    response = requests.post(
-        url, headers=headers)
-    #print(response.text)
-    pattren = re.compile(r'"https+:[^\s]*"')
-    url_lst = pattren.findall(response.text)
-    #print('获取到',len(url_lst),'个网址')
-    #print(url_lst)
-    return url_lst
-
-
-#对bs64解密
-def jiemi_base64(data):  # 解密base64
-    # 对 Base64 编码后的字符串进行解码，得到字节字符串
-    decoded_bytes = base64.b64decode(data)
-    # 使用 chardet 库自动检测字节字符串的编码格式
-    encoding = chardet.detect(decoded_bytes)['encoding']
-    # 将字节字符串转换为字符串
-    decoded_str = decoded_bytes.decode(encoding)
-    return decoded_str
-
-#判读是否为订阅链接
-def get_content(url):
-    #print('【获取频道',url,'】')
-    url_lst = get_channel_http(url)
-    #print(url_lst)
-    #对链接进行格式化
-    for i in url_lst:
-        result = i.replace("\\", "").replace('"', "")
-        if result not in new_list:
-            if "t" not in result[8]:
-                if "p" not in result[-2]:
-                    new_list.append(result)
-    #print(new_list)
-    #print("共获得", len(new_list), "条链接")
-    #获取单个订阅链接进行判断
-    i = 1
-    try:
-        new_list_down = new_list[sub_n::]
-    except:
-        new_list_down = new_list[len(new_list) * 2 // 3::]
-    print("共获得", len(new_list_down), "条链接")
-    #print('【判断链接是否为订阅链接】')
-    for o in new_list_down:
-        try:
-            res = requests.get(o)
-            #判断是否为clash
-            try:
-                skuid = re.findall('proxies:', res.text)[0]
-                if skuid == "proxies:":
-                    #print(i, ".这是个clash订阅", o)
-                    end_list_clash.append(o)
-            except:
-                #判断是否为v2
-                try:
-                    #解密base64
-                    peoxy = jiemi_base64(res.text)
-                    #print(i, ".这是个v2ray订阅", o)
-                    end_list_v2ray.append(o)
-                    end_bas64.extend(peoxy.splitlines())
-                    
-                #均不是则非订阅链接
-                except:
-                    #print(i, ".非订阅链接")
-                    pass
-        except:
-            #print("第", i, "个链接获取失败跳过！")
-            pass
-        i += 1
-    return end_bas64
-
-#写入文件
-def write_document():
-    if e_sub == [] or try_sub == []:
-        print("订阅为空请检查！")
+    if system == 'Linux':
+        # Assuming clash-linux is for x86_64, common for Linux servers/desktops
+        # If you have a specific arm64 linux binary, add logic here
+        if 'aarch64' in machine or 'arm64' in machine:
+            # The prompt did not specify a clash-linux-arm binary.
+            # If you have one, e.g., 'clash-linux-arm', update here.
+            print("Warning: No specific ARM64 Linux Clash binary specified in prompt. Trying generic 'clash-linux'.")
+            binary_path = os.path.join(CLASH_DIR, 'clash-linux')
+        else: # x86_64, amd64
+            binary_path = os.path.join(CLASH_DIR, 'clash-linux')
+    elif system == 'Darwin': # macOS
+        if 'arm64' in machine: # Apple Silicon
+            binary_path = os.path.join(CLASH_DIR, 'clash-darwin-arm')
+        elif 'x86_64' in machine: # Intel
+            binary_path = os.path.join(CLASH_DIR, 'clash-darwin-amd')
     else:
-        #永久订阅
-        random.shuffle(e_sub)
-        for e in e_sub:
-            try:
-                res = requests.get(e)
-                proxys=jiemi_base64(res.text)
-                end_bas64.extend(proxys.splitlines())
-            except:
-                print(e,"永久订阅出现错误❌跳过")
-        print('永久订阅更新完毕')
-        #试用订阅
-        random.shuffle(try_sub)
-        for t in try_sub:
-            try:
-                res = requests.get(t)
-                proxys=jiemi_base64(res.text)
-                end_try.extend(proxys.splitlines())
-            except Exception as er:
-                print(t,"试用订阅出现错误❌跳过",er)
-        print('试用订阅更新完毕',try_sub)
-        #永久订阅去重
-        end_bas64_A = list(set(end_bas64))
-        print("去重完毕！！去除",len(end_bas64) - len(end_bas64_A),"个重复节点")
-        #永久订阅去除多余换行符
-        bas64 = '\n'.join(end_bas64_A).replace('\n\n', "\n").replace('\n\n', "\n").replace('\n\n', "\n")
-        #试用去除多余换行符
-        bas64_try = '\n'.join(end_try).replace('\n\n', "\n").replace('\n\n', "\n").replace('\n\n', "\n")
-        #获取时间，给文档命名用
-        t = time.localtime()
-        date = time.strftime('%y%m', t)
-        date_day = time.strftime('%y%m%d', t)
-        #创建文件路径
-        try:
-            os.mkdir(f'{update_path}{date}')
-        except FileExistsError:
-            pass
-        txt_dir = update_path + date + '/' + date_day + '.txt'
-        #写入时间订阅
-        file = open(txt_dir, 'w', encoding='utf-8')
-        file.write(bas64)
-        file.close()       
-        
-        #减少获取的个数
-        r = 1
-        length = len(end_bas64_A)  # 总长
-        m = 8  # 切分成多少份
-        step = int(length / m) + 1  # 每份的长度
-        for i in range(0, length, step):
-            print("起",i,"始",i+step)
-            zhengli = '\n'.join(end_bas64_A[i: i + step]).replace('\n\n', "\n").replace('\n\n', "\n").replace('\n\n', "\n")
-            #将获得的节点变成base64加密，为了长期订阅
-            obj = base64.b64encode(zhengli.encode())
-            plaintext_result = obj.decode()
-            #写入长期订阅
-            file_L = open("Long_term_subscription"+str(r), 'w', encoding='utf-8')
-            file_L.write(plaintext_result)
-            r += 1
-        #写入总长期订阅
-        obj = base64.b64encode(bas64.encode())
-        plaintext_result = obj.decode()
-        file_L = open("Long_term_subscription_num", 'w', encoding='utf-8')
-        file_L.write(plaintext_result)
-        #写入试用订阅
-        obj_try = base64.b64encode(bas64_try.encode())
-        plaintext_result_try = obj_try.decode()
-        file_L_try = open("Long_term_subscription_try", 'w', encoding='utf-8')
-        file_L_try.write(plaintext_result_try)
-        #写入README
-        with open("README.md", 'r', encoding='utf-8') as f:
-            lines = f.readlines()
-            f.close()
-        now_time = datetime.datetime.now()
-        TimeDate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        for index in range(len(lines)):
-            try:
-                if lines[index] == '`https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription_num`\n':
-                    lines.pop(index+1)
-                    lines.insert(index+1, f'`Total number of merge nodes: {length}`\n')
-                if lines[index] == '`https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription1`\n':
-                    lines.pop(index+1)
-                    lines.insert(index+1, f'`Total number of merge nodes: {step}`\n')
-                if lines[index] == '`https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription2`\n': # 目标行内容
-                    lines.pop(index+1)
-                    lines.insert(index+1, f'`Total number of merge nodes: {step}`\n')
-                if lines[index] == '`https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription3`\n': # 目标行内容
-                    lines.pop(index+1)
-                    lines.insert(index+1, f'`Total number of merge nodes: {step}`\n')
-                if lines[index] == '`https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription4`\n': # 目标行内容
-                    lines.pop(index+1)
-                    lines.insert(index+1, f'`Total number of merge nodes: {step}`\n')
-                if lines[index] == '`https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription5`\n': # 目标行内容
-                    lines.pop(index+1)
-                    lines.insert(index+1, f'`Total number of merge nodes: {step}`\n')
-                if lines[index] == '`https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription6`\n': # 目标行内容
-                    lines.pop(index+1)
-                    lines.insert(index+1, f'`Total number of merge nodes: {step}`\n')
-                if lines[index] == '`https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription7`\n': # 目标行内容
-                    lines.pop(index+1)
-                    lines.insert(index+1, f'`Total number of merge nodes: {step}`\n')
-                if lines[index] == '`https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription8`\n': # 目标行内容
-                    lines.pop(index+1)
-                    lines.insert(index+1, f'`Total number of merge nodes: {length-step*7}`\n')
-                if lines[index] == '`https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription3.yaml`\n': # 目标行内容
-                    lines.pop(index+4)
-                    lines.pop(index+4)
-                    lines.insert(index+4, f'Updata：`{TimeDate}`\n')
-                    lines.insert(index+4, f'### Try the number of high-speed subscriptions: `{len(try_sub)}`\n')
-                if lines[index] == '>Trial subscription：\n': # 目标行内容
-                    lines.pop(index)
-                    lines.pop(index)
-                """
-                if lines[index] == '## ✨Star count\n': # 目标行内容
-                    n = 5
-                    for TrySub in try_sub:
-                        lines.insert(index-n, f'\n>Trial subscription：\n`{TrySub}`\n')
-                        n += 3
-                """
-            except:
-                #print("写入READ出错")
-                pass
-        #写入试用订阅
-        for index in range(len(lines)):
-            try:
-                if lines[index] == '## ✨Star count\n': # 目标行内容
-                    n = 5
-                    for TrySub in try_sub:
-                        #lines.insert(index+n-1, f'\n>')
-                        lines.insert(index-n, f'\n>Trial subscription：\n`{TrySub}`\n')
-                        n += 3
-            except:
-                print("写入试用出错")
-        
-        with open("README.md", 'w', encoding='utf-8') as f:
-            data = ''.join(lines)
-            f.write(data)
-        print("合并完成✅")
-        try:
-            numbers =sum(1 for _ in open(txt_dir))
-            print("共获取到",numbers,"节点")
-        except:
-            print("出现错误！")
-        
-    return
+        raise OSError(f"Unsupported operating system: {system}")
 
-#获取clash订阅
-def get_yaml():
-    print("开始获取clsah订阅")
-    urls = ["https://api.dler.io//sub?target=clash&url=https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription_try&insert=false&config=https://raw.githubusercontent.com/PangTouY00/fetchProxy/main/config/provider/rxconfig.ini&emoji=true","https://api.dler.io//sub?target=clash&url=https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription2&insert=false&config=https://raw.githubusercontent.com/PangTouY00/fetchProxy/main/config/provider/rxconfig.ini&emoji=true", "https://api.dler.io//sub?target=clash&url=https://raw.githubusercontent.com/PangTouY00/Auto_proxy/main/Long_term_subscription3&insert=false&config=https://raw.githubusercontent.com/PangTouY00/fetchProxy/main/config/provider/rxconfig.ini&emoji=true"]
-    n = 1
-    for i in urls:
-        response = requests.get(i)
-        #print(response.text)
-        file_L = open("Long_term_subscription" + str(n) +".yaml", 'w', encoding='utf-8')
-        file_L.write(response.text)
-        file_L.close()
-        n += 1
-    print("clash订阅获取完成！")
+    if binary_path and os.path.exists(binary_path):
+        # Ensure the binary is executable
+        try:
+            os.chmod(binary_path, 0o755)
+        except OSError as e:
+            print(f"Warning: Could not set executable permission on {binary_path}: {e}")
+        return os.path.abspath(binary_path)
+    elif binary_path:
+        raise FileNotFoundError(f"Clash binary not found at: {binary_path}")
+    else:
+        raise OSError(f"Could not determine Clash binary for {system} {machine}")
 
-#获取机场试用订阅
-def get_sub_url():
-    V2B_REG_REL_URL = '/api/v1/passport/auth/register'
-    times = 1
-    for current_url in home_urls:
-        i = 0
-        while i < times:
-            header = {
-                'Referer': current_url,
-                'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Mobile/15E148 Safari/604.1',
-                'Content-Type': 'application/x-www-form-urlencoded',
-            }
-            form_data = {
-                'email': ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(12))+'@gmail.com',
-                'password': 'autosub_v2b',
-                'invite_code': '',
-                'email_code': ''
-            }
-            if current_url == 'https://xn--4gqu8thxjfje.com' or current_url == 'https://seeworld.pro'  or current_url == 'https://www.jwckk.top'or current_url == 'https://vvtestatiantian.top':
-                try:
-                    fan_res = requests.post(
-                        f'{current_url}/api/v1/passport/auth/register', data=form_data, headers=header)
-                    auth_data = fan_res.json()["data"]["auth_data"]
-                    #print(auth_data)
-                    fan_header = {
-                        'Origin': current_url,
-                        'Authorization': ''.join(auth_data),
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'Connection': 'keep-alive',
-                        'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Mobile/15E148 Safari/604.1',
-                        'Referer': current_url,
-                    }
-                    fan_data = {
-                        'period': 'onetime_price',
-                        'plan_id': '1',
-                    }
-                    fan_res_n = requests.post(
-                        f'{current_url}/api/v1/user/order/save', headers=fan_header, data=fan_data)
-                    #print(fan_res_n.json()["data"])
-                    fan_data_n = {
-                        'trade_no':fan_res_n.json()["data"],
-                        #'method': '1',
-                    }
-                    fan_res_pay = requests.post(
-                        f'{current_url}/api/v1/user/order/checkout', data=fan_data_n, headers=fan_header)
-                    subscription_url = f'{current_url}/api/v1/client/subscribe?token={fan_res.json()["data"]["token"]}'
-                    try_sub.append(subscription_url)
-                    #e_sub.append(subscription_url)
-                    print("add:"+subscription_url)
-                except Exception as result:
-                    print(result)
-                    break
-            else:
-                try:
-                    response = requests.post(
-                        current_url+V2B_REG_REL_URL, data=form_data, headers=header)
-                    subscription_url = f'{current_url}/api/v1/client/subscribe?token={response.json()["data"]["token"]}'
-                    try_sub.append(subscription_url)
-                    #e_sub.append(subscription_url)
-                    print("add:"+subscription_url)
-                except Exception as e:
-                    print("获取订阅失败",e)
-            i += 1
-        
-# ========== 抓取 cfmem.com 的节点 ==========
-def get_cfmem():
+def load_clash_config(file_path):
+    """Loads the Clash configuration from a YAML file."""
     try:
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.53"
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return yaml.safe_load(f)
+    except FileNotFoundError:
+        print(f"Error: Input YAML file not found at {file_path}")
+        return None
+    except yaml.YAMLError as e:
+        print(f"Error: Could not parse input YAML file {file_path}: {e}")
+        return None
+
+def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, country_mmdb_path):
+    """
+    Tests a single proxy node by starting a Clash instance.
+    Returns True if the proxy is valid, False otherwise.
+    """
+    proxy_name = proxy_config.get('name', 'UnnamedProxy')
+    print(f"  Testing node: {proxy_name} (type: {proxy_config.get('type')})")
+
+    # Find free ports for Clash
+    http_port = find_free_port()
+    # socks_port = find_free_port() # If needed
+    # external_controller_port = find_free_port() # If needed
+
+    temp_config_content = {
+        'port': http_port,
+        # 'socks-port': socks_port,
+        'allow-lan': False,
+        'mode': 'rule', # or 'global'
+        'log-level': 'silent', # or 'error' for debugging
+        # 'external-controller': f'127.0.0.1:{external_controller_port}',
+        'dns': {
+            'enable': True,
+            'ipv6': False,
+            'listen': '0.0.0.0:53', # Clash might need a DNS listen port
+            'nameserver': ['114.114.114.114', '8.8.8.8'],
+            'fallback': ['1.1.1.1', 'dns.google:53'],
+            'enhanced-mode': 'redir-host', # or fake-ip
+        },
+        'geoip': True, # Tells Clash to look for Country.mmdb in its data directory
+        'proxies': [proxy_config],
+        'proxy-groups': [{
+            'name': 'TEST_GROUP',
+            'type': 'select',
+            'proxies': [proxy_name]
+        }],
+        'rules': [f'MATCH,TEST_GROUP']
+    }
+
+    temp_config_file_path = os.path.join(clash_work_dir, TEMP_CONFIG_NAME)
+    try:
+        with open(temp_config_file_path, 'w', encoding='utf-8') as f:
+            yaml.dump(temp_config_content, f)
+    except IOError as e:
+        print(f"    Error creating temporary config: {e}")
+        return False
+
+    clash_process = None
+    try:
+        # -d sets the working directory for Clash (where Country.mmdb, etc. are)
+        # -f specifies the configuration file
+        # Ensure paths are absolute or correctly relative
+        cmd = [clash_binary_path, '-d', os.path.abspath(clash_work_dir), '-f', temp_config_file_path]
+        # print(f"    Starting Clash with command: {' '.join(cmd)}")
+        clash_process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        # print(f"    Clash PID: {clash_process.pid}. Waiting {CLASH_STARTUP_WAIT_SECONDS}s for startup...")
+        time.sleep(CLASH_STARTUP_WAIT_SECONDS)
+
+        # Check if Clash process is still running
+        if clash_process.poll() is not None:
+            print(f"    Error: Clash process terminated prematurely. Exit code: {clash_process.returncode}")
+            # You might want to capture stderr from Clash here for detailed errors
+            return False
+
+        proxies_for_request = {
+            'http': f'http://127.0.0.1:{http_port}',
+            'https': f'http://127.0.0.1:{http_port}' # HTTPS requests also go through the HTTP proxy port
         }
-        res = requests.get("https://www.cfmem.com/search/label/free", headers=headers)
-        soup = BeautifulSoup(res.text, 'html.parser')
-        
-        # 查找目标 h2 并提取 URL
-        target_h2 = soup.find('h2', class_='entry-title')
-        if target_h2:
-            article_url = target_h2.find('a')['href']
-            #print(article_url)
-            
-            res = requests.get(article_url, headers=headers)
-            soup = BeautifulSoup(res.text, 'html.parser')
-            
-            # 查找订阅地址
-            target_span = soup.find('span', style="background-color:#fff;color:#111;font-size:15px")
-            if target_span:
-                sub_url = re.search(r'https://fs\.v2rayse\.com/share/\d{8}/\w+\.txt', target_span.text).group()
-                print(sub_url)
-                try_sub.append(sub_url)
-                e_sub.append(sub_url)
-                print("获取cfmem.com完成！")
-            else:
-                print("未找到订阅地址")
-        else:
-            print("未找到目标 h2")
-    except Exception as e:
-        print(e)
-        print("获取cfmem.com失败！")
 
-# ========== 抓取 v2rayshare.com 的节点 ==========
-def get_v2rayshare():
+        # print(f"    Making request to {TEST_URL} via proxy 127.0.0.1:{http_port}")
+        response = requests.get(TEST_URL, proxies=proxies_for_request, timeout=REQUEST_TIMEOUT_SECONDS, verify=True)
+
+        if response.status_code == 204:
+            print(f"    SUCCESS: Node {proxy_name} is valid.")
+            return True
+        else:
+            print(f"    FAILED: Node {proxy_name} returned status {response.status_code}.")
+            return False
+
+    except requests.exceptions.Timeout:
+        print(f"    FAILED: Node {proxy_name} timed out after {REQUEST_TIMEOUT_SECONDS}s.")
+        return False
+    except requests.exceptions.RequestException as e:
+        print(f"    FAILED: Node {proxy_name} request error: {e}")
+        return False
+    except Exception as e:
+        print(f"    An unexpected error occurred while testing {proxy_name}: {e}")
+        return False
+    finally:
+        if clash_process:
+            try:
+                clash_process.terminate()
+                clash_process.wait(timeout=5) # Wait for termination
+            except subprocess.TimeoutExpired:
+                print(f"    Clash process for {proxy_name} did not terminate gracefully, killing.")
+                clash_process.kill()
+            except Exception as e:
+                print(f"    Error terminating Clash process for {proxy_name}: {e}")
+        if os.path.exists(temp_config_file_path):
+            try:
+                os.remove(temp_config_file_path)
+            except OSError as e:
+                print(f"    Warning: Could not remove temporary config file {temp_config_file_path}: {e}")
+
+def save_valid_proxies(valid_proxies, file_path):
+    """Saves the list of valid proxies to a YAML file."""
+    output_data = {'proxies': valid_proxies}
     try:
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.53"}
-        res = requests.get(
-            "https://v2rayshare.com/", headers=headers)
-        #print(res.text)
-        article_url = re.search(
-            r'https://v2rayshare.com/p/\d+\.html', res.text).group()
-        #print(article_url)
-        res = requests.get(article_url, headers=headers)
-        soup = BeautifulSoup(res.text, 'html.parser')
-        # 查找目标 p 标签并提取 URL
-        target_p = soup.find('p', string=re.compile(r'https://v2rayshare.githubrowcontent.com/\d{4}/\d{2}/\d{8}\.txt'))
-        if target_p:
-            sub_url = target_p.text.strip()
-            print(sub_url)
-            try_sub.append(sub_url)
-            e_sub.append(sub_url)
-            print("获取v2rayshare.com完成！")
-        else:
-            print("未找到目标 p 标签")
-    except Exception as e:
-        print("获取v2rayshare.com失败！",e)
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path, 'w', encoding='utf-8') as f:
+            yaml.dump(output_data, f, allow_unicode=True, sort_keys=False)
+        print(f"\nSuccessfully saved {len(valid_proxies)} valid proxies to {file_path}")
+    except IOError as e:
+        print(f"Error: Could not write output YAML file {file_path}: {e}")
 
-# ========== 抓取 nodefree.org 的节点 ==========
-def get_nodefree():
+# --- Main Execution ---
+def main():
+    print("Starting Clash proxy node testing process...")
+
+    # 1. Select Clash Binary
     try:
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.53"}
-        res = requests.get(
-            "https://nodefree.org/", headers=headers)
-        article_url = re.search(
-            r'https://nodefree.org/p/\d+\.html', res.text).group()
-        res = requests.get(article_url, headers=headers)
-        soup = BeautifulSoup(res.text, 'html.parser')
-        # 查找目标 p 标签并提取 URL
-        target_p = soup.find('p', string=re.compile(r'https://nodefree.githubrowcontent.com/\d{4}/\d{2}/\d{8}\.txt'))
-        if target_p:
-            sub_url = target_p.text.strip()
-            print(sub_url)
-            try_sub.append(sub_url)
-            e_sub.append(sub_url)
-            print("获取nodefree.org完成！")
-        else:
-            print("未找到目标 p 标签")
-    except Exception as e:
-        print("获取nodefree.org失败！",e)
+        clash_binary = select_clash_binary()
+        print(f"Using Clash binary: {clash_binary}")
+    except (OSError, FileNotFoundError) as e:
+        print(f"Error selecting Clash binary: {e}")
+        return
 
-        
-    
+    # Check for Country.mmdb
+    country_mmdb_full_path = os.path.abspath(os.path.join(CLASH_DIR, COUNTRY_MMDB_NAME))
+    if not os.path.exists(country_mmdb_full_path):
+        print(f"Error: {COUNTRY_MMDB_NAME} not found in {CLASH_DIR}/ directory.")
+        print(f"Expected at: {country_mmdb_full_path}")
+        return
+    print(f"Found GeoIP database: {country_mmdb_full_path}")
+
+
+    # 2. Load Proxies from input clash.yaml
+    clash_config = load_clash_config(INPUT_YAML_PATH)
+    if not clash_config or 'proxies' not in clash_config:
+        print(f"No 'proxies' section found in {INPUT_YAML_PATH} or file is invalid.")
+        return
+
+    all_proxies = clash_config['proxies']
+    if not isinstance(all_proxies, list):
+        print(f"Error: 'proxies' section in {INPUT_YAML_PATH} is not a list.")
+        return
+
+    print(f"Loaded {len(all_proxies)} proxies from {INPUT_YAML_PATH}.")
+
+    # 3. Filter and Test Proxies
+    nodes_to_test = [p for p in all_proxies if isinstance(p, dict) and p.get('type') in TARGET_PROXY_TYPES]
+
+    if not nodes_to_test:
+        print(f"No proxies matching the target types ({', '.join(TARGET_PROXY_TYPES)}) found.")
+        return
+
+    print(f"Found {len(nodes_to_test)} proxies matching target types. Starting tests...\n")
+
+    valid_proxies_configs = []
+    for i, proxy_node_config in enumerate(nodes_to_test):
+        print(f"Processing proxy {i+1}/{len(nodes_to_test)}:")
+        is_valid = test_single_proxy(proxy_node_config, clash_binary, CLASH_DIR, country_mmdb_full_path)
+        if is_valid:
+            valid_proxies_configs.append(proxy_node_config)
+        print("-" * 30) # Separator
+
+    # 4. Save Valid Proxies to output sp.yaml
+    if valid_proxies_configs:
+        save_valid_proxies(valid_proxies_configs, OUTPUT_YAML_PATH)
+    else:
+        print("\nNo valid proxies found after testing.")
+        # Create an empty sp.yaml or one with an empty proxies list
+        save_valid_proxies([], OUTPUT_YAML_PATH)
+
+    print("\nProxy testing process finished.")
+
 if __name__ == '__main__':
-    # 初始化线程池（建议4-8个worker）
-    MAX_WORKERS = min(8, len(urls) + 4)  # 动态设置线程数[1][5]
-    
-    print("========== 开始获取机场订阅链接 ==========")
-    get_sub_url()
-    
-    print("========== 开始获取网站订阅链接 ==========")
-    # 使用线程池执行IO密集型任务[2][5]
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        executor.submit(get_cfmem)
-        executor.submit(get_v2rayshare)
-        executor.submit(get_nodefree)
-    
-    print("========== 开始获取频道订阅链接 ==========")
-    threads = []
-    for url in urls:
-        print(url, "开始获取......")
-        # 添加超时参数（建议3-10秒）[3]
-        t = threading.Thread(
-            target=get_content,
-            args=(url,),
-            daemon=True  # 设置为守护线程[7]
-        )
-        t.start()
-        threads.append(t)
-    
-    # 优化线程等待机制[1][6]
-    alive_threads = threads.copy()
-    start_time = time.time()
-    with tqdm(total=len(threads)) as pbar:
-        while alive_threads and (time.time() - start_time < TIMEOUT):
-            for t in alive_threads[:]:
-                if not t.is_alive():
-                    alive_threads.remove(t)
-                    pbar.update(1)
-            time.sleep(0.1)  # 降低CPU占用
-    
-    # 处理超时线程[3]
-    for t in alive_threads:
-        print(f"线程超时终止: {t.name}")
-    
-    print("========== 准备写入订阅 ==========")
-    res = write_document()
-    clash_sub = get_yaml()
-    print("========== 写入完成任务结束 ==========")
+    # Ensure the data directory exists for output, if not already for input
+    if not os.path.exists('data'):
+        os.makedirs('data')
+    if not os.path.exists(CLASH_DIR):
+        print(f"Error: Clash directory '{CLASH_DIR}' not found. Please create it and place Clash binaries and Country.mmdb inside.")
+    else:
+        main()
