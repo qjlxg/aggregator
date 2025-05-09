@@ -23,6 +23,9 @@ jobs:
       run: |
           pip install requests pyyaml
           pip install geoip2
+          
+    - name: 设置时区
+      run: sudo timedatectl set-timezone 'Asia/Shanghai'
       
     - name: Execute Python script
       run: python -u subscribe/replace.py -s
