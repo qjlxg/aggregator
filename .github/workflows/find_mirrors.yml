@@ -36,9 +36,14 @@ jobs:
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          echo "RESULTS:" >> README.md
-          python -c "import sys; print('```\\n' + sys.stdin.read() + '\\n```')" < output.txt >> README.md
-          git add README.md
-          git commit -m "Update results using GitHub Actions"  2>/dev/null || echo "No changes to commit"
-          git push origin main  2>/dev/null || echo "Nothing to push"
+          # 检查 output.txt 是否存在
+          if [ -f output.txt ]; then
+            echo "RESULTS:" >> README.md
+            python -c "import sys; print('```\\n' + sys.stdin.read() + '\\n```', end='')" < output.txt >> README.md
+            git add README.md
+            git commit -m "Update results using GitHub Actions"  2>/dev/null || echo "No changes to commit"
+            git push origin main  2>/dev/null || echo "Nothing to push"
+          else
+            echo "output.txt 文件不存在!"
+          fi
         shell: bash
