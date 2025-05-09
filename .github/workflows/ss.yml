@@ -8,7 +8,7 @@ on:
     paths:
       - 'ss.py'
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 */3 * * *'
 
 jobs:
   collect:
