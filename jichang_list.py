@@ -123,9 +123,9 @@ def main(base_url='https://t.me/s/jichang_list', max_pages=90):
     logging.info(f"有效的 URL 数量: {len(valid_urls)}")
 
     # 保存最终结果
-    save_urls_to_file(valid_urls, 'data/ji.txt')
+    save_urls_to_file(valid_urls, 'data/jichang_list.txt')
 
 if __name__ == '__main__':
     start_url = 'https://t.me/s/jichang_list'  # 你可以修改起始 URL
-    max_pages_to_crawl = 90  # 你可以修改最大抓取页数
+    max_pages_to_crawl = 5  # 你可以修改最大抓取页数
     main(start_url, max_pages_to_crawl)
