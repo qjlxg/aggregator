@@ -2,14 +2,14 @@ name: Daily Image Download
 
 on:
   schedule:
-    - cron: '0 1 * * *'  # 每天 UTC 时间 1:00 运行 (北京时间 9:00)
-  workflow_dispatch:  # 允许手动触发 workflow
+    - cron: '0 1 * * *'  # 每天 UTC 时间 1:00 运行
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
   download_images:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -21,7 +21,7 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Run daily image downloader
+      - name: Run image downloader
         run: python src/daily_image_downloader.py
 
       - name: Commit and push changes
