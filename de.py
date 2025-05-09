@@ -30,7 +30,7 @@ def get_urls_from_html(html, base_url):
 
     for target in targets:
         text = target.get_text(separator=' ', strip=True)
-        found_urls = re.findall(r'(?:https?://|www\.)[^\s]+', text)
+        found_urls = re.findall(r'(?:https?://|www\.)[^\s]+|http://sub\.crosswall\.org/s/[0-9a-fA-F]+|https?://[a-zA-Z0-9.-]+/[a-zA-Z0-9/]+(\?clash=[0-9])?|http://\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d+/[a-zA-Z0-9/]+', text)
         for found_url in found_urls:
             if is_valid_url(found_url):
                 urls.add(found_url)
@@ -80,7 +80,7 @@ def fetch_page(url, headers, timeout=10, max_retries=3):
                 return None
     return None  # 如果所有重试都失败
 
-def save_urls_to_file(urls, filename='data/ji_partial.txt'):
+def save_urls_to_file(urls, filename='data/ji.txt'):
     """保存 URL 到文件"""
     # 确保目录存在
     os.makedirs(os.path.dirname(filename), exist_ok=True)
@@ -134,7 +134,7 @@ def search_url_in_telegram(start_url, keyword, max_pages=90):
 
     logging.info(f"共抓取 {page_count} 页")
     logging.info(f"找到包含关键词 '{keyword}' 的 URL 总数: {len(all_urls)}")
-    save_urls_to_file(list(all_urls), 'data/ji_partial.txt.txt')
+    save_urls_to_file(list(all_urls), 'data/ji.txt') # 这里修正了文件名
     return list(all_urls)
 
 
