@@ -7,7 +7,7 @@ import os
 # --- 新增：从环境变量或安全配置中获取 GITHUB PAT ---
 # 强烈建议不要直接将 PAT 硬编码到脚本中，尤其是当脚本会被共享或提交到版本控制时。
 # 最好将其存储在环境变量中。
-GITHUB_TOKEN = os.getenv('MY_GITHUB_PAT') # 例如，你可以在运行脚本前设置环境变量 MY_GITHUB_PAT
+GITHUB_TOKEN = os.getenv('GT_TOKEN') # 例如，你可以在运行脚本前设置环境变量 MY_GITHUB_PAT
 
 # 如果没有设置环境变量，你可以在这里临时硬编码（仅供测试，不推荐用于生产）
 # if not GITHUB_TOKEN:
