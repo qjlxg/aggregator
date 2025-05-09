@@ -36,16 +36,13 @@ jobs:
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
-          # 检查 output.txt 是否存在
-          if [ -f output.txt ]; then
-            echo "RESULTS:" >> README.md
-            echo "```" >> README.md        # 添加代码块的开始标记
-            cat output.txt >> README.md      # 将 output.txt 的内容追加到 README.md
-            echo "```" >> README.md        # 添加代码块的结束标记
-            git add README.md
-            git commit -m "Update results using GitHub Actions"  2>/dev/null || echo "No changes to commit"
-            git push origin main  2>/dev/null || echo "Nothing to push"
+
+          # 检查 data/output.txt 是否存在并添加
+          if [ -f data/output.txt ]; then
+            git add data/output.txt
+            git commit -m "Update results in data/output.txt using GitHub Actions" 2>/dev/null || echo "No changes to commit"
+            git push origin main 2>/dev/null || echo "Nothing to push"
           else
-            echo "output.txt 文件不存在!"
+            echo "data/output.txt 文件不存在! 请检查Python脚本。"
           fi
         shell: bash
