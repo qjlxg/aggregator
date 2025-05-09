@@ -33,6 +33,11 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Actions Bot"
-          git add mirrors.txt  # 假设 mirrors.py 将结果保存到 mirrors.txt
-          git commit -m "Update GitHub mirrors list [skip ci]" || echo "No changes to commit"
-          git push origin main
+          git add mirrors.txt github_mirror_list.json # 确保 mirrors.txt 和 github_mirror_list.json 都被添加
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          else
+            git commit -m "Update GitHub mirrors list [skip ci]"
+            git push origin main
+          fi
