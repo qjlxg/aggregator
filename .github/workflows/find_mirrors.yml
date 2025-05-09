@@ -1,0 +1,44 @@
+name: Find Google Mirror Sites
+
+on:
+  workflow_dispatch:
+    inputs:
+      timezone:
+        description: '时区 (例如 Asia/Shanghai)'
+        required: true
+        default: 'Asia/Shanghai'
+
+jobs:
+  find_mirrors:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+
+      - name: Run Python script
+        env:
+          TZ: ${{ github.event.inputs.timezone }}
+        run: |
+          python find_google_mirror_sites.py
+
+      - name: Commit Results (Optional)
+        if: ${{ always() }} # 无论成功与否都运行
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          echo "RESULTS:" >> README.md
+          python -c "import sys; print('```\\n' + sys.stdin.read() + '\\n```')" < output.txt >> README.md
+          git add README.md
+          git commit -m "Update results using GitHub Actions"  2>/dev/null || echo "No changes to commit"
+          git push origin main  2>/dev/null || echo "Nothing to push"
+        shell: bash
