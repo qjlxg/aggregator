@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+import os # 引入 os 模块
 
 def find_google_mirror_sites(search_terms=["google mirror", "google代理", "镜像谷歌"]):
     """
@@ -46,9 +47,13 @@ def find_google_mirror_sites(search_terms=["google mirror", "google代理", "镜
 
 
 if __name__ == '__main__':
+    # 创建 data 目录（如果不存在）
+    if not os.path.exists("data"):
+        os.makedirs("data")
+
     mirror_sites = find_google_mirror_sites()
 
-    with open("output.txt", "w") as f:
+    with open("data/output.txt", "w") as f:
         if mirror_sites:
             f.write("找到的可能 Google 镜像站点：\n")
             for site in mirror_sites:
