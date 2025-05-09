@@ -62,8 +62,8 @@ def process_url(url, out_file):
 
 # 主程序
 source_urls = [
-    'https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/valid_links.txt',
-    'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/subscribes.txt',
+    
+    'https://bgithub.xyz/qjlxg/aggregator/raw/refs/heads/main/xujw3.txt',
 ]
 
 # 获取所有有效的URL
