@@ -1,33 +1,24 @@
-name: Daily Image Download
+name: Daily Image Downloader
 
 on:
   schedule:
-    - cron: '0 1 * * *'  # 每天 UTC 时间 1:00 运行
-  workflow_dispatch:  # 允许手动触发
+    - cron: '0 0 * * *'
 
 jobs:
-  download_images:
+  download-images:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.9'
-
-      - name: Install dependencies
+      - name: Run daily image downloader
         run: |
-          pip install -r requirements.txt
-
-      - name: Run image downloader
-        run: python src/daily_image_downloader.py
+          python src/daily_image_downloader.py
 
       - name: Commit and push changes
         run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add data/
-          git commit -m "Daily image update" || echo "No changes to commit"
-          git push origin main || echo "No changes to push"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add src/*
+          git commit -m "Update daily images" || echo "No changes to commit"
+          git push origin main
