@@ -38,20 +38,23 @@ def find_google_mirror_sites(search_terms=["google mirror", "google代理", "镜
 
         except requests.exceptions.RequestException as e:
             print(f"搜索 '{term}' 时出错: {e}")
+            results.append({"title": f"Error: {e}", "link": ""})  # 将错误信息添加到结果列表中
         except Exception as e:
             print(f"处理搜索结果时出错: {e}")
+            results.append({"title": f"Error: {e}", "link": ""})  # 将错误信息添加到结果列表中
     return results
 
 
 if __name__ == '__main__':
     mirror_sites = find_google_mirror_sites()
 
-    if mirror_sites:
-        print("找到的可能 Google 镜像站点：")
-        for site in mirror_sites:
-            print(f"  标题: {site['title']}")
-            print(f"  链接: {site['link']}")
-            print("-" * 20)
-    else:
-        print("未找到任何潜在的镜像站点。")
-    print("请谨慎验证这些链接的安全性和有效性.")
+    with open("output.txt", "w") as f:
+        if mirror_sites:
+            f.write("找到的可能 Google 镜像站点：\n")
+            for site in mirror_sites:
+                f.write(f"  标题: {site['title']}\n")
+                f.write(f"  链接: {site['link']}\n")
+                f.write("-" * 20 + "\n")
+        else:
+            f.write("未找到任何潜在的镜像站点。\n")
+        f.write("请谨慎验证这些链接的安全性和有效性.\n")  # 重要的安全提示
