@@ -127,5 +127,5 @@ def main(base_url='https://t.me/s/jichang_list', max_pages=90):
 
 if __name__ == '__main__':
     start_url = 'https://t.me/s/jichang_list'  # 你可以修改起始 URL
-    max_pages_to_crawl = 130  # 你可以修改最大抓取页数
+    max_pages_to_crawl = 30  # 你可以修改最大抓取页数
     main(start_url, max_pages_to_crawl)
