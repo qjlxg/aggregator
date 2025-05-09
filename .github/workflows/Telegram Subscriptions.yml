@@ -32,7 +32,7 @@ jobs:
     - name: Run Python script
       env:
         GT_TOKEN: ${{ secrets.GT_TOKEN }}
-      run: python Telegram Subscriptions.py
+      run: python "Telegram Subscriptions.py"
 
     - name: Configure Git
       run: |
