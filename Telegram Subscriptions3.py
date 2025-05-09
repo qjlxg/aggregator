@@ -182,32 +182,20 @@ def main(start_urls, max_pages=10, num_threads=5):
 
 
 if __name__ == '__main__':
-    github_token = os.environ.get('GT_TOKEN')
-
-    config_repo_name = 'qjlxg/362'
-    config_file_path = 'data/config.txt'
+    config_file_path = 'config.txt'  # 设置为根目录下的 config.txt
     start_urls_list = []
 
     try:
-        # 注意：这里不再需要 Github 库，因为我们不保存到远程仓库了
-        if github_token:
-            import github
-            g = github.Github(github_token)
-            repo = g.get_repo(config_repo_name)
-            config_content_file = repo.get_contents(config_file_path)
-            config_content = config_content_file.decoded_content.decode('utf-8')
-            start_urls_list = [url.strip() for url in config_content.strip().split('\n') if url.strip()]
-            logging.info(f"从 GitHub 读取到 {len(start_urls_list)} 个起始 URL")
-        else:
-            logging.warning("未配置 GitHub Token，无法从远程仓库读取配置文件，请确保在本地定义了起始 URL。")
-            # 如果没有 Token，你可能需要在本地定义一个 start_urls_list
-            start_urls_list = [] # 或者你可以在这里添加默认的 URL 列表
-    except ImportError:
-        logging.warning("未安装 PyGithub 库，无法从远程仓库读取配置文件，请确保在本地定义了起始 URL。")
-        start_urls_list = []
+        with open(config_file_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                url = line.strip()
+                if url:
+                    start_urls_list.append(url)
+        logging.info(f"从本地文件 {config_file_path} 读取到 {len(start_urls_list)} 个起始 URL")
+    except FileNotFoundError:
+        logging.error(f"找不到配置文件: {config_file_path}。请确保该文件位于根目录下。")
     except Exception as e:
-        logging.error(f"无法从 GitHub 读取配置文件: {e}")
-        start_urls_list = []
+        logging.error(f"读取配置文件 {config_file_path} 失败: {e}")
 
     max_pages_to_crawl = 10
     num_working_threads = 5
