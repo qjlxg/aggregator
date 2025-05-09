@@ -4,7 +4,8 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron: '0 0 * * *' # 每天 UTC 00:00 运行 (北京时间早上 8:00)
+    #- cron: '0 0 * * *' # 每天 UTC 00:00 运行 (北京时间早上 8:00)
+    - cron: '0 */8 * * *'
   workflow_dispatch:
 
 jobs:
