@@ -1,0 +1,47 @@
+
+name: de
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 */8 * * *'
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4
+
+    - name: Set timezone to Asia/Shanghai
+      run: sudo timedatectl set-timezone 'Asia/Shanghai'
+
+    - name: Run Python script
+      run: python de.py"
+
+    - name: Configure Git
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "GitHub Actions Bot"
+
+    - name: Pull latest changes
+      run: git pull origin main
+
+    - name: Commit and push changes
+      run: |
+        git add data/ji_partial.txt
+        git commit -m "Update Telegram subscriptions [skip ci]" || echo "No changes to commit"
+        git push origin main
