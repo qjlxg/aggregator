@@ -30,7 +30,7 @@ jobs:
       run: sudo timedatectl set-timezone 'Asia/Shanghai'
 
     - name: Run Python script
-      run: python de.py"
+      run: python de.py
 
     - name: Configure Git
       run: |
