@@ -1,0 +1,11 @@
+# config.yml
+
+websites:
+  bing:
+    enabled: true
+    url_function: "get_bing_image_url"
+  nasa_apod:
+    enabled: true
+    url_function: "get_nasa_apod_image_url"
+
+output_dir: "data"
