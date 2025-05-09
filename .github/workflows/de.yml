@@ -42,6 +42,6 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git add data/ji_partial.txt
+        git add data/ji.txt
         git commit -m "Update Telegram subscriptions [skip ci]" || echo "No changes to commit"
         git push origin main
