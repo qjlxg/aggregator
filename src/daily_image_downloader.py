@@ -1,10 +1,23 @@
-# src/download_images.py
+# src/daily_image_downloader.py
 
 import requests
 import os
 from datetime import datetime
 from bs4 import BeautifulSoup
-import yaml
+
+# 直接在脚本中定义配置
+config = {
+    'websites': {
+        'bing': {
+            'enabled': True,
+            'url_function': "get_bing_image_url"
+        },
+        'nasa_apod': {
+            'enabled': True,
+            'url_function': "get_nasa_apod_image_url"
+        }
+    }
+}
 
 def get_bing_image_url():
     """从 Bing 获取每日图片 URL"""
@@ -30,20 +43,11 @@ def get_nasa_apod_image_url():
         if img_tag and img_tag.get('src'):
             img_url = img_tag['src']
             if not img_url.startswith('http'):
-                img_url = url + img_url
+                img_url = 'https://apod.nasa.gov/apod/' + img_url
             return img_url
         return None
     except Exception as e:
         print(f"获取 NASA APOD 图片 URL 失败: {e}")
-        return None
-
-def load_config(config_file="config.yml"):
-    try:
-        with open(config_file, 'r') as f:
-            config = yaml.safe_load(f)
-        return config
-    except Exception as e:
-        print(f"加载配置失败: {e}")
         return None
 
 def download_image(image_url, filepath):
@@ -61,10 +65,6 @@ def download_image(image_url, filepath):
         print(f"下载或保存图片失败: {e}")
 
 def main():
-    config = load_config()
-    if not config:
-        return
-
     today = datetime.now()
     year = today.year
     month = today.month
@@ -82,10 +82,11 @@ def main():
 
                 image_url = url_function()
                 if image_url:
-                    dir_path = os.path.join(config['output_dir'], website_name, f"{year}{str(month).zfill(2)}")
+                    dir_path = os.path.join(os.path.dirname(__file__), website_name)
                     os.makedirs(dir_path, exist_ok=True)
 
-                    filepath = os.path.join(dir_path, f"{year}{str(month).zfill(2)}{str(day).zfill(2)}.jpg")
+                    filename = f"{website_name}{year}{str(month).zfill(2)}{str(day).zfill(2)}.jpg"
+                    filepath = os.path.join(dir_path, filename)
                     download_image(image_url, filepath)
                 else:
                     print(f"无法从 {website_name} 获取图片 URL。")
