@@ -7,7 +7,6 @@ import logging
 import os
 import threading
 from queue import Queue
-from github import Github
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -90,26 +89,15 @@ def fetch_page(url, headers, timeout=10, max_retries=3):
                 logging.error(f"抓取 {url} 失败，超出最大重试次数: {e}")
                 return None
 
-def save_urls_to_github(repo_name, file_path, content, github_token):
+def save_urls_to_local(file_path, content):
     try:
-        g = Github(github_token)
-        repo = g.get_repo(repo_name)
-        try:
-            contents = repo.get_contents(file_path)
-            updated_content = contents.decoded_content.decode('utf-8') + '\n' + '\n'.join(content)
-            repo.update_file(contents.path, "Add new subscriptions", updated_content.encode('utf-8'), contents.sha)
-            logging.info(f"URL 追加保存到 GitHub: {repo_name}/{file_path}")
-            return True
-        except Exception as e:
-            if "Not Found" in str(e):
-                repo.create_file(file_path, "Initial subscriptions", '\n'.join(content).encode('utf-8'))
-                logging.info(f"URL 首次保存到 GitHub: {repo_name}/{file_path}")
-                return True
-            else:
-                logging.error(f"保存到 GitHub 失败: {e}")
-                return False
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write('\n'.join(content) + '\n')
+        logging.info(f"URL 保存到本地文件: {file_path}")
+        return True
     except Exception as e:
-        logging.error(f"GitHub API 认证或仓库访问失败: {e}")
+        logging.error(f"保存到本地文件失败: {e}")
         return False
 
 
@@ -147,25 +135,11 @@ def worker(url_queue, valid_urls, lock):
                 logging.warning(f"URL {url} 连接测试失败")
 
         except Exception as e:
-             logging.error(f"测试 URL {url} 的连接性时发生错误: {e}")
+            logging.error(f"测试 URL {url} 的连接性时发生错误: {e}")
         finally:
             url_queue.task_done()
 
-def main(start_urls, max_pages=10, num_threads=5, github_token=None):
-
-    if github_token:
-      logging.info(f"GitHub Token 存在!")
-    else:
-      logging.warning(f"GitHub Token 不存在，将不会保存到GitHub")
-
-    if github_token:
-        try:
-            g = Github(github_token)
-            user = g.get_user()
-            logging.info(f"GitHub 用户名: {user.login}")
-        except Exception as e:
-            logging.error(f"GitHub API 认证失败: {e}")
-            github_token = None # 设置为None，避免后续保存操作
+def main(start_urls, max_pages=10, num_threads=5):
 
     url_queue = Queue()
     valid_urls = set()
@@ -202,14 +176,9 @@ def main(start_urls, max_pages=10, num_threads=5, github_token=None):
     logging.info(f"所有worker线程已退出")
     logging.info(f"有效 URL 数量: {len(valid_urls)}")
 
-    if github_token: #再次检查github_token
-        repo_name = 'qjlxg/362'
-        file_path = 'data/subscribes.txt'
-        if(save_urls_to_github(repo_name, file_path, list(valid_urls), github_token)): #如果保存成功
-            logging.info("成功将URL保存到github")
-        else:
-            logging.error("将URL保存到github失败")
-
+    # 保存到本地文件
+    local_file_path = 'data/subscribes.txt'
+    save_urls_to_local(local_file_path, list(valid_urls))
 
 
 if __name__ == '__main__':
@@ -220,16 +189,26 @@ if __name__ == '__main__':
     start_urls_list = []
 
     try:
-        g = Github(github_token)
-        repo = g.get_repo(config_repo_name)
-        config_content_file = repo.get_contents(config_file_path)
-        config_content = config_content_file.decoded_content.decode('utf-8')
-        start_urls_list = [url.strip() for url in config_content.strip().split('\n') if url.strip()]
-        logging.info(f"从 GitHub 读取到 {len(start_urls_list)} 个起始 URL")
+        # 注意：这里不再需要 Github 库，因为我们不保存到远程仓库了
+        if github_token:
+            import github
+            g = github.Github(github_token)
+            repo = g.get_repo(config_repo_name)
+            config_content_file = repo.get_contents(config_file_path)
+            config_content = config_content_file.decoded_content.decode('utf-8')
+            start_urls_list = [url.strip() for url in config_content.strip().split('\n') if url.strip()]
+            logging.info(f"从 GitHub 读取到 {len(start_urls_list)} 个起始 URL")
+        else:
+            logging.warning("未配置 GitHub Token，无法从远程仓库读取配置文件，请确保在本地定义了起始 URL。")
+            # 如果没有 Token，你可能需要在本地定义一个 start_urls_list
+            start_urls_list = [] # 或者你可以在这里添加默认的 URL 列表
+    except ImportError:
+        logging.warning("未安装 PyGithub 库，无法从远程仓库读取配置文件，请确保在本地定义了起始 URL。")
+        start_urls_list = []
     except Exception as e:
         logging.error(f"无法从 GitHub 读取配置文件: {e}")
         start_urls_list = []
 
     max_pages_to_crawl = 10
     num_working_threads = 5
-    main(start_urls_list, max_pages_to_crawl, num_working_threads, github_token=github_token)
+    main(start_urls_list, max_pages_to_crawl, num_working_threads)
