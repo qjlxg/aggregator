@@ -3,7 +3,6 @@
 import requests
 import os
 from datetime import datetime
-from bs4 import BeautifulSoup
 
 # 直接在脚本中定义配置
 config = {
@@ -21,13 +20,13 @@ config = {
 
 def get_bing_image_url():
     """从 Bing 获取每日图片 URL"""
-    url = "https://www.bing.com"
+    url = "https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1"
     try:
         response = requests.get(url)
         response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'html.parser')
-        img_url = soup.find('link', {'id': 'preloadBg'})['href']
-        return url + img_url
+        data = response.json()
+        img_url = data['images'][0]['url']
+        return 'https://cn.bing.com' + img_url
     except Exception as e:
         print(f"获取 Bing 图片 URL 失败: {e}")
         return None
@@ -38,6 +37,7 @@ def get_nasa_apod_image_url():
     try:
         response = requests.get(url)
         response.raise_for_status()
+        from bs4 import BeautifulSoup
         soup = BeautifulSoup(response.text, 'html.parser')
         img_tag = soup.find('img')
         if img_tag and img_tag.get('src'):
