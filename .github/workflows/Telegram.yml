@@ -4,7 +4,6 @@ on:
   push:
     branches: [ main ]
   schedule:
-    #- cron: '0 0 * * *' # 每天 UTC 00:00 运行 (北京时间早上 8:00)
     - cron: '0 */8 * * *'
   workflow_dispatch:
 
@@ -24,15 +23,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests beautifulsoup4 PyGithub
-        pip install requests beautifulsoup4 python-github-api
+        pip install requests beautifulsoup4
 
-    - name: 设置时区
+    - name: Set timezone to Asia/Shanghai
       run: sudo timedatectl set-timezone 'Asia/Shanghai'
 
     - name: Run Python script
-      env:
-        GT_TOKEN: ${{ secrets.GT_TOKEN }}
       run: python "Telegram Subscriptions3.py"
 
     - name: Configure Git
@@ -45,6 +41,6 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git add .
+        git add data/subscribes.txt
         git commit -m "Update Telegram subscriptions [skip ci]" || echo "No changes to commit"
         git push origin main
