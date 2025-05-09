@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-import os # 引入 os 模块
+import os
+import urllib.parse # 导入 urllib.parse 模块
 
 def find_google_mirror_sites(search_terms=["google mirror", "google代理", "镜像谷歌"]):
     """
@@ -34,7 +35,8 @@ def find_google_mirror_sites(search_terms=["google mirror", "google代理", "镜
                 # 从 DuckDuckGo 的重定向 URL 中提取实际链接
                 match = re.search(r"url=([^&]+)", link)
                 if match:
-                    real_link = match.group(1)
+                    extracted_link = match.group(1)  # 获取URL编码的链接
+                    real_link = urllib.parse.unquote(extracted_link)  # 解码URL
                     results.append({"title": title, "link": real_link})
 
         except requests.exceptions.RequestException as e:
