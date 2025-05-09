@@ -86,7 +86,7 @@ def process_url(url):
 
 # 主程序 (Main Program)
 source_urls = [
-    'https://github.com/qjlxg/aggregator/raw/refs/heads/main/xujw3.txt',
+    'https://github.com/qjlxg/362/raw/refs/heads/main/data/subscribes.txt',
     # 你可以在这里添加更多的源URL (You can add more source URLs here)
     # 'another_source_url_here.txt',
 ]
