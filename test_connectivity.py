@@ -56,7 +56,7 @@ def standardize_clash_config(input_path="data/clash.yaml", output_path="temp_cla
         return None
 
 def test_node_connectivity(node, clash_path, temp_config="temp_config.yaml"):
-    """测试单个节点的连通性，返回延迟 (毫秒) 或 None (如果连接失败)。"""
+    """测试单个节点的连通性，返回 True (连接成功) 或 False (连接失败)。"""
     proxy_name = node.get('name', 'unknown')
     proxies_config = {'proxies': [node]}
     try:
@@ -67,24 +67,23 @@ def test_node_connectivity(node, clash_path, temp_config="temp_config.yaml"):
         process = subprocess.run(command, capture_output=True, text=True, timeout=10)
 
         output = process.stdout
-        match = re.search(r"delay:\s*(\d+)ms", output)
-        if match:
-            delay = int(match.group(1))
-            print(f"节点 '{proxy_name}' 连接成功，延迟: {delay}ms")
-            return delay
+        # 如果测试成功，clash-linux 通常会输出 "configuration file ... test is successful"
+        if "test is successful" in output:
+            print(f"节点 '{proxy_name}' 连接成功。")
+            return True
         else:
-            print(f"节点 '{proxy_name}' 连接失败或无法获取延迟信息。输出: {output.strip()}")
-            return None
+            print(f"节点 '{proxy_name}' 连接失败。输出: {output.strip()}")
+            return False
 
     except subprocess.TimeoutExpired:
         print(f"节点 '{proxy_name}' 测试超时。")
-        return None
+        return False
     except FileNotFoundError:
         print(f"错误: Clash 可执行文件 '{clash_path}' 未找到。")
-        return None
+        return False
     except Exception as e:
         print(f"测试节点 '{proxy_name}' 时发生错误: {e}")
-        return None
+        return False
     finally:
         if os.path.exists(temp_config):
             os.remove(temp_config)
@@ -154,28 +153,27 @@ if __name__ == "__main__":
             with open(standardized_config_path, 'r') as f:
                 standardized_config = yaml.safe_load(f)
                 if 'proxies' in standardized_config:
-                    for node in standardized_config['proxies']:
-                        node_type = node.get('type')
-                        server_address = node.get('server', '')
+                    for original_node in yaml.safe_load(open(clash_config_path, 'r')).get('proxies', []): # 保持原始节点信息
+                        processed_node = original_node
+                        node_type = processed_node.get('type')
+                        server_address = processed_node.get('server', '')
 
                         if server_address.startswith('hysteria2://'):
-                            processed_node = process_hysteria2_node(node)
-                            if processed_node:
-                                delay = test_node_connectivity(processed_node, clash_executable_path)
-                                if delay is not None:
-                                    successful_nodes['proxies'].append(node) # 保存原始 hysteria2 格式
-                        elif node_type in ['ss', 'vmess', 'trojan', 'snell', 'hysteria2']: # 包括 hysteria2 类型
-                            delay = test_node_connectivity(node, clash_executable_path)
-                            if delay is not None:
-                                successful_nodes['proxies'].append(node)
+                            processed_node_for_test = process_hysteria2_node(processed_node)
+                            if processed_node_for_test:
+                                if test_node_connectivity(processed_node_for_test, clash_executable_path):
+                                    successful_nodes['proxies'].append(processed_node) # 保存原始 hysteria2 格式
+                        elif node_type in ['ss', 'vmess', 'trojan', 'snell', 'hysteria2']:
+                            if test_node_connectivity(processed_node, clash_executable_path):
+                                successful_nodes['proxies'].append(processed_node)
                         else:
-                            print(f"不支持的节点类型或格式: {node.get('name')}")
+                            print(f"不支持的节点类型或格式: {processed_node.get('name')}")
 
             os.makedirs(os.path.dirname(output_config_path), exist_ok=True)
             with open(output_config_path, 'w') as f:
                 yaml.dump(successful_nodes, f, sort_keys=False)
 
-            print(f"\n已将连通的节点保存到 '{output_config_path}'")
+            print(f"\n已将连接成功的节点保存到 '{output_config_path}'")
 
         except FileNotFoundError:
             print(f"错误: 临时配置文件 '{standardized_config_path}' 未找到。")
