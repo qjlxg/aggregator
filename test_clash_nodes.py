@@ -7,13 +7,14 @@ import platform
 import time
 import shutil
 import socket
+import tempfile
 
 # --- Configuration ---
 INPUT_YAML_PATH = os.path.join('data', 'clash.yaml')
 OUTPUT_YAML_PATH = os.path.join('data', 'sp.yaml')
 CLASH_DIR = 'clash'
 COUNTRY_MMDB_NAME = 'Country.mmdb'
-TEMP_CONFIG_NAME = 'temp_clash_test_config.yaml'
+# TEMP_CONFIG_NAME = 'temp_clash_test_config.yaml' # 使用 tempfile，不再需要固定的文件名
 
 TARGET_PROXY_TYPES = ["vmess", "ss", "vless", "trojan", "hysteria2"]
 TEST_URL = "http://www.gstatic.com/generate_204"
@@ -105,16 +106,18 @@ async def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, cou
         'rules': [f'MATCH,TEST_GROUP']
     }
 
-    temp_config_file_path = os.path.join(clash_work_dir, TEMP_CONFIG_NAME)
+    temp_config_file_path = None
     try:
-        with open(temp_config_file_path, 'w', encoding='utf-8') as f:
-            yaml.dump(temp_config_content, f)
-            f.flush()
-            os.fsync(f.fileno())
-        # 添加以下代码来读取并打印临时配置文件的内容
-        with open(temp_config_file_path, 'r', encoding='utf-8') as f:
-            temp_config_read = f.read()
-            print(f"    Temporary config file content (after sync):\n{temp_config_read}")
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.yaml', dir='.') as tmp_file:
+            yaml.dump(temp_config_content, tmp_file)
+            temp_config_file_path = tmp_file.name
+            tmp_file.flush()
+            os.fsync(tmp_file.fileno())
+            print(f"    Temporary config file created at: {temp_config_file_path}")
+            # 添加以下代码来读取并打印临时配置文件的内容
+            with open(temp_config_file_path, 'r', encoding='utf-8') as f:
+                temp_config_read = f.read()
+                print(f"    Temporary config file content (after sync):\n{temp_config_read}")
     except IOError as e:
         print(f"    Error creating temporary config: {e}")
         return None
@@ -171,11 +174,11 @@ async def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, cou
                 clash_process.kill()
             except Exception as e:
                 print(f"    Error terminating Clash process for {proxy_name}: {e}")
-        if os.path.exists(temp_config_file_path):
+        if temp_config_file_path and os.path.exists(temp_config_file_path):
             try:
                 os.remove(temp_config_file_path)
             except OSError as e:
-                print(f"    Warning: Could not remove temporary config file {temp_config_file_path}: {e}")
+                print(f"    Warning: Could not remove temporary file {temp_config_file_path}: {e}")
 
 def save_valid_proxies(valid_proxies, file_path):
     """Saves the list of valid proxies to a YAML file."""
