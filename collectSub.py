@@ -9,13 +9,14 @@ exclude_keywords = [
     "https://raw.githubusercontent.com",
     "https://t.me",
     "https://github.com",
+    "https://mc.jiedianxielou.workers.dev",
     "raw"
 ]
 
 # 配置文件 URLs 列表 (保持不变)
 config_urls = [
-    # "https://github.com/qjlxg/collectSub/raw/refs/heads/main/config.yaml",
-     "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/xujw3.txt",
+     "https://github.com/qjlxg/collectSub/raw/refs/heads/main/config.yaml",
+     #"https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/xujw3.txt",
     # 你可以在这里添加更多的配置文件 URL
 ]
 
