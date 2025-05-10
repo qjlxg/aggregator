@@ -27,6 +27,11 @@ jobs:
       run: chmod +x /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/clash/clash-linux
       shell: bash
 
+    - name: Run standardization script
+      run: python test_connectivity.py --standardize
+      env:
+        CLASH_PATH: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/clash/clash-linux
+
     - name: Run connectivity test script
       run: python test_connectivity.py
       env:
