@@ -27,17 +27,37 @@ jobs:
       run: chmod +x /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/clash/clash-linux
       shell: bash
 
-    - name: Run standardization script
-      run: python test_connectivity.py --standardize
-      env:
-        CLASH_PATH: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/clash/clash-linux
-
-    - name: Run connectivity test script
+    - name: Run standardization and connectivity test script
+      id: test_script
       run: python test_connectivity.py
       env:
         CLASH_PATH: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/clash/clash-linux
 
+    - name: Configure Git
+      run: |
+        git config --global user.name "GitHub Actions Bot"
+        git config --global user.email "actions@github.com"
+
+    - name: Add and Commit changes
+      run: |
+        git add data/ss.yaml
+        if [[ -n "$(git status --porcelain data/ss.yaml)" ]]; then
+          git commit -m "Update successful nodes [skip ci]"
+          echo "COMMIT=true" >> $GITHUB_OUTPUT
+        else
+          echo "COMMIT=false" >> $GITHUB_OUTPUT
+          echo "No changes to data/ss.yaml to commit."
+        fi
+
+    - name: Push changes
+      if: steps.test_script.outcome == 'success' && steps.git_changes.outputs.COMMIT == 'true'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref_name }}
+
     - name: Upload successful nodes (optional)
+      if: steps.test_script.outcome == 'success'
       uses: actions/upload-artifact@v4
       with:
         name: successful-nodes
