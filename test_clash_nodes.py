@@ -15,8 +15,9 @@ COUNTRY_MMDB_NAME = 'Country.mmdb'
 TARGET_PROXY_TYPES = ["vmess", "ss", "vless", "trojan", "hysteria2"]
 TEST_URL = "http://www.gstatic.com/generate_204"
 REQUEST_TIMEOUT_SECONDS = 10
-CLASH_STARTUP_WAIT_SECONDS = 3
-MAX_CONCURRENCY = 5
+CLASH_STARTUP_WAIT_SECONDS = 15  # 增加启动等待时间
+MAX_CONCURRENCY = 3  # 降低并发数
+CLASH_TERMINATE_TIMEOUT = 10 # 增加 Clash 终止超时时间
 
 # --- 辅助函数 ---
 
@@ -102,7 +103,11 @@ async def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, cou
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
-        stdout, stderr = await asyncio.wait_for(clash_process.communicate(input=config_string), timeout=CLASH_STARTUP_WAIT_SECONDS)
+        try:
+            stdout, stderr = await asyncio.wait_for(clash_process.communicate(input=config_string), timeout=CLASH_STARTUP_WAIT_SECONDS)
+        except asyncio.TimeoutError:
+            print(f"    FAILED: Timeout while starting Clash for {proxy_name}.")
+            return None
 
         if clash_process.returncode != 0:
             print(f"    Error starting Clash for {proxy_name}. Exit code: {clash_process.returncode}")
@@ -113,30 +118,34 @@ async def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, cou
             return None
 
         proxies = {'http': f'http://127.0.0.1:{http_port}', 'https': f'http://127.0.0.1:{http_port}'}
-        async with session.get(TEST_URL, proxy=proxies['http'], timeout=REQUEST_TIMEOUT_SECONDS, ssl=False) as response:
-            if response.status == 204:
-                print(f"    SUCCESS: Node {proxy_name} is valid.")
-                return proxy_config
-            else:
-                print(f"    FAILED: Node {proxy_name} returned status {response.status}.")
-                return None
+        try:
+            async with session.get(TEST_URL, proxy=proxies['http'], timeout=REQUEST_TIMEOUT_SECONDS, ssl=False) as response:
+                if response.status == 204:
+                    print(f"    SUCCESS: Node {proxy_name} is valid.")
+                    return proxy_config
+                else:
+                    print(f"    FAILED: Node {proxy_name} returned status {response.status}.")
+                    return None
+        except aiohttp.ClientError as e:
+            print(f"    FAILED: Request error for {proxy_name}: {e}")
+            return None
+        except asyncio.TimeoutError:
+            print(f"    FAILED: Timeout during request for {proxy_name}.")
+            return None
+        except Exception as e:
+            print(f"    An unexpected error occurred while testing {proxy_name}: {e}")
+            return None
 
-    except asyncio.TimeoutError:
-        print(f"    FAILED: Timeout while starting Clash or testing {proxy_name}.")
-        return None
-    except aiohttp.ClientError as e:
-        print(f"    FAILED: Request error for {proxy_name}: {e}")
-        return None
-    except Exception as e:
-        print(f"    An unexpected error occurred while testing {proxy_name}: {e}")
-        return None
     finally:
         if clash_process:
             try:
                 clash_process.terminate()
-                await asyncio.wait_for(clash_process.wait(), timeout=5)
+                await asyncio.wait_for(clash_process.wait(), timeout=CLASH_TERMINATE_TIMEOUT)
             except asyncio.TimeoutError:
                 clash_process.kill()
+                print(f"    Clash process for {proxy_name} did not terminate gracefully, killed.")
+            except Exception as e:
+                print(f"    Error terminating Clash process for {proxy_name}: {e}")
 
 async def test_proxies_concurrently(nodes_to_test, clash_binary, clash_dir, country_mmdb_path):
     """并发测试代理节点。"""
@@ -166,7 +175,7 @@ def save_valid_proxies(valid_proxies, file_path):
         print(f"Error: Could not write output YAML file {file_path}: {e}")
 
 async def main():
-    print("Starting Clash proxy node testing process (rebooted)...")
+    print("Starting Clash proxy node testing process (rebooted again)...")
 
     # 1. 选择 Clash 二进制文件
     try:
@@ -216,7 +225,7 @@ async def main():
         print("\nNo valid proxies found after testing.")
         save_valid_proxies([], OUTPUT_YAML_PATH)
 
-    print("\nProxy testing process finished (rebooted).")
+    print("\nProxy testing process finished (rebooted again).")
 
 if __name__ == '__main__':
     if not os.path.exists('data'):
