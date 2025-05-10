@@ -6,17 +6,23 @@ import base64
 
 # 定义要排除的关键字 (保持不变)
 exclude_keywords = [
-    "https://raw.githubusercontent.com",
+    "https://raw.bgithub.xyz",
     "https://t.me",
-    "https://github.com",
+    "https://bgithub.xyz",
     "https://mc.jiedianxielou.workers.dev",
+    "https://apps.apple.com",
+    "https://ch.owokkvsxks.store",
+    "https://igdux.top",
+    "https://sdk.bhqt.fun",
+    "https://shz.al",
+    
     "raw"
 ]
 
 # 配置文件 URLs 列表 (保持不变)
 config_urls = [
-     "https://github.com/qjlxg/collectSub/raw/refs/heads/main/config.yaml",
-     #"https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/xujw3.txt",
+     "https://bgithub.xyz/qjlxg/collectSub/raw/refs/heads/main/config.yaml",
+     #"https://bgithub.xyz/qjlxg/aggregator/raw/refs/heads/main/data/xujw3.txt",
     # 你可以在这里添加更多的配置文件 URL
 ]
 
