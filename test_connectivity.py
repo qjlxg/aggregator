@@ -7,7 +7,7 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def standardize_clash_config(input_path="data/clash.yaml", output_path="temp_clash.yaml"):
-    """读取 Clash 配置文件，标准化格式，并写入新的临时文件。"""
+    """读取 Clash 配置文件，标准化格式，并写入新的临时文件 (强制转换布尔值)。"""
     try:
         with open(input_path, 'r') as f:
             clash_config = yaml.safe_load(f)
@@ -16,15 +16,15 @@ def standardize_clash_config(input_path="data/clash.yaml", output_path="temp_cla
                 for proxy in clash_config['proxies']:
                     if isinstance(proxy, dict):
                         standardized_proxy = proxy.copy()
-                        # 标准化布尔值
+                        # 强制转换布尔值
                         for key in ['tls', 'udp', 'allow-insecure', 'insecure']:
                             if key in standardized_proxy:
                                 if standardized_proxy[key] in ['true', True, 1]:
                                     standardized_proxy[key] = True
-                                elif standardized_proxy[key] in ['false', False, 0, None]:
+                                elif standardized_proxy[key] in ['false', False, 0, None, '']:
                                     standardized_proxy[key] = False
-                                elif isinstance(standardized_proxy[key], str):
-                                    logging.warning(f"代理 '{standardized_proxy.get('name', 'unknown')}' 的字段 '{key}' 的值 '{standardized_proxy[key]}' 不是标准的布尔值，已尝试转换为 False。")
+                                else:
+                                    logging.warning(f"代理 '{standardized_proxy.get('name', 'unknown')}' 的字段 '{key}' 的值 '{standardized_proxy[key]}' 不是标准的布尔值，已强制转换为 False。")
                                     standardized_proxy[key] = False
 
                         # 标准化端口为整数
