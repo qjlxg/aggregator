@@ -24,8 +24,14 @@ jobs:
         run: python collectSub.py
 
       - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Update subscribes.txt (Shanghai Time)"
-          file_pattern: data/subscribes.txt
-          push_options: origin main
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/subscribes.txt
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update subscribes.txt (Shanghai Time)" -a
+            git pull --rebase origin main
+            git push origin main
+          fi
