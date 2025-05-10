@@ -1,6 +1,7 @@
 import yaml
+import asyncio
+import aiohttp
 import subprocess
-import requests
 import os
 import platform
 import time
@@ -14,15 +15,11 @@ CLASH_DIR = 'clash'
 COUNTRY_MMDB_NAME = 'Country.mmdb'
 TEMP_CONFIG_NAME = 'temp_clash_test_config.yaml'
 
-# Proxy types to test as specified in the prompt
-# Note: "ss://" is represented as type "ss" in Clash config, "vmess://" as "vmess", etc.
-# Hysteria2 is type "hysteria2"
 TARGET_PROXY_TYPES = ["vmess", "ss", "vless", "trojan", "hysteria2"]
-
-# Test URL: light, fast, returns HTTP 204 No Content on success
 TEST_URL = "http://www.gstatic.com/generate_204"
-REQUEST_TIMEOUT_SECONDS = 10  # Timeout for the test request
-CLASH_STARTUP_WAIT_SECONDS = 3 # Time to wait for Clash to start
+REQUEST_TIMEOUT_SECONDS = 10
+CLASH_STARTUP_WAIT_SECONDS = 3
+MAX_CONCURRENCY = 5  # 控制并发测试的任务数量，根据系统性能调整
 
 # --- Helper Functions ---
 
@@ -39,11 +36,7 @@ def select_clash_binary():
     binary_path = None
 
     if system == 'Linux':
-        # Assuming clash-linux is for x86_64, common for Linux servers/desktops
-        # If you have a specific arm64 linux binary, add logic here
         if 'aarch64' in machine or 'arm64' in machine:
-            # The prompt did not specify a clash-linux-arm binary.
-            # If you have one, e.g., 'clash-linux-arm', update here.
             print("Warning: No specific ARM64 Linux Clash binary specified in prompt. Trying generic 'clash-linux'.")
             binary_path = os.path.join(CLASH_DIR, 'clash-linux')
         else: # x86_64, amd64
@@ -57,7 +50,6 @@ def select_clash_binary():
         raise OSError(f"Unsupported operating system: {system}")
 
     if binary_path and os.path.exists(binary_path):
-        # Ensure the binary is executable
         try:
             os.chmod(binary_path, 0o755)
         except OSError as e:
@@ -80,35 +72,30 @@ def load_clash_config(file_path):
         print(f"Error: Could not parse input YAML file {file_path}: {e}")
         return None
 
-def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, country_mmdb_path):
+async def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, country_mmdb_path, session):
     """
-    Tests a single proxy node by starting a Clash instance.
-    Returns True if the proxy is valid, False otherwise.
+    Tests a single proxy node by starting a Clash instance (async version).
+    Returns the proxy config if valid, None otherwise.
     """
     proxy_name = proxy_config.get('name', 'UnnamedProxy')
-    print(f"  Testing node: {proxy_name} (type: {proxy_config.get('type')})")
+    print(f"  Testing node: {proxy_name} (type: {proxy_config.get('type')}) - Task: {asyncio.current_task().get_name()}")
 
-    # Find free ports for Clash
     http_port = find_free_port()
-    # socks_port = find_free_port() # If needed
-    # external_controller_port = find_free_port() # If needed
 
     temp_config_content = {
         'port': http_port,
-        # 'socks-port': socks_port,
         'allow-lan': False,
-        'mode': 'rule', # or 'global'
-        'log-level': 'silent', # or 'error' for debugging
-        # 'external-controller': f'127.0.0.1:{external_controller_port}',
+        'mode': 'rule',
+        'log-level': 'silent',
         'dns': {
             'enable': True,
             'ipv6': False,
-            'listen': '0.0.0.0:53', # Clash might need a DNS listen port
+            'listen': '0.0.0.0:53',
             'nameserver': ['114.114.114.114', '8.8.8.8'],
             'fallback': ['1.1.1.1', 'dns.google:53'],
-            'enhanced-mode': 'redir-host', # or fake-ip
+            'enhanced-mode': 'redir-host',
         },
-        'geoip': True, # Tells Clash to look for Country.mmdb in its data directory
+        'geoip': True,
         'proxies': [proxy_config],
         'proxy-groups': [{
             'name': 'TEST_GROUP',
@@ -124,55 +111,47 @@ def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, country_m
             yaml.dump(temp_config_content, f)
     except IOError as e:
         print(f"    Error creating temporary config: {e}")
-        return False
+        return None
 
     clash_process = None
     try:
-        # -d sets the working directory for Clash (where Country.mmdb, etc. are)
-        # -f specifies the configuration file
-        # Ensure paths are absolute or correctly relative
         cmd = [clash_binary_path, '-d', os.path.abspath(clash_work_dir), '-f', temp_config_file_path]
-        # print(f"    Starting Clash with command: {' '.join(cmd)}")
-        clash_process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        # print(f"    Clash PID: {clash_process.pid}. Waiting {CLASH_STARTUP_WAIT_SECONDS}s for startup...")
-        time.sleep(CLASH_STARTUP_WAIT_SECONDS)
+        clash_process = await asyncio.create_subprocess_exec(*cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        await asyncio.sleep(CLASH_STARTUP_WAIT_SECONDS)
 
-        # Check if Clash process is still running
-        if clash_process.poll() is not None:
+        if clash_process.returncode is not None:
             print(f"    Error: Clash process terminated prematurely. Exit code: {clash_process.returncode}")
-            # You might want to capture stderr from Clash here for detailed errors
-            return False
+            return None
 
         proxies_for_request = {
             'http': f'http://127.0.0.1:{http_port}',
-            'https': f'http://127.0.0.1:{http_port}' # HTTPS requests also go through the HTTP proxy port
+            'https': f'http://127.0.0.1:{http_port}'
         }
 
-        # print(f"    Making request to {TEST_URL} via proxy 127.0.0.1:{http_port}")
-        response = requests.get(TEST_URL, proxies=proxies_for_request, timeout=REQUEST_TIMEOUT_SECONDS, verify=True)
+        try:
+            async with session.get(TEST_URL, proxy=proxies_for_request['http'], timeout=REQUEST_TIMEOUT_SECONDS, ssl=False) as response:
+                if response.status == 204:
+                    print(f"    SUCCESS: Node {proxy_name} is valid.")
+                    return proxy_config
+                else:
+                    print(f"    FAILED: Node {proxy_name} returned status {response.status}.")
+                    return None
+        except aiohttp.ClientError as e:
+            print(f"    FAILED: Node {proxy_name} request error: {e}")
+            return None
+        except asyncio.TimeoutError:
+            print(f"    FAILED: Node {proxy_name} timed out after {REQUEST_TIMEOUT_SECONDS}s.")
+            return None
+        except Exception as e:
+            print(f"    An unexpected error occurred while testing {proxy_name}: {e}")
+            return None
 
-        if response.status_code == 204:
-            print(f"    SUCCESS: Node {proxy_name} is valid.")
-            return True
-        else:
-            print(f"    FAILED: Node {proxy_name} returned status {response.status_code}.")
-            return False
-
-    except requests.exceptions.Timeout:
-        print(f"    FAILED: Node {proxy_name} timed out after {REQUEST_TIMEOUT_SECONDS}s.")
-        return False
-    except requests.exceptions.RequestException as e:
-        print(f"    FAILED: Node {proxy_name} request error: {e}")
-        return False
-    except Exception as e:
-        print(f"    An unexpected error occurred while testing {proxy_name}: {e}")
-        return False
     finally:
         if clash_process:
             try:
                 clash_process.terminate()
-                clash_process.wait(timeout=5) # Wait for termination
-            except subprocess.TimeoutExpired:
+                await asyncio.wait_for(clash_process.wait(), timeout=5)
+            except asyncio.TimeoutError:
                 print(f"    Clash process for {proxy_name} did not terminate gracefully, killing.")
                 clash_process.kill()
             except Exception as e:
@@ -194,9 +173,25 @@ def save_valid_proxies(valid_proxies, file_path):
     except IOError as e:
         print(f"Error: Could not write output YAML file {file_path}: {e}")
 
+async def test_proxies_concurrently(nodes_to_test, clash_binary, clash_dir, country_mmdb_path):
+    """Tests proxies concurrently using asyncio tasks."""
+    valid_proxies_configs = []
+    semaphore = asyncio.Semaphore(MAX_CONCURRENCY)
+
+    async def limited_test(proxy_config):
+        async with semaphore:
+            async with aiohttp.ClientSession() as session:
+                result = await test_single_proxy(proxy_config, clash_binary, clash_dir, country_mmdb_path, session)
+                if result:
+                    valid_proxies_configs.append(result)
+
+    tasks = [limited_test(proxy) for proxy in nodes_to_test]
+    await asyncio.gather(*tasks)
+    return valid_proxies_configs
+
 # --- Main Execution ---
-def main():
-    print("Starting Clash proxy node testing process...")
+async def main():
+    print("Starting Clash proxy node testing process (asyncio version)...")
 
     # 1. Select Clash Binary
     try:
@@ -214,7 +209,6 @@ def main():
         return
     print(f"Found GeoIP database: {country_mmdb_full_path}")
 
-
     # 2. Load Proxies from input clash.yaml
     clash_config = load_clash_config(INPUT_YAML_PATH)
     if not clash_config or 'proxies' not in clash_config:
@@ -228,38 +222,31 @@ def main():
 
     print(f"Loaded {len(all_proxies)} proxies from {INPUT_YAML_PATH}.")
 
-    # 3. Filter and Test Proxies
+    # 3. Filter Proxies
     nodes_to_test = [p for p in all_proxies if isinstance(p, dict) and p.get('type') in TARGET_PROXY_TYPES]
 
     if not nodes_to_test:
         print(f"No proxies matching the target types ({', '.join(TARGET_PROXY_TYPES)}) found.")
         return
 
-    print(f"Found {len(nodes_to_test)} proxies matching target types. Starting tests...\n")
+    print(f"Found {len(nodes_to_test)} proxies matching target types. Starting concurrent tests (max {MAX_CONCURRENCY} tasks)...\n")
 
-    valid_proxies_configs = []
-    for i, proxy_node_config in enumerate(nodes_to_test):
-        print(f"Processing proxy {i+1}/{len(nodes_to_test)}:")
-        is_valid = test_single_proxy(proxy_node_config, clash_binary, CLASH_DIR, country_mmdb_full_path)
-        if is_valid:
-            valid_proxies_configs.append(proxy_node_config)
-        print("-" * 30) # Separator
+    # 4. Test Proxies Concurrently
+    valid_proxies_configs = await test_proxies_concurrently(nodes_to_test, clash_binary, CLASH_DIR, country_mmdb_full_path)
 
-    # 4. Save Valid Proxies to output sp.yaml
+    # 5. Save Valid Proxies to output sp.yaml
     if valid_proxies_configs:
         save_valid_proxies(valid_proxies_configs, OUTPUT_YAML_PATH)
     else:
         print("\nNo valid proxies found after testing.")
-        # Create an empty sp.yaml or one with an empty proxies list
         save_valid_proxies([], OUTPUT_YAML_PATH)
 
     print("\nProxy testing process finished.")
 
 if __name__ == '__main__':
-    # Ensure the data directory exists for output, if not already for input
     if not os.path.exists('data'):
         os.makedirs('data')
     if not os.path.exists(CLASH_DIR):
         print(f"Error: Clash directory '{CLASH_DIR}' not found. Please create it and place Clash binaries and Country.mmdb inside.")
     else:
-        main()
+        asyncio.run(main())
