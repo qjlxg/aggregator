@@ -28,12 +28,29 @@ def is_valid_url(url):
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
     return re.match(regex, url) is not None
 
-def test_connectivity(url, timeout=5):
-    """测试 URL 是否可以连通"""
+def test_connectivity(url, timeout=10):
+    """测试 URL 是否可以连通，并初步判断订阅是否有效"""
     try:
         response = requests.get(url, timeout=timeout)
-        return response.status_code == 200
-    except requests.exceptions.RequestException:
+        response.raise_for_status()  # 如果状态码不是 200，会抛出异常
+
+        # 尝试读取内容，进行初步判断
+        content = response.text.strip()
+        if content:
+            # 这里可以添加更复杂的判断逻辑，例如：
+            # - 检查是否包含常见的节点信息格式 (例如 base64 编码的 vmess/trojan/shadowsocks 链接)
+            # - 检查是否包含特定的错误提示 (这需要根据实际订阅返回的内容来确定)
+            # 对于通用的订阅链接，如果能成功获取到非空内容，我们暂时认为它是有效的
+            return True
+        else:
+            print(f"链接 {url} 返回空内容，可能无效")
+            return False
+
+    except requests.exceptions.RequestException as e:
+        print(f"测试链接 {url} 失败: {e}")
+        return False
+    except Exception as e:
+        print(f"测试链接 {url} 时发生错误: {e}")
         return False
 
 def main():
@@ -65,19 +82,19 @@ def main():
                     if link:
                         existing_links.add(link)
 
-        # 测试新链接的连通性并去重
-        connected_links = set()
+        # 测试新链接的连通性和有效性并去重
+        valid_links = set()
         for link in new_links:
             if link not in existing_links and test_connectivity(link):
-                connected_links.add(link)
-                print(f"链接 {link} 可连通")
+                valid_links.add(link)
+                print(f"链接 {link} 可连通且内容不为空，已添加到有效链接")
             elif link in existing_links:
                 print(f"链接 {link} 已存在")
             else:
-                print(f"链接 {link} 无法连通")
+                print(f"链接 {link} 无法连通或内容为空")
 
-        # 合并已存在的和新连接通的链接并去重
-        all_links = existing_links.union(connected_links)
+        # 合并已存在的和新连接通且有效的链接并去重
+        all_links = existing_links.union(valid_links)
 
         # 保存去重后的链接到文件
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
@@ -85,7 +102,7 @@ def main():
             for link in sorted(list(all_links)):
                 f.write(link + "\n")
 
-        print(f"共保存 {len(all_links)} 个订阅链接到 {output_file}")
+        print(f"共保存 {len(all_links)} 个有效订阅链接到 {output_file}")
 
     except requests.exceptions.RequestException as e:
         print(f"获取配置文件失败: {e}")
