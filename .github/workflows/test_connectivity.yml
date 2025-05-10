@@ -1,0 +1,39 @@
+name: Test Clash Node Connectivity
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: # 允许手动触发 workflow
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Install PyYAML
+      run: pip install pyyaml
+
+    - name: Make clash-linux executable
+      run: chmod +x /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/clash/clash-linux
+      shell: bash
+
+    - name: Run connectivity test script
+      run: python test_connectivity.py
+      env:
+        CLASH_PATH: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/clash/clash-linux
+
+    - name: Upload successful nodes (optional)
+      uses: actions/upload-artifact@v4
+      with:
+        name: successful-nodes
+        path: data/ss.yaml
