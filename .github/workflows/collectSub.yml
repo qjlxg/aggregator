@@ -1,0 +1,31 @@
+name: Collect Subscribes
+
+on:
+  workflow_dispatch: # 允许手动触发工作流
+  schedule:
+    - cron: '0 1 * * *' # 每天 UTC 时间 1 点运行 (北京时间 9 点)
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install requests and PyYAML
+        run: pip install requests pyyaml
+
+      - name: Run collectSub script
+        run: python collectSub.py
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update subscribes.txt (Shanghai Time)"
+          file_pattern: data/subscribes.txt
+          push_options: origin main
