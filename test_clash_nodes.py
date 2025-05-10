@@ -86,7 +86,7 @@ async def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, cou
         'port': http_port,
         'allow-lan': False,
         'mode': 'rule',
-        'log-level': 'silent',
+        'log-level': 'silent', # 先保持 silent，如果问题依旧，可以尝试改为 'error' 或 'debug'
         'dns': {
             'enable': True,
             'ipv6': False,
@@ -116,11 +116,20 @@ async def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, cou
     clash_process = None
     try:
         cmd = [clash_binary_path, '-d', os.path.abspath(clash_work_dir), '-f', temp_config_file_path]
-        clash_process = await asyncio.create_subprocess_exec(*cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        clash_process = await asyncio.create_subprocess_exec(
+            *cmd,
+            stdout=subprocess.PIPE,  # 捕获标准输出
+            stderr=subprocess.PIPE   # 捕获标准错误
+        )
         await asyncio.sleep(CLASH_STARTUP_WAIT_SECONDS)
 
         if clash_process.returncode is not None:
+            stdout, stderr = await clash_process.communicate()
             print(f"    Error: Clash process terminated prematurely. Exit code: {clash_process.returncode}")
+            if stdout:
+                print(f"    Clash stdout:\n{stdout.decode()}")
+            if stderr:
+                print(f"    Clash stderr:\n{stderr.decode()}")
             return None
 
         proxies_for_request = {
