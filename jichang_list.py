@@ -132,6 +132,6 @@ def main(base_url='https://t.me/s/jichang_list', max_pages=90, max_workers=10): 
 
 if __name__ == '__main__':
     start_url = 'https://t.me/s/jichang_list'  # 你可以修改起始 URL
-    max_pages_to_crawl = 150  # 你可以修改最大抓取页数
+    max_pages_to_crawl = 10  # 你可以修改最大抓取页数
     max_workers = 10 #设置并发线程数量
     main(start_url, max_pages_to_crawl, max_workers)
