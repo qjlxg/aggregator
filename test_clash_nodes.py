@@ -86,7 +86,7 @@ async def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, cou
         'port': http_port,
         'allow-lan': False,
         'mode': 'rule',
-        'log-level': 'silent', # 先保持 silent，如果问题依旧，可以尝试改为 'error' 或 'debug'
+        'log-level': 'silent',
         'dns': {
             'enable': True,
             'ipv6': False,
@@ -109,6 +109,10 @@ async def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, cou
     try:
         with open(temp_config_file_path, 'w', encoding='utf-8') as f:
             yaml.dump(temp_config_content, f)
+        # 添加以下代码来读取并打印临时配置文件的内容
+        with open(temp_config_file_path, 'r', encoding='utf-8') as f:
+            temp_config_read = f.read()
+            print(f"    Temporary config file content:\n{temp_config_read}")
     except IOError as e:
         print(f"    Error creating temporary config: {e}")
         return None
