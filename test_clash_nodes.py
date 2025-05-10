@@ -18,7 +18,7 @@ TEMP_CONFIG_NAME = 'temp_clash_test_config.yaml'
 TARGET_PROXY_TYPES = ["vmess", "ss", "vless", "trojan", "hysteria2"]
 TEST_URL = "http://www.gstatic.com/generate_204"
 REQUEST_TIMEOUT_SECONDS = 10
-CLASH_STARTUP_WAIT_SECONDS = 3
+CLASH_STARTUP_WAIT_SECONDS = 10  # 增加启动等待时间
 MAX_CONCURRENCY = 5  # 控制并发测试的任务数量，根据系统性能调整
 
 # --- Helper Functions ---
@@ -86,7 +86,7 @@ async def test_single_proxy(proxy_config, clash_binary_path, clash_work_dir, cou
         'port': http_port,
         'allow-lan': False,
         'mode': 'rule',
-        'log-level': 'silent',
+        'log-level': 'error',  # 启用更详细的日志
         'dns': {
             'enable': True,
             'ipv6': False,
