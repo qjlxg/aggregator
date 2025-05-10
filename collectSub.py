@@ -2,6 +2,8 @@ import requests
 import yaml
 import os
 import re
+import time
+from datetime import datetime, timezone, timedelta
 
 # 定义要排除的关键字
 exclude_keywords = [
@@ -11,8 +13,12 @@ exclude_keywords = [
     "raw"
 ]
 
-# 配置文件 URL
-config_url = "https://github.com/qjlxg/collectSub/raw/refs/heads/main/config.yaml"
+# 配置文件 URLs 列表
+config_urls = [
+    "https://github.com/qjlxg/collectSub/raw/refs/heads/main/config.yaml",
+    "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/xujw3.txt",
+   
+]
 
 # 输出文件路径
 output_file = "data/subscribes.txt"
@@ -37,10 +43,6 @@ def test_connectivity(url, timeout=10):
         # 尝试读取内容，进行初步判断
         content = response.text.strip()
         if content:
-            # 这里可以添加更复杂的判断逻辑，例如：
-            # - 检查是否包含常见的节点信息格式 (例如 base64 编码的 vmess/trojan/shadowsocks 链接)
-            # - 检查是否包含特定的错误提示 (这需要根据实际订阅返回的内容来确定)
-            # 对于通用的订阅链接，如果能成功获取到非空内容，我们暂时认为它是有效的
             return True
         else:
             print(f"链接 {url} 返回空内容，可能无效")
@@ -54,62 +56,69 @@ def test_connectivity(url, timeout=10):
         return False
 
 def main():
-    try:
-        response = requests.get(config_url)
-        response.raise_for_status()
-        config = yaml.safe_load(response.text)
+    all_new_links = set()
+    for config_url in config_urls:
+        try:
+            response = requests.get(config_url)
+            response.raise_for_status()
+            config = yaml.safe_load(response.text)
 
-        new_links = set()
+            if isinstance(config, dict) and ("clash订阅" in config or "v2订阅" in config):
+                # 处理包含 "clash订阅" 和 "v2订阅" 键的格式
+                if "clash订阅" in config and isinstance(config["clash订阅"], list):
+                    for link in config["clash订阅"]:
+                        if isinstance(link, str) and is_valid_url(link) and not any(keyword in link for keyword in exclude_keywords):
+                            all_new_links.add(link)
 
-        # 提取 clash 订阅链接
-        if "clash订阅" in config and isinstance(config["clash订阅"], list):
-            for link in config["clash订阅"]:
-                if isinstance(link, str) and is_valid_url(link) and not any(keyword in link for keyword in exclude_keywords):
-                    new_links.add(link)
+                if "v2订阅" in config and isinstance(config["v2订阅"], list):
+                    for link in config["v2订阅"]:
+                        if isinstance(link, str) and is_valid_url(link) and not any(keyword in link for keyword in exclude_keywords):
+                            all_new_links.add(link)
+            elif isinstance(config, list):
+                # 处理直接的链接列表格式
+                for link in config:
+                    if isinstance(link, str) and is_valid_url(link) and not any(keyword in link for keyword in exclude_keywords):
+                        all_new_links.add(link)
 
-        # 提取 v2 订阅链接
-        if "v2订阅" in config and isinstance(config["v2订阅"], list):
-            for link in config["v2订阅"]:
-                if isinstance(link, str) and is_valid_url(link) and not any(keyword in link for keyword in exclude_keywords):
-                    new_links.add(link)
+            print(f"成功从 {config_url} 获取并处理了订阅链接")
 
-        # 读取已存在的订阅链接
-        existing_links = set()
-        if os.path.exists(output_file):
-            with open(output_file, "r") as f:
-                for line in f:
-                    link = line.strip()
-                    if link:
-                        existing_links.add(link)
+        except requests.exceptions.RequestException as e:
+            print(f"获取配置文件 {config_url} 失败: {e}")
+        except yaml.YAMLError as e:
+            print(f"解析 YAML 文件 {config_url} 失败: {e}")
+        except Exception as e:
+            print(f"处理配置文件 {config_url} 时发生错误: {e}")
 
-        # 测试新链接的连通性和有效性并去重
-        valid_links = set()
-        for link in new_links:
-            if link not in existing_links and test_connectivity(link):
-                valid_links.add(link)
-                print(f"链接 {link} 可连通且内容不为空，已添加到有效链接")
-            elif link in existing_links:
-                print(f"链接 {link} 已存在")
-            else:
-                print(f"链接 {link} 无法连通或内容为空")
+    # 读取已存在的订阅链接
+    existing_links = set()
+    if os.path.exists(output_file):
+        with open(output_file, "r") as f:
+            for line in f:
+                link = line.strip()
+                if link:
+                    existing_links.add(link)
 
-        # 合并已存在的和新连接通且有效的链接并去重
-        all_links = existing_links.union(valid_links)
+    # 测试新链接的连通性和有效性并去重
+    valid_links = set()
+    for link in all_new_links:
+        if link not in existing_links and test_connectivity(link):
+            valid_links.add(link)
+            print(f"链接 {link} 可连通且内容不为空，已添加到有效链接")
+        elif link in existing_links:
+            print(f"链接 {link} 已存在")
+        else:
+            print(f"链接 {link} 无法连通或内容为空")
 
-        # 保存去重后的链接到文件
-        os.makedirs(os.path.dirname(output_file), exist_ok=True)
-        with open(output_file, "w") as f:
-            for link in sorted(list(all_links)):
-                f.write(link + "\n")
+    # 合并已存在的和新连接通且有效的链接并去重
+    final_links = existing_links.union(valid_links)
 
-        print(f"共保存 {len(all_links)} 个有效订阅链接到 {output_file}")
+    # 保存去重后的链接到文件
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    with open(output_file, "w") as f:
+        for link in sorted(list(final_links)):
+            f.write(link + "\n")
 
-    except requests.exceptions.RequestException as e:
-        print(f"获取配置文件失败: {e}")
-    except yaml.YAMLError as e:
-        print(f"解析 YAML 失败: {e}")
-    except Exception as e:
-        print(f"发生错误: {e}")
+    print(f"共保存 {len(final_links)} 个有效订阅链接到 {output_file}")
 
 if __name__ == "__main__":
     main()
