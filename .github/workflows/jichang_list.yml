@@ -24,7 +24,7 @@ jobs:
           pip install requests
 
       - name: 运行脚本
-        run: python update_jichang_list.py
+        run: python jichang_list.py
 
       - name: 检查是否有更改
         id: git-check
