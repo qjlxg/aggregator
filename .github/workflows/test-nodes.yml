@@ -41,11 +41,19 @@ jobs:
           wget "$DOWNLOAD_URL" -O clash.gz
 
           # 解压 .gz 文件
-          rm -f clash # 确保 clash 文件不存在
+          rm -rf clash # 强制删除名为 clash 的目录（如果存在）
           gunzip clash.gz
 
+          # 查找解压后的文件名
+          CLASH_BINARY=$(ls | grep "clash-linux-amd64")
+          if [ -z "$CLASH_BINARY" ]; then
+            echo "错误：解压后未找到 Clash 二进制文件。"
+            exit 1
+          fi
+          echo "找到 Clash 二进制文件：$CLASH_BINARY"
+
           # 移动并设置权限
-          sudo mv clash-linux-amd64-v1.18.0 /usr/local/bin/clash
+          sudo mv "$CLASH_BINARY" /usr/local/bin/clash
           sudo chmod +x /usr/local/bin/clash
 
           # 验证安装
