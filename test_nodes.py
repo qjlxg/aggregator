@@ -24,7 +24,7 @@ def test_node(node_name):
     return False
 
 # 启动Clash
-subprocess.Popen(["./clash/clash", "-f", "config.yaml"])
+subprocess.Popen(["./clash/clash-linux", "-f", "config.yaml"])
 time.sleep(5)  # 等待Clash启动
 
 # 读取配置文件中的节点
