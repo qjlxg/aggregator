@@ -2,6 +2,7 @@ import base64
 import json
 import yaml
 from urllib.parse import urlparse, parse_qs
+import binascii  # 导入 binascii 模块
 
 def parse_vmess(uri):
     vmess_data = base64.b64decode(uri.split("://")[1]).decode()
@@ -21,17 +22,24 @@ def parse_vmess(uri):
     }
 
 def parse_ss(uri):
-    parts = uri.split("://")[1].split("@")
-    method_password = base64.b64decode(parts[0]).decode().split(":")
-    server_port = parts[1].split("#")[0].split(":")  # 处理带#的情况
-    return {
-        "name": "ss-" + server_port[0],
-        "type": "ss",
-        "server": server_port[0],
-        "port": int(server_port[1]),
-        "cipher": method_password[0],
-        "password": method_password[1]
-    }
+    try:
+        parts = uri.split("://")[1].split("@")
+        method_password = base64.b64decode(parts[0]).decode().split(":")
+        server_port = parts[1].split("#")[0].split(":")  # 处理带#的情况
+        return {
+            "name": "ss-" + server_port[0],
+            "type": "ss",
+            "server": server_port[0],
+            "port": int(server_port[1]),
+            "cipher": method_password[0],
+            "password": method_password[1]
+        }
+    except binascii.Error:
+        print(f"警告: 解析 Shadowsocks URI '{uri}' 时遇到 Base64 解码错误，已跳过该节点。")
+        return None
+    except Exception as e:
+        print(f"警告: 解析 Shadowsocks URI '{uri}' 时遇到其他错误: {e}，已跳过该节点。")
+        return None
 
 def parse_trojan(uri):
     parsed = urlparse(uri)
@@ -50,7 +58,9 @@ def generate_clash_config(nodes):
         if uri.startswith("vmess://"):
             proxies.append(parse_vmess(uri))
         elif uri.startswith("ss://"):
-            proxies.append(parse_ss(uri))
+            ss_node = parse_ss(uri)
+            if ss_node:
+                proxies.append(ss_node)
         elif uri.startswith("trojan://"):
             proxies.append(parse_trojan(uri))
         # 可扩展支持ssr://等其他协议
