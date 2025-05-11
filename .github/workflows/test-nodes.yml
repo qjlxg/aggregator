@@ -1,0 +1,29 @@
+name: Test Proxy Nodes with Clash
+on: [push, workflow_dispatch]
+jobs:
+  test-nodes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+      - name: 安装Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+      - name: 安装Clash
+        run: |
+          wget https://github.com/Dreamacro/clash/releases/download/v1.11.4/clash-linux-amd64-v1.11.4.gz
+          gunzip clash-linux-amd64-v1.11.4.gz
+          chmod +x clash-linux-amd64-v1.11.4
+          sudo mv clash-linux-amd64-v1.11.4 /usr/local/bin/clash
+      - name: 生成Clash配置文件
+        run: python generate_config.py
+      - name: 运行测试脚本
+        run: python test_nodes.py
+      - name: 提交结果
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add data/sp.txt
+          git commit -m "更新有效节点" || echo "无更改"
+          git push
