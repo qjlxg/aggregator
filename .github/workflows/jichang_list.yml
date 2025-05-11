@@ -3,7 +3,7 @@ name:  jichang_list.txt
 on:
   schedule:
     - cron: '0 0 * * *'  # 每天 UTC 时间午夜运行一次
-  workflow_dispatch:   # 允许手动触发
+  workflow_dispatch:    # 允许手动触发
 
 jobs:
   update-list:
@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0   # 重要：获取完整的历史记录
+          fetch-depth: 0    # 重要：获取完整的历史记录
 
       - name: 设置 Python
         uses: actions/setup-python@v4
@@ -22,11 +22,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install requests
-          pip install beautifulsoup4  # 安装 BeautifulSoup (bs4)
-          
+          pip install beautifulsoup4   # 安装 BeautifulSoup (bs4)
 
       - name: 运行脚本
         run: python jichang_list.py
+
+      - name: 检查 Git 状态 (调试)
+        run: git status
 
       - name: 检查是否有更改
         id: git-check
@@ -34,7 +36,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           git add data/jichang_list.txt
-          git diff --quiet --exit-code  # 检查是否有需要提交的更改
+          git diff --quiet --exit-code   # 检查是否有需要提交的更改
           if [ $? -eq 0 ]; then
             echo "没有需要提交的更改"
             echo "::set-output name=push::false"
@@ -46,8 +48,8 @@ jobs:
 
       - name: 推送更改
         if: steps.git-check.outputs.push == 'true'
-        uses: ad-m/github-push-action@master  # 可以使用更新的版本
+        uses: ad-m/github-push-action@master   # 可以使用更新的版本
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}  # 推送到触发工作流的分支
+          branch: ${{ github.ref }}   # 推送到触发工作流的分支
           force: false # 避免强制推送，更安全
