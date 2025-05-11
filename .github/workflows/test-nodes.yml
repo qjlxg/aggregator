@@ -27,10 +27,10 @@ jobs:
             exit 1
           fi
 
-          # 提取 Linux AMD64 二进制文件的下载链接
-          DOWNLOAD_URL=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name | startswith("clash-linux-amd64") and .name | endswith(".gz")) | .browser_download_url' 2>/dev/null || echo "")
+          # 提取 Linux AMD64 v1.18.0 二进制文件的下载链接
+          DOWNLOAD_URL=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name == "clash-linux-amd64-v1.18.0.gz") | .browser_download_url' 2>/dev/null || echo "")
           if [ -z "$DOWNLOAD_URL" ]; then
-            echo "错误：未找到适用于 Linux AMD64 的 Clash 二进制文件。"
+            echo "错误：未找到名为 clash-linux-amd64-v1.18.0.gz 的 Clash 二进制文件。"
             echo "API 响应："
             echo "$RELEASE_INFO"
             exit 1
@@ -44,8 +44,7 @@ jobs:
           gunzip clash.gz
 
           # 移动并设置权限
-          BINARY_NAME=$(ls | grep "clash-linux-amd64" || echo "clash") # 尝试匹配文件名，否则使用 "clash"
-          sudo mv "$BINARY_NAME" /usr/local/bin/clash
+          sudo mv clash-linux-amd64-v1.18.0 /usr/local/bin/clash
           sudo chmod +x /usr/local/bin/clash
 
           # 验证安装
