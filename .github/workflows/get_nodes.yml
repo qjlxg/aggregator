@@ -1,0 +1,35 @@
+name: Get Nodes
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # 每天 UTC 时间凌晨 1 点运行 (北京时间上午 9 点)
+  workflow_dispatch:
+
+jobs:
+  get_and_save_nodes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Python script to get and save nodes
+        run: python get_nodes.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions Bot"
+          git add data/ji.txt
+          if [[ -n $(git diff --staged) ]]; then
+            git commit -m "Update nodes data"
+            git push
+          else
+            echo "No changes to commit."
+          fi
