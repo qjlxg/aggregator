@@ -73,18 +73,20 @@ def fetch_page(url, headers, timeout=10, max_retries=3):
                 return None
     return None  # 如果所有重试都失败
 
-def save_urls_to_file(urls, filename='data/ji.txt'):
+def save_urls_to_file(urls, filename='data/jichang_list.txt'):
     """保存 URL 到文件"""
     # 确保目录存在
     os.makedirs(os.path.dirname(filename), exist_ok=True)
 
     try:
+        logging.info(f"尝试保存 URL 到文件: {filename}, 数量: {len(urls)}")
         with open(filename, 'w', encoding='utf-8') as f:
             for url in urls:
                 f.write(url + '\n')
-        logging.info(f"URL 已保存到 {filename}")
+        logging.info(f"URL 已成功保存到 {filename}")
     except IOError as e:
         logging.error(f"保存 URL 到文件 {filename} 失败: {e}")
+        logging.error(f"错误详情: {str(e)}") # 添加更详细的错误信息
 
 
 def main(base_url='https://t.me/s/jichang_list', max_pages=90, max_workers=10): # 添加 max_workers
@@ -102,19 +104,25 @@ def main(base_url='https://t.me/s/jichang_list', max_pages=90, max_workers=10): 
 
         html = fetch_page(current_url, headers)
         if html is None:
+            logging.warning("抓取页面内容失败，停止抓取。")
             break  # 抓取失败，停止
 
         new_urls = get_urls_from_html(html)
+        logging.info(f"从当前页面找到 {len(new_urls)} 个 URL。")
         all_urls.update(new_urls)
+        logging.info(f"当前总 URL 数量: {len(all_urls)}")
 
         next_page_url = get_next_page_url(html)
         current_url = next_page_url
+        logging.info(f"下一页 URL: {current_url}")
 
         page_count += 1
         time.sleep(random.uniform(35, 45))  # 礼貌地随机延迟，避免被封
 
         # 保存中间结果
+        logging.info("保存中间结果...")
         save_urls_to_file(list(all_urls), 'data/ji_partial.txt') # 保存为中间文件，防止程序中断导致数据丢失
+        logging.info("中间结果保存完毕。")
 
     # 并发测试 URL 连通性
     logging.info("开始并发测试 URL 连通性...")
@@ -122,16 +130,19 @@ def main(base_url='https://t.me/s/jichang_list', max_pages=90, max_workers=10): 
     with ThreadPoolExecutor(max_workers=max_workers) as executor: #控制线程池大小
         results = executor.map(test_url_connectivity, all_urls) # 并发执行测试
         valid_urls = [url for url, result in zip(all_urls, results) if result] #过滤有效的URL
+    logging.info("URL 连通性测试完成。")
 
     logging.info(f"共抓取 {page_count} 页")
     logging.info(f"找到的 URL 总数: {len(all_urls)}")
     logging.info(f"有效的 URL 数量: {len(valid_urls)}")
 
     # 保存最终结果
+    logging.info("保存最终结果...")
     save_urls_to_file(valid_urls, 'data/jichang_list.txt')
+    logging.info("最终结果保存完毕。")
 
 if __name__ == '__main__':
     start_url = 'https://t.me/s/jichang_list'  # 你可以修改起始 URL
-    max_pages_to_crawl = 5  # 你可以修改最大抓取页数
+    max_pages_to_crawl = 1  # 你可以修改最大抓取页数
     max_workers = 10 #设置并发线程数量
     main(start_url, max_pages_to_crawl, max_workers)
