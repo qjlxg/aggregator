@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # 日期变量
 currentdate=$(date +%Y%m%d)
@@ -6,18 +6,40 @@ currentmonth=$(date +%Y%m)
 currentmonths=$(date +%m)
 currentyears=$(date +%Y)
 
-# 订阅链接（Clash 和 V2Ray），使用换行符和续行符 \ 使其更易读
-# 注意：这里的缩进是为了代码可读性，实际执行时会被忽略
-subscribe_url="https://api-suc.0z.gs/sub?target="  # 公共前缀
+# 订阅链接（Clash 和 V2Ray）
+clash_urls=(
+  "https://proxy.v2gh.com/https://raw.bgithub.xyz/Pawdroid/Free-servers/main/sub"
+  "https://proxy.v2gh.com/https://raw.bgithub.xyz/ermaozi01/free_clash_vpn/main/subscribe/clash.yml"
+)
 
-clash_urls="https://proxy.v2gh.com/https://raw.bgithub.xyz/Pawdroid/Free-servers/main/sub%7Chttps://raw.bgithub.xyz/ermaozi01/free_clash_vpn/main/subscribe/clash.yml"
-v2ray_urls="https://proxy.v2gh.com/https://raw.bgithub.xyz/Pawdroid/Free-servers/main/sub%7Chttps://raw.bgithub.xyz/ermaozi01/free_clash_vpn/main/subscribe/clash.yml"
+v2ray_urls=(
+  "https://proxy.v2gh.com/https://raw.bgithub.xyz/Pawdroid/Free-servers/main/sub"
+  "https://proxy.v2gh.com/https://raw.bgithub.xyz/ermaozi01/free_clash_vpn/main/subscribe/clash.yml"
+)
 
 config_url="https://raw.bgithub.xyz/NZESupB/Profile/main/outpref/pypref/pyfull.ini"
 filename="GitHub-GetNode"
+subscribe_url="https://api-suc.0z.gs/sub?target="
 
-subscribeclash="${subscribe_url}clash&url=${clash_urls}&insert=false&config=${config_url}&filename=${filename}&append_type=true&emoji=true&list=false&tfo=false&scv=true&fdn=false&sort=true&udp=true&new_name=true"
-subscribeV2ray="${subscribe_url}v2ray&url=${v2ray_urls}&insert=false&config=${config_url}&filename=${filename}&append_type=true&emoji=true&list=false&tfo=false&scv=true&fdn=false&sort=true&udp=true&new_name=true"
+# 函数：构造订阅链接
+construct_subscribe_url() {
+  local target="$1"
+  local urls=("${!2}") # Indirect reference to the array
+  local complete_url="${subscribe_url}${target}&url="
+  local first=true
+
+  for url in "${urls[@]}"; do
+    if $first; then
+      complete_url+="${url}"
+      first=false
+    else
+      complete_url+="|${url}"
+    fi
+  done
+
+  complete_url+="&insert=false&config=${config_url}&filename=${filename}&append_type=true&emoji=true&list=false&tfo=false&scv=true&fdn=false&sort=true&udp=true&new_name=true"
+  echo "$complete_url"
+}
 
 # 清理旧文件（可选，如果文件存在，则删除）
 if [ -f "./clash.yaml" ]; then
@@ -30,7 +52,11 @@ fi
 
 # 下载订阅
 echo "Getting subscribe..."
-wget -q "$subscribeclash" -O ./clash.yaml  # 使用 -q 减少 wget 输出
+
+subscribeclash=$(construct_subscribe_url "clash" clash_urls[@])
+subscribeV2ray=$(construct_subscribe_url "v2ray" v2ray_urls[@])
+
+wget -q "$subscribeclash" -O ./clash.yaml
 wget -q "$subscribeV2ray" -O ./v2ray.txt
 
 # 检查下载结果
