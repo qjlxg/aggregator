@@ -27,22 +27,33 @@ jobs:
       - name: 运行脚本
         run: python jichang_list.py
 
-      - name: 检查是否有更改
+      - name: 检查是否有更改并提交
+        uses: actions/github-script@v7
         id: git-check
-        run: |
-          export HOME=/home/runner
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git add data/jichang_list.txt
-          git diff --quiet --exit-code   # 检查是否有需要提交的更改
-          if [ $? -eq 0 ]; then
-            echo "没有需要提交的更改"
-            echo "::set-output name=push::false"
-          else
-            echo "发现更改，正在提交..."
-            git commit -m "Update jichang_list.txt"
-            echo "::set-output name=push::true"
-          fi
+        with:
+          script: |
+            const core = require('@actions/core');
+            const { execSync } = require('child_process');
+
+            try {
+              execSync('git config user.email "github-actions[bot]@users.noreply.github.com"');
+              execSync('git config user.name "github-actions[bot]"');
+              execSync('git add data/jichang_list.txt');
+
+              const diff = execSync('git diff --quiet --exit-code');
+
+              if (diff !== null) { // diff 返回 null 表示没有更改
+                console.log('没有发现更改');
+                core.setOutput('push', 'false');
+              } else {
+                console.log('发现更改，正在提交...');
+                execSync('git commit -m "Update jichang_list.txt"');
+                core.setOutput('push', 'true');
+              }
+            } catch (error) {
+              console.error('Git 操作失败:', error);
+              core.setOutput('push', 'false'); // 发生错误时不推送
+            }
 
       - name: 推送更改
         if: steps.git-check.outputs.push == 'true'
