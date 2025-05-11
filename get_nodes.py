@@ -31,7 +31,6 @@ def extract_nodes_from_content(content, content_type='plain'):
                 for proxy in data['proxies']:
                     node_type = proxy.get('type')
                     if node_type == 'vmess':
-                        # 生成 vmess 节点链接
                         vmess_dict = {
                             "v": "2",
                             "ps": proxy.get('name'),
@@ -50,7 +49,6 @@ def extract_nodes_from_content(content, content_type='plain'):
                         node_str = f"vmess://{base64.urlsafe_b64encode(vmess_str.encode()).decode().rstrip('=')}"
                         nodes.add(node_str)
                     elif node_type == 'vless':
-                        # 生成 vless 节点链接
                         encryption = proxy.get('encryption', 'none')
                         security = 'tls' if proxy.get('tls') else 'none'
                         sni = proxy.get('sni', '')
@@ -65,35 +63,20 @@ def extract_nodes_from_content(content, content_type='plain'):
                         )
                         nodes.add(node_str)
                     elif node_type == 'trojan':
-                        # 生成 trojan 节点链接
                         sni = proxy.get('sni', '')
                         node_str = f"trojan://{proxy.get('password')}@{proxy.get('server')}:{proxy.get('port')}?sni={sni}"
                         nodes.add(node_str)
                     elif node_type == 'ss':
-                        # 生成 ss 节点链接
                         method = proxy.get('cipher')
                         password = proxy.get('password')
                         auth_str = base64.urlsafe_b64encode(f"{method}:{password}".encode()).decode().rstrip('=')
                         node_str = f"ss://{auth_str}@{proxy.get('server')}:{proxy.get('port')}"
                         nodes.add(node_str)
                     elif node_type == 'hysteria2':
-                        # 生成 hysteria2 节点链接
                         node_str = (
                             f"hysteria2://{proxy.get('password')}@"
                             f"{proxy.get('server')}:{proxy.get('port')}?"
                             f"sni={proxy.get('sni')}"
-                        )
-                        nodes.add(node_str)
-                    elif node_type == 'snell':
-                        # 生成 snell 节点链接
-                        obfs = proxy.get('obfs-opts', {}).get('obfs', 'http')
-                        node_str = f"snell://{proxy.get('server')}:{proxy.get('port')}?psk={proxy.get('psk')}&obfs={obfs}"
-                        nodes.add(node_str)
-                    elif node_type == 'tuic':
-                        # 生成 tuic 节点链接
-                        node_str = (
-                            f"tuic://{proxy.get('uuid')}:{proxy.get('password')}@"
-                            f"{proxy.get('server')}:{proxy.get('port')}"
                         )
                         nodes.add(node_str)
         except yaml.YAMLError as e:
@@ -137,8 +120,8 @@ def process_url_for_nodes(url, retries=3, timeout=10):
                                 extracted_nodes.update(extract_nodes_from_content(node_content, 'plain'))
                         elif 'yaml' in node_content_type or link.endswith('.yaml'):
                             extracted_nodes.update(extract_nodes_from_content(node_content, 'yaml'))
-                    except requests.exceptions.RequestException:
-                        pass
+                    except requests.exceptions.RequestException as e:
+                        print(f"访问子链接 {link} 失败: {e}")
             break
         except requests.exceptions.RequestException as e:
             print(f"尝试 {attempt+1}/{retries} 失败: {url} - {e}")
