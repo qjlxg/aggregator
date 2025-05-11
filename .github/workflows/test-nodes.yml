@@ -1,113 +1,48 @@
-name: Test Proxy Nodes with Clash
-on: [push, workflow_dispatch]
+name: Test and Generate Clash Config
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: # 允许手动触发工作流
+
 jobs:
-  test-nodes:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: 检出代码
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-      - name: 安装 Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
 
-      - name: 安装 Clash 和依赖
-        run: |
-          # 安装必要的工具：curl, jq, wget
-          sudo apt-get update
-          sudo apt-get install -y curl jq wget
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests pyyaml
 
-          # 获取 Kuingsmile/clash-core 的最新发布信息
-          RELEASE_INFO=$(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/Kuingsmile/clash-core/releases/latest)
+    - name: Make Clash Executable
+      run: chmod +x clash/clash-linux
 
-          # 检查 API 响应是否有效
-          if [ -z "$RELEASE_INFO" ] || echo "$RELEASE_INFO" | grep -q "Not Found"; then
-            echo "::error::无法获取 Kuingsmile/clash-core 的发布信息。"
-            exit 1
-          fi
-          echo "API 响应:"
-          echo "$RELEASE_INFO"
+    - name: Generate Clash Config
+      run: python generate_config.py
 
-          # 提取 Linux AMD64 v1.18.0 二进制文件的下载链接
-          DOWNLOAD_URL=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name == "clash-linux-amd64-v1.18.0.gz") | .browser_download_url' 2>/dev/null || echo "")
-          if [ -z "$DOWNLOAD_URL" ]; then
-            echo "::error::未找到名为 clash-linux-amd64-v1.18.0.gz 的 Clash 二进制文件。"
-            echo "API 响应："
-            echo "$RELEASE_INFO"
-            exit 1
-          fi
-          echo "下载链接：$DOWNLOAD_URL"
+    - name: Run Node Test
+      run: python test_nodes.py
 
-          # 下载二进制文件
-          echo "开始下载 Clash..."
-          wget "$DOWNLOAD_URL" -O clash.gz
-          echo "Clash 下载完成。"
+    - name: Upload sp.txt
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: sp.txt
+        path: data/sp.txt
 
-          # 解压 .gz 文件
-          echo "开始解压 Clash..."
-          rm -rf clash # 强制删除名为 clash 的目录（如果存在）
-          gunzip clash.gz
-          echo "Clash 解压完成。"
-
-          # 查找解压后的文件名 (更通用)
-          CLASH_BINARY=$(ls | grep "clash-linux-amd64")
-          if [ -z "$CLASH_BINARY" ]; then
-            echo "::error::解压后未找到 Clash 二进制文件。"
-            ls -l # 列出当前目录文件
-            exit 1
-          fi
-          echo "找到 Clash 二进制文件：$CLASH_BINARY"
-
-          # 移动并设置权限
-          echo "开始移动 Clash 到 /usr/local/bin..."
-          sudo mv "$CLASH_BINARY" /usr/local/bin/clash
-          if [ $? -ne 0 ]; then
-            echo "::error::移动 Clash 二进制文件失败"
-            exit 1
-          fi
-          echo "Clash 移动完成。"
-          echo "开始设置 Clash 可执行权限..."
-          sudo chmod +x /usr/local/bin/clash
-          if [ $? -ne 0 ]; then
-            echo "::error::设置 Clash 权限失败"
-            exit 1
-          fi
-          echo "Clash 权限设置完成。"
-
-          # 验证安装
-          echo "验证 Clash 安装..."
-          clash -v
-          if [ $? -ne 0 ]; then
-            echo "::error::Clash 安装验证失败"
-            exit 1
-          fi
-
-      - name: 生成 Clash 配置文件
-        run: python generate_config.py
-        
-      - name: 启动 Clash
-        run: |
-          nohup clash -d . -f config.yaml &
-          echo "Clash 已在后台启动..."
-          sleep 5
-          
-      - name: 检查 Clash API 状态
-        run: |
-          # 检查 Clash API 是否可用
-          until curl -s --fail http://127.0.0.1:9090 > /dev/null 2>&1; do
-            echo "等待 Clash API 启动..."
-            sleep 2
-          done
-          echo "Clash API 已启动。"
-
-      - name: 运行测试脚本
-        run: python test_nodes.py
-
-      - name: 提交结果
-        run: |
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
-          git add data/sp.txt
-          git commit -m "更新有效节点" || echo "无更改"
-          git push
+    - name: Upload config.yaml
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: config.yaml
+        path: config.yaml
