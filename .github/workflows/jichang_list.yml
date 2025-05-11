@@ -40,15 +40,20 @@ jobs:
               execSync('git config user.name "github-actions[bot]"');
               execSync('git add data/jichang_list.txt');
 
-              const diff = execSync('git diff --quiet --exit-code');
+              let diff = null;
+              try {
+                execSync('git diff --quiet --exit-code');
+              } catch (error) {
+                diff = error; // 如果有差异，git diff 会返回非零退出码并抛出错误
+              }
 
-              if (diff !== null) { // diff 返回 null 表示没有更改
-                console.log('没有发现更改');
-                core.setOutput('push', 'false');
-              } else {
+              if (diff !== null) {
                 console.log('发现更改，正在提交...');
                 execSync('git commit -m "Update jichang_list.txt"');
                 core.setOutput('push', 'true');
+              } else {
+                console.log('没有发现更改');
+                core.setOutput('push', 'false');
               }
             } catch (error) {
               console.error('Git 操作失败:', error);
