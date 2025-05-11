@@ -13,7 +13,6 @@ import base64
 import logging
 import requests
 import yaml
-import socket  # 导入 socket 模块
 
 import crawl
 import executable
@@ -186,21 +185,17 @@ class SubscriptionManager:
         return tasks, domains
 
 # 新增函数：根据 IP 获取国旗 emoji
-def get_country_flag(server):
+def get_country_flag(ip):
     try:
-        ip_address = socket.gethostbyname(server)
         reader = geoip2.database.Reader(os.path.join(PATH, "clash", "Country.mmdb"))
-        response = reader.country(ip_address)
+        response = reader.country(ip)
         country_code = response.country.iso_code
         if country_code:
             flag = ''.join([chr(ord(char) + 127397) for char in country_code.upper()])
             return flag
         return ""
-    except socket.gaierror as e:
-        logger.warning(f"无法解析域名 {server}: {e}")
-        return ""
     except Exception as e:
-        logger.warning(f"无法获取 IP {server} 的国家信息: {e}")
+        logger.warning(f"无法获取 IP {ip} 的国家信息: {e}")
         return ""
 
 def aggregate(args: argparse.Namespace) -> None:
@@ -270,7 +265,10 @@ def aggregate(args: argparse.Namespace) -> None:
             else:
                 flag_counter[flag] += 1
             number = f"{flag_counter[flag]:02d}"
-            proxy["name"] = f"{flag} yandex-{number}"
+            if name.startswith(flag):  # 如果 name 已经以国旗开头，则保留国旗
+                proxy["name"] = f"{flag} yandex-{number}"
+            else:
+                proxy["name"] = f"{flag}yandex-{number}"  # 没有国旗开头则直接添加国旗
         else:
             # 如果无法获取国旗，使用默认编号
             number = f"{len(unique_proxies):02d}"
@@ -343,3 +341,70 @@ def aggregate(args: argparse.Namespace) -> None:
         total = len(urls)
         urls = [new_subscriptions[i] for i in range(len(new_subscriptions)) if results[i][0] and not results[i][1]]
         discard = len(tasks_check) - len(urls)
+        urls.extend(old_subscriptions)
+        logger.info(f"订阅过滤完成，总数: {total}, 保留: {len(urls)}, 丢弃: {discard}")
+
+    try:
+        push_repo_file("subscribes.txt", "\n".join(urls))
+    except Exception as e:
+        logger.error(f"推送 subscribes.txt 失败: {e}")
+    try:
+        domains_lines = [utils.extract_domain(url=x, include_protocal=True) for x in urls]
+        push_repo_file("valid-domains.txt", "\n".join(list(set(domains_lines))))
+    except Exception as e:
+        logger.error(f"推送 valid-domains.txt 失败: {e}")
+    try:
+        domains_txt_content = ""
+        for k, v in domains_dict.items():
+            line = k
+            if v.get("coupon") or v.get("invite_code"):
+                line += f"{manager.delimiter}{v.get('coupon','')}{manager.delimiter}{v.get('invite_code','')}"
+            domains_txt_content += line + "\n"
+        push_repo_file("domains.txt", domains_txt_content.strip())
+    except Exception as e:
+        logger.error(f"推送 domains.txt 失败: {e}")
+    try:
+        push_repo_file("coupons.txt", repo_files.get("coupons.txt", ""))
+    except Exception as e:
+        logger.error(f"推送 coupons.txt 失败: {e}")
+
+    workflow.cleanup(workspace, [])
+
+class CustomHelpFormatter(argparse.HelpFormatter):
+    def _format_action_invocation(self, action):
+        if action.choices:
+            parts = []
+            if action.option_strings:
+                parts.extend(action.option_strings)
+                if action.nargs != 0 and action.option_strings != ["-t", "--targets"]:
+                    default = action.dest.upper()
+                    args_string = self._format_args(action, default)
+                    parts[-1] += " " + args_string
+            else:
+                args_string = self._format_args(action, action.dest)
+                parts.append(args_string)
+            return ", ".join(parts)
+        else:
+            return super()._format_action_invocation(action)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(formatter_class=CustomHelpFormatter)
+    parser.add_argument("-a", "--all", dest="all", action="store_true", default=False, help="生成 clash 完整配置")
+    parser.add_argument("-c", "--chuck", dest="chuck", action="store_true", default=False, help="丢弃可能需要人工验证的候选网站")
+    parser.add_argument("-d", "--delay", type=int, required=False, default=5000, help="允许的代理最大延迟")
+    parser.add_argument("-e", "--easygoing", dest="easygoing", action="store_true", default=False, help="遇到邮箱白名单问题时尝试使用 Gmail 别名")
+    parser.add_argument("-f", "--flow", type=int, required=False, default=0, help="可用剩余流量，单位: GB")
+    parser.add_argument("-g", "--gist", type=str, required=False, default=os.environ.get("GIST_LINK", ""), help="GitHub 用户名和 gist id，用 '/' 分隔")
+    parser.add_argument("-i", "--invisible", dest="invisible", action="store_true", default=False, help="不显示检测进度条")
+    parser.add_argument("-k", "--key", type=str, required=False, default=os.environ.get("GIST_PAT", ""), help="用于编辑 gist 的 GitHub personal access token")
+    parser.add_argument("-l", "--life", type=int, required=False, default=0, help="剩余可用时长，单位: 小时")
+    parser.add_argument("-n", "--num", type=int, required=False, default=64, help="检测代理使用的线程数")
+    parser.add_argument("-o", "--overwrite", dest="overwrite", action="store_true", default=False, help="覆盖已存在的域名")
+    parser.add_argument("-p", "--pages", type=int, required=False, default=sys.maxsize, help="爬取 Telegram 时的最大页数")
+    parser.add_argument("-r", "--refresh", dest="refresh", action="store_true", default=False, help="使用现有订阅刷新并剔除过期节点")
+    parser.add_argument("-s", "--skip", dest="skip", action="store_true", default=False, help="跳过可用性检测")
+    parser.add_argument("-t", "--targets", nargs="+", choices=subconverter.CONVERT_TARGETS, default=["clash", "v2ray", "singbox"], help=f"选择要生成的配置类型，默认为 clash, v2ray 和 singbox，支持: {subconverter.CONVERT_TARGETS}")
+    parser.add_argument("-u", "--url", type=str, required=False, default="https://www.google.com/generate_204", help="测试 URL")
+    parser.add_argument("-v", "--vitiate", dest="vitiate", action="store_true", default=False, help="忽略默认代理过滤规则")
+    parser.add_argument("-y", "--yourself", type=str, required=False, default=os.environ.get("CUSTOMIZE_LINK", ""), help="你维护的机场列表的 URL")
+    aggregate(args=parser.parse_args())
