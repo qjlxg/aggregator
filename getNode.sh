@@ -12,14 +12,14 @@ subscribe_url="https://api-suc.0z.gs/sub?target="  # 公共前缀
 
 clash_urls=(
   "https://proxy.v2gh.com/https://raw.bgithub.xyz/Pawdroid/Free-servers/main/sub"
-  "https://raw.bgithub.xyz/ermaozi01/free_clash_vpn/main/subscribe/clash.yml"
+  "https://raw.githubusercontent.com//ermaozi01/free_clash_vpn/main/subscribe/clash.yml"
 )
 v2ray_urls=(
   "https://proxy.v2gh.com/https://raw.bgithub.xyz/Pawdroid/Free-servers/main/sub"
-  "https://raw.bgithub.xyz/ermaozi01/free_clash_vpn/main/subscribe/clash.yml"
+  "https://raw.githubusercontent.com/ermaozi01/free_clash_vpn/main/subscribe/clash.yml"
 )
 
-config_url="https://raw.bgithub.xyz/NZESupB/Profile/main/outpref/pypref/pyfull.ini"
+config_url="https://raw.githubusercontent.com/NZESupB/Profile/main/outpref/pypref/pyfull.ini"
 filename="GitHub-GetNode"
 
 construct_subscribe_url() {
