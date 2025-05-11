@@ -1,35 +1,35 @@
-name: Get Nodes
+name: Get Nodes Workflow
 
 on:
+  workflow_dispatch:  # 支持手动触发
   schedule:
-    - cron: '0 1 * * *'  # 每天 UTC 时间凌晨 1 点运行 (北京时间上午 9 点)
-  workflow_dispatch:
+    - cron: '0 0 * * *'  # 每天 UTC 0 点运行（对应上海时间 8 点）
 
 jobs:
-  get_and_save_nodes:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
 
-      - name: Install dependencies
-        run: pip install requests
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests pyyaml
 
-      - name: Run Python script to get and save nodes
-        run: python get_nodes.py
+    - name: Run get_nodes.py
+      run: python get_nodes.py
 
-      - name: Commit and push changes
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions Bot"
-          git add data/ji.txt
-          if [[ -n $(git diff --staged) ]]; then
-            git commit -m "Update nodes data"
-            git push
-          else
-            echo "No changes to commit."
-          fi
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/ji.txt
+        git commit -m "Update nodes" || echo "No changes to commit"
+        git push
