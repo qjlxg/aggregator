@@ -138,7 +138,7 @@ def main(base_url='https://t.me/s/jichang_list', max_pages=90, max_workers=10): 
 
     # 保存最终结果
     logging.info("保存最终结果...")
-    save_urls_to_file(valid_urls, 'data/jichang_list.txt')
+    save_urls_to_file(valid_urls, 'data/jichang.txt')
     logging.info("最终结果保存完毕。")
 
 if __name__ == '__main__':
