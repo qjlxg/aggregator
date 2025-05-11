@@ -27,14 +27,11 @@ jobs:
       - name: 运行脚本
         run: python jichang_list.py
 
-      - name: 检查 Git 状态 (调试)
-        run: git status
-
       - name: 检查是否有更改
         id: git-check
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
           git add data/jichang_list.txt
           git diff --quiet --exit-code   # 检查是否有需要提交的更改
           if [ $? -eq 0 ]; then
