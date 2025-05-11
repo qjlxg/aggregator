@@ -1,0 +1,47 @@
+name: Test Download and Unzip Clash
+on: [push, workflow_dispatch]
+jobs:
+  test-download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 安装 jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: 下载 Clash
+        run: |
+          # 获取 Kuingsmile/clash-core 的最新发布信息
+          RELEASE_INFO=$(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/Kuingsmile/clash-core/releases/latest)
+
+          # 检查 API 响应是否有效
+          if [ -z "$RELEASE_INFO" ] || echo "$RELEASE_INFO" | grep -q "Not Found"; then
+            echo "错误：无法获取 Kuingsmile/clash-core 的发布信息。"
+            exit 1
+          fi
+
+          # 提取 Linux AMD64 v1.18.0 二进制文件的下载链接
+          DOWNLOAD_URL=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name == "clash-linux-amd64-v1.18.0.gz") | .browser_download_url' 2>/dev/null || echo "")
+          if [ -z "$DOWNLOAD_URL" ]; then
+            echo "错误：未找到名为 clash-linux-amd64-v1.18.0.gz 的 Clash 二进制文件。"
+            echo "API 响应："
+            echo "$RELEASE_INFO"
+            exit 1
+          fi
+          echo "下载链接：$DOWNLOAD_URL"
+
+          # 下载二进制文件
+          wget "$DOWNLOAD_URL" -O clash.gz
+          echo "Clash 下载完成。"
+
+      - name: 解压 Clash
+        run: |
+          echo "开始解压 Clash..."
+          rm -rf clash # 强制删除名为 clash 的目录（如果存在）
+          gunzip clash.gz
+          echo "Clash 解压完成。"
+
+          # 列出当前目录的所有文件和目录
+          echo "当前目录内容："
+          ls -l
