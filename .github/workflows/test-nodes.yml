@@ -16,11 +16,26 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y jq
-          LATEST_URL=$(curl -s https://api.github.com/repos/Dreamacro/clash/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd64")) | .browser_download_url')
-          if [ -z "$LATEST_URL" ]; then
-            echo "未能获取 Clash 下载链接，请检查网络或 API 状态"
+          # Fetch API data
+          API_URL="https://api.github.com/repos/Dreamacro/clash/releases/latest"
+          API_RESPONSE=$(curl -s "$API_URL")
+          # Debug: Output the raw API response
+          echo "API Response:"
+          echo "$API_RESPONSE" | jq '.' || echo "Failed to parse API response"
+          # Check if .assets exists and is not null
+          ASSETS=$(echo "$API_RESPONSE" | jq -r '.assets')
+          if [ "$ASSETS" == "null" ] || [ -z "$ASSETS" ]; then
+            echo "错误：API 返回的 .assets 字段为空或不存在。"
+            echo "请检查网络连接或 Clash 项目的最新发布版本。"
             exit 1
           fi
+          # Extract the download URL
+          LATEST_URL=$(echo "$API_RESPONSE" | jq -r '.assets[] | select(.name | contains("linux-amd64")) | .browser_download_url')
+          if [ -z "$LATEST_URL" ]; then
+            echo "未能找到包含 'linux-amd64' 的下载链接，请检查资产名称或 API 数据。"
+            exit 1
+          fi
+          # Download and install Clash
           wget "$LATEST_URL" -O clash.gz
           gunzip clash.gz
           chmod +x clash
