@@ -16,26 +16,41 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y jq
-          # Fetch API data
+          # 尝试获取 Clash 的最新发布版本
           API_URL="https://api.github.com/repos/Dreamacro/clash/releases/latest"
           API_RESPONSE=$(curl -s "$API_URL")
-          # Debug: Output the raw API response
           echo "API Response:"
           echo "$API_RESPONSE" | jq '.' || echo "Failed to parse API response"
-          # Check if .assets exists and is not null
+          
+          # 检查是否有错误消息
+          ERROR_MESSAGE=$(echo "$API_RESPONSE" | jq -r '.message // empty')
+          if [ "$ERROR_MESSAGE" == "Not Found" ]; then
+            echo "错误：Clash 项目在 $API_URL 未找到（404）。"
+            echo "可能原因：仓库已迁移或删除。请尝试以下替代方案："
+            echo "尝试使用 Dreamacro/clash-premium 或其他来源。"
+            # 尝试备用地址（例如 Clash Premium 的镜像）
+            API_URL="https://api.github.com/repos/Dreamacro/clash-premium/releases/latest"
+            API_RESPONSE=$(curl -s "$API_URL")
+            echo "备用 API Response:"
+            echo "$API_RESPONSE" | jq '.' || echo "Failed to parse backup API response"
+          fi
+
+          # 检查 .assets 是否存在
           ASSETS=$(echo "$API_RESPONSE" | jq -r '.assets')
           if [ "$ASSETS" == "null" ] || [ -z "$ASSETS" ]; then
             echo "错误：API 返回的 .assets 字段为空或不存在。"
-            echo "请检查网络连接或 Clash 项目的最新发布版本。"
+            echo "请手动检查 Clash 项目状态或使用其他下载来源。"
             exit 1
           fi
-          # Extract the download URL
+
+          # 提取下载链接
           LATEST_URL=$(echo "$API_RESPONSE" | jq -r '.assets[] | select(.name | contains("linux-amd64")) | .browser_download_url')
           if [ -z "$LATEST_URL" ]; then
             echo "未能找到包含 'linux-amd64' 的下载链接，请检查资产名称或 API 数据。"
             exit 1
           fi
-          # Download and install Clash
+
+          # 下载并安装 Clash
           wget "$LATEST_URL" -O clash.gz
           gunzip clash.gz
           chmod +x clash
