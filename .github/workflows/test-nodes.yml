@@ -14,22 +14,28 @@ jobs:
 
       - name: 安装 Clash
         run: |
-          # 下载 Clash 归档文件
-          wget https://archive.org/download/github.com-Dreamacro-clash_-_2023-08-06_20-51-37/Dreamacro-clash_-_2023-08-06_20-51-37.bundle -O clash.bundle
+          # 安装 jq 以解析 JSON
+          sudo apt-get update
+          sudo apt-get install -y jq
           
-          # 解压 bundle 文件（假设是 tar.gz 格式，视具体情况调整）
-          tar -xzf clash.bundle
+          # 获取 MetaCubeX/Clash.Meta 的最新发布信息
+          RELEASE_INFO=$(curl -s https://api.github.com/repos/MetaCubeX/Clash.Meta/releases/latest)
           
-          # 查找并移动 Clash 二进制文件
-          # 假设二进制文件名为 clash-linux-amd64，您可能需要根据实际文件名调整
-          if [ -f "clash-linux-amd64" ]; then
-            sudo mv clash-linux-amd64 /usr/local/bin/clash
-          else
-            echo "错误：未找到 Clash 二进制文件。请检查归档文件内容。"
+          # 提取 Linux AMD64 二进制文件的下载链接
+          DOWNLOAD_URL=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name | contains("linux-amd64")) | .browser_download_url')
+          if [ -z "$DOWNLOAD_URL" ]; then
+            echo "错误：未找到 Linux AMD64 二进制文件。"
             exit 1
           fi
           
-          # 设置执行权限
+          # 下载二进制文件
+          wget "$DOWNLOAD_URL" -O clash.gz
+          
+          # 解压 .gz 文件
+          gunzip clash.gz
+          
+          # 移动并设置权限
+          sudo mv clash /usr/local/bin/clash
           sudo chmod +x /usr/local/bin/clash
           
           # 验证安装
