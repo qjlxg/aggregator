@@ -29,10 +29,18 @@ jobs:
 
       - name: 提交更改
         run: |
-         git config --global user.name "GitHub Actions"
-         git config --global user.email "actions@github.com"
-         git add --all
-         git commit -m "$(date '+%Y-%m-%d %H:%M:%S') Auto Update"
-         git pull --rebase --allow-unrelated-histories origin main
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add data/jichang.txt
+          git add .
+          git commit -m "$(date '+%Y-%m-%d %H:%M:%S')" || echo "Nothing to commit"
 
-     
+      - name: 拉取远程并变基
+        run: |
+          git pull --rebase origin main
+
+      - name: 推送更改
+        uses: ad-m/github-push-action@master
+        with:
+          branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }} # 别忘了添加 token
