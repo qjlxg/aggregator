@@ -107,6 +107,6 @@ def generate_clash_config(nodes):
     with open("config.yaml", "w") as f:
         yaml.dump(config, f)
 
-with open("data/ss.txt", "r") as f:
+with open("data/ji.txt", "r") as f:
     nodes = f.readlines()
 generate_clash_config(nodes)
