@@ -18,15 +18,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y jq
 
-          # 获取 MetaCubeX/Clash.Meta 的最新发布信息
-          RELEASE_INFO=$(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/MetaCubeX/Clash.Meta/releases/latest)
-          
+          # 获取 Kuingsmile/clash-core 的最新发布信息
+          RELEASE_INFO=$(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/Kuingsmile/clash-core/releases/latest)
+
           # 检查 API 响应是否有效
           if [ -z "$RELEASE_INFO" ] || echo "$RELEASE_INFO" | grep -q "Not Found"; then
-            echo "错误：无法获取 MetaCubeX/Clash.Meta 的发布信息。"
+            echo "错误：无法获取 Kuingsmile/clash-core 的发布信息。"
             exit 1
           fi
-          
+
           # 提取 Linux AMD64 二进制文件的下载链接
           DOWNLOAD_URL=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name | contains("linux-amd64")) | .browser_download_url' 2>/dev/null || echo "")
           if [ -z "$DOWNLOAD_URL" ]; then
@@ -35,22 +35,19 @@ jobs:
             echo "$RELEASE_INFO"
             exit 1
           fi
-          
+
           # 下载二进制文件
           echo "下载链接：$DOWNLOAD_URL"
           wget "$DOWNLOAD_URL" -O clash.gz
-          
+
           # 解压 .gz 文件
           gunzip clash.gz
-          
-          # 重命名（如果需要）、移动并设置权限
-          if [ -f "clash-linux-amd64" ]; then
-            sudo mv clash-linux-amd64 /usr/local/bin/clash
-          else
-            sudo mv clash /usr/local/bin/clash
-          fi
+
+          # 移动并设置权限
+          BINARY_NAME=$(ls | grep "clash-linux-amd64" || echo "clash") # 尝试匹配文件名，否则使用 "clash"
+          sudo mv "$BINARY_NAME" /usr/local/bin/clash
           sudo chmod +x /usr/local/bin/clash
-          
+
           # 验证安装
           clash -v
 
