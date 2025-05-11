@@ -27,13 +27,17 @@ jobs:
             exit 1
           fi
 
-          # 提取 Linux AMD64 二进制文件的下载链接
-          DOWNLOAD_URL=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name | contains("linux-amd64")) | .browser_download_url' 2>/dev/null || echo "")
+          # 提取 Linux AMD64 (非 v3) 二进制文件的下载链接
+          DOWNLOAD_URL=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name | contains("linux-amd64") and .name | !contains("v3")) | .browser_download_url' 2>/dev/null || echo "")
           if [ -z "$DOWNLOAD_URL" ]; then
-            echo "错误：未找到适用于 Linux AMD64 的 Clash 二进制文件。"
-            echo "API 响应："
-            echo "$RELEASE_INFO"
-            exit 1
+            # 如果找不到非 v3 版本，尝试下载 v3 版本作为备选
+            DOWNLOAD_URL=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name | contains("linux-amd64") and .name | contains("v3")) | .browser_download_url' 2>/dev/null || echo "")
+            if [ -z "$DOWNLOAD_URL" ]; then
+              echo "错误：未找到适用于 Linux AMD64 的 Clash 二进制文件。"
+              echo "API 响应："
+              echo "$RELEASE_INFO"
+              exit 1
+            fi
           fi
 
           # 下载二进制文件
@@ -53,6 +57,12 @@ jobs:
 
       - name: 生成 Clash 配置文件
         run: python generate_config.py
+
+      - name: 启动 Clash
+        run: |
+          nohup clash -d . -f config.yaml &
+          echo "Clash 已在后台启动..."
+          sleep 5 # 等待 Clash 启动
 
       - name: 运行测试脚本
         run: python test_nodes.py
