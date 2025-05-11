@@ -30,10 +30,6 @@ jobs:
       - name: 检查是否有更改
         id: git-check
         run: |
-          echo "--- 检查 Git 配置 ---"
-          git config --local -l
-          echo "--- 检查 Git 状态 ---"
-          git status
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git add data/jichang_list.txt
