@@ -6,20 +6,33 @@ jobs:
     steps:
       - name: 检出代码
         uses: actions/checkout@v3
-      - name: 安装Python
+
+      - name: 安装 Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.x"
-      - name: 安装Clash
+
+      - name: 安装 Clash
         run: |
-          wget https://github.com/Dreamacro/clash/releases/download/v1.11.4/clash-linux-amd64-v1.11.4.gz
-          gunzip clash-linux-amd64-v1.11.4.gz
-          chmod +x clash-linux-amd64-v1.11.4
-          sudo mv clash-linux-amd64-v1.11.4 /usr/local/bin/clash
-      - name: 生成Clash配置文件
+          sudo apt-get update
+          sudo apt-get install -y jq
+          LATEST_URL=$(curl -s https://api.github.com/repos/Dreamacro/clash/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd64")) | .browser_download_url')
+          if [ -z "$LATEST_URL" ]; then
+            echo "未能获取 Clash 下载链接，请检查网络或 API 状态"
+            exit 1
+          fi
+          wget "$LATEST_URL" -O clash.gz
+          gunzip clash.gz
+          chmod +x clash
+          sudo mv clash /usr/local/bin/clash
+          clash -v
+
+      - name: 生成 Clash 配置文件
         run: python generate_config.py
+
       - name: 运行测试脚本
         run: python test_nodes.py
+
       - name: 提交结果
         run: |
           git config --global user.name "GitHub Action"
