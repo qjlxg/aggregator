@@ -27,43 +27,12 @@ jobs:
       - name: 运行脚本
         run: python jichang_list.py
 
-      - name: 检查是否有更改并提交
-        uses: actions/github-script@v7
-        id: git-check
-        with:
-          script: |
-            const core = require('@actions/core');
-            const { execSync } = require('child_process');
+      - name: 提交更改
+        run: |
+         git config --global user.name "GitHub Actions"
+         git config --global user.email "actions@github.com"
+         git add --all
+         git commit -m "$(date '+%Y-%m-%d %H:%M:%S') Auto Update"
+         git pull --rebase --allow-unrelated-histories origin main
 
-            try {
-              execSync('git config user.email "github-actions[bot]@users.noreply.github.com"');
-              execSync('git config user.name "github-actions[bot]"');
-              execSync('git add data/jichang_list.txt');
-
-              let diff = null;
-              try {
-                execSync('git diff --quiet --exit-code');
-              } catch (error) {
-                diff = error; // 如果有差异，git diff 会返回非零退出码并抛出错误
-              }
-
-              if (diff !== null) {
-                console.log('发现更改，正在提交...');
-                execSync('git commit -m "Update jichang_list.txt"');
-                core.setOutput('push', 'true');
-              } else {
-                console.log('没有发现更改');
-                core.setOutput('push', 'false');
-              }
-            } catch (error) {
-              console.error('Git 操作失败:', error);
-              core.setOutput('push', 'false'); // 发生错误时不推送
-            }
-
-      - name: 推送更改
-        if: steps.git-check.outputs.push == 'true'
-        uses: ad-m/github-push-action@master   # 可以使用更新的版本
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}   # 推送到触发工作流的分支
-          force: false # 避免强制推送，更安全
+     
