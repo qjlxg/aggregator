@@ -41,6 +41,7 @@ jobs:
           wget "$DOWNLOAD_URL" -O clash.gz
 
           # 解压 .gz 文件
+          rm -f clash # 确保 clash 文件不存在
           gunzip clash.gz
 
           # 移动并设置权限
