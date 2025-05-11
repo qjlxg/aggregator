@@ -32,14 +32,15 @@ async def is_clash_api_ready(session):
     return False
 
 async def switch_node(session, node_name):
+    logging.info(f"尝试切换到节点: {node_name}")
     try:
         async with session.put(
             f"{CLASH_API_URL}/proxies/{PROXY_GROUP}",
             json={"name": node_name},
             timeout=API_TIMEOUT
         ) as response:
-            if response.status == 204:  # Clash API 成功切换返回 204 No Content
-                await asyncio.sleep(0.3)  # 稍微等待切换完成
+            if response.status == 204:
+                await asyncio.sleep(0.3)
                 return True
             else:
                 logging.warning(f"切换到节点 '{node_name}' 失败，状态码: {response.status}")
@@ -63,12 +64,17 @@ async def test_node(session, node_name):
     if not await switch_node(session, node_name):
         return False
     results = await asyncio.gather(*[test_connect(session, url) for url in TEST_URLS])
-    return all(results)
+    if all(results):
+        logging.info(f"节点 '{node_name}' 测试成功。")
+        return True
+    else:
+        logging.info(f"节点 '{node_name}' 测试失败。")
+        return False
 
 async def main():
     logging.info("启动 Clash...")
     process = subprocess.Popen(["./clash/clash-linux", "-f", "config.yaml"])
-    await asyncio.sleep(5)  # 稍微等待 Clash 启动
+    await asyncio.sleep(5)
 
     async with aiohttp.ClientSession() as session:
         if not await is_clash_api_ready(session):
@@ -116,7 +122,7 @@ async def main():
 
         if process.poll() is None:
             process.terminate()
-            await asyncio.sleep(1) # 等待进程结束
+            await asyncio.sleep(1)
 
         try:
             with open("data/sp.txt", "w") as f:
