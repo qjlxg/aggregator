@@ -26,6 +26,8 @@ jobs:
             echo "错误：无法获取 Kuingsmile/clash-core 的发布信息。"
             exit 1
           fi
+          echo "API 响应:"
+          echo "$RELEASE_INFO"
 
           # 提取 Linux AMD64 v1.18.0 二进制文件的下载链接
           DOWNLOAD_URL=$(echo "$RELEASE_INFO" | jq -r '.assets[] | select(.name == "clash-linux-amd64-v1.18.0.gz") | .browser_download_url' 2>/dev/null || echo "")
@@ -35,28 +37,38 @@ jobs:
             echo "$RELEASE_INFO"
             exit 1
           fi
+          echo "下载链接：$DOWNLOAD_URL"
 
           # 下载二进制文件
-          echo "下载链接：$DOWNLOAD_URL"
+          echo "开始下载 Clash..."
           wget "$DOWNLOAD_URL" -O clash.gz
+          echo "Clash 下载完成。"
 
           # 解压 .gz 文件
+          echo "开始解压 Clash..."
           rm -rf clash # 强制删除名为 clash 的目录（如果存在）
           gunzip clash.gz
+          echo "Clash 解压完成。"
 
           # 查找解压后的文件名
           CLASH_BINARY=$(ls | grep "clash-linux-amd64")
           if [ -z "$CLASH_BINARY" ]; then
             echo "错误：解压后未找到 Clash 二进制文件。"
+            ls -l # 列出当前目录文件
             exit 1
           fi
           echo "找到 Clash 二进制文件：$CLASH_BINARY"
 
           # 移动并设置权限
+          echo "开始移动 Clash 到 /usr/local/bin..."
           sudo mv "$CLASH_BINARY" /usr/local/bin/clash
+          echo "Clash 移动完成。"
+          echo "开始设置 Clash 可执行权限..."
           sudo chmod +x /usr/local/bin/clash
+          echo "Clash 权限设置完成。"
 
           # 验证安装
+          echo "验证 Clash 安装..."
           clash -v
 
       - name: 生成 Clash 配置文件
