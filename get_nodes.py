@@ -255,9 +255,9 @@ def save_nodes_to_file(nodes, filename="data/ji.txt"):
 if __name__ == "__main__":
     main_urls = [
         "https://github.com/qjlxg/TV/raw/refs/heads/main/url/igdux.top.txt",
-        "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.txt",
-        "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/v2ray.txt",
-        "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml",
+       # "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.txt",
+       # "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/v2ray.txt",
+       # "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml",
     ]
 
     all_extracted_nodes = set()
