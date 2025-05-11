@@ -23,17 +23,15 @@ proxy-groups:
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
   tolerance: 100
-  proxies: &id001
-  - 🇭🇰 香港2 - 星火
-  - 🇸🇬 新加坡3 - 星火
-  - 🇯🇵 日本2 - 星火
-  - 🇺🇸 美国2 - 星火
+  use: &id001
+  - HK
+  - SG
+  - JP
+  - US
 - name: 👆🏻 ‍指定
   type: select
-  proxies: *id001
+  use: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -74,49 +72,73 @@ proxy-groups:
   - 💩 ‍广告
 - name: 🇭🇰 ‍香港
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id002
-  - 🇭🇰 香港2 - 星火
+  use: &id002
+  - HK
 - name: 🇸🇬 ‍新加坡
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id003
-  - 🇸🇬 新加坡3 - 星火
+  use: &id003
+  - SG
 - name: 🇯🇵 ‍日本
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id004
-  - 🇯🇵 日本2 - 星火
+  use: &id004
+  - JP
 - name: 🇺🇸 ‍美国
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 300
-  proxies: &id005
-  - 🇺🇸 美国2 - 星火
+  use: &id005
+  - US
 - name: 👆🏻🇭🇰 ‍香港
   type: select
-  proxies: *id002
+  use: *id002
 - name: 👆🏻🇸🇬 ‍新加坡
   type: select
-  proxies: *id003
+  use: *id003
 - name: 👆🏻🇯🇵 ‍日本
   type: select
-  proxies: *id004
+  use: *id004
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  proxies: *id005
-proxies:
-- {name: 🇭🇰 香港2 - 星火, server: 216.250.97.138, port: 900, type: vmess, uuid: d7c9ae0f-330a-412e-af1a-f5a926d4af0e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇸🇬 新加坡3 - 星火, server: 164.152.167.114, port: 800, type: vmess, uuid: d7c9ae0f-330a-412e-af1a-f5a926d4af0e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇯🇵 日本2 - 星火, server: 216.250.97.138, port: 7000, type: ss, cipher: aes-256-gcm, password: d7c9ae0f-330a-412e-af1a-f5a926d4af0e, udp: true}
-- {name: 🇺🇸 美国2 - 星火, server: 173.249.199.82, port: 600, type: ss, cipher: aes-256-gcm, password: d7c9ae0f-330a-412e-af1a-f5a926d4af0e, udp: true}
+  use: *id005
+proxy-providers:
+  HK:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.zuodianme.uk/HK.yaml
+    interval: 180
+    path: trials_providers/www.zuodianme.uk/HK.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  SG:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.zuodianme.uk/SG.yaml
+    interval: 180
+    path: trials_providers/www.zuodianme.uk/SG.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  JP:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.zuodianme.uk/JP.yaml
+    interval: 180
+    path: trials_providers/www.zuodianme.uk/JP.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  US:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.zuodianme.uk/US.yaml
+    interval: 180
+    path: trials_providers/www.zuodianme.uk/US.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
