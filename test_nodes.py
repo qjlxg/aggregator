@@ -73,7 +73,11 @@ async def test_node(session, node_name):
 
 async def main():
     logging.info("启动 Clash...")
-    process = subprocess.Popen(["./clash/clash-linux", "-f", "config.yaml"])
+    process = subprocess.Popen(
+        ["./clash/clash-linux", "-f", "config.yaml"],
+        stderr=subprocess.PIPE,
+        text=True
+    )
     await asyncio.sleep(5)
 
     async with aiohttp.ClientSession() as session:
@@ -81,6 +85,8 @@ async def main():
             logging.error("无法进行节点测试，Clash API 不可用。")
             if process.poll() is None:
                 process.terminate()
+                stderr_output, _ = await asyncio.wait_for(process.communicate(), timeout=5)
+                logging.error(f"Clash 错误输出:\n{stderr_output}")
             return
 
         try:
@@ -91,11 +97,15 @@ async def main():
             logging.error("config.yaml 文件未找到。")
             if process.poll() is None:
                 process.terminate()
+                stderr_output, _ = await asyncio.wait_for(process.communicate(), timeout=5)
+                logging.error(f"Clash 错误输出:\n{stderr_output}")
             return
         except yaml.YAMLError as e:
             logging.error(f"解析 config.yaml 文件时发生错误: {e}")
             if process.poll() is None:
                 process.terminate()
+                stderr_output, _ = await asyncio.wait_for(process.communicate(), timeout=5)
+                logging.error(f"Clash 错误输出:\n{stderr_output}")
             return
 
         raw_nodes = {}
@@ -122,7 +132,8 @@ async def main():
 
         if process.poll() is None:
             process.terminate()
-            await asyncio.sleep(1)
+            stderr_output, _ = await asyncio.wait_for(process.communicate(), timeout=5)
+            logging.info(f"Clash 退出，错误输出:\n{stderr_output}")
 
         try:
             with open("data/sp.txt", "w") as f:
