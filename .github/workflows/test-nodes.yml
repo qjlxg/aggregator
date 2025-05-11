@@ -14,47 +14,25 @@ jobs:
 
       - name: 安装 Clash
         run: |
-          sudo apt-get update
-          sudo apt-get install -y jq
-          # 尝试获取 Clash 的最新发布版本
-          API_URL="https://api.github.com/repos/Dreamacro/clash/releases/latest"
-          API_RESPONSE=$(curl -s "$API_URL")
-          echo "API Response:"
-          echo "$API_RESPONSE" | jq '.' || echo "Failed to parse API response"
+          # 下载 Clash 归档文件
+          wget https://archive.org/download/github.com-Dreamacro-clash_-_2023-08-06_20-51-37/Dreamacro-clash_-_2023-08-06_20-51-37.bundle -O clash.bundle
           
-          # 检查是否有错误消息
-          ERROR_MESSAGE=$(echo "$API_RESPONSE" | jq -r '.message // empty')
-          if [ "$ERROR_MESSAGE" == "Not Found" ]; then
-            echo "错误：Clash 项目在 $API_URL 未找到（404）。"
-            echo "可能原因：仓库已迁移或删除。请尝试以下替代方案："
-            echo "尝试使用 Dreamacro/clash-premium 或其他来源。"
-            # 尝试备用地址（例如 Clash Premium 的镜像）
-            API_URL="https://api.github.com/repos/Dreamacro/clash-premium/releases/latest"
-            API_RESPONSE=$(curl -s "$API_URL")
-            echo "备用 API Response:"
-            echo "$API_RESPONSE" | jq '.' || echo "Failed to parse backup API response"
-          fi
-
-          # 检查 .assets 是否存在
-          ASSETS=$(echo "$API_RESPONSE" | jq -r '.assets')
-          if [ "$ASSETS" == "null" ] || [ -z "$ASSETS" ]; then
-            echo "错误：API 返回的 .assets 字段为空或不存在。"
-            echo "请手动检查 Clash 项目状态或使用其他下载来源。"
+          # 解压 bundle 文件（假设是 tar.gz 格式，视具体情况调整）
+          tar -xzf clash.bundle
+          
+          # 查找并移动 Clash 二进制文件
+          # 假设二进制文件名为 clash-linux-amd64，您可能需要根据实际文件名调整
+          if [ -f "clash-linux-amd64" ]; then
+            sudo mv clash-linux-amd64 /usr/local/bin/clash
+          else
+            echo "错误：未找到 Clash 二进制文件。请检查归档文件内容。"
             exit 1
           fi
-
-          # 提取下载链接
-          LATEST_URL=$(echo "$API_RESPONSE" | jq -r '.assets[] | select(.name | contains("linux-amd64")) | .browser_download_url')
-          if [ -z "$LATEST_URL" ]; then
-            echo "未能找到包含 'linux-amd64' 的下载链接，请检查资产名称或 API 数据。"
-            exit 1
-          fi
-
-          # 下载并安装 Clash
-          wget "$LATEST_URL" -O clash.gz
-          gunzip clash.gz
-          chmod +x clash
-          sudo mv clash /usr/local/bin/clash
+          
+          # 设置执行权限
+          sudo chmod +x /usr/local/bin/clash
+          
+          # 验证安装
           clash -v
 
       - name: 生成 Clash 配置文件
