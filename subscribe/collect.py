@@ -42,7 +42,7 @@ GIST_PAT = os.environ.get("GIST_PAT")
 
 if not ALL_CLASH_DATA_API or not GIST_PAT:
     print("环境变量 ALL_CLASH_DATA_API 或 GIST_PAT 未设置！")
-    print("ALL_CLASH_DATA_API 应为：https://api.github.com/repos/qjlxg/362/contents/data")
+    print("ALL_CLASH_DATA_API 应为：")
     sys.exit(1)
 
 api_headers = {
