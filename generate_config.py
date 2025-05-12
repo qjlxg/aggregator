@@ -2,8 +2,38 @@ import base64
 import json
 import yaml
 from urllib.parse import urlparse, parse_qs
-import binascii  # 导入 binascii 模块
-import hashlib  # 导入 hashlib 模块
+import binascii
+import hashlib
+import urllib.parse # 导入 urllib.parse 用于 URL 编码
+
+def generate_ss_uri(method, password, server, port, remarks=""):
+    """
+    生成兼容 UTF-8 的 Shadowsocks URI.
+
+    Args:
+        method: 加密方法 (例如: aes-256-cfb).
+        password: 密码 (可以是 Unicode 字符).
+        server: 服务器地址.
+        port: 端口号.
+        remarks: 备注信息 (可选).
+
+    Returns:
+        一个 Shadowsocks URI 字符串.
+    """
+    try:
+        method_password = f"{method}:{password}".encode('utf-8')
+        encoded_method_password = base64.b64encode(method_password).decode('utf-8').strip('=')
+
+        uri = f"ss://{encoded_method_password}@{server}:{port}"
+
+        if remarks:
+            uri += "#" + urllib.parse.quote(remarks)
+
+        return uri
+
+    except Exception as e:
+        print(f"生成 SS URI 失败: {e}")
+        return None
 
 def parse_vmess(uri):
     try:
@@ -32,8 +62,13 @@ def parse_vmess(uri):
 def parse_ss(uri):
     try:
         parts = uri.split("://")[1].split("@")
-        method_password = base64.b64decode(parts[0]).decode().split(":")
-        server_port = parts[1].split("#")[0].split(":")  # 处理带#的情况
+        encoded_method_password = parts[0]
+        try:
+            method_password = base64.b64decode(encoded_method_password).decode("utf-8").split(":")
+        except UnicodeDecodeError:
+            method_password = base64.b64decode(encoded_method_password).decode("latin-1").split(":")
+
+        server_port = parts[1].split("#")[0].split(":")
         return {
             "name": "ss-" + server_port[0],
             "type": "ss",
@@ -79,11 +114,9 @@ def generate_clash_config(nodes):
         if proxy_info:
             name = proxy_info["name"]
             if name in seen_names:
-                # 生成唯一名称，使用 URI 的 MD5 哈希作为后缀
                 unique_suffix = hashlib.md5(uri.encode()).hexdigest()[:8]
                 proxy_info["name"] = f"{name}-{unique_suffix}"
             elif not name:
-                # 如果原始名称为空，则使用 URI 的 MD5 哈希作为名称
                 unique_name = hashlib.md5(uri.encode()).hexdigest()[:16]
                 proxy_info["name"] = unique_name
 
@@ -105,8 +138,21 @@ def generate_clash_config(nodes):
         "rules": ["MATCH,auto"]
     }
     with open("config.yaml", "w") as f:
-        yaml.dump(config, f)
+        yaml.dump(config, f, indent=2, sort_keys=False, allow_unicode=True) # 加上 indent，sort_keys 和 allow_unicode
 
+# 示例用法 (生成 SS URI)
+# method = "aes-256-cfb"
+# password = "密码包含中文测试123"
+# server = "your_server.com"
+# port = 8888
+# remarks = "我的中文节点备注"
+# ss_uri = generate_ss_uri(method, password, server, port, remarks)
+# if ss_uri:
+#     print(f"生成的 Shadowsocks URI: {ss_uri}")
+
+
+# 读取节点信息并生成 Clash 配置
 with open("data/ji.txt", "r") as f:
     nodes = f.readlines()
+
 generate_clash_config(nodes)
