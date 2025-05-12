@@ -12,29 +12,17 @@ from typing import List, Dict, Set
 import base64
 import logging
 import requests
-import yaml # PyYAML library
+import yaml 
 
-# <--- 新增代码开始 --->
-# 自定义字符串 representer，以避免对纯数字字符串添加 !<str> 标签
 def represent_str_plain(dumper, data):
-    """
-    自定义 representer，确保字符串（特别是纯数字字符串）
-    在 YAML 输出时尽可能使用普通标量样式，不带标签或不必要的引号。
-    """
-    if data.isdigit(): # 如果字符串只包含数字
-        # 将其表示为普通的标量字符串，不加引号或标签
+    if data.isdigit(): 
         return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='')
-    # 对于其他类型的字符串，使用 PyYAML 的默认行为（可能会根据内容加引号）
     return dumper.represent_scalar('tag:yaml.org,2002:str', data)
 
-# 将自定义 representer 添加到默认的 Dumper 和 SafeDumper
-# 这样，所有后续的 yaml.dump 调用都会使用这个自定义行为
-# 检查 Dumper 和 SafeDumper 是否存在，以避免在某些 PyYAML 版本或安装中出现 AttributeError
 if hasattr(yaml, 'Dumper'):
     yaml.add_representer(str, represent_str_plain, Dumper=yaml.Dumper)
 if hasattr(yaml, 'SafeDumper'):
     yaml.add_representer(str, represent_str_plain, Dumper=yaml.SafeDumper)
-# <--- 新增代码结束 --->
 
 import crawl
 import executable
@@ -51,7 +39,6 @@ import subconverter
 from dotenv import load_dotenv
 load_dotenv()
 
-# 设置日志级别
 logging.basicConfig(level=logging.INFO)
 
 PATH = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
@@ -71,7 +58,6 @@ api_headers = {
 }
 
 def fetch_repo_file(filename):
-    """从 GitHub 仓库获取文件内容"""
     try:
         url = f"{ALL_CLASH_DATA_API}/{filename}?ref=main"
         resp = requests.get(url, headers=api_headers, timeout=10)
@@ -86,7 +72,6 @@ def fetch_repo_file(filename):
         return ""
 
 def push_repo_file(filename, content):
-    """推送文件内容到 GitHub 仓库"""
     try:
         url = f"{ALL_CLASH_DATA_API}/{filename}"
         sha = None
@@ -119,7 +104,6 @@ class SubscriptionManager:
         self.repo_files = repo_files
 
     def load_exist(self, filename: str) -> List[str]:
-        """加载现有订阅并校验有效性"""
         if not filename or filename not in self.repo_files:
             return []
         subscriptions: Set[str] = set()
@@ -137,7 +121,6 @@ class SubscriptionManager:
         return [links[i] for i in range(len(links)) if results[i][0] and not results[i][1]]
 
     def parse_domains(self, content: str) -> Dict[str, Dict[str, str]]:
-        """解析域名内容"""
         if not content or not isinstance(content, str):
             logger.warning("内容为空或非字符串，无法解析域名")
             return {}
@@ -154,7 +137,6 @@ class SubscriptionManager:
         return records
 
     def assign(self, domains_file: str = "", overwrite: bool = False, pages: int = sys.maxsize, rigid: bool = True, chuck: bool = False, subscribes_file: str = "", refresh: bool = False, customize_link: str = "") -> (List[TaskConfig], dict):
-        """分配任务并收集域名"""
         subscriptions = self.load_exist(subscribes_file)
         logger.info(f"加载现有订阅完成，数量: {len(subscriptions)}")
         tasks = [
@@ -214,7 +196,6 @@ class SubscriptionManager:
         return tasks, domains
 
 def aggregate(args: argparse.Namespace) -> None:
-    """聚合订阅并生成配置文件"""
     repo_files = {}
     for fname in ["coupons.txt", "domains.txt", "subscribes.txt", "valid-domains.txt"]:
         repo_files[fname] = fetch_repo_file(fname)
@@ -256,7 +237,6 @@ def aggregate(args: argparse.Namespace) -> None:
             unique_proxies.append(proxy)
             seen_proxies.add(proxy_key)
 
-    # 统一节点名称：使用递增编号
     for i, proxy in enumerate(unique_proxies, start=1):
         number = f"{i:02d}"
         proxy["name"] = f"yandex-{number}"
@@ -295,7 +275,7 @@ def aggregate(args: argparse.Namespace) -> None:
     if os.path.exists(supplier) and os.path.isfile(supplier):
         os.remove(supplier)
     with open(supplier, "w+", encoding="utf8") as f:
-        yaml.dump(data, f, allow_unicode=True) # This will now use the custom representer
+        yaml.dump(data, f, allow_unicode=True, Dumper=yaml.SafeDumper)
     if os.path.exists(generate_conf) and os.path.isfile(generate_conf):
         os.remove(generate_conf)
     targets, records = [], {}
@@ -358,7 +338,6 @@ def aggregate(args: argparse.Namespace) -> None:
     workflow.cleanup(workspace, [])
 
 class CustomHelpFormatter(argparse.HelpFormatter):
-    """自定义帮助格式化器"""
     def _format_action_invocation(self, action):
         if action.choices:
             parts = []
