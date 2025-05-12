@@ -13,8 +13,6 @@ import base64
 import logging
 import requests
 import yaml
-import socket
-import geoip2.database
 
 import crawl
 import executable
@@ -193,35 +191,6 @@ class SubscriptionManager:
                 task_set.add(domain)
         return tasks, domains
 
-def get_country_flag(server):
-    """根据 server 获取国旗 emoji"""
-    try:
-        if re.match(r"^\d+\.\d+\.\d+\.\d+$", server):
-            ip = server
-            logger.info(f"直接使用 IP 地址: {ip}")
-        else:
-            ip = socket.gethostbyname(server)
-            logger.info(f"域名 {server} 解析为 IP: {ip}")
-        reader = geoip2.database.Reader(os.path.join(PATH, "clash", "Country.mmdb"))
-        response = reader.country(ip)
-        country_code = response.country.iso_code
-        if country_code:
-            flag = ''.join([chr(ord(char) + 127397) for char in country_code.upper()])
-            logger.info(f"IP {ip} 的国旗: {flag}")
-            return flag
-        else:
-            logger.warning(f"IP {ip} 无国家代码")
-            return ""
-    except socket.gaierror as e:
-        logger.warning(f"域名解析失败 {server}: {e}")
-        return ""
-    except geoip2.errors.AddressNotFoundError:
-        logger.warning(f"IP {ip} 在数据库中未找到")
-        return ""
-    except Exception as e:
-        logger.warning(f"获取 {server} 的国旗失败: {e}")
-        return ""
-
 def aggregate(args: argparse.Namespace) -> None:
     """聚合订阅并生成配置文件"""
     repo_files = {}
@@ -265,32 +234,10 @@ def aggregate(args: argparse.Namespace) -> None:
             unique_proxies.append(proxy)
             seen_proxies.add(proxy_key)
 
-    # 统一节点名称：保留国旗，替换为 yandex 并编号
-    flag_counter = {}
-    for proxy in unique_proxies:
-        name = proxy.get("name", "")
-        server = proxy.get("server", "")
-
-        flag = ""
-        for char in name:
-            if ord(char) in range(127462, 127488):
-                flag += char
-            else:
-                break
-
-        if not flag and server:
-            flag = get_country_flag(server)
-
-        if flag:
-            if flag not in flag_counter:
-                flag_counter[flag] = 1
-            else:
-                flag_counter[flag] += 1
-            number = f"{flag_counter[flag]:02d}"
-            proxy["name"] = f"{flag} yandex-{number}"
-        else:
-            number = f"{len(unique_proxies):02d}"
-            proxy["name"] = f"yandex-{number}"
+    # 统一节点名称：使用递增编号
+    for i, proxy in enumerate(unique_proxies, start=1):
+        number = f"{i:02d}"
+        proxy["name"] = f"yandex-{number}"
 
     nodes = []
     workspace = os.path.join(PATH, "clash")
