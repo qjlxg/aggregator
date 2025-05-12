@@ -13,7 +13,8 @@ import base64
 import logging
 import requests
 import yaml
-import socket # 导入 socket 模块
+import socket  # 导入 socket 模块
+import geoip2.database  # 导入 geoip2 库
 
 import crawl
 import executable
@@ -26,10 +27,12 @@ from urlvalidator import isurl
 from workflow import TaskConfig
 import clash
 import subconverter
-import geoip2.database  # 导入 geoip2 库
 
 from dotenv import load_dotenv
 load_dotenv()
+
+# 设置日志级别
+logging.basicConfig(level=logging.INFO)
 
 PATH = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 DATA_BASE = os.path.join(PATH, "data")
@@ -48,6 +51,7 @@ api_headers = {
 }
 
 def fetch_repo_file(filename):
+    """从 GitHub 仓库获取文件内容"""
     try:
         url = f"{ALL_CLASH_DATA_API}/{filename}?ref=main"
         resp = requests.get(url, headers=api_headers, timeout=10)
@@ -62,6 +66,7 @@ def fetch_repo_file(filename):
         return ""
 
 def push_repo_file(filename, content):
+    """推送文件内容到 GitHub 仓库"""
     try:
         url = f"{ALL_CLASH_DATA_API}/{filename}"
         sha = None
@@ -94,6 +99,7 @@ class SubscriptionManager:
         self.repo_files = repo_files
 
     def load_exist(self, filename: str) -> List[str]:
+        """加载现有订阅并校验有效性"""
         if not filename or filename not in self.repo_files:
             return []
         subscriptions: Set[str] = set()
@@ -111,6 +117,7 @@ class SubscriptionManager:
         return [links[i] for i in range(len(links)) if results[i][0] and not results[i][1]]
 
     def parse_domains(self, content: str) -> Dict[str, Dict[str, str]]:
+        """解析域名内容"""
         if not content or not isinstance(content, str):
             logger.warning("内容为空或非字符串，无法解析域名")
             return {}
@@ -127,6 +134,7 @@ class SubscriptionManager:
         return records
 
     def assign(self, domains_file: str = "", overwrite: bool = False, pages: int = sys.maxsize, rigid: bool = True, chuck: bool = False, subscribes_file: str = "", refresh: bool = False, customize_link: str = "") -> (List[TaskConfig], dict):
+        """分配任务并收集域名"""
         subscriptions = self.load_exist(subscribes_file)
         logger.info(f"加载现有订阅完成，数量: {len(subscriptions)}")
         tasks = [
@@ -185,23 +193,41 @@ class SubscriptionManager:
                 task_set.add(domain)
         return tasks, domains
 
-# 新增函数：根据 IP 获取国旗 emoji
-def get_country_flag(ip):
+def get_country_flag(server):
+    """根据 server 获取国旗 emoji"""
     try:
+        # 检查 server 是否为 IP 地址
+        if re.match(r"^\d+\.\d+\.\d+\.\d+$", server):
+            ip = server
+            logger.info(f"直接使用 IP 地址: {ip}")
+        else:
+            # 将域名解析为 IP 地址
+            ip = socket.gethostbyname(server)
+            logger.info(f"域名 {server} 解析为 IP: {ip}")
+        
+        # 查询国旗
         reader = geoip2.database.Reader(os.path.join(PATH, "clash", "Country.mmdb"))
         response = reader.country(ip)
         country_code = response.country.iso_code
         if country_code:
             flag = ''.join([chr(ord(char) + 127397) for char in country_code.upper()])
+            logger.info(f"IP {ip} 的国旗: {flag}")
             return flag
         else:
-            logger.warning(f"无法获取 IP {ip} 的国家代码")
+            logger.warning(f"IP {ip} 无国家代码")
             return ""
+    except socket.gaierror as e:
+        logger.warning(f"域名解析失败 {server}: {e}")
+        return ""
+    except geoip2.errors.AddressNotFoundError:
+        logger.warning(f"IP {ip} 在数据库中未找到")
+        return ""
     except Exception as e:
-        logger.warning(f"无法获取 IP {ip} 的国家信息: {e}")
+        logger.warning(f"获取 {server} 的国旗失败: {e}")
         return ""
 
 def aggregate(args: argparse.Namespace) -> None:
+    """聚合订阅并生成配置文件"""
     repo_files = {}
     for fname in ["coupons.txt", "domains.txt", "subscribes.txt", "valid-domains.txt"]:
         repo_files[fname] = fetch_repo_file(fname)
@@ -257,18 +283,9 @@ def aggregate(args: argparse.Namespace) -> None:
             else:
                 break  # 遇到非国旗字符停止
 
-        # 如果没有国旗，通过 geoip2 生成
+        # 如果没有国旗，尝试获取
         if not flag and server:
-            try:
-                # 尝试将域名解析为 IP 地址
-                ip_address = socket.gethostbyname(server)
-                flag = get_country_flag(ip_address)
-            except socket.gaierror as e:
-                logger.warning(f"无法解析域名 {server}: {e}")
-                flag = ""
-            except Exception as e:
-                logger.warning(f"获取{server}的国旗失败: {e}")
-                flag = ""
+            flag = get_country_flag(server)
 
         # 生成编号
         if flag:
@@ -277,12 +294,8 @@ def aggregate(args: argparse.Namespace) -> None:
             else:
                 flag_counter[flag] += 1
             number = f"{flag_counter[flag]:02d}"
-            if name.startswith(flag):  # 如果 name 已经以国旗开头，则保留国旗
-                proxy["name"] = f"{flag} yandex-{number}"
-            else:
-                proxy["name"] = f"{flag}yandex-{number}"  # 没有国旗开头则直接添加国旗
+            proxy["name"] = f"{flag} yandex-{number}"
         else:
-            # 如果无法获取国旗，使用默认编号
             number = f"{len(unique_proxies):02d}"
             proxy["name"] = f"yandex-{number}"
 
@@ -383,6 +396,7 @@ def aggregate(args: argparse.Namespace) -> None:
     workflow.cleanup(workspace, [])
 
 class CustomHelpFormatter(argparse.HelpFormatter):
+    """自定义帮助格式化器"""
     def _format_action_invocation(self, action):
         if action.choices:
             parts = []
