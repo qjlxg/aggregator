@@ -46,7 +46,7 @@ def extract_subscribe_urls(html):
     for target in soup.find_all(class_=target_classes):
         text = target.get_text(separator=' ', strip=True)
         found_urls = re.findall(r'(?:https?://|www\.)[^\s]+', text)
-        valid_urls = [url for url in found_urls if "subscribe?token=" in url]
+        valid_urls = [url for url in found_urls if "subscribe?token=" in url or "/s/" in url or url.startswith("http://") or url.startswith("https://")]
         urls.update(valid_urls)
     return list(urls)
 
