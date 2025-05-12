@@ -33,36 +33,13 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇺🇸 美国2 - 星火
-  - 🇯🇵 日本2 - 星火
-  - 🇯🇵 SVPN-Japan-1 - KanTanVPN
-  - 🇯🇵 SVPN-Japan-2 - KanTanVPN
-  - 🇯🇵 SVPN-Japan-3 - KanTanVPN
-  - 🇯🇵 SVPN-Japan-4 - KanTanVPN
-  - 🇯🇵 SVPN-Japan-5 - KanTanVPN
-  - 🇸🇬 新加坡3 - 星火
-  - 🇭🇰 香港2 - 星火
   - 🇭🇰 香港 - 飞鸽
-  - 🇭🇰 香港 - 飞鸽
-  - 🇭🇰 香港 - 飞鸽
-  - 🇺🇸 美国 - 飞鸽
-  - 🇺🇸 美国 - 飞鸽
-  - 🇺🇸 美国 - 飞鸽
   - 🇹🇼 台湾 - 飞鸽
-  - 🇹🇼 台湾 - 飞鸽
-  - 🇹🇼 台湾 - 飞鸽
+  - 🇸🇬 新加坡 - 飞鸽
   - 🇯🇵 日本 - 飞鸽
-  - 🇯🇵 日本 - 飞鸽
-  - 🇯🇵 日本 - 飞鸽
+  - 🇺🇸 美国 - 飞鸽
   - 🇰🇷 韩国 - 飞鸽
   - 🇨🇦 加拿大 - 飞鸽
-  - 🇰🇷 韩国 - 飞鸽
-  - 🇨🇦 加拿大 - 飞鸽
-  - 🇰🇷 韩国 - 飞鸽
-  - 🇨🇦 加拿大 - 飞鸽
-  - 🇸🇬 新加坡 - 飞鸽
-  - 🇸🇬 新加坡 - 飞鸽
-  - 🇸🇬 新加坡 - 飞鸽
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -118,9 +95,6 @@ proxy-groups:
   interval: 15
   tolerance: 100
   proxies: &id002
-  - 🇭🇰 香港2 - 星火
-  - 🇭🇰 香港 - 飞鸽
-  - 🇭🇰 香港 - 飞鸽
   - 🇭🇰 香港 - 飞鸽
 - name: 🇹🇼 ‍台湾
   type: url-test
@@ -129,20 +103,13 @@ proxy-groups:
   tolerance: 100
   proxies: &id003
   - 🇹🇼 台湾 - 飞鸽
-  - 🇹🇼 台湾 - 飞鸽
-  - 🇹🇼 台湾 - 飞鸽
 - name: 🇨🇳 ‍中国
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id004
-  - 🇭🇰 香港2 - 星火
   - 🇭🇰 香港 - 飞鸽
-  - 🇭🇰 香港 - 飞鸽
-  - 🇭🇰 香港 - 飞鸽
-  - 🇹🇼 台湾 - 飞鸽
-  - 🇹🇼 台湾 - 飞鸽
   - 🇹🇼 台湾 - 飞鸽
 - name: 🇸🇬 ‍新加坡
   type: url-test
@@ -150,9 +117,6 @@ proxy-groups:
   interval: 15
   tolerance: 100
   proxies: &id005
-  - 🇸🇬 新加坡3 - 星火
-  - 🇸🇬 新加坡 - 飞鸽
-  - 🇸🇬 新加坡 - 飞鸽
   - 🇸🇬 新加坡 - 飞鸽
 - name: 🇯🇵 ‍日本
   type: url-test
@@ -160,14 +124,6 @@ proxy-groups:
   interval: 15
   tolerance: 100
   proxies: &id006
-  - 🇯🇵 日本2 - 星火
-  - 🇯🇵 SVPN-Japan-1 - KanTanVPN
-  - 🇯🇵 SVPN-Japan-2 - KanTanVPN
-  - 🇯🇵 SVPN-Japan-3 - KanTanVPN
-  - 🇯🇵 SVPN-Japan-4 - KanTanVPN
-  - 🇯🇵 SVPN-Japan-5 - KanTanVPN
-  - 🇯🇵 日本 - 飞鸽
-  - 🇯🇵 日本 - 飞鸽
   - 🇯🇵 日本 - 飞鸽
 - name: 🇺🇸 ‍美国
   type: url-test
@@ -175,9 +131,6 @@ proxy-groups:
   interval: 15
   tolerance: 300
   proxies: &id007
-  - 🇺🇸 美国2 - 星火
-  - 🇺🇸 美国 - 飞鸽
-  - 🇺🇸 美国 - 飞鸽
   - 🇺🇸 美国 - 飞鸽
 - name: 🎏 ‍其他
   type: url-test
@@ -185,10 +138,6 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id008
-  - 🇰🇷 韩国 - 飞鸽
-  - 🇨🇦 加拿大 - 飞鸽
-  - 🇰🇷 韩国 - 飞鸽
-  - 🇨🇦 加拿大 - 飞鸽
   - 🇰🇷 韩国 - 飞鸽
   - 🇨🇦 加拿大 - 飞鸽
 - name: 👆🏻🇭🇰 ‍香港
@@ -213,22 +162,13 @@ proxy-groups:
   type: select
   proxies: *id008
 proxies:
-- {name: 🇭🇰 香港2 - 星火, server: 216.250.97.138, port: 900, type: vmess, uuid: d7c9ae0f-330a-412e-af1a-f5a926d4af0e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇸🇬 新加坡3 - 星火, server: 164.152.167.114, port: 800, type: vmess, uuid: d7c9ae0f-330a-412e-af1a-f5a926d4af0e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇯🇵 日本2 - 星火, server: 216.250.97.138, port: 7000, type: ss, cipher: aes-256-gcm, password: d7c9ae0f-330a-412e-af1a-f5a926d4af0e, udp: true}
-- {name: 🇺🇸 美国2 - 星火, server: 173.249.199.82, port: 600, type: ss, cipher: aes-256-gcm, password: d7c9ae0f-330a-412e-af1a-f5a926d4af0e, udp: true}
-- {name: 🇯🇵 SVPN-Japan-1 - KanTanVPN, server: japantv1.zhixiang.us, port: 24567, type: ss, cipher: aes-256-gcm, password: 89fa4f2e-88de-46cf-8c9c-d8808cc1a984, udp: true}
-- {name: 🇯🇵 SVPN-Japan-2 - KanTanVPN, server: japantv2.zhixiang.us, port: 56789, type: ss, cipher: aes-256-gcm, password: 89fa4f2e-88de-46cf-8c9c-d8808cc1a984, udp: true}
-- {name: 🇯🇵 SVPN-Japan-3 - KanTanVPN, server: japantv3.zhixiang.us, port: 56789, type: ss, cipher: aes-256-gcm, password: 89fa4f2e-88de-46cf-8c9c-d8808cc1a984, udp: true}
-- {name: 🇯🇵 SVPN-Japan-4 - KanTanVPN, server: japantv4.zhixiang.us, port: 56789, type: ss, cipher: aes-256-gcm, password: 89fa4f2e-88de-46cf-8c9c-d8808cc1a984, udp: true}
-- {name: 🇯🇵 SVPN-Japan-5 - KanTanVPN, server: japantv5.zhixiang.us, port: 56789, type: ss, cipher: aes-256-gcm, password: 89fa4f2e-88de-46cf-8c9c-d8808cc1a984, udp: true}
-- {name: 🇰🇷 韩国 - 飞鸽, server: ai.aiteacherai.me, port: 60004, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
-- {name: 🇨🇦 加拿大 - 飞鸽, server: ai.aiteacherai.me, port: 60009, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
 - {name: 🇭🇰 香港 - 飞鸽, server: ai.aiteacherai.me, port: 60000, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
-- {name: 🇸🇬 新加坡 - 飞鸽, server: ai.aiteacherai.me, port: 60008, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
-- {name: 🇯🇵 日本 - 飞鸽, server: ai.aiteacherai.me, port: 60003, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
 - {name: 🇺🇸 美国 - 飞鸽, server: ai.aiteacherai.me, port: 60001, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
 - {name: 🇹🇼 台湾 - 飞鸽, server: ai.aiteacherai.me, port: 60002, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
+- {name: 🇯🇵 日本 - 飞鸽, server: ai.aiteacherai.me, port: 60003, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
+- {name: 🇰🇷 韩国 - 飞鸽, server: ai.aiteacherai.me, port: 60004, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
+- {name: 🇸🇬 新加坡 - 飞鸽, server: ai.aiteacherai.me, port: 60008, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
+- {name: 🇨🇦 加拿大 - 飞鸽, server: ai.aiteacherai.me, port: 60009, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

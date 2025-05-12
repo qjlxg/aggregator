@@ -1,0 +1,6 @@
+%YAML 1.1
+---
+proxies:
+- &id001 {name: 🇹🇼 台湾 - 飞鸽, server: ai.aiteacherai.me, port: 60002, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
+- *id001
+- *id001
