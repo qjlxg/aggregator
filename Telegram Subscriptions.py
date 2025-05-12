@@ -42,7 +42,7 @@ def get_urls_from_html(html):
         'tgme_widget_message_video', 'tgme_widget_message_document',
         'tgme_widget_message_poll'
     ])
-    excluded_domains = ("aliyundrive.com", "pan.baidu.com")
+    excluded_domains = ("aliyundrive.com", "pan.baidu.com","raw.githubusercontent.com")
     urls = set()
     for target in targets:
         text = target.get_text(separator=' ', strip=True)
