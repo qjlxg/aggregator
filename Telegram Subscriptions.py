@@ -74,7 +74,7 @@ def get_urls_from_html(html):
         'tgme_widget_message_poll'
     ])
     # 定义要排除的域名或字符串
-    excluded_domains = ("aliyundrive.com", "pan.baidu.com", "raw.githubusercontent.com", "t.me", "yam")
+    excluded_domains = ("aliyundrive.com", "pan.baidu.com", "raw.githubusercontent.com", "t.me", "yam","play.google.com","app")
     urls = set()
     for target in targets:
         text = target.get_text(separator=' ', strip=True)
