@@ -117,7 +117,7 @@ def main(base_url='https://t.me/s/jichang_list', max_pages=90, max_workers=10): 
         logging.info(f"下一页 URL: {current_url}")
 
         page_count += 1
-        time.sleep(random.uniform(35, 45))  # 礼貌地随机延迟，避免被封
+        time.sleep(random.uniform(39,58))  # 礼貌地随机延迟，避免被封
 
         # 保存中间结果
         logging.info("保存中间结果...")
