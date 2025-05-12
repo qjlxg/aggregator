@@ -42,11 +42,13 @@ def extract_subscribe_urls(html):
         'tgme_widget_message_video', 'tgme_widget_message_document',
         'tgme_widget_message_poll'
     ]
+    excluded_domains = ("aliyundrive.com", "pan.baidu.com")
     urls = set()
     for target in soup.find_all(class_=target_classes):
         text = target.get_text(separator=' ', strip=True)
         found_urls = re.findall(r'(?:https?://|www\.)[^\s]+', text)
-        valid_urls = [url for url in found_urls if "subscribe?token=" in url or "/s/" in url or url.startswith("http://") or url.startswith("https://")]
+        valid_urls = [url for url in found_urls if "subscribe?token=" in url or "/s/" in url or url.startswith("http://") or url.startswith("https://")
+        and not any(domain in url for domain in excluded_domains)]
         urls.update(valid_urls)
     return list(urls)
 
