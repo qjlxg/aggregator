@@ -2,8 +2,8 @@
 ---
 proxies:
 - {name: 🇭🇰 香港2 - 星火, server: 216.250.97.138, port: 900, type: vmess, uuid: d7c9ae0f-330a-412e-af1a-f5a926d4af0e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id001 {name: 🇭🇰 香港 - 飞鸽, server: ai.aiteacherai.me, port: 60000, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
-- &id002 {name: 🇹🇼 台湾 - 飞鸽, server: ai.aiteacherai.me, port: 60002, type: ss, cipher: chacha20-ietf-poly1305, password: cb7ba5ec-20ea-41ac-9ab5-10cc8f740909, udp: true}
+- &id001 {name: 🇭🇰 香港 - 飞鸽, server: ai.aiteacherai.me, port: 60000, type: ss, cipher: chacha20-ietf-poly1305, password: 9b53d7fa-ba16-4ff8-a5df-12ea17513a6d, udp: true}
+- &id002 {name: 🇹🇼 台湾 - 飞鸽, server: ai.aiteacherai.me, port: 60002, type: ss, cipher: chacha20-ietf-poly1305, password: 9b53d7fa-ba16-4ff8-a5df-12ea17513a6d, udp: true}
 - *id001
 - *id002
 - *id001
