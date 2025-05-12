@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+#可用完整，无国旗
 # @Author  : wzdnzd
 # @Time    : 2022-07-15
 
@@ -651,10 +651,10 @@ def search_github(page: int, cookie: str, searchtype: str, sortedby: str) -> str
     if searchtype.lower() == "code":
         query = "%2F%5C%2Fapi%5C%2Fv1%5C%2Fclient%5C%2Fsubscribe%5C%3Ftoken%3D%5Ba-zA-Z0-9%5D%7B8%2C32%7D%2F"
 
-    url = f"https://github.com/search?o=desc&p={page}&q={query}&s={sortedby}&type={searchtype}"
+    url = f"https://bgithub.xyz/search?o=desc&p={page}&q={query}&s={sortedby}&type={searchtype}"
     headers = {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-        "Referer": "https://github.com",
+        "Referer": "https://bgithub.xyz",
         "User-Agent": utils.USER_AGENT,
         "Cookie": f"user_session={cookie}",
     }
@@ -686,7 +686,7 @@ def search_github_issues(page: int, cookie: str) -> list[str]:
         regex = r'href="(/.*/.*/issues/\d+)">'
         groups = re.findall(regex, content, flags=re.I)
         links = list(set(groups))
-        links = [f"https://github.com{x}" for x in links]
+        links = [f"https://bgithub.xyz{x}" for x in links]
         return links
     except:
         return []
@@ -763,7 +763,7 @@ def search_github_code(page: int, cookie: str, excludes: list = []) -> list[str]
 
         for uri in uris:
             if not intercept(text=uri, excludes=excludes):
-                links.add(f"https://github.com{uri}")
+                links.add(f"https://bgithub.xyz{uri}")
 
         return list(links)
     except:
@@ -1520,7 +1520,7 @@ def collect_airport(
         return result
 
     def crawl_jctj(convert: bool = False) -> dict:
-        url = "https://raw.githubusercontent.com/hwanz/SSR-V2ray-Trojan-vpn/main/README.md"
+        url = "https://raw.bgithub.xyz/hwanz/SSR-V2ray-Trojan-vpn/main/README.md"
         content = utils.http_get(url=url)
         groups = re.findall(r"\[.*\]\((https?:\/\/[^\s\r\n]+)\)[^\r\n]+\d+G.*", content, flags=re.I)
         if not groups:
