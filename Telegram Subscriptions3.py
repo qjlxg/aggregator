@@ -226,7 +226,7 @@ if __name__ == '__main__':
     except Exception as e:
         logging.error(f"读取配置文件 {config_file_path} 失败: {e}")
 
-    max_pages_to_crawl = 10
+    max_pages_to_crawl = 3
     num_working_threads = 5
     output_filename = 'data/xujw3.txt'
     main(start_urls_list, max_pages_to_crawl, num_working_threads, output_filename)
