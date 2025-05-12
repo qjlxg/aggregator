@@ -307,6 +307,6 @@ def aggregate(args: argparse.Namespace) -> None:
             logger.error("终止 clash 进程失败")
         nodes = [unique_proxies[i] for i in range(len(unique_proxies)) if masks[i]]
         if not nodes:
-        ```
+      
 
 
