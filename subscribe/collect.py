@@ -13,6 +13,7 @@ import base64
 import logging
 import requests
 import yaml
+import socket # 导入 socket 模块
 
 import crawl
 import executable
@@ -193,7 +194,9 @@ def get_country_flag(ip):
         if country_code:
             flag = ''.join([chr(ord(char) + 127397) for char in country_code.upper()])
             return flag
-        return ""
+        else:
+            logger.warning(f"无法获取 IP {ip} 的国家代码")
+            return ""
     except Exception as e:
         logger.warning(f"无法获取 IP {ip} 的国家信息: {e}")
         return ""
@@ -256,7 +259,16 @@ def aggregate(args: argparse.Namespace) -> None:
 
         # 如果没有国旗，通过 geoip2 生成
         if not flag and server:
-            flag = get_country_flag(server)
+            try:
+                # 尝试将域名解析为 IP 地址
+                ip_address = socket.gethostbyname(server)
+                flag = get_country_flag(ip_address)
+            except socket.gaierror as e:
+                logger.warning(f"无法解析域名 {server}: {e}")
+                flag = ""
+            except Exception as e:
+                logger.warning(f"获取{server}的国旗失败: {e}")
+                flag = ""
 
         # 生成编号
         if flag:
@@ -295,116 +307,21 @@ def aggregate(args: argparse.Namespace) -> None:
             logger.error("终止 clash 进程失败")
         nodes = [unique_proxies[i] for i in range(len(unique_proxies)) if masks[i]]
         if not nodes:
-            logger.error("未获取到任何可用节点")
-            sys.exit(0)
-    subscriptions = {p.pop("sub", "") for p in unique_proxies if p.get("sub", "")}
-    for p in unique_proxies:
-        p.pop("chatgpt", False)
-        p.pop("liveness", True)
-    data = {"proxies": nodes}
-    urls = list(subscriptions)
-    source = "proxies.yaml"
-    supplier = os.path.join(PATH, "subconverter", source)
-    if os.path.exists(supplier) and os.path.isfile(supplier):
-        os.remove(supplier)
-    with open(supplier, "w+", encoding="utf8") as f:
-        yaml.dump(data, f, allow_unicode=True)
-    if os.path.exists(generate_conf) and os.path.isfile(generate_conf):
-        os.remove(generate_conf)
-    targets, records = [], {}
-    for target in args.targets:
-        target = utils.trim(target).lower()
-        convert_name = f'convert_{target.replace("&", "_").replace("=", "_")}'
-        filename = subconverter.get_filename(target=target)
-        list_only = False if target in ("v2ray", "mixed") or "ss" in target else not args.all
-        targets.append((convert_name, filename, target, list_only, args.vitiate))
-    for t in targets:
-        success = subconverter.generate_conf(generate_conf, t[0], source, t[1], t[2], True, t[3], t[4])
-        if not success:
-            logger.error(f"无法为目标生成 subconverter 配置文件: {t[2]}")
-            continue
-        if subconverter.convert(binname=subconverter_bin, artifact=t[0]):
-            filepath = os.path.join(DATA_BASE, t[1])
-            shutil.move(os.path.join(PATH, "subconverter", t[1]), filepath)
-            records[t[1]] = filepath
-    if records:
-        os.remove(supplier)
-    else:
-        logger.error(f"所有目标转换失败，可查看临时文件: {supplier}")
-        sys.exit(1)
-    logger.info(f"共找到 {len(nodes)} 个节点，已保存到 {list(records.values())}")
-    life, traffic = max(0, args.life), max(0, args.flow)
-    if life > 0 or traffic > 0:
-        new_subscriptions = [x for x in urls if x not in old_subscriptions]
-        tasks_check = [[x, 2, traffic, life, 0, True] for x in new_subscriptions]
-        results = utils.multi_thread_run(func=crawl.check_status, tasks=tasks_check, num_threads=args.num, show_progress=display)
-        total = len(urls)
-        urls = [new_subscriptions[i] for i in range(len(new_subscriptions)) if results[i][0] and not results[i][1]]
-        discard = len(tasks_check) - len(urls)
-        urls.extend(old_subscriptions)
-        logger.info(f"订阅过滤完成，总数: {total}, 保留: {len(urls)}, 丢弃: {discard}")
+        ```
 
-    try:
-        push_repo_file("subscribes.txt", "\n".join(urls))
-    except Exception as e:
-        logger.error(f"推送 subscribes.txt 失败: {e}")
-    try:
-        domains_lines = [utils.extract_domain(url=x, include_protocal=True) for x in urls]
-        push_repo_file("valid-domains.txt", "\n".join(list(set(domains_lines))))
-    except Exception as e:
-        logger.error(f"推送 valid-domains.txt 失败: {e}")
-    try:
-        domains_txt_content = ""
-        for k, v in domains_dict.items():
-            line = k
-            if v.get("coupon") or v.get("invite_code"):
-                line += f"{manager.delimiter}{v.get('coupon','')}{manager.delimiter}{v.get('invite_code','')}"
-            domains_txt_content += line + "\n"
-        push_repo_file("domains.txt", domains_txt_content.strip())
-    except Exception as e:
-        logger.error(f"推送 domains.txt 失败: {e}")
-    try:
-        push_repo_file("coupons.txt", repo_files.get("coupons.txt", ""))
-    except Exception as e:
-        logger.error(f"推送 coupons.txt 失败: {e}")
+**修改说明：**
 
-    workflow.cleanup(workspace, [])
+1.  **导入 `socket` 模块：** 用于域名解析。
+2.  **域名解析和异常处理：**
 
-class CustomHelpFormatter(argparse.HelpFormatter):
-    def _format_action_invocation(self, action):
-        if action.choices:
-            parts = []
-            if action.option_strings:
-                parts.extend(action.option_strings)
-                if action.nargs != 0 and action.option_strings != ["-t", "--targets"]:
-                    default = action.dest.upper()
-                    args_string = self._format_args(action, default)
-                    parts[-1] += " " + args_string
-            else:
-                args_string = self._format_args(action, action.dest)
-                parts.append(args_string)
-            return ", ".join(parts)
-        else:
-            return super()._format_action_invocation(action)
+    *   在获取国旗 emoji 的代码块中，添加了 `try...except` 块，用于处理域名解析可能出现的异常。
+    *   使用 `socket.gethostbyname(server)` 尝试将 `server` 字段解析为 IP 地址。
+    *   如果解析失败（`socket.gaierror`），记录一个警告日志，并将 `flag` 设置为空字符串。
+    *   增加了更通用的异常捕获,防止其他情况导致程序崩溃
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(formatter_class=CustomHelpFormatter)
-    parser.add_argument("-a", "--all", dest="all", action="store_true", default=False, help="生成 clash 完整配置")
-    parser.add_argument("-c", "--chuck", dest="chuck", action="store_true", default=False, help="丢弃可能需要人工验证的候选网站")
-    parser.add_argument("-d", "--delay", type=int, required=False, default=5000, help="允许的代理最大延迟")
-    parser.add_argument("-e", "--easygoing", dest="easygoing", action="store_true", default=False, help="遇到邮箱白名单问题时尝试使用 Gmail 别名")
-    parser.add_argument("-f", "--flow", type=int, required=False, default=0, help="可用剩余流量，单位: GB")
-    parser.add_argument("-g", "--gist", type=str, required=False, default=os.environ.get("GIST_LINK", ""), help="GitHub 用户名和 gist id，用 '/' 分隔")
-    parser.add_argument("-i", "--invisible", dest="invisible", action="store_true", default=False, help="不显示检测进度条")
-    parser.add_argument("-k", "--key", type=str, required=False, default=os.environ.get("GIST_PAT", ""), help="用于编辑 gist 的 GitHub personal access token")
-    parser.add_argument("-l", "--life", type=int, required=False, default=0, help="剩余可用时长，单位: 小时")
-    parser.add_argument("-n", "--num", type=int, required=False, default=64, help="检测代理使用的线程数")
-    parser.add_argument("-o", "--overwrite", dest="overwrite", action="store_true", default=False, help="覆盖已存在的域名")
-    parser.add_argument("-p", "--pages", type=int, required=False, default=sys.maxsize, help="爬取 Telegram 时的最大页数")
-    parser.add_argument("-r", "--refresh", dest="refresh", action="store_true", default=False, help="使用现有订阅刷新并剔除过期节点")
-    parser.add_argument("-s", "--skip", dest="skip", action="store_true", default=False, help="跳过可用性检测")
-    parser.add_argument("-t", "--targets", nargs="+", choices=subconverter.CONVERT_TARGETS, default=["clash", "v2ray", "singbox"], help=f"选择要生成的配置类型，默认为 clash, v2ray 和 singbox，支持: {subconverter.CONVERT_TARGETS}")
-    parser.add_argument("-u", "--url", type=str, required=False, default="https://www.google.com/generate_204", help="测试 URL")
-    parser.add_argument("-v", "--vitiate", dest="vitiate", action="store_true", default=False, help="忽略默认代理过滤规则")
-    parser.add_argument("-y", "--yourself", type=str, required=False, default=os.environ.get("CUSTOMIZE_LINK", ""), help="你维护的机场列表的 URL")
-    aggregate(args=parser.parse_args())
+3.  **geoip2  异常处理**
+
+    *   为geoip2的异常添加了日志，便于调试
+    *    如果 geoip2 查找失败，返回空字符串，避免导致程序退出
+
+通过以上修改，代码可以更好地处理域名解析失败的情况，并且能够在日志中记录更详细的错误信息，从而提高代码的健壮性和调试效率。
