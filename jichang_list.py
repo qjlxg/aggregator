@@ -182,38 +182,8 @@ def main(start_urls, max_pages_per_source=90, max_workers=10):
 
 if __name__ == '__main__':
     start_urls_list = [
-        'https://t.me/s/vpn_3000',
-        'https://t.me/s/academi_vpn',
-        'https://t.me/s/dingyue_center',
-        'https://t.me/s/freedatazone1',
-        'https://t.me/s/freev2rayi',
-        'https://t.me/s/mypremium98',
-        'https://t.me/s/inikotesla',
-        'https://t.me/s/v2rayngalpha',
-        'https://t.me/s/v2rayngalphagamer',
-        'https://t.me/s/jiedian_share',
-        'https://t.me/s/vpn_mafia',
-        'https://t.me/s/dr_v2ray',
-        'https://t.me/s/allv2board',
-        'https://t.me/s/bigsmoke_config',
-        'https://t.me/s/vpn_443',
-        'https://t.me/s/prossh',
-        'https://t.me/s/mftizi',
-        'https://t.me/s/qun521',
-        'https://t.me/s/v2rayng_my2',
-        'https://t.me/s/go4sharing',
-        'https://t.me/s/trand_farsi',
-        'https://t.me/s/vpnplusee_free',
-        'https://t.me/s/freekankan',
-        'https://t.me/s/awxdy666',
-        'https://t.me/s/freeVPNjd',
-        'https://t.me/s/hkaa0',
-        'https://t.me/s/ccbaohe',
-        'https://t.me/s/MxlShare',
-        'https://t.me/hack_proxy',
-        'https://t.me/s/mrjdfx',
-        'https://t.me/s/QrV2ray',
-        'https://t.me/s/V2ray_v2ray_v2ray',
+        'https://t.me/s/jichang_list',
+       
     ]
     max_pages_to_crawl_per_source = 1
     concurrent_workers = 15
