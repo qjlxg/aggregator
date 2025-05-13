@@ -162,13 +162,13 @@ proxy-groups:
   type: select
   proxies: *id008
 proxies:
-- {name: 🇭🇰 香港 - 飞鸽, server: ai.aiteacherai.me, port: 60000, type: ss, cipher: chacha20-ietf-poly1305, password: c9cada07-702a-4165-8c83-df53fce126cd, udp: true}
-- {name: 🇺🇸 美国 - 飞鸽, server: ai.aiteacherai.me, port: 60001, type: ss, cipher: chacha20-ietf-poly1305, password: c9cada07-702a-4165-8c83-df53fce126cd, udp: true}
-- {name: 🇹🇼 台湾 - 飞鸽, server: ai.aiteacherai.me, port: 60002, type: ss, cipher: chacha20-ietf-poly1305, password: c9cada07-702a-4165-8c83-df53fce126cd, udp: true}
-- {name: 🇯🇵 日本 - 飞鸽, server: ai.aiteacherai.me, port: 60003, type: ss, cipher: chacha20-ietf-poly1305, password: c9cada07-702a-4165-8c83-df53fce126cd, udp: true}
-- {name: 🇰🇷 韩国 - 飞鸽, server: ai.aiteacherai.me, port: 60004, type: ss, cipher: chacha20-ietf-poly1305, password: c9cada07-702a-4165-8c83-df53fce126cd, udp: true}
-- {name: 🇸🇬 新加坡 - 飞鸽, server: ai.aiteacherai.me, port: 60008, type: ss, cipher: chacha20-ietf-poly1305, password: c9cada07-702a-4165-8c83-df53fce126cd, udp: true}
-- {name: 🇨🇦 加拿大 - 飞鸽, server: ai.aiteacherai.me, port: 60009, type: ss, cipher: chacha20-ietf-poly1305, password: c9cada07-702a-4165-8c83-df53fce126cd, udp: true}
+- {name: 🇭🇰 香港 - 飞鸽, server: ai.aiteacherai.me, port: 60000, type: ss, cipher: chacha20-ietf-poly1305, password: b9929c68-a8a0-4a38-a506-bb7f2a859612, udp: true}
+- {name: 🇺🇸 美国 - 飞鸽, server: ai.aiteacherai.me, port: 60001, type: ss, cipher: chacha20-ietf-poly1305, password: b9929c68-a8a0-4a38-a506-bb7f2a859612, udp: true}
+- {name: 🇹🇼 台湾 - 飞鸽, server: ai.aiteacherai.me, port: 60002, type: ss, cipher: chacha20-ietf-poly1305, password: b9929c68-a8a0-4a38-a506-bb7f2a859612, udp: true}
+- {name: 🇯🇵 日本 - 飞鸽, server: ai.aiteacherai.me, port: 60003, type: ss, cipher: chacha20-ietf-poly1305, password: b9929c68-a8a0-4a38-a506-bb7f2a859612, udp: true}
+- {name: 🇰🇷 韩国 - 飞鸽, server: ai.aiteacherai.me, port: 60004, type: ss, cipher: chacha20-ietf-poly1305, password: b9929c68-a8a0-4a38-a506-bb7f2a859612, udp: true}
+- {name: 🇸🇬 新加坡 - 飞鸽, server: ai.aiteacherai.me, port: 60008, type: ss, cipher: chacha20-ietf-poly1305, password: b9929c68-a8a0-4a38-a506-bb7f2a859612, udp: true}
+- {name: 🇨🇦 加拿大 - 飞鸽, server: ai.aiteacherai.me, port: 60009, type: ss, cipher: chacha20-ietf-poly1305, password: b9929c68-a8a0-4a38-a506-bb7f2a859612, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
