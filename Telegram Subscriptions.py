@@ -265,6 +265,6 @@ if __name__ == '__main__':
         logging.error(f"无法从 GitHub 读取配置文件: {e}")
         start_urls_list = []
 
-    max_pages_to_crawl = 3
+    max_pages_to_crawl = 1
     num_working_threads = 5
     main(start_urls_list, max_pages_to_crawl, num_working_threads, github_token=github_token)
