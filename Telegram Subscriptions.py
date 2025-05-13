@@ -73,13 +73,13 @@ def get_urls_from_html(html):
         'tgme_widget_message_video', 'tgme_widget_message_document',
         'tgme_widget_message_poll'
     ])
-    # 定义要排除的域名或字符串
+     # 定义要排除的域名或字符串
     excluded_domains = ("aliyundrive.com", "pan.baidu.com", "raw.githubusercontent.com", "t.me", "yam","play.google.com","app","777.hz.cz","releases","org","html","apk","appleID","apps.apple.com","fs.v2rayse.com")
     urls = set()
     for target in targets:
         text = target.get_text(separator=' ', strip=True)
         found_urls = re.findall(r'(?:https?://|www\.)[^\s]+', text)
-        valid_urls = [url for url in found_urls if "token=" in url]
+        valid_urls = [url for url in found_urls if "token=" in url
             and not any(domain in url for domain in excluded_domains)]
         urls.update(valid_urls)
     return list(urls)
