@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import time
 import os
 
-# Bing 搜索 URL 模板，关键词为“机场+vpn”
+# Bing 搜索 URL 模板
 BASE_URL = "https://www.bing.com/search?q=机场+vpn&first={}"
 
 # 存储所有提取的网址，使用集合去重
@@ -14,13 +14,19 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 }
 
+def get_final_url(url):
+    """获取重定向后的最终 URL"""
+    try:
+        response = requests.get(url, headers=headers, allow_redirects=True, timeout=5)
+        return response.url
+    except requests.RequestException:
+        return url
+
 # 爬取前 5 页
 for page in range(0, 5):
-    # 计算分页参数 first（0=第1页，10=第2页，依此类推）
     first = page * 10
     url = BASE_URL.format(first)
     
-    # 发送 HTTP 请求
     print(f"正在爬取页面: {url}")
     response = requests.get(url, headers=headers)
     if response.status_code != 200:
@@ -30,19 +36,23 @@ for page in range(0, 5):
     # 解析 HTML
     soup = BeautifulSoup(response.text, "html.parser")
     
-    # 提取搜索结果中的网址
+    # 提取搜索结果中的真实网址
     for result in soup.find_all("li", class_="b_algo"):
         link = result.find("a")
         if link and "href" in link.attrs:
-            all_urls.add(link["href"])
+            extracted_url = link["href"]
+            # 如果是 Bing 重定向链接，获取最终 URL
+            if extracted_url.startswith("https://www.bing.com/ck/"):
+                final_url = get_final_url(extracted_url)
+            else:
+                final_url = extracted_url
+            all_urls.add(final_url)
+            print(f"提取到网址: {final_url}")
     
-    # 添加 2 秒延迟，避免请求过快被封禁
-    time.sleep(2)
+    time.sleep(2)  # 避免请求过快被封禁
 
-# 创建 data 目录（如果不存在）
+# 创建 data 目录并保存结果
 os.makedirs("data", exist_ok=True)
-
-# 保存去重后的网址到 data/ji.txt
 with open("data/ji.txt", "w", encoding="utf-8") as f:
     for url in sorted(all_urls):
         f.write(url + "\n")
