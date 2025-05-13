@@ -1,0 +1,26 @@
+name: Bing Crawler Workflow
+
+on:
+  workflow_dispatch:  # 支持手动触发
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: 检出代码
+      - name: 设置 Python 环境
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: 安装依赖
+        run: pip install requests beautifulsoup4
+      - name: 运行爬虫
+        run: python crawler/crawler.py
+      - name: 提交结果
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/ji.txt
+          git commit -m "更新爬取数据: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" || echo "无变化"
+          git push
