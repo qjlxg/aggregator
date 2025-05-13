@@ -83,8 +83,8 @@ proxy-groups:
   type: select
   proxies: *id003
 proxies:
-- {name: 🇭🇰 香港 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: ff98679b-8c07-48de-9fe2-35291090d55d, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, udp: true}
-- {name: 🇺🇸 美国-加利福尼亚州 - OurFast, server: node4.ourfast.asia, port: 443, type: vmess, uuid: ff98679b-8c07-48de-9fe2-35291090d55d, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node4.ourfast.asia, udp: true}
+- {name: 🇭🇰 香港 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: 47c64b9e-c4a5-4a4c-be0e-a8ceac67b5ab, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, udp: true}
+- {name: 🇺🇸 美国-加利福尼亚州 - OurFast, server: node4.ourfast.asia, port: 443, type: vmess, uuid: 47c64b9e-c4a5-4a4c-be0e-a8ceac67b5ab, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node4.ourfast.asia, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
