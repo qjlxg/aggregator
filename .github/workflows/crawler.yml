@@ -14,10 +14,10 @@ jobs:
         with:
           python-version: '3.x'
       - name: 安装依赖
-        run: pip install requests beautifulsoup4
-             pip install requests beautifulsoup4 fake-useragent
+        run: pip install pyyaml
+             
       - name: 运行爬虫
-        run: python crawler/crawler.py
+        run: python subscribe/clash.py
       - name: 提交结果
         run: |
           git config --local user.email "action@github.com"
