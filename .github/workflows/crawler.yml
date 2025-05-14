@@ -11,18 +11,17 @@ jobs:
         with:
           python-version: '3.x'
       - name: Install dependencies
-          
         run: pip install -r requirements.txt
-             
-      - name: Create data directory
-        run: mkdir -p data
+      - name: Remove existing file
+        run: rm -f data/ss.yaml
       - name: Run script
         run: python subscribe/clash.py
-      - name: Check file
+      - name: Display file contents
+        run: cat data/ss.yaml
+      - name: Check if file exists
         run: |
-          echo "当前目录: $(pwd)"
           if [ -f data/ss.yaml ]; then
-            echo "文件 data/ss.yaml 已生成。"
+            echo "文件 data/ss.yaml 创建成功。"
           else
-            echo "文件 data/ss.yaml 未生成。"
+            echo "文件 data/ss.yaml 未找到。"
           fi
