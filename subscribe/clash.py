@@ -2,7 +2,8 @@
 
 # @Author  : wzdnzd
 # @Time    : 2022-07-15
-
+import os
+print("当前工作目录:", os.getcwd())
 import base64
 import itertools
 import json
