@@ -12,7 +12,7 @@ bin_name="clash-linux"
 chmod +x ${bin_name}
 
 # 获取订阅内容
-content=$(curl -L --retry 5 --retry-delay 1 "https://raw.githubusercontent.com/qjlxg/aggregator/main/data/subscribes.txt")
+content=$(curl -L --retry 5 --retry-delay 1 "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml")
 subscribes=($content)
 
 # 启动和测试
