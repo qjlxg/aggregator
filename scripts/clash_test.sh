@@ -6,13 +6,13 @@ clash_path="$(dirname "$0")/data"
 # 更改工作目录
 cd "${clash_path}"
 
-bin_name="clash-linux"
+bin_name="clash/clash-linux"
 
 # 确保可执行
 chmod +x "${bin_name}"
 
 # 下载配置文件
-config_url="https://raw.githubusercontent.com/qjlxg/aggregator/main/data/clash.yaml"
+config_url="https://raw.bgithub.xyz/qjlxg/aggregator/main/data/clash.yaml"
 wget -q -t 2 "${config_url}" -O config.yaml
 
 if [ $? -ne 0 ]; then
