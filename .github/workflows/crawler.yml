@@ -15,6 +15,9 @@ jobs:
           python-version: '3.x'
       - name: 安装依赖
         run: pip install pyyaml
+             pip install tqdm
+             pip install -r requirements.txt
+             
              
       - name: 运行爬虫
         run: python subscribe/clash.py
