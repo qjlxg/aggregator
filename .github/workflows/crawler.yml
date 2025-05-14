@@ -11,7 +11,10 @@ jobs:
         with:
           python-version: '3.x'
       - name: Install dependencies
-        run: pip install tqdm  # 确保 tqdm 已安装
+          
+        run: pip install -r requirements.txt
+             pip install tqdm  
+             pip install pyyaml tqdm
       - name: Create data directory
         run: mkdir -p data
       - name: Run script
