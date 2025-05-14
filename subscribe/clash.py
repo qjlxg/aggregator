@@ -26,7 +26,7 @@ CTX.check_hostname = False
 CTX.verify_mode = ssl.CERT_NONE
 
 DOWNLOAD_URL = [
-    "https://github.com/2dust/v2rayN/releases/latest/download/v2rayN.zip",
+    "https://bgithub.xyz/2dust/v2rayN/releases/latest/download/v2rayN.zip",
     "https://cachefly.cachefly.net/10mb.test",
     "http://speedtest-sgp1.digitalocean.com/10mb.test",
 ]
@@ -53,7 +53,7 @@ def generate_config(path: str, proxies: list, filename: str) -> list:
 
 def filter_proxies(proxies: list) -> dict:
     config = {
-        "proxies": [],
+        "proxies": [data/clash.yaml],
         "proxy-groups": [
             {
                 "name": "automatic",
