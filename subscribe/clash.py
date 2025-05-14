@@ -53,7 +53,7 @@ def generate_config(path: str, proxies: list, filename: str) -> list:
 
 def filter_proxies(proxies: list) -> dict:
     config = {
-        "proxies": [data/clash.yaml],
+        "proxies": [],
         "proxy-groups": [
             {
                 "name": "automatic",
