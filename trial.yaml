@@ -133,20 +133,20 @@ proxy-groups:
   type: select
   proxies: *id005
 proxies:
-- {name: ℹ️ 欢迎使用灵境 - 灵境, server: 45.192.107.32, port: 888, type: vmess, uuid: e884477a-235b-46fc-9711-31618f43f017, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
-- {name: 🇭🇰 香港 - 灵境, server: 45.192.107.32, port: 34344, type: ss, cipher: chacha20-ietf-poly1305, password: e884477a-235b-46fc-9711-31618f43f017, udp: true}
-- {name: 🇭🇰 香港 - 灵境 2, server: 45.192.107.32, port: 34344, type: ss, cipher: chacha20-ietf-poly1305, password: e884477a-235b-46fc-9711-31618f43f017, udp: true}
-- {name: 🇭🇰 香港 - 灵境 3, server: 45.192.107.32, port: 34344, type: ss, cipher: chacha20-ietf-poly1305, password: e884477a-235b-46fc-9711-31618f43f017, udp: true}
-- {name: '🇭🇰 香港 - 1 IEPL [Lite] - 云顶网络', server: negzyd.neurix.cc, port: 40104, type: ss, cipher: aes-128-gcm, password: 068f724f-3b9a-4710-8c38-5cae84dc0348, udp: true}
-- {name: '🇭🇰 香港 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40105, type: ss, cipher: aes-128-gcm, password: 068f724f-3b9a-4710-8c38-5cae84dc0348, udp: true}
-- {name: '🇭🇰 香港 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40103, type: ss, cipher: aes-128-gcm, password: 068f724f-3b9a-4710-8c38-5cae84dc0348, udp: true}
-- {name: '🇭🇰 香港 - 2 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40205, type: ss, cipher: aes-256-gcm, password: 068f724f-3b9a-4710-8c38-5cae84dc0348, udp: true}
-- {name: '🇯🇵 日本 - 1 IEPL [Lite] - 云顶网络', server: neawsbj.neurix.cc, port: 40404, type: ss, cipher: aes-256-gcm, password: 068f724f-3b9a-4710-8c38-5cae84dc0348, udp: true}
-- {name: '🇯🇵 日本 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40405, type: ss, cipher: aes-256-gcm, password: 068f724f-3b9a-4710-8c38-5cae84dc0348, udp: true}
-- {name: '🇯🇵 日本 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40403, type: ss, cipher: aes-256-gcm, password: 068f724f-3b9a-4710-8c38-5cae84dc0348, udp: true}
-- {name: '🇺🇸 美国 - 1 IEPL [Lite] - 云顶网络', server: neawsbj.neurix.cc, port: 40304, type: ss, cipher: aes-256-gcm, password: 068f724f-3b9a-4710-8c38-5cae84dc0348, udp: true}
-- {name: '🇺🇸 美国 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40305, type: ss, cipher: aes-256-gcm, password: 068f724f-3b9a-4710-8c38-5cae84dc0348, udp: true}
-- {name: '🇺🇸 美国 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40303, type: ss, cipher: aes-256-gcm, password: 068f724f-3b9a-4710-8c38-5cae84dc0348, udp: true}
+- {name: ℹ️ 欢迎使用灵境 - 灵境, server: 45.192.107.32, port: 888, tfo: true, type: vmess, uuid: e884477a-235b-46fc-9711-31618f43f017, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
+- {name: 🇭🇰 香港 - 灵境, server: 45.192.107.32, port: 34344, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: e884477a-235b-46fc-9711-31618f43f017, udp: true}
+- {name: 🇭🇰 香港 - 灵境 2, server: 45.192.107.32, port: 34344, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: e884477a-235b-46fc-9711-31618f43f017, udp: true}
+- {name: 🇭🇰 香港 - 灵境 3, server: 45.192.107.32, port: 34344, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: e884477a-235b-46fc-9711-31618f43f017, udp: true}
+- {name: '🇭🇰 香港 - 1 IEPL [Lite] - 云顶网络', server: negzyd.neurix.cc, port: 40104, type: ss, cipher: aes-128-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
+- {name: '🇭🇰 香港 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40105, type: ss, cipher: aes-128-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
+- {name: '🇭🇰 香港 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40103, type: ss, cipher: aes-128-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
+- {name: '🇭🇰 香港 - 2 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40205, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
+- {name: '🇯🇵 日本 - 1 IEPL [Lite] - 云顶网络', server: neawsbj.neurix.cc, port: 40404, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
+- {name: '🇯🇵 日本 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40405, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
+- {name: '🇯🇵 日本 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40403, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
+- {name: '🇺🇸 美国 - 1 IEPL [Lite] - 云顶网络', server: neawsbj.neurix.cc, port: 40304, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
+- {name: '🇺🇸 美国 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40305, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
+- {name: '🇺🇸 美国 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40303, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
