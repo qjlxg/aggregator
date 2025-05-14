@@ -1,30 +1,16 @@
-name: Bing Crawler Workflow
+name: Clash Test
 
 on:
-  workflow_dispatch:  # 支持手动触发
+  push:
+    branches:
+      - main
 
 jobs:
-  crawl:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        name: 检出代码
-      - name: 设置 Python 环境
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-      - name: 安装依赖
-        run: pip install -r requirements.txt
-             
-             
-             
-             
-      - name: 运行爬虫
-        run: python subscribe/clash.py
-      - name: 提交结果
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add data/ji.txt
-          git commit -m "更新爬取数据: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" || echo "无变化"
-          git push
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run Clash Test Script
+        run: bash scripts/clash_test.sh  
