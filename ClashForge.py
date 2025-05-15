@@ -2331,8 +2331,8 @@ def work(links,check=False,allowed_types=[],only_check=False):
 
 if __name__ == '__main__':
     links = [
-        "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.txt",
-        "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml",  
-        "https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt"
+        "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml",
+       #"https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml",  
+        #"https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt"
     ]
     work(links, check=True, only_check=False, allowed_types=["ss","hysteria2","hy2","vless","vmess","trojan"])
