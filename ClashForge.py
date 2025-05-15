@@ -31,13 +31,13 @@ warnings.filterwarnings('ignore')
 from requests_html import HTMLSession
 
 # TEST_URL = "http://www.gstatic.com/generate_204"
-TEST_URL = "http://www.pinterest.com"
+TEST_URL = https://www.tiktok.com/explore
 CLASH_API_PORTS = [9090]
 CLASH_API_HOST = "127.0.0.1"
 CLASH_API_SECRET = ""
 TIMEOUT = 1
-MAX_CONCURRENT_TESTS = 128
-LIMIT = 138 # 最多保留LIMIT个节点
+MAX_CONCURRENT_TESTS = 18
+LIMIT = 286 # 最多保留LIMIT个节点
 CONFIG_FILE = 'data/clash_config.yaml'
 INPUT = "input" # 从文件中加载代理节点，支持yaml/yml、txt(每条代理链接占一行)
 BAN = ["中国", "China", "CN", "电信", "移动", "联通"]
@@ -104,7 +104,7 @@ clash_config_template = {
             "exclude-filter": "(?i)中国|China|CN|电信|移动|联通",
             "proxies": [],
             # "url": "http://www.gstatic.com/generate_204",
-            "url": "http://www.pinterest.com",
+            "url": "https://www.tiktok.com/explore",
             "interval": 300,
             "tolerance": 50
         },
@@ -113,7 +113,7 @@ clash_config_template = {
             "type": "fallback",
             "exclude-filter": "(?i)中国|China|CN|电信|移动|联通",
             "proxies": [],
-            "url": "http://www.gstatic.com/generate_204",
+            "url": "https://www.tiktok.com/explore",
             "interval": 300
         },
         {
