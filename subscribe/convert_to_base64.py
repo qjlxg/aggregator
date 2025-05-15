@@ -2,7 +2,8 @@ import base64
 import requests
 import os
 
-def convert_multiple_to_base64(urls):
+# 第一步：下载、聚合、重命名、去重并保存节点
+def process_and_save_nodes(urls, output_file='processed_nodes.txt'):
     combined_text = ""
     
     # 从每个 URL 下载文本并聚合
@@ -40,31 +41,37 @@ def convert_multiple_to_base64(urls):
     # 调试：打印生成的新节点名称
     print("生成的新节点名称:\n", new_nodes if new_nodes else "【无新节点】")
     
-    # 将新节点名称重新组合成文本
-    new_combined_text = "\n".join(new_nodes)
+    # 将新节点名称保存到文件
+    try:
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write("\n".join(new_nodes))
+        print(f"处理后的节点已保存到 {output_file}")
+    except Exception as e:
+        print(f"写入文件 {output_file} 时出错: {e}")
+
+# 第二步：读取处理后的文件并转换为 base64
+def convert_to_base64(input_file='processed_nodes.txt', output_file='base64.txt'):
+    if not os.path.exists(input_file):
+        print(f"错误: {input_file} 不存在。请先运行第一步。")
+        return
     
-    # 将新文本编码为 base64
-    encoded_bytes = base64.b64encode(new_combined_text.encode('utf-8'))
-    encoded_text = encoded_bytes.decode('utf-8')
-    
-    # 检查是否需要更新文件
-    needs_update = True
-    if os.path.exists('base64.txt'):
-        with open('base64.txt', 'r') as f:
-            existing_content = f.read()
-            if encoded_text == existing_content:
-                needs_update = False
-    
-    # 仅在内容变化时保存 base64 编码文本
-    if needs_update:
-        try:
-            with open('base64.txt', 'w') as f:
-                f.write(encoded_text)
-            print("文件写入成功，base64.txt 已更新。")
-        except Exception as e:
-            print(f"写入文件时出错: {e}")
-    else:
-        print("未检测到变化，文件未更新。")
+    try:
+        with open(input_file, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # 调试：打印读取的内容
+        print(f"从 {input_file} 读取的内容:\n", content if content else "【文件为空】")
+        
+        # 编码为 base64
+        encoded_bytes = base64.b64encode(content.encode('utf-8'))
+        encoded_text = encoded_bytes.decode('utf-8')
+        
+        # 保存 base64 编码内容
+        with open(output_file, 'w', encoding='utf-8') as f:
+            f.write(encoded_text)
+        print(f"base64 编码内容已保存到 {output_file}")
+    except Exception as e:
+        print(f"转换或写入 base64 文件时出错: {e}")
 
 if __name__ == "__main__":
     urls = [
@@ -72,4 +79,9 @@ if __name__ == "__main__":
         "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.txt",
         "https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt",
     ]
-    convert_multiple_to_base64(urls)
+    
+    # 执行第一步
+    process_and_save_nodes(urls)
+    
+    # 执行第二步
+    convert_to_base64()
