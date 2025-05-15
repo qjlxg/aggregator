@@ -40,6 +40,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Download all_nodes.txt
+        run: |
+          curl -f -o all_nodes.txt https://github.com/qjlxg/aggregator/raw/refs/heads/main/all_nodes.txt || echo "Failed to download all_nodes.txt"
+
+      - name: Check if all_nodes.txt exists
+        run: |
+          if [ -f all_nodes.txt ]; then
+            echo "all_nodes.txt downloaded successfully."
+          else
+            echo "Failed to download all_nodes.txt."
+            exit 1
+          fi
+
       - name: Install jq and base64
         run: |
           sudo apt-get update
