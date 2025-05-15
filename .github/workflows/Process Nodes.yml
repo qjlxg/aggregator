@@ -1,0 +1,70 @@
+name: Process Nodes
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download-and-save:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create data directory
+        run: |
+          mkdir -p data
+
+      - name: Download files
+        run: |
+          curl -f -o data/ss.txt https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.txt || echo "Failed to download ss.txt"
+          curl -f -o data/configtg.txt https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt || echo "Failed to download configtg.txt"
+
+      - name: Check if files exist
+        run: |
+          if [ -f data/ss.txt ] && [ -f data/configtg.txt ]; then
+            echo "All files downloaded successfully."
+          else
+            echo "One or more files failed to download."
+            exit 1
+          fi
+
+      - name: Save merged file
+        run: |
+          cat data/ss.txt data/configtg.txt > data/all_nodes.txt
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/*
+          git commit -m "Update data files" || echo "No changes to commit"
+          git push origin main
+
+  process-nodes:
+    runs-on: ubuntu-latest
+    needs: download-and-save
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install jq and base64
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Process nodes
+        run: |
+          grep 'vmess://' data/all_nodes.txt | sed 's/vmess:\/\///g' | base64 --decode > data/vmess_json.txt
+          jq -r '.ps' data/vmess_json.txt > data/vmess_names.txt
+          grep -v 'vmess://' data/all_nodes.txt | grep -oP '(?<=#).*?(?=$)' > data/other_names.txt
+          cat data/vmess_names.txt data/other_names.txt | sed 's/[^a-zA-Z0-9\u4e00-\u9fa5]//g' | sort | uniq | awk '/[\u4e00-\u9fa5]/{print $0; next} {print "Bak-"NR}' > data/processed_nodes.txt
+          awk '{printf "Bak-%03d %s\n", NR, $0}' data/processed_nodes.txt | sort -n -k1.5 > data/bak.txt
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/*
+          git commit -m "Update data files" || echo "No changes to commit"
+          git push origin main
+
+      - name: Set timezone to Shanghai
+        run: |
+          echo "上海时间: $(TZ=Asia/Shanghai date +%Y-%m-%d' '%H:%M:%S)"
