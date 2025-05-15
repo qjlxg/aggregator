@@ -11,12 +11,6 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
-  - 🇭🇰 ‍香港
-  - 🇯🇵 ‍日本
-  - 🇺🇸 ‍美国
-  - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🇺🇸 ‍美国
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -25,16 +19,9 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇭🇰 香港 - 1 IEPL [Lite] - 云顶网络
-  - 🇭🇰 香港 - 1 IEPL [Std] - 云顶网络
-  - 🇭🇰 香港 - 1 IEPL [Pro] [5x] - 云顶网络
-  - 🇭🇰 香港 - 2 IEPL [Std] - 云顶网络
-  - 🇯🇵 日本 - 1 IEPL [Lite] - 云顶网络
-  - 🇯🇵 日本 - 1 IEPL [Std] - 云顶网络
-  - 🇯🇵 日本 - 1 IEPL [Pro] [5x] - 云顶网络
-  - 🇺🇸 美国 - 1 IEPL [Lite] - 云顶网络
-  - 🇺🇸 美国 - 1 IEPL [Std] - 云顶网络
-  - 🇺🇸 美国 - 1 IEPL [Pro] [5x] - 云顶网络
+  - 🇺🇸 美国-纽约-001 - 漏网之鱼
+  - 🇺🇸 美国-拉斯维加斯-001 - 漏网之鱼
+  - 🇺🇸 美国-拉斯维加斯-002 - 漏网之鱼
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -54,18 +41,12 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇭🇰 ‍香港
   - ✈️ ‍起飞
-  - 👆🏻🇭🇰 ‍香港
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🇺🇸 ‍美国
-  - 🇯🇵 ‍日本
   - ✈️ ‍起飞
-  - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🇯🇵 ‍日本
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -74,54 +55,10 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇭🇰 ‍香港
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id002
-  - 🇭🇰 香港 - 1 IEPL [Lite] - 云顶网络
-  - 🇭🇰 香港 - 1 IEPL [Std] - 云顶网络
-  - 🇭🇰 香港 - 1 IEPL [Pro] [5x] - 云顶网络
-  - 🇭🇰 香港 - 2 IEPL [Std] - 云顶网络
-- name: 🇯🇵 ‍日本
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id003
-  - 🇯🇵 日本 - 1 IEPL [Lite] - 云顶网络
-  - 🇯🇵 日本 - 1 IEPL [Std] - 云顶网络
-  - 🇯🇵 日本 - 1 IEPL [Pro] [5x] - 云顶网络
-- name: 🇺🇸 ‍美国
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 300
-  proxies: &id004
-  - 🇺🇸 美国 - 1 IEPL [Lite] - 云顶网络
-  - 🇺🇸 美国 - 1 IEPL [Std] - 云顶网络
-  - 🇺🇸 美国 - 1 IEPL [Pro] [5x] - 云顶网络
-- name: 👆🏻🇭🇰 ‍香港
-  type: select
-  proxies: *id002
-- name: 👆🏻🇯🇵 ‍日本
-  type: select
-  proxies: *id003
-- name: 👆🏻🇺🇸 ‍美国
-  type: select
-  proxies: *id004
 proxies:
-- {name: '🇭🇰 香港 - 1 IEPL [Lite] - 云顶网络', server: negzyd.neurix.cc, port: 40104, type: ss, cipher: aes-128-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
-- {name: '🇭🇰 香港 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40105, type: ss, cipher: aes-128-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
-- {name: '🇭🇰 香港 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40103, type: ss, cipher: aes-128-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
-- {name: '🇭🇰 香港 - 2 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40205, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
-- {name: '🇺🇸 美国 - 1 IEPL [Lite] - 云顶网络', server: neawsbj.neurix.cc, port: 40304, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
-- {name: '🇺🇸 美国 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40305, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
-- {name: '🇺🇸 美国 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40303, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
-- {name: '🇯🇵 日本 - 1 IEPL [Lite] - 云顶网络', server: neawsbj.neurix.cc, port: 40404, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
-- {name: '🇯🇵 日本 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40405, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
-- {name: '🇯🇵 日本 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40403, type: ss, cipher: aes-256-gcm, password: e081f413-0e9f-4549-b878-f1523bcf0504, udp: true}
+- {name: 🇺🇸 美国-纽约-001 - 漏网之鱼, server: 45.147.201.231, port: 22039, type: vmess, uuid: c7955320-9b4d-4db3-9c6a-6f05df5d3ef6, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
+- {name: 🇺🇸 美国-拉斯维加斯-001 - 漏网之鱼, server: 45.147.201.231, port: 20028, type: vmess, uuid: c7955320-9b4d-4db3-9c6a-6f05df5d3ef6, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
+- {name: 🇺🇸 美国-拉斯维加斯-002 - 漏网之鱼, server: 45.147.201.231, port: 23083, type: vmess, uuid: c7955320-9b4d-4db3-9c6a-6f05df5d3ef6, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

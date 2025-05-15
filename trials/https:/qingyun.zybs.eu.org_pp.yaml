@@ -11,25 +11,16 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
-  - 🇭🇰 ‍香港
-  - 🎏 ‍其他
-  - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
   tolerance: 100
-  proxies: &id001
-  - 🇭🇰 香港 - 灵境
-  - 🇭🇰 香港 - 灵境 2
-  - 🇭🇰 香港 - 灵境 3
-  - ℹ️ 欢迎使用灵境 - 灵境
+  use: &id001
+  - All
 - name: 👆🏻 ‍指定
   type: select
-  proxies: *id001
+  use: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -46,16 +37,12 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇭🇰 ‍香港
   - ✈️ ‍起飞
-  - 👆🏻🇭🇰 ‍香港
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🎏 ‍其他
   - ✈️ ‍起飞
-  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -64,33 +51,16 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇭🇰 ‍香港
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id002
-  - 🇭🇰 香港 - 灵境
-  - 🇭🇰 香港 - 灵境 2
-  - 🇭🇰 香港 - 灵境 3
-- name: 🎏 ‍其他
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
-  tolerance: 100
-  proxies: &id003
-  - ℹ️ 欢迎使用灵境 - 灵境
-- name: 👆🏻🇭🇰 ‍香港
-  type: select
-  proxies: *id002
-- name: 👆🏻🎏 ‍其他
-  type: select
-  proxies: *id003
-proxies:
-- {name: ℹ️ 欢迎使用灵境 - 灵境, server: 45.192.107.32, port: 888, type: vmess, uuid: e884477a-235b-46fc-9711-31618f43f017, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
-- {name: 🇭🇰 香港 - 灵境, server: 45.192.107.32, port: 34344, type: ss, cipher: chacha20-ietf-poly1305, password: e884477a-235b-46fc-9711-31618f43f017, udp: true}
-- {name: 🇭🇰 香港 - 灵境 2, server: 45.192.107.32, port: 34344, type: ss, cipher: chacha20-ietf-poly1305, password: e884477a-235b-46fc-9711-31618f43f017, udp: true}
-- {name: 🇭🇰 香港 - 灵境 3, server: 45.192.107.32, port: 34344, type: ss, cipher: chacha20-ietf-poly1305, password: e884477a-235b-46fc-9711-31618f43f017, udp: true}
+proxy-providers:
+  All:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://qingyun.zybs.eu.org/All.yaml
+    interval: 180
+    path: trials_providers/https://qingyun.zybs.eu.org/All.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

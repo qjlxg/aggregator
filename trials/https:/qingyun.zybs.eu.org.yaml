@@ -11,21 +11,18 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
-  - 🇭🇰 ‍香港
-  - 🎏 ‍其他
-  - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
   tolerance: 100
-  use: &id001
-  - HK
-  - Other
+  proxies: &id001
+  - 🇰🇷 韩国-三网优化2 - 青云互联网-
 - name: 👆🏻 ‍指定
   type: select
-  use: *id001
+  proxies: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -42,16 +39,12 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇭🇰 ‍香港
   - ✈️ ‍起飞
-  - 👆🏻🇭🇰 ‍香港
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🎏 ‍其他
   - ✈️ ‍起飞
-  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -60,41 +53,8 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇭🇰 ‍香港
-  type: url-test
-  tolerance: 100
-  use: &id002
-  - HK
-- name: 🎏 ‍其他
-  type: url-test
-  tolerance: 100
-  use: &id003
-  - Other
-- name: 👆🏻🇭🇰 ‍香港
-  type: select
-  use: *id002
-- name: 👆🏻🎏 ‍其他
-  type: select
-  use: *id003
-proxy-providers:
-  HK:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/jwlingjing.shop/HK.yaml
-    interval: 180
-    path: trials_providers/jwlingjing.shop/HK.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  Other:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/jwlingjing.shop/Other.yaml
-    interval: 180
-    path: trials_providers/jwlingjing.shop/Other.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
+proxies:
+- {name: 🇰🇷 韩国-三网优化2 - 青云互联网-, server: kr-qingyun.dwyun.me, port: 44732, type: trojan, password: ca5c433f-0cdb-4bc7-bf11-99ed30f5d162, sni: kr-qingyun.dwyun.me, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

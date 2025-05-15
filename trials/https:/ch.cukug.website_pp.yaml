@@ -11,29 +11,16 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
-  - 🇹🇼 ‍台湾
-  - 🇸🇬 ‍新加坡
-  - 🇯🇵 ‍日本
-  - 🇺🇸 ‍美国
-  - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇸🇬 ‍新加坡
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🇺🇸 ‍美国
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
   tolerance: 100
-  proxies: &id001
-  - 🇹🇼 台湾节点(推荐) - byi加速器
-  - 🇸🇬 新加坡节点 - byi加速器
-  - 🇯🇵 日本节点3 - byi加速器
-  - 🇺🇸 美国节点 - byi加速器
+  use: &id001
+  - All
 - name: 👆🏻 ‍指定
   type: select
-  proxies: *id001
+  use: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -50,22 +37,12 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇹🇼 ‍台湾
   - ✈️ ‍起飞
-  - 👆🏻🇹🇼 ‍台湾
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🇺🇸 ‍美国
-  - 🇹🇼 ‍台湾
-  - 🇸🇬 ‍新加坡
-  - 🇯🇵 ‍日本
   - ✈️ ‍起飞
-  - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇸🇬 ‍新加坡
-  - 👆🏻🇯🇵 ‍日本
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -74,51 +51,16 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇹🇼 ‍台湾
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id002
-  - 🇹🇼 台湾节点(推荐) - byi加速器
-- name: 🇸🇬 ‍新加坡
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id003
-  - 🇸🇬 新加坡节点 - byi加速器
-- name: 🇯🇵 ‍日本
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id004
-  - 🇯🇵 日本节点3 - byi加速器
-- name: 🇺🇸 ‍美国
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 300
-  proxies: &id005
-  - 🇺🇸 美国节点 - byi加速器
-- name: 👆🏻🇹🇼 ‍台湾
-  type: select
-  proxies: *id002
-- name: 👆🏻🇸🇬 ‍新加坡
-  type: select
-  proxies: *id003
-- name: 👆🏻🇯🇵 ‍日本
-  type: select
-  proxies: *id004
-- name: 👆🏻🇺🇸 ‍美国
-  type: select
-  proxies: *id005
-proxies:
-- {name: 🇹🇼 台湾节点(推荐) - byi加速器, server: g4bk7yx3nd5q.byijsq.com, port: 20101, type: vmess, uuid: 1e623c0e-7cba-3ae8-94d0-e94644df875d, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, servername: byjsq.kozow.com, udp: true}
-- {name: 🇸🇬 新加坡节点 - byi加速器, server: g4bk7yx3nd5q.byijsq.com, port: 27605, type: vmess, uuid: 1e623c0e-7cba-3ae8-94d0-e94644df875d, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, servername: sg.byijsq.com, udp: true}
-- {name: 🇯🇵 日本节点3 - byi加速器, server: g4bk7yx3nd5q.byijsq.com, port: 20103, type: vmess, uuid: 1e623c0e-7cba-3ae8-94d0-e94644df875d, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, servername: jp3.byijsq.com, udp: true}
-- {name: 🇺🇸 美国节点 - byi加速器, server: g4bk7yx3nd5q.byijsq.com, port: 20106, type: vmess, uuid: 1e623c0e-7cba-3ae8-94d0-e94644df875d, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, servername: usnode.byijsq.com, udp: true}
+proxy-providers:
+  All:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://ch.cukug.website/All.yaml
+    interval: 180
+    path: trials_providers/https://ch.cukug.website/All.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
