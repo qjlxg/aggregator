@@ -37,9 +37,9 @@ CLASH_API_HOST = "127.0.0.1"
 CLASH_API_SECRET = ""
 TIMEOUT = 1
 MAX_CONCURRENT_TESTS = 100
-LIMIT = 100 # 最多保留LIMIT个节点
+LIMIT = 20 # 最多保留LIMIT个节点
 CONFIG_FILE = 'data/clash_config.yaml'
-INPUT = "dtat" # 从文件中加载代理节点，支持yaml/yml、txt(每条代理链接占一行)
+INPUT = "data" # 从文件中加载代理节点，支持yaml/yml、txt(每条代理链接占一行)
 BAN = ["中国", "China", "CN", "电信", "移动", "联通"]
 headers = {
     'Accept-Charset': 'utf-8',
@@ -57,7 +57,7 @@ clash_config_template = {
     "log-level": "info",
     "external-controller": "127.0.0.1:9090",
     "geodata-mode": True,
-    'geox-url': {'geoip': 'https://raw.githubusercontent.com/Loyalsoldier/geoip/release/geoip.dat', 'mmdb': 'https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-Country.mmdb'},
+    'geox-url': {'geoip': 'https://raw.bgithub.xyz/Loyalsoldier/geoip/release/geoip.dat', 'mmdb': 'https://raw.bgithub.xyz/Loyalsoldier/geoip/release/GeoLite2-Country.mmdb'},
     "dns": {
         "enable": True,
         "ipv6": False,
@@ -2199,7 +2199,7 @@ def strip_proxy_prefix(url):
 
 # 判断是否为GitHub raw URL
 def is_github_raw_url(url):
-    return 'raw.githubusercontent.com' in url
+    return 'raw.bgithub.xyz' in url
 
 # 从URL中提取文件模式，返回占位符前后的部分
 def extract_file_pattern(url):
@@ -2384,10 +2384,10 @@ if __name__ == '__main__':
         "https://kpox8pzltp8.irss.eu.org",
         "https://v1210clash.pimax.com",
         "http://v1210clash.pimax.com",
-        "https://raw.githubusercontent.com/chengaopan/AutoMergePublicNodes/refs/heads/master/list.yml",
+        "https://raw.bgithub.xyz/chengaopan/AutoMergePublicNodes/refs/heads/master/list.yml",
         "https://proxypool.link/clash/proxies",
         "https://www.sstank.top/link/sAHQuZoZ1tzQWjrn?clash=1",
-        "https://github.com/midpoint/pools2/raw/refs/heads/master/Eternity.yml",
+        "https://bgithub.xyz/midpoint/pools2/raw/refs/heads/master/Eternity.yml",
         "https://fe199f91.jego.vip/subscribe/mihomo/dda8ef4dee6d0531ffcd2391634c6310",
         "https://ef8d7dc9.jego.vip/subscribe/mihomo/1cc80eac1fb4a324e64cfa0234fec8c2",
         "https://5924a891.jego.vip/subscribe/mihomo/04e5adfb7d173ca4b290f357c98373d4",
