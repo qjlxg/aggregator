@@ -36,11 +36,29 @@ jobs:
 
       - name: Process nodes
         run: |
-          grep 'vmess://' data/configtg.txt | sed 's/vmess:\/\///g' | base64 --decode > data/vmess_json.txt
-          jq -r '.ps' data/vmess_json.txt > data/vmess_names.txt
-          grep -v 'vmess://' data/configtg.txt | grep -oP '(?<=#).*?(?=$)' > data/other_names.txt
-          cat data/vmess_names.txt data/other_names.txt | sed 's/[^a-zA-Z0-9\u4e00-\u9fa5]//g' | sort | uniq | awk '/[\u4e00-\u9fa5]/{print $0; next} {print "Bak-"NR}' > data/processed_nodes.txt
-          awk '{printf "Bak-%03d %s\n", NR, $0}' data/processed_nodes.txt | sort -n -k1.5 > data/bak.txt
+          vmess_lines=$(grep 'vmess://' data/configtg.txt || true)
+          if [ -n "$vmess_lines" ]; then
+            echo "$vmess_lines" | sed 's/vmess:\/\///g' | base64 --decode > data/vmess_json.txt
+            if [ -s data/vmess_json.txt ]; then
+              jq -r '.ps' data/vmess_json.txt > data/vmess_names.txt || echo "Failed to parse vmess_json.txt"
+            else
+              echo "Failed to decode vmess_json.txt"
+              touch data/vmess_names.txt
+            fi
+          else
+            echo "No vmess:// lines found"
+            touch data/vmess_names.txt
+          fi
+
+          grep -v 'vmess://' data/configtg.txt | grep -oP '(?<=#).*?(?=$)' > data/other_names.txt || touch data/other_names.txt
+
+          if [ -s data/vmess_names.txt ] || [ -s data/other_names.txt ]; then
+            cat data/vmess_names.txt data/other_names.txt | sed 's/[^a-zA-Z0-9\u4e00-\u9fa5]//g' | sort | uniq | awk '/[\u4e00-\u9fa5]/{print $0; next} {print "Bak-"NR}' > data/processed_nodes.txt
+            awk '{printf "Bak-%03d %s\n", NR, $0}' data/processed_nodes.txt | sort -n -k1.5 > data/bak.txt
+          else
+            echo "No names found"
+            touch data/processed_nodes.txt data/bak.txt
+          fi
 
       - name: Commit and push changes
         run: |
