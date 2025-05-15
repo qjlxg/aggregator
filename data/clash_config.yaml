@@ -46,6 +46,20 @@ proxies:
   cipher: chacha20-ietf-poly1305
   password: 4a2rfixophdjffa8KVA4Aa
   udp: true
+- name: bing89
+  server: 45.87.175.164
+  port: 8080
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 4a2rfixophdjffa8KVA4Aa
+  udp: true
+- name: bing90
+  server: 45.87.175.166
+  port: 8080
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: 4a2rfixophdjffa8KVA4Aa
+  udp: true
 - name: bing92
   server: 45.87.175.181
   port: 8080
@@ -60,12 +74,12 @@ proxies:
   cipher: chacha20-ietf-poly1305
   password: 69MUii7VDwMqh7Hz
   udp: true
-- name: bing115
-  server: 188.191.147.127
-  port: 31348
+- name: bing118
+  server: 144.126.146.38
+  port: 30100
   type: ss
   cipher: chacha20-ietf-poly1305
-  password: 6IVOuzMfH5ROpgwtRTcNJKYJvYe9FDVaU7wAYYh8PRLxxZs6
+  password: 741ddced-e6ee-4175-9c1a-e524009f9045
   udp: true
 proxy-groups:
 - name: 节点选择
@@ -80,10 +94,12 @@ proxy-groups:
   exclude-filter: (?i)中国|China|CN|电信|移动|联通
   proxies:
   - bing78
-  - bing92
+  - bing118
   - bing86
+  - bing92
+  - bing89
+  - bing90
   - bing114
-  - bing115
   url: https://www.tiktok.com/explore
   interval: 300
   tolerance: 50
@@ -92,20 +108,24 @@ proxy-groups:
   exclude-filter: (?i)中国|China|CN|电信|移动|联通
   proxies:
   - bing78
-  - bing92
+  - bing118
   - bing86
+  - bing92
+  - bing89
+  - bing90
   - bing114
-  - bing115
   url: https://www.tiktok.com/explore
   interval: 300
 - name: 手动选择
   type: select
   proxies:
   - bing78
-  - bing92
+  - bing118
   - bing86
+  - bing92
+  - bing89
+  - bing90
   - bing114
-  - bing115
 rules:
 - DOMAIN,app.adjust.com,DIRECT
 - DOMAIN,bdtj.tagtic.cn,DIRECT
