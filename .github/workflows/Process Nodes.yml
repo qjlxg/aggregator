@@ -1,38 +1,35 @@
-name: ClashForge
+
+name: Process Nodes
 
 on:
   schedule:
-   - cron: '0 7-22/5 * * *'
-  push:
-    paths-ignore:
-      - '**'
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
-  run_demo_actions:
+  download-images:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-        with:                 
-          token: ${{ secrets.BOT }}
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.10.10'
+          python-version: '3.x'
 
       - name: Install requirements.txt
         run: |
           pip install -r ./requirements.txt
 
-      - name: Run ClashForge.py
-        run: python ClashForge.py
-
-      - name: Commit and push file
+      - name: Run daily image downloader
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add data/clash_config.yaml
-          git commit -m "update" || echo "No changes to commit"
-         
+          python ClashForge.py
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/*
+          git commit -m "Update daily images" || echo "No changes to commit"
+          git push origin main
