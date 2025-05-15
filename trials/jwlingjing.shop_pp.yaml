@@ -12,12 +12,8 @@ proxy-groups:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
   - 🇭🇰 ‍香港
-  - 🇯🇵 ‍日本
-  - 🇺🇸 ‍美国
   - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🇺🇸 ‍美国
   - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
@@ -26,8 +22,6 @@ proxy-groups:
   tolerance: 100
   use: &id001
   - HK
-  - JP
-  - US
   - Other
 - name: 👆🏻 ‍指定
   type: select
@@ -55,12 +49,8 @@ proxy-groups:
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🇺🇸 ‍美国
-  - 🇯🇵 ‍日本
   - 🎏 ‍其他
   - ✈️ ‍起飞
-  - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🇯🇵 ‍日本
   - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
@@ -75,66 +65,32 @@ proxy-groups:
   tolerance: 100
   use: &id002
   - HK
-- name: 🇯🇵 ‍日本
-  type: url-test
-  tolerance: 100
-  use: &id003
-  - JP
-- name: 🇺🇸 ‍美国
-  type: url-test
-  tolerance: 300
-  use: &id004
-  - US
 - name: 🎏 ‍其他
   type: url-test
   tolerance: 100
-  use: &id005
+  use: &id003
   - Other
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   use: *id002
-- name: 👆🏻🇯🇵 ‍日本
-  type: select
-  use: *id003
-- name: 👆🏻🇺🇸 ‍美国
-  type: select
-  use: *id004
 - name: 👆🏻🎏 ‍其他
   type: select
-  use: *id005
+  use: *id003
 proxy-providers:
   HK:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/HK.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/jwlingjing.shop/HK.yaml
     interval: 180
-    path: trials_providers/HK.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  JP:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/JP.yaml
-    interval: 180
-    path: trials_providers/JP.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/US.yaml
-    interval: 180
-    path: trials_providers/US.yaml
+    path: trials_providers/jwlingjing.shop/HK.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
   Other:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/Other.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/jwlingjing.shop/Other.yaml
     interval: 180
-    path: trials_providers/Other.yaml
+    path: trials_providers/jwlingjing.shop/Other.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204

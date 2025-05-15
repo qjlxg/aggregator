@@ -14,24 +14,30 @@ proxy-groups:
   - 🇭🇰 ‍香港
   - 🇯🇵 ‍日本
   - 🇺🇸 ‍美国
-  - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
   - 👆🏻🇯🇵 ‍日本
   - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
   tolerance: 100
-  use: &id001
-  - HK
-  - JP
-  - US
-  - Other
+  proxies: &id001
+  - 🇭🇰 香港 - 1 IEPL [Lite] - 云顶网络
+  - 🇭🇰 香港 - 1 IEPL [Std] - 云顶网络
+  - 🇭🇰 香港 - 1 IEPL [Pro] [5x] - 云顶网络
+  - 🇭🇰 香港 - 2 IEPL [Std] - 云顶网络
+  - 🇯🇵 日本 - 1 IEPL [Lite] - 云顶网络
+  - 🇯🇵 日本 - 1 IEPL [Std] - 云顶网络
+  - 🇯🇵 日本 - 1 IEPL [Pro] [5x] - 云顶网络
+  - 🇺🇸 美国 - 1 IEPL [Lite] - 云顶网络
+  - 🇺🇸 美国 - 1 IEPL [Std] - 云顶网络
+  - 🇺🇸 美国 - 1 IEPL [Pro] [5x] - 云顶网络
 - name: 👆🏻 ‍指定
   type: select
-  use: *id001
+  proxies: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -57,11 +63,9 @@ proxy-groups:
   proxies:
   - 🇺🇸 ‍美国
   - 🇯🇵 ‍日本
-  - 🎏 ‍其他
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
   - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -72,73 +76,52 @@ proxy-groups:
   - 💩 ‍广告
 - name: 🇭🇰 ‍香港
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id002
-  - HK
+  proxies: &id002
+  - 🇭🇰 香港 - 1 IEPL [Lite] - 云顶网络
+  - 🇭🇰 香港 - 1 IEPL [Std] - 云顶网络
+  - 🇭🇰 香港 - 1 IEPL [Pro] [5x] - 云顶网络
+  - 🇭🇰 香港 - 2 IEPL [Std] - 云顶网络
 - name: 🇯🇵 ‍日本
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id003
-  - JP
+  proxies: &id003
+  - 🇯🇵 日本 - 1 IEPL [Lite] - 云顶网络
+  - 🇯🇵 日本 - 1 IEPL [Std] - 云顶网络
+  - 🇯🇵 日本 - 1 IEPL [Pro] [5x] - 云顶网络
 - name: 🇺🇸 ‍美国
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 300
-  use: &id004
-  - US
-- name: 🎏 ‍其他
-  type: url-test
-  tolerance: 100
-  use: &id005
-  - Other
+  proxies: &id004
+  - 🇺🇸 美国 - 1 IEPL [Lite] - 云顶网络
+  - 🇺🇸 美国 - 1 IEPL [Std] - 云顶网络
+  - 🇺🇸 美国 - 1 IEPL [Pro] [5x] - 云顶网络
 - name: 👆🏻🇭🇰 ‍香港
   type: select
-  use: *id002
+  proxies: *id002
 - name: 👆🏻🇯🇵 ‍日本
   type: select
-  use: *id003
+  proxies: *id003
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  use: *id004
-- name: 👆🏻🎏 ‍其他
-  type: select
-  use: *id005
-proxy-providers:
-  HK:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/HK.yaml
-    interval: 180
-    path: trials_providers/HK.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  JP:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/JP.yaml
-    interval: 180
-    path: trials_providers/JP.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/US.yaml
-    interval: 180
-    path: trials_providers/US.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  Other:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/Other.yaml
-    interval: 180
-    path: trials_providers/Other.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
+  proxies: *id004
+proxies:
+- {name: '🇭🇰 香港 - 1 IEPL [Lite] - 云顶网络', server: negzyd.neurix.cc, port: 40104, type: ss, cipher: aes-128-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
+- {name: '🇭🇰 香港 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40105, type: ss, cipher: aes-128-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
+- {name: '🇭🇰 香港 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40103, type: ss, cipher: aes-128-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
+- {name: '🇭🇰 香港 - 2 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40205, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
+- {name: '🇺🇸 美国 - 1 IEPL [Lite] - 云顶网络', server: neawsbj.neurix.cc, port: 40304, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
+- {name: '🇺🇸 美国 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40305, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
+- {name: '🇺🇸 美国 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40303, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
+- {name: '🇯🇵 日本 - 1 IEPL [Lite] - 云顶网络', server: neawsbj.neurix.cc, port: 40404, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
+- {name: '🇯🇵 日本 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40405, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
+- {name: '🇯🇵 日本 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40403, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
