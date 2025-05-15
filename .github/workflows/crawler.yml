@@ -1,27 +1,48 @@
-name: Run Clash Script
-on: [push]
+name: Process Nodes
+
+on:
+  workflow_dispatch:
+
 jobs:
-  build:
+  process:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Remove existing file
-        run: rm -f data/ss.yaml
-      - name: Run script
-        run: python subscribe/clash.py
-      - name: Display file contents
-        run: cat data/ss.yaml
-      - name: Check if file exists
+
+      - name: Install jq and base64
         run: |
-          if [ -f data/ss.yaml ]; then
-            echo "文件 data/ss.yaml 创建成功。"
-          else
-            echo "文件 data/ss.yaml 未找到。"
-          fi
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Download files
+        run: |
+          curl -o base.txt https://github.com/qjlxg/aggregator/raw/refs/heads/main/base.txt
+          curl -o ss.txt https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.txt
+          curl -o configtg.txt https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt
+
+      - name: Process nodes
+        run: |
+          cat base.txt ss.txt configtg.txt > all_nodes.txt
+          # 处理vmess链接
+          grep 'vmess://' all_nodes.txt | sed 's/vmess:\/\///g' | base64 --decode > vmess_json.txt
+          jq -r '.ps' vmess_json.txt > vmess_names.txt
+          # 处理其他协议的节点名称
+          grep -v 'vmess://' all_nodes.txt | grep -oP '(?<=#).*?(?=$)' > other_names.txt
+          # 合并所有节点名称
+          cat vmess_names.txt other_names.txt | sed 's/[^a-zA-Z0-9\u4e00-\u9fa5]//g' | sort | uniq | awk '/[\u4e00-\u9fa5]/{print $0; next} {print "Bak-"NR}' > processed_nodes.txt
+          # 格式化输出
+          awk '{printf "Bak-%03d %s\n", NR, $0}' processed_nodes.txt | sort -n -k1.5 > data/bak.txt
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          mkdir -p data
+          git add data/bak.txt
+          git commit -m "Update bak.txt" || echo "No changes to commit"
+          git push origin main
+
+      - name: Set timezone to Shanghai
+        run: |
+          echo "上海时间: $(TZ=Asia/Shanghai date +%Y-%m-%d' '%H:%M:%S)"
