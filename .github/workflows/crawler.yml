@@ -17,21 +17,26 @@ jobs:
 
       - name: Download files
         run: |
-          curl -o base.txt https://github.com/qjlxg/aggregator/raw/refs/heads/main/base.txt
-          curl -o ss.txt https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.txt
-          curl -o configtg.txt https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt
+          curl -f -o base.txt https://github.com/qjlxg/aggregator/raw/refs/heads/main/base.txt || echo "Failed to download base.txt"
+          curl -f -o ss.txt https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.txt || echo "Failed to download ss.txt"
+          curl -f -o configtg.txt https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt || echo "Failed to download configtg.txt"
+
+      - name: Check if files exist
+        run: |
+          if [ -f base.txt ] && [ -f ss.txt ] && [ -f configtg.txt ]; then
+            echo "All files downloaded successfully."
+          else
+            echo "One or more files failed to download."
+            exit 1
+          fi
 
       - name: Process nodes
         run: |
           cat base.txt ss.txt configtg.txt > all_nodes.txt
-          # 处理vmess链接
           grep 'vmess://' all_nodes.txt | sed 's/vmess:\/\///g' | base64 --decode > vmess_json.txt
           jq -r '.ps' vmess_json.txt > vmess_names.txt
-          # 处理其他协议的节点名称
           grep -v 'vmess://' all_nodes.txt | grep -oP '(?<=#).*?(?=$)' > other_names.txt
-          # 合并所有节点名称
           cat vmess_names.txt other_names.txt | sed 's/[^a-zA-Z0-9\u4e00-\u9fa5]//g' | sort | uniq | awk '/[\u4e00-\u9fa5]/{print $0; next} {print "Bak-"NR}' > processed_nodes.txt
-          # 格式化输出
           awk '{printf "Bak-%03d %s\n", NR, $0}' processed_nodes.txt | sort -n -k1.5 > data/bak.txt
 
       - name: Commit and push changes
