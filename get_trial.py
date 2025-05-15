@@ -1,136 +1,36 @@
-import asyncio
-import aiohttp
-from typing import Optional, Tuple
-import logging
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
 from datetime import timedelta
 from random import choice, randint
 from time import time
 from urllib.parse import urlsplit, urlunsplit
-import backoff
 
 from apis import PanelSession, TempEmail, guess_panel, panel_class_map
 from subconverter import gen_base64_and_clash_config, get
 from utils import (clear_files, g0, keep, list_file_paths, list_folder_paths,
-                  rand_id, read, read_cfg, remove, size2str, str2timestamp,
-                  timestamp2str, to_zero, write, write_cfg)
+                   rand_id, read, read_cfg, remove, size2str, str2timestamp,
+                   timestamp2str, to_zero, write, write_cfg)
 
-# 配置日志
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+MAX_WORKERS = 16
+MAX_TASK_TIMEOUT = 45  # 单任务最大等待时间（秒）
 
-MAX_WORKERS = 8  # 减少并发线程数
-MAX_TASK_TIMEOUT = 45  # 单任务超时时间（秒）
-
-# 带重试的装饰器
-@backoff.on_exception(backoff.expo, (aiohttp.ClientError, asyncio.TimeoutError), max_tries=5)
-async def _send_email_code(session: aiohttp.ClientSession, host: str, email: str):
-    """异步发送邮箱验证码"""
-    async with session.post(f"{host}/send_email_code", json={'email': email}, timeout=aiohttp.ClientTimeout(total=10)) as resp:
-        if resp.status != 200:
-            raise Exception(f'发送验证码失败: {await resp.text()}')
-
-async def _get_email_and_email_code_async(session: aiohttp.ClientSession, kwargs: dict, opt: dict, cache: dict) -> str:
-    """异步获取邮箱和验证码，带重试和超时控制"""
-    retry = 0
-    while retry < 5:
-        tm = TempEmail(banned_domains=cache.get('banned_domains', []))
-        try:
-            email = kwargs['email'] = tm.email
-        except Exception as e:
-            raise Exception(f'获取邮箱失败: {e}')
-        
-        try:
-            await _send_email_code(session, kwargs['host'], email)
-        except Exception as e:
-            msg = str(e)
-            if '禁' in msg or '黑' in msg:
-                cache.setdefault('banned_domains', []).append(email.split('@')[1])
-                retry += 1
-                continue
-            raise Exception(f'发送邮箱验证码失败({email}): {e}')
-        
-        email_code = await asyncio.to_thread(tm.get_email_code, g0(cache, 'name'))  # 异步获取验证码
-        if not email_code:
-            cache.setdefault('banned_domains', []).append(email.split('@')[1])
-            retry += 1
-            continue
-        kwargs['email_code'] = email_code
-        return email
-    raise Exception('获取邮箱验证码失败，重试次数过多')
-
-@backoff.on_exception(backoff.expo, (aiohttp.ClientError, asyncio.TimeoutError), max_tries=3)
-async def get_sub_async(session: aiohttp.ClientSession, host: str, opt: dict, cache: dict) -> Optional[Tuple]:
-    """异步获取订阅信息"""
+def get_sub(session: PanelSession, opt: dict, cache: dict[str, list[str]]):
     url = cache['sub_url'][0]
     suffix = ' - ' + g0(cache, 'name')
     if 'speed_limit' in opt:
         suffix += ' ⚠️限速 ' + opt['speed_limit']
     try:
-        async with session.get(url, timeout=aiohttp.ClientTimeout(total=15)) as resp:
-            if resp.status == 200:
-                text = await resp.text()
-                info, base64_content, clash_content = get(text, suffix)  # 调用原有的 get 函数
-                return info, base64_content, clash_content
-            else:
-                logger.warning(f"获取订阅失败({host}): {resp.status}")
-                return None
-    except Exception as e:
-        logger.error(f"获取订阅异常({host}): {e}")
-        return None
+        info, *rest = get(url, suffix)
+    except Exception:
+        origin = urlsplit(session.origin)[:2]
+        url = '|'.join(urlunsplit(origin + urlsplit(part)[2:]) for part in url.split('|'))
+        info, *rest = get(url, suffix)
+        cache['sub_url'][0] = url
+    if not info and hasattr(session, 'get_sub_info'):
+        session.login(cache['email'][0])
+        info = session.get_sub_info()
+    return info, *rest
 
-async def try_turn_async(session: aiohttp.ClientSession, host: str, opt: dict, cache: dict, log: list) -> Optional[Tuple]:
-    """异步尝试更新订阅"""
-    try:
-        sub = await get_sub_async(session, host, opt, cache)
-        if not sub:  # 如果订阅无效或需要更新
-            panel_session = new_panel_session(host, cache, log)
-            if panel_session:
-                do_turn(panel_session, opt, cache, log)
-                cache['sub_url'] = [panel_session.get_sub_url(**opt)]
-                log.append(f"更新订阅链接({host}) {cache['sub_url'][0]}")
-                sub = await get_sub_async(session, host, opt, cache)
-        return sub
-    except Exception as e:
-        log.append(f"更新订阅链接/续费续签失败({host}): {e}")
-        return None
-
-async def save_sub_async(info, base64, clash, host: str, opt: dict, cache: dict, log: list):
-    """异步保存订阅"""
-    if not info or not base64 or not clash:
-        log.append(f"保存base64/clash订阅失败({host}): 数据无效")
-        return
-    try:
-        cache_sub_info(info, opt, cache)
-        node_n = save_sub_base64_and_clash(base64, clash, host, opt)
-        if (d := node_n - int(g0(cache, 'node_n', 0))) != 0:
-            log.append(f'{host} 节点数 {"+" if d > 0 else ""}{d} ({node_n})')
-        cache['node_n'] = node_n
-        logger.info(f"保存订阅成功({host})")
-    except Exception as e:
-        log.append(f"保存base64/clash订阅失败({host}): {e}")
-
-async def get_and_save_async(http_session: aiohttp.ClientSession, host: str, opt: dict, cache: dict, log: list):
-    """异步获取并保存订阅"""
-    try:
-        sub = await try_turn_async(http_session, host, opt, cache, log)
-        if sub:
-            await save_sub_async(*sub, host, opt, cache, log)
-    except Exception as e:
-        log.append(f"{host} get_and_save 异常: {e}")
-
-async def get_trial_async(host: str, opt: dict, cache: dict) -> list:
-    """异步执行单个任务"""
-    log = []
-    async with aiohttp.ClientSession() as session:
-        try:
-            kwargs = {'host': host}  # 为 _get_email_and_email_code_async 提供 host 参数
-            await get_and_save_async(session, host, opt, cache, log)
-        except Exception as e:
-            log.append(f"{host} 处理异常: {e}")
-    return log
-
-# 以下为未修改的辅助函数，直接从原代码中保留
 def should_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]]):
     if 'sub_url' not in cache:
         return 1,
@@ -158,6 +58,32 @@ def _register(session: PanelSession, email, *args, **kwargs):
         return session.register(email, *args, **kwargs)
     except Exception as e:
         raise Exception(f'注册失败({email}): {e}')
+
+def _get_email_and_email_code(kwargs, session: PanelSession, opt: dict, cache: dict[str, list[str]]):
+    retry = 0
+    while retry < 5:
+        tm = TempEmail(banned_domains=cache.get('banned_domains'))
+        try:
+            email = kwargs['email'] = tm.email
+        except Exception as e:
+            raise Exception(f'获取邮箱失败: {e}')
+        try:
+            session.send_email_code(email)
+        except Exception as e:
+            msg = str(e)
+            if '禁' in msg or '黑' in msg:
+                cache['banned_domains'].append(email.split('@')[1])
+                retry += 1
+                continue
+            raise Exception(f'发送邮箱验证码失败({email}): {e}')
+        email_code = tm.get_email_code(g0(cache, 'name'))
+        if not email_code:
+            cache['banned_domains'].append(email.split('@')[1])
+            retry += 1
+            continue
+        kwargs['email_code'] = email_code
+        return email
+    raise Exception('获取邮箱验证码失败，重试次数过多')
 
 def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list) -> bool:
     kwargs = keep(opt, 'name_eq_email', 'reg_fmt', 'aff')
@@ -198,7 +124,7 @@ def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log:
                     session.reset()
 
                     if 'email_code' in kwargs:
-                        email = kwargs['email']  # 假设已有异步获取逻辑
+                        email = _get_email_and_email_code(kwargs, session, opt, cache)
                     else:
                         email = kwargs['email'] = f"{rand_id()}@{email.split('@')[1]}"
 
@@ -227,7 +153,7 @@ def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log:
                 break
             email = kwargs['email'] = f'{rand_id()}@qq.com'
         elif '验证码' in msg:
-            email = kwargs['email']  # 假设已有异步获取逻辑
+            email = _get_email_and_email_code(kwargs, session, opt, cache)
         elif '联' in msg:
             kwargs['im_type'] = True
         elif (
@@ -327,6 +253,33 @@ def do_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: 
     cache['time'] = [timestamp2str(time())]
     log.append(f'{"更新订阅链接(新注册)" if is_new_reg else "续费续签"}({session.host}) {cache["sub_url"][0]}')
 
+def try_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list):
+    cache.pop('更新旧订阅失败', None)
+    cache.pop('更新订阅链接/续费续签失败', None)
+    cache.pop('获取订阅失败', None)
+
+    try:
+        turn, *sub = should_turn(session, opt, cache)
+    except Exception as e:
+        cache['更新旧订阅失败'] = [e]
+        log.append(f'更新旧订阅失败({session.host})({cache["sub_url"][0]}): {e}')
+        return None
+
+    if turn:
+        try:
+            do_turn(session, opt, cache, log, force_reg=turn == 2)
+        except Exception as e:
+            cache['更新订阅链接/续费续签失败'] = [e]
+            log.append(f'更新订阅链接/续费续签失败({session.host}): {e}')
+            return sub
+        try:
+            sub = get_sub(session, opt, cache)
+        except Exception as e:
+            cache['获取订阅失败'] = [e]
+            log.append(f'获取订阅失败({session.host})({cache["sub_url"][0]}): {e}')
+
+    return sub
+
 def cache_sub_info(info, opt: dict, cache: dict[str, list[str]]):
     if not info:
         raise Exception('no sub info')
@@ -352,6 +305,33 @@ def save_sub_base64_and_clash(base64, clash, host, opt: dict):
         exclude=opt.get('exclude')
     )
 
+def save_sub(info, base64, clash, base64_url, clash_url, host, opt: dict, cache: dict[str, list[str]], log: list):
+    cache.pop('保存订阅信息失败', None)
+    cache.pop('保存base64/clash订阅失败', None)
+
+    try:
+        cache_sub_info(info, opt, cache)
+    except Exception as e:
+        cache['保存订阅信息失败'] = [e]
+        log.append(f'保存订阅信息失败({host})({clash_url}): {e}')
+    try:
+        node_n = save_sub_base64_and_clash(base64, clash, host, opt)
+        if (d := node_n - int(g0(cache, 'node_n', 0))) != 0:
+            log.append(f'{host} 节点数 {"+" if d > 0 else ""}{d} ({node_n})')
+        cache['node_n'] = node_n
+    except Exception as e:
+        cache['保存base64/clash订阅失败'] = [e]
+        log.append(f'保存base64/clash订阅失败({host})({base64_url})({clash_url}): {e}')
+
+def get_and_save(session: PanelSession, host, opt: dict, cache: dict[str, list[str]], log: list):
+    try:
+        try_checkin(session, opt, cache, log)
+        sub = try_turn(session, opt, cache, log)
+        if sub:
+            save_sub(*sub, host, opt, cache, log)
+    except Exception as e:
+        log.append(f"{host} get_and_save 异常: {e}")
+
 def new_panel_session(host, cache: dict[str, list[str]], log: list) -> PanelSession | None:
     try:
         if 'type' not in cache:
@@ -368,6 +348,18 @@ def new_panel_session(host, cache: dict[str, list[str]], log: list) -> PanelSess
         log.append(f"{host} new_panel_session 异常: {e}")
         return None
 
+def get_trial(host, opt: dict, cache: dict[str, list[str]]):
+    log = []
+    try:
+        session = new_panel_session(host, cache, log)
+        if session:
+            get_and_save(session, host, opt, cache, log)
+            if hasattr(session, 'redirect_origin') and session.redirect_origin:
+                cache['api_host'] = session.host
+    except Exception as e:
+        log.append(f"{host} 处理异常: {e}")
+    return log
+
 def build_options(cfg):
     opt = {
         host: dict(zip(opt[::2], opt[1::2]))
@@ -375,7 +367,7 @@ def build_options(cfg):
     }
     return opt
 
-async def main():
+if __name__ == '__main__':
     pre_repo = read('.github/repo_get_trial')
     cur_repo = os.getenv('GITHUB_REPOSITORY')
     if pre_repo != cur_repo:
@@ -405,15 +397,20 @@ async def main():
             clear_files(path)
             remove(path)
 
-    tasks = [get_trial_async(h, opt[h], cache[h]) for h, *_ in cfg]
-    results = await asyncio.gather(*tasks, return_exceptions=True)
-    
-    for result in results:
-        if isinstance(result, Exception):
-            logger.error(f"任务异常: {result}")
-        else:
-            for line in result:
-                print(line, flush=True)
+    with ThreadPoolExecutor(MAX_WORKERS) as executor:
+        futures = []
+        args = [(h, opt[h], cache[h]) for h, *_ in cfg]
+        for h, o, c in args:
+            futures.append(executor.submit(get_trial, h, o, c))
+        for future in as_completed(futures):
+            try:
+                log = future.result(timeout=MAX_TASK_TIMEOUT)
+                for line in log:
+                    print(line, flush=True)
+            except TimeoutError:
+                print("有任务超时（超过45秒未完成），已跳过。", flush=True)
+            except Exception as e:
+                print(f"任务异常: {e}", flush=True)
 
     total_node_n = gen_base64_and_clash_config(
         base64_path='trial',
@@ -425,6 +422,3 @@ async def main():
 
     print('总节点数', total_node_n)
     write_cfg('trial.cache', cache)
-
-if __name__ == '__main__':
-    asyncio.run(main())
