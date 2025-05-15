@@ -37,6 +37,8 @@ def convert_multiple_to_base64(urls):
 if __name__ == "__main__":
     urls = [
         "https://github.com/qjlxg/aggregator/raw/refs/heads/main/base.txt",
+        "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.txt",
+        "https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt",
     
         
     ]
