@@ -31,83 +31,7 @@ dns:
     ipcidr:
     - 240.0.0.0/4
     - 0.0.0.0/32
-proxies:
-- name: yandex-45
-  server: r1.tube-cat.com
-  port: 9300
-  type: trojan
-  password: e683f38d-d9b9-49b3-9844-e88625b368ae
-  sni: tw.catxstar.com
-  skip-cert-verify: true
-  udp: true
-- name: yandex-99
-  server: iepl01.tube-cat.com
-  port: 20028
-  type: trojan
-  password: e683f38d-d9b9-49b3-9844-e88625b368ae
-  sni: tr.catxstar.com
-  skip-cert-verify: true
-  udp: true
-- name: yandex-59
-  server: r2.tube-cat.com
-  port: 9425
-  type: trojan
-  password: e683f38d-d9b9-49b3-9844-e88625b368ae
-  sni: JP-03.oneok.link
-  skip-cert-verify: true
-  udp: true
-- name: yandex-451
-  server: japantv5.zhixiang.us
-  port: 56789
-  type: ss
-  cipher: aes-256-gcm
-  password: ff6b53fb-a1e4-4bad-a969-766136e361a6
-  udp: true
-- name: yandex-495
-  server: green.cdntencentmusic.com
-  port: 28504
-  type: trojan
-  password: feac8d6d-8fcf-4ef1-9ad0-18833c9fca11
-  sni: green.cdntencentmusic.com
-  skip-cert-verify: true
-  udp: true
-- name: yandex-93
-  server: iepl01.tube-cat.com
-  port: 20057
-  type: trojan
-  password: e683f38d-d9b9-49b3-9844-e88625b368ae
-  sni: ru.catxstar.com
-  skip-cert-verify: true
-  udp: true
-- name: yandex-784
-  server: okanc.node-is.green
-  port: 23118
-  type: ss
-  cipher: aes-256-gcm
-  password: 7d11dda9-9538-4293-89c2-ab5637622346
-  udp: true
-- name: yandex-261
-  server: 8tv68qhq.slashdevslashnetslashtun.net
-  port: 15007
-  type: ss
-  cipher: aes-256-gcm
-  password: 0ZQAS0W0HUT6MHX7
-  udp: true
-- name: yandex-63
-  server: iepl.tube-cat.com
-  port: 20077
-  type: trojan
-  password: e683f38d-d9b9-49b3-9844-e88625b368ae
-  sni: kr.catxstar.com
-  skip-cert-verify: true
-  udp: true
-- name: yandex-440
-  server: iepl.miyue.fun
-  port: 40403
-  type: ss
-  cipher: aes-256-gcm
-  password: 5eb3256a-ac6a-485f-9161-97e3369c2806
-  udp: true
+proxies: []
 proxy-groups:
 - name: 节点选择
   type: select
@@ -119,49 +43,19 @@ proxy-groups:
 - name: 自动选择
   type: url-test
   exclude-filter: (?i)中国|China|CN|电信|移动|联通
-  proxies:
-  - yandex-261
-  - yandex-45
-  - yandex-784
-  - yandex-440
-  - yandex-63
-  - yandex-451
-  - yandex-99
-  - yandex-59
-  - yandex-495
-  - yandex-93
+  proxies: []
   url: http://www.pinterest.com
   interval: 300
   tolerance: 50
 - name: 故障转移
   type: fallback
   exclude-filter: (?i)中国|China|CN|电信|移动|联通
-  proxies:
-  - yandex-261
-  - yandex-45
-  - yandex-784
-  - yandex-440
-  - yandex-63
-  - yandex-451
-  - yandex-99
-  - yandex-59
-  - yandex-495
-  - yandex-93
+  proxies: []
   url: http://www.gstatic.com/generate_204
   interval: 300
 - name: 手动选择
   type: select
-  proxies:
-  - yandex-261
-  - yandex-45
-  - yandex-784
-  - yandex-440
-  - yandex-63
-  - yandex-451
-  - yandex-99
-  - yandex-59
-  - yandex-495
-  - yandex-93
+  proxies: []
 rules:
 - DOMAIN,app.adjust.com,DIRECT
 - DOMAIN,bdtj.tagtic.cn,DIRECT
