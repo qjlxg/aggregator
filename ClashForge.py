@@ -39,7 +39,7 @@ TIMEOUT = 1
 MAX_CONCURRENT_TESTS = 100
 LIMIT = 20 # 最多保留LIMIT个节点
 CONFIG_FILE = 'data/clash_config.yaml'
-INPUT = "data" # 从文件中加载代理节点，支持yaml/yml、txt(每条代理链接占一行)
+INPUT = "" # 从文件中加载代理节点，支持yaml/yml、txt(每条代理链接占一行)
 BAN = ["中国", "China", "CN", "电信", "移动", "联通"]
 headers = {
     'Accept-Charset': 'utf-8',
@@ -2331,6 +2331,8 @@ def work(links,check=False,allowed_types=[],only_check=False):
 
 if __name__ == '__main__':
     links = [
-        
+        "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.txt",
+        "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml",  
+        "https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt"
     ]
     work(links, check=True, only_check=False, allowed_types=["ss","hysteria2","hy2","vless","vmess","trojan"])
