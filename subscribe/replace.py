@@ -281,20 +281,20 @@ def main(urls):
 
     os.makedirs('data', exist_ok=True)
     yaml_content = generate_yaml(all_proxies)
-    output_path = 'data/clash.yaml'
+    output_path = 'data/ss.yaml'
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(yaml_content)
     print(f"Clash 配置文件已保存到 {output_path}")
 
 if __name__ == "__main__":
     urls = [
-        'https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/ss.txt',
-       # 'https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/all_clash.txt',
-        #'https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/base.txt',
-        #'https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/Long_term_subscription_num',
-        'https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/data/clash.yaml',
-        #'https://raw.githubusercontent.com/qjlxg/cheemsar/refs/heads/main/Long_term_subscription_num',
-        #'https://raw.githubusercontent.com/qjlxg/cheemsar-2/refs/heads/main/Long_term_subscription_num',
+        'https://raw.bgithub.xyz/qjlxg/aggregator/refs/heads/main/data/ss.txt',
+       # 'https://raw.bgithub.xyz/qjlxg/aggregator/refs/heads/main/all_clash.txt',
+        #'https://raw.bgithub.xyz/qjlxg/aggregator/refs/heads/main/base.txt',
+        #'https://raw.bgithub.xyz/qjlxg/aggregator/refs/heads/main/Long_term_subscription_num',
+        'https://raw.bgithub.xyz/qjlxg/aggregator/refs/heads/main/data/clash.yaml',
+        #'https://raw.bgithub.xyz/qjlxg/cheemsar/refs/heads/main/Long_term_subscription_num',
+        #'https://raw.bgithub.xyz/qjlxg/cheemsar-2/refs/heads/main/Long_term_subscription_num',
         #'https://github.com/qjlxg/collectSub/raw/refs/heads/main/all_nodes.txt',
         'https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt',
     ]
