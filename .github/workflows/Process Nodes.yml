@@ -1,74 +1,40 @@
-name: Process Nodes
+name: ClashForge
 
 on:
+  schedule:
+   - cron: '0 7-22/5 * * *'
+  push:
+    paths-ignore:
+      - '**'
   workflow_dispatch:
 
 jobs:
-  process-nodes:
+  run_demo_actions:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          # 转到 Settings > Secrets and variables > Actions
+          # 点击 New repository secret，添加 Secret，名称为 BOT，输入你的token
+          token: ${{ secrets.BOT }}
 
-      - name: Create data directory
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10.10'
+
+      - name: Install requirements.txt
         run: |
-          mkdir -p data
+          pip install -r ./requirements.txt
 
-      - name: Download files
+      - name: Run ClashForge.py
+        run: python ClashForge.py
+
+      - name: Commit and push file
         run: |
-          curl -f -o data/configtg.txt https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt || echo "Failed to download configtg.txt"
-
-      - name: Check if files exist
-        run: |
-          if [ -f data/configtg.txt ]; then
-            echo "File downloaded successfully."
-          else
-            echo "File failed to download."
-            exit 1
-          fi
-
-      - name: Install jq and base64
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq
-
-      - name: Process nodes
-        run: |
-          vmess_lines=$(grep 'vmess://' data/configtg.txt || true)
-          if [ -n "$vmess_lines" ]; then
-            echo "$vmess_lines" | sed 's/vmess:\/\///g' | base64 --decode > data/vmess_json.txt
-            if [ -s data/vmess_json.txt ]; then
-              jq -r '.ps' data/vmess_json.txt > data/vmess_names.txt || echo "Failed to parse vmess_json.txt"
-            else
-              echo "Failed to decode vmess_json.txt"
-              touch data/vmess_names.txt
-            fi
-          else
-            echo "No vmess:// lines found"
-            touch data/vmess_names.txt
-          fi
-
-          grep -v 'vmess://' data/configtg.txt | grep -oP '(?<=#).*?(?=$)' > data/other_names.txt || touch data/other_names.txt
-
-          if [ -s data/vmess_names.txt ] || [ -s data/other_names.txt ]; then
-            cat data/vmess_names.txt data/other_names.txt | sed 's/[^a-zA-Z0-9\u4e00-\u9fa5]//g' | sort | uniq | awk '/[\u4e00-\u9fa5]/{print $0; next} {print "Bak-"NR}' > data/processed_nodes.txt
-            awk '{printf "Bak-%03d %s\n", NR, $0}' data/processed_nodes.txt | sort -n -k1.5 > data/bak.txt
-          else
-            echo "No names found"
-            touch data/processed_nodes.txt data/bak.txt
-          fi
-
-      - name: Commit and push changes
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git pull --rebase origin main
-          git add data/*
-          git commit -m "Update data files" || echo "No changes to commit"
-          git push origin main
-
-      - name: Set timezone to Shanghai
-        run: |
-          echo "上海时间: $(TZ=Asia/Shanghai date +%Y-%m-%d' '%H:%M:%S)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add clash_config.yaml
+          git commit -m "update" || echo "No changes to commit"
+          git push https://${{ secrets.BOT }}:x-oauth-basic@github.com/${GITHUB_REPOSITORY}.git
