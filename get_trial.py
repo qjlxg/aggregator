@@ -11,8 +11,8 @@ from utils import (clear_files, g0, keep, list_file_paths, list_folder_paths,
                    rand_id, read, read_cfg, remove, size2str, str2timestamp,
                    timestamp2str, to_zero, write, write_cfg)
 
-MAX_WORKERS = 16
-MAX_TASK_TIMEOUT = 45  # 单任务最大等待时间（秒）
+MAX_WORKERS = 8
+MAX_TASK_TIMEOUT = 38  # 单任务最大等待时间（秒）
 
 def get_sub(session: PanelSession, opt: dict, cache: dict[str, list[str]]):
     url = cache['sub_url'][0]
