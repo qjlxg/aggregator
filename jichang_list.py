@@ -186,7 +186,7 @@ if __name__ == '__main__':
     start_urls_list = [
         'https://t.me/s/jichang_list',
     ]
-    max_pages_to_crawl_per_source = 1
+    max_pages_to_crawl_per_source = 18
     concurrent_workers = 15
 
     main(start_urls_list, max_pages_to_crawl_per_source, concurrent_workers)
