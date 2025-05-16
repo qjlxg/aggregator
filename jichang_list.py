@@ -1,3 +1,5 @@
+# jichang_list.py
+
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -116,7 +118,7 @@ def fetch_page(url, timeout=15, max_retries=3):
                 return None
     return None
 
-def save_urls_to_file(urls, filename='trial.cfg'):
+def save_urls_to_file(urls, filename='./trial.cfg'):
     """Save URLs to a file."""
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     try:
@@ -177,13 +179,12 @@ def main(start_urls, max_pages_per_source=90, max_workers=10):
 
         logging.info(f"Connectivity testing complete. Valid URLs: {len(valid_urls)}")
         logging.info("Saving final valid URLs...")
-        save_urls_to_file(valid_urls, '/trial.cfg')
+        save_urls_to_file(valid_urls, './trial.cfg')
         logging.info("Final results saved.")
 
 if __name__ == '__main__':
     start_urls_list = [
         'https://t.me/s/jichang_list',
-       
     ]
     max_pages_to_crawl_per_source = 1
     concurrent_workers = 15
