@@ -1,6 +1,7 @@
 name: 更新 trial.cfg
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: 0 3 * * *
 
