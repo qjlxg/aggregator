@@ -23,6 +23,7 @@ jobs:
 
 
 
+
       - name: 运行 Python 脚本
         run: |
           python jichang_list.py
@@ -31,6 +32,7 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
+          git pull --rebase  # 拉取远程更改并变基
           git add trial.cfg
           git commit -m "$(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
           git push
