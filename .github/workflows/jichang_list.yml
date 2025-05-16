@@ -31,8 +31,11 @@ jobs:
         run: |
          git config --global user.email "actions@github.com"
          git config --global user.name "GitHub Actions"
+         git stash push -m "local changes"
+         git pull origin main
+         git stash pop
          git add trial.cfg
-         if [[ -n $(git status -s trial.cfg) ]]; then  # Check for changes
+         if [[ -n $(git status -s trial.cfg) ]]; then
          git commit -m "Update trial.cfg"
-         git push
+         git push origin main
          fi
