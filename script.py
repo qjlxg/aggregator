@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 # 从环境变量中获取关键字
 keyword = os.getenv("SEARCH_KEYWORD")
 
-# 配置 Chrome headless 模式（无界面运行，适合 GitHub Actions）
+# 配置 Chrome headless 模式
 chrome_options = Options()
 chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
@@ -32,7 +32,7 @@ driver.implicitly_wait(10)
 # 获取页面源码并解析
 soup = BeautifulSoup(driver.page_source, "html.parser")
 
-# 提取搜索结果中包含关键字的链接
+# 提取包含关键字的链接
 links = []
 for a in soup.find_all("a"):
     href = a.get("href")
