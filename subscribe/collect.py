@@ -12,12 +12,10 @@ from typing import List, Dict, Set
 import base64
 import logging
 import requests
-import yaml
-
-from urllib.parse import urlparse
+import yaml 
 
 def represent_str_plain(dumper, data):
-    if data.isdigit():
+    if data.isdigit(): 
         return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='')
     return dumper.represent_scalar('tag:yaml.org,2002:str', data)
 
@@ -66,16 +64,11 @@ def fetch_repo_file(filename):
         resp.raise_for_status()
         data = resp.json()
         if "content" not in data:
-            logger.warning(f"{filename} 无 content 字段，可能文件为空或未初始化")
+            logger.warning(f"{filename} 无 content 字段")
             return ""
-        content = base64.b64decode(data["content"].replace("\n", "")).decode("utf-8")
-        logger.info(f"成功读取 {filename}，内容长度: {len(content)} 字符")
-        return content
-    except requests.exceptions.RequestException as e:
-        logger.error(f"读取 {filename} 失败: {e}")
-        return ""
+        return base64.b64decode(data["content"].replace("\n", "")).decode("utf-8")
     except Exception as e:
-        logger.error(f"解析 {filename} 内容失败: {e}")
+        logger.error(f"读取 {filename} 失败: {e}")
         return ""
 
 def push_repo_file(filename, content):
@@ -112,49 +105,20 @@ class SubscriptionManager:
 
     def load_exist(self, filename: str) -> List[str]:
         if not filename or filename not in self.repo_files:
-            logger.warning(f"文件 {filename} 未提供或不在仓库文件中")
             return []
         subscriptions: Set[str] = set()
-        pattern = r"https?://[^\s]+"
+        pattern = r"^https?:\/\/[^\s]+"
         content = self.repo_files.get(filename, "")
-        potential_links = re.findall(pattern, content, flags=re.M)
-        logger.info(f"从 {filename} 中提取到 {len(potential_links)} 个潜在链接")
-
-        # 进一步验证 URL 格式
-        subscriptions.update(link for link in potential_links if self.is_valid_url(link))
-        logger.info(f"过滤后剩余 {len(subscriptions)} 个有效格式的订阅链接")
-
-        if not subscriptions:
-            logger.warning(f"{filename} 中未找到有效订阅链接")
-            return []
-
+        subscriptions.update(re.findall(pattern, content, flags=re.M))
         logger.info("开始校验现有订阅是否失效")
         links = list(subscriptions)
         results = utils.multi_thread_run(
-            func=lambda x: crawl.check_status(x, retries=2, timeout=10),
+            func=crawl.check_status,
             tasks=links,
             num_threads=self.num_threads,
             show_progress=self.display,
         )
-
-        valid_links = []
-        for i, link in enumerate(links):
-            status, error = results[i]
-            if status and not error:
-                logger.info(f"链接 {link} 验证成功")
-                valid_links.append(link)
-            else:
-                logger.warning(f"链接 {link} 验证失败: {error or '未知错误'}")
-
-        logger.info(f"订阅验证完成，有效链接数: {len(valid_links)}")
-        return valid_links
-
-    def is_valid_url(self, url: str) -> bool:
-        try:
-            result = urlparse(url)
-            return all([result.scheme in ('http', 'https'), result.netloc])
-        except ValueError:
-            return False
+        return [links[i] for i in range(len(links)) if results[i][0] and not results[i][1]]
 
     def parse_domains(self, content: str) -> Dict[str, Dict[str, str]]:
         if not content or not isinstance(content, str):
