@@ -177,7 +177,7 @@ def main(start_urls, max_pages_per_source=90, max_workers=10):
 
         logging.info(f"Connectivity testing complete. Valid URLs: {len(valid_urls)}")
         logging.info("Saving final valid URLs...")
-        save_urls_to_file(valid_urls, 'data/jichang_subscribed_links.txt')
+        save_urls_to_file(valid_urls, './trial.cfg')
         logging.info("Final results saved.")
 
 if __name__ == '__main__':
@@ -185,7 +185,7 @@ if __name__ == '__main__':
         'https://t.me/s/jichang_list',
        
     ]
-    max_pages_to_crawl_per_source = 5
+    max_pages_to_crawl_per_source = 1
     concurrent_workers = 15
 
     if not os.path.exists('data'):
