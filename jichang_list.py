@@ -185,7 +185,7 @@ if __name__ == '__main__':
         'https://t.me/s/jichang_list',
        
     ]
-    max_pages_to_crawl_per_source = 58
+    max_pages_to_crawl_per_source = 5
     concurrent_workers = 15
 
     if not os.path.exists('data'):
