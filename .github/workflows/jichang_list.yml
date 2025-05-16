@@ -1,38 +1,47 @@
 name: 更新 trial.cfg
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # 允许手动触发
   schedule:
-    - cron: 0 3 * * *
+    - cron: '0 3 * * *' # 每天凌晨3点 (UTC) 运行
 
 jobs:
   update-trial-cfg:
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # 使用较新版本的 checkout action
 
       - name: 设置 Python 环境
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # 使用较新版本的 setup-python action
         with:
-          python-version: '3.9'
+          python-version: '3.9' # 您可以根据需要调整 Python 版本
+
       - name: 安装依赖
         run: |
           python -m pip install --upgrade pip
-          pip install requests beautifulsoup4   # 安装依赖
-
-
-
+          pip install requests beautifulsoup4 # 安装 Python 脚本所需的依赖
 
       - name: 运行 Python 脚本
         run: |
-          python jichang_list.py
+          python jichang_list.py # 运行您的脚本
 
-      - name: 提交更改
+      - name: 提交并推送更改
         run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git pull --rebase  # 拉取远程更改并变基
-          git add trial.cfg
-          git commit -m "$(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
-          git push
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions-bot@github.com"
+          # 拉取远程更改并变基，以避免因远程仓库更新而导致的推送冲突
+          # 如果脚本总是完全覆盖 trial.cfg，并且没有其他协作者同时修改它，
+          # --rebase 可能不是严格必需的，但通常是一个好习惯。
+          # 如果遇到复杂的合并冲突，可以考虑 git pull --no-rebase 或其他策略。
+          git pull --rebase
+          git add trial.cfg # 添加由脚本生成的 trial.cfg 文件
+          # 检查是否有更改需要提交
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "自动更新 trial.cfg - $(date '+%Y-%m-%d %H:%M:%S')"
+            git push
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GITHUB_TOKEN 用于认证推送
