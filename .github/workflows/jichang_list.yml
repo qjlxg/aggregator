@@ -1,4 +1,4 @@
-name:  jichang_list.txt
+name:  jichang_list
 
 on:
   schedule:
@@ -31,7 +31,7 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add data/jichang.txt
+          git add ./trial.cfg
           git add .
           git commit -m "$(date '+%Y-%m-%d %H:%M:%S')" || echo "Nothing to commit"
 
