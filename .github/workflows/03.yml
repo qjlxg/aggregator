@@ -1,14 +1,14 @@
-name: Search and Test Links
+name: Search and Test 
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:  # Manual trigger support already included
+  workflow_dispatch:  # Manual trigger support
 
 jobs:
   build:
-    runs-on: ubuntu-22.04  # Temporarily use GitHub-hosted runner to test
+    runs-on: self-hosted  # Assumes your runner is labeled as self-hosted; adjust if needed
 
     steps:
     - name: Checkout code
@@ -28,16 +28,28 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable
+        google-chrome --version  # Verify Chrome is installed
 
     - name: Install ChromeDriver
       run: |
-        CHROME_VERSION=$(google-chrome --version | cut -d ' ' -f 3 | cut -d '.' -f 1)
-        CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION})
-        wget -N https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip
+        # Get full Chrome version (e.g., "126.0.6478.126")
+        CHROME_VERSION=$(google-chrome --version | awk '{print $3}')
+        echo "Chrome version: $CHROME_VERSION"
+        # Get the matching ChromeDriver version for the full Chrome version
+        CHROMEDRIVER_VERSION=$(curl -sS "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}")
+        if [ -z "$CHROMEDRIVER_VERSION" ]; then
+          # Fallback: Use the major version if exact match fails
+          CHROME_MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d '.' -f 1)
+          CHROMEDRIVER_VERSION=$(curl -sS "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_MAJOR_VERSION}")
+        fi
+        echo "ChromeDriver version: $CHROMEDRIVER_VERSION"
+        # Download and install ChromeDriver
+        wget -N "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
         unzip chromedriver_linux64.zip
         sudo mv chromedriver /usr/bin/chromedriver
         sudo chown root:root /usr/bin/chromedriver
         sudo chmod +x /usr/bin/chromedriver
+        chromedriver --version  # Verify installation
 
     - name: Run Python script
       env:
@@ -45,7 +57,7 @@ jobs:
       run: python script.py
 
     - name: Upload results
-      uses: actions/upload-artifact@v4  # Updated to v4 (or keep v3 if it works after fixes)
+      uses: actions/upload-artifact@v4  # Updated to v4
       with:
         name: ji.txt
         path: data/ji.txt
