@@ -9,41 +9,8 @@ proxy-groups:
 - name: ✈️ ‍起飞
   type: select
   proxies:
-  - ⚡ ‍低延迟
-  - 👆🏻 ‍指定
-  - 🇭🇰 ‍香港
-  - 🇯🇵 ‍日本
-  - 🇺🇸 ‍美国
-  - 🎏 ‍其他
-  - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
-- name: ⚡ ‍低延迟
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
-  tolerance: 100
-  proxies: &id001
-  - 🇭🇰 香港 - 灵境
-  - 🇭🇰 香港 - 灵境 2
-  - 🇭🇰 香港 - 灵境 3
-  - 🇭🇰 香港 - 1 IEPL [Lite] - 云顶网络
-  - 🇭🇰 香港 - 1 IEPL [Std] - 云顶网络
-  - 🇭🇰 香港 - 1 IEPL [Pro] [5x] - 云顶网络
-  - 🇭🇰 香港 - 2 IEPL [Std] - 云顶网络
-  - 🇯🇵 日本 - 1 IEPL [Lite] - 云顶网络
-  - 🇯🇵 日本 - 1 IEPL [Std] - 云顶网络
-  - 🇯🇵 日本 - 1 IEPL [Pro] [5x] - 云顶网络
-  - 🇺🇸 美国 - 1 IEPL [Lite] - 云顶网络
-  - 🇺🇸 美国 - 1 IEPL [Std] - 云顶网络
-  - 🇺🇸 美国 - 1 IEPL [Pro] [5x] - 云顶网络
-  - ℹ️ 欢迎使用灵境 - 灵境
-- name: 👆🏻 ‍指定
-  type: select
-  proxies: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -60,21 +27,11 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇭🇰 ‍香港
   - ✈️ ‍起飞
-  - 👆🏻🇭🇰 ‍香港
-  - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🇺🇸 ‍美国
-  - 🇯🇵 ‍日本
-  - 🎏 ‍其他
   - ✈️ ‍起飞
-  - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🎏 ‍其他
-  - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
   type: select
@@ -82,71 +39,7 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇭🇰 ‍香港
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id002
-  - 🇭🇰 香港 - 灵境
-  - 🇭🇰 香港 - 灵境 2
-  - 🇭🇰 香港 - 灵境 3
-  - 🇭🇰 香港 - 1 IEPL [Lite] - 云顶网络
-  - 🇭🇰 香港 - 1 IEPL [Std] - 云顶网络
-  - 🇭🇰 香港 - 1 IEPL [Pro] [5x] - 云顶网络
-  - 🇭🇰 香港 - 2 IEPL [Std] - 云顶网络
-- name: 🇯🇵 ‍日本
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id003
-  - 🇯🇵 日本 - 1 IEPL [Lite] - 云顶网络
-  - 🇯🇵 日本 - 1 IEPL [Std] - 云顶网络
-  - 🇯🇵 日本 - 1 IEPL [Pro] [5x] - 云顶网络
-- name: 🇺🇸 ‍美国
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 300
-  proxies: &id004
-  - 🇺🇸 美国 - 1 IEPL [Lite] - 云顶网络
-  - 🇺🇸 美国 - 1 IEPL [Std] - 云顶网络
-  - 🇺🇸 美国 - 1 IEPL [Pro] [5x] - 云顶网络
-- name: 🎏 ‍其他
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
-  tolerance: 100
-  proxies: &id005
-  - ℹ️ 欢迎使用灵境 - 灵境
-- name: 👆🏻🇭🇰 ‍香港
-  type: select
-  proxies: *id002
-- name: 👆🏻🇯🇵 ‍日本
-  type: select
-  proxies: *id003
-- name: 👆🏻🇺🇸 ‍美国
-  type: select
-  proxies: *id004
-- name: 👆🏻🎏 ‍其他
-  type: select
-  proxies: *id005
-proxies:
-- {name: ℹ️ 欢迎使用灵境 - 灵境, server: 45.192.107.32, port: 888, tfo: true, type: vmess, uuid: 7a065c79-3f86-42ca-bd57-a5b7cdefb109, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
-- {name: 🇭🇰 香港 - 灵境, server: 45.192.107.32, port: 34344, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7a065c79-3f86-42ca-bd57-a5b7cdefb109, udp: true}
-- {name: 🇭🇰 香港 - 灵境 2, server: 45.192.107.32, port: 34344, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7a065c79-3f86-42ca-bd57-a5b7cdefb109, udp: true}
-- {name: 🇭🇰 香港 - 灵境 3, server: 45.192.107.32, port: 34344, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7a065c79-3f86-42ca-bd57-a5b7cdefb109, udp: true}
-- {name: '🇭🇰 香港 - 1 IEPL [Lite] - 云顶网络', server: negzyd.neurix.cc, port: 40104, type: ss, cipher: aes-128-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
-- {name: '🇭🇰 香港 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40105, type: ss, cipher: aes-128-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
-- {name: '🇭🇰 香港 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40103, type: ss, cipher: aes-128-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
-- {name: '🇭🇰 香港 - 2 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40205, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
-- {name: '🇺🇸 美国 - 1 IEPL [Lite] - 云顶网络', server: neawsbj.neurix.cc, port: 40304, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
-- {name: '🇺🇸 美国 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40305, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
-- {name: '🇺🇸 美国 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40303, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
-- {name: '🇯🇵 日本 - 1 IEPL [Lite] - 云顶网络', server: neawsbj.neurix.cc, port: 40404, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
-- {name: '🇯🇵 日本 - 1 IEPL [Std] - 云顶网络', server: 120.233.31.6, port: 40405, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
-- {name: '🇯🇵 日本 - 1 IEPL [Pro] [5x] - 云顶网络', server: iepl.miyue.fun, port: 40403, type: ss, cipher: aes-256-gcm, password: 5eb3256a-ac6a-485f-9161-97e3369c2806, udp: true}
+proxies: []
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
