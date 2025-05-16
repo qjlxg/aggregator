@@ -116,7 +116,7 @@ def fetch_page(url, timeout=15, max_retries=3):
                 return None
     return None
 
-def save_urls_to_file(urls, filename='data/jichang_list.txt'):
+def save_urls_to_file(urls, filename='trial.cfg'):
     """Save URLs to a file."""
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     try:
@@ -177,7 +177,7 @@ def main(start_urls, max_pages_per_source=90, max_workers=10):
 
         logging.info(f"Connectivity testing complete. Valid URLs: {len(valid_urls)}")
         logging.info("Saving final valid URLs...")
-        save_urls_to_file(valid_urls, './trial.cfg')
+        save_urls_to_file(valid_urls, '/trial.cfg')
         logging.info("Final results saved.")
 
 if __name__ == '__main__':
@@ -187,8 +187,5 @@ if __name__ == '__main__':
     ]
     max_pages_to_crawl_per_source = 1
     concurrent_workers = 15
-
-    if not os.path.exists('data'):
-        os.makedirs('data')
 
     main(start_urls_list, max_pages_to_crawl_per_source, concurrent_workers)
