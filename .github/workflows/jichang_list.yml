@@ -1,46 +1,32 @@
-# .github/workflows/jichang_list.yml
-
-name: jichang_list
+name: 更新 trial.cfg
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 每天 UTC 时间午夜运行一次
-  workflow_dispatch:    # 允许手动触发
+    - cron: 0 3 * * *
 
 jobs:
-  update-list:
+  update-trial-cfg:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0    # 重要：获取完整的历史记录
+      - name: 检出代码
+        uses: actions/checkout@v3
 
-      - name: 设置 Python
+      - name: 设置 Python 环境
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      - name: 安装依赖
+      - name: 运行 Python 脚本
         run: |
-          python -m pip install --upgrade pip
-          pip install requests beautifulsoup4   # 安装依赖
-
-      - name: 运行脚本
-        run: python jichang_list.py
+          python jichang_list.py
 
       - name: 提交更改
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add ./trial.cfg
-          git diff --quiet && echo "No changes to commit" || (git commit -m "$(date '+%Y-%m-%d %H:%M:%S')")
+          git commit -m "$(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
 
-      - name: 拉取远程并变基
+      - name: 检查文件是否被更新
         run: |
-          git pull --rebase origin main || true  # 如果拉取失败也没关系
-
-      - name: 推送更改
-        uses: ad-m/github-push-action@master
-        with:
-          branch: main
-          github_token: ${{ secrets.GITHUB_TOKEN }} # 别忘了添加 token
+          cat ./trial.cfg
