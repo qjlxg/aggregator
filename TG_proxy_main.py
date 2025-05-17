@@ -17,8 +17,8 @@ class SubscriptionManager:
     def __init__(self, update_path: str = "./sub/"):
         self.update_path = update_path
         # 只存储订阅链接
-        self.permanent_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]
-        self.trial_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]
+        self.permanent_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/v2ray.txt"]
+        self.trial_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/v2ray.txt"]
         # 节点列表初始化为空
         self.nodes: List[str] = []
         self.trial_nodes: List[str] = []
@@ -133,7 +133,7 @@ async def main():
     logger.info("========== 开始处理订阅 ==========")
     manager = SubscriptionManager()
     # 可以在这里添加更多订阅链接，例如通过注册获取的链接
-    manager.permanent_subs.append("https://vvs.e54.site/api/v1/client/subscribe?token=73a7f39a013ac2372ad6ae4be8b452c3")
+    manager.permanent_subs.append("https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/v2ray.txt")
     await manager.process_subscriptions()
     logger.info("========== 准备写入订阅 ==========")
     manager.write_to_file()
