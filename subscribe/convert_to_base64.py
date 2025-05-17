@@ -28,16 +28,18 @@ def convert_multiple_to_base64(urls):
     # Remove duplicate lines while preserving order
     lines = combined_text.splitlines()
     unique_lines = []
-    seen_lines = set()
+    seen_lines = set() # Stores stripped lines to check for duplicates
     for line in lines:
         # Normalize line by stripping whitespace before checking for duplicates
         stripped_line = line.strip()
-        if stripped_line and stripped_line not in seen_lines: # Also ensure line is not empty after stripping
-            unique_lines.append(line) # Add original line to preserve original spacing if desired
-            seen_lines.add(stripped_line)
+        # Add to unique_lines if the stripped line is not empty and not seen before
+        if stripped_line and stripped_line not in seen_lines: 
+            unique_lines.append(line) # Add original line (with its original spacing, but no trailing newline from splitlines)
+            seen_lines.add(stripped_line) # Add the stripped version to the set of seen lines
     
     processed_text = "\n".join(unique_lines)
-    if unique_lines: # Ensure there's content before adding a final newline
+    # Add a final newline if there's content and it's not just whitespace
+    if unique_lines and processed_text.strip(): 
         processed_text += "\n"
 
 
@@ -69,8 +71,6 @@ def convert_multiple_to_base64(urls):
             print(f"Conversion complete and changes saved to {output_file}.")
         except Exception as e:
             print(f"Error writing to file {output_file}: {e}")
-    # else: # This part is already covered by the print statement above
-    #     print("No changes detected.")
 
 if __name__ == "__main__":
     urls = [
