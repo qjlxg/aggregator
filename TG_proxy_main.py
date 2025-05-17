@@ -9,7 +9,7 @@ import asyncio
 import aiohttp
 import yaml
 import chardet
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 # 配置日志
 logging.basicConfig(
@@ -20,8 +20,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # 从配置文件加载机场链接
-def load_config(config_file: str = "config.yaml") -> List[str]:
-    """加载配置文件中的机场链接"""
+def load_config(config_file: str = "config.yaml") -> List[Dict[str, str]]:
+    """加载配置文件中的机场链接和邀请码"""
     try:
         with open(config_file, 'r', encoding='utf-8') as f:
             config = yaml.safe_load(f)
@@ -37,10 +37,10 @@ def load_config(config_file: str = "config.yaml") -> List[str]:
 class SubscriptionManager:
     def __init__(self, update_path: str = "./sub/"):
         self.update_path = update_path
-        self.permanent_subs: List[str] = ["https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/base64.txt"]  # 永久订阅
-        self.trial_subs: List[str] = ["https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/base64.txt"]      # 试用订阅
-        self.nodes: List[str] = ["https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/base64.txt"]          # 所有节点明文信息
-        self.trial_nodes: List[str] = ["https://raw.githubusercontent.com/qjlxg/aggregator/refs/heads/main/base64.txt"]    # 试用节点明文
+        self.permanent_subs: List[str] = []  # 永久订阅
+        self.trial_subs: List[str] = []      # 试用订阅
+        self.nodes: List[str] = []           # 所有节点明文信息
+        self.trial_nodes: List[str] = []     # 试用节点明文
 
     def decode_base64(self, data: str) -> Optional[str]:
         """解码base64数据并检测编码"""
@@ -63,7 +63,7 @@ class SubscriptionManager:
                         logger.warning(f"请求 {url} 失败，状态码: {response.status}")
             except Exception as e:
                 logger.warning(f"尝试 {attempt + 1}/{retries} 获取 {url} 失败: {e}")
-                await asyncio.sleep(1)  # 重试前等待
+                await asyncio.sleep(1)
         logger.error(f"获取 {url} 失败，已达最大重试次数")
         return None
 
@@ -92,15 +92,15 @@ class SubscriptionManager:
 
     def validate_nodes(self, data: str) -> bool:
         """验证订阅内容是否有效"""
-        return bool(data.strip())  # 简单验证非空，后续可扩展
+        return bool(data.strip())
 
     def deduplicate_nodes(self) -> List[str]:
         """高效去重节点"""
-        return list(dict.fromkeys(self.nodes))  # 保持顺序并去重
+        return list(dict.fromkeys(self.nodes))
 
     def write_to_file(self):
         """一次性写入文件"""
-        if not self.permanent_subs or not self.trial_subs:
+        if not self.permanent_subs and not self.trial_subs:
             logger.error("订阅为空，请检查！")
             return
 
@@ -110,7 +110,6 @@ class SubscriptionManager:
         output_dir = os.path.join(self.update_path, date)
         os.makedirs(output_dir, exist_ok=True)
 
-        # 写入永久订阅
         deduped_nodes = self.deduplicate_nodes()
         logger.info(f"去重完毕，去除 {len(self.nodes) - len(deduped_nodes)} 个重复节点")
         content = '\n'.join(deduped_nodes).replace('\n\n', '\n')
@@ -118,11 +117,9 @@ class SubscriptionManager:
         with open(txt_file, 'w', encoding='utf-8') as f:
             f.write(content)
 
-        # 写入长期订阅文件
         with open("Long_term_subscription_num", 'w', encoding='utf-8') as f:
             f.write(base64.b64encode(content.encode()).decode())
 
-        # 写入试用订阅文件
         trial_content = '\n'.join(self.trial_nodes).replace('\n\n', '\n')
         with open("Long_term_subscription_try", 'w', encoding='utf-8') as f:
             f.write(base64.b64encode(trial_content.encode()).decode())
@@ -132,31 +129,48 @@ class SubscriptionManager:
 async def get_sub_url(manager: SubscriptionManager):
     """获取订阅链接"""
     V2B_REG_REL_URL = '/api/v1/passport/auth/register'
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Mobile/15E148 Safari/604.1',
-        'Content-Type': 'application/x-www-form-urlencoded',
-    }
+    user_agents = [
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1',
+        'Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Mobile/15E148 Safari/604.1',
+    ]
 
     async with aiohttp.ClientSession() as session:
-        for url in load_config():
-            form_data = {
-                'email': ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(12)) + '@gmail.com',
-                'password': 'autosub_v2b',
-                'invite_code': '',
-                'email_code': ''
+        config_urls = load_config()
+        for item in config_urls:
+            url = item if isinstance(item, str) else item.get('url', '')
+            invite_code = item.get('invite_code', '') if isinstance(item, dict) else ''
+            headers = {
+                'User-Agent': random.choice(user_agents),
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json',
             }
-            try:
-                async with session.post(url + V2B_REG_REL_URL, data=form_data, headers=headers) as response:
-                    if response.status == 200:
-                        data = await response.json()
-                        sub_url = f'{url}/api/v1/client/subscribe?token={data["data"]["token"]}'
-                        manager.permanent_subs.append(sub_url)
-                        manager.trial_subs.append(sub_url)
-                        logger.info(f"添加订阅: {sub_url}")
-                    else:
-                        logger.warning(f"注册失败 {url}，状态码: {response.status}")
-            except Exception as e:
-                logger.error(f"获取订阅 {url} 失败: {e}")
+            for attempt in range(3):
+                try:
+                    form_data = {
+                        'email': ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(12)) + '@gmail.com',
+                        'password': 'autosub_v2b',
+                        'invite_code': invite_code,
+                        'email_code': ''
+                    }
+                    async with session.post(url + V2B_REG_REL_URL, data=form_data, headers=headers) as response:
+                        if response.status == 200:
+                            data = await response.json()
+                            if data.get('data') and data['data'].get('token'):
+                                sub_url = f'{url}/api/v1/client/subscribe?token={data["data"]["token"]}'
+                                manager.permanent_subs.append(sub_url)
+                                manager.trial_subs.append(sub_url)
+                                logger.info(f"成功注册并添加订阅: {sub_url}")
+                                break
+                            else:
+                                logger.warning(f"注册成功但未返回 token: {url}")
+                        else:
+                            logger.warning(f"注册失败 {url}，状态码: {response.status}")
+                except Exception as e:
+                    logger.error(f"注册 {url} 失败 (尝试 {attempt + 1}/3): {e}")
+                await asyncio.sleep(random.uniform(1, 3))  # 随机延时
+            else:
+                logger.error(f"注册 {url} 失败，已达最大重试次数")
 
 async def main():
     logger.info("========== 开始获取机场订阅链接 ==========")
