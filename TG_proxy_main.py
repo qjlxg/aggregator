@@ -1,19 +1,15 @@
 # coding=utf-8
 import base64
-import requests
 import time
 import os
 import random
 import string
-import datetime
 import logging
 import asyncio
 import aiohttp
-from collections import Counter
-from concurrent.futures import ThreadPoolExecutor
-from typing import List, Optional
-import chardet
 import yaml
+import chardet
+from typing import List, Optional
 
 # 配置日志
 logging.basicConfig(
