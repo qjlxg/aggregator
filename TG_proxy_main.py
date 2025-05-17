@@ -46,10 +46,10 @@ def is_base64(data: str) -> bool:
 class SubscriptionManager:
     def __init__(self, update_path: str = "./sub/"):
         self.update_path = update_path
-        self.permanent_subs: List[str] = []
-        self.trial_subs: List[str] = []
-        self.nodes: List[str] = []
-        self.trial_nodes: List[str] = []
+        self.permanent_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]
+        self.trial_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]
+        self.nodes: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/v2ray.txt"]
+        self.trial_nodes: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.txt"]
 
     def decode_base64(self, data: str) -> Optional[str]:
         """解码 Base64 数据并检测编码，若不是 Base64 则返回原文"""
