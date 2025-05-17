@@ -38,9 +38,9 @@ class SubscriptionManager:
     def __init__(self, update_path: str = "./sub/"):
         self.update_path = update_path
         self.permanent_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]  # 永久订阅
-        self.trial_subs: List[str] = []      # 试用订阅
-        self.nodes: List[str] = []           # 所有节点明文信息
-        self.trial_nodes: List[str] = []     # 试用节点明文
+        self.trial_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]      # 试用订阅
+        self.nodes: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]           # 所有节点明文信息
+        self.trial_nodes: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]     # 试用节点明文
 
     def decode_base64(self, data: str) -> Optional[str]:
         """解码base64数据并检测编码"""
