@@ -37,7 +37,7 @@ def load_config(config_file: str = "config.yaml") -> List[Dict[str, str]]:
 class SubscriptionManager:
     def __init__(self, update_path: str = "./sub/"):
         self.update_path = update_path
-        self.permanent_subs: List[str] = []  # 永久订阅
+        self.permanent_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]  # 永久订阅
         self.trial_subs: List[str] = []      # 试用订阅
         self.nodes: List[str] = []           # 所有节点明文信息
         self.trial_nodes: List[str] = []     # 试用节点明文
