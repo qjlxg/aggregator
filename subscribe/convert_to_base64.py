@@ -74,8 +74,12 @@ def convert_multiple_to_base64(urls):
 
 if __name__ == "__main__":
     urls = [
-        "https://github.com/qjlxg/aggregator/raw/refs/heads/main/base.txt",
+        "https://bgithub.xyz/qjlxg/aggregator/raw/refs/heads/main/base.txt",
         "https://kurzlinks.de/13tc",
+        "https://gy.xiaozi.us.kg/sub?token=lzj666",
+        "https://gy.lzj.pp.ua/sub?token=lzj666",
+        "https://gy.lzjjjjjjj.pp.ua/sub?token=lzj666",
+        "https://gy.lzj.x10.bz/sub?token=lzj666",
         # Add more URLs here if needed
     ]
     convert_multiple_to_base64(urls)
