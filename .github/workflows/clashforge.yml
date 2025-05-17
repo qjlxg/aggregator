@@ -1,0 +1,29 @@
+name: Run ClashForge Script
+
+on:
+  workflow_dispatch: # 允许手动运行
+  # 你可以在这里添加其他触发条件，例如定时运行等
+
+jobs:
+  run-clashforge:
+    runs-on: ubuntu-latest # 可以根据需要选择其他操作系统
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8' # 设置Python版本
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt # 确保你有一个requirements.txt文件列出所需的依赖
+
+    - name: Run ClashForge Script
+      env:
+        TZ: Asia/Shanghai # 设置时区为上海
+      run: |
+        python ClashForge.py # 运行脚本
