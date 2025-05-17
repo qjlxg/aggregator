@@ -15,7 +15,7 @@ from typing import List, Optional, Dict
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[logging.FileHandler('subscription.log'), logging.StreamHandler()]
+    handlers=[logging.FileHandler('subscription.log', encoding='utf-8'), logging.StreamHandler()]
 )
 logger = logging.getLogger(__name__)
 
@@ -33,24 +33,37 @@ def load_config(config_file: str = "config.yaml") -> List[Dict[str, str]]:
         logger.error(f"加载配置文件失败: {e}")
         return []
 
+# 检查是否为 Base64 编码
+def is_base64(data: str) -> bool:
+    """检查字符串是否为有效的 Base64 编码"""
+    try:
+        base64.b64decode(data, validate=True)
+        return True
+    except Exception:
+        return False
+
 # 数据存储类
 class SubscriptionManager:
     def __init__(self, update_path: str = "./sub/"):
         self.update_path = update_path
-        self.permanent_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]  # 永久订阅
-        self.trial_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]      # 试用订阅
-        self.nodes: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]           # 所有节点明文信息
-        self.trial_nodes: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml"]     # 试用节点明文
+        self.permanent_subs: List[str] = []
+        self.trial_subs: List[str] = []
+        self.nodes: List[str] = []
+        self.trial_nodes: List[str] = []
 
     def decode_base64(self, data: str) -> Optional[str]:
-        """解码base64数据并检测编码"""
-        try:
-            decoded_bytes = base64.b64decode(data)
-            encoding = chardet.detect(decoded_bytes)['encoding'] or 'utf-8'
-            return decoded_bytes.decode(encoding)
-        except Exception as e:
-            logger.error(f"Base64解码失败: {e}")
-            return None
+        """解码 Base64 数据并检测编码，若不是 Base64 则返回原文"""
+        if is_base64(data):
+            try:
+                decoded_bytes = base64.b64decode(data, validate=True)
+                encoding = chardet.detect(decoded_bytes).get('encoding', 'utf-8') or 'utf-8'
+                return decoded_bytes.decode(encoding)
+            except Exception as e:
+                logger.error(f"Base64 解码失败: {e}")
+                return None
+        else:
+            logger.info("数据非 Base64 编码，按明文处理")
+            return data
 
     async def fetch_subscription(self, url: str, session: aiohttp.ClientSession, retries: int = 3) -> Optional[str]:
         """异步获取订阅内容并实现重试机制"""
@@ -58,7 +71,9 @@ class SubscriptionManager:
             try:
                 async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as response:
                     if response.status == 200:
-                        return await response.text()
+                        content = await response.text()
+                        logger.info(f"成功获取订阅 {url}")
+                        return content
                     else:
                         logger.warning(f"请求 {url} 失败，状态码: {response.status}")
             except Exception as e:
@@ -70,29 +85,50 @@ class SubscriptionManager:
     async def process_subscriptions(self):
         """异步处理所有订阅"""
         async with aiohttp.ClientSession() as session:
-            tasks = []
-            for url in self.permanent_subs:
-                tasks.append(self.fetch_subscription(url, session))
-            for url in self.trial_subs:
-                tasks.append(self.fetch_subscription(url, session))
-
+            tasks = [self.fetch_subscription(url, session) for url in self.permanent_subs + self.trial_subs]
             results = await asyncio.gather(*tasks, return_exceptions=True)
+
             for url, result in zip(self.permanent_subs + self.trial_subs, results):
                 if isinstance(result, str):
                     decoded = self.decode_base64(result)
-                    if decoded and self.validate_nodes(decoded):
-                        if url in self.permanent_subs:
-                            self.nodes.extend(decoded.splitlines())
+                    if decoded:
+                        nodes = self.parse_nodes(decoded)
+                        if nodes and self.validate_nodes(nodes):
+                            if url in self.permanent_subs:
+                                self.nodes.extend(nodes)
+                            if url in self.trial_subs:
+                                self.trial_nodes.extend(nodes)
+                            logger.info(f"订阅 {url} 处理成功，获取到 {len(nodes)} 个节点")
                         else:
-                            self.trial_nodes.extend(decoded.splitlines())
+                            logger.warning(f"订阅 {url} 内容无效或无有效节点")
                     else:
-                        logger.warning(f"订阅 {url} 内容无效")
+                        logger.warning(f"订阅 {url} 解码失败")
                 else:
                     logger.error(f"订阅 {url} 获取失败")
 
-    def validate_nodes(self, data: str) -> bool:
-        """验证订阅内容是否有效"""
-        return bool(data.strip())
+    def parse_nodes(self, data: str) -> List[str]:
+        """解析订阅内容，支持多种格式"""
+        lines = data.strip().splitlines()
+        nodes = []
+        # 如果是 YAML 格式，尝试解析
+        if data.strip().startswith(('{', '[')) or 'proxies:' in data:
+            try:
+                yaml_data = yaml.safe_load(data)
+                if isinstance(yaml_data, dict) and 'proxies' in yaml_data:
+                    nodes = [str(proxy) for proxy in yaml_data['proxies']]
+                elif isinstance(yaml_data, list):
+                    nodes = [str(item) for item in yaml_data]
+            except Exception as e:
+                logger.warning(f"YAML 解析失败: {e}")
+        else:
+            # 按行处理明文节点
+            nodes = [line.strip() for line in lines if line.strip()]
+        return nodes
+
+    def validate_nodes(self, nodes: List[str]) -> bool:
+        """验证节点列表是否有效"""
+        valid_prefixes = ('vmess://', 'trojan://', 'ss://', 'http://', 'https://')
+        return bool(nodes) and any(node.startswith(prefixes) for node in nodes for prefixes in valid_prefixes)
 
     def deduplicate_nodes(self) -> List[str]:
         """高效去重节点"""
@@ -100,8 +136,8 @@ class SubscriptionManager:
 
     def write_to_file(self):
         """一次性写入文件"""
-        if not self.permanent_subs and not self.trial_subs:
-            logger.error("订阅为空，请检查！")
+        if not self.nodes and not self.trial_nodes:
+            logger.error("没有获取到任何有效节点，请检查订阅！")
             return
 
         t = time.localtime()
@@ -127,12 +163,13 @@ class SubscriptionManager:
         logger.info(f"合并完成，共获取到 {len(deduped_nodes)} 个节点")
 
 async def get_sub_url(manager: SubscriptionManager):
-    """获取订阅链接"""
+    """增强注册功能，获取订阅链接"""
     V2B_REG_REL_URL = '/api/v1/passport/auth/register'
     user_agents = [
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1',
         'Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Mobile/15E148 Safari/604.1',
+        'Mozilla/5.0 (Linux; Android 10; SM-G975F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.120 Mobile Safari/537.36',
     ]
 
     async with aiohttp.ClientSession() as session:
@@ -145,14 +182,15 @@ async def get_sub_url(manager: SubscriptionManager):
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json',
             }
-            for attempt in range(3):
+            for attempt in range(5):  # 增加重试次数
                 try:
                     form_data = {
-                        'email': ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(12)) + '@gmail.com',
-                        'password': 'autosub_v2b',
+                        'email': ''.join(random.choices(string.ascii_letters + string.digits, k=12)) + '@gmail.com',
+                        'password': 'autosub_v2b_' + ''.join(random.choices(string.digits, k=4)),
                         'invite_code': invite_code,
                         'email_code': ''
                     }
+                    logger.info(f"尝试注册 {url}，参数: {form_data}")
                     async with session.post(url + V2B_REG_REL_URL, data=form_data, headers=headers) as response:
                         if response.status == 200:
                             data = await response.json()
@@ -163,12 +201,12 @@ async def get_sub_url(manager: SubscriptionManager):
                                 logger.info(f"成功注册并添加订阅: {sub_url}")
                                 break
                             else:
-                                logger.warning(f"注册成功但未返回 token: {url}")
+                                logger.warning(f"注册成功但未返回 token: {url}, 响应: {data}")
                         else:
                             logger.warning(f"注册失败 {url}，状态码: {response.status}")
                 except Exception as e:
-                    logger.error(f"注册 {url} 失败 (尝试 {attempt + 1}/3): {e}")
-                await asyncio.sleep(random.uniform(1, 3))  # 随机延时
+                    logger.error(f"注册 {url} 失败 (尝试 {attempt + 1}/5): {e}")
+                await asyncio.sleep(random.uniform(1, 5))  # 随机延时
             else:
                 logger.error(f"注册 {url} 失败，已达最大重试次数")
 
