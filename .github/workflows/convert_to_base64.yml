@@ -27,6 +27,7 @@ jobs:
        python -m pip install --upgrade pip
        python subscribe/convert_to_base64.py
 
+
    - name: Commit and push changes (only if necessary)
      if: ${{ always() }}  # Always run this step, even on failure
      run: |
@@ -35,5 +36,6 @@ jobs:
        git add base64.txt
        if [[ -n $(git status -s base64.txt) ]]; then  # Check for changes
          git commit -m "Update base64.txt"
+         git pull --rebase # Add this line to pull remote changes
          git push
        fi
