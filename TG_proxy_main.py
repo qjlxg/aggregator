@@ -1,143 +1,306 @@
+# coding=utf-8
 import base64
+import json
 import logging
-import asyncio
-import aiohttp
-import yaml
+import os
+import random
+import string
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor
 from typing import List, Optional
 
-# 配置日志
+import chardet
+import requests
+from tqdm import tqdm
+
+# Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[logging.FileHandler('subscription.log', encoding='utf-8'), logging.StreamHandler()]
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[logging.FileHandler("script.log"), logging.StreamHandler()]
 )
-logger = logging.getLogger(__name__)
 
-class SubscriptionManager:
-    def __init__(self, update_path: str = "./sub/"):
-        self.update_path = update_path
-        # 只存储订阅链接
-        self.permanent_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/v2ray.txt"]
-        self.trial_subs: List[str] = ["https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/v2ray.txt"]
-        # 节点列表初始化为空
-        self.nodes: List[str] = []
+# Load configuration from external file
+CONFIG_FILE = "config.json"
+DEFAULT_CONFIG = {
+    "update_path": "./sub/",
+    "max_workers": 10,
+    "subscription_urls": [
+        "https://37cdn.ski9.cn",
+        "http://vpn1.fengniaocloud.top",
+        # Add more URLs as needed
+    ],
+    "channel_urls": []
+}
+
+def load_config() -> dict:
+    """Load configuration from a JSON file or return default config."""
+    try:
+        if os.path.exists(CONFIG_FILE):
+            with open(CONFIG_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        else:
+            with open(CONFIG_FILE, "w", encoding="utf-8") as f:
+                json.dump(DEFAULT_CONFIG, f, indent=4)
+            return DEFAULT_CONFIG
+    except Exception as e:
+        logging.error(f"Failed to load config: {e}")
+        return DEFAULT_CONFIG
+
+config = load_config()
+
+class ProxyCollector:
+    def __init__(self):
+        self.update_path = config["update_path"]
+        self.clash_subscriptions: List[str] = []
+        self.v2ray_subscriptions: List[str] = []
+        self.node_plaintexts: List[str] = []
+        self.unique_urls: set = set()
+        self.permanent_subscriptions: List[str] = []
+        self.trial_subscriptions: List[str] = []
         self.trial_nodes: List[str] = []
+        self.lock = threading.Lock()
+
+    def fetch_channel_urls(self, url: str) -> List[str]:
+        """Fetch HTTP URLs from a Telegram channel."""
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
+            "Accept": "application/json, text/javascript, */*; q=0.01",
+            "X-Requested-With": "XMLHttpRequest",
+        }
+        try:
+            response = requests.post(url, headers=headers, timeout=10)
+            response.raise_for_status()
+            pattern = r'"https+:[^\s]*"'
+            return [url.replace('"', "").replace("\\", "") for url in re.findall(pattern, response.text)]
+        except requests.RequestException as e:
+            logging.error(f"Failed to fetch channel {url}: {e}")
+            return []
 
     def decode_base64(self, data: str) -> Optional[str]:
-        """解码 Base64 数据，若不是 Base64 则返回原文"""
+        """Decode Base64 encoded data."""
         try:
             decoded_bytes = base64.b64decode(data)
-            return decoded_bytes.decode('utf-8', errors='ignore')
-        except Exception:
-            logger.info("数据非 Base64 编码，按明文处理")
-            return data
+            encoding = chardet.detect(decoded_bytes)["encoding"] or "utf-8"
+            return decoded_bytes.decode(encoding)
+        except Exception as e:
+            logging.error(f"Base64 decoding failed: {e}")
+            return None
 
-    async def fetch_subscription(self, url: str, session: aiohttp.ClientSession, retries: int = 3) -> Optional[str]:
-        """异步获取订阅内容并实现重试机制"""
-        for attempt in range(retries):
-            try:
-                async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as response:
-                    if response.status == 200:
-                        content = await response.text()
-                        logger.info(f"成功获取订阅 {url}")
-                        return content
-                    else:
-                        logger.warning(f"请求 {url} 失败，状态码: {response.status}")
-            except Exception as e:
-                logger.warning(f"尝试 {attempt + 1}/{retries} 获取 {url} 失败: {e}")
-                await asyncio.sleep(1)
-        logger.error(f"获取 {url} 失败，已达最大重试次数")
-        return None
-
-    async def process_subscriptions(self):
-        """异步处理所有订阅"""
-        async with aiohttp.ClientSession() as session:
-            tasks = [self.fetch_subscription(url, session) for url in self.permanent_subs + self.trial_subs]
-            results = await asyncio.gather(*tasks, return_exceptions=True)
-
-            for url, result in zip(self.permanent_subs + self.trial_subs, results):
-                if isinstance(result, str):
-                    decoded = self.decode_base64(result)
-                    if decoded:
-                        nodes = self.parse_nodes(decoded)
-                        if nodes and self.validate_nodes(nodes):
-                            if url in self.permanent_subs:
-                                self.nodes.extend(nodes)
-                            if url in self.trial_subs:
-                                self.trial_nodes.extend(nodes)
-                            logger.info(f"订阅 {url} 处理成功，获取到 {len(nodes)} 个节点")
-                        else:
-                            logger.warning(f"订阅 {url} 内容无效或无有效节点")
-                    else:
-                        logger.warning(f"订阅 {url} 解码失败")
-                else:
-                    logger.error(f"订阅 {url} 获取失败")
-
-    def parse_nodes(self, data: str) -> List[str]:
-        """解析订阅内容，支持 Base64、明文和 Clash YAML 格式"""
-        nodes = []
-        # 尝试按 YAML 解析（Clash 格式）
+    def process_subscription(self, url: str) -> None:
+        """Determine if a URL is a Clash or V2Ray subscription and process it."""
         try:
-            yaml_data = yaml.safe_load(data)
-            if isinstance(yaml_data, dict) and 'proxies' in yaml_data:
-                nodes = [str(proxy) for proxy in yaml_data['proxies']]
-            elif isinstance(yaml_data, list):
-                nodes = [str(item) for item in yaml_data]
-        except Exception:
-            # 如果不是 YAML，按明文或 Base64 解码后按行解析
-            lines = data.strip().splitlines()
-            nodes = [line.strip() for line in lines if line.strip() and line.startswith(('vmess://', 'trojan://', 'ss://', 'http://', 'https://'))]
-        return nodes
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            content = response.text
 
-    def validate_nodes(self, nodes: List[str]) -> bool:
-        """验证节点列表是否有效"""
-        valid_prefixes = ('vmess://', 'trojan://', 'ss://', 'http://', 'https://')
-        return bool(nodes) and any(node.startswith(prefixes) for node in nodes for prefixes in valid_prefixes)
+            if "proxies:" in content:
+                logging.info(f"Clash subscription found: {url}")
+                with self.lock:
+                    self.clash_subscriptions.append(url)
+            else:
+                decoded = self.decode_base64(content)
+                if decoded:
+                    logging.info(f"V2Ray subscription found: {url}")
+                    with self.lock:
+                        self.v2ray_subscriptions.append(url)
+                        self.node_plaintexts.extend(decoded.splitlines())
+        except requests.RequestException as e:
+            logging.warning(f"Failed to process {url}: {e}")
 
-    def deduplicate_nodes(self) -> List[str]:
-        """高效去重节点"""
-        return list(dict.fromkeys(self.nodes))
-
-    def write_to_file(self):
-        """一次性写入文件"""
-        import os
-        import time
-
-        if not self.nodes and not self.trial_nodes:
-            logger.error("没有获取到任何有效节点，请检查订阅！")
+    def collect_channel_subscriptions(self) -> None:
+        """Collect subscriptions from Telegram channels using a thread pool."""
+        urls = config["channel_urls"]
+        if not urls:
+            logging.info("No channel URLs provided.")
             return
 
-        t = time.localtime()
-        date = time.strftime('%y%m', t)
-        date_day = time.strftime('%y%m%d', t)
-        output_dir = os.path.join(self.update_path, date)
-        os.makedirs(output_dir, exist_ok=True)
+        with ThreadPoolExecutor(max_workers=config["max_workers"]) as executor:
+            future_to_url = {executor.submit(self.fetch_channel_urls, url): url for url in urls}
+            for future in tqdm(future_to_url, desc="Fetching channels"):
+                channel_urls = future.result()
+                self.unique_urls.update([url for url in channel_urls if "t" not in url[8] and "p" not in url[-2]])
 
-        deduped_nodes = self.deduplicate_nodes()
-        logger.info(f"去重完毕，去除 {len(self.nodes) - len(deduped_nodes)} 个重复节点")
-        content = '\n'.join(deduped_nodes).replace('\n\n', '\n')
-        txt_file = os.path.join(output_dir, f'{date_day}.txt')
-        with open(txt_file, 'w', encoding='utf-8') as f:
-            f.write(content)
+        recent_urls = list(self.unique_urls)[-25:]  # Process the last 25 URLs
+        with ThreadPoolExecutor(max_workers=config["max_workers"]) as executor:
+            executor.map(self.process_subscription, recent_urls)
 
-        with open("Long_term_subscription_num", 'w', encoding='utf-8') as f:
-            f.write(base64.b64encode(content.encode()).decode())
+    def fetch_airport_trial(self) -> None:
+        """Fetch trial subscriptions from airport websites."""
+        V2B_REG_REL_URL = "/api/v1/passport/auth/register"
+        headers = {
+            "User-Agent": "Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Mobile/15E148 Safari/604.1",
+            "Content-Type": "application/x-www-form-urlencoded",
+        }
 
-        trial_content = '\n'.join(self.trial_nodes).replace('\n\n', '\n')
-        with open("Long_term_subscription_try", 'w', encoding='utf-8') as f:
-            f.write(base64.b64encode(trial_content.encode()).decode())
+        for url in config["subscription_urls"]:
+            form_data = {
+                "email": f"{''.join(random.choices(string.ascii_letters + string.digits, k=12))}@gmail.com",
+                "password": ''.join(random.choices(string.ascii_letters + string.digits, k=12)),  # Random password
+                "invite_code": "",
+                "email_code": ""
+            }
+            try:
+                response = requests.post(f"{url}{V2B_REG_REL_URL}", data=form_data, headers=headers, timeout=10)
+                token = response.json()["data"]["token"]
+                sub_url = f"{url}/api/v1/client/subscribe?token={token}"
+                with self.lock:
+                    self.trial_subscriptions.append(sub_url)
+                    self.permanent_subscriptions.append(sub_url)
+                logging.info(f"Trial subscription added: {sub_url}")
+            except Exception as e:
+                logging.error(f"Failed to fetch trial from {url}: {e}")
 
-        logger.info(f"合并完成，共获取到 {len(deduped_nodes)} 个节点")
+    def fetch_free_nodes(self) -> None:
+        """Fetch free nodes from specific websites."""
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36"
+        }
+        # Example: Fetch from kkzui.com
+        try:
+            res = requests.get("https://kkzui.com/jd?orderby=modified", headers=headers, timeout=10)
+            article_url = re.search(r'<h2 class="item-heading"><a href="(https://kkzui.com/(.*?)\.html)"', res.text).group(1)
+            res = requests.get(article_url, headers=headers, timeout=10)
+            sub_url = re.search(r'<p><strong>这是v2订阅地址</strong>：(.*?)</p>', res.text).group(1)
+            with self.lock:
+                self.permanent_subscriptions.append(sub_url)
+            logging.info(f"Free node from kkzui.com: {sub_url}")
+        except Exception as e:
+            logging.error(f"Failed to fetch from kkzui.com: {e}")
 
-async def main():
-    logger.info("========== 开始处理订阅 ==========")
-    manager = SubscriptionManager()
-    # 可以在这里添加更多订阅链接，例如通过注册获取的链接
-    manager.permanent_subs.append("https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/v2ray.txt")
-    await manager.process_subscriptions()
-    logger.info("========== 准备写入订阅 ==========")
-    manager.write_to_file()
-    logger.info("========== 写入完成任务结束 ==========")
+    def write_subscriptions(self) -> None:
+        """Write collected subscriptions to files and update README."""
+        if not (self.permanent_subscriptions or self.trial_subscriptions):
+            logging.error("No subscriptions to write.")
+            return
+
+        # Process permanent subscriptions
+        random.shuffle(self.permanent_subscriptions)
+        for sub in self.permanent_subscriptions:
+            try:
+                res = requests.get(sub, timeout=10)
+                nodes = self.decode_base64(res.text)
+                if nodes:
+                    with self.lock:
+                        self.node_plaintexts.extend(nodes.splitlines())
+            except Exception as e:
+                logging.warning(f"Permanent subscription {sub} failed: {e}")
+
+        # Process trial subscriptions
+        random.shuffle(self.trial_subscriptions)
+        for sub in self.trial_subscriptions:
+            try:
+                res = requests.get(sub, timeout=10)
+                nodes = self.decode_base64(res.text)
+                if nodes:
+                    with self.lock:
+                        self.trial_nodes.extend(nodes.splitlines())
+            except Exception as e:
+                logging.warning(f"Trial subscription {sub} failed: {e}")
+
+        # Deduplicate and clean nodes
+        unique_nodes = list(set(self.node_plaintexts))
+        trial_nodes = "\n".join(self.trial_nodes).replace("\n\n", "\n")
+        logging.info(f"Deduplicated {len(self.node_plaintexts) - len(unique_nodes)} nodes.")
+
+        # Write daily subscription
+        date = time.strftime("%y%m")
+        date_day = time.strftime("%y%m%d")
+        os.makedirs(f"{self.update_path}{date}", exist_ok=True)
+        daily_file = f"{self.update_path}{date}/{date_day}.txt"
+        with open(daily_file, "w", encoding="utf-8") as f:
+            f.write("\n".join(unique_nodes).replace("\n\n", "\n"))
+
+        # Split and write long-term subscriptions
+        step = max(1, len(unique_nodes) // 8 + 1)
+        for i, start in enumerate(range(0, len(unique_nodes), step), 1):
+            chunk = "\n".join(unique_nodes[start:start + step]).replace("\n\n", "\n")
+            encoded = base64.b64encode(chunk.encode()).decode()
+            with open(f"Long_term_subscription{i}", "w", encoding="utf-8") as f:
+                f.write(encoded)
+
+        # Write total long-term subscription
+        total_encoded = base64.b64encode("\n".join(unique_nodes).encode()).decode()
+        with open("Long_term_subscription_num", "w", encoding="utf-8") as f:
+            f.write(total_encoded)
+
+        # Write trial subscription
+        trial_encoded = base64.b64encode(trial_nodes.encode()).decode()
+        with open("Long_term_subscription_try", "w", encoding="utf-8") as f:
+            f.write(trial_encoded)
+
+        # Update README
+        self.update_readme(len(unique_nodes), step)
+
+        logging.info(f"Subscriptions written successfully. Total nodes: {len(unique_nodes)}")
+
+    def update_readme(self, total_nodes: int, step: int) -> None:
+        """Update README.md with subscription information."""
+        try:
+            with open("README.md", "r", encoding="utf-8") as f:
+                lines = f.readlines()
+
+            update_time = time.strftime("%Y-%m-%d %H:%M:%S")
+            for i, line in enumerate(lines):
+                if line.startswith("`https://raw.bgithub.xyz/w1770946466/Auto_proxy/main/Long_term_subscription_num`"):
+                    lines[i + 1] = f"`Total number of merge nodes: {total_nodes}`\n"
+                elif line.startswith("`https://raw.bgithub.xyz/w1770946466/Auto_proxy/main/Long_term_subscription"):
+                    if "8" in line:
+                        lines[i + 1] = f"`Total number of merge nodes: {total_nodes - step * 7}`\n"
+                    else:
+                        lines[i + 1] = f"`Total number of merge nodes: {step}`\n"
+                elif line.startswith("`https://raw.bgithub.xyz/w1770946466/Auto_proxy/main/Long_term_subscription3.yaml`"):
+                    lines[i + 4:i + 6] = [
+                        f"### Try the number of high-speed subscriptions: `{len(self.trial_subscriptions)}`\n",
+                        f"Updata: `{update_time}`\n"
+                    ]
+                elif line == ">Trial subscription：\n":
+                    lines[i:i + 2] = []
+
+            # Insert trial subscriptions
+            for i, line in enumerate(lines):
+                if line == "## ✨Star count\n":
+                    trial_lines = [f"\n>Trial subscription：\n`{sub}`\n" for sub in self.trial_subscriptions]
+                    lines[i:i] = trial_lines
+                    break
+
+            with open("README.md", "w", encoding="utf-8") as f:
+                f.write("".join(lines))
+        except Exception as e:
+            logging.error(f"Failed to update README: {e}")
+
+    def fetch_clash_subscriptions(self) -> None:
+        """Fetch and save Clash subscriptions."""
+        logging.info("Fetching Clash subscriptions.")
+        for i, url in enumerate(self.clash_subscriptions, 1):
+            try:
+                response = requests.get(url, timeout=10)
+                with open(f"Long_term_subscription{i}.yaml", "w", encoding="utf-8") as f:
+                    f.write(response.text)
+            except Exception as e:
+                logging.error(f"Failed to fetch Clash subscription {url}: {e}")
+
+def main():
+    collector = ProxyCollector()
+    logging.info("Starting proxy collection.")
+
+    logging.info("Fetching airport trial subscriptions.")
+    collector.fetch_airport_trial()
+
+    logging.info("Fetching free nodes.")
+    collector.fetch_free_nodes()
+
+    logging.info("Fetching channel subscriptions.")
+    collector.collect_channel_subscriptions()
+
+    logging.info("Writing subscriptions.")
+    collector.write_subscriptions()
+
+    logging.info("Fetching Clash subscriptions.")
+    collector.fetch_clash_subscriptions()
+
+    logging.info("Task completed.")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
