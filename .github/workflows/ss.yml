@@ -40,7 +40,7 @@ jobs:
     - name: Run collection script       
       run: python subscribe/ss.py
       env:
-        SOURCE_URLS: ${{ vars.SOURCE_URLS }}      
+        SOURCE_URLS: ${{ secrets.SOURCE_URLS }}      
 
     - name: 提交更改
       run: |                 
