@@ -37,9 +37,10 @@ jobs:
         pip install requests tqdm
         pip install python-dotenv tqdm
         
-    - name: Run collection script
-          
+    - name: Run collection script       
       run: python subscribe/ss.py
+      env:
+        SOURCE_URLS: ${{ vars.SUBSCRIPTION_SOURCE_URLS }}      
 
     - name: 提交更改
       run: |                 
