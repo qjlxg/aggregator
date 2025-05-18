@@ -1,0 +1,35 @@
+name: Fetch Telegram Links
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fetch-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Python dependencies
+        run: |
+          pip install selenium beautifulsoup4
+
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Set up ChromeDriver
+        uses: browser-actions/setup-chromedriver@latest
+
+      - name: Run the script
+        run: python fetch_telegram_links.py
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update ji.txt with latest links"
+          file_pattern: data/ji.txt
