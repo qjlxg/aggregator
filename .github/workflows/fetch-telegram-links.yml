@@ -15,9 +15,9 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Install Python dependencies
+      - name: Install dependencies
         run: |
-          pip install selenium beautifulsoup4
+          pip install selenium
 
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@latest
@@ -29,7 +29,7 @@ jobs:
           sudo chmod +x /usr/local/bin/chromedriver
           chromedriver --version
 
-      - name: Run the script
+      - name: Run script
         run: python fetch_telegram_links.py
 
       - name: Commit changes
