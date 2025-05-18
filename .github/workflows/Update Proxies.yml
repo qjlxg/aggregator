@@ -24,7 +24,7 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
     - name: Run main.py
-      run: python main.py
+      run: python ma.py
 
     - name: Commit and push if changed
       run: |
