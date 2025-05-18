@@ -27,6 +27,9 @@ jobs:
           sudo mv drivers/chromedriver /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
 
+      - name: Pull latest changes
+        run: git pull origin main --rebase
+
       - name: Run script
         run: python fetch_telegram_links.py
 
