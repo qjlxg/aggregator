@@ -16,8 +16,7 @@ jobs:
           python-version: '3.9'
 
       - name: Install dependencies
-        run: |
-          pip install selenium
+        run: pip install selenium
 
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@latest
@@ -27,7 +26,6 @@ jobs:
           unzip -j drivers/chromedriver-linux64.zip -d drivers/
           sudo mv drivers/chromedriver /usr/local/bin/chromedriver
           sudo chmod +x /usr/local/bin/chromedriver
-          chromedriver --version
 
       - name: Run script
         run: python fetch_telegram_links.py
