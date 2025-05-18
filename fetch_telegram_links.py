@@ -6,7 +6,9 @@ import os
 
 # 设置Selenium
 options = webdriver.ChromeOptions()
-options.add_argument("--headless")  # 无头模式，不显示浏览器窗口
+options.add_argument("--headless")  # 无头模式
+options.add_argument("--no-sandbox")  # CI环境需要的参数
+options.add_argument("--disable-dev-shm-usage")  # 解决资源限制问题
 driver = webdriver.Chrome(options=options)
 
 # 目标URL
