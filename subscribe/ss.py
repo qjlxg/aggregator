@@ -74,6 +74,7 @@ def process_url(url):
 # 主程序
 source_urls = [
     'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/xujw3.txt',
+    'https://github.com/mermeroo/V2RAY-CLASH-BASE64-Subscription.Links/raw/refs/heads/main/SUB%20LINKS',
     # 可添加更多源URL
 ]
 
