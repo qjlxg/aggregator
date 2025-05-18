@@ -4,8 +4,8 @@ import base64
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import os
 import threading
-import re # 新增导入
-import json # 新增导入
+import re
+import json
 
 # 请求头 (Request Headers)
 headers = {
@@ -15,7 +15,8 @@ headers = {
 
 # 配置参数 (Configuration Parameters)
 TIMEOUT = 30         # 单次请求超时时间（秒）
-OUTPUT_FILE = 'data/ss.txt' # 输出文件路径
+FINAL_OUTPUT_FILE = 'data/ss.txt' # 最终输出文件路径
+TEMP_OUTPUT_FILE = 'data/ss_temp_all_nodes.txt' # 临时存储所有节点的路径
 
 # 确定并发线程数
 cpu_cores = os.cpu_count()
@@ -49,37 +50,30 @@ def get_url_list(source_url):
 def process_url(url):
     """
     处理单个URL，获取内容。
-    成功则返回解码后的内容，失败则返回None。
+    成功则返回解码后的内容(字符串形式，可能包含多行)，失败则返回None。
     """
     try:
         resp = requests.get(url, headers=headers, timeout=TIMEOUT)
         resp.raise_for_status()
         
         text_content = resp.text
-        # 过滤掉明显无效或非节点内容
         if len(text_content.strip()) < 10 or "DOMAIN" in text_content or "port" in text_content or "proxies" in text_content:
             return None
         
         try:
-            # 尝试Base64解码
             decoded_content = base64.b64decode(text_content).decode('utf-8')
             return decoded_content
-        except base64.binascii.Error: # Base64解码错误
-            # 如果解码失败，可能是纯文本节点列表，直接返回原始文本
-            # 但要确保它不是我们之前过滤掉的那些短内容或关键词内容
+        except base64.binascii.Error:
             if len(text_content.strip()) >= 10 and not ("DOMAIN" in text_content or "port" in text_content or "proxies" in text_content):
-                 return text_content # 返回原始文本
+                 return text_content
             return None
-        except UnicodeDecodeError: # 解码后的文本非UTF-8
+        except UnicodeDecodeError:
             return None
     except requests.exceptions.Timeout:
-        # print(f"URL {url} 请求超时")
         return None
-    except requests.exceptions.RequestException as e:
-        # print(f"URL {url} 请求失败: {e}")
+    except requests.exceptions.RequestException:
         return None
     except Exception:
-        # print(f"URL {url} 处理时发生未知错误: {e}")
         return None
 
 def get_node_key(node_line):
@@ -89,16 +83,15 @@ def get_node_key(node_line):
     如果解析失败，则返回原始 node_line 作为后备。
     """
     node_line = node_line.strip()
-    original_node_for_fallback = node_line # 用于解析失败时的后备
+    original_node_for_fallback = node_line
 
     try:
         if '://' not in node_line:
-            return original_node_for_fallback # 没有协议分隔符，无法解析
+            return original_node_for_fallback
 
         protocol_part, rest = node_line.split('://', 1)
         protocol = protocol_part.lower()
 
-        # 首先移除 #fragment (节点名称/备注)
         if '#' in rest:
             rest_no_fragment, _ = rest.split('#', 1)
         else:
@@ -107,7 +100,6 @@ def get_node_key(node_line):
         if protocol == 'vmess':
             try:
                 encoded_json = rest_no_fragment
-                # 如果需要，填充base64字符串
                 missing_padding = len(encoded_json) % 4
                 if missing_padding:
                     encoded_json += '=' * (4 - missing_padding)
@@ -121,17 +113,15 @@ def get_node_key(node_line):
 
                 if uuid and server_address and port:
                     return ('vmess', uuid, server_address, port)
-            except Exception: # 捕获JSON, Base64或其他错误
-                pass # 失败则继续，使用默认键
+            except Exception:
+                pass
 
         elif protocol in ['ss', 'vless', 'hysteria2']:
-            # 类URI结构: 认证信息@主机信息?查询参数
             if '@' not in rest_no_fragment:
-                 return original_node_for_fallback # 缺少关键的 '@' 分隔符
+                 return original_node_for_fallback
 
             auth_part, host_spec_part = rest_no_fragment.split('@', 1)
 
-            # 忽略查询参数部分 (如 ?sni=...)
             if '?' in host_spec_part:
                 host_and_port_part, _ = host_spec_part.split('?', 1)
             else:
@@ -140,40 +130,36 @@ def get_node_key(node_line):
             server_host = ""
             server_port = ""
 
-            # 从后向前查找冒号以分离主机和端口 (处理IPv6地址)
             last_colon_idx = host_and_port_part.rfind(':')
             if last_colon_idx != -1:
                 potential_host = host_and_port_part[:last_colon_idx]
                 potential_port = host_and_port_part[last_colon_idx+1:]
-                if potential_port.isdigit(): # 确保冒号后面是数字端口
+                if potential_port.isdigit():
                     server_port = potential_port
                     server_host = potential_host
-                    # 处理带方括号的IPv6地址
                     if server_host.startswith('[') and server_host.endswith(']'):
                         server_host = server_host[1:-1]
-                    server_host = server_host.lower().rstrip('.') # 小写并移除末尾的点
-                else: #最后的冒号不是端口分隔符 (例如，IPv6地址本身可能包含冒号但没有端口)
+                    server_host = server_host.lower().rstrip('.')
+                else:
                     server_host = host_and_port_part.lower().rstrip('.')
-            else: # 没有冒号，假定整个部分是主机，端口缺失
+            else:
                 server_host = host_and_port_part.lower().rstrip('.')
 
-            if not server_host or not server_port: # 缺少主机或端口，无法构成有效键
+            if not server_host or not server_port:
                 return original_node_for_fallback
 
-            identifier = auth_part # 对于ss是base64串; 对于vless/hysteria2是UUID/认证串
-            if identifier: # 确保标识符存在
+            identifier = auth_part
+            if identifier:
                 return (protocol, identifier, server_host, server_port)
         
-    except ValueError: # 主要捕获 split 操作的错误
+    except ValueError:
         pass 
-    except Exception: # 捕获解析过程中的任何其他意外错误
+    except Exception:
         pass 
 
-    # 如果以上所有解析尝试都失败，返回原始节点字符串
     return original_node_for_fallback
 
-
-# 主程序
+# --- 主程序 ---
 source_urls = [
     'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/xujw3.txt',
     'https://github.com/mermeroo/V2RAY-CLASH-BASE64-Subscription.Links/raw/refs/heads/main/SUB%20LINKS',
@@ -182,71 +168,128 @@ source_urls = [
 
 print(f"开始处理URL。单个URL超时: {TIMEOUT}秒, 最大并发线程数: {MAX_WORKERS}")
 
-# 获取所有有效URL
-all_valid_urls = []
+# 获取所有有效订阅链接URL
+all_subscription_urls = []
 for source_url in source_urls:
-    valid_urls_from_source = get_url_list(source_url)
-    all_valid_urls.extend(valid_urls_from_source)
+    subscription_urls_from_source = get_url_list(source_url)
+    all_subscription_urls.extend(subscription_urls_from_source)
 
-if not all_valid_urls:
-    print("没有获取到任何有效URL，程序退出。")
+if not all_subscription_urls:
+    print("没有获取到任何有效订阅链接URL，程序退出。")
     exit()
 
-print(f"总共获取到 {len(all_valid_urls)} 个有效URL，准备处理...")
+print(f"总共获取到 {len(all_subscription_urls)} 个有效订阅链接URL，准备处理...")
 
 # 确保输出目录存在
-output_dir = os.path.dirname(OUTPUT_FILE)
-if output_dir and not os.path.exists(output_dir): # 只有在目录非空且不存在时创建
+output_dir = os.path.dirname(FINAL_OUTPUT_FILE)
+if output_dir and not os.path.exists(output_dir):
     os.makedirs(output_dir, exist_ok=True)
 
-# 用于记录唯一键的集合和锁
-unique_keys = set() # 从 unique_nodes 改为 unique_keys
-lock = threading.Lock()
+temp_output_dir = os.path.dirname(TEMP_OUTPUT_FILE)
+if temp_output_dir and not os.path.exists(temp_output_dir):
+    os.makedirs(temp_output_dir, exist_ok=True)
 
-# 处理URL并保存唯一内容
-success_count = 0
-processed_count = 0
 
-with open(OUTPUT_FILE, 'w', encoding='utf-8') as out_file:
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        future_to_url = {executor.submit(process_url, url): url for url in all_valid_urls}
-        total_tasks = len(future_to_url)
-        print(f"已提交 {total_tasks} 个任务到线程池进行处理。")
+# --- 阶段 1: 从URL收集所有节点到临时文件 ---
+print("\n--- 阶段 1: 开始收集所有节点 ---")
+all_raw_lines_collected = []
+processed_url_count = 0
+urls_yielded_content = 0
 
-        for i, future in enumerate(as_completed(future_to_url)):
-            url_processed = future_to_url[future]
-            processed_count += 1
+with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+    future_to_url = {executor.submit(process_url, url): url for url in all_subscription_urls}
+    total_tasks = len(future_to_url)
+    print(f"已提交 {total_tasks} 个订阅链接到线程池进行处理。")
+
+    for i, future in enumerate(as_completed(future_to_url)):
+        url_processed = future_to_url[future]
+        processed_url_count += 1
+        
+        try:
+            content = future.result()
+            if content:
+                urls_yielded_content += 1
+                lines = content.splitlines()
+                for line in lines:
+                    stripped_line = line.strip()
+                    if stripped_line: # 跳过空行
+                        all_raw_lines_collected.append(stripped_line)
+        except Exception as exc:
+            print(f"订阅链接 {url_processed} 在执行期间产生错误: {exc}")
+        
+        if processed_url_count % 10 == 0 or processed_url_count == total_tasks:
+            print(f"[阶段1 进度] 已处理 {processed_url_count}/{total_tasks} 个订阅链接 | 已收集 {len(all_raw_lines_collected)} 条原始节点")
+
+# 将所有收集到的原始节点写入临时文件
+with open(TEMP_OUTPUT_FILE, 'w', encoding='utf-8') as temp_file:
+    for line in all_raw_lines_collected:
+        temp_file.write(line + '\n')
+
+print(f"--- 阶段 1 完成 ---")
+print(f"总共处理了 {processed_url_count} 个订阅链接。")
+print(f"{urls_yielded_content} 个订阅链接成功返回了内容。")
+print(f"总共收集到 {len(all_raw_lines_collected)} 条原始节点数据，已保存到临时文件: {TEMP_OUTPUT_FILE}")
+
+
+# --- 阶段 2: 从临时文件读取，去重并保存到最终文件 ---
+print("\n--- 阶段 2: 开始去重并生成最终输出 ---")
+unique_keys = set()
+final_unique_nodes_written = 0
+
+if not os.path.exists(TEMP_OUTPUT_FILE):
+    print(f"错误：临时文件 {TEMP_OUTPUT_FILE} 未找到。无法进行去重。")
+    exit()
+
+try:
+    with open(TEMP_OUTPUT_FILE, 'r', encoding='utf-8') as temp_file, \
+         open(FINAL_OUTPUT_FILE, 'w', encoding='utf-8') as out_file:
+        
+        line_num = 0
+        for line_content in temp_file:
+            line_num +=1
+            node_line = line_content.strip()
+            if node_line:
+                key = get_node_key(node_line)
+                if key not in unique_keys:
+                    unique_keys.add(key)
+                    out_file.write(node_line + '\n')
+                    final_unique_nodes_written += 1
             
-            try:
-                content = future.result()
-                if content:
-                    lines = content.splitlines()
-                    for line in lines:
-                        line = line.strip()
-                        if line:  # 跳过空行
-                            key = get_node_key(line) # 为节点行生成唯一的键
-                            with lock:
-                                if key not in unique_keys: # 检查键是否已存在
-                                    unique_keys.add(key)   # 将键添加到集合中
-                                    out_file.write(line + '\n') # 写入原始的节点行
-                                    success_count += 1
-            except Exception as exc:
-                print(f"URL {url_processed} 在执行期间产生错误: {exc}")
-            
-            # 每处理10个或处理完所有任务时打印进度
-            if processed_count % 10 == 0 or processed_count == total_tasks:
-                print(f"[进度] 已处理 {processed_count}/{total_tasks} 个 | 唯一节点数 {success_count}")
+            if line_num % 500 == 0 : # 每处理500行临时文件内容打印一次进度
+                print(f"[阶段2 进度] 已处理临时文件 {line_num} 行 | 当前唯一节点数 {final_unique_nodes_written}")
 
-# 最终报告
+
+    print(f"--- 阶段 2 完成 ---")
+    print(f"成功从 {len(all_raw_lines_collected)} 条原始节点中提取并写入 {final_unique_nodes_written} 条唯一节点。")
+
+finally:
+    # 清理临时文件
+    if os.path.exists(TEMP_OUTPUT_FILE):
+        try:
+            os.remove(TEMP_OUTPUT_FILE)
+            print(f"临时文件 {TEMP_OUTPUT_FILE} 已成功删除。")
+        except OSError as e:
+            print(f"删除临时文件 {TEMP_OUTPUT_FILE} 失败: {e}")
+
+
+# --- 最终报告 ---
 print("\n" + "=" * 50)
 print(f"最终结果：")
-print(f"尝试处理URL总数：{len(all_valid_urls)}")
-print(f"实际完成处理数：{processed_count}")
-print(f"成功写入的唯一节点数：{success_count}")
-if processed_count > 0:
-    # 避免除以零错误
-    valid_content_rate = (success_count / processed_count * 100) if processed_count > 0 else 0
-    print(f"有效内容率（基于完成任务）：{valid_content_rate:.1f}%")
+print(f"尝试处理订阅链接总数：{len(all_subscription_urls)}")
+print(f"实际完成处理的订阅链接数：{processed_url_count}")
+print(f"返回内容的订阅链接数：{urls_yielded_content}")
+print(f"收集到的原始节点总数（去重前）：{len(all_raw_lines_collected)}")
+print(f"成功写入的唯一节点数（去重后）：{final_unique_nodes_written}")
+
+if len(all_raw_lines_collected) > 0:
+    deduplication_rate = (1 - (final_unique_nodes_written / len(all_raw_lines_collected))) * 100 if len(all_raw_lines_collected) > 0 else 0
+    print(f"节点去重率：{deduplication_rate:.1f}%")
 else:
-    print("没有处理任何URL。")
-print(f"结果文件已保存至：{OUTPUT_FILE}")
+    print("没有收集到任何原始节点数据。")
+
+if processed_url_count > 0 and urls_yielded_content > 0 : # 避免除以零
+    unique_node_yield_rate = (final_unique_nodes_written / urls_yielded_content) if urls_yielded_content > 0 else 0 # 平均每个有效源产出多少唯一节点
+    # print(f"平均每个有效源产出唯一节点数: {unique_node_yield_rate:.1f}") # 这项指标意义可能不大
+    pass
+
+print(f"最终结果文件已保存至：{FINAL_OUTPUT_FILE}")
