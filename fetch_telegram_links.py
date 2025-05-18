@@ -1,8 +1,5 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
 import time
 import re
 
@@ -34,19 +31,10 @@ all_links = []
 for url in channel_urls:
     print(f"正在抓取频道: {url}")
     driver.get(url)
-    time.sleep(5)  # 初始加载
+    time.sleep(5)  # 等待页面加载
 
-    # 等待消息元素出现
-    try:
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "message"))
-        )
-    except:
-        print(f"警告: {url} 未加载消息，可能为私有频道或无内容")
-        continue
-
-    # 增加滚动次数以加载更多消息
-    for _ in range(10):  # 从 5 次增加到 10 次
+    # 滚动加载更多消息
+    for _ in range(5):
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(2)
 
