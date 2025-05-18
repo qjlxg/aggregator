@@ -4,7 +4,7 @@ from base64 import b64encode
 import string
 
 def fetch_proxies_from_url(url):
-    "https://github.com/0x24a/FreeNodes/raw/refs/heads/main/subs/main.txt"
+    "https://github.com/0x24a/FreeNodes/raw/refs/heads/main/subs/main.txt",
     从单个网址获取代理列表。
     假设代理数据是文本格式，每行一个代理。
     """
