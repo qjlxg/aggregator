@@ -13,7 +13,7 @@ options.add_argument("--disable-dev-shm-usage")  # 避免共享内存问题
 driver = webdriver.Chrome(options=options)
 
 # 导航到 Telegram 页面（替换为实际的目标 URL）
-driver.get("https://t.me/V2ray_Click")  # 请替换为您的目标 Telegram 频道或群组 URL
+driver.get("https://t.me/s/V2ray_Click")  # 请替换为您的目标 Telegram 频道或群组 URL
 driver.implicitly_wait(10)  # 等待页面加载，视情况调整时间
 
 # 定义提取链接的函数
