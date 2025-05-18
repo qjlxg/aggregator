@@ -34,7 +34,7 @@ jobs:
       env:
         ALL_CLASH_DATA_API: ${{ secrets.CLASH_API }}
         GIST_PAT: ${{ secrets.GIST_PAT }}
-      run: python -u subscribe/collect.py -s
+      run: python -u subscribe/collect.py 
 
     - name: Check script execution
       run: |
