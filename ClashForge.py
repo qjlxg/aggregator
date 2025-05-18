@@ -96,6 +96,7 @@ def parse_hysteria2_link(link):
         obfs_param = params.get('obfs-param', [''])[0]
         protocol = params.get('protocol', ['udp'])[0]
         up = params.get('up', [''])[0]
+        # Corrected syntax error here: 'down': down if down else None
         down = params.get('down', [''])[0]
         alpn = params.get('alpn', [''])[0]
         fast_open = params.get('fast-open', ['false'])[0].lower() == 'true'
@@ -112,7 +113,7 @@ def parse_hysteria2_link(link):
             'obfs-param': obfs_param if obfs_param else None,
             'protocol': protocol,
             'up': up if up else None,
-            'down': down if down if down else None,
+            'down': down if down else None, # Corrected line
             'alpn': [a.strip() for a in alpn.split(',')] if alpn else None,
             'fast-open': fast_open,
             'mptcp': mptcp,
