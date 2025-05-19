@@ -292,7 +292,7 @@ if __name__ == "__main__":
        # 'https://raw.bgithub.xyz/qjlxg/aggregator/refs/heads/main/all_clash.txt',
         #'https://raw.bgithub.xyz/qjlxg/aggregator/refs/heads/main/base.txt',
         #'https://raw.bgithub.xyz/qjlxg/aggregator/refs/heads/main/Long_term_subscription_num',
-        'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/clash.yaml',
+        'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/config.yaml',
         #'https://raw.bgithub.xyz/qjlxg/cheemsar/refs/heads/main/Long_term_subscription_num',
         #'https://raw.bgithub.xyz/qjlxg/cheemsar-2/refs/heads/main/Long_term_subscription_num',
         #'https://github.com/qjlxg/collectSub/raw/refs/heads/main/all_nodes.txt',
