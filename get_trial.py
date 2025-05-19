@@ -1,12 +1,10 @@
+
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
 from datetime import timedelta
 from random import choice, randint
 from time import time
 from urllib.parse import urlsplit, urlunsplit
-import requests
-from urllib3.util.retry import Retry
-from requests.adapters import HTTPAdapter
 
 from apis import PanelSession, TempEmail, guess_panel, panel_class_map
 from subconverter import gen_base64_and_clash_config, get
@@ -14,37 +12,26 @@ from utils import (clear_files, g0, keep, list_file_paths, list_folder_paths,
                    rand_id, read, read_cfg, remove, size2str, str2timestamp,
                    timestamp2str, to_zero, write, write_cfg)
 
-MAX_WORKERS = 8
-MAX_TASK_TIMEOUT = 38  # 单任务最大等待时间（秒）
+MAX_WORKERS = 16
+MAX_TASK_TIMEOUT = 45  # 单任务最大等待时间（秒）
 
-# 创建带重试机制的会话
-def create_session():
-    session = requests.Session()
-    session.verify = False  # 禁用 SSL 验证（注意：降低安全性，仅用于调试）
-    retries = Retry(total=3, backoff_factor=1, status_forcelist=[500, 502, 503, 504])
-    session.mount("http://", HTTPAdapter(max_retries=retries))
-    session.mount("https://", HTTPAdapter(max_retries=retries))
-    return session
-
-# 获取订阅信息
 def get_sub(session: PanelSession, opt: dict, cache: dict[str, list[str]]):
     url = cache['sub_url'][0]
     suffix = ' - ' + g0(cache, 'name')
     if 'speed_limit' in opt:
         suffix += ' ⚠️限速 ' + opt['speed_limit']
     try:
-        info, *rest = get(url, suffix, timeout=60)  # 增加超时时间
+        info, *rest = get(url, suffix)
     except Exception:
         origin = urlsplit(session.origin)[:2]
         url = '|'.join(urlunsplit(origin + urlsplit(part)[2:]) for part in url.split('|'))
-        info, *rest = get(url, suffix, timeout=60)
+        info, *rest = get(url, suffix)
         cache['sub_url'][0] = url
     if not info and hasattr(session, 'get_sub_info'):
         session.login(cache['email'][0])
         info = session.get_sub_info()
     return info, *rest
 
-# 判断是否需要更新订阅
 def should_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]]):
     if 'sub_url' not in cache:
         return 1,
@@ -67,21 +54,16 @@ def should_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]]):
         or (opt.get('expire') != 'never' and info.get('expire') and str2timestamp(info.get('expire')) - now < ((now - str2timestamp(cache['time'][0])) / 7 if 'reg_limit' in opt else 2400))
     ), info, *rest
 
-# 注册逻辑
 def _register(session: PanelSession, email, *args, **kwargs):
     try:
-        response = session.register(email, *args, **kwargs)
-        if response is None:
-            raise Exception("No response received from registration API")
-        return response
+        return session.register(email, *args, **kwargs)
     except Exception as e:
         raise Exception(f'注册失败({email}): {e}')
 
-# 获取邮箱和验证码
 def _get_email_and_email_code(kwargs, session: PanelSession, opt: dict, cache: dict[str, list[str]]):
     retry = 0
     while retry < 5:
-        tm = TempEmail(banned_domains=cache.get('banned_domains', []))
+        tm = TempEmail(banned_domains=cache.get('banned_domains'))
         try:
             email = kwargs['email'] = tm.email
         except Exception as e:
@@ -104,7 +86,6 @@ def _get_email_and_email_code(kwargs, session: PanelSession, opt: dict, cache: d
         return email
     raise Exception('获取邮箱验证码失败，重试次数过多')
 
-# 注册并处理邀请码
 def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list) -> bool:
     kwargs = keep(opt, 'name_eq_email', 'reg_fmt', 'aff')
 
@@ -192,11 +173,9 @@ def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log:
         raise Exception(f'注册失败({email}): {msg}{" " + kwargs.get("invite_code") if "邀" in msg else ""}')
     return True
 
-# 检查是否需要签到
 def is_checkin(session, opt: dict):
     return hasattr(session, 'checkin') and opt.get('checkin') != 'F'
 
-# 尝试签到
 def try_checkin(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list):
     if is_checkin(session, opt) and cache.get('email'):
         if len(cache['last_checkin']) < len(cache['email']):
@@ -215,16 +194,7 @@ def try_checkin(session: PanelSession, opt: dict, cache: dict[str, list[str]], l
     else:
         cache.pop('last_checkin', None)
 
-# 尝试购买
 def try_buy(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list):
-    if not hasattr(session, 'is_logged_in') or not session.is_logged_in():  # 检查会话状态
-        session.login(cache['email'][0])
-    
-    balance = session.get_balance()
-    plan_cost = opt.get('plan_cost', 0)  # 假设有计划成本
-    if balance < plan_cost:
-        raise Exception(f"余额不足: {balance} < {plan_cost}")
-    
     try:
         if (plan := opt.get('buy')):
             return session.buy(plan)
@@ -245,7 +215,6 @@ def try_buy(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: 
         log.append(f'购买失败({session.host}): {e}')
     return False
 
-# 执行订阅更新
 def do_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list, force_reg=False) -> bool:
     is_new_reg = False
     login_and_buy_ok = False
@@ -285,7 +254,6 @@ def do_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: 
     cache['time'] = [timestamp2str(time())]
     log.append(f'{"更新订阅链接(新注册)" if is_new_reg else "续费续签"}({session.host}) {cache["sub_url"][0]}')
 
-# 尝试更新订阅
 def try_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list):
     cache.pop('更新旧订阅失败', None)
     cache.pop('更新订阅链接/续费续签失败', None)
@@ -313,10 +281,9 @@ def try_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]], log:
 
     return sub
 
-# 缓存订阅信息
 def cache_sub_info(info, opt: dict, cache: dict[str, list[str]]):
-    if not info or not isinstance(info, dict):
-        raise ValueError("无效的订阅信息")
+    if not info:
+        raise Exception('no sub info')
     used = float(info["upload"]) + float(info["download"])
     total = float(info["total"])
     rest = '(剩余 ' + size2str(total - used)
@@ -329,12 +296,7 @@ def cache_sub_info(info, opt: dict, cache: dict[str, list[str]]):
     rest += ')'
     cache['sub_info'] = [size2str(used), size2str(total), expire, rest]
 
-# 保存 base64 和 Clash 配置
 def save_sub_base64_and_clash(base64, clash, host, opt: dict):
-    if not base64 or not isinstance(base64, str):
-        raise ValueError("无效的 base64 订阅数据")
-    if not clash or not isinstance(clash, dict):
-        raise ValueError("无效的 Clash 配置数据")
     return gen_base64_and_clash_config(
         base64_path=f'trials/{host}',
         clash_path=f'trials/{host}.yaml',
@@ -344,7 +306,6 @@ def save_sub_base64_and_clash(base64, clash, host, opt: dict):
         exclude=opt.get('exclude')
     )
 
-# 保存订阅
 def save_sub(info, base64, clash, base64_url, clash_url, host, opt: dict, cache: dict[str, list[str]], log: list):
     cache.pop('保存订阅信息失败', None)
     cache.pop('保存base64/clash订阅失败', None)
@@ -363,7 +324,6 @@ def save_sub(info, base64, clash, base64_url, clash_url, host, opt: dict, cache:
         cache['保存base64/clash订阅失败'] = [e]
         log.append(f'保存base64/clash订阅失败({host})({base64_url})({clash_url}): {e}')
 
-# 获取并保存订阅
 def get_and_save(session: PanelSession, host, opt: dict, cache: dict[str, list[str]], log: list):
     try:
         try_checkin(session, opt, cache, log)
@@ -373,7 +333,6 @@ def get_and_save(session: PanelSession, host, opt: dict, cache: dict[str, list[s
     except Exception as e:
         log.append(f"{host} get_and_save 异常: {e}")
 
-# 创建新的 PanelSession
 def new_panel_session(host, cache: dict[str, list[str]], log: list) -> PanelSession | None:
     try:
         if 'type' not in cache:
@@ -385,14 +344,11 @@ def new_panel_session(host, cache: dict[str, list[str]], log: list) -> PanelSess
                     log.append(f"{host} 未知类型")
                 return None
             cache.update(info)
-        session = panel_class_map[g0(cache, 'type')](g0(cache, 'api_host', host), **keep(cache, 'auth_path', getitem=g0))
-        session.session = create_session()  # 使用带重试的会话
-        return session
+        return panel_class_map[g0(cache, 'type')](g0(cache, 'api_host', host), **keep(cache, 'auth_path', getitem=g0))
     except Exception as e:
         log.append(f"{host} new_panel_session 异常: {e}")
         return None
 
-# 获取试用订阅
 def get_trial(host, opt: dict, cache: dict[str, list[str]]):
     log = []
     try:
@@ -405,7 +361,6 @@ def get_trial(host, opt: dict, cache: dict[str, list[str]]):
         log.append(f"{host} 处理异常: {e}")
     return log
 
-# 构建选项
 def build_options(cfg):
     opt = {
         host: dict(zip(opt[::2], opt[1::2]))
