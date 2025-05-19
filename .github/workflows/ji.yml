@@ -1,0 +1,41 @@
+name: jichang_list
+
+on:
+  workflow_dispatch: # 允许手动触发
+  schedule:
+    - cron: '0 3 * * *' # 每天凌晨3点 (UTC) 运行
+
+jobs:
+  update-trial-cfg:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4 # 使用较新版本的 checkout action
+
+      - name: 设置 Python 环境
+        uses: actions/setup-python@v5 # 使用较新版本的 setup-python action
+        with:
+          python-version: '3.9' # 您可以根据需要调整 Python 版本
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 # 安装 Python 脚本所需的依赖
+
+      - name: 运行 Python 脚本
+        run: |
+          python ji.py # 运行您的脚本
+
+      - name: Commit and push changes (only if necessary)
+        if: ${{ always() }}  # Always run this step, even on failure
+        run: |
+         git config --global user.email "actions@github.com"
+         git config --global user.name "GitHub Actions"
+         git stash push -m "local changes"
+         git pull origin main
+         git stash pop
+         git add ji.txt
+         if [[ -n $(git status -s ji.txt) ]]; then
+         git commit -m "Update ji.txt"
+         git push origin main
+         fi
