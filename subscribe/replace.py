@@ -288,14 +288,8 @@ def main(urls):
 
 if __name__ == "__main__":
     urls = [
-        'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.txt',
-       # 'https://raw.bgithub.xyz/qjlxg/aggregator/refs/heads/main/all_clash.txt',
-        #'https://raw.bgithub.xyz/qjlxg/aggregator/refs/heads/main/base.txt',
-        #'https://raw.bgithub.xyz/qjlxg/aggregator/refs/heads/main/Long_term_subscription_num',
+        'https://github.com/qjlxg/aggregator/raw/refs/heads/main/ss.txt',
         'https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/config.yaml',
-        #'https://raw.bgithub.xyz/qjlxg/cheemsar/refs/heads/main/Long_term_subscription_num',
-        #'https://raw.bgithub.xyz/qjlxg/cheemsar-2/refs/heads/main/Long_term_subscription_num',
-        #'https://github.com/qjlxg/collectSub/raw/refs/heads/main/all_nodes.txt',
-        'https://github.com/qjlxg/hy2/raw/refs/heads/main/configtg.txt',
+        'https://raw.githubusercontent.com/qjlxg/hy2/refs/heads/main/configtg.txt',
     ]
     main(urls)
