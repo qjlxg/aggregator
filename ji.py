@@ -34,7 +34,7 @@ def is_valid_hostname(hostname):
 def is_valid_url(url):
     """Validate the URL by checking its structure and hostname."""
     # Keep the t.me exclusion as we are scraping from t.me and don't want internal links
-    invalid_prefixes = (''https://t.me', 'http://t.me', 't.me')
+    invalid_prefixes = ('https://t.me', 'http://t.me', 't.me')
     parsed = urlparse(url)
     # Require scheme and network location
     if not parsed.scheme or not parsed.netloc:
@@ -123,7 +123,7 @@ def get_next_page_url(html):
     load_more = soup.find('a', class_='tme_messages_more')
     if load_more and load_more.has_attr('href'):
         # Telegram relative paths need to be joined with the base domain
-        return ''https://t.me' + load_more['href']
+        return 'https://t.me' + load_more['href']
     return None
 
 def fetch_page(url, timeout=15, max_retries=3):
@@ -275,13 +275,12 @@ if __name__ == '__main__':
 'https://t.me/s/mrjdfx',
 'https://t.me/s/QrV2ray',
 'https://t.me/s/V2ray_v2ray_v2ray',
-
         # Add other source URLs here if needed
     ]
 
     # Maximum number of pages to crawl per source URL
     # 90 pages was in the original; keeping it but making it adjustable
-    max_pages_to_crawl_per_source = 15
+    max_pages_to_crawl_per_source = 90
 
     # Number of worker threads for concurrent connectivity testing
     concurrent_workers = 20 # Increased from 15 for potentially faster testing
