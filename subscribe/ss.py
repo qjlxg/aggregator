@@ -16,7 +16,7 @@ headers = {
 
 # 配置参数 (Configuration Parameters)
 TIMEOUT = 30         # 单次请求超时时间（秒）
-FINAL_OUTPUT_FILE = 'data/ss.txt' # 最终输出文件路径
+FINAL_OUTPUT_FILE = 'ss.txt' # 最终输出文件路径
 TEMP_OUTPUT_FILE = 'data/ss_temp_all_nodes.txt' # 临时存储所有节点的路径
 
 # 确定并发线程数
