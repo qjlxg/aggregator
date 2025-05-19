@@ -15,15 +15,18 @@ import base64 # 用于处理 GitHub API 的文件内容
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # --- 需要从环境变量读取的配置项 ---
-# GITHUB_REPO_OWNER: GitHub 仓库拥有者 (例如: qjlxg)
-# GITHUB_REPO_NAME: GitHub 仓库名称 (例如: 362)
-# GITHUB_BRANCH: GitHub 仓库分支 (例如: main)
-# GITHUB_CONFIG_PATH: 配置文件的路径 (例如: data/config.txt)
-# GITHUB_SUBSCRIBES_PATH: 结果文件的路径 (例如: data/subscribes.txt)
+# 以下是脚本将尝试读取的环境变量名称。
+# 请在 GitHub Actions Secrets 中创建同名密钥。
+#
+# REPO_OWNER: GitHub 仓库拥有者 (例如: qjlxg)
+# REPO_NAME: GitHub 仓库名称 (例如: 362)
+# GIT_BRANCH: GitHub 仓库分支 (例如: main)
+# CONFIG_PATH: 配置文件的路径 (例如: data/config.txt)
+# SUBSCRIBES_PATH: 结果文件的路径 (例如: data/subscribes.txt)
 # BOT: GitHub Personal Access Token (需要 repo 权限)
 # ---
 
-GITHUB_API_URL = "https://api.github.com"
+GITHUB_API_URL = "https://api.github.com" # GitHub API 的固定地址
 
 # User-Agent 池
 USER_AGENTS = [
@@ -39,21 +42,36 @@ USER_AGENTS = [
 def get_required_env_vars():
     """从环境变量获取所有必需的 GitHub 配置信息和令牌。"""
     config = {}
+    # 脚本现在读取这些不以 GITHUB_ 开头的环境变量
     required_vars = [
-        'GITHUB_REPO_OWNER',
-        'GITHUB_REPO_NAME',
-        'GITHUB_BRANCH',
-        'GITHUB_CONFIG_PATH',
-        'GITHUB_SUBSCRIBES_PATH',
-        'BOT' # 令牌
+        'REPO_OWNER',
+        'REPO_NAME',
+        'GIT_BRANCH', # 使用 GIT_BRANCH 避免冲突
+        'CONFIG_PATH',
+        'SUBSCRIBES_PATH',
+        'BOT' # 令牌名称不变
     ]
     for var_name in required_vars:
         value = os.getenv(var_name)
         if not value:
             logging.error(f"缺少必需的环境变量: {var_name}")
-            return None
-        config[var_name] = value
+            # 注意：BOT 令牌是最后一个，如果 BOT 缺失，错误信息会显示 BOT
+            # 对于其他变量，可以直接在这里返回 None
+            if var_name != 'BOT':
+                 return None
+            # 如果是 BOT 缺失，继续检查其他变量，最后返回 None
+            else:
+                config[var_name] = None # 先标记为 None
+        else:
+             config[var_name] = value
+
+    # 再次检查 BOT 是否成功获取
+    if config.get('BOT') is None:
+         # 错误已经在循环中记录
+         return None
+
     return config
+
 
 def fetch_github_file_content(token, repo_owner, repo_name, file_path, branch):
     """从 GitHub 仓库获取文件内容和 SHA。"""
@@ -70,12 +88,15 @@ def fetch_github_file_content(token, repo_owner, repo_name, file_path, branch):
         return content, sha
     except requests.exceptions.RequestException as e:
         # 特殊处理 404 Not Found 错误，结果文件首次运行可能不存在
-        if response.status_code == 404:
+        if response.response is not None and response.response.status_code == 404:
              logging.info(f"文件 {file_path} 未找到 (404)。这对于结果文件可能是正常的。")
         else:
              logging.error(f"从 GitHub 获取文件 {file_path} 失败: {e}")
              try: # 尝试打印响应体以获取更多非 404 错误的细节
-                 logging.error(f"响应体: {response.json()}")
+                 if response.response is not None:
+                    logging.error(f"响应体: {response.response.json()}")
+                 else:
+                    logging.error("无法获取响应体。")
              except:
                  pass # 忽略无法解析响应体的情况
         return None, None
@@ -112,8 +133,11 @@ def update_github_file_content(token, repo_owner, repo_name, file_path, new_cont
         logging.error(f"在 GitHub 上更新文件 {file_path} 失败: {e}")
         try:
             # 尝试打印 GitHub API 错误细节 (如果可用)
-            error_details = response.json()
-            logging.error(f"GitHub API 错误细节: {error_details}")
+            if response.response is not None:
+                error_details = response.response.json()
+                logging.error(f"GitHub API 错误细节: {error_details}")
+            else:
+                logging.error("无法获取响应体。")
         except:
             pass # 忽略无法解析错误细节的情况
         return False
@@ -261,11 +285,12 @@ def main(max_pages_per_source=90, max_workers=20):
         return # 没有配置信息，无法继续
 
     github_token = config['BOT']
-    repo_owner = config['GITHUB_REPO_OWNER']
-    repo_name = config['GITHUB_REPO_NAME']
-    branch = config['GITHUB_BRANCH']
-    config_path = config['GITHUB_CONFIG_PATH']
-    subscribes_path = config['GITHUB_SUBSCRIBES_PATH']
+    # 从 config 字典中获取新的变量名对应的值
+    repo_owner = config['REPO_OWNER']
+    repo_name = config['REPO_NAME']
+    branch = config['GIT_BRANCH']
+    config_path = config['CONFIG_PATH']
+    subscribes_path = config['SUBSCRIBES_PATH']
 
 
     # 2. 从 GitHub Config 读取起始 URL 和查找模式
@@ -286,9 +311,11 @@ def main(max_pages_per_source=90, max_workers=20):
         if not stripped_line or stripped_line.startswith('#'):
             continue # 跳过空行和注释
 
-        if stripped_line.startswith('pattern='):
+        # 检查是否是模式行
+        pattern_prefix = 'pattern='
+        if stripped_line.startswith(pattern_prefix):
             # 提取模式
-            pattern = stripped_line[len('pattern='):].strip()
+            pattern = stripped_line[len(pattern_prefix):].strip()
             if pattern:
                 token_patterns_list.append(pattern)
                 logging.debug(f"找到查找模式: {pattern}")
@@ -362,6 +389,7 @@ def main(max_pages_per_source=90, max_workers=20):
     else:
         logging.info("开始并发 URL 连通性测试...")
         valid_specific_urls = set() # 使用 set 方便直接添加和去重
+        # 使用 ThreadPoolExecutor 进行并发测试
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             # 使用 as_completed 以便结果一完成就处理
             future_to_url = {executor.submit(test_url_connectivity, url): url for url in urls_to_test}
@@ -411,13 +439,13 @@ def main(max_pages_per_source=90, max_workers=20):
 
     logging.info(f"合并去重后的 URL 总数: {len(combined_urls)}")
     # 仅在成功读取现有文件时计算“新增”数量
-    if existing_subscribes_content:
+    if existing_subscribes_content is not None: # 判断是否成功读取了现有文件 (即使为空内容)
          newly_added_count = len(valid_specific_urls) - len(valid_specific_urls.intersection(existing_urls))
          logging.info(f"本次运行新添加的有效 URL 数 (去重后): {newly_added_count}")
          commit_message = f"更新订阅列表 - 新增 {newly_added_count} 个唯一 URL"
     else:
-         # 第一次创建文件
-         newly_added_count = len(combined_urls) # 第一次创建，所有都是新增的
+         # 第一次创建文件的情况
+         newly_added_count = len(combined_urls)
          logging.info(f"本次运行新添加的有效 URL 数 (首次保存): {newly_added_count}")
          commit_message = f"首次创建订阅列表 - 共 {newly_added_count} 个 URL"
 
@@ -446,4 +474,4 @@ if __name__ == '__main__':
     max_pages_to_crawl_per_source = 90 # 每个源最多爬取的页面数
     concurrent_workers = 20 # 并发连通性测试的线程数
 
-    main(max_pages_to_crawl_per_source, concurrent_workers)
+    main(max_pages_per_source, concurrent_workers)
