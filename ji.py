@@ -34,7 +34,7 @@ def is_valid_hostname(hostname):
 def is_valid_url(url):
     """Validate the URL by checking its structure and hostname."""
     # Keep the t.me exclusion as we are scraping from t.me and don't want internal links
-    invalid_prefixes = ('https://t.me', 'http://t.me', 't.me')
+    invalid_prefixes = (''https://t.me', 'http://t.me', 't.me')
     parsed = urlparse(url)
     # Require scheme and network location
     if not parsed.scheme or not parsed.netloc:
@@ -123,7 +123,7 @@ def get_next_page_url(html):
     load_more = soup.find('a', class_='tme_messages_more')
     if load_more and load_more.has_attr('href'):
         # Telegram relative paths need to be joined with the base domain
-        return 'https://t.me' + load_more['href']
+        return ''https://t.me' + load_more['href']
     return None
 
 def fetch_page(url, timeout=15, max_retries=3):
@@ -240,9 +240,42 @@ def main(start_urls, max_pages_per_source=90, max_workers=10):
 if __name__ == '__main__':
     # List of Telegram channel archive URLs to scrape
     start_urls_list = [
-        'https://t.me/s/vpn_3000',
-        'https://t.me/s/ccbaohe',
-        'https://t.me/s/wangcai_8',
+'https://t.me/s/ccbaohe',
+'https://t.me/s/wangcai_8',
+'https://t.me/s/vpn_3000',
+'https://t.me/s/V2ray_Click',
+'https://t.me/s/academi_vpn',
+'https://t.me/s/dingyue_center',
+'https://t.me/s/freedatazone1',
+'https://t.me/s/freev2rayi',
+'https://t.me/s/mypremium98',
+'https://t.me/s/inikotesla',
+'https://t.me/s/v2rayngalpha',
+'https://t.me/s/v2rayngalphagamer',
+'https://t.me/s/jiedian_share',
+'https://t.me/s/vpn_mafia',
+'https://t.me/s/dr_v2ray',
+'https://t.me/s/allv2board',
+'https://t.me/s/bigsmoke_config',
+'https://t.me/s/vpn_443',
+'https://t.me/s/prossh',
+'https://t.me/s/mftizi',
+'https://t.me/s/qun521',
+'https://t.me/s/v2rayng_my2',
+'https://t.me/s/go4sharing',
+'https://t.me/s/trand_farsi',
+'https://t.me/s/vpnplusee_free',
+'https://t.me/s/freekankan',
+'https://t.me/s/awxdy666',
+'https://t.me/s/freeVPNjd',
+'https://t.me/s/hkaa0',
+'https://t.me/s/ccbaohe',
+'https://t.me/s/MxlShare',
+'https://t.me/hack_proxy',
+'https://t.me/s/mrjdfx',
+'https://t.me/s/QrV2ray',
+'https://t.me/s/V2ray_v2ray_v2ray',
+
         # Add other source URLs here if needed
     ]
 
