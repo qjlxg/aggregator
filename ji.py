@@ -1,4 +1,4 @@
-# ji.txt generation script
+# GitHub 同步订阅链接脚本 (ji_github_sync.py)
 
 import requests
 from bs4 import BeautifulSoup
@@ -7,23 +7,124 @@ import time
 import random
 import logging
 import os
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import urlparse
+import base64 # 用于处理 GitHub API 的文件内容
 
-# Configure logging
+# 配置日志输出为中文
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# User-Agent pool
+# --- 需要从环境变量读取的配置项 ---
+# GITHUB_REPO_OWNER: GitHub 仓库拥有者 (例如: qjlxg)
+# GITHUB_REPO_NAME: GitHub 仓库名称 (例如: 362)
+# GITHUB_BRANCH: GitHub 仓库分支 (例如: main)
+# GITHUB_CONFIG_PATH: 配置文件的路径 (例如: data/config.txt)
+# GITHUB_SUBSCRIBES_PATH: 结果文件的路径 (例如: data/subscribes.txt)
+# BOT: GitHub Personal Access Token (需要 repo 权限)
+# ---
+
+GITHUB_API_URL = "https://api.github.com"
+
+# User-Agent 池
 USER_AGENTS = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15',
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-    'Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1'
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version=14.0 Mobile/15E148 Safari/604.1'
 ]
 
+# --- GitHub API 辅助函数 ---
+
+def get_required_env_vars():
+    """从环境变量获取所有必需的 GitHub 配置信息和令牌。"""
+    config = {}
+    required_vars = [
+        'GITHUB_REPO_OWNER',
+        'GITHUB_REPO_NAME',
+        'GITHUB_BRANCH',
+        'GITHUB_CONFIG_PATH',
+        'GITHUB_SUBSCRIBES_PATH',
+        'BOT' # 令牌
+    ]
+    for var_name in required_vars:
+        value = os.getenv(var_name)
+        if not value:
+            logging.error(f"缺少必需的环境变量: {var_name}")
+            return None
+        config[var_name] = value
+    return config
+
+def fetch_github_file_content(token, repo_owner, repo_name, file_path, branch):
+    """从 GitHub 仓库获取文件内容和 SHA。"""
+    url = f"{GITHUB_API_URL}/repos/{repo_owner}/{repo_name}/contents/{file_path}?ref={branch}"
+    headers = {"Authorization": f"token {token}"}
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status() # 如果状态码不是 2xx，则抛出异常
+        data = response.json()
+        # 文件内容在 'content' 字段中是 Base64 编码的
+        content = base64.b64decode(data['content']).decode('utf-8')
+        sha = data['sha'] # 更新文件需要 SHA
+        logging.info(f"成功获取文件内容: {file_path}")
+        return content, sha
+    except requests.exceptions.RequestException as e:
+        # 特殊处理 404 Not Found 错误，结果文件首次运行可能不存在
+        if response.status_code == 404:
+             logging.info(f"文件 {file_path} 未找到 (404)。这对于结果文件可能是正常的。")
+        else:
+             logging.error(f"从 GitHub 获取文件 {file_path} 失败: {e}")
+             try: # 尝试打印响应体以获取更多非 404 错误的细节
+                 logging.error(f"响应体: {response.json()}")
+             except:
+                 pass # 忽略无法解析响应体的情况
+        return None, None
+    except Exception as e:
+        logging.error(f"处理 GitHub 文件获取响应时发生错误: {e}")
+        return None, None
+
+def update_github_file_content(token, repo_owner, repo_name, file_path, new_content, sha, branch, commit_message):
+    """在 GitHub 仓库中更新或创建文件内容。"""
+    url = f"{GITHUB_API_URL}/repos/{repo_owner}/{repo_name}/contents/{file_path}"
+    headers = {
+        "Authorization": f"token {token}",
+        "Content-Type": "application/json"
+    }
+    # 新内容必须是 Base64 编码的
+    encoded_content = base64.b64encode(new_content.encode('utf-8')).decode('utf-8')
+
+    payload = {
+        "message": commit_message,
+        "content": encoded_content,
+        "branch": branch,
+        # 仅在更新现有文件时包含 SHA
+    }
+    if sha:
+        payload["sha"] = sha
+    # 注意: 如果 SHA 是 None，API 调用将尝试创建文件。
+
+    try:
+        response = requests.put(url, headers=headers, json=payload)
+        response.raise_for_status() # 如果状态码不是 2xx，则抛出异常
+        logging.info(f"成功在 GitHub 上更新文件: {file_path}")
+        return True
+    except requests.exceptions.RequestException as e:
+        logging.error(f"在 GitHub 上更新文件 {file_path} 失败: {e}")
+        try:
+            # 尝试打印 GitHub API 错误细节 (如果可用)
+            error_details = response.json()
+            logging.error(f"GitHub API 错误细节: {error_details}")
+        except:
+            pass # 忽略无法解析错误细节的情况
+        return False
+    except Exception as e:
+        logging.error(f"在 GitHub 文件更新期间发生错误: {e}")
+        return False
+
+# --- 现有爬取和验证函数 (翻译了注释和日志，并修改为接受模式列表) ---
+
 def is_valid_hostname(hostname):
-    """Check if the hostname is valid according to domain name rules."""
+    """根据域名规则检查主机名是否有效。"""
     if not hostname or len(hostname) > 255:
         return False
     if hostname[-1] == ".":
@@ -32,38 +133,36 @@ def is_valid_hostname(hostname):
     return all(allowed.match(label) for label in hostname.split("."))
 
 def is_valid_url(url):
-    """Validate the URL by checking its structure and hostname."""
-    # Keep the t.me exclusion as we are scraping from t.me and don't want internal links
-    invalid_prefixes = ('https://t.me', 'http://t.me', 't.me')
+    """通过检查结构和主机名验证 URL。"""
+    # 排除 t.me 链接本身，因为我们从 t.me 爬取但不想要内部链接
     parsed = urlparse(url)
-    # Require scheme and network location
+    # 需要协议和网络位置
     if not parsed.scheme or not parsed.netloc:
         return False
-    # Only http/https schemes
+    # 只接受 http/https 协议
     if parsed.scheme not in ('http', 'https'):
         return False
-    # Check for valid hostname structure
+    # 检查有效的主机名结构
     if not is_valid_hostname(parsed.netloc):
         return False
-    # Exclude t.me links themselves
-    if any(url.startswith(prefix) for prefix in invalid_prefixes):
-        # Allow the base t.me page itself, but not internal links starting with t.me
-        # However, for our specific token pattern search, we mainly expect external links.
-        # The main fetcher starts with t.me/s/... which is handled.
-        # This check primarily prevents extracting links *within* t.me that aren't full URLs.
-        # Let's refine this: if the netloc IS 't.me', it's likely an internal link we don't want for tokens.
-        if parsed.netloc == 't.me':
-             return False
+    # 如果网络位置是 t.me，则排除此链接
+    if parsed.netloc == 't.me':
+         return False
     return True
 
 def clean_url(url):
-    """Remove trailing punctuation from the URL."""
+    """移除 URL 末尾的标点符号。"""
     while url and url[-1] in '.,;:!?)':
         url = url[:-1]
     return url
 
-def get_specific_urls_from_html(html):
-    """Extract and clean URLs containing specific token patterns from HTML content."""
+# 修改函数签名，接受 token_patterns 列表作为参数
+def get_specific_urls_from_html(html, token_patterns):
+    """从 HTML 内容中提取包含特定 token 模式的 URL 并清理。"""
+    if not token_patterns:
+        logging.warning("未提供 token 模式列表，将无法提取特定 URL。")
+        return []
+
     soup = BeautifulSoup(html, 'html.parser')
     targets = soup.find_all(class_=[
         'tgme_widget_message_text',
@@ -71,221 +170,280 @@ def get_specific_urls_from_html(html):
         'tgme_widget_message_video',
         'tgme_widget_message_document',
         'tgme_widget_message_poll',
-        # Consider adding message meta for potential links? Let's stick to content for now.
     ])
 
     urls = set()
-    # Define the patterns we are looking for
-    token_patterns = ['/api/v1/client/subscribe?token=', 'subscribe?token=']
+    # 定义我们要查找的模式 - 现在从参数传入
 
     for target in targets:
-        # Extract from <a> tags
+        # 从 <a> 标签中提取
         for a_tag in target.find_all('a', href=True):
             href = clean_url(a_tag['href'].rstrip('/'))
-            # Check if it's a valid URL structure AND contains one of the token patterns
+            # 检查它是否是有效的 URL 结构，并且包含任一 token 模式
             if is_valid_url(href) and any(pattern in href for pattern in token_patterns):
                 urls.add(href)
             else:
-                logging.debug(f"Discarded (pattern/validity mismatch) URL from <a> tag: {href}")
+                logging.debug(f"从 <a> 标签丢弃 URL (模式/有效性不匹配): {href}")
 
-        # Extract from text content
-        # Use a broader regex first, then filter by patterns and validity
+        # 从文本内容中提取
         text = target.get_text(separator=' ', strip=True)
-        # This regex finds http/https or www. followed by non-whitespace/quotes/angle brackets
+        # 先使用更广泛的正则表达式查找潜在 URL，然后按模式和有效性过滤
         found_potential_urls = re.findall(r'https?://[^\s<>"\']+|www\.[^\s<>"\']+', text)
         for url_in_text in found_potential_urls:
             if url_in_text.startswith('www.'):
                 url_in_text = 'http://' + url_in_text
             url_in_text = clean_url(url_in_text.rstrip('/'))
-            # Check if it's a valid URL structure AND contains one of the token patterns
+            # 检查它是否是有效的 URL 结构，并且包含任一 token 模式
             if is_valid_url(url_in_text) and any(pattern in url_in_text for pattern in token_patterns):
                  urls.add(url_in_text)
             else:
-                 logging.debug(f"Discarded (pattern/validity mismatch) URL from text: {url_in_text}")
+                 logging.debug(f"从文本丢弃 URL (模式/有效性不匹配): {url_in_text}")
 
     return list(urls)
 
 def test_url_connectivity(url, timeout=10):
-    """Test if the URL is connectable by attempting a HEAD request."""
+    """通过尝试 HEAD 请求测试 URL 是否可连接。"""
     try:
         headers = {'User-Agent': random.choice(USER_AGENTS)}
-        # Use a HEAD request as it's faster and we only need the status code
+        # 使用 HEAD 请求更快，我们只需要状态码
+        # allow_redirects=True 很重要，因为有些链接可能会重定向
         response = requests.head(url, headers=headers, timeout=timeout, allow_redirects=True)
-        # Check for successful status codes (200 range)
+        # 检查成功的状态码 (200-299 范围)
         return 200 <= response.status_code < 300
     except requests.exceptions.RequestException as e:
-        logging.debug(f"Connectivity test failed for {url}: {e}")
+        logging.debug(f"URL {url} 连接测试失败: {e}")
         return False
 
 def get_next_page_url(html):
-    """Extract the next page URL from HTML."""
+    """从 HTML 中提取下一页的 URL。"""
     soup = BeautifulSoup(html, 'html.parser')
     load_more = soup.find('a', class_='tme_messages_more')
     if load_more and load_more.has_attr('href'):
-        # Telegram relative paths need to be joined with the base domain
+        # Telegram 相对路径需要与基本域名拼接
         return 'https://t.me' + load_more['href']
     return None
 
 def fetch_page(url, timeout=15, max_retries=3):
-    """Fetch page content with retries and random User-Agent."""
+    """带重试和随机 User-Agent 获取页面内容。"""
     headers = {'User-Agent': random.choice(USER_AGENTS)}
     for attempt in range(max_retries):
         try:
             response = requests.get(url, headers=headers, timeout=timeout)
-            response.raise_for_status() # Raise an exception for bad status codes (4xx or 5xx)
+            response.raise_for_status() # 如果状态码是 4xx 或 5xx 则抛出异常
             return response.text
         except requests.exceptions.RequestException as e:
-            logging.warning(f"Failed to fetch {url} on attempt {attempt + 1}/{max_retries}: {e}")
+            logging.warning(f"尝试 {attempt + 1}/{max_retries} 次获取 {url} 失败: {e}")
             if attempt < max_retries - 1:
-                # Wait longer on subsequent retries
+                # 在后续重试时等待更长时间
                 time.sleep(random.uniform(5, 12 + attempt * 5))
             else:
-                logging.error(f"Failed to fetch {url} after {max_retries} attempts")
+                logging.error(f"在 {max_retries} 次尝试后获取 {url} 失败")
                 return None
-    return None # Should not be reached if max_retries > 0
+    return None # 如果 max_retries > 0，通常不会执行到这里
 
-def save_urls_to_file(urls, filename='ji.txt'):
-    """Save URLs to a file."""
-    # Ensure the directory exists (though 'ji.txt' is in root, good practice)
-    output_dir = os.path.dirname(filename)
-    if output_dir and not os.path.exists(output_dir):
-         os.makedirs(output_dir)
+# --- 主执行函数 ---
 
-    try:
-        with open(filename, 'w', encoding='utf-8') as f:
-            for url in sorted(list(urls)): # Sort for consistency
-                f.write(url + '\n')
-        logging.info(f"Valid URLs saved to {filename} (count: {len(urls)})")
-    except IOError as e:
-        logging.error(f"Failed to save URLs to {filename}: {e}")
+def main(max_pages_per_source=90, max_workers=20):
+    """
+    主函数控制整个流程:
+    1. 从环境变量读取所有 GitHub 配置信息和令牌。
+    2. 从私有 GitHub 仓库的 config.txt 读取起始 URL 和查找模式。
+    3. 从 Telegram 频道爬取包含特定 token 的 URL。
+    4. 测试找到的 URL 的连通性。
+    5. 从私有 GitHub 仓库的 subscribes.txt 读取现有 URL。
+    6. 合并、去重，并将新的有效 URL 追加到现有列表中。
+    7. 将更新后的列表写回 GitHub 上的 subscribes.txt。
+    """
+    # 1. 获取必需的环境变量
+    config = get_required_env_vars()
+    if not config:
+        # get_required_env_vars 中已记录错误消息
+        return # 没有配置信息，无法继续
 
-def main(start_urls, max_pages_per_source=90, max_workers=10):
-    """Main function to control the scraping and testing process for specific token URLs."""
+    github_token = config['BOT']
+    repo_owner = config['GITHUB_REPO_OWNER']
+    repo_name = config['GITHUB_REPO_NAME']
+    branch = config['GITHUB_BRANCH']
+    config_path = config['GITHUB_CONFIG_PATH']
+    subscribes_path = config['GITHUB_SUBSCRIBES_PATH']
+
+
+    # 2. 从 GitHub Config 读取起始 URL 和查找模式
+    logging.info(f"尝试从 {repo_owner}/{repo_name}/{config_path} 读取配置 (起始 URL 和查找模式)")
+    config_content, _ = fetch_github_file_content(
+        github_token, repo_owner, repo_name, config_path, branch
+    )
+
+    if not config_content:
+        logging.error("从 GitHub 的 config.txt 读取失败。无法继续。")
+        return
+
+    # 解析配置内容，提取起始 URL 和查找模式
+    start_urls = []
+    token_patterns_list = []
+    for line in config_content.splitlines():
+        stripped_line = line.strip()
+        if not stripped_line or stripped_line.startswith('#'):
+            continue # 跳过空行和注释
+
+        if stripped_line.startswith('pattern='):
+            # 提取模式
+            pattern = stripped_line[len('pattern='):].strip()
+            if pattern:
+                token_patterns_list.append(pattern)
+                logging.debug(f"找到查找模式: {pattern}")
+        else:
+            # 视为起始 URL
+            start_urls.append(stripped_line)
+            logging.debug(f"找到起始 URL: {stripped_line}")
+
+
+    if not start_urls:
+        logging.warning("GitHub config.txt 文件中没有找到起始 URL。无需爬取。")
+        return
+
+    if not token_patterns_list:
+         logging.error("GitHub config.txt 文件中没有找到任何查找模式 (pattern=...)。无法进行链接提取。")
+         return
+
+    logging.info(f"成功读取 {len(start_urls)} 个起始 URL 和 {len(token_patterns_list)} 个查找模式。")
+
+
+    # 3. 从 Telegram 频道爬取特定 URL
     overall_found_specific_urls = set()
     processed_page_count_total = 0
 
     for base_url in start_urls:
-        logging.info(f"======== Starting source: {base_url} ========")
-        current_source_specific_urls = set()
+        logging.info(f"\n======== 开始爬取源: {base_url} ========")
         current_url = base_url
         page_count_for_source = 0
 
         while current_url and page_count_for_source < max_pages_per_source:
-            logging.info(f"Fetching page: {current_url} (source: {base_url}, page {page_count_for_source + 1}/{max_pages_per_source})")
+            logging.info(f"正在获取页面: {current_url} (源: {base_url}, 页面 {page_count_for_source + 1}/{max_pages_per_source})")
             html = fetch_page(current_url)
             if html is None:
-                logging.warning(f"Failed to fetch content from {current_url}, stopping this source.")
-                break # Stop processing this source if a page fails to fetch
+                logging.warning(f"无法获取 {current_url} 的内容，停止爬取此源。")
+                break
 
-            # Use the modified function to get only specific token URLs
-            new_specific_urls = get_specific_urls_from_html(html)
+            # 使用修改后的函数只获取特定 token 的 URL，并传入模式列表
+            new_specific_urls = get_specific_urls_from_html(html, token_patterns_list)
 
             if new_specific_urls:
-                logging.info(f"Found {len(new_specific_urls)} new specific URLs on this page.")
-                current_source_specific_urls.update(new_specific_urls)
+                logging.info(f"在此页面找到 {len(new_specific_urls)} 个特定 URL。")
                 overall_found_specific_urls.update(new_specific_urls)
-                logging.info(f"Current source specific URL count: {len(current_source_specific_urls)}")
-                logging.info(f"Total specific URL count across all sources: {len(overall_found_specific_urls)}")
+                logging.info(f"迄今为止找到的总唯一特定 URL 数: {len(overall_found_specific_urls)}")
             else:
-                 logging.info("No new specific URLs found on this page.")
+                 logging.info("在此页面没有找到新的特定 URL。")
 
             next_page_url = get_next_page_url(html)
 
-            # Decide whether to continue to the next page
             if next_page_url:
                 current_url = next_page_url
                 page_count_for_source += 1
                 processed_page_count_total += 1
-                # Add a delay between page fetches to be polite
-                time.sleep(random.uniform(15, 30)) # Increased delay slightly
+                # 在页面获取之间添加延迟，以礼貌待人
+                time.sleep(random.uniform(15, 30))
             else:
-                logging.info(f"No more pages found for source: {base_url}")
-                current_url = None # Stop the loop for this source
+                logging.info(f"源 {base_url} 没有找到更多页面。")
+                current_url = None # 停止此源的循环
 
-        logging.info(f"======== Finished source: {base_url}, processed {page_count_for_source} pages ========")
+        logging.info(f"======== 结束爬取源: {base_url}, 已处理 {page_count_for_source} 页面 ========")
 
-    logging.info(f"\n======== All sources processed, total pages: {processed_page_count_total} ========")
-    logging.info(f"Total unique specific URLs found before testing: {len(overall_found_specific_urls)}")
+    logging.info(f"\n======== 所有源爬取完毕，总页面数: {processed_page_count_total} ========")
+    logging.info(f"在测试连通性前找到的总唯一特定 URL 数: {len(overall_found_specific_urls)}")
 
-    if not overall_found_specific_urls:
-        logging.info("No specific URLs found for connectivity testing.")
-        # Save an empty file or indicate no URLs found
-        save_urls_to_file([], 'ji.txt')
+    urls_to_test = overall_found_specific_urls # 需要测试连通性的 URL 集合
+
+
+    # 4. 测试找到的 URL 的连通性
+    if not urls_to_test:
+         logging.info("没有需要测试连通性的 URL。")
+         valid_specific_urls = set()
     else:
-        logging.info("Starting concurrent URL connectivity testing for specific URLs...")
-        valid_specific_urls = []
-        # Use ThreadPoolExecutor for concurrent testing
+        logging.info("开始并发 URL 连通性测试...")
+        valid_specific_urls = set() # 使用 set 方便直接添加和去重
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            # Map the connectivity test function to each URL
-            # executor.map returns results in the order the inputs were given
-            future_to_url = {executor.submit(test_url_connectivity, url): url for url in overall_found_specific_urls}
-            for future in concurrent.futures.as_completed(future_to_url):
+            # 使用 as_completed 以便结果一完成就处理
+            future_to_url = {executor.submit(test_url_connectivity, url): url for url in urls_to_test}
+            for future in as_completed(future_to_url):
                 url = future_to_url[future]
                 try:
                     is_connectable = future.result()
                     if is_connectable:
-                        valid_specific_urls.append(url)
-                        # logging.debug(f"URL {url} is connectable.") # Too verbose
+                        valid_specific_urls.add(url)
+                        # logging.debug(f"URL {url} 可连接.") # 太冗长
                     else:
-                        logging.debug(f"URL {url} is not connectable.")
+                        logging.debug(f"URL {url} 不可连接.")
                 except Exception as exc:
-                    logging.error(f"URL {url} generated an exception during testing: {exc}")
+                    logging.error(f"URL {url} 在测试期间发生异常: {exc}")
 
-        logging.info(f"Connectivity testing complete. Valid specific URLs found: {len(valid_specific_urls)}")
-        logging.info("Saving final valid specific URLs to ji.txt...")
-        save_urls_to_file(valid_specific_urls, 'ji.txt')
-        logging.info("Final results saved to ji.txt.")
+        logging.info(f"连通性测试完成。找到的有效特定 URL 数: {len(valid_specific_urls)}")
+
+    # 5. 从 GitHub 读取现有结果文件
+    logging.info(f"尝试从 {repo_owner}/{repo_name}/{subscribes_path} 读取现有 URL")
+    existing_subscribes_content, subscribes_sha = fetch_github_file_content(
+        github_token, repo_owner, repo_name, subscribes_path, branch
+    )
+
+    existing_urls = set()
+    if existing_subscribes_content:
+        # 将现有内容解析为 set，忽略空行
+        existing_urls = set(line.strip() for line in existing_subscribes_content.splitlines() if line.strip())
+        logging.info(f"从 subscribes.txt 读取到 {len(existing_urls)} 个现有 URL。")
+    else:
+        # subscribes_sha 将为 None，表示文件不存在或无法读取
+        logging.info(f"GitHub 上未找到 subscribes.txt 或为空。开始合并时使用空列表。")
+
+
+    # 6. 合并、去重并准备新内容
+    # 合并现有有效 URL 和新找到的有效 URL
+    combined_urls = existing_urls.union(valid_specific_urls) # Union 自动去重
+
+    if not combined_urls:
+         logging.info("没有找到任何有效 URL (新的或现有的) 可供保存。")
+         # 如果订阅文件存在 SHA，传入空内容会清空文件；如果 SHA 为 None，传入空内容会尝试创建空文件。
+         new_subscribes_content = ""
+    else:
+        # 对合并后的列表进行排序，以保持文件内容的一致性
+        sorted_combined_urls = sorted(list(combined_urls))
+        # 格式化为用于保存的内容 (每行一个 URL)
+        new_subscribes_content = "\n".join(sorted_combined_urls) + "\n" # 确保末尾有换行
+
+    logging.info(f"合并去重后的 URL 总数: {len(combined_urls)}")
+    # 仅在成功读取现有文件时计算“新增”数量
+    if existing_subscribes_content:
+         newly_added_count = len(valid_specific_urls) - len(valid_specific_urls.intersection(existing_urls))
+         logging.info(f"本次运行新添加的有效 URL 数 (去重后): {newly_added_count}")
+         commit_message = f"更新订阅列表 - 新增 {newly_added_count} 个唯一 URL"
+    else:
+         # 第一次创建文件
+         newly_added_count = len(combined_urls) # 第一次创建，所有都是新增的
+         logging.info(f"本次运行新添加的有效 URL 数 (首次保存): {newly_added_count}")
+         commit_message = f"首次创建订阅列表 - 共 {newly_added_count} 个 URL"
+
+
+    # 7. 将更新后的结果写回 GitHub
+    logging.info(f"尝试将更新后的 URL 写入 {repo_owner}/{repo_name}/{subscribes_path}")
+
+
+    if update_github_file_content(
+        github_token,
+        repo_owner,
+        repo_name,
+        subscribes_path,
+        new_subscribes_content,
+        subscribes_sha, # 如果文件不存在，这里是 None，会尝试创建文件
+        branch,
+        commit_message
+    ):
+        logging.info("最终的订阅列表已成功保存到 GitHub。")
+    else:
+        logging.error("未能将最终订阅列表保存到 GitHub。")
 
 
 if __name__ == '__main__':
-    # List of Telegram channel archive URLs to scrape
-    start_urls_list = [
-'https://t.me/s/ccbaohe',
-'https://t.me/s/wangcai_8',
-'https://t.me/s/vpn_3000',
-'https://t.me/s/V2ray_Click',
-'https://t.me/s/academi_vpn',
-'https://t.me/s/dingyue_center',
-'https://t.me/s/freedatazone1',
-'https://t.me/s/freev2rayi',
-'https://t.me/s/mypremium98',
-'https://t.me/s/inikotesla',
-'https://t.me/s/v2rayngalpha',
-'https://t.me/s/v2rayngalphagamer',
-'https://t.me/s/jiedian_share',
-'https://t.me/s/vpn_mafia',
-'https://t.me/s/dr_v2ray',
-'https://t.me/s/allv2board',
-'https://t.me/s/bigsmoke_config',
-'https://t.me/s/vpn_443',
-'https://t.me/s/prossh',
-'https://t.me/s/mftizi',
-'https://t.me/s/qun521',
-'https://t.me/s/v2rayng_my2',
-'https://t.me/s/go4sharing',
-'https://t.me/s/trand_farsi',
-'https://t.me/s/vpnplusee_free',
-'https://t.me/s/freekankan',
-'https://t.me/s/awxdy666',
-'https://t.me/s/freeVPNjd',
-'https://t.me/s/hkaa0',
-'https://t.me/s/ccbaohe',
-'https://t.me/s/MxlShare',
-'https://t.me/hack_proxy',
-'https://t.me/s/mrjdfx',
-'https://t.me/s/QrV2ray',
-'https://t.me/s/V2ray_v2ray_v2ray',
-        # Add other source URLs here if needed
-    ]
+    # 爬取和测试的参数
+    max_pages_to_crawl_per_source = 90 # 每个源最多爬取的页面数
+    concurrent_workers = 20 # 并发连通性测试的线程数
 
-    # Maximum number of pages to crawl per source URL
-    # 90 pages was in the original; keeping it but making it adjustable
-    max_pages_to_crawl_per_source = 10
-
-    # Number of worker threads for concurrent connectivity testing
-    concurrent_workers = 20 # Increased from 15 for potentially faster testing
-
-    # Import concurrent.futures within the __main__ block or globally if needed elsewhere
-    import concurrent.futures
-
-    main(start_urls_list, max_pages_to_crawl_per_source, concurrent_workers)
+    main(max_pages_to_crawl_per_source, concurrent_workers)
