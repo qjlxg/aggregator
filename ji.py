@@ -248,7 +248,7 @@ if __name__ == '__main__':
 
     # Maximum number of pages to crawl per source URL
     # 90 pages was in the original; keeping it but making it adjustable
-    max_pages_to_crawl_per_source = 90
+    max_pages_to_crawl_per_source = 5
 
     # Number of worker threads for concurrent connectivity testing
     concurrent_workers = 20 # Increased from 15 for potentially faster testing
