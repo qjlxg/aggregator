@@ -471,7 +471,9 @@ def main(max_pages_per_source=90, max_workers=20):
 
 if __name__ == '__main__':
     # 爬取和测试的参数
-    max_pages_to_crawl_per_source = 1 # 每个源最多爬取的页面数
-    concurrent_workers = 20 # 并发连通性测试的线程数
+    # 将变量名改为与 main 函数参数名一致
+    max_pages_per_source = 1 # 每个源最多爬取的页面数
+    max_workers = 20 # 并发连通性测试的线程数 # <--- 也将 concurrent_workers 改为 max_workers
 
-    main(max_pages_per_source, concurrent_workers)
+    # 调用时使用修改后的变量名
+    main(max_pages_per_source, max_workers)
