@@ -11,6 +11,8 @@ on:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # 确保工作流有写入仓库内容的权限
 
     steps:
     - name: Checkout repository
@@ -31,26 +33,26 @@ jobs:
 
     - name: Run Python script
       env:
-       
+      
         GT_TOKEN: ${{ secrets.GT_TOKEN }}
-        REPO_NAME: ${{ secrets.REPO_NAME }}
-        FILE_PATH_SUBSCRIPTIONS: ${{ secrets.FILE_PATH_SUBSCRIPTIONS }}
+        # 新的 Secret 名称
+        SUBSCRIPTION_TARGET_REPO: ${{ secrets.SUBSCRIPTION_TARGET_REPO }}
+        SUBSCRIPTION_SAVE_PATH: ${{ secrets.SUBSCRIPTION_SAVE_PATH }}
+        # 保持不变的 Secret 名称
         CONFIG_REPO_NAME: ${{ secrets.CONFIG_REPO_NAME }}
         CONFIG_FILE_PATH: ${{ secrets.CONFIG_FILE_PATH }}
-        SEARCH_KEYWORDS_ENV: ${{ secrets.SEARCH_KEYWORDS_ENV }} 
+        SEARCH_KEYWORDS_ENV: ${{ secrets.SEARCH_KEYWORDS_ENV }}
       run: python "Telegram Subscriptions.py" 
 
-    - name: Configure Git
+    - name: Configure Git 
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "GitHub Actions Bot"
-        
-  
 
-    - name: Commit and push changes
+    - name: Commit and push changes 
       run: |
-        # 检查是否有文件被修改，包括由PyGithub创建/更新的文件
         git add .
         git diff-index --quiet HEAD || (git commit -m "Update Telegram subscriptions [skip ci]" && git push origin main)
       env:
-        GITHUB_TOKEN: ${{ secrets.GT_TOKEN }} 
+       
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
