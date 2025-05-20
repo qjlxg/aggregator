@@ -376,7 +376,7 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
 
     # --- Generate and Save Final YAML ---
     # Define the final output file path
-    final_output_filename = "config.yaml"  # 修改此处将输出文件名更改为 config.yaml
+    final_output_filename = "clash.yaml"  
     final_output_filepath = os.path.join(DATA_BASE, final_output_filename)
 
     # Save the final YAML data to the specified file
@@ -404,8 +404,8 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
         list_only = False if target in ("v2ray", "mixed") or "ss" in target else not args.all
         targets.append((convert_name, filename, target, list_only, args.vitiate))
 
-    # Use the generated config.yaml (previously ss.yaml) as the source for subconverter
-    subconverter_source_filepath = final_output_filepath # Use the saved config.yaml
+    
+    subconverter_source_filepath = final_output_filepath 
 
     # Process each target format
     for t in targets:
@@ -431,9 +431,7 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
     # Check if any target conversion was successful
     if not records:
         logger.error(f"所有目标转换失败。")
-        # No need to remove supplier here as we used config.yaml directly
-        # sys.exit(1) # Consider exiting if no conversions succeed
-
+      
     logger.info(f"共收集到 {len(nodes)} 个去重后的节点。")
     if records:
         logger.info(f"生成的配置已保存至: {list(records.values())}")
