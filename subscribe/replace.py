@@ -280,8 +280,8 @@ def main(urls):
         print("未找到有效的代理配置！")
         return
 
-    # Split proxies into chunks of 1000
-    chunk_size = 1000
+    # Split proxies into chunks of 1860
+    chunk_size = 1860
     for i in range(0, len(all_proxies), chunk_size):
         chunk_proxies = all_proxies[i:i + chunk_size]
         
