@@ -8,11 +8,26 @@ import os
 import threading
 from queue import Queue
 from github import Github
+import sys # 导入sys模块用于程序退出
 
-# 配置日志
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# 用户代理列表，用于伪装请求头
+
+search_keywords_env_str = os.environ.get('SEARCH_KEYWORDS_ENV')
+
+if search_keywords_env_str:
+    SEARCH_KEYWORDS = [kw.strip() for kw in search_keywords_env_str.split(',') if kw.strip()]
+    if not SEARCH_KEYWORDS: # 如果解析后列表为空，说明没有有效关键字
+        logging.error("Environment variable 'SEARCH_KEYWORDS_ENV' is set but contains no valid keywords after parsing. Exiting.")
+        sys.exit(1) # 退出程序并返回非零状态码
+else:
+    logging.error("Environment variable 'SEARCH_KEYWORDS_ENV' is NOT set. Cannot proceed without search keywords. Exiting.")
+    sys.exit(1) # 退出程序并返回非零状态码
+
+# --- 其他常量配置 ---
+MAX_PAGES_TO_CRAWL = 1
+NUM_WORKING_THREADS = 5
+
 USER_AGENTS = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36',
@@ -56,16 +71,13 @@ USER_AGENTS = [
     'Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1',
 ]
 
-# 获取随机请求头
 def get_random_headers():
     return {'User-Agent': random.choice(USER_AGENTS)}
 
-# 检查 URL 是否有效（排除 Telegram 链接）
 def is_valid_url(url):
     invalid_prefixes = ('https://t.me', 'http://t.me', 't.me')
     return not any(url.startswith(prefix) for prefix in invalid_prefixes)
 
-# 从 HTML 中提取 URL 并过滤
 def get_urls_from_html(html):
     soup = BeautifulSoup(html, 'html.parser')
     targets = soup.find_all(class_=[
@@ -73,39 +85,44 @@ def get_urls_from_html(html):
         'tgme_widget_message_video', 'tgme_widget_message_document',
         'tgme_widget_message_poll'
     ])
-     # 定义要排除的域名或字符串
-    excluded_domains = ("aliyundrive.com", ".top","website","pan.baidu.com", "raw.githubusercontent.com", "t.me", "yam","play.google.com","app","777.hz.cz","releases","org","html","apk","appleID","apps.apple.com","fs.v2rayse.com")
+    excluded_domains = (
+        "aliyundrive.com", ".top", "website", "pan.baidu.com", "raw.bgithub.xyz",
+        "t.me", "yam", "play.google.com", "app", "777.hz.cz", "releases",
+        "org", "html", "apk", "appleID", "apps.apple.com", "fs.v2rayse.com"
+    )
     urls = set()
     for target in targets:
         text = target.get_text(separator=' ', strip=True)
         found_urls = re.findall(r'(?:https?://|www\.)[^\s]+', text)
-        valid_urls = [url for url in found_urls if "token=" in url or "/s/" in url or "sub" in url and not any(domain in url for domain in excluded_domains)]
+        
+        valid_urls = [
+            url for url in found_urls
+            if any(keyword in url for keyword in SEARCH_KEYWORDS)
+            and not any(domain in url for domain in excluded_domains)
+        ]
         urls.update(valid_urls)
     return list(urls)
 
-# 测试 URL 的连通性
 def test_url_connectivity(url, timeout=5):
     try:
         response = requests.head(url, timeout=timeout)
         response.raise_for_status()
         return True
     except requests.RequestException as e:
-        logging.warning(f"URL {url} 连接测试失败: {e}")
+        logging.warning(f"URL {url} connectivity test failed: {e}")
         return False
 
-# 获取下一页的 URL
 def get_next_page_url(html):
     soup = BeautifulSoup(html, 'html.parser')
     load_more = soup.find('a', class_='tme_messages_more')
     if load_more:
         next_page_url = 'https://t.me' + load_more['href']
-        logging.info(f"找到下一页 URL: {next_page_url}")
+        logging.info(f"Found next page URL: {next_page_url}")
         return next_page_url
     else:
-        logging.info("没有找到下一页 URL")
+        logging.info("No next page URL found")
         return None
 
-# 获取页面内容，支持重试机制
 def fetch_page(url, headers, timeout=10, max_retries=3):
     for attempt in range(max_retries):
         try:
@@ -113,19 +130,18 @@ def fetch_page(url, headers, timeout=10, max_retries=3):
             response = requests.get(url, headers=headers, timeout=timeout)
             response.raise_for_status()
             end_time = time.time()
-            logging.info(f"成功抓取 {url} (尝试 {attempt + 1}/{max_retries}), 耗时: {end_time - start_time:.2f}秒")
+            logging.info(f"Successfully fetched {url} (Attempt {attempt + 1}/{max_retries}), took: {end_time - start_time:.2f}s")
             return response.text
         except requests.RequestException as e:
-            logging.warning(f"抓取 {url} 尝试 {attempt + 1}/{max_retries} 失败: {e}")
+            logging.warning(f"Failed to fetch {url} on attempt {attempt + 1}/{max_retries}: {e}")
             if attempt < max_retries - 1:
                 sleep_time = random.uniform(38, 53)
-                logging.info(f"等待 {sleep_time:.2f} 秒后重试")
+                logging.info(f"Waiting {sleep_time:.2f} seconds before retrying")
                 time.sleep(sleep_time)
             else:
-                logging.error(f"抓取 {url} 失败，超出最大重试次数: {e}")
+                logging.error(f"Failed to fetch {url}, exceeded max retries: {e}")
                 return None
 
-# 将 URL 保存到 GitHub
 def save_urls_to_github(repo_name, file_path, content, github_token):
     try:
         g = Github(github_token)
@@ -134,124 +150,123 @@ def save_urls_to_github(repo_name, file_path, content, github_token):
             contents = repo.get_contents(file_path)
             updated_content = contents.decoded_content.decode('utf-8') + '\n' + '\n'.join(content)
             repo.update_file(contents.path, "Add new subscriptions", updated_content.encode('utf-8'), contents.sha)
-            logging.info(f"URL 追加保存到 GitHub: {repo_name}/{file_path}")
+            logging.info(f"URLs appended to GitHub: {repo_name}/{file_path}")
             return True
         except Exception as e:
             if "Not Found" in str(e):
                 repo.create_file(file_path, "Initial subscriptions", '\n'.join(content).encode('utf-8'))
-                logging.info(f"URL 首次保存到 GitHub: {repo_name}/{file_path}")
+                logging.info(f"URLs initially saved to GitHub: {repo_name}/{file_path}")
                 return True
             else:
-                logging.error(f"保存到 GitHub 失败: {e}")
+                logging.error(f"Failed to save to GitHub: {e}")
                 return False
     except Exception as e:
-        logging.error(f"GitHub API 认证或仓库访问失败: {e}")
+        logging.error(f"GitHub API authentication or repository access failed: {e}")
         return False
 
-# 抓取单一来源的线程函数
 def crawl_single_source(start_url, headers, max_pages, url_queue):
     current_url = start_url
     page_count = 0
     while current_url and page_count < max_pages:
-        logging.info(f"抓取: {current_url} (第 {page_count + 1}/{max_pages} 页，来源: {start_url})")
+        logging.info(f"Crawling: {current_url} (Page {page_count + 1}/{max_pages}, Source: {start_url})")
         html = fetch_page(current_url, headers)
         if html is None:
-            logging.warning(f"无法获取 {current_url} 的 HTML，停止从此来源抓取")
+            logging.warning(f"Could not get HTML for {current_url}, stopping crawl from this source")
             break
         new_urls = get_urls_from_html(html)
-        logging.info(f"从 {current_url} 提取到 {len(new_urls)} 个 URL")
+        logging.info(f"Extracted {len(new_urls)} URLs from {current_url}")
         for url in new_urls:
             url_queue.put(url)
         current_url = get_next_page_url(html)
         page_count += 1
         sleep_time = random.uniform(35, 45)
-        logging.info(f"等待 {sleep_time:.2f} 秒后抓取下一页")
+        logging.info(f"Waiting {sleep_time:.2f} seconds before crawling next page")
         time.sleep(sleep_time)
 
-# 工作线程函数，测试 URL 连通性
 def worker(url_queue, valid_urls, lock):
     while True:
         url = url_queue.get()
         if url is None:
-            logging.info("worker 收到停止信号，退出")
+            logging.info("Worker received stop signal, exiting")
             break
         try:
             if test_url_connectivity(url):
                 with lock:
                     valid_urls.add(url)
-                logging.info(f"URL {url} 有效，已添加到有效 URL 集合")
+                logging.info(f"URL {url} is valid, added to valid URL set")
             else:
-                logging.warning(f"URL {url} 连接测试失败")
+                logging.warning(f"URL {url} connectivity test failed")
         except Exception as e:
-            logging.error(f"测试 URL {url} 的连接性时发生错误: {e}")
+            logging.error(f"Error testing connectivity for URL {url}: {e}")
         finally:
             url_queue.task_done()
 
-# 主函数
-def main(start_urls, max_pages=10, num_threads=5, github_token=None):
-    if github_token:
-        logging.info(f"GitHub Token 存在!")
-    else:
-        logging.warning(f"GitHub Token 不存在，将不会保存到GitHub")
+def main(start_urls, github_token=None):
+    repo_name = os.environ.get('REPO_NAME')
+    file_path = os.environ.get('FILE_PATH_SUBSCRIPTIONS')
+
+    if not repo_name or not file_path:
+        logging.error("Environment variables 'REPO_NAME' or 'FILE_PATH_SUBSCRIPTIONS' not set, cannot save to GitHub.")
+        github_token = None
 
     if github_token:
+        logging.info("GitHub Token exists!")
         try:
             g = Github(github_token)
             user = g.get_user()
-            logging.info(f"GitHub 用户名: {user.login}")
+            logging.info(f"GitHub Username: {user.login}")
         except Exception as e:
-            logging.error(f"GitHub API 认证失败: {e}")
-            github_token = None  # 设置为 None，避免后续保存操作
+            logging.error(f"GitHub API authentication failed: {e}")
+            github_token = None
+    else:
+        logging.warning("GitHub Token not found, will not save to GitHub")
 
     url_queue = Queue()
     valid_urls = set()
     lock = threading.Lock()
 
     threads = []
-    for _ in range(num_threads):
+    for _ in range(NUM_WORKING_THREADS):
         t = threading.Thread(target=worker, args=(url_queue, valid_urls, lock))
-        t.daemon = True  # 设置为守护线程
+        t.daemon = True
         t.start()
         threads.append(t)
 
-    crawler_threads = []  # 单独保存爬虫线程，方便 join
+    crawler_threads = []
     for start_url in start_urls:
         headers = get_random_headers()
-        t = threading.Thread(target=crawl_single_source, args=(start_url, headers, max_pages, url_queue))
-        t.daemon = True  # 设置为守护线程
+        t = threading.Thread(target=crawl_single_source, args=(start_url, headers, MAX_PAGES_TO_CRAWL, url_queue))
+        t.daemon = True
         t.start()
         crawler_threads.append(t)
 
-    for t in crawler_threads:  # 等待爬虫线程结束
+    for t in crawler_threads:
         t.join()
 
-    # Queue 的所有任务完成后，再发送结束信号
     url_queue.join()
 
-    logging.info("所有来源抓取任务已完成. 发送停止信号给 worker")
+    logging.info("All source crawling tasks completed. Sending stop signals to workers.")
 
-    for _ in range(num_threads):
-        url_queue.put(None)  # 发送停止信号
+    for _ in range(NUM_WORKING_THREADS):
+        url_queue.put(None)
     for t in threads:
         t.join()
 
-    logging.info(f"所有 worker 线程已退出")
-    logging.info(f"有效 URL 数量: {len(valid_urls)}")
+    logging.info("All worker threads exited.")
+    logging.info(f"Number of valid URLs: {len(valid_urls)}")
 
-    if github_token:  # 再次检查 github_token
-        repo_name = 'qjlxg/362'
-        file_path = 'data/subscribes.txt'
-        if save_urls_to_github(repo_name, file_path, list(valid_urls), github_token):  # 如果保存成功
-            logging.info("成功将 URL 保存到 GitHub")
+    if github_token and repo_name and file_path:
+        if save_urls_to_github(repo_name, file_path, list(valid_urls), github_token):
+            logging.info("Successfully saved URLs to GitHub.")
         else:
-            logging.error("将 URL 保存到 GitHub 失败")
+            logging.error("Failed to save URLs to GitHub.")
 
-# 主程序入口
 if __name__ == '__main__':
     github_token = os.environ.get('GT_TOKEN')
 
-    config_repo_name = 'qjlxg/362'
-    config_file_path = 'data/config.txt'
+    config_repo_name = os.environ.get('CONFIG_REPO_NAME', 'qjlxg/362')
+    config_file_path = os.environ.get('CONFIG_FILE_PATH', 'data/config.txt')
+
     start_urls_list = []
 
     try:
@@ -260,11 +275,9 @@ if __name__ == '__main__':
         config_content_file = repo.get_contents(config_file_path)
         config_content = config_content_file.decoded_content.decode('utf-8')
         start_urls_list = [url.strip() for url in config_content.strip().split('\n') if url.strip()]
-        logging.info(f"从 GitHub 读取到 {len(start_urls_list)} 个起始 URL")
+        logging.info(f"Read {len(start_urls_list)} starting URLs from GitHub.")
     except Exception as e:
-        logging.error(f"无法从 GitHub 读取配置文件: {e}")
+        logging.error(f"Failed to read configuration file from GitHub: {e}")
         start_urls_list = []
 
-    max_pages_to_crawl = 1
-    num_working_threads = 5
-    main(start_urls_list, max_pages_to_crawl, num_working_threads, github_token=github_token)
+    main(start_urls_list, github_token=github_token)
