@@ -3,7 +3,7 @@ name: Telegram Subscriptions
 on:
   push:
     branches:
-      - main # 如果你希望在推送到 main 分支时运行，可以保留。如果不需要，可以移除此行。
+      - main
   schedule:
     - cron: '0 */8 * * *' # 每 8 小时运行一次
   workflow_dispatch: # 允许手动触发
@@ -12,14 +12,14 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # 确保工作流有写入仓库内容的权限
+      contents: write # 确保工作流有写入当前仓库内容的权限
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v5 # 推荐使用最新稳定版本
+      uses: actions/setup-python@v5
       with:
         python-version: '3.x'
 
@@ -33,26 +33,24 @@ jobs:
 
     - name: Run Python script
       env:
-      
+     
         GT_TOKEN: ${{ secrets.GT_TOKEN }}
-        # 新的 Secret 名称
         SUBSCRIPTION_TARGET_REPO: ${{ secrets.SUBSCRIPTION_TARGET_REPO }}
         SUBSCRIPTION_SAVE_PATH: ${{ secrets.SUBSCRIPTION_SAVE_PATH }}
-        # 保持不变的 Secret 名称
         CONFIG_REPO_NAME: ${{ secrets.CONFIG_REPO_NAME }}
         CONFIG_FILE_PATH: ${{ secrets.CONFIG_FILE_PATH }}
         SEARCH_KEYWORDS_ENV: ${{ secrets.SEARCH_KEYWORDS_ENV }}
       run: python "Telegram Subscriptions.py" 
 
-    - name: Configure Git 
+    - name: Configure Git # 这部分仍然是可选的，PyGithub 会直接提交
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "GitHub Actions Bot"
 
-    - name: Commit and push changes 
+    - name: Commit and push changes # 这部分仍然是可选的，PyGithub 会直接提交
       run: |
         git add .
         git diff-index --quiet HEAD || (git commit -m "Update Telegram subscriptions [skip ci]" && git push origin main)
       env:
-       
+        # 使用内置的 GITHUB_TOKEN 进行 git push 操作
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
