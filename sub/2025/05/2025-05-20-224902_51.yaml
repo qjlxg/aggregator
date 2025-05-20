@@ -1,0 +1,1001 @@
+proxies:
+ - {name: '🇫🇷 bing50001', server: '13.39.73.118', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.39.73.118', udp: True}
+ - {name: '🇫🇷 bing50002', server: '52.47.187.239', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '52.47.187.239', udp: True}
+ - {name: '🇬🇧 bing50003', server: '18.135.86.202', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.135.86.202', udp: True}
+ - {name: '🇬🇧 bing50004', server: '3.11.129.2', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.11.129.2', udp: True}
+ - {name: '🇨🇮 bing50005', server: '52.30.169.88', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '52.30.169.88', udp: True}
+ - {name: '🇨🇮 bing50006', server: '52.211.163.190', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '52.211.163.190', udp: True}
+ - {name: '🇸🇪 bing50007', server: '16.16.175.219', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '16.16.175.219', udp: True}
+ - {name: '🇸🇪 bing50008', server: '13.51.212.76', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.51.212.76', udp: True}
+ - {name: '🇩🇪 bing50009', server: '18.193.240.191', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.193.240.191', udp: True}
+ - {name: '🇩🇪 bing50010', server: '3.78.71.87', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.78.71.87', udp: True}
+ - {name: '🇬🇧 bing50011', server: '18.170.21.204', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.170.21.204', udp: True}
+ - {name: '🇬🇧 bing50012', server: '18.170.75.82', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.170.75.82', udp: True}
+ - {name: '🇫🇷 bing50013', server: '13.38.214.109', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.38.214.109', udp: True}
+ - {name: '🇫🇷 bing50014', server: '13.37.189.245', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.37.189.245', udp: True}
+ - {name: '🇸🇪 bing50015', server: '51.20.47.161', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '51.20.47.161', udp: True}
+ - {name: '🇸🇪 bing50016', server: '13.48.12.123', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.48.12.123', udp: True}
+ - {name: '🇩🇪 bing50017', server: '3.78.54.91', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.78.54.91', udp: True}
+ - {name: '🇩🇪 bing50018', server: '52.57.235.139', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '52.57.235.139', udp: True}
+ - {name: '🇫🇷 bing50019', server: '15.188.198.17', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '15.188.198.17', udp: True}
+ - {name: '🇫🇷 bing50020', server: '13.36.47.135', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.36.47.135', udp: True}
+ - {name: 'bing50021', server: '3254.outline-vpn.cloud', port: 8443, type: 'vless', uuid: 'd342d11e-d424-4583-b36e-524ab1f0afa4', tls: True, servername: '3254.outline-vpn.cloud', udp: True}
+ - {name: 'bing50022', server: 'kanal-telegram-freev2rng-freev2rng-freev2rng.pages.dev', port: 443, type: 'vless', uuid: 'fc208ea6-a2fb-40a8-b7e7-6b3221c5291a', tls: True, servername: 'kanal-telegram-freev2rng-freev2rng-freev2rng.pages.dev', udp: True}
+ - {name: '🇬🇧 bing50023', server: '35.177.77.226', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '35.177.77.226', udp: True}
+ - {name: '🇬🇧 bing50024', server: '18.132.96.156', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.132.96.156', udp: True}
+ - {name: '🇨🇮 bing50025', server: '34.255.66.44', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '34.255.66.44', udp: True}
+ - {name: '🇩🇪 bing50026', server: '3.64.70.5', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.64.70.5', udp: True}
+ - {name: '🇫🇷 bing50027', server: '13.37.170.47', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.37.170.47', udp: True}
+ - {name: '🇫🇷 bing50028', server: '13.39.181.4', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.39.181.4', udp: True}
+ - {name: '🇬🇧 bing50029', server: '18.168.121.221', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.168.121.221', udp: True}
+ - {name: '🇬🇧 bing50030', server: '35.179.37.38', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '35.179.37.38', udp: True}
+ - {name: '🇨🇮 bing50031', server: '99.81.63.74', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '99.81.63.74', udp: True}
+ - {name: '🇨🇮 bing50032', server: '52.19.65.90', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '52.19.65.90', udp: True}
+ - {name: '🇸🇪 bing50033', server: '51.20.161.178', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '51.20.161.178', udp: True}
+ - {name: '🇸🇪 bing50034', server: '13.50.69.91', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.50.69.91', udp: True}
+ - {name: '🇩🇪 bing50035', server: '3.64.92.247', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.64.92.247', udp: True}
+ - {name: 'bing50036', server: '152.42.178.181', port: 28844, type: 'vless', uuid: '8ca7ce9d-1c38-40b4-d8f1-5237230c3cfd', tls: True, servername: '152.42.178.181', udp: True}
+ - {name: 'bing50037', server: '146.190.90.91', port: 47936, type: 'vless', uuid: '42dc1433-929e-4e55-ab7a-da5c71b0f5d2', tls: True, servername: '146.190.90.91', udp: True}
+ - {name: 'bing50038', server: 'Zula.ir', port: 2096, type: 'vless', uuid: 'aee24606-71db-4799-9241-5ca76788b352', tls: True, servername: 'Zula.ir', udp: True}
+ - {name: 'bing50039', server: '62.60.178.127', port: 2053, type: 'vless', uuid: '2101f57e-4a06-42dc-ab70-9059f1d25715', tls: True, servername: '62.60.178.127', udp: True}
+ - {name: 'bing50040', server: '194.226.49.245', port: 443, type: 'vless', uuid: 'bestm03', tls: True, servername: '194.226.49.245', udp: True}
+ - {name: 'bing50041', server: '172.66.47.146', port: 8880, type: 'vless', uuid: 'ffce9d6b-0019-4fe0-ae15-28dd750455cd', tls: True, servername: '172.66.47.146', udp: True}
+ - {name: 'bing50042', server: '45.142.44.47', port: 8443, type: 'vless', uuid: '3bfa9b24-6e07-4587-a1cd-5a228acbf124', tls: True, servername: '45.142.44.47', udp: True}
+ - {name: 'bing50043', server: 'san.dornagamesco.ir', port: 1623, type: 'vless', uuid: '2d5d4230-10e2-4ee9-afe5-a55c20d2cb3b', tls: True, servername: 'san.dornagamesco.ir', udp: True}
+ - {name: 'bing50044', server: '37.32.30.112', port: 2020, type: 'vless', uuid: '9a028e7b-d11d-4f20-a8ec-fcde8a8e6c38', tls: True, servername: '37.32.30.112', udp: True}
+ - {name: 'bing50045', server: '91.107.235.161', port: 1022, type: 'vless', uuid: '19b3d5d3-b1e4-4eb3-aa10-ee63e0ca4a9b', tls: True, servername: '91.107.235.161', udp: True}
+ - {name: 'bing50046', server: '172.234.116.15', port: 51397, type: 'vless', uuid: '97404b2d-4e43-4c0a-9618-1a5950c2f28d', tls: True, servername: '172.234.116.15', udp: True}
+ - {name: 'bing50047', server: 'log.twixspace.com', port: 443, type: 'vless', uuid: '956f1324-85dc-42c2-a37d-ac87c47f6cac', tls: True, servername: 'log.twixspace.com', udp: True}
+ - {name: 'bing50048', server: 'prOD.fAstlY.nEt', port: 80, type: 'vless', uuid: '196e676a-d38e-57d1-82ac-3eac95a34fdb', tls: True, servername: 'prOD.fAstlY.nEt', udp: True}
+ - {name: 'bing50049', server: 'ef2rel.siasepid.sbs', port: 445, type: 'vless', uuid: 'c4a547dc-cfe5-4056-9158-a5c15487e624', tls: True, servername: 'ef2rel.siasepid.sbs', udp: True}
+ - {name: 'bing50050', server: 'ip.V2ray.re', port: 2087, type: 'vless', uuid: '2a409f73-4cd3-4c3e-a153-67f5a0e6441e', tls: True, servername: 'ip.V2ray.re', udp: True}
+ - {name: 'bing50051', server: '95.217.128.99', port: 443, type: 'vless', uuid: '--Tel-MsV2ray-MsV2ray---', tls: True, servername: '95.217.128.99', udp: True}
+ - {name: 'bing50052', server: '3.64.225.235', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.64.225.235', udp: True}
+ - {name: 'bing50053', server: '3.74.196.99', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.74.196.99', udp: True}
+ - {name: 'bing50054', server: '18.130.36.253', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.130.36.253', udp: True}
+ - {name: 'bing50055', server: '13.42.198.62', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.42.198.62', udp: True}
+ - {name: 'bing50056', server: '13.53.254.118', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.53.254.118', udp: True}
+ - {name: 'bing50057', server: '16.16.244.108', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '16.16.244.108', udp: True}
+ - {name: 'bing50058', server: '63.33.91.193', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '63.33.91.193', udp: True}
+ - {name: 'bing50059', server: '34.252.112.18', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '34.252.112.18', udp: True}
+ - {name: '🇫🇷 bing50060', server: '35.180.182.122', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '35.180.182.122', udp: True}
+ - {name: '🇫🇷 bing50061', server: '15.237.79.130', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '15.237.79.130', udp: True}
+ - {name: '🇬🇧 bing50062', server: '18.135.141.115', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.135.141.115', udp: True}
+ - {name: '🇬🇧 bing50063', server: '13.41.161.57', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.41.161.57', udp: True}
+ - {name: '🇸🇪 bing50064', server: '16.171.104.238', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '16.171.104.238', udp: True}
+ - {name: '🇸🇪 bing50065', server: '16.16.249.71', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '16.16.249.71', udp: True}
+ - {name: '🇩🇪 bing50066', server: '3.74.218.166', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.74.218.166', udp: True}
+ - {name: '🇩🇪 bing50067', server: '3.78.44.242', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.78.44.242', udp: True}
+ - {name: '🇸🇪 bing50068', server: '13.51.33.123', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.51.33.123', udp: True}
+ - {name: '🇸🇪 bing50069', server: '13.48.83.49', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.48.83.49', udp: True}
+ - {name: '🇩🇪 bing50070', server: '52.28.208.229', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '52.28.208.229', udp: True}
+ - {name: '🇩🇪 bing50071', server: '52.57.172.252', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '52.57.172.252', udp: True}
+ - {name: '🇫🇷 bing50072', server: '13.36.213.130', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.36.213.130', udp: True}
+ - {name: '🇫🇷 bing50073', server: '15.237.103.240', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '15.237.103.240', udp: True}
+ - {name: '🇩🇪 bing50074', server: '3.64.50.186', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.64.50.186', udp: True}
+ - {name: '🇩🇪 bing50075', server: '3.67.154.101', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.67.154.101', udp: True}
+ - {name: '🇫🇷 bing50076', server: '15.188.212.212', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '15.188.212.212', udp: True}
+ - {name: '🇫🇷 bing50077', server: '13.37.129.168', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.37.129.168', udp: True}
+ - {name: '🇸🇪 bing50078', server: '13.53.238.184', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.53.238.184', udp: True}
+ - {name: '🇸🇪 bing50079', server: '13.51.75.55', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.51.75.55', udp: True}
+ - {name: '🇩🇪 bing50080', server: '18.156.183.31', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.156.183.31', udp: True}
+ - {name: '🇩🇪 bing50081', server: '3.126.179.189', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.126.179.189', udp: True}
+ - {name: '🇸🇪 bing50082', server: '13.53.143.197', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.53.143.197', udp: True}
+ - {name: '🇸🇪 bing50083', server: '13.51.247.140', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.51.247.140', udp: True}
+ - {name: '🇩🇪 bing50084', server: '18.184.66.38', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.184.66.38', udp: True}
+ - {name: '🇩🇪 bing50085', server: '18.193.180.38', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.193.180.38', udp: True}
+ - {name: '🇫🇷 bing50086', server: '52.47.191.90', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '52.47.191.90', udp: True}
+ - {name: '🇫🇷 bing50087', server: '13.36.56.11', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.36.56.11', udp: True}
+ - {name: '🇩🇪 bing50088', server: '3.73.97.22', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.73.97.22', udp: True}
+ - {name: '🇩🇪 bing50089', server: '3.75.150.71', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.75.150.71', udp: True}
+ - {name: '🇫🇷 bing50090', server: '13.38.169.90', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.38.169.90', udp: True}
+ - {name: '🇸🇪 bing50091', server: '16.16.152.15', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '16.16.152.15', udp: True}
+ - {name: '🇸🇪 bing50092', server: '16.171.158.189', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '16.171.158.189', udp: True}
+ - {name: '🇩🇪 bing50093', server: '3.64.120.142', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.64.120.142', udp: True}
+ - {name: '🇩🇪 bing50094', server: '35.156.115.14', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '35.156.115.14', udp: True}
+ - {name: '🇨🇮 bing50095', server: '18.200.173.252', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.200.173.252', udp: True}
+ - {name: '🇩🇪 bing50096', server: '52.59.10.95', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '52.59.10.95', udp: True}
+ - {name: '🇩🇪 bing50097', server: '3.122.110.197', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.122.110.197', udp: True}
+ - {name: '🇸🇪 bing50098', server: '51.20.59.62', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '51.20.59.62', udp: True}
+ - {name: '🇸🇪 bing50099', server: '13.53.251.78', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.53.251.78', udp: True}
+ - {name: 'bing50100', server: '139.162.6.26', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'PmLeZHQAhGZNaJhQsJCMXO', udp: True}
+ - {name: 'bing50101', server: 'sg.free.yangon.club', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'BXYKTthoJSp6JIsRbro2cc', udp: True}
+ - {name: '🇭🇰 bing50102', server: 'hk1.yihaobao.xyz', port: 10040, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇭🇰 bing50103', server: 'hk3.yihaobao.xyz', port: 10034, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇭🇰 bing50104', server: 'hk6.yihaobao.xyz', port: 10059, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇸🇬 bing50105', server: 'sg4.yihaobao.xyz', port: 10076, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇯🇵 bing50106', server: 'jp2.yihaobao.xyz', port: 10053, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇯🇵 bing50107', server: 'jp5.yihaobao.xyz', port: 10067, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇰🇷 bing50108', server: 'kr2.yihaobao.xyz', port: 10077, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇹🇼 bing50109', server: 'tw1.yihaobao.xyz', port: 10022, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇭🇰 bing50110', server: 'hk2.yihaobao.xyz', port: 10037, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇭🇰 bing50111', server: 'hk4.yihaobao.xyz', port: 10037, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇭🇰 bing50112', server: 'hk5.yihaobao.xyz', port: 10040, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇸🇬 bing50113', server: 'sg1.yihaobao.xyz', port: 10068, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇸🇬 bing50114', server: 'sg2.yihaobao.xyz', port: 10066, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇸🇬 bing50115', server: 'sg3.yihaobao.xyz', port: 10062, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇸🇬 bing50116', server: 'sg4.yihaobao.xyz', port: 10077, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇸🇬 bing50117', server: 'sg5.yihaobao.xyz', port: 10063, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇯🇵 bing50118', server: 'jp1.yihaobao.xyz', port: 10072, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇯🇵 bing50119', server: 'jp3.yihaobao.xyz', port: 10067, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇯🇵 bing50120', server: 'jp4.yihaobao.xyz', port: 10068, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇯🇵 bing50121', server: 'jp5.yihaobao.xyz', port: 10068, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇺🇸 bing50122', server: 'us2.yihaobao.xyz', port: 10051, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇰🇷 bing50123', server: 'kr1.yihaobao.xyz', port: 10075, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇺🇸 bing50124', server: 'us3.yihaobao.xyz', port: 10053, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇰🇷 bing50125', server: 'kr2.yihaobao.xyz', port: 10078, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇰🇷 bing50126', server: 'kr3.yihaobao.xyz', port: 10062, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇰🇷 bing50127', server: 'kr4.yihaobao.xyz', port: 10070, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇰🇷 bing50128', server: 'kr5.yihaobao.xyz', port: 10067, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇫🇷 bing50129', server: 'fr1.yihaobao.xyz', port: 10032, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: '🇹🇼 bing50130', server: 'tw2.yihaobao.xyz', port: 10023, type: 'trojan', password: 'f78b6dfe-d15c-42bf-a9d6-a6b2db2fff5b', udp: True}
+ - {name: 'bing50131', server: '104.26.5.124', port: 443, type: 'vless', uuid: '4237e058-a727-4503-b40d-db758a617c21', tls: True, servername: '104.26.5.124', udp: True}
+ - {name: 'bing50132', server: '154.92.9.102', port: 443, type: 'vless', uuid: 'edf12778-fbeb-48d9-85e4-6530370b47cc', tls: True, servername: '154.92.9.102', udp: True}
+ - {name: 'bing50133', server: '154.92.9.117', port: 443, type: 'vless', uuid: 'edf12778-fbeb-48d9-85e4-6530370b47cc', tls: True, servername: '154.92.9.117', udp: True}
+ - {name: 'bing50134', server: '154.92.9.13', port: 443, type: 'vless', uuid: 'edf12778-fbeb-48d9-85e4-6530370b47cc', tls: True, servername: '154.92.9.13', udp: True}
+ - {name: 'bing50135', server: '138.124.61.246', port: 443, type: 'vless', uuid: 'V2rayArgoN-', tls: True, servername: '138.124.61.246', udp: True}
+ - {name: 'bing50136', server: '104.27.107.192', port: 443, type: 'vless', uuid: 'acc07fc2-f37a-4b1a-bece-68f38e17cf67', tls: True, servername: '104.27.107.192', udp: True}
+ - {name: 'bing50137', server: 'pronk.moderplus.com', port: 51841, type: 'vless', uuid: '2e7cfdb7-44c7-4992-8d1c-3cab70088a2e', tls: True, servername: 'pronk.moderplus.com', udp: True}
+ - {name: 'bing50138', server: '98.80.171.158', port: 2083, type: 'vless', uuid: 'f811f001-208d-4469-b137-6f58e86c22ab', tls: True, servername: '98.80.171.158', udp: True}
+ - {name: 'bing50139', server: '217.144.185.31', port: 2096, type: 'vless', uuid: '27055935-7817-4a86-92c1-89cbca3e9986', tls: True, servername: '217.144.185.31', udp: True}
+ - {name: 'bing50140', server: '104.17.43.21', port: 443, type: 'vless', uuid: '4d7969d9-5ec4-44b2-88e4-a153245bdd18', tls: True, servername: '104.17.43.21', udp: True}
+ - {name: 'bing50141', server: '185.255.112.175', port: 5600, type: 'vless', uuid: 'c121c9ce-f0a2-403c-9b30-11b6fe2b73a6', tls: True, servername: '185.255.112.175', udp: True}
+ - {name: 'bing50142', server: '5.75.205.179', port: 443, type: 'vless', uuid: '8a3e58dd-4883-44b9-91d9-37fec3c87a25', tls: True, servername: '5.75.205.179', udp: True}
+ - {name: 'bing50143', server: '135.181.43.124', port: 41792, type: 'vless', uuid: '641c0691-034d-4736-9651-61d5aa124f80', tls: True, servername: '135.181.43.124', udp: True}
+ - {name: 'bing50144', server: '188.114.98.12', port: 443, type: 'vless', uuid: 'cd557d97-4d74-4f5c-aa0e-4888af59a658', tls: True, servername: '188.114.98.12', udp: True}
+ - {name: 'bing50145', server: '52.76.140.84', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'r51ULXmfDtXDkURRDwSa6p', udp: True}
+ - {name: 'bing50146', server: '184.170.213.204', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'dqlr7JCgDrOK', udp: True}
+ - {name: 'bing50147', server: '3.1.56.38', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: '32JuuW4xLFNPbQ4zBuHtal', udp: True}
+ - {name: 'bing50148', server: '167.99.46.93', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'w6FJGrXEg6XlQkqU6mao8N', udp: True}
+ - {name: 'bing50149', server: '138.199.24.171', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: '6BianXWGMhZVJwmOD8pJsB', udp: True}
+ - {name: 'bing50150', server: '146.190.35.218', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'dp7aXKZX0bnUcWbbk3dDLi', udp: True}
+ - {name: 'bing50151', server: '74.3.163.117', port: 34386, type: 'ss', cipher: 'aes-256-gcm', password: 'c3bc81ed-39a4-4478-860d-e62db83ea40a', udp: True}
+ - {name: 'bing50152', server: '185.254.204.240', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: '7brWXfqNiWWbW58KRVLzP4', udp: True}
+ - {name: 'bing50153', server: '157.245.159.67', port: 16000, type: 'vless', uuid: '2220fa0c-3050-45bc-e797-10814b7ac02d', tls: True, servername: '157.245.159.67', udp: True}
+ - {name: 'bing50154', server: 'ns2.esfahansiman.com', port: 2052, type: 'vless', uuid: 'be6d2019-b9c8-48c4-a915-90a99c2c562c', tls: True, servername: 'ns2.esfahansiman.com', udp: True}
+ - {name: 'bing50155', server: '199.232.112.11', port: 443, type: 'vless', uuid: '8b269721-714f-4bb8-a18e-76038fbec1ec', tls: True, servername: '199.232.112.11', udp: True}
+ - {name: 'bing50156', server: '174.138.13.224', port: 15891, type: 'vless', uuid: 'ae2228d1-9b8f-4914-9e0a-68a115f8dbe1', tls: True, servername: '174.138.13.224', udp: True}
+ - {name: 'bing50157', server: 'srv1-d.gamekade.tech', port: 443, type: 'vless', uuid: 'f97c0600-b5c9-465d-9c14-34cfb8a6e9dc', tls: True, servername: 'srv1-d.gamekade.tech', udp: True}
+ - {name: 'bing50158', server: '65.109.216.171', port: 443, type: 'vless', uuid: '9f177110-4a05-4a53-aced-f529dd9583ec', tls: True, servername: '65.109.216.171', udp: True}
+ - {name: 'bing50159', server: '128-140-56-114.cprapid.com', port: 8443, type: 'vless', uuid: 'b0813d90-6535-4783-9212-2a7cc5af4966', tls: True, servername: '128-140-56-114.cprapid.com', udp: True}
+ - {name: 'bing50160', server: 'v4.vixsm.ir', port: 443, type: 'vless', uuid: '0069b36c-ba6c-4c70-ae39-71be514b9820', tls: True, servername: 'v4.vixsm.ir', udp: True}
+ - {name: 'bing50161', server: 'Www.spEEdtest.net', port: 8080, type: 'vless', uuid: 'f054f66b-6cda-44c9-cf32-d7cea51c971f', tls: True, servername: 'Www.spEEdtest.net', udp: True}
+ - {name: 'bing50162', server: 'ir.bamtech.site', port: 1720, type: 'vless', uuid: '46153d1a-ebe7-4218-9155-19618285a286', tls: True, servername: 'ir.bamtech.site', udp: True}
+ - {name: 'bing50163', server: 'dena2.avaservice.sbs', port: 31604, type: 'vless', uuid: '6c968a36-4889-47a6-99d6-b0399cd872c3', tls: True, servername: 'dena2.avaservice.sbs', udp: True}
+ - {name: 'bing50164', server: 'rose3.takshop.sbs', port: 45545, type: 'vless', uuid: '322c98b0-1f0a-4a5c-9e7f-e6c7c52dbbd4', tls: True, servername: 'rose3.takshop.sbs', udp: True}
+ - {name: 'bing50165', server: '65.109.228.235', port: 45743, type: 'vless', uuid: '3c2e5f39-d738-40d4-929c-249ea568cb4a', tls: True, servername: '65.109.228.235', udp: True}
+ - {name: 'bing50166', server: 'digikalacomgooglecomsof98varzesh3com3.bestsoftware4you.com', port: 45743, type: 'vless', uuid: '3c2e5f39-d738-40d4-929c-249ea568cb4a', tls: True, servername: 'digikalacomgooglecomsof98varzesh3com3.bestsoftware4you.com', udp: True}
+ - {name: 'bing50167', server: '185.161.251.211', port: 1633, type: 'vless', uuid: '8886974d-e25c-4311-9385-7dc6be0c33d4', tls: True, servername: '185.161.251.211', udp: True}
+ - {name: 'bing50168', server: '193.107.48.105', port: 10750, type: 'vless', uuid: 'fcdea945-f87c-4b34-9241-a33adc22af97', tls: True, servername: '193.107.48.105', udp: True}
+ - {name: 'bing50169', server: '104.24.197.20', port: 2083, type: 'vless', uuid: 'd603cba7-4ec4-4744-a1df-1fcbec323066', tls: True, servername: '104.24.197.20', udp: True}
+ - {name: 'bing50170', server: 'ad2.transitkala.com', port: 443, type: 'vless', uuid: 'f822a992-3b1f-4e2e-b7bf-46874f376dcc', tls: True, servername: 'ad2.transitkala.com', udp: True}
+ - {name: 'bing50171', server: 'v6.vixsm.ir', port: 2919, type: 'vless', uuid: 'a0b8d30b-3022-488e-bdc2-c24bb34272c9', tls: True, servername: 'v6.vixsm.ir', udp: True}
+ - {name: 'bing50172', server: 'mmad.72.fhiran.ir', port: 4810, type: 'vless', uuid: 'acfb8db7-fbc4-4aac-814d-ef73bd6ce72c', tls: True, servername: 'mmad.72.fhiran.ir', udp: True}
+ - {name: 'bing50173', server: 's25ulrera.s8573.ir', port: 1616, type: 'vless', uuid: 'f07bf2eb-332a-4cc8-b8fa-cfb6b3b9d987', tls: True, servername: 's25ulrera.s8573.ir', udp: True}
+ - {name: 'bing50174', server: 's25ulrera.s8573.ir', port: 8880, type: 'vless', uuid: 'f07bf2eb-332a-4cc8-b8fa-cfb6b3b9d987', tls: True, servername: 's25ulrera.s8573.ir', udp: True}
+ - {name: 'bing50175', server: 's25ulrera.s8573.ir', port: 1090, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'N_dopECS7fLMYmKXG7lwEw', udp: True}
+ - {name: 'bing50176', server: 'pqawszf.aiopen.cfd', port: 33009, type: 'trojan', password: 'f0366e33-84c9-4a20-ad40-4f1e2c230c36', udp: True}
+ - {name: 'bing50177', server: 'pqawssg001.aiopen.cfd', port: 443, type: 'trojan', password: 'f0366e33-84c9-4a20-ad40-4f1e2c230c36', udp: True}
+ - {name: 'bing50178', server: 'pqawsjp3.aiopen.cfd', port: 443, type: 'trojan', password: 'f0366e33-84c9-4a20-ad40-4f1e2c230c36', udp: True}
+ - {name: 'bing50179', server: 'pqawsjp2.aiopen.cfd', port: 443, type: 'trojan', password: 'f0366e33-84c9-4a20-ad40-4f1e2c230c36', udp: True}
+ - {name: 'bing50180', server: 'www.tegzitp.net', port: 2083, type: 'vless', uuid: '7d8f1635-dab2-49d0-8165-6c4d843bc882', tls: True, servername: 'www.tegzitp.net', udp: True}
+ - {name: 'bing50181', server: 'www.tegzitp.net', port: 2096, type: 'vless', uuid: '8ef42b9a-03b8-4ee9-87df-2ff046ff6986', tls: True, servername: 'www.tegzitp.net', udp: True}
+ - {name: 'bing50182', server: 'asl.totfaranghi.sbs', port: 2053, type: 'vless', uuid: 'e6a7c8d5-e63c-4804-ab65-43b5aacd443a', tls: True, servername: 'asl.totfaranghi.sbs', udp: True}
+ - {name: 'bing50183', server: 'kanal-telegram-freev2rng-freev2rng-freev2rng.pages.dev', port: 2083, type: 'vless', uuid: '4ad666a2-9c0e-4309-83b8-2d87830d572e', tls: True, servername: 'kanal-telegram-freev2rng-freev2rng-freev2rng.pages.dev', udp: True}
+ - {name: 'bing50184', server: '172.66.47.12', port: 2083, type: 'vless', uuid: '4ad666a2-9c0e-4309-83b8-2d87830d572e', tls: True, servername: '172.66.47.12', udp: True}
+ - {name: 'bing50185', server: '128.140.124.180', port: 22132, type: 'vless', uuid: '33c8b0dc-b16d-46b4-b927-f372ce7258a0', tls: True, servername: '128.140.124.180', udp: True}
+ - {name: 'bing50186', server: 'lightning6-joinbede.ddns.net', port: 2083, type: 'vless', uuid: '88227a4a-ba21-4d6b-91d9-22224c259407', tls: True, servername: 'lightning6-joinbede.ddns.net', udp: True}
+ - {name: 'bing50187', server: '77.246.105.179', port: 443, type: 'vless', uuid: '52c602fc-532d-49ee-9383-f8eb0007322b', tls: True, servername: '77.246.105.179', udp: True}
+ - {name: 'bing50188', server: '137.74.71.118', port: 443, type: 'vless', uuid: '52c602fc-532d-49ee-9383-f8eb0007322b', tls: True, servername: '137.74.71.118', udp: True}
+ - {name: 'bing50189', server: '54.38.59.30', port: 443, type: 'vless', uuid: '52c602fc-532d-49ee-9383-f8eb0007322b', tls: True, servername: '54.38.59.30', udp: True}
+ - {name: 'bing50190', server: '5.161.82.169', port: 443, type: 'vless', uuid: '52c602fc-532d-49ee-9383-f8eb0007322b', tls: True, servername: '5.161.82.169', udp: True}
+ - {name: 'bing50191', server: '5.135.21.191', port: 8880, type: 'vless', uuid: '64afe0cf-d56b-4471-983a-5428d32958de', tls: True, servername: '5.135.21.191', udp: True}
+ - {name: 'bing50192', server: 'iranserver.com', port: 2087, type: 'vless', uuid: '12ef2fb8-4c06-4e9e-b1b6-0dbde357790b', tls: True, servername: 'iranserver.com', udp: True}
+ - {name: 'bing50193', server: '5.75.173.36', port: 22757, type: 'vless', uuid: 'lotextem', tls: True, servername: '5.75.173.36', udp: True}
+ - {name: 'bing50194', server: '171.22.125.184', port: 2198, type: 'vless', uuid: '838f5273-5d2d-4630-a0f5-9cc8e4aef4d6', tls: True, servername: '171.22.125.184', udp: True}
+ - {name: 'bing50195', server: 'ul-uae2.09vpn.com', port: 80, type: 'vless', uuid: '4d0466d9-90b0-4f95-aef9-ca1c35b31c43', tls: True, servername: 'ul-uae2.09vpn.com', udp: True}
+ - {name: 'bing50196', server: 'ul-uae2.09vpn.com', port: 8443, type: 'vless', uuid: '4d0466d9-90b0-4f95-aef9-ca1c35b31c43', tls: True, servername: 'ul-uae2.09vpn.com', udp: True}
+ - {name: 'bing50197', server: '85.237.211.218', port: 2580, type: 'ss', cipher: 'aes-256-cfb', password: 'u7745442451', udp: True}
+ - {name: 'bing50198', server: '86.38.247.109', port: 2083, type: 'trojan', password: 'u201424980', udp: True}
+ - {name: 'bing50199', server: 'ul-singapore1.09vpn.com', port: 2083, type: 'trojan', password: 'u201424980', udp: True}
+ - {name: 'bing50200', server: '146.190.105.24', port: 42522, type: 'vless', uuid: 'f9179e3b-3b0d-48e1-ca5a-63295bd63714', tls: True, servername: '146.190.105.24', udp: True}
+ - {name: 'bing50201', server: '139.177.189.164', port: 55389, type: 'vless', uuid: '417fe8d8-29c5-4abd-ad14-7e44ea8e0962', tls: True, servername: '139.177.189.164', udp: True}
+ - {name: 'bing50202', server: 'free.ashvpnzcz.online', port: 80, type: 'vless', uuid: '5a142243-ded2-4858-a97b-eb56f0a7765f', tls: True, servername: 'free.ashvpnzcz.online', udp: True}
+ - {name: 'bing50203', server: 'free.ashvpnzcz.online', port: 443, type: 'vless', uuid: '0b2d005c-4dc6-4c9d-b223-aff22f7099dd', tls: True, servername: 'free.ashvpnzcz.online', udp: True}
+ - {name: 'bing50204', server: 'free.ashvpnzcz.online', port: 8080, type: 'vless', uuid: '142cab30-a43d-4506-80e7-285f9fac2331', tls: True, servername: 'free.ashvpnzcz.online', udp: True}
+ - {name: 'bing50205', server: 'vps.momyzu.com', port: 52475, type: 'vless', uuid: 'a1c878d3-3f95-4e75-fe18-ecb0e31a60da', tls: True, servername: 'vps.momyzu.com', udp: True}
+ - {name: 'bing50206', server: '139.59.110.133', port: 18004, type: 'vless', uuid: '569d23e3-3a97-4bf1-871a-edf5837b7c4f', tls: True, servername: '139.59.110.133', udp: True}
+ - {name: 'bing50207', server: '172.232.149.72', port: 17123, type: 'vless', uuid: '14653802-4435-41ef-9210-64e4293f28b9', tls: True, servername: '172.232.149.72', udp: True}
+ - {name: 'bing50208', server: '181.215.205.104', port: 443, type: 'vless', uuid: 'ce7b5e36-a3a0-4f61-af4d-6ca132f892c5', tls: True, servername: '181.215.205.104', udp: True}
+ - {name: 'bing50209', server: 'jp2.gsjc.cfd', port: 443, type: 'trojan', password: 'bce72830-6561-4af6-a2c4-052fccb94595', udp: True}
+ - {name: 'bing50210', server: 'hk2.gsjc.cfd', port: 443, type: 'trojan', password: 'bce72830-6561-4af6-a2c4-052fccb94595', udp: True}
+ - {name: '🇺🇸 bing50211', server: '163.123.192.60', port: 443, type: 'trojan', password: '41bec492-cd79-4b57-9a15-7d2bb00fcfca', udp: True}
+ - {name: '🇺🇸 bing50212', server: '163.123.192.152', port: 443, type: 'trojan', password: '718c4ef4-9f65-496c-9547-f27e4226c4f5', udp: True}
+ - {name: 'bing50213', server: 'pqawszf.aiopen.cfd', port: 443, type: 'trojan', password: '7ad2a5e0-906b-4b3e-97bb-b5f3992cb19d', udp: True}
+ - {name: 'bing50214', server: 'kbawssg2.aiopen.cfd', port: 443, type: 'trojan', password: 'a8f284ff-7d36-493a-a0a6-87ee7f003c5c', udp: True}
+ - {name: 'bing50215', server: 'Zula.ir', port: 2052, type: 'vless', uuid: 'a612b080-9c98-443e-83b1-e83841927753', tls: True, servername: 'Zula.ir', udp: True}
+ - {name: 'bing50216', server: '3.0.107.14', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'UTWzSIgr6EOqUIOBqiYalW', udp: True}
+ - {name: 'bing50217', server: '5.161.97.145', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'nd7nz14Mw1iUNjDwRf141w', udp: True}
+ - {name: 'bing50218', server: 'supdevbc.zitactm.click', port: 443, type: 'vless', uuid: 'de7b5268-7a69-4986-8a65-29575c57ad0c', tls: True, servername: 'supdevbc.zitactm.click', udp: True}
+ - {name: 'bing50219', server: 'acetu1000.deltamar.space', port: 1011, type: 'vless', uuid: '74c8c7f8-e1ec-49e7-801c-bc5d4322dbb5', tls: True, servername: 'acetu1000.deltamar.space', udp: True}
+ - {name: 'bing50220', server: 'channel-id-freev2rng.pages.dev', port: 443, type: 'vless', uuid: 'd1478eab-1c50-46c8-8a22-001ef6aaad36', tls: True, servername: 'channel-id-freev2rng.pages.dev', udp: True}
+ - {name: 'bing50221', server: '13.48.158.115', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.48.158.115', udp: True}
+ - {name: 'bing50222', server: '16.16.140.25', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '16.16.140.25', udp: True}
+ - {name: 'bing50223', server: 'v2line.telegram.channel.1270.fr8678825324247b8176d59f83c30bd94d23d2e3ac5cd4a743bkwqeikvdyufr.cyou', port: 443, type: 'vless', uuid: '884f9b2c-f0c5-44dd-a68e-3e39ce93bb39', tls: True, servername: 'v2line.telegram.channel.1270.fr8678825324247b8176d59f83c30bd94d23d2e3ac5cd4a743bkwqeikvdyufr.cyou', udp: True}
+ - {name: 'bing50224', server: '104.25.255.254', port: 2096, type: 'vless', uuid: '306a3bc7-2eae-428d-b6fb-04c3f3b51d1c', tls: True, servername: '104.25.255.254', udp: True}
+ - {name: 'bing50225', server: '172.67.193.36', port: 2096, type: 'vless', uuid: '306a3bc7-2eae-428d-b6fb-04c3f3b51d1c', tls: True, servername: '172.67.193.36', udp: True}
+ - {name: 'bing50226', server: '104.21.83.164', port: 8443, type: 'vless', uuid: 'ee648390-24b0-4122-b1fa-b7a7929acf1d', tls: True, servername: '104.21.83.164', udp: True}
+ - {name: 'bing50227', server: '104.31.16.180', port: 2096, type: 'vless', uuid: '270250fa-00ff-4fde-9608-39ebd4ea8a39', tls: True, servername: '104.31.16.180', udp: True}
+ - {name: 'bing50228', server: '188.114.97.2', port: 2053, type: 'vless', uuid: '6ebbc0ad-30a0-4b73-a443-ec5c0e1c2e44', tls: True, servername: '188.114.97.2', udp: True}
+ - {name: 'bing50229', server: '190.93.244.0', port: 443, type: 'vless', uuid: '5f84c37f-f153-4abc-b634-859dc6bf90de', tls: True, servername: '190.93.244.0', udp: True}
+ - {name: 'bing50230', server: '162.159.152.0', port: 2096, type: 'vless', uuid: 'd74d8e62-90c2-4fee-bcf3-d239956ee51a', tls: True, servername: '162.159.152.0', udp: True}
+ - {name: 'bing50231', server: 'xkalindu.xconfigz.win', port: 34696, type: 'trojan', password: 'K74nEUhKp9', udp: True}
+ - {name: 'bing50232', server: 'xkalindu.xconfigz.win', port: 29286, type: 'trojan', password: 'EQEaONr43j', udp: True}
+ - {name: 'bing50233', server: 'xkalindu.xconfigz.win', port: 52625, type: 'trojan', password: 'wIcY2HF0g8', udp: True}
+ - {name: 'bing50234', server: 'xkalindu.xconfigz.win', port: 44069, type: 'trojan', password: 'l7I7dNCvS0', udp: True}
+ - {name: 'bing50235', server: '170.64.210.146', port: 14156, type: 'vless', uuid: '63b89bf2-1692-4089-8fa1-b6f867932f0e', tls: True, servername: '170.64.210.146', udp: True}
+ - {name: 'bing50236', server: '146.190.106.7', port: 17961, type: 'vless', uuid: 'ed791f0b-d771-4b8b-f020-9e2a70939d61', tls: True, servername: '146.190.106.7', udp: True}
+ - {name: 'bing50237', server: '206.189.34.96', port: 42929, type: 'vless', uuid: '2e5828aa-e748-46c7-f463-39882fac22a6', tls: True, servername: '206.189.34.96', udp: True}
+ - {name: 'bing50238', server: '91.107.255.1', port: 33907, type: 'vless', uuid: 'd61c4fe8-fd07-418e-8592-deed7d770290', tls: True, servername: '91.107.255.1', udp: True}
+ - {name: 'bing50239', server: 'sg2.gsjc.cfd', port: 443, type: 'trojan', password: 'bce72830-6561-4af6-a2c4-052fccb94595', udp: True}
+ - {name: 'bing50240', server: 'sg1.gsjc.cfd', port: 443, type: 'trojan', password: 'bce72830-6561-4af6-a2c4-052fccb94595', udp: True}
+ - {name: 'bing50241', server: 'hk1.gsjc.cfd', port: 443, type: 'trojan', password: 'bce72830-6561-4af6-a2c4-052fccb94595', udp: True}
+ - {name: 'bing50242', server: 'jp1.gsjc.cfd', port: 443, type: 'trojan', password: 'bce72830-6561-4af6-a2c4-052fccb94595', udp: True}
+ - {name: 'bing50243', server: 'gs-hinet.gsjc.cfd', port: 443, type: 'trojan', password: 'bce72830-6561-4af6-a2c4-052fccb94595', udp: True}
+ - {name: 'bing50244', server: 'pqawsjp1.gsjc.cfd', port: 443, type: 'trojan', password: '32068eda-adad-431a-bfd4-2f7d4c73507c', udp: True}
+ - {name: 'bing50245', server: 'pqawsjp4.gsjc.cfd', port: 443, type: 'trojan', password: '32068eda-adad-431a-bfd4-2f7d4c73507c', udp: True}
+ - {name: 'bing50246', server: 'pqawssg2.gsjc.cfd', port: 443, type: 'trojan', password: '32068eda-adad-431a-bfd4-2f7d4c73507c', udp: True}
+ - {name: 'bing50247', server: 'pqawssg01.gsjc.cfd', port: 443, type: 'trojan', password: '32068eda-adad-431a-bfd4-2f7d4c73507c', udp: True}
+ - {name: 'bing50248', server: 'pqawssg02.gsjc.cfd', port: 443, type: 'trojan', password: '32068eda-adad-431a-bfd4-2f7d4c73507c', udp: True}
+ - {name: 'bing50249', server: 'v1.net2eset.com', port: 32117, type: 'vless', uuid: '34d83dcf-80ba-461a-b9c7-d057264bd854', tls: True, servername: 'v1.net2eset.com', udp: True}
+ - {name: 'bing50250', server: 'se.reata.ir', port: 2020, type: 'vless', uuid: '575543f3-f08e-426d-9230-1ddca047de30', tls: True, servername: 'se.reata.ir', udp: True}
+ - {name: 'bing50251', server: '188.245.163.79', port: 1624, type: 'vless', uuid: '24f65efb-4885-4e3c-b598-f70336ce8c63', tls: True, servername: '188.245.163.79', udp: True}
+ - {name: 'bing50252', server: 'docs.twixspace.com', port: 443, type: 'vless', uuid: '6b9389e5-0dc3-42cb-b1c7-70b21ca0a26f', tls: True, servername: 'docs.twixspace.com', udp: True}
+ - {name: 'bing50253', server: '1.gpairnetwork369.ir', port: 443, type: 'vless', uuid: '959c009b-1989-43e4-9cfc-678efa9eed1d', tls: True, servername: '1.gpairnetwork369.ir', udp: True}
+ - {name: 'bing50254', server: 'v.Reza-punisher-shopv2n.fun', port: 58952, type: 'vless', uuid: 'cbfc371d-7af6-4a4d-869b-42c159beef23', tls: True, servername: 'v.Reza-punisher-shopv2n.fun', udp: True}
+ - {name: 'bing50255', server: '62.133.63.74', port: 443, type: 'vless', uuid: '---Telgram-Parsashonam---', tls: True, servername: '62.133.63.74', udp: True}
+ - {name: 'bing50256', server: '128.140.3.97', port: 444, type: 'vless', uuid: '---Telegram-Parsashonam---', tls: True, servername: '128.140.3.97', udp: True}
+ - {name: 'bing50257', server: '65.21.183.129', port: 4568, type: 'vless', uuid: '---Telgram-Parsashonam---', tls: True, servername: '65.21.183.129', udp: True}
+ - {name: 'bing50258', server: 'Cloud.Tel-Parsashonam.Website', port: 443, type: 'vless', uuid: 'Parsashonam-46', tls: True, servername: 'Cloud.Tel-Parsashonam.Website', udp: True}
+ - {name: 'bing50259', server: 'Mci0.Tel-Parsashonam.Website', port: 2053, type: 'vless', uuid: 'Parsashonam-46', tls: True, servername: 'Mci0.Tel-Parsashonam.Website', udp: True}
+ - {name: 'bing50260', server: 'Mtn1.Tel-Parsashonam.Website', port: 2096, type: 'vless', uuid: 'Parsashonam-46', tls: True, servername: 'Mtn1.Tel-Parsashonam.Website', udp: True}
+ - {name: 'bing50261', server: 'Cloud.Tel-Parsashonam.Website', port: 2096, type: 'vless', uuid: 'Parsashonam-46', tls: True, servername: 'Cloud.Tel-Parsashonam.Website', udp: True}
+ - {name: 'bing50262', server: 'Mci0.Tel-Parsashonam.Website', port: 2087, type: 'vless', uuid: 'Parsashonam-46', tls: True, servername: 'Mci0.Tel-Parsashonam.Website', udp: True}
+ - {name: 'bing50263', server: 'Mtn1.Tel-Parsashonam.Website', port: 2083, type: 'vless', uuid: 'Parsashonam-46', tls: True, servername: 'Mtn1.Tel-Parsashonam.Website', udp: True}
+ - {name: 'bing50264', server: '146.190.89.218', port: 59193, type: 'vless', uuid: 'f5ed6607-7a2f-4f0b-9522-557d1b25f59e', tls: True, servername: '146.190.89.218', udp: True}
+ - {name: 'bing50265', server: '52.184.85.135', port: 59070, type: 'trojan', password: 'Zwheovy4ZO', udp: True}
+ - {name: 'bing50266', server: '52.184.85.135', port: 26104, type: 'trojan', password: 'oUo1ddbLyT', udp: True}
+ - {name: 'bing50267', server: '188.114.96.12', port: 2053, type: 'vless', uuid: 'b881e493-574b-4b50-e944-640ede7418e7', tls: True, servername: '188.114.96.12', udp: True}
+ - {name: 'bing50268', server: '5.78.48.116', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'l5exeQqXQq6L8Pu2n7DktN', udp: True}
+ - {name: 'bing50269', server: '185.58.240.75', port: 443, type: 'vless', uuid: '5232ec47-5d1c-4884-aa96-a6f07e6352c2', tls: True, servername: '185.58.240.75', udp: True}
+ - {name: 'bing50270', server: '212.34.150.176', port: 4199, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'gpW0ffUApVv0u5q1NwGHAX', udp: True}
+ - {name: 'bing50271', server: '113.30.151.53', port: 31348, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'tEE3xDiYuDKPOYfYdn9t9NPPWQSeiidAW4lxEOavjjo0WY7l', udp: True}
+ - {name: '🇺🇸 bing50272', server: '148.59.74.247', port: 443, type: 'trojan', password: '6e787669-8d33-4d8d-98fa-deaec17761b3', udp: True}
+ - {name: '🇺🇸 bing50273', server: '163.123.192.157', port: 443, type: 'trojan', password: '6e787669-8d33-4d8d-98fa-deaec17761b3', udp: True}
+ - {name: '🇧🇬 bing50274', server: 'siplier.top', port: 37195, type: 'trojan', password: '65e46f1a-8905-4cdc-a393-a457861af623', udp: True}
+ - {name: 'bing50275', server: 'siplier.top', port: 35538, type: 'trojan', password: '65e46f1a-8905-4cdc-a393-a457861af623', udp: True}
+ - {name: 'bing50276', server: 'siplier.top', port: 31538, type: 'trojan', password: '65e46f1a-8905-4cdc-a393-a457861af623', udp: True}
+ - {name: 'bing50277', server: 'siplier.top', port: 35789, type: 'trojan', password: '65e46f1a-8905-4cdc-a393-a457861af623', udp: True}
+ - {name: 'bing50278', server: 'siplier.top', port: 35712, type: 'trojan', password: '65e46f1a-8905-4cdc-a393-a457861af623', udp: True}
+ - {name: 'bing50279', server: 'siplier.top', port: 33861, type: 'trojan', password: '65e46f1a-8905-4cdc-a393-a457861af623', udp: True}
+ - {name: 'bing50280', server: 'siplier.top', port: 39707, type: 'trojan', password: '65e46f1a-8905-4cdc-a393-a457861af623', udp: True}
+ - {name: 'bing50281', server: 'siplier.top', port: 35874, type: 'trojan', password: '65e46f1a-8905-4cdc-a393-a457861af623', udp: True}
+ - {name: 'bing50282', server: 'siplier.top', port: 39935, type: 'trojan', password: '65e46f1a-8905-4cdc-a393-a457861af623', udp: True}
+ - {name: 'bing50283', server: 'siplier.top', port: 36110, type: 'trojan', password: '65e46f1a-8905-4cdc-a393-a457861af623', udp: True}
+ - {name: 'bing50284', server: '142.202.49.84', port: 5001, type: 'ss', cipher: 'aes-256-gcm', password: 'Y6R9pAtvxxzmGC', udp: True}
+ - {name: '🇭🇰 bing50285', server: '42.240.140.23', port: 2025, type: 'ss', cipher: 'aes-128-gcm', password: 'c6bcef1e-3fa9-4344-a291-2339ab93d6b9', udp: True}
+ - {name: '🇺🇸 bing50286', server: '106.75.65.133', port: 2025, type: 'ss', cipher: 'aes-128-gcm', password: 'c6bcef1e-3fa9-4344-a291-2339ab93d6b9', udp: True}
+ - {name: '🇸🇬 bing50287', server: '106.75.138.54', port: 2025, type: 'ss', cipher: 'aes-128-gcm', password: 'c6bcef1e-3fa9-4344-a291-2339ab93d6b9', udp: True}
+ - {name: '🇸🇬 bing50288', server: 'sg13.microsoft-orgwly.vip', port: 443, type: 'trojan', password: 'e1cdc509-0a5e-4cf9-9233-8c9507b99f6b', udp: True}
+ - {name: '🇭🇰 bing50289', server: 'hk11.microsoft-orgwly.vip', port: 443, type: 'trojan', password: 'e1cdc509-0a5e-4cf9-9233-8c9507b99f6b', udp: True}
+ - {name: '🇯🇵 bing50290', server: 'jp12.microsoft-orgwly.vip', port: 10045, type: 'trojan', password: 'e1cdc509-0a5e-4cf9-9233-8c9507b99f6b', udp: True}
+ - {name: '🇸🇬 bing50291', server: 'sg2.microsoft-orgwly.vip', port: 16232, type: 'trojan', password: 'e1cdc509-0a5e-4cf9-9233-8c9507b99f6b', udp: True}
+ - {name: 'bing50292', server: '43.201.58.248', port: 443, type: 'ss', cipher: 'aes-256-gcm', password: 'amazonskr05', udp: True}
+ - {name: '🇺🇸 bing50293', server: '148.59.74.246', port: 443, type: 'trojan', password: '6e787669-8d33-4d8d-98fa-deaec17761b3', udp: True}
+ - {name: '🇺🇸 bing50294', server: '148.59.74.248', port: 443, type: 'trojan', password: '6e787669-8d33-4d8d-98fa-deaec17761b3', udp: True}
+ - {name: 'bing50295', server: 'daily.globalnetvpn.site', port: 51536, type: 'vless', uuid: '8bcbec0e-6a99-417c-8d65-d94b5ec5c493', tls: True, servername: 'daily.globalnetvpn.site', udp: True}
+ - {name: 'bing50296', server: 'mtn-maznet.ddns.net', port: 8443, type: 'vless', uuid: '411abf96-d770-4d88-bdb8-83846facbb8b', tls: True, servername: 'mtn-maznet.ddns.net', udp: True}
+ - {name: 'bing50297', server: 'telegram.VPNCUSTOMIZE.cam', port: 2053, type: 'vless', uuid: 'b3303f6c-a8bb-47f5-ae8e-2b5da6ab5560', tls: True, servername: 'telegram.VPNCUSTOMIZE.cam', udp: True}
+ - {name: 'bing50298', server: '146.190.104.77', port: 54495, type: 'vless', uuid: '69cd0a5e-7891-478f-dd06-4275242bea55', tls: True, servername: '146.190.104.77', udp: True}
+ - {name: 'bing50299', server: 'kalindu.xconfigz.win', port: 29512, type: 'trojan', password: 'H6K7FTsGGF', udp: True}
+ - {name: 'bing50300', server: 'blue99shop.ir', port: 28829, type: 'vless', uuid: '6a0ec271-ed4a-45c9-99f3-2e0e6ca641cd', tls: True, servername: 'blue99shop.ir', udp: True}
+ - {name: 'bing50301', server: 'alienclch.edlaghiye.com', port: 443, type: 'vless', uuid: '5eedadd1-a6a9-4183-aa83-4cd5421d9265', tls: True, servername: 'alienclch.edlaghiye.com', udp: True}
+ - {name: 'bing50302', server: '157.230.27.152', port: 58632, type: 'vless', uuid: '01e2594f-271a-4a73-8807-738a0e7c02f0', tls: True, servername: '157.230.27.152', udp: True}
+ - {name: 'bing50303', server: '64.225.100.79', port: 20819, type: 'vless', uuid: 'a28db1c5-9e6c-4768-a891-0982d5f6312c', tls: True, servername: '64.225.100.79', udp: True}
+ - {name: 'bing50304', server: '217.138.193.10', port: 804, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'G!yBwPWH3Vao', udp: True}
+ - {name: 'bing50305', server: '34.83.28.127', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'AsopHtFUGtFd', udp: True}
+ - {name: 'bing50306', server: '206.189.81.147', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'mdMl2SNlB0P0', udp: True}
+ - {name: 'bing50307', server: '159.65.16.72', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'WP4PnVJRQgxj', udp: True}
+ - {name: 'bing50308', server: '5.161.115.53', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'PS6YASgcTBZc', udp: True}
+ - {name: 'bing50309', server: '5.161.115.53', port: 993, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'epjhtTE1HS3AXK3x1qH9Qo', udp: True}
+ - {name: 'bing50310', server: '167.172.183.253', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'zmeEEcJItIl5Dv1UbNNTOD', udp: True}
+ - {name: 'bing50311', server: '37.221.126.186', port: 54335, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'hRG6HKvDYp3MfxPUd4BBWf', udp: True}
+ - {name: 'bing50312', server: 'customer-95-164-38-151.stark-industries.solutions', port: 443, type: 'trojan', password: 'c5691b8f-d833-41e4-9295-769f3edb4cd2', udp: True}
+ - {name: 'bing50313', server: '35.244.56.223', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: '8ijYu0pRx4Xl', udp: True}
+ - {name: 'bing50314', server: '35.240.140.43', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: '5We0jxgH6M7m', udp: True}
+ - {name: 'bing50315', server: '35.230.138.161', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'sLh45lAp26oF', udp: True}
+ - {name: 'bing50316', server: 'ir7.rebooting98.line.pm', port: 23364, type: 'vless', uuid: 'd25d2247-a922-4c18-a711-810313bc3be9', tls: True, servername: 'ir7.rebooting98.line.pm', udp: True}
+ - {name: 'bing50317', server: 'join---------to.outline-vpn.cloud', port: 8443, type: 'vless', uuid: 'd342d11e-d424-4583-b36e-524ab1f0afa4', tls: True, servername: 'join---------to.outline-vpn.cloud', udp: True}
+ - {name: 'bing50318', server: 'vl26.rnd.biz.id', port: 443, type: 'vless', uuid: 'aa81e188-a979-411e-a10b-08287646cc43', tls: True, servername: 'vl26.rnd.biz.id', udp: True}
+ - {name: 'bing50319', server: 'join-------to.outline-vpn.cloud', port: 443, type: 'vless', uuid: '884f9b2c-f0c5-44dd-a68e-3e39ce93bb39', tls: True, servername: 'join-------to.outline-vpn.cloud', udp: True}
+ - {name: 'bing50320', server: '3254.outline-vpn.cloud', port: 2053, type: 'vless', uuid: 'd342d11e-d424-4583-b36e-524ab1f0afa4', tls: True, servername: '3254.outline-vpn.cloud', udp: True}
+ - {name: 'bing50321', server: 'zx------join.outline-vpn.cloud', port: 443, type: 'vless', uuid: '884f9b2c-f0c5-44dd-a68e-3e39ce93bb39', tls: True, servername: 'zx------join.outline-vpn.cloud', udp: True}
+ - {name: 'bing50322', server: 'daily.globalnetvpn.site', port: 20639, type: 'vless', uuid: '4d0c5ee0-33cb-4f44-a356-77de0b685bed', tls: True, servername: 'daily.globalnetvpn.site', udp: True}
+ - {name: 'bing50323', server: 'cdn.discordapp.com', port: 2095, type: 'vless', uuid: '1b4d8825-7d93-4fa0-9bf8-1575cec3b45f', tls: True, servername: 'cdn.discordapp.com', udp: True}
+ - {name: 'bing50324', server: 'sea.hopebook75zulawu.online', port: 80, type: 'vless', uuid: '472e2ab2-a7a5-44cf-84b2-158882a108a5', tls: True, servername: 'sea.hopebook75zulawu.online', udp: True}
+ - {name: 'bing50325', server: 'de-53.vip-ipsum.link', port: 26209, type: 'vless', uuid: 'eae70276-a5e0-45c3-b12a-55d046387468', tls: True, servername: 'de-53.vip-ipsum.link', udp: True}
+ - {name: '🇭🇰 bing50326', server: '16.163.102.234', port: 443, type: 'trojan', password: 'ca7febc2-bb45-4e6d-810e-ab0af6009c4e', udp: True}
+ - {name: 'bing50327', server: '23.166.88.20', port: 8119, type: 'ss', cipher: 'aes-256-gcm', password: 'cdBIDV42DCwnfIN', udp: True}
+ - {name: 'bing50328', server: '188.166.245.246', port: 60109, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: '59OW9T8grlt1hmV3VFnN72', udp: True}
+ - {name: 'bing50329', server: '206.189.93.2', port: 1489, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'hSZhPAs1FBGORHKMF2GlPp', udp: True}
+ - {name: 'bing50330', server: 'speedent.ddns.net', port: 2053, type: 'vless', uuid: 'speeDent_net', tls: True, servername: 'speedent.ddns.net', udp: True}
+ - {name: 'bing50331', server: '20.212.64.4', port: 443, type: 'vless', uuid: '6f995056-7802-4a1d-bff7-61678e626c3f', tls: True, servername: '20.212.64.4', udp: True}
+ - {name: 'bing50332', server: '65.108.144.131', port: 34667, type: 'vless', uuid: '57ded56a-daba-4a97-b8a1-f3b25ebed964', tls: True, servername: '65.108.144.131', udp: True}
+ - {name: 'bing50333', server: '104.27.193.64', port: 443, type: 'vless', uuid: '4804f14b-c1f8-452d-a6ec-eff1490aeac9', tls: True, servername: '104.27.193.64', udp: True}
+ - {name: 'bing50334', server: '13join.outline-vpn.cloud', port: 2087, type: 'vless', uuid: '884f9b2c-f0c5-44dd-a68e-3e39ce93bb39', tls: True, servername: '13join.outline-vpn.cloud', udp: True}
+ - {name: 'bing50335', server: '91.107.243.227', port: 723, type: 'vless', uuid: '4d73430d-4323-4884-d3a0-a339cd4226b2', tls: True, servername: '91.107.243.227', udp: True}
+ - {name: 'bing50336', server: 'bit23iow-four901299.ddns.net', port: 34364, type: 'vless', uuid: '7ca4046e-b4e3-4556-85de-042e8b79c755', tls: True, servername: 'bit23iow-four901299.ddns.net', udp: True}
+ - {name: 'bing50337', server: 'usa.test3.net', port: 443, type: 'trojan', password: 'f1649b00-dffe-11ef-9842-1239d0255272', udp: True}
+ - {name: 'bing50338', server: '104.20.22.145', port: 443, type: 'trojan', password: 'auto', udp: True}
+ - {name: 'bing50339', server: '146.190.86.215', port: 1279, type: 'vless', uuid: '59947315-8ccd-4454-ab49-3f53eeabc90e', tls: True, servername: '146.190.86.215', udp: True}
+ - {name: 'bing50340', server: '146.190.89.94', port: 57696, type: 'vless', uuid: '88406c80-4e9f-4ef5-ce9b-8a153c51131b', tls: True, servername: '146.190.89.94', udp: True}
+ - {name: 'bing50341', server: '68.183.185.10', port: 27565, type: 'vless', uuid: 'e8c608b6-8847-4edf-b19b-24f91aa49905', tls: True, servername: '68.183.185.10', udp: True}
+ - {name: 'bing50342', server: 'bia-to-channel5.unlimiteddev.cloud', port: 80, type: 'vless', uuid: 'c2f3ad52-01a3-40a3-c798-cd765b3bffb2', tls: True, servername: 'bia-to-channel5.unlimiteddev.cloud', udp: True}
+ - {name: 'bing50343', server: 'ar.apkzed.online', port: 29779, type: 'vless', uuid: 'b5fbd201-db4c-45e7-e139-d013e5531cba', tls: True, servername: 'ar.apkzed.online', udp: True}
+ - {name: 'bing50344', server: '16.170.8.126', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '16.170.8.126', udp: True}
+ - {name: 'bing50345', server: '13.51.188.97', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.51.188.97', udp: True}
+ - {name: 'bing50346', server: 'v2rayfroshmtnn.ddns.net', port: 8443, type: 'vless', uuid: 'b550dfdc-f3e9-48dd-89f1-a8716c4b7d99', tls: True, servername: 'v2rayfroshmtnn.ddns.net', udp: True}
+ - {name: 'bing50347', server: '3.10.45.61', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.10.45.61', udp: True}
+ - {name: 'bing50348', server: '37.120.191.150', port: 42519, type: 'vless', uuid: '1b22eae3-ae47-4b5a-8b0e-067de5178a4e', tls: True, servername: '37.120.191.150', udp: True}
+ - {name: 'bing50349', server: '5.75.214.191', port: 36850, type: 'vless', uuid: '03a7554e-8920-4b63-98bc-9aa3ec03e3d1', tls: True, servername: '5.75.214.191', udp: True}
+ - {name: 'bing50350', server: '192.36.57.65', port: 443, type: 'vless', uuid: '7d89917a-c0af-4bc0-80d3-6cfa9eb191e9', tls: True, servername: '192.36.57.65', udp: True}
+ - {name: 'bing50351', server: '13.53.225.235', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.53.225.235', udp: True}
+ - {name: 'bing50352', server: '185.139.7.70', port: 443, type: 'vless', uuid: '7d89917a-c0af-4bc0-80d3-6cfa9eb191e9', tls: True, servername: '185.139.7.70', udp: True}
+ - {name: 'bing50353', server: '16.171.187.86', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '16.171.187.86', udp: True}
+ - {name: 'bing50354', server: '13.39.135.214', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.39.135.214', udp: True}
+ - {name: 'bing50355', server: '52.48.194.175', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '52.48.194.175', udp: True}
+ - {name: 'bing50356', server: '34.254.35.150', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '34.254.35.150', udp: True}
+ - {name: 'bing50357', server: '18.133.116.239', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.133.116.239', udp: True}
+ - {name: 'bing50358', server: '45.159.219.251', port: 443, type: 'vless', uuid: 'e445f188-bc6d-4bc7-93fc-8ac0df132cfe', tls: True, servername: '45.159.219.251', udp: True}
+ - {name: 'bing50359', server: '104.31.16.70', port: 8080, type: 'vless', uuid: '89a03828-4203-4a54-984a-3ab8ee8690b5', tls: True, servername: '104.31.16.70', udp: True}
+ - {name: 'bing50360', server: '5.61.60.39', port: 8443, type: 'vless', uuid: 'fec9b7d7-aea1-4585-b760-5c608a5b0d15', tls: True, servername: '5.61.60.39', udp: True}
+ - {name: 'bing50361', server: '3.254.38.141', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.254.38.141', udp: True}
+ - {name: 'bing50362', server: '3.11.253.168', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.11.253.168', udp: True}
+ - {name: 'bing50363', server: '88.198.119.3', port: 12425, type: 'vless', uuid: '2c1a6c21-0228-4786-fad6-3ba369e8c66e', tls: True, servername: '88.198.119.3', udp: True}
+ - {name: 'bing50364', server: '15.237.21.39', port: 22222, type: 'trojan', password: 'telegram-id-privatevpns', udp: True}
+ - {name: 'bing50365', server: '15.236.108.200', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '15.236.108.200', udp: True}
+ - {name: 'bing50366', server: '18.170.145.254', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '18.170.145.254', udp: True}
+ - {name: 'bing50367', server: '170.64.212.153', port: 46227, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'Xy8gPatmyO4dimVE8I2Uwy', udp: True}
+ - {name: 'bing50368', server: '193.43.104.152', port: 443, type: 'vless', uuid: '96bc9bac-8561-4e35-9ddc-817211340d36', tls: True, servername: '193.43.104.152', udp: True}
+ - {name: 'bing50369', server: '51.159.30.61', port: 804, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'G!yBwPWH3Vao', udp: True}
+ - {name: 'bing50370', server: '196.196.156.122', port: 802, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'G!yBwPWH3Vao', udp: True}
+ - {name: 'bing50371', server: '113.30.149.199', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'JIJhc9gJ9Y7i', udp: True}
+ - {name: 'bing50372', server: '52.76.66.8', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'A0cpDIQPoMfR', udp: True}
+ - {name: 'bing50373', server: '172.67.171.52', port: 80, type: 'vless', uuid: '723dc23c-7c2f-57fd-ba97-c52a2eaa42e8', tls: True, servername: '172.67.171.52', udp: True}
+ - {name: 'bing50374', server: '185.146.173.159', port: 443, type: 'vless', uuid: '723dc23c-7c2f-57fd-ba97-c52a2eaa42e8', tls: True, servername: '185.146.173.159', udp: True}
+ - {name: 'bing50375', server: '172.67.171.49', port: 443, type: 'vless', uuid: 'c1beaf03-ea91-552e-a914-694d35060b3d', tls: True, servername: '172.67.171.49', udp: True}
+ - {name: 'bing50376', server: '185.146.173.42', port: 443, type: 'vless', uuid: '572e7789-76af-51c8-928b-e327d862f16c', tls: True, servername: '185.146.173.42', udp: True}
+ - {name: 'bing50377', server: '190.93.247.152', port: 80, type: 'vless', uuid: '572e7789-76af-51c8-928b-e327d862f16c', tls: True, servername: '190.93.247.152', udp: True}
+ - {name: 'bing50378', server: '185.146.173.51', port: 2095, type: 'vless', uuid: 'Telegram-hopev2ray,hopev2ray', tls: True, servername: '185.146.173.51', udp: True}
+ - {name: 'bing50379', server: '172.67.171.45', port: 2095, type: 'vless', uuid: 'Channel-hopev2ray', tls: True, servername: '172.67.171.45', udp: True}
+ - {name: 'bing50380', server: '190.93.247.151', port: 2095, type: 'vless', uuid: 'Channel-hopev2ray', tls: True, servername: '190.93.247.151', udp: True}
+ - {name: 'bing50381', server: '185.146.173.21', port: 443, type: 'vless', uuid: '719ba85d-583a-47e5-9cc4-6a9322cc1e02', tls: True, servername: '185.146.173.21', udp: True}
+ - {name: 'bing50382', server: '185.146.173.92', port: 443, type: 'vless', uuid: '4d4f6dfe-e92f-41d7-b538-280d76976fb8', tls: True, servername: '185.146.173.92', udp: True}
+ - {name: 'bing50383', server: '185.146.173.22', port: 443, type: 'vless', uuid: 'f1872f4e-e070-4ca1-9ba0-a29a54bade7a', tls: True, servername: '185.146.173.22', udp: True}
+ - {name: 'bing50384', server: '185.146.173.49', port: 443, type: 'vless', uuid: 'f9189ee5-3883-401c-a475-3b24cf32e0f2', tls: True, servername: '185.146.173.49', udp: True}
+ - {name: 'bing50385', server: '185.146.173.99', port: 80, type: 'vless', uuid: '51741fc6-b3f4-5da8-9d46-314062a620a5', tls: True, servername: '185.146.173.99', udp: True}
+ - {name: 'bing50386', server: '185.146.173.45', port: 443, type: 'vless', uuid: '51741fc6-b3f4-5da8-9d46-314062a620a5', tls: True, servername: '185.146.173.45', udp: True}
+ - {name: 'bing50387', server: '172.67.171.65', port: 443, type: 'vless', uuid: 'edeca314-5a2c-5936-a14e-f9b103103883', tls: True, servername: '172.67.171.65', udp: True}
+ - {name: 'bing50388', server: '172.67.171.93', port: 443, type: 'vless', uuid: 'fe945275-51a2-5c3c-8669-2c112ed35cec', tls: True, servername: '172.67.171.93', udp: True}
+ - {name: 'bing50389', server: '185.146.173.46', port: 443, type: 'vless', uuid: '2d5525e1-1aac-54ca-9e96-7fb552b0e6b9', tls: True, servername: '185.146.173.46', udp: True}
+ - {name: 'bing50390', server: '185.146.173.98', port: 80, type: 'vless', uuid: 'a28bc2c5-9867-4271-8c1c-740bac4d2478', tls: True, servername: '185.146.173.98', udp: True}
+ - {name: 'bing50391', server: '172.67.171.95', port: 80, type: 'vless', uuid: '4395e1de-84f8-54f5-92cd-628eb0061516', tls: True, servername: '172.67.171.95', udp: True}
+ - {name: 'bing50392', server: '185.146.173.38', port: 80, type: 'vless', uuid: '44912129-199f-5742-897a-442d8960dd15', tls: True, servername: '185.146.173.38', udp: True}
+ - {name: 'bing50393', server: '172.67.171.43', port: 443, type: 'vless', uuid: '44912129-199f-5742-897a-442d8960dd15', tls: True, servername: '172.67.171.43', udp: True}
+ - {name: 'bing50394', server: '185.146.173.69', port: 80, type: 'vless', uuid: '318eedfe-06ef-5ab9-8063-84d714e3be3c', tls: True, servername: '185.146.173.69', udp: True}
+ - {name: 'bing50395', server: '172.67.171.92', port: 443, type: 'vless', uuid: 'e0d272b8-60df-5447-8009-ba324a09beff', tls: True, servername: '172.67.171.92', udp: True}
+ - {name: 'bing50396', server: '172.67.171.49', port: 2095, type: 'vless', uuid: '1f19c0e8-74b5-4cd9-cc59-a6e6d75af944', tls: True, servername: '172.67.171.49', udp: True}
+ - {name: 'bing50397', server: '185.146.173.34', port: 443, type: 'trojan', password: 'aee423ce-e4b0-4555-b5b7-486dd0284fd2', udp: True}
+ - {name: 'bing50398', server: '185.146.173.32', port: 443, type: 'trojan', password: '5495ebe2-dc52-4cb4-8f25-2a13877183e6', udp: True}
+ - {name: 'bing50399', server: '173.245.58.111', port: 2096, type: 'vless', uuid: '0e7208e9-f4a8-4a26-9e9e-47b026b4196b', tls: True, servername: '173.245.58.111', udp: True}
+ - {name: 'bing50400', server: '185.113.223.10', port: 47053, type: 'vless', uuid: 'eb138531-1614-45f1-b714-91001308deb3', tls: True, servername: '185.113.223.10', udp: True}
+ - {name: 'bing50401', server: 'baby.varzesh.store', port: 443, type: 'vless', uuid: 'f08174b8-44cb-4e6d-9123-e783fdfa0c26', tls: True, servername: 'baby.varzesh.store', udp: True}
+ - {name: 'bing50402', server: 'join.vpnconectd.cfd', port: 8443, type: 'vless', uuid: 'bb0aa02f-5954-4785-9e87-296a88d44dc5', tls: True, servername: 'join.vpnconectd.cfd', udp: True}
+ - {name: 'bing50403', server: 'newpanel.alpha2.top', port: 2052, type: 'vless', uuid: 'ce213fe8-c1bc-4e70-b4d9-cf70f08370ff', tls: True, servername: 'newpanel.alpha2.top', udp: True}
+ - {name: 'bing50404', server: 'chalesh-panel.alpha2.sbs', port: 2052, type: 'vless', uuid: 'aec0cfbd-0cb3-49f3-9f33-4017c5d0d11e', tls: True, servername: 'chalesh-panel.alpha2.sbs', udp: True}
+ - {name: 'bing50405', server: '104.17.180.185', port: 2083, type: 'vless', uuid: 'e35e7272-db34-41ae-baab-e8af09e80d2e', tls: True, servername: '104.17.180.185', udp: True}
+ - {name: 'bing50406', server: '13.213.121.23', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'XVJrfJEW8RNv', udp: True}
+ - {name: 'bing50407', server: '44.238.170.67', port: 8443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'MJWyZ607NweT', udp: True}
+ - {name: 'bing50408', server: '20.243.132.39', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'QQlejbvQ1AMD', udp: True}
+ - {name: 'bing50409', server: '140.238.147.136', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: '82KwizaEfT6E', udp: True}
+ - {name: 'bing50410', server: '195.154.112.32', port: 8443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'gQIGUjlfPggM', udp: True}
+ - {name: 'bing50411', server: '138.197.166.205', port: 811, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'Ultr@r00t_2017', udp: True}
+ - {name: 'bing50412', server: 'speedent.ddns.net', port: 2087, type: 'vless', uuid: '61e04efb-5b3d-4af7-9971-a63c58cf3899', tls: True, servername: 'speedent.ddns.net', udp: True}
+ - {name: 'bing50413', server: 'speedent.ddns.net', port: 443, type: 'vless', uuid: 'ae453503-d0ce-4eef-8068-14988c119f22', tls: True, servername: 'speedent.ddns.net', udp: True}
+ - {name: 'bing50414', server: '49.13.56.232', port: 2096, type: 'vless', uuid: 'AmirTechno_Service', tls: True, servername: '49.13.56.232', udp: True}
+ - {name: 'bing50415', server: '188.114.96.216', port: 80, type: 'vless', uuid: '887d5e93-883d-5bdc-86b4-3aaaf47aa0fa', tls: True, servername: '188.114.96.216', udp: True}
+ - {name: 'bing50416', server: '104.19.164.130', port: 2095, type: 'vless', uuid: '301e5ff8-35e8-4904-98c9-c2bdd47e5d67', tls: True, servername: '104.19.164.130', udp: True}
+ - {name: 'bing50417', server: '104.17.180.185', port: 8080, type: 'vless', uuid: '59c6a1d3-3945-4239-a211-a26c74f5e220', tls: True, servername: '104.17.180.185', udp: True}
+ - {name: 'bing50418', server: '198.41.221.63', port: 8080, type: 'vless', uuid: 'a96f010c-5d1a-4d61-a298-3a62c0ae402c', tls: True, servername: '198.41.221.63', udp: True}
+ - {name: 'bing50419', server: '104.18.96.186', port: 2095, type: 'vless', uuid: '3429ecd7-c504-4db2-9655-6ea502712469', tls: True, servername: '104.18.96.186', udp: True}
+ - {name: 'bing50420', server: '104.17.180.185', port: 2095, type: 'vless', uuid: 'ffc9733d-8908-4bdb-b904-21fadc2511e7', tls: True, servername: '104.17.180.185', udp: True}
+ - {name: 'bing50421', server: '198.41.221.63', port: 2095, type: 'vless', uuid: 'ffc9733d-8908-4bdb-b904-21fadc2511e7', tls: True, servername: '198.41.221.63', udp: True}
+ - {name: 'bing50422', server: '104.18.96.186', port: 8080, type: 'vless', uuid: '965d0c88-a91d-4bef-950c-a59649bbfa14', tls: True, servername: '104.18.96.186', udp: True}
+ - {name: 'bing50423', server: '104.19.164.130', port: 8080, type: 'vless', uuid: '965d0c88-a91d-4bef-950c-a59649bbfa14', tls: True, servername: '104.19.164.130', udp: True}
+ - {name: 'bing50424', server: '185.146.173.91', port: 8080, type: 'vless', uuid: '2a9c29ab-9610-5f8b-85e3-c5a07dd20f32', tls: True, servername: '185.146.173.91', udp: True}
+ - {name: 'bing50425', server: '190.93.247.116', port: 8080, type: 'vless', uuid: '2a9c29ab-9610-5f8b-85e3-c5a07dd20f32', tls: True, servername: '190.93.247.116', udp: True}
+ - {name: 'bing50426', server: 'www.speedteat.net', port: 443, type: 'vless', uuid: '2a9c29ab-9610-5f8b-85e3-c5a07dd20f32', tls: True, servername: 'www.speedteat.net', udp: True}
+ - {name: 'bing50427', server: '185.146.173.219', port: 443, type: 'vless', uuid: '2a9c29ab-9610-5f8b-85e3-c5a07dd20f32', tls: True, servername: '185.146.173.219', udp: True}
+ - {name: 'bing50428', server: '190.93.247.159', port: 2095, type: 'vless', uuid: '7a70e749-a876-510b-abea-bfd364f481d6', tls: True, servername: '190.93.247.159', udp: True}
+ - {name: 'bing50429', server: '185.146.173.96', port: 2095, type: 'vless', uuid: '7a70e749-a876-510b-abea-bfd364f481d6', tls: True, servername: '185.146.173.96', udp: True}
+ - {name: 'bing50430', server: '185.146.173.119', port: 443, type: 'vless', uuid: '2d6c7be7-a5c6-5da6-afa2-d3f5e59281dd', tls: True, servername: '185.146.173.119', udp: True}
+ - {name: 'bing50431', server: '185.146.173.118', port: 80, type: 'vless', uuid: '3c1073b1-8f8b-5710-a053-b96660ce4d80', tls: True, servername: '185.146.173.118', udp: True}
+ - {name: 'bing50432', server: '185.146.173.114', port: 443, type: 'vless', uuid: '3c1073b1-8f8b-5710-a053-b96660ce4d80', tls: True, servername: '185.146.173.114', udp: True}
+ - {name: 'bing50433', server: '185.146.173.100', port: 80, type: 'vless', uuid: '3c1073b1-8f8b-5710-a053-b96660ce4d80', tls: True, servername: '185.146.173.100', udp: True}
+ - {name: 'bing50434', server: '185.146.173.48', port: 443, type: 'vless', uuid: 'e1ffc0d3-04ce-5393-b91e-b54ea14eb3cb', tls: True, servername: '185.146.173.48', udp: True}
+ - {name: 'bing50435', server: '172.67.171.46', port: 443, type: 'vless', uuid: '0762a614-49fd-53f5-840d-cb8d6eed9af1', tls: True, servername: '172.67.171.46', udp: True}
+ - {name: 'bing50436', server: '185.146.173.29', port: 443, type: 'vless', uuid: '96c61a45-48e2-5a7b-8547-adee329f65a2', tls: True, servername: '185.146.173.29', udp: True}
+ - {name: 'bing50437', server: '185.146.173.54', port: 443, type: 'vless', uuid: '3f84451e-ab44-5993-98ce-0fa58450656d', tls: True, servername: '185.146.173.54', udp: True}
+ - {name: 'bing50438', server: '185.146.173.91', port: 443, type: 'vless', uuid: '77be959a-3a9f-53a1-ab5c-71e461a79f4d', tls: True, servername: '185.146.173.91', udp: True}
+ - {name: 'bing50439', server: '104.21.25.31', port: 443, type: 'vless', uuid: 'aa1df27b-d639-560e-88ba-2ed382cf03b8', tls: True, servername: '104.21.25.31', udp: True}
+ - {name: 'bing50440', server: '185.146.173.99', port: 443, type: 'vless', uuid: '220b87da-7818-583e-8e06-236585ca1cb6', tls: True, servername: '185.146.173.99', udp: True}
+ - {name: 'bing50441', server: '104.21.25.32', port: 443, type: 'vless', uuid: '17caf9e8-4d17-5c67-9544-b2b05412e3a8', tls: True, servername: '104.21.25.32', udp: True}
+ - {name: 'bing50442', server: '185.146.173.62', port: 443, type: 'vless', uuid: 'fd3060b6-e604-5ee2-9099-29b91c2403ce', tls: True, servername: '185.146.173.62', udp: True}
+ - {name: 'bing50443', server: '185.146.173.112', port: 443, type: 'vless', uuid: 'a67cbb64-1e7a-5272-b5a6-cd7bb0de6adb', tls: True, servername: '185.146.173.112', udp: True}
+ - {name: 'bing50444', server: '172.67.171.211', port: 443, type: 'vless', uuid: '0209e64d-9c96-5f75-a3d0-5b13f8802566', tls: True, servername: '172.67.171.211', udp: True}
+ - {name: 'bing50445', server: '146.190.104.67', port: 32252, type: 'vless', uuid: '67800161-9bd6-4780-e198-21ebfc7d2b9b', tls: True, servername: '146.190.104.67', udp: True}
+ - {name: 'bing50446', server: '146.190.86.215', port: 2, type: 'vless', uuid: '59947315-8ccd-4454-ab49-3f53eeabc90e', tls: True, servername: '146.190.86.215', udp: True}
+ - {name: 'bing50447', server: '44.238.170.67', port: 1659, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 's6nIpELfLnwl', udp: True}
+ - {name: 'bing50448', server: '85.208.108.18', port: 8091, type: 'ss', cipher: 'aes-256-gcm', password: 'PCnnH6SQSnfoS27', udp: True}
+ - {name: 'bing50449', server: '140.238.147.136', port: 43933, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'tTwfb2deDOK1', udp: True}
+ - {name: 'bing50450', server: '104.211.222.145', port: 18040, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'yC6fIoUyZOFi', udp: True}
+ - {name: 'bing50451', server: '104.211.222.145', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'oRREjq5ntmWa', udp: True}
+ - {name: 'bing50452', server: '85.208.108.90', port: 5500, type: 'ss', cipher: 'aes-256-gcm', password: 'KixLvKzwjekG00rm', udp: True}
+ - {name: 'bing50453', server: 'freetell.globalnetvpn.site', port: 30507, type: 'vless', uuid: 'ae4e58f3-4957-4650-8c9e-88491afc1116', tls: True, servername: 'freetell.globalnetvpn.site', udp: True}
+ - {name: 'bing50454', server: '49.13.73.198', port: 8443, type: 'vless', uuid: 'Telegram-Id-CloudCityy', tls: True, servername: '49.13.73.198', udp: True}
+ - {name: 'bing50455', server: '13.37.144.186', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.37.144.186', udp: True}
+ - {name: 'bing50456', server: 'cdn-7.kiava.fun', port: 443, type: 'vless', uuid: '2e726c67-6427-488e-e4d1-e21df7194b6d', tls: True, servername: 'cdn-7.kiava.fun', udp: True}
+ - {name: 'bing50457', server: '3.78.42.155', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '3.78.42.155', udp: True}
+ - {name: 'bing50458', server: '99.81.53.61', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '99.81.53.61', udp: True}
+ - {name: 'bing50459', server: '13.51.210.140', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.51.210.140', udp: True}
+ - {name: 'bing50460', server: 'cdn-9.kiava.fun', port: 443, type: 'vless', uuid: '2e726c67-6427-488e-e4d1-e21df7194b6d', tls: True, servername: 'cdn-9.kiava.fun', udp: True}
+ - {name: 'bing50461', server: '13.43.117.65', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.43.117.65', udp: True}
+ - {name: 'bing50462', server: 'cdn-6.kiava.fun', port: 443, type: 'vless', uuid: '2e726c67-6427-488e-e4d1-e21df7194b6d', tls: True, servername: 'cdn-6.kiava.fun', udp: True}
+ - {name: 'bing50463', server: 'freetell.globalnetvpn.site', port: 30996, type: 'vless', uuid: '7646b15c-877e-4696-be13-fc6158a4854e', tls: True, servername: 'freetell.globalnetvpn.site', udp: True}
+ - {name: 'bing50464', server: 'ac.vpn383.tk', port: 443, type: 'vless', uuid: '11866849-f08e-4eec-b5da-14bab712dc26', tls: True, servername: 'ac.vpn383.tk', udp: True}
+ - {name: 'bing50465', server: 'cdn1212.akbari.top', port: 443, type: 'vless', uuid: '82835a90-0945-4808-84d8-94cda4758d00', tls: True, servername: 'cdn1212.akbari.top', udp: True}
+ - {name: 'bing50466', server: '57.129.30.254', port: 53447, type: 'vless', uuid: 'fa8a755b-a32b-4bdd-a33d-7ea78c25765c', tls: True, servername: '57.129.30.254', udp: True}
+ - {name: 'bing50467', server: 'bia-to-channel.vmessorg.fun', port: 80, type: 'vless', uuid: 'c3b83dce-a060-4ed3-e6ce-d409b25621d3', tls: True, servername: 'bia-to-channel.vmessorg.fun', udp: True}
+ - {name: 'bing50468', server: 'freetell.globalnetvpn.site', port: 36592, type: 'vless', uuid: 'a847fb3a-1ce6-45be-8bda-c13d5884d731', tls: True, servername: 'freetell.globalnetvpn.site', udp: True}
+ - {name: 'bing50469', server: '170.114.46.66', port: 2096, type: 'vless', uuid: '0e7208e9-f4a8-4a26-9e9e-47b026b4196b', tls: True, servername: '170.114.46.66', udp: True}
+ - {name: 'bing50470', server: '172.105.244.165', port: 3306, type: 'ss', cipher: 'aes-256-gcm', password: 'Y6R9pAtvxxzmGC', udp: True}
+ - {name: 'bing50471', server: '139.162.132.116', port: 8009, type: 'ss', cipher: 'aes-256-gcm', password: 'XKFKl2rULjIp74', udp: True}
+ - {name: 'bing50472', server: '139.162.52.177', port: 7002, type: 'ss', cipher: 'aes-256-gcm', password: 'RexnBgU7EV5ADxG', udp: True}
+ - {name: 'bing50473', server: '192.46.208.123', port: 8888, type: 'ss', cipher: 'aes-256-gcm', password: 'Y6R9pAtvxxzmGC', udp: True}
+ - {name: 'bing50474', server: '158.247.201.207', port: 7306, type: 'ss', cipher: 'aes-256-gcm', password: 'FoOiGlkAA9yPEGP', udp: True}
+ - {name: 'bing50475', server: '18.136.213.18', port: 21945, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'Mv3oxypMr42L', udp: True}
+ - {name: 'bing50476', server: '54.38.72.170', port: 7306, type: 'ss', cipher: 'aes-256-gcm', password: 'FoOiGlkAA9yPEGP', udp: True}
+ - {name: 'bing50477', server: '172.105.42.160', port: 2375, type: 'ss', cipher: 'aes-256-gcm', password: 'faBAoD54k87UJG7', udp: True}
+ - {name: 'bing50478', server: '172.105.234.211', port: 8882, type: 'ss', cipher: 'aes-256-gcm', password: 'kDWvXYZoTBcGkC4', udp: True}
+ - {name: 'bing50479', server: '172.105.180.227', port: 8091, type: 'ss', cipher: 'aes-256-gcm', password: 'PCnnH6SQSnfoS27', udp: True}
+ - {name: 'bing50480', server: '172.104.157.118', port: 5000, type: 'ss', cipher: 'aes-256-gcm', password: 'Y6R9pAtvxxzmGC', udp: True}
+ - {name: 'bing50481', server: '172.104.50.106', port: 2375, type: 'ss', cipher: 'aes-256-gcm', password: 'faBAoD54k87UJG7', udp: True}
+ - {name: 'bing50482', server: '172.104.44.88', port: 8091, type: 'ss', cipher: 'aes-256-gcm', password: 'PCnnH6SQSnfoS27', udp: True}
+ - {name: 'bing50483', server: '139.162.58.13', port: 6679, type: 'ss', cipher: 'aes-256-gcm', password: 'TEzjfAYq2IjtuoS', udp: True}
+ - {name: 'bing50484', server: '45.118.133.51', port: 6379, type: 'ss', cipher: 'aes-256-gcm', password: 'zDNVedRFPQexG9v', udp: True}
+ - {name: 'bing50485', server: '172.104.82.126', port: 443, type: 'ss', cipher: 'aes-256-gcm', password: 'pKEW8JPByTVTLtM', udp: True}
+ - {name: 'bing50486', server: '172.105.180.227', port: 8888, type: 'ss', cipher: 'aes-256-gcm', password: 'Y6R9pAtvxxzmGC', udp: True}
+ - {name: 'bing50487', server: '172.104.50.106', port: 6379, type: 'ss', cipher: 'aes-256-gcm', password: 'zDNVedRFPQexG9v', udp: True}
+ - {name: 'bing50488', server: '139.162.148.39', port: 5000, type: 'ss', cipher: 'aes-256-gcm', password: 'Y6R9pAtvxxzmGC', udp: True}
+ - {name: '🇺🇸 bing50489', server: '148.59.74.152', port: 443, type: 'trojan', password: '3e1c7b87-e374-4230-9ddd-3ae3de10ec1d', udp: True}
+ - {name: '🇹🇷 bing50490', server: '194.146.26.39', port: 443, type: 'trojan', password: '3e1c7b87-e374-4230-9ddd-3ae3de10ec1d', udp: True}
+ - {name: '🇯🇵 bing50491', server: '43.207.71.212', port: 443, type: 'trojan', password: '3e1c7b87-e374-4230-9ddd-3ae3de10ec1d', udp: True}
+ - {name: '🇸🇬 bing50492', server: 'sg.daishujiasunode.uk', port: 17712, type: 'trojan', password: '2468dbed-a1ce-4545-abec-42302499f05b', udp: True}
+ - {name: '🇯🇵 bing50493', server: 'jp.daishujiasunode.uk', port: 17721, type: 'trojan', password: '2468dbed-a1ce-4545-abec-42302499f05b', udp: True}
+ - {name: '🇰🇷 bing50494', server: 'kr.daishujiasunode.uk', port: 17731, type: 'trojan', password: '2468dbed-a1ce-4545-abec-42302499f05b', udp: True}
+ - {name: '🇺🇸 bing50495', server: 'us.daishujiasunode.uk', port: 17742, type: 'trojan', password: '7c480082-e1de-42c3-879d-5f357db27a31', udp: True}
+ - {name: '🇦🇺 bing50496', server: 'other.daishujiasunode.uk', port: 17753, type: 'trojan', password: '7c480082-e1de-42c3-879d-5f357db27a31', udp: True}
+ - {name: 'bing50497', server: 'canva.com', port: 80, type: 'vless', uuid: 'telegram', tls: True, servername: 'canva.com', udp: True}
+ - {name: 'bing50498', server: '66.235.200.91', port: 80, type: 'vless', uuid: 'telegram', tls: True, servername: '66.235.200.91', udp: True}
+ - {name: 'bing50499', server: 'www.parspack.com', port: 2082, type: 'vless', uuid: '1995f2ee-6767-4623-b819-db5d6386bcda', tls: True, servername: 'www.parspack.com', udp: True}
+ - {name: 'bing50500', server: 'check-host.net', port: 2082, type: 'vless', uuid: '1995f2ee-6767-4623-b819-db5d6386bcda', tls: True, servername: 'check-host.net', udp: True}
+ - {name: 'bing50501', server: '172.67.190.58', port: 8880, type: 'vless', uuid: '34bd74ff-23a0-45cd-97fb-20da6f866689', tls: True, servername: '172.67.190.58', udp: True}
+ - {name: 'bing50502', server: 'Zula.ir', port: 2053, type: 'vless', uuid: '9d960a45-c769-4238-9d64-e9786ee6ae7b', tls: True, servername: 'Zula.ir', udp: True}
+ - {name: 'bing50503', server: '46.38.143.81', port: 24835, type: 'vless', uuid: '55003dcd-7583-4ab7-ada2-f2cc47a96e28', tls: True, servername: '46.38.143.81', udp: True}
+ - {name: 'bing50504', server: 'configz.duckdns.org', port: 443, type: 'vless', uuid: 'ac591b74-3420-4dc1-a649-4bc61afd5824', tls: True, servername: 'configz.duckdns.org', udp: True}
+ - {name: 'bing50505', server: '91.189.183.38', port: 800, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'G!yBwPWH3Vao', udp: True}
+ - {name: 'bing50506', server: '148.66.56.98', port: 809, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'G!yBwPWH3Vao', udp: True}
+ - {name: 'bing50507', server: '118.107.244.111', port: 2375, type: 'ss', cipher: 'aes-256-gcm', password: 'faBAoD54k87UJG7', udp: True}
+ - {name: 'bing50508', server: '139.162.52.177', port: 8881, type: 'ss', cipher: 'aes-256-gcm', password: 'kDWvXYZoTBcGkC4', udp: True}
+ - {name: 'bing50509', server: '172.104.50.106', port: 9101, type: 'ss', cipher: 'aes-256-gcm', password: 'e4FCWrgpkji3QY', udp: True}
+ - {name: 'bing50510', server: '139.162.24.50', port: 8091, type: 'ss', cipher: 'aes-256-gcm', password: 'PCnnH6SQSnfoS27', udp: True}
+ - {name: 'bing50511', server: '51.79.178.17', port: 5000, type: 'ss', cipher: 'aes-256-gcm', password: 'Y6R9pAtvxxzmGC', udp: True}
+ - {name: 'bing50512', server: '139.99.123.156', port: 7002, type: 'ss', cipher: 'aes-256-gcm', password: 'RexnBgU7EV5ADxG', udp: True}
+ - {name: 'bing50513', server: '139.99.62.207', port: 8119, type: 'ss', cipher: 'aes-256-gcm', password: 'cdBIDV42DCwnfIN', udp: True}
+ - {name: 'bing50514', server: '93.179.125.232', port: 21167, type: 'ss', cipher: 'aes-128-gcm', password: 'Misaka', udp: True}
+ - {name: 'bing50515', server: '139.162.58.13', port: 8882, type: 'ss', cipher: 'aes-256-gcm', password: 'kDWvXYZoTBcGkC4', udp: True}
+ - {name: 'bing50516', server: '85.208.110.2', port: 8090, type: 'ss', cipher: 'aes-256-gcm', password: 'PCnnH6SQSnfoS27', udp: True}
+ - {name: 'bing50517', server: '5.180.76.74', port: 9102, type: 'ss', cipher: 'aes-256-gcm', password: 'e4FCWrgpkji3QY', udp: True}
+ - {name: 'bing50518', server: '85.208.108.66', port: 9101, type: 'ss', cipher: 'aes-256-gcm', password: 'e4FCWrgpkji3QY', udp: True}
+ - {name: 'bing50519', server: '172.105.232.147', port: 5004, type: 'ss', cipher: 'aes-256-gcm', password: 'g5MeD6Ft3CWlJId', udp: True}
+ - {name: 'bing50520', server: '172.105.177.120', port: 443, type: 'ss', cipher: 'aes-256-gcm', password: 'pKEW8JPByTVTLtM', udp: True}
+ - {name: 'bing50521', server: '194.124.35.11', port: 809, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'G!yBwPWH3Vao', udp: True}
+ - {name: 'bing50522', server: '103.62.49.141', port: 809, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'G!yBwPWH3Vao', udp: True}
+ - {name: 'bing50523', server: '51.77.52.206', port: 7306, type: 'ss', cipher: 'aes-256-gcm', password: 'FoOiGlkAA9yPEGP', udp: True}
+ - {name: 'bing50524', server: '139.99.62.207', port: 5000, type: 'ss', cipher: 'aes-256-gcm', password: 'Y6R9pAtvxxzmGC', udp: True}
+ - {name: 'bing50525', server: '45.79.123.187', port: 3306, type: 'ss', cipher: 'aes-256-gcm', password: 'Y6R9pAtvxxzmGC', udp: True}
+ - {name: 'bing50526', server: '172.105.59.32', port: 8009, type: 'ss', cipher: 'aes-256-gcm', password: 'XKFKl2rULjIp74', udp: True}
+ - {name: 'bing50527', server: '172.104.50.106', port: 6679, type: 'ss', cipher: 'aes-256-gcm', password: 'TEzjfAYq2IjtuoS', udp: True}
+ - {name: 'bing50528', server: 'v.reza-punisher-shopv2n.fun', port: 25693, type: 'vless', uuid: '-telegram-puni_shop_v2rayNG', tls: True, servername: 'v.reza-punisher-shopv2n.fun', udp: True}
+ - {name: 'bing50529', server: '128.140.124.180', port: 22131, type: 'vless', uuid: 'c9d162e2-7c31-4564-8b34-1416ef38640a', tls: True, servername: '128.140.124.180', udp: True}
+ - {name: 'bing50530', server: '162.159.129.17', port: 2082, type: 'vless', uuid: '1995f2ee-6767-4623-b819-db5d6386bcda', tls: True, servername: '162.159.129.17', udp: True}
+ - {name: 'bing50531', server: '162.159.129.17', port: 2095, type: 'vless', uuid: '63165b83-9244-465d-b1cf-f4524c28f611', tls: True, servername: '162.159.129.17', udp: True}
+ - {name: 'bing50532', server: '66.235.200.91', port: 2095, type: 'vless', uuid: '63165b83-9244-465d-b1cf-f4524c28f611', tls: True, servername: '66.235.200.91', udp: True}
+ - {name: 'bing50533', server: '104.21.7.27', port: 2095, type: 'vless', uuid: '63165b83-9244-465d-b1cf-f4524c28f611', tls: True, servername: '104.21.7.27', udp: True}
+ - {name: '🇸🇬 bing50534', server: 'sg11.microsoftjs.top', port: 443, type: 'trojan', password: '7bc78c01-4186-43dc-a4e5-3575376f0237', udp: True}
+ - {name: '🇸🇬 bing50535', server: 'sg8.microsoftjs.top', port: 443, type: 'trojan', password: '7bc78c01-4186-43dc-a4e5-3575376f0237', udp: True}
+ - {name: 'bing50536', server: '188.245.246.91', port: 34484, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'K2xAtAJX43pAOlVsUzB3Yo', udp: True}
+ - {name: '🇨🇿 bing50537', server: '195.231.66.71', port: 28125, type: 'vless', uuid: '20a49abc-b801-4308-83e4-80abcad4115c', tls: True, servername: '195.231.66.71', udp: True}
+ - {name: 'bing50538', server: '194.182.79.174', port: 11984, type: 'vless', uuid: '9d5dda5d-2644-42da-8a88-be1e648a7f89', tls: True, servername: '194.182.79.174', udp: True}
+ - {name: 'bing50539', server: 'ip.sitwe.ir', port: 8080, type: 'vless', uuid: 'c8c91d3c-7140-43ed-aa2f-4add1fe1d566', tls: True, servername: 'ip.sitwe.ir', udp: True}
+ - {name: 'bing50540', server: 'ip.zemestanil.ir', port: 2087, type: 'vless', uuid: 'bfb2d7dd-1625-4848-91a9-5587ff4c9e34', tls: True, servername: 'ip.zemestanil.ir', udp: True}
+ - {name: 'bing50541', server: 'ipv.sitwe.ir', port: 8080, type: 'vless', uuid: 'b3ad551d-db89-404e-a901-cab58305495c', tls: True, servername: 'ipv.sitwe.ir', udp: True}
+ - {name: 'bing50542', server: '164.90.212.186', port: 42497, type: 'vless', uuid: 'f667c23c-5358-44f1-b93c-dad3783e4be3', tls: True, servername: '164.90.212.186', udp: True}
+ - {name: 'bing50543', server: 'jioin-severnett2.numalla.top', port: 2096, type: 'vless', uuid: 'da0423f8-1221-4880-8d09-8fec4ae062c8', tls: True, servername: 'jioin-severnett2.numalla.top', udp: True}
+ - {name: 'bing50544', server: 'vgnhnhnjnj.nolite-te-bastardes-carborun-dorum.sbs', port: 2082, type: 'vless', uuid: 'a949e521-6af8-4c79-b5b3-c85f02f30894', tls: True, servername: 'vgnhnhnjnj.nolite-te-bastardes-carborun-dorum.sbs', udp: True}
+ - {name: 'bing50545', server: 'vgnhnhnjnj.nolite-te-bastardes-carborun-dorum.sbs', port: 2095, type: 'vless', uuid: '9f9c3eb8-de25-4e31-8765-81641533eb50', tls: True, servername: 'vgnhnhnjnj.nolite-te-bastardes-carborun-dorum.sbs', udp: True}
+ - {name: 'bing50546', server: 'vgnhnhnjnj.nolite-te-bastardes-carborun-dorum.sbs', port: 2086, type: 'vless', uuid: '7b88a219-e336-43c4-a276-30b495d21b6d', tls: True, servername: 'vgnhnhnjnj.nolite-te-bastardes-carborun-dorum.sbs', udp: True}
+ - {name: 'bing50547', server: 'vgnhnhnjnj.nolite-te-bastardes-carborun-dorum.sbs', port: 2052, type: 'vless', uuid: '5418f772-3a4d-4a45-92d7-5324431f131f', tls: True, servername: 'vgnhnhnjnj.nolite-te-bastardes-carborun-dorum.sbs', udp: True}
+ - {name: 'bing50548', server: 'vgnhnhnjnj.nolite-te-bastardes-carborun-dorum.sbs', port: 37486, type: 'vless', uuid: 'b94f5a6a-7cc1-4d09-b9e1-1a275912ab17', tls: True, servername: 'vgnhnhnjnj.nolite-te-bastardes-carborun-dorum.sbs', udp: True}
+ - {name: 'bing50549', server: 'vgnhnhnjnj.nolite-te-bastardes-carborun-dorum.sbs', port: 41877, type: 'vless', uuid: '2eaf2d65-ab4d-4e3c-8f8c-dc0e1158997f', tls: True, servername: 'vgnhnhnjnj.nolite-te-bastardes-carborun-dorum.sbs', udp: True}
+ - {name: 'bing50550', server: 'owl.applegrafix.com', port: 443, type: 'vless', uuid: 'vpnowl', tls: True, servername: 'owl.applegrafix.com', udp: True}
+ - {name: 'bing50551', server: '172.67.144.200', port: 443, type: 'vless', uuid: '754e436e-be1a-4afa-be2d-8627ce134b59', tls: True, servername: '172.67.144.200', udp: True}
+ - {name: 'bing50552', server: '172.67.134.153', port: 443, type: 'vless', uuid: 'f895c8af-f536-4bed-a3b1-ba78a8d643ce', tls: True, servername: '172.67.134.153', udp: True}
+ - {name: 'bing50553', server: 'v-2rayngvpn.ddns.net', port: 56068, type: 'vless', uuid: '87c07649-b4af-4c88-a793-95a0da4ba50e', tls: True, servername: 'v-2rayngvpn.ddns.net', udp: True}
+ - {name: '🇷🇺 bing50554', server: 'ssrsub.v02.trojan.tel', port: 80, type: 'trojan', password: '54c175d5-0fd0-4577-ad0b-0e163de91191', udp: True}
+ - {name: '🇸🇪 bing50555', server: 'ssrsub.t21.trojan.tel', port: 80, type: 'trojan', password: '54c175d5-0fd0-4577-ad0b-0e163de91191', udp: True}
+ - {name: 'bing50556', server: '237.outline-vpn.cloud', port: 443, type: 'vless', uuid: '754e436e-be1a-4afa-be2d-8627ce134b59', tls: True, servername: '237.outline-vpn.cloud', udp: True}
+ - {name: 'bing50557', server: 'cdn8.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'cdn8.kiava.fun', udp: True}
+ - {name: 'bing50558', server: 'irdl.ddns.net', port: 443, type: 'vless', uuid: '859a1f5b-6f0c-4a97-bda7-99eb567aba4e', tls: True, servername: 'irdl.ddns.net', udp: True}
+ - {name: 'bing50559', server: 'join.hafnetwork.site', port: 52305, type: 'vless', uuid: 'b5a62bd0-4966-406d-dbb3-e7d8ffaa881e', tls: True, servername: 'join.hafnetwork.site', udp: True}
+ - {name: 'bing50560', server: '185.231.206.13', port: 21452, type: 'vless', uuid: 'fb4dcb34-fb51-4142-ffef-4a7bfc920ccd', tls: True, servername: '185.231.206.13', udp: True}
+ - {name: 'bing50561', server: '159.69.102.232', port: 21038, type: 'vless', uuid: '698dc531-8c53-465a-dee3-65edfbd93265', tls: True, servername: '159.69.102.232', udp: True}
+ - {name: 'bing50562', server: 'cdn-2.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'cdn-2.kiava.fun', udp: True}
+ - {name: 'bing50563', server: 'cdn-5.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'cdn-5.kiava.fun', udp: True}
+ - {name: 'bing50564', server: 'iam.simontrol.sbs', port: 39886, type: 'vless', uuid: '49d45d27-cdb7-45eb-a284-385c6d1efb23', tls: True, servername: 'iam.simontrol.sbs', udp: True}
+ - {name: 'bing50565', server: 'www.simontrol.sbs', port: 2096, type: 'vless', uuid: '7dd20df5-7337-459f-9498-aace9ef9ff41', tls: True, servername: 'www.simontrol.sbs', udp: True}
+ - {name: 'bing50566', server: 'iam.simontrol.sbs', port: 38580, type: 'vless', uuid: 'd4ef14ec-b6bc-4a7f-a5b7-78ba2e3f3265', tls: True, servername: 'iam.simontrol.sbs', udp: True}
+ - {name: 'bing50567', server: 'www.simontrol.sbs', port: 8443, type: 'vless', uuid: 'b05cdcde-48ab-4946-b0fb-2fff3b60acad', tls: True, servername: 'www.simontrol.sbs', udp: True}
+ - {name: 'bing50568', server: 'V-2rayngVpn1.ddns.net', port: 56068, type: 'vless', uuid: '14a93d9d-64da-420b-9c5f-6e06abd3563a', tls: True, servername: 'V-2rayngVpn1.ddns.net', udp: True}
+ - {name: 'bing50569', server: '128.140.121.218', port: 443, type: 'vless', uuid: '356c3eaa-80eb-4c35-8aac-143bcc1f22c5', tls: True, servername: '128.140.121.218', udp: True}
+ - {name: 'bing50570', server: '91.107.164.70', port: 53663, type: 'vless', uuid: '1de81c51-b934-4ea8-a824-680caef7a752', tls: True, servername: '91.107.164.70', udp: True}
+ - {name: 'bing50571', server: '54.246.171.60', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '54.246.171.60', udp: True}
+ - {name: 'bing50572', server: '13.48.75.107', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.48.75.107', udp: True}
+ - {name: 'bing50573', server: '13.51.240.48', port: 22222, type: 'vless', uuid: '05519058-d2ac-4f28-9e4a-2b2a1386749e', tls: True, servername: '13.51.240.48', udp: True}
+ - {name: 'bing50574', server: '5.75.214.88', port: 57587, type: 'vless', uuid: '769d8a53-5f5e-41be-9b21-07211df28ce8', tls: True, servername: '5.75.214.88', udp: True}
+ - {name: 'bing50575', server: '91.107.162.37', port: 57587, type: 'vless', uuid: '769d8a53-5f5e-41be-9b21-07211df28ce8', tls: True, servername: '91.107.162.37', udp: True}
+ - {name: 'bing50576', server: '91.107.159.154', port: 2096, type: 'ss', cipher: '2022-blake3-aes-256-gcm', password: 'fcO4UOgw/iljpa6wOoEgVPweWQKZp0EMkObMn9BxCNE=:vOlUtSYh5sbQihrx70xf+nFfqbb3gukWbMbqcIY0RtU=', udp: True}
+ - {name: '🇨🇿 bing50577', server: '80.211.223.26', port: 16500, type: 'vless', uuid: '9f36cf0a-ca91-46e4-96b6-c47e63c2e2a3', tls: True, servername: '80.211.223.26', udp: True}
+ - {name: '🇨🇿 bing50578', server: '80.211.223.43', port: 53786, type: 'vless', uuid: '34e46858-e347-4e0b-a720-61ec2100a316', tls: True, servername: '80.211.223.43', udp: True}
+ - {name: '🇨🇿 bing50579', server: '80.211.198.183', port: 39697, type: 'vless', uuid: 'd3f580f8-5a74-43a5-8541-00576b2c6733', tls: True, servername: '80.211.198.183', udp: True}
+ - {name: '🇨🇿 bing50580', server: '217.61.20.71', port: 55443, type: 'vless', uuid: 'cf25a07b-798a-4912-9611-04d906a9189c', tls: True, servername: '217.61.20.71', udp: True}
+ - {name: '🇨🇿 bing50581', server: '94.177.244.182', port: 40378, type: 'vless', uuid: 'ec1938c8-acc1-4ded-a85f-9fe573b7730b', tls: True, servername: '94.177.244.182', udp: True}
+ - {name: '🇨🇿 bing50582', server: '81.2.233.123', port: 16777, type: 'vless', uuid: 'b62d579f-91b6-43e4-b471-de41fd5fa196', tls: True, servername: '81.2.233.123', udp: True}
+ - {name: '🇨🇿 bing50583', server: '217.61.20.57', port: 38849, type: 'vless', uuid: '31c42652-a059-46e1-b7a7-76e9a8682bb4', tls: True, servername: '217.61.20.57', udp: True}
+ - {name: 'bing50584', server: '64.225.102.48', port: 24776, type: 'vless', uuid: 'a6796a5a-a11f-49df-b496-3782637ec922', tls: True, servername: '64.225.102.48', udp: True}
+ - {name: 'bing50585', server: 'all.elfzx.me', port: 8443, type: 'vless', uuid: '1f11b35a-4f56-4e24-8419-c2681fec9111', tls: True, servername: 'all.elfzx.me', udp: True}
+ - {name: 'bing50586', server: 'v2.1.proproxy.online', port: 80, type: 'vless', uuid: '2ce2004d-a22a-447b-b1bb-223f3dfc6389', tls: True, servername: 'v2.1.proproxy.online', udp: True}
+ - {name: 'bing50587', server: 'v2.2.proproxy.online', port: 80, type: 'vless', uuid: '2ce2004d-a22a-447b-b1bb-223f3dfc6389', tls: True, servername: 'v2.2.proproxy.online', udp: True}
+ - {name: 'bing50588', server: 'v2.3.proproxy.online', port: 80, type: 'vless', uuid: '2ce2004d-a22a-447b-b1bb-223f3dfc6389', tls: True, servername: 'v2.3.proproxy.online', udp: True}
+ - {name: 'bing50589', server: 'free1.prochanel99.online', port: 20555, type: 'vless', uuid: '7ab91794-5159-4d5a-9a7c-64be75a73040', tls: True, servername: 'free1.prochanel99.online', udp: True}
+ - {name: 'bing50590', server: 'free2.prochanel99.online', port: 20555, type: 'vless', uuid: '7ab91794-5159-4d5a-9a7c-64be75a73040', tls: True, servername: 'free2.prochanel99.online', udp: True}
+ - {name: 'bing50591', server: '209.38.177.43', port: 6969, type: 'vless', uuid: '89abd242-1fbb-433d-ac09-296264bba802', tls: True, servername: '209.38.177.43', udp: True}
+ - {name: 'bing50592', server: '185.184.70.48', port: 13507, type: 'vless', uuid: '18b42d4d-580c-4bcb-964b-db93457b3ae0', tls: True, servername: '185.184.70.48', udp: True}
+ - {name: 'bing50593', server: 'ge1.09vpn.com', port: 2083, type: 'trojan', password: 'u1977141678', udp: True}
+ - {name: 'bing50594', server: '188.208.103.100', port: 43595, type: 'vless', uuid: 'join-to-chanel-v2rayfree1', tls: True, servername: '188.208.103.100', udp: True}
+ - {name: 'bing50595', server: 'deltagclass.funnyv2m.fun', port: 18756, type: 'vless', uuid: 'ab430651-f825-452e-8788-fbfeb061020a', tls: True, servername: 'deltagclass.funnyv2m.fun', udp: True}
+ - {name: 'bing50596', server: '167.82.106.228', port: 443, type: 'vless', uuid: 'f34fd091-12f9-444e-81a2-9b45ee14d00f', tls: True, servername: '167.82.106.228', udp: True}
+ - {name: 'bing50597', server: 'cadev.postsafir.ir', port: 1622, type: 'vless', uuid: 'f34fd091-12f9-444e-81a2-9b45ee14d00f', tls: True, servername: 'cadev.postsafir.ir', udp: True}
+ - {name: 'bing50598', server: 'san.digipapetdev.ir', port: 1621, type: 'vless', uuid: 'f34fd091-12f9-444e-81a2-9b45ee14d00f', tls: True, servername: 'san.digipapetdev.ir', udp: True}
+ - {name: 'bing50599', server: 'endev.postsafir.ir', port: 1623, type: 'vless', uuid: 'f34fd091-12f9-444e-81a2-9b45ee14d00f', tls: True, servername: 'endev.postsafir.ir', udp: True}
+ - {name: 'bing50600', server: 'for2.vpnprosec.shop', port: 2087, type: 'vless', uuid: '53e85dd2-3ac6-4bfe-a4cc-0881024a6c33', tls: True, servername: 'for2.vpnprosec.shop', udp: True}
+ - {name: 'bing50601', server: 'gddx.aikun.online', port: 24388, type: 'trojan', password: 'd0dc5f19-5854-4cb7-8e7e-4c8336dbcfb3', udp: True}
+ - {name: 'bing50602', server: '172.232.56.227', port: 47371, type: 'vless', uuid: '62973e14-f0a3-4792-9f1b-3a019c302791', tls: True, servername: '172.232.56.227', udp: True}
+ - {name: 'bing50603', server: '128.140.45.255', port: 443, type: 'vless', uuid: 'navid', tls: True, servername: '128.140.45.255', udp: True}
+ - {name: 'bing50604', server: 'cdn1.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'cdn1.kiava.fun', udp: True}
+ - {name: 'bing50605', server: 'cdn2.configv2rayforfree.sbs', port: 443, type: 'vless', uuid: '4cd2b546-9c42-4799-9691-17c2a0ac8d6e', tls: True, servername: 'cdn2.configv2rayforfree.sbs', udp: True}
+ - {name: 'bing50606', server: 'lordconfig.hackteam.link', port: 8080, type: 'vless', uuid: '11d5e4f1-8b49-4d25-a773-4d90f7c39bc3', tls: True, servername: 'lordconfig.hackteam.link', udp: True}
+ - {name: 'bing50607', server: 'cdn01.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'cdn01.kiava.fun', udp: True}
+ - {name: 'bing50608', server: 'cdn03.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'cdn03.kiava.fun', udp: True}
+ - {name: 'bing50609', server: 'cdn04.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'cdn04.kiava.fun', udp: True}
+ - {name: 'bing50610', server: 'cdn05.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'cdn05.kiava.fun', udp: True}
+ - {name: 'bing50611', server: 'for1.vpnprosec.shop', port: 2098, type: 'vless', uuid: '9f6a0bcd-88e0-4f02-e110-7d4f1b6aea52', tls: True, servername: 'for1.vpnprosec.shop', udp: True}
+ - {name: 'bing50612', server: '157.245.143.36', port: 80, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'ku1n7ZpScKlIfizxfoO1qs', udp: True}
+ - {name: 'bing50613', server: '157.90.154.243', port: 28696, type: 'vless', uuid: '8be94202-9aa0-49b9-8c76-1a839816a66e', tls: True, servername: '157.90.154.243', udp: True}
+ - {name: 'bing50614', server: '128.140.124.180', port: 22128, type: 'vless', uuid: 'c9d162e2-7c31-4564-8b34-1416ef38640a', tls: True, servername: '128.140.124.180', udp: True}
+ - {name: 'bing50615', server: '128.140.43.250', port: 8081, type: 'vless', uuid: '5d245df1-c570-4b84-9642-faa4d0e3d3b7', tls: True, servername: '128.140.43.250', udp: True}
+ - {name: 'bing50616', server: '37.27.241.180', port: 8880, type: 'vless', uuid: 'df0680ca-e43c-498d-ed86-8e196eedd012', tls: True, servername: '37.27.241.180', udp: True}
+ - {name: 'bing50617', server: '2.58.241.42', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: '2afbc97400ca71c8f3306f9843a6e1c2', udp: True}
+ - {name: 'bing50618', server: '185.158.155.33', port: 8388, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'eath1eicieSh_!MMyb~4HT,}bC@ohpheiRaighier0shohd', udp: True}
+ - {name: 'bing50619', server: '95.179.153.250', port: 47221, type: 'vless', uuid: '3373fe14-47b8-42e5-8a18-7ab3e0dd02b3', tls: True, servername: '95.179.153.250', udp: True}
+ - {name: 'bing50620', server: 'soft98.ir.p31download.com', port: 8080, type: 'vless', uuid: '762e148f-39f7-4ef3-a348-c3584bf436d2', tls: True, servername: 'soft98.ir.p31download.com', udp: True}
+ - {name: 'bing50621', server: 'alibaba.ir.iraniantim.ir', port: 2095, type: 'vless', uuid: '5d266d7e-dfd2-4769-ceca-f876a7fd7232', tls: True, servername: 'alibaba.ir.iraniantim.ir', udp: True}
+ - {name: 'bing50622', server: 'soft98.ir.p31download.com', port: 80, type: 'vless', uuid: 'fe4dca53-b4bb-4c57-c52a-e1cfd910ab5c', tls: True, servername: 'soft98.ir.p31download.com', udp: True}
+ - {name: 'bing50623', server: 'Tgju.org', port: 2053, type: 'vless', uuid: 'ea79df40-43cc-477e-9be4-a19de539714a', tls: True, servername: 'Tgju.org', udp: True}
+ - {name: 'bing50624', server: '207.154.194.125', port: 80, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'zWS3NvGfqZq9f6GfGmISCe', udp: True}
+ - {name: 'bing50625', server: '157.245.203.100', port: 80, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'cUIOjvFhM5n7gCHkZpPCa8', udp: True}
+ - {name: 'bing50626', server: '3.9.187.114', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'mps3FwmDjLrWaOVg', udp: True}
+ - {name: 'bing50627', server: 'htamiz5.radarmarkazi.site', port: 80, type: 'vless', uuid: 'b93bce5f-ecc5-456d-e169-ee1f867f3dc7', tls: True, servername: 'htamiz5.radarmarkazi.site', udp: True}
+ - {name: 'bing50628', server: 'bia-to6.unlimiteddev.xyz', port: 443, type: 'vless', uuid: '942e2849-9e3a-48fd-e73c-7ce89053cedf', tls: True, servername: 'bia-to6.unlimiteddev.xyz', udp: True}
+ - {name: 'bing50629', server: 'freeiranwebtest.ddns.net', port: 2095, type: 'vless', uuid: '35b4341e-66a5-432f-ad21-ad9093e65dd0', tls: True, servername: 'freeiranwebtest.ddns.net', udp: True}
+ - {name: 'bing50630', server: 'free.globalnetvpn.site', port: 21924, type: 'vless', uuid: '1dd8a897-653e-4b85-b014-9f43c2514c17', tls: True, servername: 'free.globalnetvpn.site', udp: True}
+ - {name: 'bing50631', server: 'v2rayfroshmci.ddns.net', port: 2096, type: 'vless', uuid: '7f0ef1c4-ff8d-449e-b213-60fac68104a6', tls: True, servername: 'v2rayfroshmci.ddns.net', udp: True}
+ - {name: 'bing50632', server: '51.89.181.44', port: 23321, type: 'vless', uuid: '297e8990-e725-4905-8af7-914be3c90ec5', tls: True, servername: '51.89.181.44', udp: True}
+ - {name: 'bing50633', server: '37.202.232.62', port: 443, type: 'vless', uuid: '70e3ea7a-1841-48c1-8edd-45b058fc9004', tls: True, servername: '37.202.232.62', udp: True}
+ - {name: 'bing50634', server: 'leastping.twitter-suport.com', port: 80, type: 'vless', uuid: '525e98d4-8737-4711-b82e-593c3f3ce27e', tls: True, servername: 'leastping.twitter-suport.com', udp: True}
+ - {name: 'bing50635', server: '51.107.218.219', port: 18543, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'ggjQH8SNKonK17aMWeG75n', udp: True}
+ - {name: 'bing50636', server: 'Pm.RxV2ray.space', port: 2053, type: 'vless', uuid: '03268013-28fe-4ed6-ecf6-bc6f03f258e8', tls: True, servername: 'Pm.RxV2ray.space', udp: True}
+ - {name: 'bing50637', server: '188.114.97.3', port: 2052, type: 'vless', uuid: '66008c21-6718-4a03-b7e6-002d3754ca8b', tls: True, servername: '188.114.97.3', udp: True}
+ - {name: 'bing50638', server: '185.146.173.52', port: 2052, type: 'vless', uuid: '39248a56-c0fa-4246-8b1b-84c9e57126d2', tls: True, servername: '185.146.173.52', udp: True}
+ - {name: 'bing50639', server: 'hn.xiaohouzi.club', port: 18442, type: 'trojan', password: '64de1de7-e3bb-3dc4-ab04-d1e601e18ac5', udp: True}
+ - {name: 'bing50640', server: 'hn.xiaohouzi.club', port: 18443, type: 'trojan', password: '64de1de7-e3bb-3dc4-ab04-d1e601e18ac5', udp: True}
+ - {name: 'bing50641', server: 'aws-hk02.xiaohouzi.club', port: 42541, type: 'trojan', password: '64de1de7-e3bb-3dc4-ab04-d1e601e18ac5', udp: True}
+ - {name: 'bing50642', server: 'azhk097.xiaohouzi.club', port: 17115, type: 'trojan', password: '64de1de7-e3bb-3dc4-ab04-d1e601e18ac5', udp: True}
+ - {name: 'bing50643', server: 'hn.xiaohouzi.club', port: 18462, type: 'trojan', password: '64de1de7-e3bb-3dc4-ab04-d1e601e18ac5', udp: True}
+ - {name: 'bing50644', server: 'hn.xiaohouzi.club', port: 18437, type: 'trojan', password: '64de1de7-e3bb-3dc4-ab04-d1e601e18ac5', udp: True}
+ - {name: 'bing50645', server: 'iplc.xiaohouzi.club', port: 20017, type: 'trojan', password: '64de1de7-e3bb-3dc4-ab04-d1e601e18ac5', udp: True}
+ - {name: 'bing50646', server: 'iplc.xiaohouzi.club', port: 20013, type: 'trojan', password: '64de1de7-e3bb-3dc4-ab04-d1e601e18ac5', udp: True}
+ - {name: 'bing50647', server: 'live.989bull.com', port: 80, type: 'vless', uuid: 'beef8ec5-bd5b-49b3-974a-1b2b694318bf', tls: True, servername: 'live.989bull.com', udp: True}
+ - {name: 'bing50648', server: '103.35.188.18', port: 8388, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'NzJhMDc1', udp: True}
+ - {name: 'bing50649', server: '92.246.139.24', port: 18359, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'Q6mkedon57jNe3y6fvHQET', udp: True}
+ - {name: 'bing50650', server: '135.181.41.105', port: 8880, type: 'vless', uuid: 'df0680ca-e43c-498d-ed86-8e196eedd012', tls: True, servername: '135.181.41.105', udp: True}
+ - {name: 'bing50651', server: '128.140.124.18', port: 8080, type: 'vless', uuid: 'FILTERSHCAN', tls: True, servername: '128.140.124.18', udp: True}
+ - {name: 'bing50652', server: '45.8.98.163', port: 2636, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'DLW8QqdfAvfUHSeucMIF4E', udp: True}
+ - {name: 'bing50653', server: '43.203.237.206', port: 1234, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: '1234', udp: True}
+ - {name: 'bing50654', server: '40.172.90.200', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'u17T3BvpYaaiuW2c', udp: True}
+ - {name: 'bing50655', server: '15.184.9.73', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'Bog0ELmMM9DSxDdQ', udp: True}
+ - {name: 'bing50656', server: '3.28.157.242', port: 443, type: 'ss', cipher: 'chacha20-poly1305', password: 'u17T3BvpYaaiuW2c', udp: True}
+ - {name: 'bing50657', server: 'join5.servernett.cfd', port: 51268, type: 'vless', uuid: '64368b79-10a1-4ce0-9249-afb5fb3e4969', tls: True, servername: 'join5.servernett.cfd', udp: True}
+ - {name: 'bing50658', server: '49.13.29.187', port: 8443, type: 'vless', uuid: 'telegram-id-ir_connect', tls: True, servername: '49.13.29.187', udp: True}
+ - {name: 'bing50659', server: 'sr15.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'sr15.kiava.fun', udp: True}
+ - {name: 'bing50660', server: 'sr13.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'sr13.kiava.fun', udp: True}
+ - {name: 'bing50661', server: 'sr11.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'sr11.kiava.fun', udp: True}
+ - {name: 'bing50662', server: 'video.mbstream.xyz', port: 443, type: 'vless', uuid: '2e16df41-e0be-4094-8019-9d0ac917b1da', tls: True, servername: 'video.mbstream.xyz', udp: True}
+ - {name: 'bing50663', server: '49.13.69.251', port: 21058, type: 'vless', uuid: '8a3dc08b-ddf5-4e9d-fdec-e60211e267d1', tls: True, servername: '49.13.69.251', udp: True}
+ - {name: 'bing50664', server: '45.77.62.200', port: 2096, type: 'vless', uuid: 'b335174b-92de-4371-9f4a-ece30fb9dfe7', tls: True, servername: '45.77.62.200', udp: True}
+ - {name: 'bing50665', server: 'sr20.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'sr20.kiava.fun', udp: True}
+ - {name: 'bing50666', server: 'sr21.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'sr21.kiava.fun', udp: True}
+ - {name: 'bing50667', server: 'sr22.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'sr22.kiava.fun', udp: True}
+ - {name: 'bing50668', server: 'sr24.kiava.fun', port: 443, type: 'vless', uuid: '768bd038-d320-4553-e29a-5c1b6af83fef', tls: True, servername: 'sr24.kiava.fun', udp: True}
+ - {name: 'bing50669', server: 'us4837.kctr2038.icu', port: 21785, type: 'trojan', password: 'de1fc41d-0d5e-430f-88cf-6f261a6477c0', udp: True}
+ - {name: 'bing50670', server: 'xxx.bandara.xyz', port: 4193, type: 'vless', uuid: '2165a21c-03aa-47c2-fd77-d5407c2c776c', tls: True, servername: 'xxx.bandara.xyz', udp: True}
+ - {name: 'bing50671', server: '183.245.149.5', port: 12211, type: 'trojan', password: '0e01fd82-b5ae-4981-aa51-fdf36b02e7eb', udp: True}
+ - {name: 'bing50672', server: '183.245.7.181', port: 61012, type: 'trojan', password: '0e01fd82-b5ae-4981-aa51-fdf36b02e7eb', udp: True}
+ - {name: 'bing50673', server: '183.245.149.5', port: 61014, type: 'trojan', password: '0e01fd82-b5ae-4981-aa51-fdf36b02e7eb', udp: True}
+ - {name: 'bing50674', server: '183.245.7.181', port: 61014, type: 'trojan', password: '0e01fd82-b5ae-4981-aa51-fdf36b02e7eb', udp: True}
+ - {name: 'bing50675', server: '183.245.7.181', port: 61013, type: 'trojan', password: '0e01fd82-b5ae-4981-aa51-fdf36b02e7eb', udp: True}
+ - {name: 'bing50676', server: '104.18.165.38', port: 443, type: 'vless', uuid: 'f1aa37e5-2257-5183-8975-d161d74d5ea5', tls: True, servername: '104.18.165.38', udp: True}
+ - {name: 'bing50677', server: '104.18.165.39', port: 80, type: 'vless', uuid: 'e446048f-725e-5d74-8c38-6e7f7b5dbfc9', tls: True, servername: '104.18.165.39', udp: True}
+ - {name: 'bing50678', server: 'Tgju.org', port: 2096, type: 'vless', uuid: 'daf96ee6-7e59-480b-a320-681a6e13b654', tls: True, servername: 'Tgju.org', udp: True}
+ - {name: 'bing50679', server: '185.126.3.233', port: 33235, type: 'vless', uuid: 'd3b8055e-2a39-430d-ae93-b817fe3c20ba', tls: True, servername: '185.126.3.233', udp: True}
+ - {name: 'bing50680', server: '31.207.47.38', port: 8443, type: 'vless', uuid: '5d207e26-3884-48e6-b956-1ef240526bf8', tls: True, servername: '31.207.47.38', udp: True}
+ - {name: 'bing50681', server: '5.75.212.72', port: 443, type: 'vless', uuid: 'c24f4d92-a46f-4905-d8c1-d519df330e03', tls: True, servername: '5.75.212.72', udp: True}
+ - {name: 'bing50682', server: 'join-bede1.vmessorg.fun', port: 8080, type: 'vless', uuid: 'f37c91cc-ea85-49ad-9b2d-1db7d8c0fb79', tls: True, servername: 'join-bede1.vmessorg.fun', udp: True}
+ - {name: 'bing50683', server: '104.31.16.35', port: 2086, type: 'vless', uuid: '513f9df7-c30d-418b-aa5c-d7cc8cab452d', tls: True, servername: '104.31.16.35', udp: True}
+ - {name: 'bing50684', server: 'bia2.nufilter.online', port: 443, type: 'vless', uuid: '43faa2cc-594c-48dc-9924-b0369159ba98', tls: True, servername: 'bia2.nufilter.online', udp: True}
+ - {name: 'bing50685', server: '172.232.56.227', port: 8585, type: 'vless', uuid: '0ba65138-1bfa-4bda-ac51-3aa7bdfd914d', tls: True, servername: '172.232.56.227', udp: True}
+ - {name: 'bing50686', server: 'srv2.kiava.fun', port: 443, type: 'vless', uuid: '9dd91462-55e1-4654-cd15-515dd1a2223a', tls: True, servername: 'srv2.kiava.fun', udp: True}
+ - {name: 'bing50687', server: '5.75.236.103', port: 443, type: 'vless', uuid: 'fa3e5572-dc29-4ad5-9d24-6e5646f98bb8', tls: True, servername: '5.75.236.103', udp: True}
+ - {name: 'bing50688', server: '13.39.255.225', port: 443, type: 'vless', uuid: 'cbd19b29-db88-4db5-eda5-629db98b18c9', tls: True, servername: '13.39.255.225', udp: True}
+ - {name: 'bing50689', server: '46.4.162.18', port: 26950, type: 'vless', uuid: '6fe0b2d1-4f98-4223-8903-a058c8285ab2', tls: True, servername: '46.4.162.18', udp: True}
+ - {name: 'bing50690', server: 'visa.org', port: 8880, type: 'vless', uuid: '89b2d444-7f15-4881-80ed-4aa8057fb97c', tls: True, servername: 'visa.org', udp: True}
+ - {name: 'bing50691', server: '194.31.194.110', port: 1257, type: 'vless', uuid: '17e7b169-1899-4ba3-8efa-4f10e92c9455', tls: True, servername: '194.31.194.110', udp: True}
+ - {name: 'bing50692', server: '168.119.153.222', port: 443, type: 'vless', uuid: 'ItsLegendaryking', tls: True, servername: '168.119.153.222', udp: True}
+ - {name: 'bing50693', server: '45.91.168.94', port: 443, type: 'vless', uuid: 'ItsLegendaryking', tls: True, servername: '45.91.168.94', udp: True}
+ - {name: 'bing50694', server: '62.133.63.71', port: 443, type: 'vless', uuid: 'ItsLegendaryking', tls: True, servername: '62.133.63.71', udp: True}
+ - {name: 'bing50695', server: '77.91.70.43', port: 443, type: 'vless', uuid: 'ItsLegendaryking', tls: True, servername: '77.91.70.43', udp: True}
+ - {name: 'bing50696', server: '45.95.233.206', port: 443, type: 'vless', uuid: 'ItsLegendaryking', tls: True, servername: '45.95.233.206', udp: True}
+ - {name: 'bing50697', server: '5.161.48.162', port: 443, type: 'vless', uuid: 'ItsLegendaryking', tls: True, servername: '5.161.48.162', udp: True}
+ - {name: 'bing50698', server: 'join-----telegram-----channel.outline-vpn.cloud', port: 443, type: 'vless', uuid: '884f9b2c-f0c5-44dd-a68e-3e39ce93bb39', tls: True, servername: 'join-----telegram-----channel.outline-vpn.cloud', udp: True}
+ - {name: 'bing50699', server: 'cn2hn.sub-zrj.com', port: 222, type: 'trojan', password: 'ec8d725c-6c59-4b33-9b13-ff150f2d2969', udp: True}
+ - {name: 'bing50700', server: 'ngzyd.sub-zrj.com', port: 222, type: 'trojan', password: 'ec8d725c-6c59-4b33-9b13-ff150f2d2969', udp: True}
+ - {name: 'bing50701', server: '138.124.58.242', port: 443, type: 'vless', uuid: '8bd40cd6-641c-4f76-9a03-64a5c68d1d95', tls: True, servername: '138.124.58.242', udp: True}
+ - {name: 'bing50702', server: '15.184.219.193', port: 443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'Bog0ELmMM9DSxDdQ', udp: True}
+ - {name: '🇩🇪 bing50703', server: '157.90.238.93', port: 8880, type: 'vless', uuid: 'df0680ca-e43c-498d-ed86-8e196eedd012', tls: True, servername: '157.90.238.93', udp: True}
+ - {name: 'bing50704', server: '170.64.135.248', port: 20420, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: '058LBxWLX3nqWoR4OsoMdr', udp: True}
+ - {name: 'bing50705', server: '77.110.106.77', port: 36301, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'tTquBIXCTwYCfIZJBvG9PO', udp: True}
+ - {name: 'bing50706', server: '89.110.107.89', port: 1516, type: 'vless', uuid: '9fa56b31-3766-4eff-b5f9-f1a272539031', tls: True, servername: '89.110.107.89', udp: True}
+ - {name: 'bing50707', server: '89.110.107.89', port: 1517, type: 'vless', uuid: '9fa56b31-3766-4eff-b5f9-f1a272539031', tls: True, servername: '89.110.107.89', udp: True}
+ - {name: '🇩🇪 bing50708', server: 'vip-ii.nanowaash-shop.ir.snaapppfree.com', port: 109, type: 'vless', uuid: 'd377986b-2b48-4d8b-8af6-30529e2d1fcd', tls: True, servername: 'vip-ii.nanowaash-shop.ir.snaapppfree.com', udp: True}
+ - {name: 'bing50709', server: 'join---------to.outline-vpn.cloud', port: 2096, type: 'vless', uuid: 'd342d11e-d424-4583-b36e-524ab1f0afa4', tls: True, servername: 'join---------to.outline-vpn.cloud', udp: True}
+ - {name: 'bing50710', server: 'iran-010-join.outline-vpn.cloud', port: 2087, type: 'vless', uuid: '884f9b2c-f0c5-44dd-a68e-3e39ce93bb39', tls: True, servername: 'iran-010-join.outline-vpn.cloud', udp: True}
+ - {name: 'bing50711', server: '172.67.169.146', port: 2096, type: 'vless', uuid: 'cbe9f346-4481-4256-bf0c-b136211c00f6', tls: True, servername: '172.67.169.146', udp: True}
+ - {name: 'bing50712', server: '190.93.246.200', port: 2096, type: 'vless', uuid: 'cbe9f346-4481-4256-bf0c-b136211c00f6', tls: True, servername: '190.93.246.200', udp: True}
+ - {name: 'bing50713', server: '94.228.169.27', port: 443, type: 'vless', uuid: 'ItsLegendaryking', tls: True, servername: '94.228.169.27', udp: True}
+ - {name: 'bing50714', server: '142.93.231.14', port: 26682, type: 'vless', uuid: '96da118f-49b3-42c9-b966-13165e79f5de', tls: True, servername: '142.93.231.14', udp: True}
+ - {name: 'bing50715', server: '91.107.254.145', port: 3030, type: 'vless', uuid: 'b57a60ae-9415-4968-9eae-13ff604d5b54', tls: True, servername: '91.107.254.145', udp: True}
+ - {name: 'bing50716', server: '167.99.40.186', port: 42007, type: 'vless', uuid: '2f784b82-effc-4497-8241-275880bfe0c3', tls: True, servername: '167.99.40.186', udp: True}
+ - {name: 'bing50717', server: '46.101.198.105', port: 25198, type: 'vless', uuid: 'FREE_VPN02', tls: True, servername: '46.101.198.105', udp: True}
+ - {name: 'bing50718', server: '206.189.25.148', port: 51242, type: 'vless', uuid: 'cfd103f9-7f14-41ff-a3b6-fea73c5a2819', tls: True, servername: '206.189.25.148', udp: True}
+ - {name: 'bing50719', server: 'eu.qashqaipan.xyz', port: 440, type: 'vless', uuid: 'e1972c93-4fa3-4b1e-effc-aaf03d149210', tls: True, servername: 'eu.qashqaipan.xyz', udp: True}
+ - {name: 'bing50720', server: '185.146.173.92', port: 2087, type: 'vless', uuid: '1b54598e-8bb4-4bde-d7b4-3302ceb12640', tls: True, servername: '185.146.173.92', udp: True}
+ - {name: 'bing50721', server: 'Golestan.fastly80-3.hosting-ip.com', port: 80, type: 'vless', uuid: 'a2c3e819-eb12-4b66-aeb4-f0cf58bae2d0', tls: True, servername: 'Golestan.fastly80-3.hosting-ip.com', udp: True}
+ - {name: 'bing50722', server: 's5.vact.ir', port: 443, type: 'vless', uuid: '502bc9d5-e1a0-4a70-aba9-c4256a896f5a', tls: True, servername: 's5.vact.ir', udp: True}
+ - {name: 'bing50723', server: 's7.vact.ir', port: 443, type: 'vless', uuid: '4da451aa-ef72-4c61-b363-3e71c25110ad', tls: True, servername: 's7.vact.ir', udp: True}
+ - {name: 'bing50724', server: 's8.vact.ir', port: 443, type: 'vless', uuid: '0f3af1cf-1220-462b-bf1a-ea5aabee2c47', tls: True, servername: 's8.vact.ir', udp: True}
+ - {name: 'bing50725', server: 'pl04.outline.abvpn.ru', port: 47777, type: 'ss', cipher: 'aes-256-gcm', password: 'YhuntCMfLkMffatjPNVJPF', udp: True}
+ - {name: 'bing50726', server: 'Www.speedtest.net', port: 2096, type: 'vless', uuid: '8fba3da9-5599-43f3-a461-9108d5fc735d', tls: True, servername: 'Www.speedtest.net', udp: True}
+ - {name: 'bing50727', server: 'tr8.tgcunzhang.xyz', port: 54485, type: 'trojan', password: '2a9ba60d-10ce-4f79-97e7-817334456195', udp: True}
+ - {name: 'bing50728', server: 'sgp-2.fuckjdieng.uk', port: 50050, type: 'trojan', password: 'b3a867c9-490c-41f7-8e1e-f51ba051fa2b', udp: True}
+ - {name: 'bing50729', server: 'u-s02.beef1917.com', port: 53030, type: 'trojan', password: '311091d5-b96f-4235-a29b-cda4e86dd484', udp: True}
+ - {name: 'bing50730', server: 'gonggao02.beef1917.com', port: 53002, type: 'trojan', password: '311091d5-b96f-4235-a29b-cda4e86dd484', udp: True}
+ - {name: 'bing50731', server: 't-wn01.beef1917.com', port: 53052, type: 'trojan', password: '311091d5-b96f-4235-a29b-cda4e86dd484', udp: True}
+ - {name: 'bing50732', server: 'k-r02.beef1917.com', port: 53022, type: 'trojan', password: '311091d5-b96f-4235-a29b-cda4e86dd484', udp: True}
+ - {name: 'bing50733', server: 't-wn02.beef1917.com', port: 53054, type: 'trojan', password: '311091d5-b96f-4235-a29b-cda4e86dd484', udp: True}
+ - {name: 'bing50734', server: 'k-r04.beef1917.com', port: 53026, type: 'trojan', password: '311091d5-b96f-4235-a29b-cda4e86dd484', udp: True}
+ - {name: 'bing50735', server: '172.232.207.99', port: 46254, type: 'vless', uuid: '2ef0fd33-71d8-4b0e-8f43-d1a5013ec4f9', tls: True, servername: '172.232.207.99', udp: True}
+ - {name: 'bing50736', server: '172.67.171.59', port: 443, type: 'vless', uuid: 'e1c84131-eaca-4a67-8bf1-365f254d2ef9', tls: True, servername: '172.67.171.59', udp: True}
+ - {name: 'bing50737', server: '172.67.171.42', port: 443, type: 'vless', uuid: '8de0603e-5fe5-4b50-bebe-4d63115163a4', tls: True, servername: '172.67.171.42', udp: True}
+ - {name: 'bing50738', server: '45.8.98.163', port: 52839, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: '3N2JoZhDodMX5wPfr0xbT5', udp: True}
+ - {name: 'bing50739', server: '20014.purefast2.com', port: 20014, type: 'trojan', password: '357827e5-a45d-3f09-9b73-ef4431dfb323', udp: True}
+ - {name: 'bing50740', server: 'Tgju.org', port: 2087, type: 'vless', uuid: '1cdc2e3d-c656-435b-bdcf-555536661692', tls: True, servername: 'Tgju.org', udp: True}
+ - {name: 'bing50741', server: 'Tgju.org', port: 2083, type: 'vless', uuid: '4bec0064-137e-48e2-85a2-b2ef37732a8f', tls: True, servername: 'Tgju.org', udp: True}
+ - {name: 'bing50742', server: 'Tgju.org', port: 8443, type: 'vless', uuid: '3fdc4982-b8f9-4f17-84b4-081ed05773de', tls: True, servername: 'Tgju.org', udp: True}
+ - {name: 'bing50743', server: 'Zz.zemesTanil.IR', port: 2083, type: 'vless', uuid: 'Telegram-ipV2Ray-zyu', tls: True, servername: 'Zz.zemesTanil.IR', udp: True}
+ - {name: 'bing50744', server: '104.21.3.182', port: 443, type: 'vless', uuid: 'f8f5dce2-e66b-45bd-957e-53c1ecdda37a', tls: True, servername: '104.21.3.182', udp: True}
+ - {name: 'bing50745', server: 'ssrsub.t05.trojan.tel', port: 80, type: 'trojan', password: '3f6043ee-8d11-498e-8a59-07e3214d3a35', udp: True}
+ - {name: 'bing50746', server: 'ssrsub.t10.trojan.tel', port: 80, type: 'trojan', password: '3f6043ee-8d11-498e-8a59-07e3214d3a35', udp: True}
+ - {name: 'bing50747', server: 'ssrsub.t07.trojan.tel', port: 80, type: 'trojan', password: '3f6043ee-8d11-498e-8a59-07e3214d3a35', udp: True}
+ - {name: 'bing50748', server: 'o04.tgfaka.com', port: 80, type: 'trojan', password: '3f6043ee-8d11-498e-8a59-07e3214d3a35', udp: True}
+ - {name: 'bing50749', server: 'ssrsub.o02.trojan.tel', port: 80, type: 'trojan', password: '3f6043ee-8d11-498e-8a59-07e3214d3a35', udp: True}
+ - {name: 'bing50750', server: 'zz1.piligou.cc', port: 35117, type: 'trojan', password: 'bbab60b8-779f-31e2-916e-571f7d7023c4', udp: True}
+ - {name: 'bing50751', server: 'v2ray2.v2rayfree2.xyz', port: 443, type: 'vless', uuid: '3d943a51-a315-4b9d-8f13-6cd3a9adaf6a', tls: True, servername: 'v2ray2.v2rayfree2.xyz', udp: True}
+ - {name: 'bing50752', server: 'join-bede1.vmessorg.fun', port: 443, type: 'vless', uuid: 'e271dca6-e07a-4020-fe76-8d0ff8a2bc3a', tls: True, servername: 'join-bede1.vmessorg.fun', udp: True}
+ - {name: 'bing50753', server: 'likethis.masjedeman.online', port: 32112, type: 'vless', uuid: '89e82b97-5b5c-469f-c0e7-73aea44df3f5', tls: True, servername: 'likethis.masjedeman.online', udp: True}
+ - {name: 'bing50754', server: '5.75.155.121', port: 443, type: 'vless', uuid: 'b557b0f2-60c5-4b65-a884-5b6626d4149f', tls: True, servername: '5.75.155.121', udp: True}
+ - {name: 'bing50755', server: 'mtn-join.servernett.cfd', port: 34940, type: 'vless', uuid: '90775530-838e-43fd-852c-d1369906ab2e', tls: True, servername: 'mtn-join.servernett.cfd', udp: True}
+ - {name: 'bing50756', server: '65.109.241.91', port: 52794, type: 'vless', uuid: '8da0abd3-b80c-4b3a-f1c3-23d41961cdd6', tls: True, servername: '65.109.241.91', udp: True}
+ - {name: 'bing50757', server: 'mr.abiiidar.tech', port: 46555, type: 'vless', uuid: '5a0a4032-8174-4347-a139-8f8f72156811', tls: True, servername: 'mr.abiiidar.tech', udp: True}
+ - {name: 'bing50758', server: 'neshan.ali65.tk', port: 443, type: 'vless', uuid: 'ec400526-19ec-404d-a232-9d0c90c9b5b5', tls: True, servername: 'neshan.ali65.tk', udp: True}
+ - {name: 'bing50759', server: '79.137.202.100', port: 443, type: 'vless', uuid: '6c9c1bd9-063a-4b60-999f-be8f4a7ffab3', tls: True, servername: '79.137.202.100', udp: True}
+ - {name: 'bing50760', server: 'v2rayfroshmtnn.ddns.net', port: 2096, type: 'vless', uuid: '2fbb27e6-c03c-4492-8ccb-f255590d67d2', tls: True, servername: 'v2rayfroshmtnn.ddns.net', udp: True}
+ - {name: 'bing50761', server: 'v2rayfroshmci.ddns.net', port: 2087, type: 'vless', uuid: '76310e9b-fee7-4629-b713-9f4ba374fc4b', tls: True, servername: 'v2rayfroshmci.ddns.net', udp: True}
+ - {name: 'bing50762', server: '104.21.27.152', port: 80, type: 'vless', uuid: '1d0d7f6e-a8f4-4403-b492-65e702f8a481', tls: True, servername: '104.21.27.152', udp: True}
+ - {name: 'bing50763', server: 'serv1.alpha2.sbs', port: 2053, type: 'vless', uuid: '3e2b5eee-1f1b-45ec-8ea8-bc4e925b525a', tls: True, servername: 'serv1.alpha2.sbs', udp: True}
+ - {name: 'bing50764', server: 'cos-ap-guangzhou.westdatacloud.top', port: 20068, type: 'trojan', password: 'A78CB31E-BAD3-5B47-2FDD-DF92AC7CD2A5', udp: True}
+ - {name: 'bing50765', server: '183.245.146.6', port: 12198, type: 'ss', cipher: 'aes-256-gcm', password: '68dcf2e1-05a7-46b9-937f-34b9094ffed3', udp: True}
+ - {name: 'bing50766', server: '183.245.146.6', port: 12199, type: 'ss', cipher: 'aes-256-gcm', password: '68dcf2e1-05a7-46b9-937f-34b9094ffed3', udp: True}
+ - {name: 'bing50767', server: '183.245.146.6', port: 12200, type: 'ss', cipher: 'aes-256-gcm', password: '68dcf2e1-05a7-46b9-937f-34b9094ffed3', udp: True}
+ - {name: 'bing50768', server: '183.245.146.6', port: 12205, type: 'ss', cipher: 'aes-256-gcm', password: '68dcf2e1-05a7-46b9-937f-34b9094ffed3', udp: True}
+ - {name: 'bing50769', server: '183.245.146.6', port: 12206, type: 'ss', cipher: 'aes-256-gcm', password: '68dcf2e1-05a7-46b9-937f-34b9094ffed3', udp: True}
+ - {name: 'bing50770', server: '110.80.3.24', port: 11001, type: 'trojan', password: '68dcf2e1-05a7-46b9-937f-34b9094ffed3', udp: True}
+ - {name: 'bing50771', server: '110.80.3.24', port: 11002, type: 'trojan', password: '68dcf2e1-05a7-46b9-937f-34b9094ffed3', udp: True}
+ - {name: 'bing50772', server: '01.KRIX.ANRUN-IX.TOP', port: 443, type: 'trojan', password: 'dd86a105-00c1-41ba-899c-c31aa74f4539', udp: True}
+ - {name: 'bing50773', server: '01.USIX.ANRUN-IX.TOP', port: 9527, type: 'trojan', password: 'dd86a105-00c1-41ba-899c-c31aa74f4539', udp: True}
+ - {name: 'bing50774', server: '02.USIX.ANRUN-IX.TOP', port: 9527, type: 'trojan', password: 'dd86a105-00c1-41ba-899c-c31aa74f4539', udp: True}
+ - {name: 'bing50775', server: 'bia-to6.unlimiteddev.xyz', port: 8080, type: 'vless', uuid: '7de9ee24-e53d-48fd-8434-63b957e4dbfb', tls: True, servername: 'bia-to6.unlimiteddev.xyz', udp: True}
+ - {name: 'bing50776', server: '91.198.77.202', port: 57082, type: 'vless', uuid: '84ec42e1-7a68-484a-8734-09cb9d8e544a', tls: True, servername: '91.198.77.202', udp: True}
+ - {name: 'bing50777', server: 'sport.k6n.ir', port: 443, type: 'vless', uuid: '7e9cfe7c-4cb5-4529-bc49-8b11d2143038', tls: True, servername: 'sport.k6n.ir', udp: True}
+ - {name: 'bing50778', server: 'cpanel.com', port: 2082, type: 'vless', uuid: '49c9b685-3fd3-4629-94c0-a758969653ba', tls: True, servername: 'cpanel.com', udp: True}
+ - {name: 'bing50779', server: '172.67.171.89', port: 443, type: 'vless', uuid: '6e4c616d-7050-491f-a82e-9508b5f64608', tls: True, servername: '172.67.171.89', udp: True}
+ - {name: 'bing50780', server: '172.67.171.89', port: 80, type: 'vless', uuid: '6e4c616d-7050-491f-a82e-9508b5f64608', tls: True, servername: '172.67.171.89', udp: True}
+ - {name: '🇭🇰 bing50781', server: '110.80.3.24', port: 21001, type: 'trojan', password: '36a6ad11-68f2-4f5d-b5e0-16c7a1f68779', udp: True}
+ - {name: '🇭🇰 bing50782', server: '110.80.3.24', port: 21002, type: 'trojan', password: '36a6ad11-68f2-4f5d-b5e0-16c7a1f68779', udp: True}
+ - {name: '🇭🇰 bing50783', server: '183.255.114.164', port: 21001, type: 'trojan', password: '36a6ad11-68f2-4f5d-b5e0-16c7a1f68779', udp: True}
+ - {name: '🇭🇰 bing50784', server: '183.255.114.164', port: 21003, type: 'trojan', password: '36a6ad11-68f2-4f5d-b5e0-16c7a1f68779', udp: True}
+ - {name: 'bing50785', server: 'b.lra.cn', port: 443, type: 'vless', uuid: '25dfb02f-2ed6-4288-dfd2-b52c71173650', tls: True, servername: 'b.lra.cn', udp: True}
+ - {name: 'bing50786', server: 'v2cm.nicecdns.com', port: 10353, type: 'trojan', password: '209876bb-d94c-43ff-8664-06401e2d5529', udp: True}
+ - {name: 'bing50787', server: 'v2cm.nicecdns.com', port: 15772, type: 'trojan', password: '209876bb-d94c-43ff-8664-06401e2d5529', udp: True}
+ - {name: 'bing50788', server: 'Tgju.org', port: 443, type: 'vless', uuid: '24ac1a19-e029-4022-92ec-1aab138e7338', tls: True, servername: 'Tgju.org', udp: True}
+ - {name: 'bing50789', server: 'w.tokenmj.com', port: 443, type: 'vless', uuid: '5b0966ca-21eb-431a-92a4-f1c1c19cd844', tls: True, servername: 'w.tokenmj.com', udp: True}
+ - {name: 'bing50790', server: '138.197.183.217', port: 27177, type: 'vless', uuid: '6241e0b7-0fcb-41e1-8b2c-b55f4c34259b', tls: True, servername: '138.197.183.217', udp: True}
+ - {name: 'bing50791', server: 'multi.srv2.safeunity.space', port: 3232, type: 'vless', uuid: '420e4da5-af5c-40b4-bd73-fb608fe45ecb', tls: True, servername: 'multi.srv2.safeunity.space', udp: True}
+ - {name: 'bing50792', server: 'ipv6.acangame.ir', port: 446, type: 'vless', uuid: '91f81abc-04dd-4221-84bf-ebc559a523ee', tls: True, servername: 'ipv6.acangame.ir', udp: True}
+ - {name: 'bing50793', server: '18.193.22.239', port: 443, type: 'vless', uuid: '0cb3222d-8700-46a6-ba68-0f52726ac0c2', tls: True, servername: '18.193.22.239', udp: True}
+ - {name: 'bing50794', server: '46.17.41.189', port: 50717, type: 'hysteria2', password: '/dongtaiwang.com', udp: True}
+ - {name: 'bing50795', server: '82.115.16.123', port: 54022, type: 'vless', uuid: '052ac018-69f4-4e0c-880f-22715132d5b9', tls: True, servername: '82.115.16.123', udp: True}
+ - {name: 'bing50796', server: 'sv.qashqaipan.xyz', port: 440, type: 'vless', uuid: '3b112103-a797-4168-97bc-790c06b34fc5', tls: True, servername: 'sv.qashqaipan.xyz', udp: True}
+ - {name: 'bing50797', server: '110.80.3.24', port: 21004, type: 'trojan', password: '970b4ec8-8175-47a3-9c02-237e25ae1da2', udp: True}
+ - {name: 'bing50798', server: '110.80.3.24', port: 21003, type: 'trojan', password: '970b4ec8-8175-47a3-9c02-237e25ae1da2', udp: True}
+ - {name: 'bing50799', server: 'hk4.kfcnode.xyz', port: 443, type: 'trojan', password: '99ce20e7-2525-41b6-98ce-fb6c222fb54a', udp: True}
+ - {name: 'bing50800', server: 'us1.kfcnode.xyz', port: 443, type: 'trojan', password: '99ce20e7-2525-41b6-98ce-fb6c222fb54a', udp: True}
+ - {name: 'bing50801', server: 'us3.kfcnode.xyz', port: 443, type: 'trojan', password: '99ce20e7-2525-41b6-98ce-fb6c222fb54a', udp: True}
+ - {name: 'bing50802', server: 'hk2.kfcnode.xyz', port: 443, type: 'trojan', password: '99ce20e7-2525-41b6-98ce-fb6c222fb54a', udp: True}
+ - {name: 'bing50803', server: 'trs11.bolab.net', port: 443, type: 'trojan', password: '14bdba6dede262387ebdebaa706e1c90', udp: True}
+ - {name: 'bing50804', server: 'vxq5p.ineronix.com', port: 30913, type: 'trojan', password: '648956713471a', udp: True}
+ - {name: 'bing50805', server: '138.68.137.73', port: 39903, type: 'vless', uuid: '921feab2-fea9-4e62-9e6e-8e20a31a5953', tls: True, servername: '138.68.137.73', udp: True}
+ - {name: 'bing50806', server: 'www.iodata.com', port: 443, type: 'vless', uuid: 'a5b80cdc-5d85-4e4b-aefa-71df4955fdb4', tls: True, servername: 'www.iodata.com', udp: True}
+ - {name: 'bing50807', server: 'jtehtsjts.754748.hcgshdhd.lavazemkhoshina.ir', port: 35384, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'QYc_j7Ln5Fd-snLraGkqNA', udp: True}
+ - {name: 'bing50808', server: 'cdnJS.com', port: 8880, type: 'vless', uuid: '665eb936-c2e5-4048-ab04-0b11da9c536b', tls: True, servername: 'cdnJS.com', udp: True}
+ - {name: 'bing50809', server: 'sg.myanmars.club', port: 8443, type: 'ss', cipher: 'chacha20-ietf-poly1305', password: 'MTotQaLLAq0y', udp: True}
+ - {name: 'bing50810', server: '172.232.32.137', port: 8443, type: 'vless', uuid: 'e847356b-c7e0-40bf-987d-3eb4d2cd6647', tls: True, servername: '172.232.32.137', udp: True}
+ - {name: 'bing50811', server: 'srv17.kiava.fun', port: 443, type: 'vless', uuid: '9dd91462-55e1-4654-cd15-515dd1a2223a', tls: True, servername: 'srv17.kiava.fun', udp: True}
+ - {name: 'bing50812', server: 'mci2.vpnprosec.shop', port: 2096, type: 'vless', uuid: 'd26c1c8c-2277-4ecd-e75a-5eafe4429b5f', tls: True, servername: 'mci2.vpnprosec.shop', udp: True}
+ - {name: 'bing50813', server: '172.232.47.34', port: 8443, type: 'vless', uuid: '9b82fb47-017c-426b-9916-fcb86cc1c8af', tls: True, servername: '172.232.47.34', udp: True}
+ - {name: 'bing50814', server: 'srv15.kiava.fun', port: 443, type: 'vless', uuid: '9dd91462-55e1-4654-cd15-515dd1a2223a', tls: True, servername: 'srv15.kiava.fun', udp: True}
+ - {name: 'bing50815', server: '172.232.56.7', port: 16711, type: 'vless', uuid: '486bb4f1-b6bf-430f-ace8-f0d63347491c', tls: True, servername: '172.232.56.7', udp: True}
+ - {name: 'bing50816', server: 'srv18.kiava.fun', port: 443, type: 'vless', uuid: '9dd91462-55e1-4654-cd15-515dd1a2223a', tls: True, servername: 'srv18.kiava.fun', udp: True}
+ - {name: 'bing50817', server: '95.142.40.124', port: 443, type: 'vless', uuid: '7d8f1672-e3d8-4ae9-ee2e-4a0bd883a555', tls: True, servername: '95.142.40.124', udp: True}
+ - {name: 'bing50818', server: '104.21.25.96', port: 80, type: 'vless', uuid: 'ba6016d9-cd7a-467f-9589-3e29708b11a1', tls: True, servername: '104.21.25.96', udp: True}
+ - {name: 'bing50819', server: '185.146.173.98', port: 8080, type: 'vless', uuid: 'SVNTEAMm', tls: True, servername: '185.146.173.98', udp: True}
+ - {name: '🇯🇵 bing50820', server: '110.80.3.48', port: 11001, type: 'trojan', password: 'a43c7131-99fa-4479-bf86-77d4eff6a89e', udp: True}
+ - {name: 'bing50821', server: '20016.purefast2.com', port: 20016, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50822', server: '20012.purefast2.com', port: 20012, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50823', server: '20013.purefast2.com', port: 20013, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50824', server: '20015.purefast2.com', port: 20015, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50825', server: '20002.purefast2.com', port: 20002, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50826', server: '20000.purefast2.com', port: 20000, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50827', server: '110.80.3.48', port: 11002, type: 'trojan', password: '6e2a6544-6bd5-4584-9568-9726d3b1cb0f', udp: True}
+ - {name: 'bing50828', server: '183.255.114.164', port: 11001, type: 'trojan', password: '78d8a627-9e08-4be9-bcb4-30643cb96b62', udp: True}
+ - {name: 'bing50829', server: '183.255.114.164', port: 11002, type: 'trojan', password: '78d8a627-9e08-4be9-bcb4-30643cb96b62', udp: True}
+ - {name: 'bing50830', server: 'x-vpn021.ddns.net', port: 2083, type: 'vless', uuid: '99b2caf5-5839-40b0-9696-d20f1c45fe0b', tls: True, servername: 'x-vpn021.ddns.net', udp: True}
+ - {name: 'bing50831', server: '128.140.124.180', port: 22127, type: 'vless', uuid: '4818f673-675b-46ca-a254-6dd7f6c81013', tls: True, servername: '128.140.124.180', udp: True}
+ - {name: '🇹🇼 bing50832', server: '20.210.244.13', port: 443, type: 'trojan', password: '5c777277-17f2-4272-ae65-7bd00fa4fbaa', udp: True}
+ - {name: 'bing50833', server: '223.111.202.222', port: 11047, type: 'trojan', password: '2e1e7858-ae24-4e68-9b46-0cf2d365d985', udp: True}
+ - {name: 'bing50834', server: '120.241.145.62', port: 63333, type: 'trojan', password: '2e1e7858-ae24-4e68-9b46-0cf2d365d985', udp: True}
+ - {name: 'bing50835', server: '120.241.145.62', port: 19154, type: 'trojan', password: '2e1e7858-ae24-4e68-9b46-0cf2d365d985', udp: True}
+ - {name: 'bing50836', server: '13.208.141.82', port: 443, type: 'trojan', password: '5c777277-17f2-4272-ae65-7bd00fa4fbaa', udp: True}
+ - {name: 'bing50837', server: 'tel-free-vpn02.rcelf.me', port: 53130, type: 'vless', uuid: '1250f946-805e-4ccc-b944-38b0dc994f7b', tls: True, servername: 'tel-free-vpn02.rcelf.me', udp: True}
+ - {name: 'bing50838', server: '178.62.207.248', port: 11424, type: 'vless', uuid: 'FREE_VPN02', tls: True, servername: '178.62.207.248', udp: True}
+ - {name: 'bing50839', server: 'gr.elfphnew.me', port: 3000, type: 'vless', uuid: '7be59027-8ccc-41e3-96ad-611a2c1072b1', tls: True, servername: 'gr.elfphnew.me', udp: True}
+ - {name: 'bing50840', server: 'srv8.kiava.fun', port: 443, type: 'vless', uuid: '9dd91462-55e1-4654-cd15-515dd1a2223a', tls: True, servername: 'srv8.kiava.fun', udp: True}
+ - {name: 'bing50841', server: 'techshieldco.speedbreak.xyz', port: 8443, type: 'vless', uuid: '30bf3c70-b872-47fb-adcc-f846299bb679', tls: True, servername: 'techshieldco.speedbreak.xyz', udp: True}
+ - {name: 'bing50842', server: 'f-off.melov2ray.store', port: 443, type: 'vless', uuid: '8c883de6-78e9-41e9-9d85-23774b945c16', tls: True, servername: 'f-off.melov2ray.store', udp: True}
+ - {name: 'bing50843', server: 'lauren.network-go.info', port: 443, type: 'vless', uuid: '43f6501a-ce5c-48b9-8b48-c6352cb9e22d', tls: True, servername: 'lauren.network-go.info', udp: True}
+ - {name: 'bing50844', server: '5.42.77.71', port: 443, type: 'vless', uuid: 'ce6c7361-0132-41b0-a27a-11e198c97d11', tls: True, servername: '5.42.77.71', udp: True}
+ - {name: 'bing50845', server: 'panel.wenyx.gq', port: 443, type: 'vless', uuid: '242c49c9-71a6-422a-a1a3-cf151ca9b77c', tls: True, servername: 'panel.wenyx.gq', udp: True}
+ - {name: 'bing50846', server: '134.209.28.172', port: 2096, type: 'vless', uuid: 'b97ee94c-545a-42fa-c786-3bfa02a8c1f2', tls: True, servername: '134.209.28.172', udp: True}
+ - {name: 'bing50847', server: '23.88.104.100', port: 443, type: 'vless', uuid: '37bfa7c9-98d2-48a5-93b3-085d63b9ff45', tls: True, servername: '23.88.104.100', udp: True}
+ - {name: 'bing50848', server: 'free-config.asefi.top', port: 443, type: 'vless', uuid: '8d29d214-08a1-4642-9b91-39a38bf35fa5', tls: True, servername: 'free-config.asefi.top', udp: True}
+ - {name: 'bing50849', server: 'srv10.kiava.fun', port: 443, type: 'vless', uuid: '9dd91462-55e1-4654-cd15-515dd1a2223a', tls: True, servername: 'srv10.kiava.fun', udp: True}
+ - {name: 'bing50850', server: 'srv9.kiava.fun', port: 443, type: 'vless', uuid: '9dd91462-55e1-4654-cd15-515dd1a2223a', tls: True, servername: 'srv9.kiava.fun', udp: True}
+ - {name: 'bing50851', server: 'Xv2rayNG-Xv2rayNG-Xv2rayNG-Xv2rayNG-Xv2rayNG-Xv2rayNG-Xv2rayNG.vazagh.top', port: 443, type: 'vless', uuid: 'Xv2rayNG-Xv2rayNG-Xv2rayNG-1', tls: True, servername: 'Xv2rayNG-Xv2rayNG-Xv2rayNG-Xv2rayNG-Xv2rayNG-Xv2rayNG-Xv2rayNG.vazagh.top', udp: True}
+ - {name: 'bing50852', server: 'big.melov2ray.store', port: 27078, type: 'vless', uuid: 'ba94c718-b23d-4e08-ba32-d15b8c4cdb19', tls: True, servername: 'big.melov2ray.store', udp: True}
+ - {name: 'bing50853', server: 'srv11.kiava.fun', port: 443, type: 'vless', uuid: '9dd91462-55e1-4654-cd15-515dd1a2223a', tls: True, servername: 'srv11.kiava.fun', udp: True}
+ - {name: 'bing50854', server: 'ger-v2raypro1.ddns.net', port: 2093, type: 'vless', uuid: 'dfb50f3b-5713-4c81-b833-0e096fc9cfc3', tls: True, servername: 'ger-v2raypro1.ddns.net', udp: True}
+ - {name: 'bing50855', server: 'mci2.vpnprosec.shop', port: 2087, type: 'vless', uuid: 'd26c1c8c-2277-4ecd-e75a-5eafe4429b5f', tls: True, servername: 'mci2.vpnprosec.shop', udp: True}
+ - {name: 'bing50856', server: '20006.purefast2.com', port: 20006, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50857', server: '20004.purefast2.com', port: 20004, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50858', server: '20008.purefast2.com', port: 20008, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50859', server: '20010.purefast2.com', port: 20010, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50860', server: '20005.purefast2.com', port: 20005, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50861', server: '20003.purefast2.com', port: 20003, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50862', server: '20009.purefast2.com', port: 20009, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50863', server: '20011.purefast2.com', port: 20011, type: 'trojan', password: '6f940d00-345f-31b1-858c-f0d7afea45a2', udp: True}
+ - {name: 'bing50864', server: 'himan1.parsianboton.ir', port: 443, type: 'vless', uuid: '7e7008fb-9aeb-4708-a8b2-a453d670daaf', tls: True, servername: 'himan1.parsianboton.ir', udp: True}
+ - {name: 'bing50865', server: 'himan3.parsianboton.ir', port: 2086, type: 'vless', uuid: '181a7486-1b71-4fde-8c9f-6210998e5897', tls: True, servername: 'himan3.parsianboton.ir', udp: True}
+ - {name: 'bing50866', server: '157.90.149.248', port: 28211, type: 'vless', uuid: 'b8b63720-e5a5-4753-ad23-56f36048cdff', tls: True, servername: '157.90.149.248', udp: True}
+ - {name: 'bing50867', server: '172.67.171.42', port: 80, type: 'vless', uuid: '84441a15-0ebc-4362-9217-606929cd8c5b', tls: True, servername: '172.67.171.42', udp: True}
+ - {name: 'bing50868', server: '104.21.25.49', port: 80, type: 'vless', uuid: '91968473-fe77-4d88-8bb4-7279279bc9d4', tls: True, servername: '104.21.25.49', udp: True}
+ - {name: 'bing50869', server: '222.84.250.35', port: 19237, type: 'trojan', password: '0389e88f-887f-31fd-9b16-624400bdbd71', udp: True}
+ - {name: 'bing50870', server: '222.84.250.35', port: 19206, type: 'trojan', password: '0389e88f-887f-31fd-9b16-624400bdbd71', udp: True}
+ - {name: 'bing50871', server: '182.151.8.150', port: 19214, type: 'trojan', password: '0389e88f-887f-31fd-9b16-624400bdbd71', udp: True}
+ - {name: 'bing50872', server: '222.84.250.35', port: 19229, type: 'trojan', password: '0389e88f-887f-31fd-9b16-624400bdbd71', udp: True}
+ - {name: 'bing50873', server: '182.151.8.150', port: 19211, type: 'trojan', password: '0389e88f-887f-31fd-9b16-624400bdbd71', udp: True}
+ - {name: 'bing50874', server: 'iplc.xiaohouzi.club', port: 20029, type: 'trojan', password: 'c32c56fb-64d9-33c4-b42a-af81b7a33fe7', udp: True}
+ - {name: 'bing50875', server: '222.84.250.35', port: 19249, type: 'trojan', password: '0389e88f-887f-31fd-9b16-624400bdbd71', udp: True}
+ - {name: 'bing50876', server: '117.164.185.222', port: 21004, type: 'trojan', password: '24913fd0-a94b-4ed9-9b0e-fddb06af63d3', udp: True}
+ - {name: 'bing50877', server: '111.29.60.217', port: 31002, type: 'trojan', password: '24913fd0-a94b-4ed9-9b0e-fddb06af63d3', udp: True}
+ - {name: 'bing50878', server: 'irancell.zafarinocrm.ir', port: 80, type: 'vless', uuid: '3fa4c645-f6a7-4a02-85ee-7289530a6d1e', tls: True, servername: 'irancell.zafarinocrm.ir', udp: True}
+ - {name: 'bing50879', server: 'ir50hostdl.go-to-happy.click', port: 15042, type: 'vless', uuid: '0b58a10e-495d-42c6-cb1f-a275ad078963', tls: True, servername: 'ir50hostdl.go-to-happy.click', udp: True}
+ - {name: 'bing50880', server: 'irctest.lgbtshop.cf', port: 13672, type: 'vless', uuid: 'd91b1cd0-9e4d-475c-9253-b082f4f2c1a2', tls: True, servername: 'irctest.lgbtshop.cf', udp: True}
+ - {name: 'bing50881', server: 'mtn.melov2ray.store', port: 2096, type: 'vless', uuid: '22f17195-267a-41d3-976a-b33faf05c523', tls: True, servername: 'mtn.melov2ray.store', udp: True}
+ - {name: 'bing50882', server: 'mci2.vpnxheykh.shop', port: 2096, type: 'vless', uuid: 'b97ee94c-545a-42fa-c786-3bfa02a8c1f2', tls: True, servername: 'mci2.vpnxheykh.shop', udp: True}
+ - {name: 'bing50883', server: 'srv1.kiava.fun', port: 443, type: 'vless', uuid: '005330e9-536f-4722-b9d1-dd42cbd31d15', tls: True, servername: 'srv1.kiava.fun', udp: True}
+ - {name: 'bing50884', server: 'srv3.kiava.fun', port: 443, type: 'vless', uuid: '005330e9-536f-4722-b9d1-dd42cbd31d15', tls: True, servername: 'srv3.kiava.fun', udp: True}
+ - {name: 'bing50885', server: 'srv4.kiava.fun', port: 443, type: 'vless', uuid: '005330e9-536f-4722-b9d1-dd42cbd31d15', tls: True, servername: 'srv4.kiava.fun', udp: True}
+ - {name: 'bing50886', server: '8L64-501.f-sub.site', port: 31670, type: 'vless', uuid: 'vmessvip', tls: True, servername: '8L64-501.f-sub.site', udp: True}
+ - {name: 'bing50887', server: '77.105.147.220', port: 443, type: 'vless', uuid: '667c7a31-acbd-46df-b353-ec69b0d5017a', tls: True, servername: '77.105.147.220', udp: True}
+ - {name: 'bing50888', server: '104.31.16.61', port: 80, type: 'vless', uuid: '3d074856-49d3-443c-b2c9-3b5f7a18ecfb', tls: True, servername: '104.31.16.61', udp: True}
+ - {name: 'bing50889', server: 'ribvar.xyz', port: 12209, type: 'vless', uuid: '2b04ef9e-ed8f-4145-ac97-4d2af9769b6e', tls: True, servername: 'ribvar.xyz', udp: True}
+ - {name: 'bing50890', server: 'usa.uploadfile.shop', port: 43685, type: 'vless', uuid: 'c3aa47a0-3daf-5da9-5f90-852dcaa70fe4', tls: True, servername: 'usa.uploadfile.shop', udp: True}
+ - {name: 'bing50891', server: '95.216.171.194', port: 80, type: 'vless', uuid: '827567c4-27b9-4a9a-88b8-4c35661c3243', tls: True, servername: '95.216.171.194', udp: True}
+ - {name: 'bing50892', server: '5.161.210.116', port: 80, type: 'vless', uuid: '12a170ba-5abd-44af-f8eb-7fd7e11de4c7', tls: True, servername: '5.161.210.116', udp: True}
+ - {name: 'bing50893', server: 'big.melov2ray.store', port: 27090, type: 'vless', uuid: 'ba94c718-b23d-4e08-ba32-d15b8c4cdb19', tls: True, servername: 'big.melov2ray.store', udp: True}
+ - {name: 'bing50894', server: '5.230.67.53', port: 2082, type: 'vless', uuid: 'e2bba02a-972f-4f27-a35d-34264fa6b2ae', tls: True, servername: '5.230.67.53', udp: True}
+ - {name: 'bing50895', server: '128.140.117.108', port: 4682, type: 'vless', uuid: '137d3619-80db-480e-8ab6-8591c3910691', tls: True, servername: '128.140.117.108', udp: True}
+ - {name: 'bing50896', server: '172.67.146.100', port: 2053, type: 'vless', uuid: '211271eb-467c-4be4-aa4c-9d751dd8e727', tls: True, servername: '172.67.146.100', udp: True}
+ - {name: 'bing50897', server: 'srv6.kiava.fun', port: 443, type: 'vless', uuid: '9dd91462-55e1-4654-cd15-515dd1a2223a', tls: True, servername: 'srv6.kiava.fun', udp: True}
+ - {name: 'bing50898', server: '5.42.77.71', port: 6443, type: 'vless', uuid: '2c87918c-0387-4866-a306-609f2dd63c84', tls: True, servername: '5.42.77.71', udp: True}
+ - {name: 'bing50899', server: '5.42.77.71', port: 2053, type: 'vless', uuid: '8fa0e9f0-a165-43cf-a5dd-5da92975e8cb', tls: True, servername: '5.42.77.71', udp: True}
+ - {name: 'bing50900', server: 'mci-vpncustomize.aparat.lol', port: 2095, type: 'vless', uuid: 'c55e6eda-7bfa-4ade-c4de-cf7f06166df9', tls: True, servername: 'mci-vpncustomize.aparat.lol', udp: True}
+ - {name: 'bing50901', server: '91.107.254.188', port: 443, type: 'vless', uuid: 'Hopev2ray', tls: True, servername: '91.107.254.188', udp: True}
+ - {name: 'bing50902', server: 'join_telegram_ip_cf.maskvpn.de', port: 3602, type: 'vless', uuid: '0ebf1ed8-a220-461b-8894-3027f945fc0d', tls: True, servername: 'join_telegram_ip_cf.maskvpn.de', udp: True}
+ - {name: 'bing50903', server: 'srv7.kiava.fun', port: 443, type: 'vless', uuid: '9dd91462-55e1-4654-cd15-515dd1a2223a', tls: True, servername: 'srv7.kiava.fun', udp: True}
+ - {name: 'bing50904', server: 'ha.parsa2884xyz.fun', port: 2082, type: 'vless', uuid: 'fae02f09-69c4-45ce-a5df-c577cd2a81fd', tls: True, servername: 'ha.parsa2884xyz.fun', udp: True}
+ - {name: 'bing50905', server: 'F-off.melov2ray.store', port: 23761, type: 'vless', uuid: 'e0e90e29-8ffa-4bd3-a0cc-747eacb2547f', tls: True, servername: 'F-off.melov2ray.store', udp: True}
+ - {name: 'bing50906', server: '172.67.171.94', port: 80, type: 'vless', uuid: 'cf2c462f-4ebb-43b4-be8d-97fc3038f8a6', tls: True, servername: '172.67.171.94', udp: True}
+ - {name: 'bing50907', server: '31.12.74.95', port: 8080, type: 'vless', uuid: '955ef631-bb32-47b7-98df-7cb04a217a35', tls: True, servername: '31.12.74.95', udp: True}
+ - {name: 'bing50908', server: '104.20.21.140', port: 443, type: 'vless', uuid: '2928d83a-ca75-4d52-b437-fa78c7601378', tls: True, servername: '104.20.21.140', udp: True}
+ - {name: 'bing50909', server: 'one-theme.ir', port: 8880, type: 'vless', uuid: '405f0726-89dc-6729-5bd6-a1464e61b6ea', tls: True, servername: 'one-theme.ir', udp: True}
+ - {name: 'bing50910', server: 'www.vinatech.ir', port: 8080, type: 'vless', uuid: 'ddaa541f-f819-4c46-b13c-70f90c2628e0', tls: True, servername: 'www.vinatech.ir', udp: True}
+ - {name: 'bing50911', server: 'Speedtest.net', port: 8080, type: 'vless', uuid: '9869726f-f067-4112-8a73-b55ee748e7e1', tls: True, servername: 'Speedtest.net', udp: True}
+ - {name: 'bing50912', server: 'basics.efcloud.cc', port: 42001, type: 'trojan', password: '2f95d996-e911-4b1b-82b1-1d86bf2c517d', udp: True}
+ - {name: 'bing50913', server: 'standard.efcloud.cc', port: 50000, type: 'trojan', password: '2f95d996-e911-4b1b-82b1-1d86bf2c517d', udp: True}
+ - {name: 'bing50914', server: 'node-do-us-1.gitspeed.cyou', port: 443, type: 'trojan', password: 'pNDxTmWL', udp: True}
+ - {name: 'bing50915', server: '18.181.233.220', port: 2053, type: 'trojan', password: 'de39d941-eaf6-405d-958a-ebebe1315574', udp: True}
+ - {name: 'bing50916', server: 'zz-1.jfjs.cc', port: 33109, type: 'trojan', password: 'f8eba853-2763-4577-b18b-8558c9801ebb', udp: True}
+ - {name: '🇭🇰 bing50917', server: '18.181.1.187', port: 2053, type: 'trojan', password: 'de39d941-eaf6-405d-958a-ebebe1315574', udp: True}
+ - {name: 'bing50918', server: '185.146.173.159', port: 80, type: 'vless', uuid: 'cf8b81e4-af32-40ad-8903-af4b092f2197', tls: True, servername: '185.146.173.159', udp: True}
+ - {name: 'bing50919', server: 'cf-wkrs-pages-vless-aoy.pages.dev', port: 2083, type: 'vless', uuid: 'e801777e-7edc-4cf0-979b-99d275589db1', tls: True, servername: 'cf-wkrs-pages-vless-aoy.pages.dev', udp: True}
+ - {name: 'bing50920', server: '199.247.30.221', port: 22833, type: 'vless', uuid: 'b3e48cbd-870b-4e34-c229-af2d41790b97', tls: True, servername: '199.247.30.221', udp: True}
+ - {name: 'bing50921', server: 'dns1.globalingredients.pe', port: 9000, type: 'vless', uuid: '1925c61b-0fbc-423b-915f-f719e16037c6', tls: True, servername: 'dns1.globalingredients.pe', udp: True}
+ - {name: 'bing50922', server: '45.76.82.162', port: 2096, type: 'vless', uuid: '1d202629-5d65-42a0-ab69-bcda8dfd7db1', tls: True, servername: '45.76.82.162', udp: True}
+ - {name: 'bing50923', server: '91.107.189.191', port: 32636, type: 'vless', uuid: '8332d770-2db8-4417-b399-fe89ff07da0b', tls: True, servername: '91.107.189.191', udp: True}
+ - {name: 'bing50924', server: 'telegram.melov2ray.shop', port: 2095, type: 'vless', uuid: '8cba76da-ac06-4069-88b4-6ececcee6869', tls: True, servername: 'telegram.melov2ray.shop', udp: True}
+ - {name: 'bing50925', server: '81.19.137.33', port: 443, type: 'vless', uuid: 'dcb6fbc5-8835-4920-a7c2-526686700ef2', tls: True, servername: '81.19.137.33', udp: True}
+ - {name: 'bing50926', server: 'free.shabake1.fun', port: 20400, type: 'vless', uuid: '9936808a-c669-45d2-b905-d534a582cbf3', tls: True, servername: 'free.shabake1.fun', udp: True}
+ - {name: 'bing50927', server: 'vip-mci2.vpnprosec.shop', port: 2087, type: 'vless', uuid: 'bc262381-aba5-408b-c840-f792efcf18bd', tls: True, servername: 'vip-mci2.vpnprosec.shop', udp: True}
+ - {name: 'bing50928', server: '104.21.94.25', port: 80, type: 'vless', uuid: 'a0514d9b-d109-47fd-b173-1e7f83268f21', tls: True, servername: '104.21.94.25', udp: True}
+ - {name: 'bing50929', server: 'vip-mtn1.vpnprosec.shop', port: 2087, type: 'vless', uuid: 'bc262381-aba5-408b-c840-f792efcf18bd', tls: True, servername: 'vip-mtn1.vpnprosec.shop', udp: True}
+ - {name: 'bing50930', server: '88.198.115.70', port: 443, type: 'vless', uuid: '39383b2b-a074-48d3-f99d-612512d9a377', tls: True, servername: '88.198.115.70', udp: True}
+ - {name: 'bing50931', server: '116.203.4.53', port: 443, type: 'vless', uuid: '15e5473a-1aba-49d7-87c9-13f386222139', tls: True, servername: '116.203.4.53', udp: True}
+ - {name: 'bing50932', server: 'vip-mci2.vpnprosec.shop', port: 2056, type: 'vless', uuid: '9b8e1de4-327c-4e65-82c4-ea62c0c852d7', tls: True, servername: 'vip-mci2.vpnprosec.shop', udp: True}
+ - {name: 'bing50933', server: '95.217.27.53', port: 20158, type: 'vless', uuid: 'f09a3c7b-cf5b-4697-8140-19c1749480c4', tls: True, servername: '95.217.27.53', udp: True}
+ - {name: 'bing50934', server: 'srv24.kiava.fun', port: 443, type: 'vless', uuid: 'cec7e3e3-f6bf-4c28-ce1b-1ec7d6b9ad39', tls: True, servername: 'srv24.kiava.fun', udp: True}
+ - {name: 'bing50935', server: '185.126.255.88', port: 45077, type: 'vless', uuid: 'f328bd85-f5cd-4dc1-a2fc-383af5fec94d', tls: True, servername: '185.126.255.88', udp: True}
+ - {name: 'bing50936', server: '128.140.114.153', port: 443, type: 'vless', uuid: 'qq', tls: True, servername: '128.140.114.153', udp: True}
+ - {name: 'bing50937', server: 'srv25.kiava.fun', port: 443, type: 'vless', uuid: '94b70bd4-03de-4b6b-b9c8-567094dd6eb3', tls: True, servername: 'srv25.kiava.fun', udp: True}
+ - {name: 'bing50938', server: '202.78.160.184', port: 443, type: 'vless', uuid: 'cd8480a3-d83f-4b57-8f9d-69ce67ddea0c', tls: True, servername: '202.78.160.184', udp: True}
+ - {name: 'bing50939', server: '45.144.28.247', port: 2052, type: 'vless', uuid: '838f5273-5d2d-4630-a0f5-9cc8e4aef4d6', tls: True, servername: '45.144.28.247', udp: True}
+ - {name: 'bing50940', server: 'f1.bestvipserviceirr.xyz', port: 443, type: 'vless', uuid: '19cd237f-3efc-4dbf-a0c1-d9daaea86642', tls: True, servername: 'f1.bestvipserviceirr.xyz', udp: True}
+ - {name: 'bing50941', server: '185.146.173.92', port: 8080, type: 'vless', uuid: 'SVNTEAMm', tls: True, servername: '185.146.173.92', udp: True}
+ - {name: 'bing50942', server: '128.140.65.243', port: 34923, type: 'vless', uuid: '13cad1fd-1396-4241-8c63-f37977e0a7dc', tls: True, servername: '128.140.65.243', udp: True}
+ - {name: 'bing50943', server: '91.107.254.231', port: 80, type: 'vless', uuid: 'ef8354e6-9689-43c0-9331-62f5e4f97780', tls: True, servername: '91.107.254.231', udp: True}
+ - {name: 'bing50944', server: '85.133.200.41', port: 6890, type: 'vless', uuid: '4fabe6bd-5223-408d-840c-027b5a7ca137', tls: True, servername: '85.133.200.41', udp: True}
+ - {name: 'bing50945', server: '135.181.101.223', port: 8080, type: 'vless', uuid: 'b16721a5-b18e-4517-afff-b59c1db7da55', tls: True, servername: '135.181.101.223', udp: True}
+ - {name: 'bing50946', server: '188.114.98.0', port: 8880, type: 'vless', uuid: '96ae4fdb-d9d2-42b1-8975-62be554dc976', tls: True, servername: '188.114.98.0', udp: True}
+ - {name: 'bing50947', server: '162.159.254.255', port: 443, type: 'vless', uuid: 'f3a0db0f-3c55-4045-b044-0350f2a87791', tls: True, servername: '162.159.254.255', udp: True}
+ - {name: 'bing50948', server: '144.24.69.60', port: 28443, type: 'trojan', password: '8fe3b905-b933-4a3f-aa33-40a73ec93c69', udp: True}
+ - {name: 'bing50949', server: '144.24.77.154', port: 28443, type: 'trojan', password: '8fe3b905-b933-4a3f-aa33-40a73ec93c69', udp: True}
+ - {name: 'bing50950', server: '103.195.236.24', port: 28443, type: 'trojan', password: '750a29bf-0a40-437f-b120-38de74ae7eaf', udp: True}
+ - {name: 'bing50951', server: '185.231.205.23', port: 3237, type: 'vless', uuid: '1d86846c-5a27-43c8-8981-57bb75c82195', tls: True, servername: '185.231.205.23', udp: True}
+ - {name: 'bing50952', server: '14.215.107.16', port: 28136, type: 'trojan', password: '289xWT', udp: True}
+ - {name: 'bing50953', server: 'shcuac.aag436.ccddn4.icu', port: 65522, type: 'trojan', password: '5bc96fd6-8432-31b2-9524-9910eabaa4aa', udp: True}
+ - {name: 'bing50954', server: '14.29.230.228', port: 12850, type: 'trojan', password: '289xWT', udp: True}
+ - {name: 'bing50955', server: '172.67.171.48', port: 80, type: 'vless', uuid: '2190715e-3524-4526-99c7-833be28e08b2', tls: True, servername: '172.67.171.48', udp: True}
+ - {name: 'bing50956', server: '185.146.173.55', port: 80, type: 'vless', uuid: '29d12cf7-2752-4b35-a3e9-25da290e1f78', tls: True, servername: '185.146.173.55', udp: True}
+ - {name: '🇩🇪 bing50957', server: 'TLS.zeoaeriedo-saioesrio.ir', port: 2000, type: 'vless', uuid: '0af03b20-981a-4e9a-8c35-f9014f81e84c', tls: True, servername: 'TLS.zeoaeriedo-saioesrio.ir', udp: True}
+ - {name: '🇩🇪 bing50958', server: '87.249.49.138', port: 2052, type: 'vless', uuid: '568ba1ae-3b93-4587-885c-f4185bb2dbac', tls: True, servername: '87.249.49.138', udp: True}
+ - {name: '🇩🇪 bing50959', server: '188.245.191.43', port: 3030, type: 'vless', uuid: '53184e88-e1e9-426d-bb39-d10642ec61e6', tls: True, servername: '188.245.191.43', udp: True}
+ - {name: 'bing50960', server: '172.67.223.232', port: 443, type: 'vless', uuid: '3575bdad-99d2-4742-a3ed-c7fc7bdaa60d', tls: True, servername: '172.67.223.232', udp: True}
+ - {name: 'bing50961', server: '104.20.115.188', port: 443, type: 'vless', uuid: '10716279-b1ee-41d8-b63e-87782088305b', tls: True, servername: '104.20.115.188', udp: True}
+ - {name: 'bing50962', server: '03hongkong.mealstream.xyz', port: 443, type: 'trojan', password: '7b7b507e-cecb-40e6-97cf-e2535b7e0326', udp: True}
+ - {name: 'bing50963', server: '141.98.24.155', port: 443, type: 'vless', uuid: '3cdbbb10-e586-4879-c973-3438085baf2c', tls: True, servername: '141.98.24.155', udp: True}
+ - {name: 'bing50964', server: '176.117.59.33', port: 80, type: 'vless', uuid: 'ecd49bba-2ef6-4d63-a977-8abd4630bc5b', tls: True, servername: '176.117.59.33', udp: True}
+ - {name: 'bing50965', server: '5.42.74.107', port: 14411, type: 'vless', uuid: '82ea2458-bbdf-4dff-9ec5-08b0fe32ef98', tls: True, servername: '5.42.74.107', udp: True}
+ - {name: 'bing50966', server: '95.183.11.162', port: 10002, type: 'vless', uuid: '2c30fad8-1cf0-11ee-957f-000000637366', tls: True, servername: '95.183.11.162', udp: True}
+ - {name: 'bing50967', server: '134.255.216.72', port: 3344, type: 'vless', uuid: '920b8651-9bb6-43f6-ac6a-387706280448', tls: True, servername: '134.255.216.72', udp: True}
+ - {name: 'bing50968', server: 'king00.globalingredients.pe', port: 36994, type: 'vless', uuid: '1889b936-0b1a-4f14-cfdd-242276d4f485', tls: True, servername: 'king00.globalingredients.pe', udp: True}
+ - {name: 'bing50969', server: 'irc.melov2ray.shop', port: 2095, type: 'vless', uuid: 'cd74a8cb-9330-4489-ad85-1528e8b480ce', tls: True, servername: 'irc.melov2ray.shop', udp: True}
+ - {name: 'bing50970', server: '128.140.61.242', port: 2053, type: 'vless', uuid: 'be9914a7-9255-4d79-9f20-488305e15315', tls: True, servername: '128.140.61.242', udp: True}
+ - {name: 'bing50971', server: '49.13.10.226', port: 443, type: 'vless', uuid: '6c39add6-18b8-577c-9a9c-be2082507050', tls: True, servername: '49.13.10.226', udp: True}
+ - {name: 'bing50972', server: '194.116.215.93', port: 443, type: 'vless', uuid: 'e80afda1-3b34-44be-a2d4-569ce3f880ac', tls: True, servername: '194.116.215.93', udp: True}
+ - {name: 'bing50973', server: '91.107.181.184', port: 29123, type: 'vless', uuid: 'ce739a50-66f1-4545-a032-8c4bfe6755f3', tls: True, servername: '91.107.181.184', udp: True}
+ - {name: 'bing50974', server: '45.76.80.175', port: 2096, type: 'vless', uuid: '73bb3dd8-5d6b-4853-85a1-3bd3d12de58a', tls: True, servername: '45.76.80.175', udp: True}
+ - {name: 'bing50975', server: 'big.melov2ray.store', port: 27124, type: 'vless', uuid: '4df132d0-d214-4375-9cff-d1022759be77', tls: True, servername: 'big.melov2ray.store', udp: True}
+ - {name: 'bing50976', server: '104.21.25.46', port: 443, type: 'vless', uuid: 'ada7333c-b5ee-48f0-8cae-80de363e863a', tls: True, servername: '104.21.25.46', udp: True}
+ - {name: 'bing50977', server: '104.21.25.39', port: 443, type: 'vless', uuid: '6d73f7ae-6424-4f03-ad93-10d9fd63fcaf', tls: True, servername: '104.21.25.39', udp: True}
+ - {name: 'bing50978', server: '172.67.171.94', port: 443, type: 'vless', uuid: '19208723-34b2-4789-8d92-27a672c7a556', tls: True, servername: '172.67.171.94', udp: True}
+ - {name: 'bing50979', server: '188.114.96.45', port: 80, type: 'vless', uuid: 'c117c4fa-c93c-4d52-b02c-fcbc22063bfa', tls: True, servername: '188.114.96.45', udp: True}
+ - {name: 'bing50980', server: '172.67.171.44', port: 443, type: 'vless', uuid: 'c117c4fa-c93c-4d52-b02c-fcbc22063bfa', tls: True, servername: '172.67.171.44', udp: True}
+ - {name: 'bing50981', server: '172.67.171.88', port: 80, type: 'vless', uuid: 'b6605bca-ff53-4467-be4b-076b2f9aab57', tls: True, servername: '172.67.171.88', udp: True}
+ - {name: 'bing50982', server: '172.67.171.58', port: 80, type: 'vless', uuid: '21a0376a-22c9-44d0-873f-ecc8e646e692', tls: True, servername: '172.67.171.58', udp: True}
+ - {name: 'bing50983', server: '172.67.171.99', port: 80, type: 'vless', uuid: 'e76fda5e-2783-4772-9af5-cea1a35b4316', tls: True, servername: '172.67.171.99', udp: True}
+ - {name: 'bing50984', server: '172.67.171.50', port: 80, type: 'vless', uuid: 'ebd7ac6b-1613-487f-8229-aab5e264352e', tls: True, servername: '172.67.171.50', udp: True}
+ - {name: 'bing50985', server: 'yehoyechi.stay-out-of-my-territory.shop', port: 2082, type: 'vless', uuid: 'aca86972-31cb-4209-96f9-bbfaa81da95f', tls: True, servername: 'yehoyechi.stay-out-of-my-territory.shop', udp: True}
+ - {name: 'bing50986', server: 'yehoyechi.stay-out-of-my-territory.shop', port: 8080, type: 'vless', uuid: '261f00fe-fcbb-4a72-9f46-35f8c98e2d13', tls: True, servername: 'yehoyechi.stay-out-of-my-territory.shop', udp: True}
+ - {name: 'bing50987', server: '104.31.16.9', port: 443, type: 'vless', uuid: 'd4f9e9cd-0b5c-4977-bb75-f1f6fb1911c3', tls: True, servername: '104.31.16.9', udp: True}
+ - {name: 'bing50988', server: 'free.elitegod.monster', port: 433, type: 'vless', uuid: 'f66a277d-0990-45ab-c7cb-22c07a8e919d', tls: True, servername: 'free.elitegod.monster', udp: True}
+ - {name: 'bing50989', server: '104.18.101.99', port: 8443, type: 'vless', uuid: 'd7591ebf-5dce-4c6d-8560-e9040d6b08b1', tls: True, servername: '104.18.101.99', udp: True}
+ - {name: 'bing50990', server: 'channel-hajimamad-join-bede.digital-ping.ir', port: 80, type: 'vless', uuid: 'd2e30c6a-0a3d-4439-b28e-729de8ab468b', tls: True, servername: 'channel-hajimamad-join-bede.digital-ping.ir', udp: True}
+ - {name: 'bing50991', server: '46.245.74.178', port: 80, type: 'vless', uuid: '70f785fd-834c-4190-a878-26f6aa181da0', tls: True, servername: '46.245.74.178', udp: True}
+ - {name: 'bing50992', server: '172.67.171.48', port: 443, type: 'vless', uuid: '6ed35838-e02c-4682-8ce5-ce0444298e93', tls: True, servername: '172.67.171.48', udp: True}
+ - {name: 'bing50993', server: '104.21.28.94', port: 443, type: 'vless', uuid: '0814dc8c-3cfc-4e06-9561-98d23dd0bf66', tls: True, servername: '104.21.28.94', udp: True}
+ - {name: 'bing50994', server: '172.67.171.98', port: 443, type: 'vless', uuid: '48a5617c-d778-4927-8437-6939ffe9aa9c', tls: True, servername: '172.67.171.98', udp: True}
+ - {name: 'bing50995', server: '104.21.25.49', port: 443, type: 'vless', uuid: '2291d579-237a-4468-8c95-7d17174a43b4', tls: True, servername: '104.21.25.49', udp: True}
+ - {name: 'bing50996', server: '104.21.25.93', port: 443, type: 'vless', uuid: 'ad014404-88a1-489e-8298-9e41105e1fb7', tls: True, servername: '104.21.25.93', udp: True}
+ - {name: 'bing50997', server: '104.21.25.99', port: 443, type: 'vless', uuid: 'd33f60de-4e8b-49b4-89d6-1ea95ce55393', tls: True, servername: '104.21.25.99', udp: True}
+ - {name: 'bing50998', server: '104.21.25.96', port: 2096, type: 'vless', uuid: 'b6b05561-f8ad-4b9b-9463-21e2a1f32f6b', tls: True, servername: '104.21.25.96', udp: True}
+ - {name: 'bing50999', server: '185.146.173.59', port: 2096, type: 'vless', uuid: 'b6b05561-f8ad-4b9b-9463-21e2a1f32f6b', tls: True, servername: '185.146.173.59', udp: True}
+ - {name: 'bing51000', server: '104.21.25.86', port: 443, type: 'vless', uuid: 'db055023-cbec-4e18-a6af-d10259933b01', tls: True, servername: '104.21.25.86', udp: True}
