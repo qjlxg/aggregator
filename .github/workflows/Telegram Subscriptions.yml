@@ -53,4 +53,4 @@ jobs:
         git add .
         git diff-index --quiet HEAD || (git commit -m "Update Telegram subscriptions [skip ci]" && git push origin main)
       env:
-        GITHUB_TOKEN: ${{ secrets.GT_TOKEN }} # 使用你的 PAT 或者 ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GT_TOKEN }} 
