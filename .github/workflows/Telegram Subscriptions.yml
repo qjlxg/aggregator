@@ -2,11 +2,11 @@ name: Telegram Subscriptions
 
 on:
   push:
-    
+    branches:
+      - main # 如果你希望在推送到 main 分支时运行，可以保留。如果不需要，可以移除此行。
   schedule:
-    #- cron: '0 0 * * *' # 每天 UTC 00:00 运行 (北京时间早上 8:00)
-    - cron: '0 */8 * * *'
-  workflow_dispatch:
+    - cron: '0 */8 * * *' # 每 8 小时运行一次
+  workflow_dispatch: # 允许手动触发
 
 jobs:
   scrape:
@@ -17,7 +17,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5 # 推荐使用最新稳定版本
       with:
         python-version: '3.x'
 
@@ -25,26 +25,32 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install requests beautifulsoup4 PyGithub
-        pip install requests beautifulsoup4 python-github-api
 
     - name: 设置时区
       run: sudo timedatectl set-timezone 'Asia/Shanghai'
 
     - name: Run Python script
       env:
+       
         GT_TOKEN: ${{ secrets.GT_TOKEN }}
-      run: python "Telegram Subscriptions.py"
+        REPO_NAME: ${{ secrets.REPO_NAME }}
+        FILE_PATH_SUBSCRIPTIONS: ${{ secrets.FILE_PATH_SUBSCRIPTIONS }}
+        CONFIG_REPO_NAME: ${{ secrets.CONFIG_REPO_NAME }}
+        CONFIG_FILE_PATH: ${{ secrets.CONFIG_FILE_PATH }}
+        SEARCH_KEYWORDS_ENV: ${{ secrets.SEARCH_KEYWORDS_ENV }} 
+      run: python "Telegram Subscriptions.py" 
 
     - name: Configure Git
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "GitHub Actions Bot"
-
-    - name: Pull latest changes
-      run: git pull origin main
+        
+  
 
     - name: Commit and push changes
       run: |
+        # 检查是否有文件被修改，包括由PyGithub创建/更新的文件
         git add .
-        git commit -m "Update Telegram subscriptions [skip ci]" || echo "No changes to commit"
-        git push origin main
+        git diff-index --quiet HEAD || (git commit -m "Update Telegram subscriptions [skip ci]" && git push origin main)
+      env:
+        GITHUB_TOKEN: ${{ secrets.GT_TOKEN }} # 使用你的 PAT 或者 ${{ secrets.GITHUB_TOKEN }}
