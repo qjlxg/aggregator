@@ -8,23 +8,42 @@ import os
 import threading
 from queue import Queue
 from github import Github
-import sys # 导入sys模块用于程序退出
+import sys
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 search_keywords_env_str = os.environ.get('SEARCH_KEYWORDS_ENV')
-
 if search_keywords_env_str:
     SEARCH_KEYWORDS = [kw.strip() for kw in search_keywords_env_str.split(',') if kw.strip()]
-    if not SEARCH_KEYWORDS: # 如果解析后列表为空，说明没有有效关键字
+    if not SEARCH_KEYWORDS:
         logging.error("Environment variable 'SEARCH_KEYWORDS_ENV' is set but contains no valid keywords after parsing. Exiting.")
-        sys.exit(1) # 退出程序并返回非零状态码
+        sys.exit(1)
 else:
     logging.error("Environment variable 'SEARCH_KEYWORDS_ENV' is NOT set. Cannot proceed without search keywords. Exiting.")
-    sys.exit(1) # 退出程序并返回非零状态码
+    sys.exit(1)
 
-# --- 其他常量配置 ---
+
+SUBSCRIPTION_TARGET_REPO = os.environ.get('SUBSCRIPTION_TARGET_REPO')
+SUBSCRIPTION_SAVE_PATH = os.environ.get('SUBSCRIPTION_SAVE_PATH')
+if not SUBSCRIPTION_TARGET_REPO or not SUBSCRIPTION_SAVE_PATH:
+    logging.error("Environment variables 'SUBSCRIPTION_TARGET_REPO' or 'SUBSCRIPTION_SAVE_PATH' are NOT set. Exiting.")
+    sys.exit(1)
+
+
+CONFIG_REPO_NAME = os.environ.get('CONFIG_REPO_NAME')
+CONFIG_FILE_PATH = os.environ.get('CONFIG_FILE_PATH')
+if not CONFIG_REPO_NAME or not CONFIG_FILE_PATH:
+    logging.error("Environment variables 'CONFIG_REPO_NAME' or 'CONFIG_FILE_PATH' are NOT set. Exiting.")
+    sys.exit(1)
+
+
+GT_TOKEN = os.environ.get('GT_TOKEN')
+if not GT_TOKEN:
+    logging.error("Environment variable 'GT_TOKEN' is NOT set. Cannot proceed. Exiting.")
+    sys.exit(1)
+
+
 MAX_PAGES_TO_CRAWL = 1
 NUM_WORKING_THREADS = 5
 
@@ -201,25 +220,21 @@ def worker(url_queue, valid_urls, lock):
         finally:
             url_queue.task_done()
 
-def main(start_urls, github_token=None):
-    repo_name = os.environ.get('REPO_NAME')
-    file_path = os.environ.get('FILE_PATH_SUBSCRIPTIONS')
+def main(start_urls):
+   
+    global SUBSCRIPTION_TARGET_REPO, SUBSCRIPTION_SAVE_PATH, GT_TOKEN
 
-    if not repo_name or not file_path:
-        logging.error("Environment variables 'REPO_NAME' or 'FILE_PATH_SUBSCRIPTIONS' not set, cannot save to GitHub.")
-        github_token = None
-
-    if github_token:
-        logging.info("GitHub Token exists!")
-        try:
-            g = Github(github_token)
-            user = g.get_user()
-            logging.info(f"GitHub Username: {user.login}")
-        except Exception as e:
-            logging.error(f"GitHub API authentication failed: {e}")
-            github_token = None
-    else:
-        logging.warning("GitHub Token not found, will not save to GitHub")
+    logging.info(f"Attempting to save to GitHub repo: {SUBSCRIPTION_TARGET_REPO}, path: {SUBSCRIPTION_SAVE_PATH}")
+    
+  
+    try:
+        g = Github(GT_TOKEN)
+        user = g.get_user()
+        logging.info(f"GitHub Username: {user.login}")
+    except Exception as e:
+        logging.error(f"GitHub API authentication failed with provided token: {e}. Saving to GitHub will be skipped.")
+       
+        sys.exit(1) 
 
     url_queue = Queue()
     valid_urls = set()
@@ -255,29 +270,25 @@ def main(start_urls, github_token=None):
     logging.info("All worker threads exited.")
     logging.info(f"Number of valid URLs: {len(valid_urls)}")
 
-    if github_token and repo_name and file_path:
-        if save_urls_to_github(repo_name, file_path, list(valid_urls), github_token):
-            logging.info("Successfully saved URLs to GitHub.")
-        else:
-            logging.error("Failed to save URLs to GitHub.")
+    
+    if save_urls_to_github(SUBSCRIPTION_TARGET_REPO, SUBSCRIPTION_SAVE_PATH, list(valid_urls), GT_TOKEN):
+        logging.info("Successfully saved URLs to GitHub.")
+    else:
+        logging.error("Failed to save URLs to GitHub.")
 
 if __name__ == '__main__':
-    github_token = os.environ.get('GT_TOKEN')
-
-    config_repo_name = os.environ.get('CONFIG_REPO_NAME', 'qjlxg/362')
-    config_file_path = os.environ.get('CONFIG_FILE_PATH', 'data/config.txt')
-
+   
     start_urls_list = []
 
     try:
-        g = Github(github_token)
-        repo = g.get_repo(config_repo_name)
-        config_content_file = repo.get_contents(config_file_path)
+        g = Github(GT_TOKEN) 
+        repo = g.get_repo(CONFIG_REPO_NAME) 
+        config_content_file = repo.get_contents(CONFIG_FILE_PATH) 
         config_content = config_content_file.decoded_content.decode('utf-8')
         start_urls_list = [url.strip() for url in config_content.strip().split('\n') if url.strip()]
         logging.info(f"Read {len(start_urls_list)} starting URLs from GitHub.")
     except Exception as e:
-        logging.error(f"Failed to read configuration file from GitHub: {e}")
-        start_urls_list = []
+        logging.error(f"Failed to read configuration file from GitHub ({CONFIG_REPO_NAME}/{CONFIG_FILE_PATH}): {e}. Exiting.")
+        sys.exit(1) # 如果无法读取配置，直接退出
 
-    main(start_urls_list, github_token=github_token)
+    main(start_urls_list)
