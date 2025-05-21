@@ -3,14 +3,12 @@ import base64
 import os
 import json
 import re
-import yaml
+import yaml # pip install PyYAML
 from urllib.parse import urlparse, parse_qs, unquote
-import hashlib
-import socket # 用于TCP连接测试
-import time # 用于超时
+import hashlib # 用于生成哈希指纹
 
-# --- Proxy Parsing Functions (不变) ---
-# ... (parse_vmess, parse_trojan, parse_shadowsocks, parse_hysteria2, generate_proxy_fingerprint 保持不变) ...
+# --- Proxy Parsing Functions (Modified to return more detailed info for fingerprinting) ---
+
 def generate_proxy_fingerprint(proxy_data):
     """
     根据代理的关键连接信息生成一个唯一的哈希指纹。
@@ -76,7 +74,7 @@ def parse_vmess(vmess_url):
         if network == 'ws':
             proxy['ws-path'] = config.get('path', '/')
             if config.get('headers'):
-                # For single-line output, ensure headers are simple or excluded if complex
+                # 尽量将 headers 转换为字符串，以保持代理字典扁平
                 proxy['ws-headers'] = str(config.get('headers')) 
 
         return proxy
@@ -192,27 +190,11 @@ def parse_hysteria2(hy2_url):
         print(f"解析 Hysteria2 链接失败: {hy2_url[:50]}...，原因: {e}")
         return None
 
-# --- 连通性测试函数 ---
-def test_tcp_connectivity(server, port, timeout=3):
-    """
-    尝试与指定的服务器和端口建立TCP连接，测试连通性。
-    返回 True 如果连接成功，否则返回 False。
-    """
-    try:
-        sock = socket.create_connection((server, port), timeout=timeout)
-        sock.close()
-        return True
-    except (socket.timeout, ConnectionRefusedError, OSError) as e:
-        # print(f"  TCP连接测试失败: {server}:{port} - {e}")
-        return False
-    except Exception as e:
-        print(f"  TCP连接测试发生未知错误: {server}:{port} - {e}")
-        return False
-
 # --- Fetch and Decode URLs (Modified for deduplication and naming) ---
-def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
+def fetch_and_decode_urls_to_clash_proxies(urls):
+    # 使用字典来存储唯一的代理，key 是指纹，value 是 Clash 代理配置
     unique_proxies = {} 
-    successful_urls = set() # 使用set避免URL本身重复记录
+    successful_urls = []
 
     EXCLUDE_KEYWORDS = [
         "cdn.jsdelivr.net", "statically.io", "googletagmanager.com",
@@ -382,39 +364,23 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                     content.decode('latin-1', errors='ignore')
                     print(f"Warning: Could not decode content from {url} to UTF-8, GBK, or Base64. Using latin-1 and ignoring errors.")
 
-            # --- Deduplication, Name Standardization, and Connectivity Test Logic ---
+            # --- Deduplication and Name Standardization Logic ---
             for proxy_dict in current_proxies:
-                if not proxy_dict:
-                    continue
-
-                fingerprint = generate_proxy_fingerprint(proxy_dict)
-                
-                if fingerprint not in unique_proxies:
-                    # 获取服务器和端口，确保它们存在且类型正确
-                    server = proxy_dict.get('server')
-                    port = proxy_dict.get('port')
-                    
-                    if enable_connectivity_test and server and isinstance(port, int):
-                        print(f"    正在测试连通性: {server}:{port} ...")
-                        if not test_tcp_connectivity(server, port):
-                            print(f"    节点不可达，跳过: {server}:{port}")
-                            continue # 跳过不可达节点
-                        else:
-                            print(f"    节点可达: {server}:{port}")
+                if proxy_dict: # 确保代理字典不是None
+                    fingerprint = generate_proxy_fingerprint(proxy_dict)
+                    if fingerprint not in unique_proxies:
+                        # 生成标准化名称：协议_服务器_端口_指纹_序号 (为防止重复，可以加个计数器)
+                        # 这里我们简化为 协议-服务器-指纹后四位
+                        base_name = f"{proxy_dict.get('type', 'unknown').upper()}-{proxy_dict.get('server', 'unknown')}"
+                        # 防止名称过长，截断指纹
+                        proxy_dict['name'] = f"{base_name}-{fingerprint[:8]}" 
+                        unique_proxies[fingerprint] = proxy_dict
+                        print(f"    添加新代理: {proxy_dict['name']}")
                     else:
-                        print(f"    跳过连通性测试 (未启用或信息不全): {server}:{port}")
-
-                    # 生成标准化名称：协议-服务器-指纹短ID
-                    base_name = f"{proxy_dict.get('type', 'unknown').upper()}-{proxy_dict.get('server', 'unknown')}"
-                    proxy_dict['name'] = f"{base_name}-{fingerprint[:8]}" 
-                    unique_proxies[fingerprint] = proxy_dict
-                    print(f"    添加新代理: {proxy_dict['name']}")
-                else:
-                    print(f"    跳过重复代理 (指纹: {fingerprint})")
+                        print(f"    跳过重复代理 (指纹: {fingerprint})")
             
-            # 只有当该URL成功解析出至少一个代理（不论是否重复），才认为该URL是成功的
-            if current_proxies:
-                successful_urls.add(url)
+            if current_proxies: # 如果这个URL成功解析出代理（即使是重复的）
+                successful_urls.append(url)
 
         except requests.exceptions.RequestException as e:
             print(f"Failed to fetch data from URL: {url}, reason: {e}")
@@ -422,8 +388,8 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
             print(f"An unexpected error occurred while processing URL {url}: {e}")
 
     final_proxies_list = list(unique_proxies.values())
-    print(f"Successfully parsed, deduplicated, tested, and aggregated {len(final_proxies_list)} unique and reachable proxy nodes.")
-    return final_proxies_list, list(successful_urls) # 返回列表而非集合
+    print(f"Successfully parsed, deduplicated, and aggregated {len(final_proxies_list)} unique proxy nodes.")
+    return final_proxies_list, successful_urls
 
 # --- GitHub API Helpers (不变) ---
 def get_github_file_content(api_url, token):
@@ -459,7 +425,7 @@ def update_github_file_content(repo_contents_api_base, token, file_path, new_con
             print("Conflict: File content changed on GitHub before commit. Please re-run.")
         return False
 
-# --- Main Function ---
+# --- Main Function (不变) ---
 def main():
     bot_token = os.environ.get("BOT")
     url_list_repo_api = os.environ.get("URL_LIST_REPO_API")
@@ -490,15 +456,10 @@ def main():
     urls = url_content.strip().split('\n')
     print(f"Fetched {len(urls)} subscription URLs from GitHub.")
 
-    # 启用连通性测试 (可以改为 False 来禁用)
-    # enable_connectivity_test = True
-    # 如果在 GitHub Actions 中，可以考虑通过环境变量控制此开关
-    enable_connectivity_test = os.environ.get("ENABLE_CONNECTIVITY_TEST", "true").lower() == "true"
+    # 重点：现在 fetch_and_decode_urls_to_clash_proxies 返回的是经过去重和命名标准化的代理字典列表
+    all_parsed_proxies, successful_urls = fetch_and_decode_urls_to_clash_proxies(urls)
 
-
-    all_parsed_proxies, successful_urls = fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test)
-
-    # 构建 Clash 完整配置 (不变)
+    # 构建 Clash 完整配置
     clash_config = {
         'port': 7890,
         'socks-port': 7891,
@@ -534,15 +495,17 @@ def main():
                 'ipcidr': [
                     '240.0.0.0/4'
                 ]
+            ]
             }
         },
-        'proxies': all_parsed_proxies,
+        'proxies': all_parsed_proxies, # 填入所有解析出的代理
 
+        # 示例代理组 (可根据需要自定义)
         'proxy-groups': [
             {
                 'name': '🚀 节点选择',
                 'type': 'select',
-                'proxies': ['DIRECT'] + [p['name'] for p in all_parsed_proxies]
+                'proxies': ['DIRECT'] + [p['name'] for p in all_parsed_proxies] # 添加DIRECT选项
             },
             {
                 'name': '📲 国外媒体',
@@ -577,12 +540,13 @@ def main():
                 'interval': 300
             }
         ],
+        # 示例规则 (可根据需要自定义)
         'rules': [
             'DOMAIN-KEYWORD,openai,🤖 AI/ChatGPT',
             'DOMAIN-KEYWORD,google,📲 国外媒体',
             'DOMAIN-KEYWORD,youtube,📲 国外媒体',
             'DOMAIN-KEYWORD,netflix,📲 国外媒体',
-            'DOMAIN-KEYWORD,github,🌍 其他流量',
+            'DOMAIN-KEYWORD,github,🌍 其他流量', # GitHub也通过代理，防止被墙
             'DOMAIN-SUFFIX,cn,DIRECT',
             'IP-CIDR,172.16.0.0/12,DIRECT,no-resolve',
             'IP-CIDR,192.168.0.0/16,DIRECT,no-resolve',
@@ -593,18 +557,21 @@ def main():
         ]
     }
     
+    # 关键行: 使用 default_flow_style=False 鼓励单行输出字典
     final_clash_yaml = yaml.dump(clash_config, allow_unicode=True, sort_keys=False, default_flow_style=False, indent=2)
 
+    # 编码为Base64
     final_base64_encoded = base64.b64encode(final_clash_yaml.encode('utf-8')).decode('utf-8')
 
     with open("base64.txt", "w", encoding="utf-8") as f:
         f.write(final_base64_encoded)
-    print("Base64 encoded Clash YAML configuration successfully written to base64.txt")
+    print("Base64 编码的 Clash YAML 配置已成功写入 base64.txt")
 
+    # ... (更新 url.txt 的逻辑保持不变)
     new_url_list_content = "\n".join(sorted(list(set(successful_urls))))
     
     if new_url_list_content.strip() != url_content.strip():
-        print("Updating GitHub url.txt file...")
+        print("正在更新 GitHub 上的 url.txt 文件...")
         commit_message = "feat: Update url.txt with valid subscription links (auto-filtered)"
         update_success = update_github_file_content(
             repo_contents_api_base,
@@ -615,11 +582,11 @@ def main():
             commit_message
         )
         if update_success:
-            print("url.txt file updated successfully.")
+            print("url.txt 文件已成功更新。")
         else:
-            print("Failed to update url.txt file.")
+            print("更新 url.txt 文件失败。")
     else:
-        print("url.txt file content unchanged, no update needed.")
+        print("url.txt 文件内容未改变，无需更新。")
 
 if __name__ == "__main__":
     main()
