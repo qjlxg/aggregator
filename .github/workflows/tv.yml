@@ -2,6 +2,7 @@
 name: dfyuan
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 ,06,18, * * *'
   push:
