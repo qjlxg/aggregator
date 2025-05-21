@@ -1,0 +1,48 @@
+name: Base64 Conversion
+
+on:
+  workflow_dispatch: # 允许手动触发
+  schedule:
+    - cron: "0 */1 * * *" # 每小时的第0分钟运行一次
+
+jobs:
+  convert_to_base64:
+    runs-on: ubuntu-latest # 使用最新的 Ubuntu 运行器
+
+    steps:
+      - name: Checkout repository # 检出代码
+        uses: actions/checkout@v4 # 升级到最新版本，更安全、功能更多
+
+      - name: Set up Python # 设置 Python 环境
+        uses: actions/setup-python@v5 # 升级到最新版本
+        with:
+          python-version: '3.x' # 使用最新的 Python 3 版本
+
+      - name: Install dependencies # 安装所需的 Python 库
+        run: |
+          python -m pip install --upgrade pip # 升级 pip
+          pip install requests python-dotenv # 安装 requests 和 python-dotenv
+
+      - name: Run conversion script
+        env:
+          BOT: ${{ secrets.BOT }}
+          URL_LIST_REPO_API: ${{ secrets.URL_LIST_REPO_API }} # <-- 修改为 secrets.URL_LIST_REPO_API
+        run: |
+          python subscribe/convert_to_base64.py
+
+      - name: Commit and push changes (if any) # 提交并推送更改 (如果文件有变化)
+        # Always() 确保即使脚本失败，也尝试提交，但这里改为只在成功时提交，因为失败的 base64.txt 没有意义
+        if: success()
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add base64.txt
+          # 检查 base64.txt 文件是否有实际变化
+          if git diff --cached --exit-code --quiet base64.txt; then
+            echo "base64.txt has no changes, skipping commit."
+          else
+            git commit -m "Update base64.txt via GitHub Actions"
+            # 尝试拉取远程最新代码并rebase，以避免冲突
+            git pull --rebase origin ${{ github.ref_name }}
+            git push origin ${{ github.ref_name }} # 推送到当前分支
+          fi
