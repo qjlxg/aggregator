@@ -10,7 +10,8 @@ import socket
 import time
 import concurrent.futures
 import logging
-import ipaddress # 新增导入，用于IP地址和CIDR检查
+import ipaddress # 用于 IP 地址验证
+import maxminddb # 用于 GeoIP 查找
 
 # 配置日志
 logging.basicConfig(level=logging.INFO,
@@ -18,91 +19,106 @@ logging.basicConfig(level=logging.INFO,
                     datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger(__name__)
 
-# --- China Filtering Data (Can be expanded) ---
-# Keywords often found in proxy names or server names/domains that indicate China
+# --- GeoIP 相关全局变量 ---
+GEOIP_READER = None # 用于存储 maxminddb.Reader 对象
+GEOIP_DB_PATH_GLOBAL = None # 用于存储 GeoIP 数据库路径
+
+# --- GeoIP 初始化和查找函数 ---
+def init_geoip_reader(db_path):
+    """
+    初始化 MaxMind GeoIP 数据库读取器。
+    """
+    global GEOIP_READER, GEOIP_DB_PATH_GLOBAL
+    GEOIP_DB_PATH_GLOBAL = db_path
+    if not os.path.exists(db_path):
+        logger.error(f"GeoIP 数据库文件未找到: {db_path}。GeoIP 过滤将禁用。")
+        GEOIP_READER = None
+        return False
+    try:
+        GEOIP_READER = maxminddb.open_database(db_path)
+        logger.info(f"成功加载 GeoIP 数据库: {db_path}")
+        return True
+    except maxminddb.InvalidDatabaseError as e:
+        logger.error(f"GeoIP 数据库文件无效或损坏: {db_path} - {e}。GeoIP 过滤将禁用。")
+        GEOIP_READER = None
+        return False
+    except Exception as e:
+        logger.error(f"加载 GeoIP 数据库时发生未知错误: {db_path} - {e}。GeoIP 过滤将禁用。")
+        GEOIP_READER = None
+        return False
+
+def get_country_code(ip_address):
+    """
+    使用加载的 GeoIP 数据库查找 IP 地址的国家代码。
+    返回国家代码 (例如 'CN', 'US')，如果查找失败则返回 None。
+    """
+    if GEOIP_READER is None:
+        return None
+    try:
+        # 确保 IP 地址是有效的
+        ipaddress.ip_address(ip_address) 
+        record = GEOIP_READER.get(ip_address)
+        if record and 'country' in record and 'iso_code' in record['country']:
+            return record['country']['iso_code']
+        return None
+    except ValueError: # 无效的 IP 地址
+        return None
+    except Exception as e:
+        logger.warning(f"GeoIP 查找 IP 地址 '{ip_address}' 时发生错误: {e}")
+        return None
+
+# --- 中国节点过滤逻辑 (使用 GeoIP 增强) ---
+# 仍然保留关键词，作为 GeoIP 不可用时的备用或补充，或者用于一些特别的名称
 CHINA_KEYWORDS = [
-    "中国", "china", "cn", "🇨🇳", # Common keywords
-    "ch", "mainland", "domestic", # Other potential indicators
-    ".cn", ".com.cn", ".net.cn", ".org.cn", # Chinese TLDs
-    "aliyun", "tencentcloud", "huaweicloud", # Common Chinese cloud providers (can be more specific)
-    "baidu", "qq", "wechat", "jd", "taobao", # Common Chinese services (often hosted in China)
-    "beijing", "shanghai", "guangzhou", "shenzhen", "chengdu", # Major Chinese cities
+    "中国", "china", "cn", "🇨🇳", # 常用关键词
+    "ch", "mainland", "domestic", # 其他可能的指示词
+    ".cn", ".com.cn", ".net.cn", ".org.cn", # 中国顶级域名
+    "aliyun", "tencentcloud", "huaweicloud", # 常见的中国云服务提供商 (可以更具体)
+    "beijing", "shanghai", "guangzhou", "shenzhen", "chengdu", # 中国主要城市
+    "移动", "联通", "电信", # 运营商关键词
+    "cmcc", "unicom", "telecom",
 ]
-
-# Common Chinese IP CIDR blocks (incomplete, for demonstration)
-# For a comprehensive list, consider fetching from a reliable source like:
-# https://raw.githubusercontent.com/Loyalsoldier/geoip/release/text/cn.txt
-# Or pre-downloading and using a MaxMind GeoLite2-Country database.
-# Using a small, representative set for now to avoid large data files.
-CHINA_IP_CIDRS = [
-    "1.0.1.0/24", "1.1.1.0/24", "1.1.2.0/23", "1.2.0.0/22", # Part of China Telecom
-    "42.48.0.0/12", "42.56.0.0/14", # China Unicom
-    "43.224.0.0/13", # China Mobile
-    "49.64.0.0/11", "58.0.0.0/8", "60.0.0.0/7", # Various Chinese ranges
-    "101.0.0.0/8", "103.0.0.0/8", # Various Chinese ranges
-    "111.0.0.0/7", "112.0.0.0/7", "113.0.0.0/8", # Various Chinese ranges
-    "114.0.0.0/7", "115.0.0.0/8", "116.0.0.0/7", # Various Chinese ranges
-    "117.0.0.0/8", "118.0.0.0/7", "119.0.0.0/8", # Various Chinese ranges
-    "120.0.0.0/7", "121.0.0.0/8", "122.0.0.0/7", # Various Chinese ranges
-    "123.0.0.0/8", "140.0.0.0/7", "180.0.0.0/8", "182.0.0.0/7", # Various Chinese ranges
-    "202.0.0.0/8", "210.0.0.0/7", "211.0.0.0/8", # Various Chinese ranges
-    "218.0.0.0/7", "219.0.0.0/8", "220.0.0.0/7", "221.0.0.0/8", "222.0.0.0/8",
-    # IPv6 ranges would also be needed for comprehensive filtering
-    # "2001:0db8::/32", # Example IPv6
-]
-
-# Pre-parse CIDRs for faster lookup
-PARSED_CHINA_CIDRS = []
-for cidr in CHINA_IP_CIDRS:
-    try:
-        PARSED_CHINA_CIDRS.append(ipaddress.ip_network(cidr, strict=False))
-    except ValueError as e:
-        logger.error(f"Invalid CIDR in CHINA_IP_CIDRS: {cidr} - {e}")
-
-def is_ip_in_china(ip_address):
-    """Checks if an IP address falls within the defined Chinese CIDR ranges."""
-    try:
-        ip = ipaddress.ip_address(ip_address)
-        for network in PARSED_CHINA_CIDRS:
-            if ip in network:
-                return True
-        return False
-    except ValueError: # Not a valid IP address
-        return False
 
 def is_likely_china_node(proxy_data):
     """
-    Checks if a proxy node is likely located in China based on keywords or IP.
-    Returns True if it's likely in China, False otherwise.
+    检查代理节点是否可能位于中国，优先使用 GeoIP 查找。
+    如果 GeoIP 查找失败或未启用，则退回使用关键词判断。
+    返回 True 如果它可能在中国，否则返回 False。
     """
     name_lower = proxy_data.get('name', '').lower()
-    server_lower = proxy_data.get('server', '').lower()
+    server = proxy_data.get('server', '')
+    server_lower = server.lower()
 
-    # 1. Keyword check
+    # 1. GeoIP 查找 (优先且更准确)
+    if GEOIP_READER is not None:
+        try:
+            # 尝试将主机名解析为 IP 地址
+            server_ip = socket.gethostbyname(server)
+            country_code = get_country_code(server_ip)
+            if country_code == 'CN':
+                logger.info(f"  节点 '{proxy_data.get('name')}' (IP: {server_ip}) 经 GeoIP 确认位于中国，已排除。")
+                return True
+            elif country_code is not None:
+                logger.debug(f"  节点 '{proxy_data.get('name')}' (IP: {server_ip}) 位于 {country_code}。")
+            else:
+                logger.warning(f"  无法通过 GeoIP 确定 IP '{server_ip}' 的国家，尝试关键词匹配。")
+        except socket.gaierror:
+            logger.warning(f"  无法解析服务器 '{server}' 的 IP，跳过 GeoIP 检查，尝试关键词匹配。")
+        except Exception as e:
+            logger.error(f"  GeoIP 检查 '{server}' 时发生错误: {e}，尝试关键词匹配。")
+    else:
+        logger.debug(f"  GeoIP 数据库未加载或初始化失败，将仅依赖关键词过滤。")
+    
+    # 2. 关键词检查 (作为补充或 GeoIP 失败时的回退)
     for keyword in CHINA_KEYWORDS:
         if keyword in name_lower or keyword in server_lower:
-            logger.debug(f"  Node '{proxy_data.get('name')}' excluded by keyword: '{keyword}'")
+            logger.info(f"  节点 '{proxy_data.get('name')}' 因关键词 '{keyword}' 被排除。")
             return True
-    
-    # 2. IP CIDR check
-    server_ip = None
-    try:
-        # Attempt to resolve hostname to IP
-        # Using socket.gethostbyname for simplicity, but it's blocking.
-        # For a large number of nodes, consider a non-blocking DNS resolver if this becomes a bottleneck.
-        server_ip = socket.gethostbyname(proxy_data.get('server'))
-        if is_ip_in_china(server_ip):
-            logger.debug(f"  Node '{proxy_data.get('name')}' excluded by China IP range: {server_ip}")
-            return True
-    except socket.gaierror:
-        logger.warning(f"  Could not resolve IP for server: {proxy_data.get('server')}. Skipping IP check for this node.")
-    except Exception as e:
-        logger.error(f"  Error during IP resolution for {proxy_data.get('server')}: {e}")
 
     return False
 
 
-# --- Proxy Parsing Functions ---
+# --- 代理解析函数 ---
 def generate_proxy_fingerprint(proxy_data):
     """
     根据代理的关键连接信息生成一个唯一的哈希指纹。
@@ -115,7 +131,15 @@ def generate_proxy_fingerprint(proxy_data):
     parts.append(str(proxy_data.get('port', '')))
     parts.append(str(proxy_data.get('uuid', '')))
     parts.append(str(proxy_data.get('password', '')))
-    parts.append(str(proxy_data.get('cipher', '')))<br>    parts.append(str(proxy_data.get('network', '')))<br>    parts.append(str(proxy_data.get('tls', '')))<br>    parts.append(str(proxy_data.get('servername', '')))<br>    parts.append(str(proxy_data.get('ws-path', '')))<br>    parts.append(str(proxy_data.get('plugin-info', '')))<br>    parts.append(str(proxy_data.get('alpn', '')))<br>    parts.append(str(proxy_data.get('flow', ''))) # VLESS flow<br>    parts.append(str(proxy_data.get('fingerprint', ''))) # TLS fingerprint
+    parts.append(str(proxy_data.get('cipher', '')))
+    parts.append(str(proxy_data.get('network', '')))
+    parts.append(str(proxy_data.get('tls', '')))
+    parts.append(str(proxy_data.get('servername', '')))
+    parts.append(str(proxy_data.get('ws-path', '')))
+    parts.append(str(proxy_data.get('plugin-info', '')))
+    parts.append(str(proxy_data.get('alpn', '')))
+    parts.append(str(proxy_data.get('flow', ''))) # VLESS flow
+    parts.append(str(proxy_data.get('fingerprint', ''))) # TLS fingerprint
 
     unique_string = "_".join(parts)
     return hashlib.md5(unique_string.encode('utf-8')).hexdigest()
@@ -160,7 +184,7 @@ def parse_vmess(vmess_url):
                     ws_headers_dict = json.loads(config['headers'])
                     proxy['ws-headers'] = ws_headers_dict
                 except (json.JSONDecodeError, TypeError):
-                    logger.warning(f"Vmess {name}: Invalid ws-headers format, skipping: {config.get('headers')}")
+                    logger.warning(f"Vmess {name}: 无效的 ws-headers 格式，跳过: {config.get('headers')}")
         
         # 增加对 Vmess 的 alpn 支持
         if config.get('alpn'):
@@ -210,7 +234,6 @@ def parse_trojan(trojan_url):
         logger.warning(f"解析 Trojan 链接失败: {trojan_url[:50]}...，原因: {e}")
         return None
 
-# 修改 ShadowSocks 解析器，使用更严格的正则匹配
 def parse_shadowsocks(ss_url):
     try:
         encoded_part = ss_url[5:]
@@ -248,7 +271,7 @@ def parse_shadowsocks(ss_url):
                     server = match.group(2)
                     port = int(match.group(3))
                 else:
-                    raise ValueError("Invalid format: Not method:password@server:port or method@server:port")
+                    raise ValueError("格式无效：不是 method:password@server:port 或 method@server:port。")
             else:
                 method = match.group(1)
                 password = match.group(2)
@@ -280,7 +303,7 @@ def parse_shadowsocks(ss_url):
 
             return proxy
         except (base64.binascii.Error, ValueError) as decode_err:
-            raise ValueError(f"Base64 decoding or regex matching error: {decode_err}")
+            raise ValueError(f"Base64 解码或正则匹配错误: {decode_err}")
     except Exception as e:
         logger.warning(f"解析 Shadowsocks 链接失败: {ss_url[:100]}...，原因: {e}")
         return None
@@ -322,7 +345,7 @@ def parse_hysteria2(hy2_url):
         logger.warning(f"解析 Hysteria2 链接失败: {hy2_url[:50]}...，原因: {e}")
         return None
 
-# --- Connectivity Test Function ---
+# --- 连通性测试函数 ---
 def test_tcp_connectivity(server, port, timeout=1, retries=1, delay=0.5):
     """
     尝试与指定的服务器和端口建立TCP连接，测试连通性。
@@ -355,7 +378,7 @@ def test_tcp_connectivity(server, port, timeout=1, retries=1, delay=0.5):
             return False, float('inf') # 返回无限大延迟表示失败
     return False, float('inf') # 所有重试都失败，返回无限大延迟
 
-# --- Fetch and Decode URLs (Modified for deduplication and naming) ---
+# --- 获取和解码 URL ---
 def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True, enable_china_filter=False):
     all_raw_proxies = [] # 收集所有解析出的代理（包含重复的）
     successful_urls_this_run = set() # 本次运行成功获取的URL
@@ -364,6 +387,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True, 
     exclude_servers_str = os.environ.get("EXCLUDE_NODES_BY_SERVER", "")
     exclude_servers = [s.strip().lower() for s in exclude_servers_str.split(',') if s.strip()]
 
+    # 排除一些常见的非代理或无关的 URL 关键词
     EXCLUDE_KEYWORDS = [
         "cdn.jsdelivr.net", "statically.io", "googletagmanager.com",
         "www.w3.org", "fonts.googleapis.com", "schemes.ogf.org", "clashsub.net",
@@ -393,10 +417,10 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True, 
             continue
 
         if any(keyword in url for keyword in EXCLUDE_KEYWORDS):
-            logger.info(f"Skipping non-subscription link (filtered by keyword): {url}")
+            logger.info(f"跳过非订阅链接 (被关键词过滤): {url}")
             continue
 
-        logger.info(f"[{url_idx+1}/{len(urls)}] Processing URL: {url}")
+        logger.info(f"[{url_idx+1}/{len(urls)}] 正在处理 URL: {url}")
         current_proxies_from_url = []
         try:
             response = requests.get(url, timeout=20)
@@ -434,12 +458,12 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True, 
                 yaml_proxies = try_parse_yaml(decoded_content)
                 if yaml_proxies:
                     current_proxies_from_url.extend(yaml_proxies)
-                    logger.info(f"  --- URL: {url} Identified as YAML subscription with {len(yaml_proxies)} proxies ---")
+                    logger.info(f"  --- URL: {url} 识别为 YAML 订阅，包含 {len(yaml_proxies)} 个代理。 ---")
                 else:
                     json_proxies = try_parse_json_nodes(decoded_content)
                     if json_proxies:
                         current_proxies_from_url.extend(json_proxies)
-                        logger.info(f"  --- URL: {url} Identified as JSON node list with {len(json_proxies)} proxies ---")
+                        logger.info(f"  --- URL: {url} 识别为 JSON 节点列表，包含 {len(json_proxies)} 个代理。 ---")
                     else:
                         if len(decoded_content.strip()) > 0 and len(decoded_content.strip()) % 4 == 0 and re.fullmatch(r'[A-Za-z0-9+/=]*', decoded_content.strip()):
                             try:
@@ -460,11 +484,11 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True, 
                                     
                                     if p: current_proxies_from_url.append(p); parsed_line_count += 1
                                 if parsed_line_count > 0:
-                                    logger.info(f"  --- URL: {url} Base64 decoded and identified {parsed_line_count} proxy nodes ---")
+                                    logger.info(f"  --- URL: {url} Base64 解码成功，识别到 {parsed_line_count} 个代理节点。 ---")
                                 else:
-                                    logger.warning(f"  --- URL: {url} Base64 decoded successfully, but content doesn't match known proxy format.---")
+                                    logger.warning(f"  --- URL: {url} Base64 解码成功，但内容不匹配已知代理格式。---")
                             except (base64.binascii.Error, UnicodeDecodeError):
-                                logger.warning(f"  --- URL: {url} Looks like Base64 but failed to decode, treating as plaintext.---")
+                                logger.warning(f"  --- URL: {url} 看起来像 Base64 但解码失败，按纯文本处理。---")
 
                         if not current_proxies_from_url:
                             lines = decoded_content.split('\n')
@@ -482,12 +506,12 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True, 
                                     p = parse_hysteria2(line)
                                 if p: current_proxies_from_url.append(p); parsed_line_count += 1
                             if parsed_line_count > 0:
-                                logger.info(f"  --- URL: {url} Identified as plaintext {parsed_line_count} proxy nodes ---")
+                                logger.info(f"  --- URL: {url} 识别为纯文本 {parsed_line_count} 个代理节点。 ---")
                             else:
-                                logger.warning(f"  --- URL: {url} Content not identified as valid subscription format (UTF-8).---")
+                                logger.warning(f"  --- URL: {url} 内容未被识别为有效的订阅格式 (UTF-8)。---")
 
             except UnicodeDecodeError:
-                logger.warning(f"  --- URL: {url} UTF-8 decoding failed, trying Base64 decoding.---")
+                logger.warning(f"  --- URL: {url} UTF-8 解码失败，尝试 Base64 解码。---")
                 try:
                     cleaned_content = content.strip()
                     temp_decoded = base64.b64decode(cleaned_content).decode('utf-8')
@@ -495,12 +519,12 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True, 
                     yaml_proxies = try_parse_yaml(temp_decoded)
                     if yaml_proxies:
                         current_proxies_from_url.extend(yaml_proxies)
-                        logger.info(f"  --- URL: {url} Base64 decoded to YAML subscription with {len(yaml_proxies)} proxies ---")
+                        logger.info(f"  --- URL: {url} Base64 解码为 YAML 订阅，包含 {len(yaml_proxies)} 个代理。 ---")
                     else:
                         json_proxies = try_parse_json_nodes(temp_decoded)
                         if json_proxies:
                             current_proxies_from_url.extend(json_proxies)
-                            logger.info(f"  --- URL: {url} Base64 decoded to JSON node list with {len(json_proxies)} proxies ---")
+                            logger.info(f"  --- URL: {url} Base64 解码为 JSON 节点列表，包含 {len(json_proxies)} 个代理。 ---")
                         else:
                             lines = temp_decoded.split('\n')
                             parsed_line_count = 0
@@ -517,23 +541,24 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True, 
                                     p = parse_hysteria2(line)
                                 if p: current_proxies_from_url.append(p); parsed_line_count += 1
                             if parsed_line_count > 0:
-                                logger.info(f"  --- URL: {url} Base64 decoded to {parsed_line_count} proxy nodes ---")
+                                logger.info(f"  --- URL: {url} Base64 解码为 {parsed_line_count} 个代理节点。 ---")
                             else:
-                                logger.warning(f"  --- URL: {url} Base64 decoded successfully, but content doesn't match known proxy format.---")
+                                logger.warning(f"  --- URL: {url} Base64 解码成功，但内容不匹配已知代理格式。---")
 
                 except (base64.binascii.Error, UnicodeDecodeError) as decode_err:
-                    logger.error(f"  --- URL: {url} Base64 decoding or UTF-8 conversion failed: {decode_err} ---")
+                    logger.error(f"  --- URL: {url} Base64 解码或 UTF-8 转换失败: {decode_err} ---")
+                    # 尝试用 latin-1 解码，作为最后手段，尽管可能丢失信息
                     content.decode('latin-1', errors='ignore') 
-                    logger.warning(f"Warning: Could not decode content from {url} to UTF-8 or Base64. Using latin-1 and ignoring errors.")
+                    logger.warning(f"警告：无法将 {url} 的内容解码为 UTF-8 或 Base64。将使用 latin-1 且忽略错误。")
 
             if current_proxies_from_url:
                 all_raw_proxies.extend(current_proxies_from_url)
                 successful_urls_this_run.add(url) # 标记此URL本次成功下载和解析
 
         except requests.exceptions.RequestException as e:
-            logger.error(f"Failed to fetch data from URL: {url}, reason: {e}")
+            logger.error(f"从 URL 获取数据失败: {url}，原因: {e}")
         except Exception as e:
-            logger.error(f"An unexpected error occurred while processing URL {url}: {e}")
+            logger.error(f"处理 URL {url} 时发生意外错误: {e}")
 
     # --- 去重和连通性测试 (并行化) ---
     unique_proxies_for_test = {}
@@ -542,12 +567,12 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True, 
             # 检查黑名单
             server_to_check = str(proxy_dict.get('server', '')).lower()
             if any(s in server_to_check for s in exclude_servers):
-                logger.info(f"Skipping proxy {proxy_dict.get('name', 'unknown')} (server: {server_to_check}) due to blacklisted server.")
+                logger.info(f"跳过代理 {proxy_dict.get('name', 'unknown')} (服务器: {server_to_check})，因为它在黑名单中。")
                 continue
 
-            # 检查是否是中国节点
+            # 新增：检查是否是中国节点 (使用 GeoIP 增强)
             if enable_china_filter and is_likely_china_node(proxy_dict):
-                logger.info(f"Skipping proxy {proxy_dict.get('name', 'unknown')} (server: {proxy_dict.get('server')}) due to likely China location.")
+                # is_likely_china_node 内部会打印详细的排除原因
                 continue
 
             fingerprint = generate_proxy_fingerprint(proxy_dict)
@@ -581,11 +606,12 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True, 
                     is_reachable, latency = future.result()
                     if is_reachable:
                         base_name = f"{proxy_dict.get('type', 'unknown').upper()}-{proxy_dict.get('server', 'unknown')}"
+                        # 确保 ping 值是整数，避免小数显示
                         proxy_dict['name'] = f"{base_name}-{generate_proxy_fingerprint(proxy_dict)[:8]} (Ping: {int(latency*1000)}ms)"
                         final_filtered_proxies.append(proxy_dict)
                         successful_proxy_count += 1
                     else:
-                        pass
+                        pass # 连接失败的节点不会被添加到最终列表
                 except Exception as exc:
                     logger.error(f"    连通性测试 {server}:{port} 时发生异常: {exc}")
                 
@@ -603,7 +629,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True, 
     logger.info(f"成功解析、去重、测试并聚合了 {len(final_filtered_proxies)} 个唯一且可达的代理节点。")
     return final_filtered_proxies, list(successful_urls_this_run), successful_proxy_count
 
-# --- GitHub API Helpers ---
+# --- GitHub API 辅助函数 ---
 def get_github_file_content(api_url, token):
     headers = {"Authorization": f"token {token}", "Accept": "application/vnd.github.com.v3.raw"}
     try:
@@ -625,13 +651,13 @@ def get_github_file_content(api_url, token):
         response.raise_for_status()
         return response.text, sha
     except requests.exceptions.HTTPError as http_err:
-        logger.error(f"Error fetching file from GitHub (HTTP Error): {http_err}. Response: {response.text[:200] if response else 'N/A'}")
+        logger.error(f"从 GitHub 获取文件出错 (HTTP 错误): {http_err}。响应: {response.text[:200] if response else 'N/A'}")
         return None, None
     except requests.exceptions.RequestException as req_err:
-        logger.error(f"Error fetching file from GitHub (Request Error): {req_err}")
+        logger.error(f"从 GitHub 获取文件出错 (请求错误): {req_err}")
         return None, None
     except Exception as e:
-        logger.error(f"Error fetching file from GitHub (Other Error): {e}")
+        logger.error(f"从 GitHub 获取文件出错 (其他错误): {e}")
         return None, None
 
 def update_github_file_content(repo_contents_api_base, token, file_path, new_content, sha, commit_message):
@@ -649,58 +675,66 @@ def update_github_file_content(repo_contents_api_base, token, file_path, new_con
     try:
         response = requests.put(url, headers=headers, data=json.dumps(data), timeout=10)
         response.raise_for_status()
-        logger.info(f"Successfully updated {file_path} on GitHub.")
+        logger.info(f"成功更新 GitHub 上的 {file_path}。")
         return True
     except requests.exceptions.RequestException as e:
-        logger.error(f"Error updating file on GitHub: {e}. Response: {response.text[:200] if response else 'N/A'}")
+        logger.error(f"更新 GitHub 文件出错: {e}。响应: {response.text[:200] if response else 'N/A'}")
         if response and response.status_code == 409:
-            logger.warning("Conflict: File content changed on GitHub before commit. Please re-run.")
+            logger.warning("冲突：提交前 GitHub 上的文件内容已更改。请重新运行。")
         return False
 
-# --- Main Function ---
+# --- 主函数 ---
 def main():
     bot_token = os.environ.get("BOT")
     url_list_repo_api = os.environ.get("URL_LIST_REPO_API")
     template_file_path = os.environ.get("CLASH_TEMPLATE_PATH", "clash_template.yml")
+    # 从环境变量获取 GeoIP 数据库路径，默认为 "clash/Country.mmdb"
+    geoip_db_path_env = os.environ.get("GEOIP_DB_PATH", "clash/Country.mmdb") 
+
+    # 尝试初始化 GeoIP Reader
+    logger.info(f"尝试初始化 GeoIP 数据库，路径: {geoip_db_path_env}")
+    init_geoip_reader(geoip_db_path_env)
+
 
     try:
         parts = url_list_repo_api.split('/')
         if len(parts) < 8 or parts[2] != 'api.github.com' or parts[3] != 'repos' or parts[6] != 'contents':
-            raise ValueError("URL_LIST_REPO_API does not seem to be a valid GitHub Content API URL.")
+            raise ValueError("URL_LIST_REPO_API 看起来不是有效的 GitHub Content API URL。")
             
         owner = parts[4]
         repo_name = parts[5]
         file_path_in_repo = '/'.join(parts[7:])
     except ValueError as ve:
-        logger.error(f"Error: {ve}")
-        logger.error("Please ensure URL_LIST_REPO_API is correctly set to a GitHub Content API URL (e.g., https://api.github.com/repos/user/repo/contents/path/to/file.txt).")
+        logger.error(f"错误: {ve}")
+        logger.error("请确保 URL_LIST_REPO_API 正确设置为 GitHub Content API URL (例如：https://api.github.com/repos/user/repo/contents/path/to/file.txt)。")
         exit(1)
     except IndexError:
-        logger.error("Error: URL_LIST_REPO_API format is incorrect or incomplete. Cannot extract owner, repo, or file path.")
+        logger.error("错误: URL_LIST_REPO_API 格式不正确或不完整。无法提取所有者、仓库或文件路径。")
         exit(1)
 
     repo_contents_api_base = f"https://api.github.com/repos/{owner}/{repo_name}/contents"
 
     if not bot_token or not url_list_repo_api:
-        logger.error("Error: Environment variables BOT or URL_LIST_REPO_API are not set!")
-        logger.error("Please ensure you've correctly set these variables in GitHub Actions secrets/variables.")
+        logger.error("错误: 环境变量 BOT 或 URL_LIST_REPO_API 未设置！")
+        logger.error("请确保您已在 GitHub Actions secrets/variables 中正确设置这些变量。")
         exit(1)
 
     # 获取 URL 列表和它的 SHA
-    logger.info("Fetching URL list and its SHA from GitHub...")
+    logger.info("正在从 GitHub 获取 URL 列表及其 SHA...")
     url_content, url_file_sha = get_github_file_content(url_list_repo_api, bot_token)
 
     if url_content is None or url_file_sha is None:
-        logger.error("Could not get URL list or its SHA, script terminated.")
+        logger.error("无法获取 URL 列表或其 SHA，脚本终止。")
         exit(1)
 
     original_urls = set(url_content.strip().split('\n'))
-    logger.info(f"Fetched {len(original_urls)} subscription URLs from GitHub.")
+    logger.info(f"从 GitHub 获取到 {len(original_urls)} 个订阅 URL。")
 
     enable_connectivity_test = os.environ.get("ENABLE_CONNECTIVITY_TEST", "true").lower() == "true"
     enable_china_filter = os.environ.get("EXCLUDE_CHINA_NODES", "false").lower() == "true"
 
-    # 执行代理抓取、解析、去重和测试
+    # 执行代理抓取、解析、去重和测试，并传入是否启用中国节点过滤
+    # is_likely_china_node 函数现在内部会使用 GEOIP_READER
     all_parsed_proxies, successful_urls_this_run, successful_proxy_count = \
         fetch_and_decode_urls_to_clash_proxies(list(original_urls), enable_connectivity_test, enable_china_filter)
 
@@ -711,9 +745,9 @@ def main():
         try:
             with open(failed_urls_file, "r") as f:
                 failed_urls_tracking = json.load(f)
-            logger.info(f"Loaded failed URLs tracking from {failed_urls_file}.")
+            logger.info(f"已从 {failed_urls_file} 加载失败 URL 跟踪记录。")
         except json.JSONDecodeError:
-            logger.warning(f"Could not decode {failed_urls_file}, starting with empty tracking.")
+            logger.warning(f"无法解码 {failed_urls_file}，将从空的跟踪记录开始。")
 
     new_urls_for_repo = set()
     failed_url_threshold = int(os.environ.get("FAILED_URL_THRESHOLD", 3))
@@ -727,19 +761,19 @@ def main():
             failed_urls_tracking[url] = failed_urls_tracking.get(url, 0) + 1
             if failed_urls_tracking[url] < failed_url_threshold:
                 new_urls_for_repo.add(url)
-                logger.warning(f"URL '{url}' failed to fetch/parse (count: {failed_urls_tracking[url]}). Retaining for now.")
+                logger.warning(f"URL '{url}' 获取/解析失败 (计数: {failed_urls_tracking[url]})。暂时保留。")
             else:
-                logger.error(f"URL '{url}' failed {failed_urls_tracking[url]} times, removing from list.")
+                logger.error(f"URL '{url}' 失败 {failed_urls_tracking[url]} 次，将从列表中移除。")
     
     with open(failed_urls_file, "w") as f:
         json.dump(failed_urls_tracking, f)
-    logger.info(f"Updated failed URLs tracking saved to {failed_urls_file}.")
+    logger.info(f"更新后的失败 URL 跟踪记录已保存到 {failed_urls_file}。")
 
     new_url_list_content = "\n".join(sorted(list(new_urls_for_repo)))
 
     if new_url_list_content.strip() != url_content.strip():
-        logger.info("Updating GitHub url.txt file...")
-        commit_message = "feat: Update url.txt with valid subscription links (auto-filtered)"
+        logger.info("正在更新 GitHub url.txt 文件...")
+        commit_message = "feat: 通过 GitHub Actions 更新有效订阅链接 (自动过滤)"
         update_success = update_github_file_content(
             repo_contents_api_base,
             bot_token,
@@ -749,34 +783,36 @@ def main():
             commit_message
         )
         if update_success:
-            logger.info("url.txt file updated successfully.")
+            logger.info("url.txt 文件更新成功。")
         else:
-            logger.error("Failed to update url.txt file.")
+            logger.error("url.txt 文件更新失败。")
     else:
-        logger.info("url.txt file content unchanged, no update needed.")
+        logger.info("url.txt 文件内容未更改，无需更新。")
 
     # --- 构建 Clash 完整配置 ---
     clash_config = {}
     try:
         with open(template_file_path, 'r', encoding='utf-8') as f:
             clash_config = yaml.safe_load(f)
-        logger.info(f"Loaded Clash configuration template from {template_file_path}.")
+        logger.info(f"已从 {template_file_path} 加载 Clash 配置模板。")
     except FileNotFoundError:
-        logger.critical(f"Clash template file '{template_file_path}' not found! Please create it.")
+        logger.critical(f"未找到 Clash 模板文件 '{template_file_path}'！请创建它。")
         exit(1)
     except yaml.YAMLError as e:
-        logger.critical(f"Error parsing Clash template file '{template_file_path}': {e}")
+        logger.critical(f"解析 Clash 模板文件 '{template_file_path}' 时出错: {e}")
         exit(1)
     
     clash_config['proxies'] = all_parsed_proxies
 
+    # 根据 Clash 配置中的 proxy-groups 动态添加节点
     proxy_names = [p['name'] for p in all_parsed_proxies]
     for group in clash_config.get('proxy-groups', []):
-        if group['name'] in ['🚀 节点选择', '🔰 Fallback']:
-            if group['name'] == '🚀 节点选择':
-                group['proxies'] = ['DIRECT'] + proxy_names
-            elif group['name'] == '🔰 Fallback':
-                group['proxies'] = proxy_names
+        # 假设你的节点选择组叫 '🚀 节点选择' 和 '🔰 Fallback'
+        if group['name'] == '🚀 节点选择':
+            group['proxies'] = ['DIRECT'] + proxy_names # 通常节点选择组会包含 DIRECT
+        elif group['name'] == '🔰 Fallback':
+            group['proxies'] = proxy_names # Fallback 组通常只包含代理节点
+        # 你可以根据你的模板文件中的实际组名称进行调整
     
     final_clash_yaml = yaml.dump(clash_config, allow_unicode=True, sort_keys=False, default_flow_style=False, indent=2)
 
@@ -784,7 +820,7 @@ def main():
 
     with open("base64.txt", "w", encoding="utf-8") as f:
         f.write(final_base64_encoded)
-    logger.info("Base64 encoded Clash YAML configuration successfully written to base64.txt")
+    logger.info("Base64 编码的 Clash YAML 配置已成功写入 base64.txt。")
 
     # --- GitHub Actions 输出 ---
     print(f"::set-output name=total_proxies::{len(all_parsed_proxies)}")
