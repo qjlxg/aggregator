@@ -32,8 +32,8 @@ jobs:
 
       - name: 提交更改
         run: |
-          git config --local user.email "mlyuanlang@126.com"
-          git config --local user.name "mlvjfchen"
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
           git add .
           git commit -m "Add generated file" || echo "No changes to commit" # 即使没有文件更改，也防止报错
           git push -f
