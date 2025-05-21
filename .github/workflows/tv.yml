@@ -1,10 +1,9 @@
-
-name: dfyuan
+name: tv
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 ,06,18, * * *'
+    - cron: '0 06,18 * * *' # Cron表达式，注意逗号后的空格
   push:
     branches:
       - main
@@ -16,25 +15,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-    
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.12
 
       - name: Install dependencies
-        run: python -m pip install --upgrade pip
-             pip install requests
-             pip3 install beautifulsoup4
+        run: | # 注意这里的 | 符号
+          python -m pip install --upgrade pip
+          pip install requests
+          pip install beautifulsoup4 # 统一使用 pip install 即可
       
       - name: Run main
-        run: python ${{ github.workspace }}/main.py
+        run: python ${{ github.workspace }}/main.py # 确保脚本路径正确
 
-                               
       - name: 提交更改
         run: |
           git config --local user.email "mlyuanlang@126.com"
           git config --local user.name "mlvjfchen"
           git add .
-          git commit *.txt -m "Add generated file"
+          git commit -m "Add generated file" || echo "No changes to commit" # 即使没有文件更改，也防止报错
           git push -f
