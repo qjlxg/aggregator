@@ -8,6 +8,7 @@ from urllib.parse import urlparse, parse_qs, unquote
 import hashlib
 import socket
 import time
+import concurrent.futures # 新增导入，用于并行化
 
 # --- Proxy Parsing Functions ---
 def generate_proxy_fingerprint(proxy_data):
@@ -65,11 +66,6 @@ def parse_vmess(vmess_url):
             proxy['servername'] = servername
         if skip_cert_verify:
             proxy['skip-cert-verify'] = True
-
-        if network == 'ws':
-            proxy['ws-path'] = config.get('path', '/')
-            if config.get('headers'):
-                proxy['ws-headers'] = str(config.get('headers'))
 
         return proxy
     except Exception as e:
@@ -222,11 +218,12 @@ def parse_hysteria2(hy2_url):
         return None
 
 # --- Connectivity Test Function ---
-def test_tcp_connectivity(server, port, timeout=3, retries=2, delay=1):
+def test_tcp_connectivity(server, port, timeout=1, retries=1, delay=0.5):
     """
     尝试与指定的服务器和端口建立TCP连接，测试连通性。
     增加重试机制，以应对瞬时网络抖动或服务器短暂问题。
     返回 True 如果连接成功，否则返回 False。
+    **参数已调整为更快的失败策略。**
     """
     for i in range(retries + 1): # retries + 1 = 第一次尝试 + 重试次数
         try:
@@ -234,17 +231,17 @@ def test_tcp_connectivity(server, port, timeout=3, retries=2, delay=1):
             sock.close()
             return True
         except (socket.timeout, ConnectionRefusedError, OSError) as e:
-            print(f"    连接尝试 {i+1}/{retries+1} 失败 for {server}:{port} - {e}")
+            # print(f"    连接尝试 {i+1}/{retries+1} 失败 for {server}:{port} - {e}") # 减少日志输出，避免并行化时日志过多
             if i < retries: # 如果不是最后一次尝试，则等待并重试
                 time.sleep(delay)
         except Exception as e:
-            print(f"  TCP连接测试发生未知错误: {server}:{port} - {e}")
+            # print(f"  TCP连接测试发生未知错误: {server}:{port} - {e}") # 减少日志输出
             return False
     return False # 所有重试都失败
 
 # --- Fetch and Decode URLs (Modified for deduplication and naming) ---
 def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
-    unique_proxies = {}
+    all_raw_proxies = [] # 收集所有解析出的代理（包含重复的）
     successful_urls = set()
 
     EXCLUDE_KEYWORDS = [
@@ -280,15 +277,13 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
             continue
 
         print(f"Processing URL: {url}")
+        current_proxies_from_url = [] # 存储当前URL解析出的代理
         try:
             response = requests.get(url, timeout=20)
             response.raise_for_status()
             content = response.content
 
             print(f"  --- URL: {url} Downloaded content size: {len(content)} bytes ---")
-
-            decoded_content = ""
-            current_proxies = []
 
             def try_parse_yaml(text):
                 try:
@@ -305,23 +300,29 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                 try:
                     data = json.loads(text)
                     if isinstance(data, list) and all(isinstance(item, dict) and 'v' in item for item in data):
-                        return [parse_vmess(f"vmess://{base64.b64encode(json.dumps(node).encode('utf-8')).decode('utf-8')}") for node in data]
+                        # 对于 V2rayN 导出的 JSON 格式
+                        parsed_list = []
+                        for node in data:
+                            vmess_link = f"vmess://{base64.b64encode(json.dumps(node).encode('utf-8')).decode('utf-8')}"
+                            p = parse_vmess(vmess_link)
+                            if p: parsed_list.append(p)
+                        return parsed_list
                     return None
                 except json.JSONDecodeError:
                     return None
 
             try:
                 decoded_content = content.decode('utf-8')
-                print(f"  --- URL: {url} Successfully decoded to UTF-8 ---")
+                # print(f"  --- URL: {url} Successfully decoded to UTF-8 ---") # 减少日志输出
 
                 yaml_proxies = try_parse_yaml(decoded_content)
                 if yaml_proxies:
-                    current_proxies.extend(yaml_proxies)
+                    current_proxies_from_url.extend(yaml_proxies)
                     print(f"  --- URL: {url} Identified as YAML subscription ---")
                 else:
                     json_proxies = try_parse_json_nodes(decoded_content)
                     if json_proxies:
-                        current_proxies.extend(json_proxies)
+                        current_proxies_from_url.extend(json_proxies)
                         print(f"  --- URL: {url} Identified as JSON node list ---")
                     else:
                         # 尝试 Base64 解码，即使是 UTF-8 也能处理 Base64 编码的订阅
@@ -334,16 +335,16 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                                     line = line.strip()
                                     if line.startswith("vmess://"):
                                         p = parse_vmess(line)
-                                        if p: current_proxies.append(p); parsed_line_count += 1
+                                        if p: current_proxies_from_url.append(p); parsed_line_count += 1
                                     elif line.startswith("trojan://"):
                                         p = parse_trojan(line)
-                                        if p: current_proxies.append(p); parsed_line_count += 1
+                                        if p: current_proxies_from_url.append(p); parsed_line_count += 1
                                     elif line.startswith("ss://"):
                                         p = parse_shadowsocks(line)
-                                        if p: current_proxies.append(p); parsed_line_count += 1
+                                        if p: current_proxies_from_url.append(p); parsed_line_count += 1
                                     elif line.startswith("hysteria2://"):
                                         p = parse_hysteria2(line)
-                                        if p: current_proxies.append(p); parsed_line_count += 1
+                                        if p: current_proxies_from_url.append(p); parsed_line_count += 1
                                 if parsed_line_count > 0:
                                     print(f"  --- URL: {url} Base64 decoded and identified {parsed_line_count} proxy nodes ---")
                                 else:
@@ -351,23 +352,23 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                             except (base64.binascii.Error, UnicodeDecodeError):
                                 print(f"  --- URL: {url} Looks like Base64 but failed to decode, treating as plaintext.---")
 
-                        if not current_proxies: # 如果 Base64 解码或之前的解析没有得到代理，尝试直接解析为纯文本链接
+                        if not current_proxies_from_url: # 如果 Base64 解码或之前的解析没有得到代理，尝试直接解析为纯文本链接
                             lines = decoded_content.split('\n')
                             parsed_line_count = 0
                             for line in lines:
                                 line = line.strip()
                                 if line.startswith("vmess://"):
                                     p = parse_vmess(line)
-                                    if p: current_proxies.append(p); parsed_line_count += 1
+                                    if p: current_proxies_from_url.append(p); parsed_line_count += 1
                                 elif line.startswith("trojan://"):
                                     p = parse_trojan(line)
-                                    if p: current_proxies.append(p); parsed_line_count += 1
+                                    if p: current_proxies_from_url.append(p); parsed_line_count += 1
                                 elif line.startswith("ss://"):
                                     p = parse_shadowsocks(line)
-                                    if p: current_proxies.append(p); parsed_line_count += 1
+                                    if p: current_proxies_from_url.append(p); parsed_line_count += 1
                                 elif line.startswith("hysteria2://"):
                                     p = parse_hysteria2(line)
-                                    if p: current_proxies.append(p); parsed_line_count += 1
+                                    if p: current_proxies_from_url.append(p); parsed_line_count += 1
                             if parsed_line_count > 0:
                                 print(f"  --- URL: {url} Identified as plaintext {parsed_line_count} proxy nodes ---")
                             else:
@@ -378,16 +379,16 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                 try:
                     cleaned_content = content.strip()
                     temp_decoded = base64.b64decode(cleaned_content).decode('utf-8')
-                    print(f"  --- URL: {url} Successfully decoded Base64 content to UTF-8 ---")
+                    # print(f"  --- URL: {url} Successfully decoded Base64 content to UTF-8 ---") # 减少日志输出
 
                     yaml_proxies = try_parse_yaml(temp_decoded)
                     if yaml_proxies:
-                        current_proxies.extend(yaml_proxies)
+                        current_proxies_from_url.extend(yaml_proxies)
                         print(f"  --- URL: {url} Base64 decoded to YAML subscription ---")
                     else:
                         json_proxies = try_parse_json_nodes(temp_decoded)
                         if json_proxies:
-                            current_proxies.extend(json_proxies)
+                            current_proxies_from_url.extend(json_proxies)
                             print(f"  --- URL: {url} Base64 decoded to JSON node list ---")
                         else:
                             lines = temp_decoded.split('\n')
@@ -396,16 +397,16 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                                 line = line.strip()
                                 if line.startswith("vmess://"):
                                     p = parse_vmess(line)
-                                    if p: current_proxies.append(p); parsed_line_count += 1
+                                    if p: current_proxies_from_url.append(p); parsed_line_count += 1
                                 elif line.startswith("trojan://"):
                                     p = parse_trojan(line)
-                                    if p: current_proxies.append(p); parsed_line_count += 1
+                                    if p: current_proxies_from_url.append(p); parsed_line_count += 1
                                 elif line.startswith("ss://"):
                                     p = parse_shadowsocks(line)
-                                    if p: current_proxies.append(p); parsed_line_count += 1
+                                    if p: current_proxies_from_url.append(p); parsed_line_count += 1
                                 elif line.startswith("hysteria2://"):
                                     p = parse_hysteria2(line)
-                                    if p: current_proxies.append(p); parsed_line_count += 1
+                                    if p: current_proxies_from_url.append(p); parsed_line_count += 1
                             if parsed_line_count > 0:
                                 print(f"  --- URL: {url} Base64 decoded to {parsed_line_count} proxy nodes ---")
                             else:
@@ -417,35 +418,9 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                     content.decode('latin-1', errors='ignore') 
                     print(f"Warning: Could not decode content from {url} to UTF-8 or Base64. Using latin-1 and ignoring errors.")
 
-            # --- Deduplication, Name Standardization, and Connectivity Test Logic ---
-            for proxy_dict in current_proxies:
-                if not proxy_dict:
-                    continue
-
-                fingerprint = generate_proxy_fingerprint(proxy_dict)
-
-                if fingerprint not in unique_proxies:
-                    server = proxy_dict.get('server')
-                    port = proxy_dict.get('port')
-
-                    if enable_connectivity_test and server and isinstance(port, int):
-                        print(f"    正在测试连通性: {server}:{port} ...")
-                        if not test_tcp_connectivity(server, port): # 使用带重试的连通性测试
-                            print(f"    节点不可达（多次尝试后），跳过: {server}:{port}")
-                            continue
-                        else:
-                            print(f"    节点可达: {server}:{port}")
-                    else:
-                        print(f"    跳过连通性测试 (未启用或信息不全): {server}:{port}")
-
-                    base_name = f"{proxy_dict.get('type', 'unknown').upper()}-{proxy_dict.get('server', 'unknown')}"
-                    proxy_dict['name'] = f"{base_name}-{fingerprint[:8]}"
-                    unique_proxies[fingerprint] = proxy_dict
-                    print(f"    添加新代理: {proxy_dict['name']}")
-                else:
-                    print(f"    跳过重复代理 (指纹: {fingerprint})")
-
-            if current_proxies:
+            # 将当前URL解析出的代理添加到总列表
+            if current_proxies_from_url:
+                all_raw_proxies.extend(current_proxies_from_url)
                 successful_urls.add(url)
 
         except requests.exceptions.RequestException as e:
@@ -453,9 +428,64 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
         except Exception as e:
             print(f"An unexpected error occurred while processing URL {url}: {e}")
 
-    final_proxies_list = list(unique_proxies.values())
-    print(f"Successfully parsed, deduplicated, tested, and aggregated {len(final_proxies_list)} unique and reachable proxy nodes.")
-    return final_proxies_list, list(successful_urls)
+    # --- 去重和连通性测试 (并行化) ---
+    unique_proxies_for_test = {}
+    for proxy_dict in all_raw_proxies:
+        if proxy_dict:
+            fingerprint = generate_proxy_fingerprint(proxy_dict)
+            if fingerprint not in unique_proxies_for_test:
+                unique_proxies_for_test[fingerprint] = proxy_dict
+    
+    proxies_to_test_list = list(unique_proxies_for_test.values())
+    final_filtered_proxies = []
+
+    if enable_connectivity_test:
+        print(f"\n开始并行连通性测试，共 {len(proxies_to_test_list)} 个唯一代理...")
+        # 线程池工作线程数量，根据实际GitHub Actions的CPU和内存限制调整
+        # 通常20-50个线程是比较合理的范围
+        with concurrent.futures.ThreadPoolExecutor(max_workers=30) as executor:
+            # 提交所有代理测试任务
+            # future_to_proxy 映射 future 对象到原始的 proxy_dict
+            future_to_proxy = {
+                executor.submit(test_tcp_connectivity, p['server'], p['port']): p
+                for p in proxies_to_test_list if p.get('server') and isinstance(p.get('port'), int)
+            }
+
+            processed_count = 0
+            total_testable_proxies = len(future_to_proxy) # 实际提交测试的代理数量
+
+            for future in concurrent.futures.as_completed(future_to_proxy):
+                proxy_dict = future_to_proxy[future]
+                server = proxy_dict.get('server')
+                port = proxy_dict.get('port')
+                processed_count += 1
+
+                try:
+                    is_reachable = future.result()
+                    if is_reachable:
+                        # 只有在测试通过后才生成最终的名称和添加到列表
+                        base_name = f"{proxy_dict.get('type', 'unknown').upper()}-{proxy_dict.get('server', 'unknown')}"
+                        proxy_dict['name'] = f"{base_name}-{generate_proxy_fingerprint(proxy_dict)[:8]}"
+                        final_filtered_proxies.append(proxy_dict)
+                        # print(f"    节点可达，已添加: {proxy_dict['name']}") # 并行时减少输出
+                    else:
+                        pass # print(f"    节点不可达（多次尝试后），已跳过: {server}:{port}") # 并行时减少输出
+                except Exception as exc:
+                    print(f"    连通性测试 {server}:{port} 时发生异常: {exc}")
+                
+                # 打印进度 (每50个代理打印一次，或最后一次)
+                if processed_count % 50 == 0 or processed_count == total_testable_proxies:
+                    print(f"    进度: 已测试 {processed_count}/{total_testable_proxies} 个代理...")
+
+    else:
+        print("跳过连通性测试 (已禁用)。所有解析出的唯一代理将被添加。")
+        for proxy_dict in proxies_to_test_list:
+            base_name = f"{proxy_dict.get('type', 'unknown').upper()}-{proxy_dict.get('server', 'unknown')}"
+            proxy_dict['name'] = f"{base_name}-{generate_proxy_fingerprint(proxy_dict)[:8]}"
+            final_filtered_proxies.append(proxy_dict)
+
+    print(f"Successfully parsed, deduplicated, tested, and aggregated {len(final_filtered_proxies)} unique and reachable proxy nodes.")
+    return final_filtered_proxies, list(successful_urls)
 
 # --- GitHub API Helpers (Modified to check ETag if X-GitHub-Sha is missing) ---
 def get_github_file_content(api_url, token):
@@ -466,9 +496,9 @@ def get_github_file_content(api_url, token):
         response = requests.get(api_url, headers=headers, timeout=10)
         
         # 打印所有响应头
-        print("DEBUG: GitHub API 响应头:")
-        for header, value in response.headers.items():
-            print(f"  {header}: {value}")
+        # print("DEBUG: GitHub API 响应头:")
+        # for header, value in response.headers.items():
+        #     print(f"  {header}: {value}")
             
         print(f"DEBUG: GitHub API 响应状态码: {response.status_code}")
         
@@ -487,8 +517,8 @@ def get_github_file_content(api_url, token):
         
         response.raise_for_status()
         
-        print("DEBUG: GitHub API 响应内容片段 (前500字符):")
-        print(response.text[:500])
+        # print("DEBUG: GitHub API 响应内容片段 (前500字符):") # 减少日志输出
+        # print(response.text[:500])
         
         return response.text, sha
     except requests.exceptions.HTTPError as http_err:
