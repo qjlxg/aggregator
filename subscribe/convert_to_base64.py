@@ -43,7 +43,7 @@ def fetch_and_decode_urls(urls):
         # 过滤掉常见的非订阅链接
         # 这里你可以根据你的实际需求调整或增加过滤规则
         if any(keyword in url for keyword in [
-            "github.com", "cdn.jsdelivr.net", "statically.io", "googletagmanager.com",
+            "cdn.jsdelivr.net", "statically.io", "googletagmanager.com",
             "www.w3.org", "fonts.googleapis.com", "schemes.ogf.org", "clashsub.net", # 根据日志，这些也是非订阅链接
             "html", "css", "js", "ico", "png", "jpg", "jpeg", "gif", "svg", "webp" # 常见图片和静态文件
         ]):
