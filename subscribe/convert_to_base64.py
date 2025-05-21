@@ -6,11 +6,11 @@ import re
 import yaml
 from urllib.parse import urlparse, parse_qs, unquote
 import hashlib
-import socket # 用于TCP连接测试
-import time # 用于超时
+import socket
+import time
 
 # --- Proxy Parsing Functions (不变) ---
-# ... (parse_vmess, parse_trojan, parse_shadowsocks, parse_hysteria2, generate_proxy_fingerprint 保持不变) ...
+# ... (parse_vmess, parse_trojan, parse_shadowsocks, parse_hysteria2 保持不变) ...
 def generate_proxy_fingerprint(proxy_data):
     """
     根据代理的关键连接信息生成一个唯一的哈希指纹。
@@ -30,13 +30,13 @@ def generate_proxy_fingerprint(proxy_data):
     parts.append(str(proxy_data.get('ws-path', '')))
     # 对于插件信息，如果它是一个复杂的字典，可能需要将其转换为可哈希的字符串
     # 为了简化和确保单行，我们之前已经将其尝试扁平化为字符串
-    parts.append(str(proxy_data.get('plugin-info', ''))) 
+    parts.append(str(proxy_data.get('plugin-info', '')))
     parts.append(str(proxy_data.get('alpn', ''))) # for hysteria2
 
     # 使用json.dumps来确保字典和列表的顺序一致性，使其可哈希
     # 但由于我们的目标是单行字典，通常不会有嵌套的dict/list作为值
     # 这里直接拼接字符串更高效且符合预期
-    
+
     unique_string = "_".join(parts)
     return hashlib.md5(unique_string.encode('utf-8')).hexdigest()
 
@@ -44,7 +44,7 @@ def parse_vmess(vmess_url):
     try:
         json_str = base64.b64decode(vmess_url[8:]).decode('utf-8')
         config = json.loads(json_str)
-        
+
         name = config.get('ps', f"Vmess-{config.get('add')}")
         server = config.get('add')
         port = config.get('port')
@@ -54,7 +54,7 @@ def parse_vmess(vmess_url):
         network = config.get('net', 'tcp')
         tls = config.get('tls', '') == 'tls'
         servername = config.get('sni', config.get('host', '')) if tls else ''
-        skip_cert_verify = config.get('v', '') == '1' 
+        skip_cert_verify = config.get('v', '') == '1'
 
         proxy = {
             'name': name, # 临时名称，后面会标准化
@@ -72,12 +72,12 @@ def parse_vmess(vmess_url):
             proxy['servername'] = servername
         if skip_cert_verify:
             proxy['skip-cert-verify'] = True
-        
+
         if network == 'ws':
             proxy['ws-path'] = config.get('path', '/')
             if config.get('headers'):
                 # For single-line output, ensure headers are simple or excluded if complex
-                proxy['ws-headers'] = str(config.get('headers')) 
+                proxy['ws-headers'] = str(config.get('headers'))
 
         return proxy
     except Exception as e:
@@ -91,7 +91,7 @@ def parse_trojan(trojan_url):
         server = parsed.hostname
         port = parsed.port
         name = unquote(parsed.fragment) if parsed.fragment else f"Trojan-{server}"
-        
+
         params = parse_qs(parsed.query)
         tls = True
         skip_cert_verify = params.get('allowInsecure', ['0'])[0] == '1'
@@ -109,7 +109,7 @@ def parse_trojan(trojan_url):
             proxy['servername'] = servername
         if skip_cert_verify:
             proxy['skip-cert-verify'] = True
-        
+
         return proxy
     except Exception as e:
         print(f"解析 Trojan 链接失败: {trojan_url[:50]}...，原因: {e}")
@@ -118,7 +118,7 @@ def parse_trojan(trojan_url):
 def parse_shadowsocks(ss_url):
     try:
         encoded_part = ss_url[5:]
-        
+
         if '#' in encoded_part:
             encoded_part, fragment = encoded_part.split('#', 1)
             name = unquote(fragment)
@@ -128,17 +128,17 @@ def parse_shadowsocks(ss_url):
         plugin_info_str = ""
         if '/?plugin=' in encoded_part:
             encoded_part, plugin_info_str = encoded_part.split('/?plugin=', 1)
-        
+
         decoded_str = base64.urlsafe_b64decode(encoded_part + '==').decode('utf-8')
         parts = decoded_str.split('@')
         method_password = parts[0].split(':', 1)
         method = method_password[0]
         password = method_password[1]
-        
+
         server_port = parts[1].split(':')
         server = server_port[0]
         port = int(server_port[1])
-        
+
         proxy = {
             'name': name,
             'type': 'ss',
@@ -150,8 +150,8 @@ def parse_shadowsocks(ss_url):
 
         if plugin_info_str:
             # 存储为字符串，以避免复杂嵌套导致多行
-            proxy['plugin-info'] = plugin_info_str 
-        
+            proxy['plugin-info'] = plugin_info_str
+
         return proxy
     except Exception as e:
         print(f"解析 Shadowsocks 链接失败: {ss_url[:50]}...，原因: {e}")
@@ -185,7 +185,7 @@ def parse_hysteria2(hy2_url):
             proxy['servername'] = servername
         if params.get('alpn'):
             # 将 alpn 列表转换为逗号分隔的字符串
-            proxy['alpn'] = ','.join(params['alpn']) 
+            proxy['alpn'] = ','.join(params['alpn'])
 
         return proxy
     except Exception as e:
@@ -211,12 +211,12 @@ def test_tcp_connectivity(server, port, timeout=3):
 
 # --- Fetch and Decode URLs (Modified for deduplication and naming) ---
 def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
-    unique_proxies = {} 
-    successful_urls = set() # 使用set避免URL本身重复记录
+    unique_proxies = {}
+    successful_urls = set()
 
     EXCLUDE_KEYWORDS = [
         "cdn.jsdelivr.net", "statically.io", "googletagmanager.com",
-        "www.w3.org", "fonts.googleapis.com", "schemes.ogf.org", "clashsub.net", 
+        "www.w3.org", "fonts.googleapis.com", "schemes.ogf.org", "clashsub.net",
         "t.me", "api.w.org",
         "html", "css", "js", "ico", "png", "jpg", "jpeg", "gif", "svg", "webp", "xml", "json", "txt",
         "google-analytics.com", "cloudflare.com/cdn-cgi/", "gstatic.com", "googleapis.com",
@@ -245,7 +245,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
         if any(keyword in url for keyword in EXCLUDE_KEYWORDS):
             print(f"Skipping non-subscription link (filtered by keyword): {url}")
             continue
-            
+
         print(f"Processing URL: {url}")
         try:
             response = requests.get(url, timeout=20)
@@ -280,7 +280,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
             try:
                 decoded_content = content.decode('utf-8')
                 print(f"  --- URL: {url} Successfully decoded to UTF-8 ---")
-                
+
                 yaml_proxies = try_parse_yaml(decoded_content)
                 if yaml_proxies:
                     current_proxies.extend(yaml_proxies)
@@ -316,7 +316,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                                     print(f"  --- URL: {url} Base64 decoded successfully, but content doesn't match known proxy format.---")
                             except (base64.binascii.Error, UnicodeDecodeError):
                                 print(f"  --- URL: {url} Looks like Base64 but failed to decode, treating as plaintext.---")
-                        
+
                         if not current_proxies:
                             lines = decoded_content.split('\n')
                             parsed_line_count = 0
@@ -345,7 +345,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                     cleaned_content = content.strip()
                     temp_decoded = base64.b64decode(cleaned_content).decode('utf-8')
                     print(f"  --- URL: {url} Successfully decoded Base64 content to UTF-8 ---")
-                    
+
                     yaml_proxies = try_parse_yaml(temp_decoded)
                     if yaml_proxies:
                         current_proxies.extend(yaml_proxies)
@@ -388,12 +388,12 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                     continue
 
                 fingerprint = generate_proxy_fingerprint(proxy_dict)
-                
+
                 if fingerprint not in unique_proxies:
                     # 获取服务器和端口，确保它们存在且类型正确
                     server = proxy_dict.get('server')
                     port = proxy_dict.get('port')
-                    
+
                     if enable_connectivity_test and server and isinstance(port, int):
                         print(f"    正在测试连通性: {server}:{port} ...")
                         if not test_tcp_connectivity(server, port):
@@ -406,12 +406,12 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
 
                     # 生成标准化名称：协议-服务器-指纹短ID
                     base_name = f"{proxy_dict.get('type', 'unknown').upper()}-{proxy_dict.get('server', 'unknown')}"
-                    proxy_dict['name'] = f"{base_name}-{fingerprint[:8]}" 
+                    proxy_dict['name'] = f"{base_name}-{fingerprint[:8]}"
                     unique_proxies[fingerprint] = proxy_dict
                     print(f"    添加新代理: {proxy_dict['name']}")
                 else:
                     print(f"    跳过重复代理 (指纹: {fingerprint})")
-            
+
             # 只有当该URL成功解析出至少一个代理（不论是否重复），才认为该URL是成功的
             if current_proxies:
                 successful_urls.add(url)
@@ -423,18 +423,30 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
 
     final_proxies_list = list(unique_proxies.values())
     print(f"Successfully parsed, deduplicated, tested, and aggregated {len(final_proxies_list)} unique and reachable proxy nodes.")
-    return final_proxies_list, list(successful_urls) # 返回列表而非集合
+    return final_proxies_list, list(successful_urls)
 
 # --- GitHub API Helpers (不变) ---
 def get_github_file_content(api_url, token):
     headers = {"Authorization": f"token {token}", "Accept": "application/vnd.github.v3.raw"}
     try:
+        # 添加调试输出
+        print(f"DEBUG: 尝试从 GitHub API 获取文件: {api_url}")
         response = requests.get(api_url, headers=headers, timeout=10)
-        response.raise_for_status()
+        print(f"DEBUG: GitHub API 响应状态码: {response.status_code}")
+        response.raise_for_status() # 这行会在非 2xx 状态码时抛出 HTTPError
         sha = response.headers.get("X-GitHub-Sha")
+        print(f"DEBUG: 获取到 SHA: {sha}")
         return response.text, sha
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching file from GitHub: {e}")
+    except requests.exceptions.HTTPError as http_err:
+        print(f"Error fetching file from GitHub (HTTP Error): {http_err}")
+        if response is not None:
+            print(f"DEBUG: 响应内容: {response.text}")
+        return None, None
+    except requests.exceptions.RequestException as req_err:
+        print(f"Error fetching file from GitHub (Request Error): {req_err}")
+        return None, None
+    except Exception as e:
+        print(f"Error fetching file from GitHub (Other Error): {e}")
         return None, None
 
 def update_github_file_content(repo_contents_api_base, token, file_path, new_content, sha, commit_message):
@@ -463,7 +475,7 @@ def update_github_file_content(repo_contents_api_base, token, file_path, new_con
 def main():
     bot_token = os.environ.get("BOT")
     url_list_repo_api = os.environ.get("URL_LIST_REPO_API")
-    
+
     try:
         parts = url_list_repo_api.split('/')
         owner = parts[4]
@@ -491,14 +503,13 @@ def main():
     print(f"Fetched {len(urls)} subscription URLs from GitHub.")
 
     # 启用连通性测试 (可以改为 False 来禁用)
-    # enable_connectivity_test = True
-    # 如果在 GitHub Actions 中，可以考虑通过环境变量控制此开关
+    # 也可以通过环境变量控制此开关
     enable_connectivity_test = os.environ.get("ENABLE_CONNECTIVITY_TEST", "true").lower() == "true"
 
 
     all_parsed_proxies, successful_urls = fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test)
 
-    # 构建 Clash 完整配置 (不变)
+    # 构建 Clash 完整配置
     clash_config = {
         'port': 7890,
         'socks-port': 7891,
@@ -528,14 +539,14 @@ def main():
                 'tcp://8.8.4.4',
                 'https://dns.opendns.com/dns-query'
             ],
-            'fallback-filter': {
+            'fallback-filter': { # <-- 这里是字典的开始
                 'geoip': True,
                 'geoip-code': 'CN',
                 'ipcidr': [
                     '240.0.0.0/4'
                 ]
-            }
-        },
+            } # <-- 这里是字典的结束，没有多余的 ']'
+        }, # <-- 这是 dns 字典的结束
         'proxies': all_parsed_proxies,
 
         'proxy-groups': [
@@ -592,7 +603,7 @@ def main():
             'MATCH,🐟 漏网之鱼'
         ]
     }
-    
+
     final_clash_yaml = yaml.dump(clash_config, allow_unicode=True, sort_keys=False, default_flow_style=False, indent=2)
 
     final_base64_encoded = base64.b64encode(final_clash_yaml.encode('utf-8')).decode('utf-8')
@@ -602,7 +613,7 @@ def main():
     print("Base64 encoded Clash YAML configuration successfully written to base64.txt")
 
     new_url_list_content = "\n".join(sorted(list(set(successful_urls))))
-    
+
     if new_url_list_content.strip() != url_content.strip():
         print("Updating GitHub url.txt file...")
         commit_message = "feat: Update url.txt with valid subscription links (auto-filtered)"
