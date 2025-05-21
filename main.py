@@ -1,339 +1,463 @@
-# -*- coding: utf-8 -*-
-
-# @Author  : wzdnzd
-# @Time    : 2022-07-15
-
-import argparse
-import itertools
+import urllib.request
+from urllib.parse import urlparse
 import os
-import random
 import re
-import shutil
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import subprocess
-import sys
+import socket
 import time
+from datetime import datetime
+import logging
 
-import crawl
-import executable
-import utils
-import workflow
-import yaml
-from airport import AirPort
-from logger import logger
-from urlvalidator import isurl
-from workflow import TaskConfig
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-import clash
-import subconverter
+# --- Helper Functions (as provided, with minor tweaks) ---
+def read_txt_to_array(file_name):
+    try:
+        with open(file_name, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+            return [line.strip() for line in lines]
+    except FileNotFoundError:
+        logging.error(f"File '{file_name}' not found.")
+        return []
+    except Exception as e:
+        logging.error(f"An error occurred reading '{file_name}': {e}")
+        return []
 
-PATH = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-DATA_BASE = os.path.join(PATH, "data")
+def get_url_file_extension(url):
+    parsed_url = urlparse(url)
+    return os.path.splitext(parsed_url.path)[1]
 
-def assign(
-    bin_name: str,
-    domains_file: str = "",
-    overwrite: bool = False,
-    pages: int = sys.maxsize,
-    rigid: bool = True,
-    display: bool = True,
-    num_threads: int = 0,
-    channels: list = None,
-    **kwargs,
-) -> list[TaskConfig]:
-    def load_exist(filename: str) -> list[str]:
-        if not filename:
-            return []
-
-        subscriptions = set()
-        pattern = r"^https?:\/\/[^\s]+"
-        local_file = os.path.join(DATA_BASE, filename)
-        if os.path.exists(local_file) and os.path.isfile(local_file):
-            with open(local_file, "r", encoding="utf8") as f:
-                items = re.findall(pattern, str(f.read()), flags=re.M)
-                if items:
-                    subscriptions.update(items)
-
-        logger.info("start checking whether existing subscriptions have expired")
-        links = list(subscriptions)
-        results = utils.multi_thread_run(
-            func=crawl.check_status,
-            tasks=links,
-            num_threads=num_threads,
-            show_progress=display,
-        )
-        return [links[i] for i in range(len(links)) if results[i][0] and not results[i][1]]
-
-    def parse_domains(content: str) -> dict:
-        if not content or not isinstance(content, str):
-            logger.warning("cannot found any domain due to content is empty or not string")
-            return {}
-
-        records = {}
-        for line in content.split("\n"):
-            line = utils.trim(line)
-            if not line or line.startswith("#"):
-                continue
-            words = line.rsplit(delimiter, maxsplit=2)
-            address = utils.trim(words[0])
-            coupon = utils.trim(words[1]) if len(words) > 1 else ""
-            invite_code = utils.trim(words[2]) if len(words) > 2 else ""
-            records[address] = {"coupon": coupon, "invite_code": invite_code}
-        return records
-
-    subscribes_file = utils.trim(kwargs.get("subscribes_file", ""))
-    chuck = kwargs.get("chuck", False)
-    channels = channels or ["dingyue_center"]  # 默认频道为 "ji"
-
-    # 加载已有订阅
-    subscriptions = load_exist(subscribes_file)
-    logger.info(f"load exists subscription finished, count: {len(subscriptions)}")
-
-    special_protocols = AirPort.enable_special_protocols()
-    tasks = (
-        [
-            TaskConfig(name=utils.random_chars(length=8), sub=x, bin_name=bin_name, special_protocols=special_protocols)
-            for x in subscriptions
-            if x
-        ]
-        if subscriptions
-        else []
-    )
-
-    if tasks and kwargs.get("refresh", False):
-        logger.info("skip registering new accounts, will use existing subscriptions for refreshing")
-        return tasks
-
-    domains, delimiter = {}, "@#@#"
-    domains_file = utils.trim(domains_file) or "domains.txt"
-    fullpath = os.path.join(DATA_BASE, domains_file)
-
-    if os.path.exists(fullpath) and os.path.isfile(fullpath):
-        with open(fullpath, "r", encoding="UTF8") as f:
-            domains.update(parse_domains(content=str(f.read())))
-
-    if not domains or overwrite:
-        for channel in channels:
-            candidates = crawl.collect_airport(
-                channel=channel,
-                page_num=pages,
-                num_thread=num_threads,
-                rigid=rigid,
-                display=display,
-                filepath=os.path.join(DATA_BASE, "coupons.txt"),
-                delimiter=delimiter,
-                chuck=chuck,
-            )
-            if candidates:
-                for k, v in candidates.items():
-                    item = domains.get(k, {})
-                    item["coupon"] = v
-                    domains[k] = item
-        overwrite = True
-
-    customize_link = utils.trim(kwargs.get("customize_link", ""))
-    if customize_link:
-        if isurl(customize_link):
-            domains.update(parse_domains(content=utils.http_get(url=customize_link)))
-        else:
-            local_file = os.path.join(DATA_BASE, customize_link)
-            if local_file != fullpath and os.path.exists(local_file) and os.path.isfile(local_file):
-                with open(local_file, "r", encoding="UTF8") as f:
-                    domains.update(parse_domains(content=str(f.read())))
-
-    if not domains:
-        logger.error("cannot collect any new airport for free use")
-        return tasks
-
-    if overwrite:
-        crawl.save_candidates(candidates=domains, filepath=fullpath, delimiter=delimiter)
-
-    for domain, param in domains.items():
-        name = crawl.naming_task(url=domain)
-        tasks.append(
-            TaskConfig(
-                name=name,
-                domain=domain,
-                coupon=param.get("coupon", ""),
-                invite_code=param.get("invite_code", ""),
-                bin_name=bin_name,
-                rigid=rigid,
-                chuck=chuck,
-                special_protocols=special_protocols,
-            )
-        )
-    return tasks
-
-def aggregate(args: argparse.Namespace) -> None:
-    clash_bin, subconverter_bin = executable.which_bin()
-    display = not args.invisible
-    subscribes_file = "subscribes.txt"
-
-    tasks = assign(
-        bin_name=subconverter_bin,
-        domains_file="domains.txt",
-        overwrite=args.overwrite,
-        pages=args.pages,
-        rigid=not args.easygoing,
-        display=display,
-        num_threads=args.num,
-        refresh=args.refresh,
-        chuck=args.chuck,
-        subscribes_file=subscribes_file,
-        customize_link=args.yourself,
-        channels=args.channels.split(",") if args.channels else ["ji"],
-    )
-
-    if not tasks:
-        logger.error("cannot found any valid config, exit")
-        sys.exit(0)
-
-    old_subscriptions = set([t.sub for t in tasks if t.sub])
-    logger.info(f"start generate subscribes information, tasks: {len(tasks)}")
-    generate_conf = os.path.join(PATH, "subconverter", "generate.ini")
-    if os.path.exists(generate_conf) and os.path.isfile(generate_conf):
-        os.remove(generate_conf)
-
-    results = utils.multi_thread_run(func=workflow.executewrapper, tasks=tasks, num_threads=args.num)
-    proxies = list(itertools.chain.from_iterable([x[1] for x in results if x]))
-
-    if len(proxies) == 0:
-        logger.error("exit because cannot fetch any proxy node")
-        sys.exit(0)
-
-    nodes, workspace = [], os.path.join(PATH, "clash")
-    if args.skip:
-        nodes = clash.filter_proxies(proxies).get("proxies", [])
-    else:
-        binpath = os.path.join(workspace, clash_bin)
-        confif_file = "config.yaml"
-        proxies = clash.generate_config(workspace, list(proxies), confif_file)
-        utils.chmod(binpath)
-        logger.info(f"startup clash now, workspace: {workspace}, config: {confif_file}")
-        process = subprocess.Popen(
-            [binpath, "-d", workspace, "-f", os.path.join(workspace, confif_file)]
-        )
-        logger.info(f"clash start success, begin check proxies, num: {len(proxies)}")
-        time.sleep(random.randint(3, 6))
-        params = [
-            [p, clash.EXTERNAL_CONTROLLER, 5000, args.url, args.delay, False] for p in proxies if isinstance(p, dict)
-        ]
-        masks = utils.multi_thread_run(
-            func=clash.check,
-            tasks=params,
-            num_threads=args.num,
-            show_progress=display,
-        )
-        try:
-            process.terminate()
-        except:
-            logger.error(f"terminate clash process error")
-        nodes = [proxies[i] for i in range(len(proxies)) if masks[i]]
-        if len(nodes) <= 0:
-            logger.error(f"cannot fetch any proxy")
-            sys.exit(0)
-
-    subscriptions = set()
-    for p in proxies:
-        p.pop("chatgpt", False)
-        p.pop("liveness", True)
-        sub = p.pop("sub", "")
-        if sub:
-            subscriptions.add(sub)
-
-    data = {"proxies": nodes}
-    urls = list(subscriptions)
-    source = "proxies.yaml"
-    os.makedirs(DATA_BASE, exist_ok=True)
-    supplier = os.path.join(PATH, "subconverter", source)
-    if os.path.exists(supplier) and os.path.isfile(supplier):
-        os.remove(supplier)
-
-    with open(supplier, "w+", encoding="utf8") as f:
-        yaml.dump(data, f, allow_unicode=True)
-
-    if os.path.exists(generate_conf) and os.path.isfile(generate_conf):
-        os.remove(generate_conf)
-
-    targets, records = [], {}
-    for target in args.targets:
-        target = utils.trim(target).lower()
-        convert_name = f'convert_{target.replace("&", "_").replace("=", "_")}'
-        filename = subconverter.get_filename(target=target)
-        list_only = False if target == "v2ray" or target == "mixed" or "ss" in target else not args.all
-        targets.append((convert_name, filename, target, list_only, args.vitiate))
-
-    for t in targets:
-        success = subconverter.generate_conf(generate_conf, t[0], source, t[1], t[2], True, t[3], t[4])
-        if not success:
-            logger.error(f"cannot generate subconverter config file for target: {t[2]}")
+def convert_m3u_to_txt(m3u_content):
+    lines = m3u_content.split('\n')
+    txt_lines = []
+    channel_name = ""
+    for line in lines:
+        if line.startswith("#EXTM3U"):
             continue
-        if subconverter.convert(binname=subconverter_bin, artifact=t[0]):
-            filepath = os.path.join(DATA_BASE, t[1])
-            shutil.move(os.path.join(PATH, "subconverter", t[1]), filepath)
-            records[t[1]] = filepath
+        if line.startswith("#EXTINF"):
+            channel_name = line.split(',')[-1].strip()
+        elif line.startswith(("http", "rtmp", "p3p")):
+            txt_lines.append(f"{channel_name},{line.strip()}")
+    return '\n'.join(txt_lines)
 
-    if len(records) > 0:
-        os.remove(supplier)
-    else:
-        logger.error(f"all targets convert failed, you can view the temporary file: {supplier}")
-        sys.exit(1)
+def clean_url_params(url):
+    # Remove everything after the last '$'
+    last_dollar_index = url.rfind('$')
+    if last_dollar_index != -1:
+        return url[:last_dollar_index]
+    return url
 
-    logger.info(f"found {len(nodes)} proxies, save it to {list(records.values())}")
-    life, traffic = max(0, args.life), max(0, args.flow)
-    if life > 0 or traffic > 0:
-        new_subscriptions = [x for x in urls if x not in old_subscriptions]
-        tasks = [[x, 2, traffic, life, 0, True] for x in new_subscriptions]
-        results = utils.multi_thread_run(
-            func=crawl.check_status,
-            tasks=tasks,
-            num_threads=args.num,
-            show_progress=display,
-        )
-        total = len(urls)
-        urls = [new_subscriptions[i] for i in range(len(new_subscriptions)) if results[i][0] and not results[i][1]]
-        discard = len(tasks) - len(urls)
-        urls.extend(list(old_subscriptions))
-        logger.info(f"filter subscriptions finished, total: {total}, found: {len(urls)}, discard: {discard}")
+def process_single_url_source(url, timeout=10):
+    """Fetches and parses channels from a given URL."""
+    try:
+        logging.info(f"Processing URL: {url}")
+        with urllib.request.urlopen(url, timeout=timeout) as response:
+            data = response.read()
+            text = data.decode('utf-8')
 
-    utils.write_file(filename=os.path.join(DATA_BASE, subscribes_file), lines=urls)
-    domains = [utils.extract_domain(url=x, include_protocal=True) for x in urls]
-    utils.write_file(filename=os.path.join(DATA_BASE, "valid-domains.txt"), lines=list(set(domains)))
-    workflow.cleanup(workspace, [])
+            if get_url_file_extension(url) in (".m3u", ".m3u8"):
+                text = convert_m3u_to_txt(text)
 
-class CustomHelpFormatter(argparse.HelpFormatter):
-    def _format_action_invocation(self, action):
-        if action.choices:
-            parts = []
-            if action.option_strings:
-                parts.extend(action.option_strings)
-                if action.nargs != 0 and action.option_strings != ["-t", "--targets"]:
-                    default = action.dest.upper()
-                    args_string = self._format_args(action, default)
-                    parts[-1] += " " + args_string
-            else:
-                args_string = self._format_args(action, action.dest)
-                parts.append(args_string)
-            return ", ".join(parts)
+            channels = []
+            for line in text.split('\n'):
+                if "#genre#" not in line and "," in line and "://" in line:
+                    parts = line.split(',')
+                    channel_name = parts[0].strip()
+                    channel_address_raw = parts[1].strip()
+
+                    # Handle multiple URLs separated by '#'
+                    if "#" in channel_address_raw:
+                        url_list = channel_address_raw.split('#')
+                        for sub_url in url_list:
+                            channels.append((channel_name, clean_url_params(sub_url)))
+                    else:
+                        channels.append((channel_name, clean_url_params(channel_address_raw)))
+            logging.info(f"Found {len(channels)} channels from {url}")
+            return channels
+    except Exception as e:
+        logging.error(f"Error processing URL {url}: {e}")
+        return []
+
+def filter_and_modify_channels(channels_list):
+    """Filters channels based on name/URL blacklists and cleans names."""
+    filtered_channels = []
+    # These could come from a config file
+    name_blacklist = ['购物', '理财', '导视', '指南', '测试', '芒果', 'CGTN']
+    url_blacklist = [] # '2409:' for IPv6 example
+
+    for name, url in channels_list:
+        if any(word.lower() in name.lower() for word in name_blacklist) or \
+           any(word in url for word in url_blacklist):
+            logging.info(f"Filtering channel: {name},{url}")
         else:
-            return super()._format_action_invocation(action)
+            # More efficient name cleaning using regex
+            name = re.sub(r'(FHD|HD|hd|频道|高清|超清|20M|-|4k|4K|4kR)', '', name, flags=re.IGNORECASE).strip()
+            filtered_channels.append((name, url))
+    return filtered_channels
+
+def clear_txt_files(directory):
+    """Deletes all .txt files in a given directory."""
+    for filename in os.listdir(directory):
+        if filename.endswith('.txt'):
+            file_path = os.path.join(directory, filename)
+            try:
+                os.remove(file_path)
+                logging.info(f"Deleted old file: {file_path}")
+            except Exception as e:
+                logging.error(f"Error deleting file {file_path}: {e}")
+
+# --- URL Health Check Functions ---
+def check_http_url(url, timeout):
+    try:
+        response = urllib.request.urlopen(url, timeout=timeout)
+        return response.status == 200
+    except Exception as e:
+        logging.debug(f"HTTP check failed for {url}: {e}")
+        return False
+
+def check_rtmp_url(url, timeout):
+    try:
+        # Check if ffprobe is available
+        subprocess.run(['ffprobe', '-h'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        logging.warning("ffprobe not found. RTMP streams cannot be checked.")
+        return False
+    try:
+        result = subprocess.run(
+            ['ffprobe', '-v', 'error', '-rtmp_transport', 'tcp', '-i', url],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout
+        )
+        return result.returncode == 0
+    except subprocess.TimeoutExpired:
+        logging.debug(f"RTMP check timed out for {url}")
+        return False
+    except Exception as e:
+        logging.debug(f"RTMP check error for {url}: {e}")
+        return False
+
+def check_rtp_url(url, timeout):
+    try:
+        parsed_url = urlparse(url)
+        host = parsed_url.hostname
+        port = parsed_url.port
+        if not host or not port:
+            return False
+
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.settimeout(timeout)
+            s.connect((host, port))
+            s.sendto(b'', (host, port)) # Send a dummy packet
+            s.recv(1) # Try to receive a response
+        return True
+    except (socket.timeout, socket.error) as e:
+        logging.debug(f"RTP check failed for {url}: {e}")
+        return False
+
+def check_p3p_url(url, timeout):
+    try:
+        parsed_url = urlparse(url)
+        host = parsed_url.hostname
+        port = parsed_url.port
+        path = parsed_url.path
+        if not host or not port:
+            return False
+
+        with socket.create_connection((host, port), timeout=timeout) as s:
+            request = f"GET {path} P3P/1.0\r\nHost: {host}\r\n\r\n"
+            s.sendall(request.encode())
+            response = s.recv(1024)
+            return b"P3P" in response
+    except Exception as e:
+        logging.debug(f"P3P check failed for {url}: {e}")
+        return False
+
+def check_channel_url(channel_info, timeout=6):
+    """Checks the validity and response time of a channel URL."""
+    channel_name, url = channel_info
+    start_time = time.time()
+    is_valid = False
+    
+    try:
+        if url.startswith("http"):
+            is_valid = check_http_url(url, timeout)
+        elif url.startswith("p3p"):
+            is_valid = check_p3p_url(url, timeout)
+        elif url.startswith("rtmp"):
+            is_valid = check_rtmp_url(url, timeout)
+        elif url.startswith("rtp"):
+            is_valid = check_rtp_url(url, timeout)
+        else:
+            logging.debug(f"Unsupported protocol for {url}")
+            return None, False
+
+        elapsed_time = (time.time() - start_time) * 1000 # Milliseconds
+        if is_valid:
+            logging.info(f"Checked success: {channel_name},{url} - {elapsed_time:.0f} ms")
+            return elapsed_time, f"{channel_name},{url}"
+        else:
+            logging.debug(f"Check failed for {channel_name},{url}")
+            return None, False
+    except Exception as e:
+        logging.error(f"Error during check for {channel_name}, {url}: {e}")
+        return None, False
+
+def validate_channels_multithreaded(channels, max_workers=200):
+    """Validates a list of (name, url) tuples using multiple threads."""
+    results = []
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Pass a tuple (name, url) to the worker function
+        futures = {executor.submit(check_channel_url, channel): channel for channel in channels}
+        for future in as_completed(futures):
+            elapsed_time, result_str = future.result()
+            if result_str: # result_str will be None if check failed
+                results.append((elapsed_time, result_str))
+    
+    results.sort(key=lambda x: x[0]) # Sort by elapsed time
+    return results
+
+def write_channels_to_file(file_path, data_list):
+    """Writes a list of (elapsed_time, channel_string) tuples to a file."""
+    with open(file_path, 'w', encoding='utf-8') as file:
+        for elapsed_time, channel_str in data_list:
+            file.write(channel_str + '\n')
+    logging.info(f"Channels written to {file_path}")
+
+def sort_cctv_channels(channels):
+    """Sorts CCTV channels numerically."""
+    def channel_key(channel_name_full):
+        # Extract just the channel name part before the comma for sorting
+        channel_name = channel_name_full.split(',')[0]
+        match = re.search(r'\d+', channel_name)
+        if match:
+            return int(match.group())
+        return float('inf') # Non-numeric names go to the end
+    
+    # Sort the list of channel strings directly
+    return sorted(channels, key=channel_key)
+
+def merge_and_finalize_iptv_list(local_channels_directory, final_output_file="iptv_list.txt"):
+    """Merges sorted IPTV files into a final list."""
+    merged_content_lines = []
+    
+    # Define preferred order for categories
+    ordered_categories = ["央视频道", "卫视频道", "湖南频道", "港台频道"]
+    
+    # Get all _iptv.txt files, excluding those in ordered_categories for now
+    all_iptv_files = [f for f in os.listdir(local_channels_directory) if f.endswith('_iptv.txt')]
+    
+    # Process ordered categories first
+    for category in ordered_categories:
+        file_name = f"{category}_iptv.txt"
+        if file_name in all_iptv_files:
+            file_path = os.path.join(local_channels_directory, file_name)
+            with open(file_path, "r", encoding="utf-8") as file:
+                lines = file.readlines()
+                if lines: # Add category header and content if file is not empty
+                    merged_content_lines.extend(lines)
+            all_iptv_files.remove(file_name)
+
+    # Add remaining categories alphabetically
+    for file_name in sorted(all_iptv_files):
+        file_path = os.path.join(local_channels_directory, file_name)
+        with open(file_path, "r", encoding="utf-8") as file:
+            lines = file.readlines()
+            if lines:
+                merged_content_lines.extend(lines)
+
+    # Add update time
+    now = datetime.now()
+    update_time_lines = [
+        f"更新时间,#genre#\n",
+        f"{now.strftime('%Y-%m-%d')},url\n",
+        f"{now.strftime('%H:%M:%S')},url\n"
+    ]
+
+    # Group channels by name and limit to top N (e.g., 200)
+    channels_grouped = {}
+    for line in merged_content_lines:
+        line = line.strip()
+        if line and '#genre#' not in line: # Exclude genre lines from grouping
+            parts = line.split(',', 1) # Split only on the first comma
+            if len(parts) == 2:
+                channel_name = parts[0].strip()
+                if channel_name not in channels_grouped:
+                    channels_grouped[channel_name] = []
+                # Add the full line, ensuring it's exactly as intended for output
+                channels_grouped[channel_name].append(line + '\n')
+
+    final_output_lines = []
+    final_output_lines.extend(update_time_lines) # Add update time at the beginning
+
+    # Re-add genre headers before their respective channel blocks
+    # This requires re-reading the categories or managing them alongside
+    # For simplicity, we'll re-iterate ordered categories for headers
+    # A more robust solution might pass the original 'template_name' along
+
+    # This part requires careful reconstruction to maintain genre headers.
+    # A better approach might be to build `merged_content_lines` with genre headers already in place
+    # and then process for max_channels_per_group.
+
+    # For now, let's just write the grouped channels after the update time.
+    # You might want to reconstruct genre headers explicitly here if desired.
+    for category in ordered_categories:
+        file_name = f"{category}_iptv.txt"
+        file_path = os.path.join(local_channels_directory, file_name)
+        if os.path.exists(file_path):
+             with open(file_path, "r", encoding="utf-8") as file:
+                 lines = file.readlines()
+                 genre_header = ""
+                 channels_for_category = []
+                 for line in lines:
+                     if '#genre#' in line:
+                         genre_header = line
+                     else:
+                         channels_for_category.append(line.strip())
+                 
+                 if genre_header:
+                     final_output_lines.append(genre_header)
+                 
+                 processed_count = 0
+                 for channel_line in channels_for_category:
+                     name = channel_line.split(',', 1)[0]
+                     if name in channels_grouped and processed_count < 200:
+                         # Append the actual channel line, not just its name
+                         final_output_lines.append(channel_line + '\n')
+                         processed_count += 1
+                         
+    # For remaining categories (not in ordered_categories)
+    # This part needs to be carefully aligned with the initial file merging
+    # The current grouping logic assumes unique channel names across all files,
+    # which might not be what you want for genre separation.
+
+    # A more robust approach for merging and grouping:
+    # 1. Collect all channels with their original genre context.
+    # 2. Validate all channels.
+    # 3. Then, for each genre, apply sorting and grouping, then write.
+    # This avoids the complex "reconstruction" of headers.
+
+    # Let's simplify the final merge step for demonstration:
+    # Assuming `merged_content_lines` now contains all lines (including genre headers)
+    # in the desired order after initial merging.
+    
+    final_combined_output = []
+    final_combined_output.extend(update_time_lines)
+
+    current_genre_lines = []
+    current_channels_in_genre = []
+    
+    for line in merged_content_lines:
+        line = line.strip()
+        if '#genre#' in line:
+            # Process previous genre's channels before adding new genre header
+            if current_genre_lines:
+                final_combined_output.extend(current_genre_lines)
+                
+                # Apply grouping/limiting for this genre's channels
+                genre_channels_grouped = {}
+                for ch_line in current_channels_in_genre:
+                    ch_name = ch_line.split(',',1)[0].strip()
+                    if ch_name not in genre_channels_grouped:
+                        genre_channels_grouped[ch_name] = []
+                    genre_channels_grouped[ch_name].append(ch_line + '\n')
+
+                for ch_name in genre_channels_grouped:
+                    for processed_line in genre_channels_grouped[ch_name][:200]:
+                        final_combined_output.append(processed_line)
+
+            current_genre_lines = [line + '\n']
+            current_channels_in_genre = []
+        elif line: # Regular channel line
+            current_channels_in_genre.append(line)
+    
+    # Process the last genre's channels
+    if current_genre_lines:
+        final_combined_output.extend(current_genre_lines)
+        genre_channels_grouped = {}
+        for ch_line in current_channels_in_genre:
+            ch_name = ch_line.split(',',1)[0].strip()
+            if ch_name not in genre_channels_grouped:
+                genre_channels_grouped[ch_name] = []
+            genre_channels_grouped[ch_name].append(ch_line + '\n')
+        for ch_name in genre_channels_grouped:
+            for processed_line in genre_channels_grouped[ch_name][:200]:
+                final_combined_output.append(processed_line)
+
+    with open(final_output_file, "w", encoding="utf-8") as iptv_list_file:
+        iptv_list_file.writelines(final_combined_output)
+    
+    logging.info(f"Final IPTV list merged to: {final_output_file}")
+
+
+# --- Main Execution Flow ---
+def main():
+    config_dir = os.path.join(os.getcwd(), 'config')
+    os.makedirs(config_dir, exist_ok=True)
+    urls_file_path = os.path.join(config_dir, 'urls.txt')
+
+    local_channels_directory = os.path.join(os.getcwd(), '地方频道')
+    os.makedirs(local_channels_directory, exist_ok=True)
+    clear_txt_files(local_channels_directory) # Clear old files
+
+    template_directory = os.path.join(os.getcwd(), '频道模板')
+    os.makedirs(template_directory, exist_ok=True)
+
+    # 1. Collect and filter initial channel lists from URLs
+    urls_to_process = read_txt_to_array(urls_file_path)
+    all_raw_channels = []
+    for url in urls_to_process:
+        all_raw_channels.extend(process_single_url_source(url))
+
+    filtered_unique_channels = list(set(filter_and_modify_channels(all_raw_channels)))
+    logging.info(f"Collected and filtered {len(filtered_unique_channels)} unique channels.")
+
+    # 2. Validate channel URLs (multithreaded)
+    # The check_channel_url expects (name, url) tuple directly
+    validated_channels_with_times = validate_channels_multithreaded(filtered_unique_channels)
+    logging.info(f"Validated {len(validated_channels_with_times)} channels.")
+
+    # 3. Write validated channels to iptv_speed.txt (optional intermediate)
+    iptv_speed_file_path = os.path.join(os.getcwd(), 'iptv_speed.txt')
+    write_channels_to_file(iptv_speed_file_path, validated_channels_with_times)
+
+    # 4. Categorize and save channels based on templates
+    iptv_speed_channels_raw = [item[1] for item in validated_channels_with_times] # Get "name,url" strings
+    
+    template_files = [f for f in os.listdir(template_directory) if f.endswith('.txt')]
+
+    for template_file in template_files:
+        template_channels_names = read_txt_to_array(os.path.join(template_directory, template_file))
+        template_name = os.path.splitext(template_file)[0]
+
+        # Filter channels that match names in the current template
+        matched_channels_for_template = [
+            channel_line for channel_line in iptv_speed_channels_raw
+            if channel_line.split(',')[0].strip() in template_channels_names
+        ]
+        
+        # Sort CCTV channels if it's the CCTV template
+        if "央视" in template_name or "CCTV" in template_name:
+            matched_channels_for_template = sort_cctv_channels(matched_channels_for_template)
+            
+        # Add genre header and write to output file
+        output_file_path = os.path.join(local_channels_directory, f"{template_name}_iptv.txt")
+        with open(output_file_path, 'w', encoding='utf-8') as f:
+            f.write(f"{template_name},#genre#\n")
+            for channel_line in matched_channels_for_template:
+                f.write(channel_line + '\n')
+        logging.info(f"Categorized channels written to: {output_file_path}")
+
+    # 5. Merge all categorized _iptv.txt files into a final list
+    merge_and_finalize_iptv_list(local_channels_directory)
+
+    # 6. Clean up temporary files
+    try:
+        os.remove('iptv.txt') # This one might not be created anymore with new flow
+        os.remove('iptv_speed.txt')
+        logging.info("Cleaned up temporary files: iptv.txt, iptv_speed.txt")
+    except OSError as e:
+        logging.warning(f"Could not remove temporary files: {e}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(formatter_class=CustomHelpFormatter)
-    parser.add_argument("--channels", type=str, required=False, default="ji", help="Comma-separated list of channel sources")
-    parser.add_argument("-a", "--all", dest="all", action="store_true", default=False, help="generate full configuration for clash")
-    parser.add_argument("-c", "--chuck", dest="chuck", action="store_true", default=False, help="discard candidate sites that may require human-authentication")
-    parser.add_argument("-d", "--delay", type=int, required=False, default=5000, help="proxies max delay allowed")
-    parser.add_argument("-e", "--easygoing", dest="easygoing", action="store_true", default=False, help="try registering with a gmail alias when you encounter a whitelisted mailbox")
-    parser.add_argument("-f", "--flow", type=int, required=False, default=0, help="remaining traffic available for use, unit: GB")
-    parser.add_argument("-i", "--invisible", dest="invisible", action="store_true", default=False, help="don't show check progress bar")
-    parser.add_argument("-l", "--life", type=int, required=False, default=0, help="remaining life time, unit: hours")
-    parser.add_argument("-n", "--num", type=int, required=False, default=64, help="threads num for check proxy")
-    parser.add_argument("-o", "--overwrite", dest="overwrite", action="store_true", default=False, help="overwrite domains")
-    parser.add_argument("-p", "--pages", type=int, required=False, default=sys.maxsize, help="max page number when crawling telegram")
-    parser.add_argument("-r", "--refresh", dest="refresh", action="store_true", default=False, help="refresh and remove expired proxies with existing subscriptions")
-    parser.add_argument("-s", "--skip", dest="skip", action="store_true", default=False, help="skip usability checks")
-    parser.add_argument("-t", "--targets", nargs="+", choices=subconverter.CONVERT_TARGETS, default=["clash", "v2ray", "singbox"], help=f"choose one or more generated profile type. default to clash, v2ray and singbox. supported: {subconverter.CONVERT_TARGETS}")
-    parser.add_argument("-u", "--url", type=str, required=False, default="https://www.google.com/generate_204", help="test url")
-    parser.add_argument("-v", "--vitiate", dest="vitiate", action="store_true", default=False, help="ignoring default proxies filter rules")
-    parser.add_argument("-y", "--yourself", type=str, required=False, default=os.environ.get("CUSTOMIZE_LINK", ""), help="the url to the list of airports that you maintain yourself")
-    aggregate(args=parser.parse_args())
+    main()
