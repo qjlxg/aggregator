@@ -9,8 +9,7 @@ import hashlib
 import socket
 import time
 
-# --- Proxy Parsing Functions (不变) ---
-# ... (parse_vmess, parse_trojan, parse_shadowsocks, parse_hysteria2 保持不变) ...
+# --- Proxy Parsing Functions ---
 def generate_proxy_fingerprint(proxy_data):
     """
     根据代理的关键连接信息生成一个唯一的哈希指纹。
@@ -28,14 +27,8 @@ def generate_proxy_fingerprint(proxy_data):
     parts.append(str(proxy_data.get('tls', '')))
     parts.append(str(proxy_data.get('servername', '')))
     parts.append(str(proxy_data.get('ws-path', '')))
-    # 对于插件信息，如果它是一个复杂的字典，可能需要将其转换为可哈希的字符串
-    # 为了简化和确保单行，我们之前已经将其尝试扁平化为字符串
     parts.append(str(proxy_data.get('plugin-info', '')))
-    parts.append(str(proxy_data.get('alpn', ''))) # for hysteria2
-
-    # 使用json.dumps来确保字典和列表的顺序一致性，使其可哈希
-    # 但由于我们的目标是单行字典，通常不会有嵌套的dict/list作为值
-    # 这里直接拼接字符串更高效且符合预期
+    parts.append(str(proxy_data.get('alpn', '')))
 
     unique_string = "_".join(parts)
     return hashlib.md5(unique_string.encode('utf-8')).hexdigest()
@@ -57,7 +50,7 @@ def parse_vmess(vmess_url):
         skip_cert_verify = config.get('v', '') == '1'
 
         proxy = {
-            'name': name, # 临时名称，后面会标准化
+            'name': name,
             'type': 'vmess',
             'server': server,
             'port': port,
@@ -76,7 +69,6 @@ def parse_vmess(vmess_url):
         if network == 'ws':
             proxy['ws-path'] = config.get('path', '/')
             if config.get('headers'):
-                # For single-line output, ensure headers are simple or excluded if complex
                 proxy['ws-headers'] = str(config.get('headers'))
 
         return proxy
@@ -119,42 +111,80 @@ def parse_shadowsocks(ss_url):
     try:
         encoded_part = ss_url[5:]
 
+        name = "Shadowsocks"
+        plugin_info_str = ""
+
         if '#' in encoded_part:
             encoded_part, fragment = encoded_part.split('#', 1)
             name = unquote(fragment)
-        else:
-            name = "Shadowsocks"
 
-        plugin_info_str = ""
         if '/?plugin=' in encoded_part:
             encoded_part, plugin_info_str = encoded_part.split('/?plugin=', 1)
+            plugin_info_str = unquote(plugin_info_str)
 
-        decoded_str = base64.urlsafe_b64decode(encoded_part + '==').decode('utf-8')
-        parts = decoded_str.split('@')
-        method_password = parts[0].split(':', 1)
-        method = method_password[0]
-        password = method_password[1]
+        missing_padding = len(encoded_part) % 4
+        if missing_padding:
+            encoded_part += '=' * (4 - missing_padding)
+        
+        try:
+            # 尝试使用 utf-8 解码，如果失败则尝试 latin-1
+            decoded_bytes = base64.urlsafe_b64decode(encoded_part)
+            try:
+                decoded_str = decoded_bytes.decode('utf-8')
+            except UnicodeDecodeError:
+                decoded_str = decoded_bytes.decode('latin-1', errors='ignore')
+                print(f"    Warning: Shadowsocks link decoded to non-UTF-8 characters, using latin-1 for {ss_url[:50]}...")
+            
+            # 关键修改：只取第一个 '@' 之前和之后的部分，忽略所有后续内容
+            parts = decoded_str.split('@', 1) # 只分割一次
+            
+            if len(parts) != 2:
+                raise ValueError(f"Invalid format after base64 decoding: Missing '@' separator or incorrect structure.")
 
-        server_port = parts[1].split(':')
-        server = server_port[0]
-        port = int(server_port[1])
+            method_password = parts[0]
+            server_port_and_tail = parts[1] # 包含服务器和端口，以及可能存在的后续乱码
 
-        proxy = {
-            'name': name,
-            'type': 'ss',
-            'server': server,
-            'port': port,
-            'cipher': method,
-            'password': password,
-        }
+            # 进一步清理 server_port_and_tail，只保留有效的服务器:端口部分
+            # 正则表达式匹配：
+            # ^                  - 字符串开头
+            # [\w\d\.\-]+       - 匹配一个或多个单词字符（字母、数字、下划线）、数字、点或连字符（用于服务器名）
+            # :                  - 匹配冒号
+            # \d+                - 匹配一个或多个数字（端口号）
+            clean_server_port_match = re.match(r'^[\w\d\.\-]+\:\d+', server_port_and_tail)
+            if clean_server_port_match:
+                server_port_str = clean_server_port_match.group(0)
+            else:
+                raise ValueError(f"Invalid server:port format in: '{server_port_and_tail}'")
 
-        if plugin_info_str:
-            # 存储为字符串，以避免复杂嵌套导致多行
-            proxy['plugin-info'] = plugin_info_str
+            method_password_parts = method_password.split(':', 1)
+            if len(method_password_parts) != 2:
+                raise ValueError(f"Invalid method:password format: '{method_password}'")
+            method = method_password_parts[0]
+            password = method_password_parts[1]
 
-        return proxy
+            server_port_parts = server_port_str.split(':')
+            if len(server_port_parts) != 2:
+                raise ValueError(f"Invalid server:port format: '{server_port_str}'")
+            server = server_port_parts[0]
+            port = int(server_port_parts[1])
+
+            proxy = {
+                'name': name,
+                'type': 'ss',
+                'server': server,
+                'port': port,
+                'cipher': method,
+                'password': password,
+            }
+
+            if plugin_info_str:
+                proxy['plugin-info'] = plugin_info_str
+
+            return proxy
+        except (base64.binascii.Error) as b64_err:
+            raise ValueError(f"Base64 decoding error: {b64_err}")
     except Exception as e:
-        print(f"解析 Shadowsocks 链接失败: {ss_url[:50]}...，原因: {e}")
+        print(f"解析 Shadowsocks 链接失败: {ss_url[:100]}...，原因: {e}")
         return None
 
 def parse_hysteria2(hy2_url):
@@ -184,7 +214,6 @@ def parse_hysteria2(hy2_url):
         if servername:
             proxy['servername'] = servername
         if params.get('alpn'):
-            # 将 alpn 列表转换为逗号分隔的字符串
             proxy['alpn'] = ','.join(params['alpn'])
 
         return proxy
@@ -192,22 +221,26 @@ def parse_hysteria2(hy2_url):
         print(f"解析 Hysteria2 链接失败: {hy2_url[:50]}...，原因: {e}")
         return None
 
-# --- 连通性测试函数 ---
-def test_tcp_connectivity(server, port, timeout=3):
+# --- Connectivity Test Function ---
+def test_tcp_connectivity(server, port, timeout=3, retries=2, delay=1):
     """
     尝试与指定的服务器和端口建立TCP连接，测试连通性。
+    增加重试机制，以应对瞬时网络抖动或服务器短暂问题。
     返回 True 如果连接成功，否则返回 False。
     """
-    try:
-        sock = socket.create_connection((server, port), timeout=timeout)
-        sock.close()
-        return True
-    except (socket.timeout, ConnectionRefusedError, OSError) as e:
-        # print(f"  TCP连接测试失败: {server}:{port} - {e}")
-        return False
-    except Exception as e:
-        print(f"  TCP连接测试发生未知错误: {server}:{port} - {e}")
-        return False
+    for i in range(retries + 1): # retries + 1 = 第一次尝试 + 重试次数
+        try:
+            sock = socket.create_connection((server, port), timeout=timeout)
+            sock.close()
+            return True
+        except (socket.timeout, ConnectionRefusedError, OSError) as e:
+            print(f"    连接尝试 {i+1}/{retries+1} 失败 for {server}:{port} - {e}")
+            if i < retries: # 如果不是最后一次尝试，则等待并重试
+                time.sleep(delay)
+        except Exception as e:
+            print(f"  TCP连接测试发生未知错误: {server}:{port} - {e}")
+            return False
+    return False # 所有重试都失败
 
 # --- Fetch and Decode URLs (Modified for deduplication and naming) ---
 def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
@@ -291,6 +324,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                         current_proxies.extend(json_proxies)
                         print(f"  --- URL: {url} Identified as JSON node list ---")
                     else:
+                        # 尝试 Base64 解码，即使是 UTF-8 也能处理 Base64 编码的订阅
                         if len(decoded_content.strip()) > 0 and len(decoded_content.strip()) % 4 == 0 and re.fullmatch(r'[A-Za-z0-9+/=]*', decoded_content.strip()):
                             try:
                                 temp_decoded = base64.b64decode(decoded_content.strip()).decode('utf-8')
@@ -317,7 +351,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                             except (base64.binascii.Error, UnicodeDecodeError):
                                 print(f"  --- URL: {url} Looks like Base64 but failed to decode, treating as plaintext.---")
 
-                        if not current_proxies:
+                        if not current_proxies: # 如果 Base64 解码或之前的解析没有得到代理，尝试直接解析为纯文本链接
                             lines = decoded_content.split('\n')
                             parsed_line_count = 0
                             for line in lines:
@@ -339,7 +373,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                             else:
                                 print(f"  --- URL: {url} Content not identified as valid subscription format (UTF-8).---")
 
-            except UnicodeDecodeError:
+            except UnicodeDecodeError: # 如果直接 UTF-8 解码失败，再尝试 Base64 解码
                 print(f"  --- URL: {url} UTF-8 decoding failed, trying Base64 decoding.---")
                 try:
                     cleaned_content = content.strip()
@@ -379,8 +413,9 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
 
                 except (base64.binascii.Error, UnicodeDecodeError) as decode_err:
                     print(f"  --- URL: {url} Base64 decoding or UTF-8 conversion failed: {decode_err} ---")
-                    content.decode('latin-1', errors='ignore')
-                    print(f"Warning: Could not decode content from {url} to UTF-8, GBK, or Base64. Using latin-1 and ignoring errors.")
+                    # Fallback to latin-1 for content that can't be decoded to UTF-8 or Base64 (for logging purposes)
+                    content.decode('latin-1', errors='ignore') 
+                    print(f"Warning: Could not decode content from {url} to UTF-8 or Base64. Using latin-1 and ignoring errors.")
 
             # --- Deduplication, Name Standardization, and Connectivity Test Logic ---
             for proxy_dict in current_proxies:
@@ -390,21 +425,19 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                 fingerprint = generate_proxy_fingerprint(proxy_dict)
 
                 if fingerprint not in unique_proxies:
-                    # 获取服务器和端口，确保它们存在且类型正确
                     server = proxy_dict.get('server')
                     port = proxy_dict.get('port')
 
                     if enable_connectivity_test and server and isinstance(port, int):
                         print(f"    正在测试连通性: {server}:{port} ...")
-                        if not test_tcp_connectivity(server, port):
-                            print(f"    节点不可达，跳过: {server}:{port}")
-                            continue # 跳过不可达节点
+                        if not test_tcp_connectivity(server, port): # 使用带重试的连通性测试
+                            print(f"    节点不可达（多次尝试后），跳过: {server}:{port}")
+                            continue
                         else:
                             print(f"    节点可达: {server}:{port}")
                     else:
                         print(f"    跳过连通性测试 (未启用或信息不全): {server}:{port}")
 
-                    # 生成标准化名称：协议-服务器-指纹短ID
                     base_name = f"{proxy_dict.get('type', 'unknown').upper()}-{proxy_dict.get('server', 'unknown')}"
                     proxy_dict['name'] = f"{base_name}-{fingerprint[:8]}"
                     unique_proxies[fingerprint] = proxy_dict
@@ -412,7 +445,6 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                 else:
                     print(f"    跳过重复代理 (指纹: {fingerprint})")
 
-            # 只有当该URL成功解析出至少一个代理（不论是否重复），才认为该URL是成功的
             if current_proxies:
                 successful_urls.add(url)
 
@@ -425,22 +457,44 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
     print(f"Successfully parsed, deduplicated, tested, and aggregated {len(final_proxies_list)} unique and reachable proxy nodes.")
     return final_proxies_list, list(successful_urls)
 
-# --- GitHub API Helpers (不变) ---
+# --- GitHub API Helpers (Modified to check ETag if X-GitHub-Sha is missing) ---
 def get_github_file_content(api_url, token):
     headers = {"Authorization": f"token {token}", "Accept": "application/vnd.github.v3.raw"}
     try:
-        # 添加调试输出
         print(f"DEBUG: 尝试从 GitHub API 获取文件: {api_url}")
+        
         response = requests.get(api_url, headers=headers, timeout=10)
+        
+        # 打印所有响应头
+        print("DEBUG: GitHub API 响应头:")
+        for header, value in response.headers.items():
+            print(f"  {header}: {value}")
+            
         print(f"DEBUG: GitHub API 响应状态码: {response.status_code}")
-        response.raise_for_status() # 这行会在非 2xx 状态码时抛出 HTTPError
+        
+        # 优先从 X-GitHub-Sha 获取 SHA，如果不存在，则尝试从 ETag 获取
         sha = response.headers.get("X-GitHub-Sha")
-        print(f"DEBUG: 获取到 SHA: {sha}")
+        if sha is None:
+            etag = response.headers.get("ETag")
+            if etag:
+                # ETag 值通常是带引号的，我们需要去除引号
+                sha = etag.strip('"')
+                print(f"DEBUG: X-GitHub-Sha 为 None，从 ETag 获取到 SHA: {sha}")
+            else:
+                print("DEBUG: 既未获取到 X-GitHub-Sha，也未获取到 ETag。")
+        else:
+            print(f"DEBUG: 从 X-GitHub-Sha 获取到 SHA: {sha}")
+        
+        response.raise_for_status()
+        
+        print("DEBUG: GitHub API 响应内容片段 (前500字符):")
+        print(response.text[:500])
+        
         return response.text, sha
     except requests.exceptions.HTTPError as http_err:
         print(f"Error fetching file from GitHub (HTTP Error): {http_err}")
         if response is not None:
-            print(f"DEBUG: 响应内容: {response.text}")
+            print(f"DEBUG: 错误响应内容: {response.text}")
         return None, None
     except requests.exceptions.RequestException as req_err:
         print(f"Error fetching file from GitHub (Request Error): {req_err}")
@@ -477,12 +531,21 @@ def main():
     url_list_repo_api = os.environ.get("URL_LIST_REPO_API")
 
     try:
+        # 确保 url_list_repo_api 是一个完整的 GitHub Content API URL
+        # 例如: https://api.github.com/repos/owner/repo/contents/path/to/file.txt
         parts = url_list_repo_api.split('/')
+        if len(parts) < 8 or parts[2] != 'api.github.com' or parts[3] != 'repos' or parts[6] != 'contents':
+            raise ValueError("URL_LIST_REPO_API does not seem to be a valid GitHub Content API URL.")
+            
         owner = parts[4]
         repo_name = parts[5]
-        file_path_in_repo = '/'.join(parts[7:])
+        file_path_in_repo = '/'.join(parts[7:]) # 'contents' 之后的路径
+    except ValueError as ve:
+        print(f"Error: {ve}")
+        print("Please ensure URL_LIST_REPO_API is correctly set to a GitHub Content API URL (e.g., https://api.github.com/repos/user/repo/contents/path/to/file.txt).")
+        exit(1)
     except IndexError:
-        print("Error: URL_LIST_REPO_API format is incorrect. Ensure it's a GitHub API file content link.")
+        print("Error: URL_LIST_REPO_API format is incorrect or incomplete. Cannot extract owner, repo, or file path.")
         exit(1)
 
     repo_contents_api_base = f"https://api.github.com/repos/{owner}/{repo_name}/contents"
@@ -502,8 +565,6 @@ def main():
     urls = url_content.strip().split('\n')
     print(f"Fetched {len(urls)} subscription URLs from GitHub.")
 
-    # 启用连通性测试 (可以改为 False 来禁用)
-    # 也可以通过环境变量控制此开关
     enable_connectivity_test = os.environ.get("ENABLE_CONNECTIVITY_TEST", "true").lower() == "true"
 
 
@@ -539,14 +600,14 @@ def main():
                 'tcp://8.8.4.4',
                 'https://dns.opendns.com/dns-query'
             ],
-            'fallback-filter': { # <-- 这里是字典的开始
+            'fallback-filter': {
                 'geoip': True,
                 'geoip-code': 'CN',
                 'ipcidr': [
                     '240.0.0.0/4'
                 ]
-            } # <-- 这里是字典的结束，没有多余的 ']'
-        }, # <-- 这是 dns 字典的结束
+            }
+        },
         'proxies': all_parsed_proxies,
 
         'proxy-groups': [
