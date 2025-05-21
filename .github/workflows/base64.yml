@@ -21,14 +21,14 @@ jobs:
       - name: Install dependencies # 安装所需的 Python 库
         run: |
           python -m pip install --upgrade pip # 升级 pip
-          pip install requests python-dotenv PyYAML
+          pip install requests python-dotenv PyYAML # <-- 重点：添加 PyYAML
 
       - name: Run conversion script
         env:
           BOT: ${{ secrets.BOT }}
           URL_LIST_REPO_API: ${{ secrets.URL_LIST_REPO_API }}
           # 如果你希望在这里控制连通性测试的开关，可以添加 ENABLE_CONNECTIVITY_TEST 环境变量
-          # ENABLE_CONNECTIVITY_TEST: "true" 
+          # ENABLE_CONNECTIVITY_TEST: "true"
         run: |
           python subscribe/convert_to_base64.py
 
