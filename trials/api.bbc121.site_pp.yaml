@@ -31,54 +31,12 @@ proxy-groups:
   type: url-test
   tolerance: 100
   use: &id001
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
+  - HK
+  - TW
+  - SG
+  - JP
+  - US
+  - Other
 - name: 👆🏻 ‍指定
   type: select
   use: *id001
@@ -132,94 +90,38 @@ proxy-groups:
   type: url-test
   tolerance: 100
   use: &id002
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
+  - HK
 - name: 🇹🇼 ‍台湾
   type: url-test
   tolerance: 100
   use: &id003
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
+  - TW
 - name: 🇨🇳 ‍中国
   type: url-test
   tolerance: 100
   use: &id004
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
+  - HK
+  - TW
 - name: 🇸🇬 ‍新加坡
   type: url-test
   tolerance: 100
   use: &id005
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
+  - SG
 - name: 🇯🇵 ‍日本
   type: url-test
   tolerance: 100
   use: &id006
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
+  - JP
 - name: 🇺🇸 ‍美国
   type: url-test
   tolerance: 300
   use: &id007
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
+  - US
 - name: 🎏 ‍其他
   type: url-test
   tolerance: 100
   use: &id008
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
+  - Other
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   use: *id002
@@ -242,83 +144,56 @@ proxy-groups:
   type: select
   use: *id008
 proxy-providers:
-  p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP:
+  HK:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/api.bbc121.site/HK.yaml
     interval: 180
-    path: trials_providers/p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP.yaml
+    path: trials_providers/api.bbc121.site/HK.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
-  p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN:
+  TW:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/api.bbc121.site/TW.yaml
     interval: 180
-    path: trials_providers/p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN.yaml
+    path: trials_providers/api.bbc121.site/TW.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
-  p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other:
+  SG:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/api.bbc121.site/SG.yaml
     interval: 180
-    path: trials_providers/p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other.yaml
+    path: trials_providers/api.bbc121.site/SG.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
-  p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN:
+  JP:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/api.bbc121.site/JP.yaml
     interval: 180
-    path: trials_providers/p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN.yaml
+    path: trials_providers/api.bbc121.site/JP.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
-  p_All_All_All_All_All_All_US_US_US_US_US_US:
+  US:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_All_All_US_US_US_US_US_US.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/api.bbc121.site/US.yaml
     interval: 180
-    path: trials_providers/p_All_All_All_All_All_All_US_US_US_US_US_US.yaml
+    path: trials_providers/api.bbc121.site/US.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
-  p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG:
+  Other:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/api.bbc121.site/Other.yaml
     interval: 180
-    path: trials_providers/p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN.yaml
-    interval: 180
-    path: trials_providers/p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_All_All_JP_JP_JP_JP:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_JP_JP_JP_JP.yaml
-    interval: 180
-    path: trials_providers/p_All_All_All_All_JP_JP_JP_JP.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_All_All_US_US_US_US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_US_US_US_US.yaml
-    interval: 180
-    path: trials_providers/p_All_All_All_All_US_US_US_US.yaml
+    path: trials_providers/api.bbc121.site/Other.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204

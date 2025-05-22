@@ -1,0 +1,15 @@
+%YAML 1.1
+---
+proxies:
+- &id001 {name: '🇹🇼 [ss]台湾彰化01专线|TW - 穿越云', server: cyy-iepl.netchadmin.top, port: 50326, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id002 {name: '🇹🇼 [ss]台湾彰化02专线|TW - 穿越云', server: cyy-iepl.netchadmin.top, port: 50326, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- *id001
+- *id002
+- *id001
+- *id002
+- *id001
+- *id002
+- *id001
+- *id002
+- *id001
+- *id002
