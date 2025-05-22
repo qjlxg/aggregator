@@ -1,0 +1,78 @@
+name: Base64 Conversion
+
+on:
+  workflow_dispatch: # 允许手动触发
+  schedule:
+    - cron: '0 */8 * * *' # 每 8 小时运行一次
+
+jobs:
+  convert_to_base64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x' # 使用 Python 3.x 的最新稳定版
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests PyYAML maxminddb # 保留必要的依赖
+
+      - name: Run conversion script
+        env: # 保留脚本运行必要的环境变量
+          BOT: ${{ secrets.BOT }}
+          URL_LIST_REPO_API: ${{ secrets.URL_LIST_REPO_API }}
+          CLASH_TEMPLATE_PATH: "clash_template.yml"
+          ENABLE_CONNECTIVITY_TEST: "true"
+          TCP_TIMEOUT: "1"
+          TCP_RETRIES: "1"
+          TCP_DELAY: "0.5"
+          # MAX_WORKERS: "30" # 如果Python脚本内部有硬编码或默认值，可以考虑移除
+          EXCLUDE_NODES_BY_SERVER: ""
+          FAILED_URL_THRESHOLD: "3" # 如果URL更新逻辑在脚本内部处理，保留此项
+          EXCLUDE_CHINA_NODES: "true"
+          GEOIP_DB_PATH: "clash/Country.mmdb"
+        run: python subscribe/convert_to_base64.py # 脚本直接运行，输出到控制台
+
+      - name: Upload Generated Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-clash-configs
+          path: | # 只上传核心的配置文件
+            base64.yaml
+            base64.txt
+          retention-days: 7
+
+      # 移除了原先的 "Display script outputs" 或 "Append Script Summary to Job Summary" 步骤
+
+      - name: Commit and push changes (if any)
+        if: success() # 只在前面的步骤都成功时才运行
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+
+          # 只添加核心的配置文件
+          git add base64.txt base64.yaml || true # || true 避免在文件无变化时出错
+
+          # 检查是否有待提交的更改
+          if git diff --cached --exit-code --quiet; then
+            echo "未检测到 base64.txt 或 base64.yaml 更改，跳过提交。"
+          else
+            REF_NAME=$(echo "${{ github.ref }}" | sed 's_refs/heads/__')
+            echo "当前分支: ${REF_NAME}"
+
+            git commit -m "feat: 更新生成的 Clash 配置 (base64.yaml, base64.txt)"
+
+            echo "尝试拉取并合并 origin/${REF_NAME}..."
+            # 使用 --ff-only 尝试快进，如果不行则默认合并（可能产生合并提交）
+            # 或者使用 git pull --rebase --autostash origin "${REF_NAME}" 来保持线性历史
+            git pull origin "${REF_NAME}" --no-rebase # 简化：尝试合并
+            
+            echo "推送更改到 origin/${REF_NAME}..."
+            git push origin "HEAD:${REF_NAME}"
+          fi
