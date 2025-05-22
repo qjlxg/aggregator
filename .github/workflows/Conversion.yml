@@ -66,13 +66,10 @@ jobs:
             REF_NAME=$(echo "${{ github.ref }}" | sed 's_refs/heads/__')
             echo "当前分支: ${REF_NAME}"
 
-            git commit -m "feat: 更新生成的 Clash 配置 (base64.yaml, base64.txt)"
+            # 如果没有实际更改，git commit 会失败，加 || true 确保脚本不中断
+            git commit -m "feat: 更新生成的 Clash 配置 (base64.yaml, base64.txt)" || true 
 
-            echo "尝试拉取并合并 origin/${REF_NAME}..."
-            # 使用 --ff-only 尝试快进，如果不行则默认合并（可能产生合并提交）
-            # 或者使用 git pull --rebase --autostash origin "${REF_NAME}" 来保持线性历史
-            git pull origin "${REF_NAME}" --no-rebase # 简化：尝试合并
-            
             echo "推送更改到 origin/${REF_NAME}..."
-            git push origin "HEAD:${REF_NAME}"
+            # 删除了 git pull 命令，直接使用 --force-with-lease 进行推送
+            git push origin "HEAD:${REF_NAME}" --force-with-lease
           fi
