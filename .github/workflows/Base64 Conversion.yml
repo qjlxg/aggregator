@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies # 安装所需的 Python 库
         run: |
           python -m pip install --upgrade pip
-          pip install requests PyYAML maxminddb-reader # <-- 重点：maxminddb-reader 是正确的包名
+          pip install requests PyYAML maxminddb # <-- 重点：添加 maxminddb
 
       - name: Run conversion script
         id: generate_config # 为此步骤设置 ID，以便后续步骤可以访问其输出
