@@ -223,50 +223,71 @@ def parse_trojan(trojan_url):
         logger.warning(f"解析 Trojan 链接失败: {trojan_url[:50]}...，原因: {e}")
         return None
 
-elif proxy_string.startswith('ss://'):
+def parse_shadowsocks(ss_url):
+    try:
+        encoded_part = ss_url[5:]
+        name = "Shadowsocks"
+        plugin_info_str = ""
+
+        if '#' in encoded_part:
+            encoded_part, fragment = encoded_part.split('#', 1)
+            name = unquote(fragment)
+
+        if '/?plugin=' in encoded_part:
+            encoded_part, plugin_info_str = encoded_part.split('/?plugin=', 1)
+            plugin_info_str = unquote(plugin_info_str)
+
+        missing_padding = len(encoded_part) % 4
+        if missing_padding:
+            encoded_part += '=' * (4 - missing_padding)
+
         try:
-            parts = proxy_string[5:].split('#', 1)
-            remark = unquote(parts[1]) if len(parts) > 1 else ''
-            base64_part = parts[0]
+            decoded_bytes = base64.urlsafe_b64decode(encoded_part)
+            decoded_str = decoded_bytes.decode('utf-8', errors='ignore')
 
-            # 尝试 Base64 解码整个 base64_part
-            decoded_cred_server = None
-            try:
-                # 尝试解码，如果失败则不是 Base64 编码的 SS 链接主体
-                decoded_cred_server = base64.b64decode(base64_part).decode('utf-8')
-            except (base64.binascii.Error, UnicodeDecodeError):
-                # 如果解码失败，说明 base64_part 本身不是 Base64 编码的凭证部分
-                # 而是旧格式的 method:password@server:port 或 method@server:port
-                decoded_cred_server = None
-
-            if decoded_cred_server and '@' in decoded_cred_server:
-                # 这是新格式：ss://base64(method:password@server:port)
-                method_pass, server_info = decoded_cred_server.split('@')
-                if ':' not in method_pass: # 确保 method:password 格式
-                    raise ValueError("格式无效：method:password 部分缺失。")
-                method, password = method_pass.split(':', 1) # split(..., 1) 避免密码中包含冒号的问题
-            elif '@' in base64_part:
-                # 这是旧格式：ss://method:password@server:port
-                credentials, server_info = base64_part.split('@')
-                if ':' not in credentials: # 确保 method:password 格式
-                    raise ValueError("格式无效：method:password 部分缺失。")
-                method, password = credentials.split(':', 1)
+            match = re.match(r'^([^:]+):([^@]+)@([^:]+):(\d+)$', decoded_str)
+            if not match:
+                match = re.match(r'^([^@]+)@([^:]+):(\d+)$', decoded_str)
+                if match:
+                    method = match.group(1)
+                    password = ""
+                    server = match.group(2)
+                    port = int(match.group(3))
+                else:
+                    raise ValueError("格式无效：不是 method:password@server:port 或 method@server:port。")
             else:
-                raise ValueError("格式无效：不是 method:password@server:port 或 method@server:port。")
-
-            server, port = server_info.rsplit(':', 1)
+                method = match.group(1)
+                password = match.group(2)
+                server = match.group(3)
+                port = int(match.group(4))
 
             proxy = {
+                'name': name,
                 'type': 'ss',
-                'name': remark if remark else f"{server}:{port}",
                 'server': server,
-                'port': int(port),
+                'port': port,
                 'cipher': method,
                 'password': password,
             }
-        except Exception as e:
-            logger.warning(f"解析 Shadowsocks 链接失败: {proxy_string[:50]}... - {e}")
-            return None
+
+            if plugin_info_str:
+                plugin_parts = plugin_info_str.split(';')
+                plugin_type = plugin_parts[0]
+                plugin_opts = {}
+                for part in plugin_parts[1:]:
+                    if '=' in part:
+                        key, value = part.split('=', 1)
+                        plugin_opts[key] = value
+
+                proxy['plugin'] = plugin_type
+                proxy['plugin-opts'] = plugin_opts
+
+            return proxy
+        except (base64.binascii.Error, ValueError) as decode_err:
+            raise ValueError(f"Base64 解码或正则匹配错误: {decode_err}")
+    except Exception as e:
+        logger.warning(f"解析 Shadowsocks 链接失败: {ss_url[:100]}...，原因: {e}")
+        return None
 
 def parse_hysteria2(hy2_url):
     try:
