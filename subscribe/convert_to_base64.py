@@ -1,312 +1,122 @@
+
 import requests
 import base64
-import yaml
-import re
 import os
-import hashlib
-import concurrent.futures
-import time
-import socket
-import struct
 import json
-import ipaddress # For IP address validation
-import sys
+import re
+import yaml
+from urllib.parse import urlparse, parse_qs, unquote
+import hashlib
+import socket
+import time
+import concurrent.futures
 
-# --- Configuration (from environment variables) ---
-# Maximum workers for concurrent connectivity tests (default: 30)
-MAX_WORKERS_CONNECTIVITY_TEST = int(os.getenv('MAX_WORKERS_CONNECTIVITY_TEST', '30'))
+# --- Global Constants ---
+# 修正了拼写错误: MAX_WORKERS_CONNECTIVITY_TEST
+MAX_WORKERS_CONNECTIVITY_TEST = 30 
+EXCLUDE_KEYWORDS = [
+    "cdn.jsdelivr.net", "statically.io", "googletagmanager.com",
+    "www.w3.org", "fonts.googleapis.com", "schemes.ogf.org", "clashsub.net",
+    "t.me", "api.w.org",
+    "html", "css", "js", "ico", "png", "jpg", "jpeg", "gif", "svg", "webp", "xml", "json", "txt",
+    "google-analytics.com", "cloudflare.com/cdn-cgi/", "gstatic.com", "googleapis.com",
+    "disqus.com", "gravatar.com", "s.w.org",
+    "amazon.com", "aliyuncs.com", "tencentcos.cn",
+    "cdn.bootcss.com", "cdnjs.cloudflare.com",
+    "bit.ly", "tinyurl.com", "cutt.ly", "shorturl.at", "surl.li", "suo.yt", "v1.mk",
+    "youtube.com", "facebook.com", "twitter.com", "weibo.com",
+    "mail.google.com", "docs.google.com",
+    "microsoft.com", "apple.com", "baidu.com", "qq.com",
+    ".woff", ".woff2", ".ttf", ".otf", ".eot",
+    ".zip", ".rar", ".7z", ".tar.gz", ".exe", ".dmg", ".apk",
+    "/assets/", "/static/", "/images/", "/scripts/", "/styles/", "/fonts/",
+    "robots.txt", "sitemap.xml", "favicon.ico",
+    "rss", "atom",
+    "/LICENSE", "/README.md", "/CHANGELOG.md",
+    ".git", ".svn",
+    "swagger-ui.html", "openapi.json"
+]
 
-# TCP connectivity test timeout in seconds (default: 1)
-TCP_TIMEOUT = float(os.getenv('TCP_TIMEOUT', '1'))
+# --- Proxy Parsing Functions ---
+def generate_proxy_fingerprint(proxy_data):
+    """
+    根据代理的核心连接信息生成一个唯一的哈希指纹。
+    这用于识别和去重相同的代理，即使它们的名称或非核心配置（如传输协议、SNI等）不同。
+    """
+    p_type = proxy_data.get('type', '').lower()
+    server = proxy_data.get('server', '')
+    port = str(proxy_data.get('port', ''))
+    fingerprint_parts = [p_type, server, port]
 
-# TCP connectivity test retries (default: 1)
-TCP_RETRIES = int(os.getenv('TCP_RETRIES', '1'))
+    if p_type == 'vmess':
+        # Vmess 的核心是 server, port, uuid
+        fingerprint_parts.append(proxy_data.get('uuid', ''))
+    elif p_type == 'trojan':
+        # Trojan 的核心是 server, port, password
+        fingerprint_parts.append(proxy_data.get('password', ''))
+    elif p_type == 'ss':
+        # SS 的核心是 server, port, password, cipher
+        # 即使加密方式不同，我们也倾向于将它们视为不同的服务
+        fingerprint_parts.append(proxy_data.get('password', ''))
+        fingerprint_parts.append(proxy_data.get('cipher', ''))
+    elif p_type == 'hysteria2':
+        # Hysteria2 的核心是 server, port, password (uuid)
+        fingerprint_parts.append(proxy_data.get('password', ''))
+    # 可以根据需要添加其他协议的去重逻辑
 
-# TCP connectivity test delay between retries in seconds (default: 0.5)
-TCP_DELAY = float(os.getenv('TCP_DELAY', '0.5'))
+    unique_string = "_".join(fingerprint_parts)
+    return hashlib.md5(unique_string.encode('utf-8')).hexdigest()
 
-# URL list repository API endpoint (e.g., from GitHub API for a specific file)
-URL_LIST_REPO_API = os.getenv('URL_LIST_REPO_API')
-
-# Clash template path
-CLASH_TEMPLATE_PATH = os.getenv('CLASH_TEMPLATE_PATH', 'clash_template.yml')
-
-# Enable/Disable connectivity test (default: "true")
-ENABLE_CONNECTIVITY_TEST = os.getenv('ENABLE_CONNECTIVITY_TEST', 'true').lower() == 'true'
-
-# Exclude nodes by server keyword (comma-separated, case-insensitive)
-EXCLUDE_NODES_BY_SERVER_RAW = os.getenv('EXCLUDE_NODES_BY_SERVER', '')
-EXCLUDE_NODES_BY_SERVER = [k.strip().lower() for k in EXCLUDE_NODES_BY_SERVER_RAW.split(',') if k.strip()]
-
-# Exclude keywords from subscription URLs (e.g., 'rules', 'filter')
-EXCLUDE_KEYWORDS_RAW = os.getenv('EXCLUDE_KEYWORDS', 'rules,filter')
-EXCLUDE_KEYWORDS = [k.strip().lower() for k in EXCLUDE_KEYWORDS_RAW.split(',') if k.strip()]
-
-# Exclude China Mainland IP addresses (default: "true")
-EXCLUDE_CHINA_NODES = os.getenv('EXCLUDE_CHINA_NODES', 'true').lower() == 'true'
-
-# Path to GeoIP database (e.g., Country.mmdb)
-GEOIP_DB_PATH = os.getenv('GEOIP_DB_PATH', 'clash/Country.mmdb')
-
-# --- Global Variables ---
-_country_db = None
-
-# --- Helper Functions ---
-
-def load_geoip_db():
-    global _country_db
-    if _country_db is None and GEOIP_DB_PATH and os.path.exists(GEOIP_DB_PATH):
-        try:
-            import maxminddb
-            _country_db = maxminddb.open_database(GEOIP_DB_PATH)
-            print(f"GeoIP database loaded from: {GEOIP_DB_PATH}")
-        except ImportError:
-            print("Warning: maxminddb not installed. GeoIP lookup will be skipped.")
-            _country_db = None
-        except FileNotFoundError:
-            print(f"Warning: GeoIP database not found at {GEOIP_DB_PATH}. GeoIP lookup will be skipped.")
-            _country_db = None
-        except Exception as e:
-            print(f"Warning: Error loading GeoIP database: {e}. GeoIP lookup will be skipped.")
-            _country_db = None
-    elif _country_db is None and not GEOIP_DB_PATH:
-        print("Info: GEOIP_DB_PATH is not set. GeoIP lookup will be skipped.")
-    return _country_db
-
-def is_china_ip(ip_address):
-    """Checks if an IP address belongs to China using GeoIP database."""
-    if not EXCLUDE_CHINA_NODES:
-        return False
-
-    global _country_db
-    if _country_db is None:
-        _country_db = load_geoip_db() # Attempt to load if not already loaded
-
-    if _country_db:
-        try:
-            # Ensure the IP is a valid IP address string before lookup
-            ip_obj = ipaddress.ip_address(ip_address)
-            record = _country_db.get(str(ip_obj))
-            if record and 'country' in record and record['country'].get('iso_code') == 'CN':
-                return True
-        except ValueError:
-            # Not a valid IP address, treat as non-China to be safe, or log it
-            return False
-        except Exception as e:
-            print(f"Error during GeoIP lookup for {ip_address}: {e}")
-            return False
-    return False
-
-# --- MODIFIED generate_proxy_fingerprint FUNCTION ---
-def generate_proxy_fingerprint(proxy_dict):
-    """Generates a unique fingerprint for a proxy based on its *core* key attributes."""
-    core_attributes = {}
-    
-    # Always include type, server, and port
-    core_attributes['type'] = proxy_dict.get('type', 'unknown').lower()
-    core_attributes['server'] = proxy_dict.get('server', '').lower()
-    core_attributes['port'] = proxy_dict.get('port')
-
-    # Add protocol-specific core identity attributes
-    if core_attributes['type'] == 'vmess':
-        core_attributes['uuid'] = proxy_dict.get('uuid', '')
-        # For Vmess, alterId is often a minor config, not core identity,
-        # but sometimes a provider might offer different alterIds for the *same* physical node.
-        # If you want to deduplicate Vmess nodes with different alterIds, exclude it from fingerprint.
-        # If you want to keep Vmess nodes with different alterIds as distinct, include it.
-        # Let's keep it out for now, to maximize deduplication.
-        # core_attributes['alterId'] = proxy_dict.get('alterId')
-    elif core_attributes['type'] == 'trojan':
-        core_attributes['password'] = proxy_dict.get('password', '')
-    elif core_attributes['type'] == 'ss': # Shadowsocks
-        core_attributes['cipher'] = proxy_dict.get('cipher', '')
-        core_attributes['password'] = proxy_dict.get('password', '')
-    elif core_attributes['type'] == 'hysteria2':
-        core_attributes['password'] = proxy_dict.get('password', '')
-        # Obfs and Obfs-password might be seen as core for Hysteria2 obfuscation.
-        # If you consider different obfs methods/passwords on the same server/port
-        # as different *logical* nodes, include them.
-        # For simple physical de-duplication, keep them out. Let's include for H2 as they are critical.
-        core_attributes['obfs'] = proxy_dict.get('obfs', '')
-        core_attributes['obfs-password'] = proxy_dict.get('obfs-password', '')
-
-    # Ensure a consistent order of keys for hashing
-    proxy_str = json.dumps(core_attributes, sort_keys=True)
-    return hashlib.sha1(proxy_str.encode('utf-8')).hexdigest()
-
-# --- Connectivity Test Function (remains the same) ---
-def test_tcp_connectivity(server, port):
-    """Tests TCP connectivity to a given server and port with retries."""
-    if not server or not isinstance(port, int):
-        return False
-    
-    # Validate server as IP or domain
+def parse_vmess(vmess_url):
     try:
-        ipaddress.ip_address(server) # Check if it's a valid IP
-        is_ip = True
-    except ValueError:
-        is_ip = False # It's likely a domain name
+        json_str = base64.b64decode(vmess_url[8:]).decode('utf-8')
+        config = json.loads(json_str)
 
-    for i in range(TCP_RETRIES + 1):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(TCP_TIMEOUT)
-        try:
-            if not is_ip:
-                # Resolve domain to IP for more reliable connection testing
-                # DNS resolution can fail here, too.
-                ip_address = socket.gethostbyname(server)
-            else:
-                ip_address = server
+        name = config.get('ps', f"Vmess-{config.get('add')}")
+        server = config.get('add')
+        port = config.get('port')
+        uuid = config.get('id')
+        alterId = config.get('aid', 0)
+        cipher = config.get('scy', 'auto')
+        network = config.get('net', 'tcp')
+        tls = config.get('tls', '') == 'tls'
+        servername = config.get('sni', config.get('host', '')) if tls else ''
+        skip_cert_verify = config.get('v', '') == '1'
 
-            # Exclude China IP addresses if configured
-            if EXCLUDE_CHINA_NODES and is_china_ip(ip_address):
-                # print(f"    跳过中国大陆IP节点 {server}:{port} (GeoIP).")
-                return False # Explicitly return False for excluded China IPs
-
-            s.connect((ip_address, port))
-            return True
-        except (socket.timeout, ConnectionRefusedError, OSError, socket.gaierror) as e:
-            # socket.gaierror for DNS resolution errors
-            # print(f"    TCP 连接失败: {server}:{port} (尝试 {i+1}/{TCP_RETRIES+1}) - {e}")
-            if i < TCP_RETRIES:
-                time.sleep(TCP_DELAY)
-            continue
-        finally:
-            s.close()
-    return False
-
-# --- Proxy Parsing Helper Functions (remain the same) ---
-
-# --- Universal Clash Proxy Parser ---
-def _parse_clash_proxy_common(link_type, link_data):
-    """Parses common attributes for Clash proxy types."""
-    proxy_dict = {'type': link_type}
-    try:
-        parts = link_data.split('#')
-        params_str = parts[0]
-        if len(parts) > 1:
-            try:
-                # Name is URL-decoded
-                proxy_dict['name'] = requests.utils.unquote(parts[1])
-            except Exception:
-                proxy_dict['name'] = parts[1] # Fallback if unquote fails
-        
-        # Parse params string for server and port first if possible
-        # This part depends on the specific protocol's parameter format
-        # Example: ss://method:password@server:port
-        # Generic approach for common server:port pattern (needs refinement per protocol)
-        if '@' in params_str:
-            auth_server_part = params_str.split('@', 1)[1]
-        else:
-            auth_server_part = params_str # No auth part, direct server string
-        
-        if ':' in auth_server_part:
-            server_port_parts = auth_server_part.rsplit(':', 1)
-            proxy_dict['server'] = server_port_parts[0].strip()
-            try:
-                proxy_dict['port'] = int(server_port_parts[1].strip())
-            except ValueError:
-                pass # Port not an integer, handled below
-
-    except Exception as e:
-        print(f"Error parsing common proxy attributes for {link_type} link: {e}")
-    return proxy_dict
-
-# Vmess
-def parse_vmess(link):
-    """Parses a Vmess link."""
-    # Vmess links are base64 encoded JSON
-    if not link.startswith("vmess://"):
-        return None
-    try:
-        encoded_data = link[len("vmess://"):].strip()
-        # Add padding if necessary
-        missing_padding = len(encoded_data) % 4
-        if missing_padding:
-            encoded_data += '=' * (4 - missing_padding)
-
-        decoded_data = base64.b64decode(encoded_data).decode('utf-8')
-        vmess_config = json.loads(decoded_data)
-        
-        # Map Vmess config to Clash proxy format
         proxy = {
-            'name': vmess_config.get('ps', vmess_config.get('id', 'vmess_node')),
+            'name': name,
             'type': 'vmess',
-            'server': vmess_config.get('add'),
-            'port': int(vmess_config.get('port')),
-            'uuid': vmess_config.get('id'),
-            'alterId': int(vmess_config.get('aid', 0)),
-            'cipher': vmess_config.get('scy', 'auto'),
-            'udp': True,
-            'network': vmess_config.get('net', 'tcp'),
+            'server': server,
+            'port': port,
+            'uuid': uuid,
+            'alterId': alterId,
+            'cipher': cipher,
+            'network': network,
+            'tls': tls,
         }
-        
-        # Add TLS settings if present
-        if vmess_config.get('tls') == 'tls':
-            proxy['tls'] = True
-            proxy['skip-cert-verify'] = vmess_config.get('v', '') != '2' and vmess_config.get('sni') == '' # if v=2 or sni exists, skip is false
-            proxy['servername'] = vmess_config.get('host', '') if vmess_config.get('host') else vmess_config.get('sni', '')
-            if proxy['servername'] == '': # If both host and sni are empty, set to server
-                proxy['servername'] = proxy['server']
 
-        # Add network specific settings
-        if proxy['network'] == 'ws':
-            proxy['ws-opts'] = {
-                'path': vmess_config.get('path', '/'),
-                'headers': {'Host': vmess_config.get('host', '')}
-            }
-        elif proxy['network'] == 'grpc':
-            proxy['grpc-opts'] = {
-                'serviceName': vmess_config.get('path', ''),
-                'grpcMode': 'gun' if vmess_config.get('host') == 'gun' else 'direct' # simplified, check actual spec
-            }
-        
-        # Clean up name if it's just the uuid
-        if proxy['name'] == proxy['uuid']:
-            proxy['name'] = f"vmess-{proxy['server']}:{proxy['port']}"
-
-        # Ensure server and port are valid
-        if not proxy['server'] or not proxy['port']:
-            return None
+        if servername:
+            proxy['servername'] = servername
+        if skip_cert_verify:
+            proxy['skip-cert-verify'] = True
 
         return proxy
     except Exception as e:
-        # print(f"Failed to parse Vmess link: {link} - Error: {e}")
+        print(f"解析 Vmess 链接失败: {vmess_url[:50]}...，原因: {e}")
         return None
 
-# Trojan
-def parse_trojan(link):
-    """Parses a Trojan link."""
-    if not link.startswith("trojan://"):
-        return None
+def parse_trojan(trojan_url):
     try:
-        # trojan://password@server:port#name
-        # trojan://password@server:port?param=value#name
-        parts_hash = link[len("trojan://"):].split('#', 1)
-        uri = parts_hash[0]
-        name = requests.utils.unquote(parts_hash[1]) if len(parts_hash) > 1 else 'trojan_node'
+        parsed = urlparse(trojan_url)
+        password = parsed.username
+        server = parsed.hostname
+        port = parsed.port
+        name = unquote(parsed.fragment) if parsed.fragment else f"Trojan-{server}"
 
-        parts_at = uri.split('@', 1)
-        password = parts_at[0]
-        server_info = parts_at[1] if len(parts_at) > 1 else ''
-
-        parts_query = server_info.split('?', 1)
-        server_port_str = parts_query[0]
-        query_params = {}
-        if len(parts_query) > 1:
-            for param in parts_query[1].split('&'):
-                if '=' in param:
-                    key, value = param.split('=', 1)
-                    query_params[key] = value
-
-        server, port = None, None
-        if ':' in server_port_str:
-            server_parts = server_port_str.rsplit(':', 1)
-            server = server_parts[0]
-            port = int(server_parts[1])
-        
-        if not server or not port:
-            return None
+        params = parse_qs(parsed.query)
+        tls = True
+        skip_cert_verify = params.get('allowInsecure', ['0'])[0] == '1'
+        servername = params.get('sni', [server])[0]
 
         proxy = {
             'name': name,
@@ -314,271 +124,205 @@ def parse_trojan(link):
             'server': server,
             'port': port,
             'password': password,
-            'udp': True,
-            'tls': True,
-            'skip-cert-verify': query_params.get('allowInsecure', '0') == '1',
-            'servername': query_params.get('peer', server),
-            'network': query_params.get('type', 'tcp')
+            'tls': tls,
         }
+        if servername:
+            proxy['servername'] = servername
+        if skip_cert_verify:
+            proxy['skip-cert-verify'] = True
 
-        if proxy['network'] == 'ws':
-            proxy['ws-opts'] = {
-                'path': query_params.get('path', '/'),
-                'headers': {'Host': query_params.get('host', server)}
-            }
-        elif proxy['network'] == 'grpc':
-            proxy['grpc-opts'] = {
-                'serviceName': query_params.get('serviceName', ''),
-                'grpcMode': query_params.get('mode', 'gun') # direct or gun
-            }
-        
         return proxy
     except Exception as e:
-        # print(f"Failed to parse Trojan link: {link} - Error: {e}")
+        print(f"解析 Trojan 链接失败: {trojan_url[:50]}...，原因: {e}")
         return None
 
-# Shadowsocks
-def parse_shadowsocks(link):
-    """Parses a Shadowsocks link."""
-    if not link.startswith("ss://"):
-        return None
+def parse_shadowsocks(ss_url):
     try:
-        # ss://base64encoded_method_password@server:port#name
-        # ss://base64encoded_method_password@server:port?plugin=...#name
-        link_data = link[len("ss://"):].strip()
-        
-        parts_hash = link_data.split('#', 1)
-        encoded_part = parts_hash[0]
-        name = requests.utils.unquote(parts_hash[1]) if len(parts_hash) > 1 else 'shadowsocks_node'
+        encoded_part = ss_url[5:]
+        name = "Shadowsocks"
+        plugin_info_str = ""
 
-        # Separate the @ from the server:port part for plugins
-        at_parts = encoded_part.split('@', 1)
-        if len(at_parts) != 2:
-            return None # Invalid SS format
+        if '#' in encoded_part:
+            encoded_part, fragment = encoded_part.split('#', 1)
+            name = unquote(fragment)
 
-        # Plugin info
-        plugin_info_str = ''
-        if '?' in at_parts[1]:
-            server_port_part_temp = at_parts[1].split('?', 1)
-            server_port_str = server_port_part_temp[0]
-            plugin_info_str = server_port_part_temp[1]
-        else:
-            server_port_str = at_parts[1]
+        if '/?plugin=' in encoded_part:
+            encoded_part, plugin_info_str = encoded_part.split('/?plugin=', 1)
+            plugin_info_str = unquote(plugin_info_str)
 
-        # Decode method:password
-        decoded_method_password_b64 = at_parts[0]
-        missing_padding = len(decoded_method_password_b64) % 4
+        missing_padding = len(encoded_part) % 4
         if missing_padding:
-            decoded_method_password_b64 += '=' * (4 - missing_padding)
-        decoded_method_password = base64.b64decode(decoded_method_password_b64).decode('utf-8')
-        
-        method_password_parts = decoded_method_password.split(':', 1)
-        if len(method_password_parts) != 2:
-            return None # Invalid method:password format
-
-        method = method_password_parts[0]
-        password = method_password_parts[1]
-        
-        server_parts = server_port_str.rsplit(':', 1)
-        server = server_parts[0]
-        port = int(server_parts[1])
-
-        proxy = {
-            'name': name,
-            'type': 'ss',
-            'server': server,
-            'port': port,
-            'cipher': method,
-            'password': password,
-            'udp': True
-        }
-
-        if plugin_info_str:
-            plugin_params = {}
-            for param in plugin_info_str.split('&'):
-                if '=' in param:
-                    key, value = param.split('=', 1)
-                    plugin_params[key] = value
-
-            if 'plugin' in plugin_params:
-                plugin_name = plugin_params['plugin']
-                plugin_opts_raw = plugin_params.get('plugin-opts', '')
+            encoded_part += '=' * (4 - missing_padding)
+            
+        try:
+            decoded_bytes = base64.urlsafe_b64decode(encoded_part)
+            try:
+                decoded_str = decoded_bytes.decode('utf-8')
+            except UnicodeDecodeError:
+                decoded_str = decoded_bytes.decode('latin-1', errors='ignore')
+                print(f"    Warning: Shadowsocks link decoded to non-UTF-8 characters, using latin-1 for {ss_url[:50]}...")
                 
-                proxy['plugin'] = plugin_name
-                proxy['plugin-opts'] = {}
-                if plugin_opts_raw:
-                    # Parse plugin-opts string (e.g., "tls;host=example.com")
-                    opts = plugin_opts_raw.split(';')
-                    for opt in opts:
-                        if '=' in opt:
-                            k, v = opt.split('=', 1)
-                            proxy['plugin-opts'][k] = v
-                        else:
-                            # For boolean flags like 'tls'
-                            if opt:
-                                proxy['plugin-opts'][opt] = True # or similar boolean value
-                
-                # Special handling for obfs/v2ray-plugin (Clash requires tls for obfs)
-                if plugin_name in ['obfs-local', 'v2ray-plugin']:
-                    if proxy['plugin-opts'].get('tls'):
-                        proxy['tls'] = True
-                        if 'host' in proxy['plugin-opts']:
-                            proxy['servername'] = proxy['plugin-opts']['host']
-                            proxy['skip-cert-verify'] = proxy['plugin-opts'].get('tls-no-verify', '0') == '1'
-                    else:
-                        proxy['tls'] = False # Ensure not set if not using TLS
+            parts = decoded_str.split('@', 1)
+            if len(parts) != 2:
+                raise ValueError(f"Invalid format after base64 decoding: Missing '@' separator or incorrect structure.")
 
-        return proxy
+            method_password = parts[0]
+            server_port_and_tail = parts[1]
+            clean_server_port_match = re.match(r'^[\w\d\.\-]+\:\d+', server_port_and_tail)
+            if clean_server_port_match:
+                server_port_str = clean_server_port_match.group(0)
+            else:
+                raise ValueError(f"Invalid server:port format in: '{server_port_and_tail}'")
+
+            method_password_parts = method_password.split(':', 1)
+            if len(method_password_parts) != 2:
+                raise ValueError(f"Invalid method:password format: '{method_password}'")
+            method = method_password_parts[0]
+            password = method_password_parts[1]
+
+            server_port_parts = server_port_str.split(':')
+            if len(server_port_parts) != 2:
+                raise ValueError(f"Invalid server:port format: '{server_port_str}'")
+            server = server_port_parts[0]
+            port = int(server_port_parts[1])
+
+            proxy = {
+                'name': name,
+                'type': 'ss',
+                'server': server,
+                'port': port,
+                'cipher': method,
+                'password': password,
+            }
+            if plugin_info_str:
+                proxy['plugin-info'] = plugin_info_str
+            return proxy
+        except (base64.binascii.Error) as b64_err:
+            raise ValueError(f"Base64 decoding error: {b64_err}")
     except Exception as e:
-        # print(f"Failed to parse Shadowsocks link: {link} - Error: {e}")
+        print(f"解析 Shadowsocks 链接失败: {ss_url[:100]}...，原因: {e}")
         return None
 
-# Hysteria2
-def parse_hysteria2(link):
-    """Parses a Hysteria2 link."""
-    if not link.startswith("hysteria2://"):
-        return None
+def parse_hysteria2(hy2_url):
     try:
-        # hysteria2://password@server:port?params#name
-        parts_hash = link[len("hysteria2://"):].split('#', 1)
-        uri = parts_hash[0]
-        name = requests.utils.unquote(parts_hash[1]) if len(parts_hash) > 1 else 'hysteria2_node'
+        parsed = urlparse(hy2_url)
+        uuid = parsed.username
+        server = parsed.hostname
+        port = parsed.port
+        name = unquote(parsed.fragment) if parsed.fragment else f"Hysteria2-{server}"
 
-        parts_at = uri.split('@', 1)
-        password = parts_at[0]
-        server_info = parts_at[1] if len(parts_at) > 1 else ''
-
-        parts_query = server_info.split('?', 1)
-        server_port_str = parts_query[0]
-        query_params = {}
-        if len(parts_query) > 1:
-            for param in parts_query[1].split('&'):
-                if '=' in param:
-                    key, value = param.split('=', 1)
-                    query_params[key] = value
-
-        server, port = None, None
-        if ':' in server_port_str:
-            server_parts = server_port_str.rsplit(':', 1)
-            server = server_parts[0]
-            port = int(server_parts[1])
-        
-        if not server or not port:
-            return None
+        params = parse_qs(parsed.query)
+        tls = params.get('security', [''])[0].lower() == 'tls'
+        servername = params.get('sni', [''])[0]
+        skip_cert_verify = params.get('insecure', ['0'])[0] == '1'
+        fast_open = params.get('fastopen', ['0'])[0] == '1'
 
         proxy = {
             'name': name,
             'type': 'hysteria2',
             'server': server,
             'port': port,
-            'password': password,
-            'udp': True, # Hysteria2 is UDP-based, but also needs TCP for initial handshake
-            'autocert': query_params.get('autocert', '0') == '1',
-            'skip-cert-verify': query_params.get('insecure', '0') == '1',
-            'servername': query_params.get('sni', server),
-            'mfa': query_params.get('mfa', ''), # Multi-factor authentication
-            'obfs': query_params.get('obfs', 'none'),
-            'obfs-password': query_params.get('obfs-password', '')
+            'password': uuid,
+            'tls': tls,
+            'skip-cert-verify': skip_cert_verify,
+            'fast-open': fast_open,
         }
+        if servername:
+            proxy['servername'] = servername
+        if params.get('alpn'):
+            proxy['alpn'] = ','.join(params['alpn'])
         return proxy
     except Exception as e:
-        # print(f"Failed to parse Hysteria2 link: {link} - Error: {e}")
+        print(f"解析 Hysteria2 链接失败: {hy2_url[:50]}...，原因: {e}")
         return None
 
-# --- Link Parsing Dispatcher ---
-def _parse_single_proxy_link(link):
-    """Dispatches parsing based on link scheme."""
-    if link.startswith("vmess://"):
-        return parse_vmess(link)
-    elif link.startswith("trojan://"):
-        return parse_trojan(link)
-    elif link.startswith("ss://"):
-        return parse_shadowsocks(link)
-    elif link.startswith("hysteria2://"):
-        return parse_hysteria2(link)
-    # Add other protocols as needed
+# --- Connectivity Test Function ---
+def test_tcp_connectivity(server, port, timeout=1, retries=1, delay=0.5):
+    for i in range(retries + 1):
+        try:
+            sock = socket.create_connection((server, port), timeout=timeout)
+            sock.close()
+            return True
+        except (socket.timeout, ConnectionRefusedError, OSError):
+            if i < retries:
+                time.sleep(delay)
+        except Exception:
+            return False
+    return False
+
+# --- Subscription Parsing Helper Functions ---
+def _parse_single_proxy_link(line):
+    """Helper function to parse a single proxy link string."""
+    line = line.strip()
+    if line.startswith("vmess://"):
+        return parse_vmess(line)
+    elif line.startswith("trojan://"):
+        return parse_trojan(line)
+    elif line.startswith("ss://"):
+        return parse_shadowsocks(line)
+    elif line.startswith("hysteria2://"):
+        return parse_hysteria2(line)
     return None
 
-def _try_parse_yaml_proxies(decoded_text):
-    """Attempts to parse a YAML string containing a list of Clash proxies."""
+def _try_parse_yaml_proxies(text):
     try:
-        parsed_yaml = yaml.safe_load(decoded_text)
-        if isinstance(parsed_yaml, dict) and 'proxies' in parsed_yaml and isinstance(parsed_yaml['proxies'], list):
-            # Basic validation to ensure it looks like a proxy list
-            if parsed_yaml['proxies'] and isinstance(parsed_yaml['proxies'][0], dict) and 'name' in parsed_yaml['proxies'][0]:
-                print(f"Identified as YAML subscription, found {len(parsed_yaml['proxies'])} proxies")
-                return parsed_yaml['proxies']
+        data = yaml.safe_load(text)
+        if isinstance(data, dict) and 'proxies' in data and isinstance(data['proxies'], list):
+            return data['proxies']
+        # Handle cases where the YAML itself is a list of proxies (e.g. a sub-list from a larger config)
+        elif isinstance(data, list) and all(isinstance(item, dict) and 'type' in item for item in data):
+            return data
+        return None
     except yaml.YAMLError:
-        pass
-    return None
+        return None
 
-def _try_parse_v2rayn_json_proxies(decoded_text):
-    """Attempts to parse a V2RayN-style JSON array of Vmess configs."""
+def _try_parse_v2rayn_json_proxies(text):
     try:
-        parsed_json = json.loads(decoded_text)
-        if isinstance(parsed_json, list):
-            # Check if it looks like a list of Vmess objects (heuristic)
-            if all(isinstance(item, dict) and 'v' in item and 'ps' in item and 'add' in item for item in parsed_json):
-                print(f"Identified as V2RayN JSON subscription, found {len(parsed_json)} proxies")
-                proxies = []
-                for vmess_config in parsed_json:
-                    proxy = {
-                        'name': vmess_config.get('ps', vmess_config.get('id', 'vmess_node')),
-                        'type': 'vmess',
-                        'server': vmess_config.get('add'),
-                        'port': int(vmess_config.get('port')),
-                        'uuid': vmess_config.get('id'),
-                        'alterId': int(vmess_config.get('aid', 0)),
-                        'cipher': vmess_config.get('scy', 'auto'),
-                        'udp': True,
-                        'network': vmess_config.get('net', 'tcp'),
-                    }
-                    if vmess_config.get('tls') == 'tls':
-                        proxy['tls'] = True
-                        proxy['skip-cert-verify'] = vmess_config.get('v', '') != '2' and vmess_config.get('sni') == ''
-                        proxy['servername'] = vmess_config.get('host', '') if vmess_config.get('host') else vmess_config.get('sni', '')
-                        if proxy['servername'] == '':
-                            proxy['servername'] = proxy['server']
-                    if proxy['network'] == 'ws':
-                        proxy['ws-opts'] = {
-                            'path': vmess_config.get('path', '/'),
-                            'headers': {'Host': vmess_config.get('host', '')}
-                        }
-                    elif proxy['network'] == 'grpc':
-                        proxy['grpc-opts'] = {
-                            'serviceName': vmess_config.get('path', ''),
-                            'grpcMode': 'gun' if vmess_config.get('host') == 'gun' else 'direct'
-                        }
-                    
-                    if proxy['server'] and proxy['port']:
-                        proxies.append(proxy)
-                return proxies
+        data = json.loads(text)
+        if isinstance(data, list) and all(isinstance(item, dict) and 'v' in item and 'ps' in item for item in data): # More specific check for V2RayN format
+            parsed_list = []
+            for node in data:
+                # Reconstruct vmess link from V2RayN JSON object
+                vmess_link = f"vmess://{base64.b64encode(json.dumps(node).encode('utf-8')).decode('utf-8')}"
+                p = parse_vmess(vmess_link)
+                if p:
+                    parsed_list.append(p)
+            return parsed_list
+        return None
     except json.JSONDecodeError:
-        pass
-    return None
+        return None
 
-def _parse_proxies_from_decoded_text(decoded_text, url=""):
-    """Parses proxies from a decoded string, trying various formats."""
-    # Try parsing as YAML list of proxies first (e.g., Clash subscription)
+def _parse_proxies_from_decoded_text(decoded_text, url_for_logging):
+    """
+    Tries to parse proxies from decoded text content.
+    Attempts YAML, then V2RayN JSON, then line-by-line.
+    Returns a list of parsed proxy dicts, or an empty list if none found.
+    """
+    proxies = []
+
     yaml_proxies = _try_parse_yaml_proxies(decoded_text)
     if yaml_proxies:
+        print(f"  --- URL: {url_for_logging} Identified as YAML subscription, found {len(yaml_proxies)} proxies ---")
         return yaml_proxies
 
-    # Try parsing as V2RayN-style JSON array
-    v2rayn_proxies = _try_parse_v2rayn_json_proxies(decoded_text)
-    if v2rayn_proxies:
-        return v2rayn_proxies
+    json_node_proxies = _try_parse_v2rayn_json_proxies(decoded_text)
+    if json_node_proxies:
+        print(f"  --- URL: {url_for_logging} Identified as V2RayN JSON node list, found {len(json_node_proxies)} proxies ---")
+        return json_node_proxies
 
-    # If not YAML or V2RayN JSON, assume it's a list of proxy links (one per line)
-    proxies = []
-    lines = decoded_text.splitlines()
+    # Try line-by-line parsing for common proxy link formats
+    lines = decoded_text.split('\n')
+    parsed_line_count = 0
     for line in lines:
-        stripped_line = line.strip()
-        if stripped_line:
-            proxy = _parse_single_proxy_link(stripped_line)
-            if proxy:
-                proxies.append(proxy)
+        proxy = _parse_single_proxy_link(line)
+        if proxy:
+            proxies.append(proxy)
+            parsed_line_count += 1
+            
+    if parsed_line_count > 0:
+        print(f"  --- URL: {url_for_logging} Identified as plaintext, {parsed_line_count} proxy nodes parsed ---")
     return proxies
+
 
 # --- Fetch and Decode URLs ---
 def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
@@ -608,6 +352,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
             try:
                 decoded_content_utf8 = content.decode('utf-8')
                 decoded_successfully = True
+                # print(f"  --- URL: {url} Successfully decoded as UTF-8 ---")
                 
                 proxies_from_utf8 = _parse_proxies_from_decoded_text(decoded_content_utf8, url)
                 if proxies_from_utf8:
@@ -627,29 +372,41 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                             proxies_from_b64_in_utf8 = _parse_proxies_from_decoded_text(decoded_from_base64_in_utf8, url)
                             if proxies_from_b64_in_utf8:
                                 current_proxies_from_url.extend(proxies_from_b64_in_utf8)
+                            # else:
+                                # print(f"  --- URL: {url} Base64 decoded (from UTF-8 source) but no proxies found. ---")
                         except (base64.binascii.Error, UnicodeDecodeError) as e_b64_utf8:
                             print(f"  --- URL: {url} Looked like Base64 (in UTF-8 text) but failed to decode/parse: {e_b64_utf8} ---")
-                        except Exception as e_generic_b64_utf8:
+                        except Exception as e_generic_b64_utf8: # Catch any other unexpected error
                             print(f"  --- URL: {url} Unexpected error during Base64 (in UTF-8 text) processing: {e_generic_b64_utf8} ---")
                 
             except UnicodeDecodeError:
                 print(f"  --- URL: {url} UTF-8 decoding failed. Will try direct Base64. ---")
+                # decoded_successfully remains False
 
             # Attempt 2: If no proxies found yet, OR initial UTF-8 decoding failed, try direct Base64 decoding of original content
             if not current_proxies_from_url:
+                # print(f"  --- URL: {url} No proxies found via UTF-8 path or UTF-8 decode failed. Attempting direct Base64. ---")
                 try:
+                    # content is bytes. Strip potential whitespace bytes if the source was text-like before b64 encoding.
                     cleaned_byte_content = content.strip()
-                    # Ensure byte content is a multiple of 4 for base64 decoding
-                    missing_padding = len(cleaned_byte_content) % 4
+                    # Add padding if necessary, robustly
+                    b64_text_equivalent = cleaned_byte_content.decode('ascii', errors='ignore') # For length check and padding
+                    missing_padding = len(b64_text_equivalent) % 4
                     if missing_padding:
-                           cleaned_byte_content += b'=' * (4 - missing_padding)
+                            cleaned_byte_content += b'=' * (4 - missing_padding)
 
                     decoded_content_b64 = base64.b64decode(cleaned_byte_content).decode('utf-8')
+                    # print(f"  --- URL: {url} Successfully decoded raw content as Base64 then UTF-8 ---")
                     proxies_from_b64 = _parse_proxies_from_decoded_text(decoded_content_b64, url)
                     if proxies_from_b64:
                         current_proxies_from_url.extend(proxies_from_b64)
+                    # elif decoded_successfully: # if UTF-8 was successful but found nothing, and b64 also found nothing
+                        # print(f"  --- URL: {url} Direct Base64 decoding yielded no proxies (original was UTF-8). ---")
+                    # else: # if UTF-8 failed, and b64 also found nothing
+                        # print(f"  --- URL: {url} Direct Base64 decoding yielded no proxies (original was not UTF-8). ---")
+
                 except (base64.binascii.Error, UnicodeDecodeError) as b64_err:
-                    if not decoded_successfully:
+                    if not decoded_successfully: # Only print this if UTF-8 also failed
                             print(f"  --- URL: {url} Direct Base64 decoding or subsequent UTF-8 conversion failed: {b64_err} ---")
                 except Exception as e_b64_direct:
                     print(f"  --- URL: {url} Unexpected error during direct Base64 processing: {e_b64_direct} ---")
@@ -667,29 +424,21 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
             print(f"An unexpected error occurred while processing URL {url}: {e}")
 
     # --- Deduplication and Connectivity Test (Parallelized) ---
-    # MODIFIED DEDUPLICATION LOGIC: Use generate_proxy_fingerprint for unique keys
     unique_proxies_for_test = {}
     for proxy_dict in all_raw_proxies:
-        if proxy_dict and isinstance(proxy_dict, dict) and 'server' in proxy_dict and 'port' in proxy_dict :
-            # Check for exclude keywords in server name (case-insensitive)
-            if any(keyword in proxy_dict['server'].lower() for keyword in EXCLUDE_NODES_BY_SERVER):
-                # print(f"Excluding node due to server keyword: {proxy_dict['server']}")
-                continue
-
+        if proxy_dict and isinstance(proxy_dict, dict) and 'server' in proxy_dict and 'port' in proxy_dict : # Ensure it's a valid dict
             fingerprint = generate_proxy_fingerprint(proxy_dict)
             if fingerprint not in unique_proxies_for_test:
                 unique_proxies_for_test[fingerprint] = proxy_dict
-            else:
-                # Optional: If a duplicate is found, you might want to log it
-                # print(f"    检测到重复节点 (基于核心参数): {proxy_dict.get('name', proxy_dict.get('server'))}")
-                pass
+        # else:
+            # print(f"Warning: Invalid proxy data encountered during deduplication: {proxy_dict}")
             
     proxies_to_test_list = list(unique_proxies_for_test.values())
     final_filtered_proxies = []
 
     if enable_connectivity_test:
         print(f"\n开始并行连通性测试，共 {len(proxies_to_test_list)} 个唯一代理...")
-        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS_CONNECTIVITY_TEST) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS_CONNECTIVITY_TEST) as executor: # 修正了变量名
             future_to_proxy = {
                 executor.submit(test_tcp_connectivity, p['server'], p['port']): p
                 for p in proxies_to_test_list if p.get('server') and isinstance(p.get('port'), int)
@@ -705,219 +454,246 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                 try:
                     is_reachable = future.result()
                     if is_reachable:
-                        # --- START MODIFIED NAMING LOGIC (from previous update, remains) ---
-                        original_parsed_name = proxy_dict.get('name', '') # 获取解析函数得到的名称
-                        fingerprint_suffix = generate_proxy_fingerprint(proxy_dict)[:8] # 获取指纹
+                        original_name = proxy_dict.get('name', f"{proxy_dict.get('type', 'UNKNOWN').upper()}-{proxy_dict.get('server', 'unknown')}")
+                        short_fingerprint = generate_proxy_fingerprint(proxy_dict)[:6]
+                        max_name_len = 50 
 
-                        if original_parsed_name:
-                            # 如果原始名称存在，使用原始名称 + 指纹
-                            # 增加一个长度限制，避免名称过长
-                            max_name_len = 40 # 原始名称的最大长度，加上指纹和连字符
-                            if len(original_parsed_name) > max_name_len:
-                                display_name = f"{original_parsed_name[:max_name_len]}..."
-                            else:
-                                display_name = original_parsed_name
-                            proxy_dict['name'] = f"{display_name}-{fingerprint_suffix}"
+                        if len(original_name) > max_name_len - (len(short_fingerprint) + 1):
+                            display_name = original_name[:max_name_len - (len(short_fingerprint) + 4)] + "..."
                         else:
-                            # 如果原始名称不存在，则回退到 类型-服务器 + 指纹
-                            base_name = f"{proxy_dict.get('type', 'UNKNOWN').upper()}-{proxy_dict.get('server', 'unknown_server')}"
-                            proxy_dict['name'] = f"{base_name}-{fingerprint_suffix}"
-                        # --- END MODIFIED NAMING LOGIC ---
-                        
+                            display_name = original_name
+
+                        proxy_dict['name'] = f"{display_name}-{short_fingerprint}"
                         final_filtered_proxies.append(proxy_dict)
                 except Exception as exc:
                     print(f"    连通性测试 {server}:{port} 时发生异常: {exc}")
                 
-                # Print progress every 50 proxies or at the end
                 if processed_count % 50 == 0 or processed_count == total_testable_proxies:
                     print(f"    进度: 已测试 {processed_count}/{total_testable_proxies} 个代理...")
     else:
         print("跳过连通性测试 (已禁用)。所有解析出的唯一代理将被添加。")
         for proxy_dict in proxies_to_test_list:
-            # --- START MODIFIED NAMING LOGIC (for when connectivity test is disabled, remains) ---
-            original_parsed_name = proxy_dict.get('name', '')
-            fingerprint_suffix = generate_proxy_fingerprint(proxy_dict)[:8]
+            original_name = proxy_dict.get('name', f"{proxy_dict.get('type', 'UNKNOWN').upper()}-{proxy_dict.get('server', 'unknown')}")
+            short_fingerprint = generate_proxy_fingerprint(proxy_dict)[:6]
+            max_name_len = 50 
 
-            if original_parsed_name:
-                max_name_len = 40
-                if len(original_parsed_name) > max_name_len:
-                    display_name = f"{original_parsed_name[:max_name_len]}..."
-                else:
-                    display_name = original_parsed_name
-                proxy_dict['name'] = f"{display_name}-{fingerprint_suffix}"
+            if len(original_name) > max_name_len - (len(short_fingerprint) + 1):
+                display_name = original_name[:max_name_len - (len(short_fingerprint) + 4)] + "..."
             else:
-                base_name = f"{proxy_dict.get('type', 'UNKNOWN').upper()}-{proxy_dict.get('server', 'unknown_server')}"
-                proxy_dict['name'] = f"{base_name}-{fingerprint_suffix}"
-            # --- END MODIFIED NAMING LOGIC ---
+                display_name = original_name
+
+            proxy_dict['name'] = f"{display_name}-{short_fingerprint}"
             final_filtered_proxies.append(proxy_dict)
 
     print(f"Successfully parsed, deduplicated, tested, and aggregated {len(final_filtered_proxies)} unique and reachable proxy nodes.")
     return final_filtered_proxies, list(successful_urls)
 
 # --- GitHub API Helpers ---
-def get_github_file_content(repo_api_url):
-    """Fetches content of a file from GitHub API and its SHA."""
-    headers = {
-        'Accept': 'application/vnd.github.v3.raw',
-        'User-Agent': 'GitHubActions/Aggregator' # Good practice to set User-Agent
-    }
-    # For public repos, token is usually not needed for content.
-    # If it's a private repo or hits rate limit, consider adding Authorization header:
-    # if os.getenv('GITHUB_TOKEN'):
-    #     headers['Authorization'] = f"token {os.getenv('GITHUB_TOKEN')}"
+def get_github_file_content(api_url, token):
+    headers = {"Authorization": f"token {token}", "Accept": "application/vnd.github.v3.raw"}
+    try:
+        print(f"DEBUG: 尝试从 GitHub API 获取文件: {api_url}")
+        response = requests.get(api_url, headers=headers, timeout=10)
+        print(f"DEBUG: GitHub API 响应状态码: {response.status_code}")
+        
+        sha = response.headers.get("X-GitHub-Sha")
+        if sha is None:
+            etag = response.headers.get("ETag")
+            if etag:
+                sha = etag.strip('"')
+                print(f"DEBUG: X-GitHub-Sha 为 None，从 ETag 获取到 SHA: {sha}")
+            else:
+                print("DEBUG: 既未获取到 X-GitHub-Sha，也未获取到 ETag。")
+        else:
+            print(f"DEBUG: 从 X-GitHub-Sha 获取到 SHA: {sha}")
+            
+        response.raise_for_status()
+        return response.text, sha
+    except requests.exceptions.HTTPError as http_err:
+        print(f"Error fetching file from GitHub (HTTP Error): {http_err}")
+        if response is not None:
+            print(f"DEBUG: 错误响应内容: {response.text}")
+        return None, None
+    except requests.exceptions.RequestException as req_err:
+        print(f"Error fetching file from GitHub (Request Error): {req_err}")
+        return None, None
+    except Exception as e:
+        print(f"Error fetching file from GitHub (Other Error): {e}")
+        return None, None
 
-    print(f"DEBUG: 尝试从 GitHub API 获取文件: {repo_api_url}")
-    response = requests.get(repo_api_url, headers=headers, timeout=10)
-    print(f"DEBUG: GitHub API 响应状态码: {response.status_code}")
-    response.raise_for_status() # Raise an exception for HTTP errors
-    
-    # Get SHA from ETag or Link header
-    sha = response.headers.get('ETag', '').strip('"') # ETag usually contains SHA for blobs
-    if not sha:
-        # Fallback for SHA if ETag is not the SHA directly, or if it's a tree/commit SHA
-        # This is less reliable for blob content SHA, but might be needed if API changes
-        print("DEBUG: X-GitHub-Sha 为 None，从 ETag 获取到 SHA: " + sha)
-    else:
-         print("DEBUG: 从 ETag 获取到 SHA: " + sha)
-         
-    return response.text, sha # Return text content and SHA
-
-def update_github_file_content(repo_api_url, content, sha, commit_message, bot_token):
-    """Updates a file on GitHub via API."""
+def update_github_file_content(repo_contents_api_base, token, file_path, new_content, sha, commit_message):
+    url = f"{repo_contents_api_base}/{file_path}"
     headers = {
-        'Authorization': f"token {bot_token}",
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json',
-        'User-Agent': 'GitHubActions/Aggregator'
+        "Authorization": f"token {token}",
+        "Accept": "application/vnd.github.v3+json",
+        "Content-Type": "application/json"
     }
     data = {
-        'message': commit_message,
-        'content': base64.b64encode(content.encode('utf-8')).decode('utf-8'),
-        'sha': sha
+        "message": commit_message,
+        "content": base64.b64encode(new_content.encode('utf-8')).decode('utf-8'),
+        "sha": sha
     }
-    print(f"DEBUG: 尝试更新 GitHub 文件: {repo_api_url} with SHA: {sha}")
-    response = requests.put(repo_api_url, headers=headers, json=data, timeout=10)
-    print(f"DEBUG: GitHub API 更新响应状态码: {response.status_code}")
-    response.raise_for_status()
-    return response.json()
-
+    try:
+        response = requests.put(url, headers=headers, data=json.dumps(data), timeout=10)
+        response.raise_for_status()
+        return True
+    except requests.exceptions.RequestException as e:
+        print(f"Error updating file on GitHub: {e}")
+        if response and response.status_code == 409: # type: ignore
+            print("Conflict: File content changed on GitHub before commit. Please re-run.")
+        return False
 
 # --- Main Function ---
 def main():
-    if not URL_LIST_REPO_API:
-        print("Error: URL_LIST_REPO_API environment variable is not set. Exiting.")
-        sys.exit(1)
+    bot_token = os.environ.get("BOT")
+    url_list_repo_api = os.environ.get("URL_LIST_REPO_API")
 
-    url_list_content, url_list_sha = get_github_file_content(URL_LIST_REPO_API)
-    subscription_urls = [url.strip() for url in url_list_content.splitlines() if url.strip()]
-    
-    print(f"Fetched {len(subscription_urls)} non-empty subscription URLs from GitHub.")
+    if not url_list_repo_api: # Check early
+        print("Error: Environment variable URL_LIST_REPO_API is not set!")
+        exit(1)
 
-    # Load Clash template
     try:
-        with open(CLASH_TEMPLATE_PATH, 'r', encoding='utf-8') as f:
-            clash_template = yaml.safe_load(f)
-    except FileNotFoundError:
-        print(f"Error: Clash template file not found at {CLASH_TEMPLATE_PATH}. Exiting.")
-        sys.exit(1)
-    except yaml.YAMLError as e:
-        print(f"Error parsing Clash template YAML: {e}. Exiting.")
-        sys.exit(1)
+        parts = url_list_repo_api.split('/')
+        if len(parts) < 8 or parts[2] != 'api.github.com' or parts[3] != 'repos' or parts[6] != 'contents':
+            raise ValueError("URL_LIST_REPO_API does not seem to be a valid GitHub Content API URL.")
+        owner = parts[4]
+        repo_name = parts[5]
+        file_path_in_repo = '/'.join(parts[7:])
+    except ValueError as ve:
+        print(f"Error: {ve}")
+        print("Please ensure URL_LIST_REPO_API is correctly set (e.g., https://api.github.com/repos/user/repo/contents/path/to/file.txt).")
+        exit(1)
+    except IndexError:
+        print("Error: URL_LIST_REPO_API format is incorrect. Cannot extract owner, repo, or file path.")
+        exit(1)
 
-    # Fetch and process proxies
-    filtered_proxies, successful_urls_set = fetch_and_decode_urls_to_clash_proxies(
-        subscription_urls,
-        enable_connectivity_test=ENABLE_CONNECTIVITY_TEST
-    )
+    repo_contents_api_base = f"https://api.github.com/repos/{owner}/{repo_name}/contents"
 
-    # Convert proxies to YAML format
-    proxies_yaml = yaml.dump(filtered_proxies, sort_keys=False, indent=2, allow_unicode=True)
-    
-    # Generate Clash config file
-    clash_config = clash_template
-    clash_config['proxies'] = filtered_proxies
-    
-    # Generate proxy groups based on the filtered proxies (simplified example)
-    # This part would need more sophisticated logic for robust group creation
-    # For now, let's just make a simple 'Auto' group that uses all available proxies
-    proxy_names = [p['name'] for p in filtered_proxies]
-    if 'proxy-groups' not in clash_config:
-        clash_config['proxy-groups'] = []
+    if not bot_token:
+        print("Error: Environment variable BOT is not set!")
+        print("Please ensure you've correctly set this variable in GitHub Actions secrets/variables.")
+        exit(1)
 
-    # Example: Add an 'Auto' group and 'Proxy' group if they don't exist
-    auto_group_exists = False
-    proxy_group_exists = False
-    
-    for group in clash_config['proxy-groups']:
-        if group.get('name') == 'Auto':
-            group['proxies'] = ['DIRECT'] + proxy_names # Add DIRECT for fallback
-            auto_group_exists = True
-        if group.get('name') == 'Proxy':
-            # This 'Proxy' group typically points to 'Auto' or similar
-            group['proxies'] = ['Auto', 'DIRECT'] # Ensure it has correct fallback/selection
-            proxy_group_exists = True
+    print("Fetching URL list and its SHA from GitHub...")
+    url_content, url_file_sha = get_github_file_content(url_list_repo_api, bot_token)
 
-    if not auto_group_exists:
-        clash_config['proxy-groups'].append({
-            'name': 'Auto',
-            'type': 'select',
-            'proxies': ['DIRECT'] + proxy_names
-        })
-    if not proxy_group_exists:
-         clash_config['proxy-groups'].append({
-            'name': 'Proxy',
-            'type': 'select',
-            'proxies': ['Auto', 'DIRECT']
-        })
+    if url_content is None or url_file_sha is None:
+        print("Could not get URL list or its SHA, script terminated.")
+        exit(1)
 
-    # The rules section in the template should be adjusted by the user as needed.
-    # Here, we ensure that the main proxy group is at least part of the rules.
-    # This is a very basic example and might need adjustment for complex rule sets.
-    if 'rules' in clash_config:
-        # Ensure a final DIRECT rule exists if not already present
-        if 'MATCH,DIRECT' not in clash_config['rules'] and 'FINAL,DIRECT' not in clash_config['rules']:
-            clash_config['rules'].append('MATCH,DIRECT')
+    urls = [u for u in url_content.strip().split('\n') if u.strip()] # Ensure no empty lines
+    print(f"Fetched {len(urls)} non-empty subscription URLs from GitHub.")
+
+    enable_connectivity_test = os.environ.get("ENABLE_CONNECTIVITY_TEST", "true").lower() == "true"
+
+    all_parsed_proxies, successful_urls_list = fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test)
+
+    clash_config = {
+        'port': 7890,
+        'socks-port': 7891,
+        'redir-port': 7892,
+        'tproxy-port': 7893,
+        'mixed-port': 7890, # Usually same as 'port'
+        'mode': 'rule',
+        'log-level': 'info',
+        'allow-lan': True,
+        'bind-address': '*',
+        'external-controller': '127.0.0.1:9090',
+        'dns': {
+            'enable': True,
+            'ipv6': False,
+            'enhanced-mode': 'fake-ip', # 'redir-host' or 'fake-ip'
+            'listen': '0.0.0.0:53',
+            'default-nameserver': ['114.114.114.114', '8.8.8.8'],
+            'nameserver': ['https://dns.google/dns-query', 'tls://dns.google'],
+            'fallback': ['tls://1.1.1.1', 'tcp://8.8.4.4', 'https://dns.opendns.com/dns-query'],
+            'fallback-filter': {'geoip': True, 'geoip-code': 'CN', 'ipcidr': ['240.0.0.0/4']}
+        },
+        'proxies': all_parsed_proxies,
+        'proxy-groups': [
+            {
+                'name': '🚀 节点选择', 'type': 'select',
+                'proxies': ['DIRECT'] + ([p['name'] for p in all_parsed_proxies] if all_parsed_proxies else [])
+            },
+            {
+                'name': '📲 国外媒体', 'type': 'select',
+                'proxies': ['🚀 节点选择', 'DIRECT'] + ([p['name'] for p in all_parsed_proxies] if all_parsed_proxies else [])
+            },
+            {
+                'name': '🤖 AI/ChatGPT', 'type': 'select',
+                'proxies': ['🚀 节点选择', 'DIRECT'] + ([p['name'] for p in all_parsed_proxies] if all_parsed_proxies else [])
+            },
+            {
+                'name': '🌍 其他流量', 'type': 'select',
+                'proxies': ['🚀 节点选择', 'DIRECT'] + ([p['name'] for p in all_parsed_proxies] if all_parsed_proxies else [])
+            },
+            {
+                'name': '🐟 漏网之鱼', 'type': 'select',
+                'proxies': ['🚀 节点选择', 'DIRECT'] + ([p['name'] for p in all_parsed_proxies] if all_parsed_proxies else [])
+            },
+            {
+                'name': '🛑 广告拦截', 'type': 'select',
+                'proxies': ['REJECT', 'DIRECT']
+            },
+            {
+                'name': '🔰 Fallback', 'type': 'fallback',
+                'proxies': ([p['name'] for p in all_parsed_proxies] if all_parsed_proxies else ['DIRECT']), # Fallback needs at least one proxy
+                'url': 'http://www.google.com/generate_204', 'interval': 300
+            }
+        ],
+        'rules': [
+            'DOMAIN-KEYWORD,openai,🤖 AI/ChatGPT',
+            'DOMAIN-KEYWORD,google,📲 国外媒体',
+            'DOMAIN-KEYWORD,youtube,📲 国外媒体',
+            'DOMAIN-KEYWORD,netflix,📲 国外媒体',
+            'DOMAIN-KEYWORD,github,🌍 其他流量',
+            'DOMAIN-SUFFIX,cn,DIRECT',
+            'IP-CIDR,172.16.0.0/12,DIRECT,no-resolve',
+            'IP-CIDR,192.168.0.0/16,DIRECT,no-resolve',
+            'IP-CIDR,10.0.0.0/8,DIRECT,no-resolve',
+            'IP-CIDR,127.0.0.1/8,DIRECT,no-resolve',
+            'GEOIP,CN,DIRECT,no-resolve',
+            'MATCH,🐟 漏网之鱼'
+        ]
+    }
+    # Ensure proxy groups have valid options even if no proxies are found
+    if not all_parsed_proxies:
+        for group in clash_config['proxy-groups']:
+            if group['name'] not in ['🛑 广告拦截', '🔰 Fallback']: # These have static/different logic
+                group['proxies'] = ['DIRECT'] # Default to DIRECT if no remote proxies
+            elif group['name'] == '🔰 Fallback':
+                group['proxies'] = ['DIRECT']
 
 
-    # Write to base64.yaml
-    with open('base64.yaml', 'w', encoding='utf-8') as f:
-        yaml.dump(clash_config, f, sort_keys=False, indent=2, allow_unicode=True)
-    print("Generated base64.yaml (Clash config).")
+    final_clash_yaml = yaml.dump(clash_config, allow_unicode=True, sort_keys=False, default_flow_style=False, indent=2)
+    with open("base64.yaml", "w", encoding="utf-8") as f:
+        f.write(final_clash_yaml)
+    print("Clash YAML configuration successfully written to base64.yaml")
 
-    # Generate base64.txt (Base64 encoded YAML)
-    with open('base64.yaml', 'r', encoding='utf-8') as f:
-        config_content = f.read()
-    base64_content = base64.b64encode(config_content.encode('utf-8')).decode('utf-8')
-    with open('base64.txt', 'w', encoding='utf-8') as f:
-        f.write(base64_content)
-    print("Generated base64.txt (Base64 encoded Clash config).")
+    final_base64_encoded = base64.b64encode(final_clash_yaml.encode('utf-8')).decode('utf-8')
+    with open("base64.txt", "w", encoding="utf-8") as f:
+        f.write(final_base64_encoded)
+    print("Base64 encoded Clash YAML configuration successfully written to base64.txt")
 
-    # Optional: Update URL list on GitHub if needed (e.g., remove failed URLs)
-    # This logic is commented out by default but can be enabled if needed
-    # (Requires BOT secret and URL_LIST_REPO_API pointing to the actual URL list file)
-    # bot_token = os.getenv('BOT')
-    # if bot_token and URL_LIST_REPO_API:
-    #     current_url_list = set(subscription_urls)
-    #     urls_to_keep = sorted(list(successful_urls_set.intersection(current_url_list)))
-    #     if len(urls_to_keep) < len(current_url_list):
-    #         print(f"Updating URL list on GitHub: keeping {len(urls_to_keep)} of {len(current_url_list)} URLs.")
-    #         new_url_list_content = "\n".join(urls_to_keep) + "\n"
-    #         if new_url_list_content.strip() != url_list_content.strip():
-    #             try:
-    #                 update_github_file_content(URL_LIST_REPO_API, new_url_list_content, url_list_sha,
-    #                                            "chore: Update subscription URLs based on successful fetches", bot_token)
-    #                 print("Successfully updated subscription URL list on GitHub.")
-    #             except requests.exceptions.RequestException as e:
-    #                 print(f"Failed to update subscription URL list on GitHub: {e}")
-    #             except Exception as e:
-    #                 print(f"An unexpected error occurred while updating URL list: {e}")
-    #         else:
-    #             print("No changes to subscription URL list, skipping GitHub update.")
-    #     else:
-    #         print("All URLs were successfully fetched, no need to update URL list on GitHub.")
-    # else:
-    #     print("Skipping URL list update on GitHub (BOT secret or URL_LIST_REPO_API not set).")
+    new_url_list_content = "\n".join(sorted(list(set(successful_urls_list))))
 
+    if new_url_list_content.strip() != url_content.strip():
+        print("Updating GitHub url.txt file...")
+        commit_message = "feat: Update url.txt with valid subscription links (auto-filtered)"
+        update_success = update_github_file_content(
+            repo_contents_api_base,
+            bot_token,
+            file_path_in_repo,
+            new_url_list_content,
+            url_file_sha,
+            commit_message
+        )
+        if update_success:
+            print("url.txt file updated successfully.")
+        else:
+            print("Failed to update url.txt file.")
+    else:
+        print("url.txt file content unchanged, no update needed.")
 
 if __name__ == "__main__":
     main()
