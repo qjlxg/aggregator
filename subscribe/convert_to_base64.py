@@ -1,4 +1,3 @@
-
 import requests
 import base64
 import os
@@ -122,7 +121,7 @@ def parse_shadowsocks(ss_url):
         missing_padding = len(encoded_part) % 4
         if missing_padding:
             encoded_part += '=' * (4 - missing_padding)
-        
+            
         try:
             # 尝试使用 utf-8 解码，如果失败则尝试 latin-1
             decoded_bytes = base64.urlsafe_b64decode(encoded_part)
@@ -131,7 +130,7 @@ def parse_shadowsocks(ss_url):
             except UnicodeDecodeError:
                 decoded_str = decoded_bytes.decode('latin-1', errors='ignore')
                 print(f"    Warning: Shadowsocks link decoded to non-UTF-8 characters, using latin-1 for {ss_url[:50]}...")
-            
+                
             # 关键修改：只取第一个 '@' 之前和之后的部分，忽略所有后续内容
             parts = decoded_str.split('@', 1) # 只分割一次
             
@@ -143,10 +142,10 @@ def parse_shadowsocks(ss_url):
 
             # 进一步清理 server_port_and_tail，只保留有效的服务器:端口部分
             # 正则表达式匹配：
-            # ^                  - 字符串开头
-            # [\w\d\.\-]+       - 匹配一个或多个单词字符（字母、数字、下划线）、数字、点或连字符（用于服务器名）
-            # :                  - 匹配冒号
-            # \d+                - 匹配一个或多个数字（端口号）
+            # ^                   - 字符串开头
+            # [\w\d\.\-]+         - 匹配一个或多个单词字符（字母、数字、下划线）、数字、点或连字符（用于服务器名）
+            # :                   - 匹配冒号
+            # \d+                 - 匹配一个或多个数字（端口号）
             clean_server_port_match = re.match(r'^[\w\d\.\-]+\:\d+', server_port_and_tail)
             if clean_server_port_match:
                 server_port_str = clean_server_port_match.group(0)
@@ -236,7 +235,7 @@ def test_tcp_connectivity(server, port, timeout=1, retries=1, delay=0.5):
             if i < retries: # 如果不是最后一次尝试，则等待并重试
                 time.sleep(delay)
         except Exception as e:
-            # print(f"  TCP连接测试发生未知错误: {server}:{port} - {e}") # 减少日志输出
+            # print(f"    TCP连接测试发生未知错误: {server}:{port} - {e}") # 减少日志输出
             return False
     return False # 所有重试都失败
 
@@ -416,7 +415,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                 except (base64.binascii.Error, UnicodeDecodeError) as decode_err:
                     print(f"  --- URL: {url} Base64 decoding or UTF-8 conversion failed: {decode_err} ---")
                     # Fallback to latin-1 for content that can't be decoded to UTF-8 or Base64 (for logging purposes)
-                    content.decode('latin-1', errors='ignore') 
+                    content.decode('latin-1', errors='ignore')  
                     print(f"Warning: Could not decode content from {url} to UTF-8 or Base64. Using latin-1 and ignoring errors.")
 
             # 将当前URL解析出的代理添加到总列表
@@ -436,7 +435,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
             fingerprint = generate_proxy_fingerprint(proxy_dict)
             if fingerprint not in unique_proxies_for_test:
                 unique_proxies_for_test[fingerprint] = proxy_dict
-    
+            
     proxies_to_test_list = list(unique_proxies_for_test.values())
     final_filtered_proxies = []
 
@@ -696,10 +695,14 @@ def main():
         ]
     }
 
+    # --- 生成原始 YAML 文件 ---
     final_clash_yaml = yaml.dump(clash_config, allow_unicode=True, sort_keys=False, default_flow_style=False, indent=2)
+    with open("base64.yaml", "w", encoding="utf-8") as f:
+        f.write(final_clash_yaml)
+    print("Clash YAML configuration successfully written to base64.yaml")
 
+    # --- 生成 Base64 编码后的文本文件 ---
     final_base64_encoded = base64.b64encode(final_clash_yaml.encode('utf-8')).decode('utf-8')
-
     with open("base64.txt", "w", encoding="utf-8") as f:
         f.write(final_base64_encoded)
     print("Base64 encoded Clash YAML configuration successfully written to base64.txt")
