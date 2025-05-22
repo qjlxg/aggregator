@@ -1,0 +1,92 @@
+name: Base64 Conversion
+
+on:
+  workflow_dispatch: # 允许手动触发
+  schedule:
+    - cron: "0 */1 * * *" # 每小时的第0分钟运行一次
+
+jobs:
+  convert_to_base64:
+    runs-on: ubuntu-latest # 使用最新的 Ubuntu 运行器
+
+    steps:
+      - name: Checkout repository # 检出代码
+        uses: actions/checkout@v4 # 升级到最新版本，更安全、功能更多
+
+      - name: Set up Python # 设置 Python 环境
+        uses: actions/setup-python@v5 # 升级到最新版本
+        with:
+          python-version: '3.x' # 使用最新的 Python 3 版本
+
+      - name: Install dependencies # 安装所需的 Python 库
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests PyYAML maxminddb # <-- 重点：添加 maxminddb
+
+      - name: Run conversion script
+        id: generate_config # 为此步骤设置 ID，以便后续步骤可以访问其输出
+        env:
+          # GitHub Token，用于访问和更新仓库文件
+          # 请在你的 GitHub 仓库 Settings -> Secrets and variables -> Actions 中添加 BOT 这个 Secret
+          BOT: ${{ secrets.BOT }}
+          # URL 列表文件的 GitHub API 地址，例如：
+          # https://api.github.com/repos/YOUR_USERNAME/YOUR_REPO/contents/url.txt
+          # 请在你的 GitHub 仓库 Settings -> Secrets and variables -> Actions 中添加 URL_LIST_REPO_API 这个 Secret
+          URL_LIST_REPO_API: ${{ secrets.URL_LIST_REPO_API }}
+          # Clash 配置模板文件的路径（相对于仓库根目录）
+          # 请确保你已经创建了 `clash_template.yml` 并提交到仓库
+          CLASH_TEMPLATE_PATH: "clash_template.yml"
+          # 是否启用代理连通性测试 ("true" 或 "false")
+          ENABLE_CONNECTIVITY_TEST: "true"
+          # TCP 连接超时秒数 (默认为 1 秒)
+          TCP_TIMEOUT: "1"
+          # TCP 连接重试次数 (默认为 1 次)
+          TCP_RETRIES: "1"
+          # TCP 连接重试间隔秒数 (默认为 0.5 秒)
+          TCP_DELAY: "0.5"
+          # 并行测试的最大线程数 (默认为 30，可以根据运行器资源调整)
+          MAX_WORKERS: "30"
+          # 要排除的代理服务器域名或 IP 列表，逗号分隔，不区分大小写
+          # 例如: "badserver1.com,1.2.3.4,another-bad.xyz"
+          EXCLUDE_NODES_BY_SERVER: "" # 留空表示不排除
+          # 一个 URL 连续失败多少次后将从 url.txt 中移除 (默认为 3 次)
+          FAILED_URL_THRESHOLD: "3"
+          # 新增：启用 GeoIP 过滤中国节点 ("true" 或 "false")
+          EXCLUDE_CHINA_NODES: "true" 
+          # 新增：GeoIP 数据库文件路径 (相对于仓库根目录)
+          # 确保这个路径和你的实际文件位置一致
+          GEOIP_DB_PATH: "clash/Country.mmdb"
+        run: |
+          python subscribe/convert_to_base64.py
+
+      - name: Display script outputs # 显示脚本生成的一些统计信息
+        run: |
+          echo "### 脚本摘要:" >> $GITHUB_STEP_SUMMARY
+          echo "- **处理的总代理数:** ${{ steps.generate_config.outputs.total_proxies }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **成功（可达）代理数:** ${{ steps.generate_config.outputs.successful_proxies }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **成功处理的 URL 数:** ${{ steps.generate_config.outputs.processed_urls }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Commit and push changes (if any) # 提交并推送更改 (如果文件有变化)
+        if: success() # 只在前面的步骤都成功时才运行此步骤
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          
+          # 检查 base64.txt 文件是否有实际变化
+          # `git diff --quiet` 如果文件无变化则返回 0，有变化则返回 1
+          git diff --quiet base64.txt || git add base64.txt # 如果有变化则添加
+          
+          # 检查是否有待提交的更改（包括 url.txt 和 base64.txt）
+          if git diff --cached --exit-code --quiet; then
+            echo "未检测到更改，跳过提交。"
+          else
+            git commit -m "feat: 通过 GitHub Actions 更新生成的配置和 URL 列表"
+            
+            # 尝试拉取远程最新代码并rebase，以避免冲突
+            # --autostash 选项可以在 rebase 前自动暂存本地修改，rebase 后恢复
+            echo "尝试拉取并 rebase 到 origin/${{ github.ref_name }}..."
+            git pull --rebase --autostash origin ${{ github.ref_name }}
+            
+            echo "推送更改到 origin/${{ github.ref_name }}..."
+            git push origin ${{ github.ref_name }}
+          fi
