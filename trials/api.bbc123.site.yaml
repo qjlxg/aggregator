@@ -29,59 +29,52 @@ proxy-groups:
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
   tolerance: 100
-  use: &id001
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
+  proxies: &id001
+  - 🇭🇰 [ss]香港01专线|优质线路 - 穿越云
+  - 🇭🇰 [ss]香港02专线|优质线路 - 穿越云
+  - 🇭🇰 [ss]香港03专线|优质线路 - 穿越云
+  - 🇭🇰 [ss]香港04专线|优质线路 - 穿越云
+  - 🇭🇰 [ss]流媒体|香港|专线|HK - 穿越云
+  - 🇹🇼 [ss]台湾彰化01专线|TW - 穿越云
+  - 🇹🇼 [ss]台湾彰化02专线|TW - 穿越云
+  - 🇸🇬 [ss]新加坡高速| IEPL专线 - 穿越云
+  - 🇸🇬 [ss]新加坡1高速| IEPL专线 - 穿越云
+  - 🇯🇵 [ss]日本转发01 - 穿越云
+  - 🇯🇵 [ss]日本转发02 - 穿越云
+  - 🇯🇵 [ss]流媒体|日本|专线|JP - 穿越云
+  - 🇯🇵 [ss]日本01专线|优质线路 - 穿越云
+  - 🇯🇵 [ss]日本02专线|优质线路 - 穿越云
+  - 🇯🇵 [ss]日本03专线|优质线路 - 穿越云
+  - 🇺🇸 [ss]美国高速1| IEPL - 穿越云
+  - 🇺🇸 [ss]美国高速2| IEPL - 穿越云
+  - 🇨🇦 [ss]加拿大01专线 - 穿越云
+  - 🇨🇦 [ss]加拿大02专线 - 穿越云
+  - 🇩🇪 [ss]德国01专线|跨境电商-tiktok - 穿越云
+  - 🇩🇪 [ss]德国02专线|跨境电商-tiktok - 穿越云
+  - 🇲🇾 [ss]马来西亚01专线|优质线路 - 穿越云
+  - 🇲🇾 [ss]马来西亚02专线|优质线路 - 穿越云
+  - 🇲🇾 [ss]马来西亚03专线|优质线路 - 穿越云
+  - 🇬🇧 [ss]英国高速| IEPL专线 - 穿越云
+  - 🇨🇦 [ss]加拿大高速| IEPL专线 - 穿越云
+  - 🇬🇧 [ss]英国高速1| IEPL专线 - 穿越云
+  - 🇨🇦 [ss]加拿大1高速| IEPL专线 - 穿越云
+  - 🇰🇷 [ss]韩国高速| IEPL专线 - 穿越云
+  - 🇰🇷 [ss]韩国1高速| IEPL专线 - 穿越云
+  - 🇰🇷 [ss]韩国2高速| IEPL专线 - 穿越云
+  - 🇻🇳 [ss]越南高速|IEPL - 穿越云
+  - 🇵🇭 [ss]菲律宾高速|IEPL - 穿越云
+  - 🇫🇷 [ss]法国高速|IEPL - 穿越云
+  - 🇻🇳 [ss]越南1高速|IEPL - 穿越云
+  - 🇵🇭 [ss]菲律宾1高速|IEPL - 穿越云
+  - 🇫🇷 [ss]法国1高速|IEPL - 穿越云
+  - 🇮🇩 [ss]印尼|高速|IEPL - 穿越云
+  - 🇮🇩 [ss]印尼1|高速|IEPL - 穿越云
 - name: 👆🏻 ‍指定
   type: select
-  use: *id001
+  proxies: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -130,199 +123,153 @@ proxy-groups:
   - 💩 ‍广告
 - name: 🇭🇰 ‍香港
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id002
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
+  proxies: &id002
+  - 🇭🇰 [ss]香港01专线|优质线路 - 穿越云
+  - 🇭🇰 [ss]香港02专线|优质线路 - 穿越云
+  - 🇭🇰 [ss]香港03专线|优质线路 - 穿越云
+  - 🇭🇰 [ss]香港04专线|优质线路 - 穿越云
+  - 🇭🇰 [ss]流媒体|香港|专线|HK - 穿越云
 - name: 🇹🇼 ‍台湾
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id003
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
+  proxies: &id003
+  - 🇹🇼 [ss]台湾彰化01专线|TW - 穿越云
+  - 🇹🇼 [ss]台湾彰化02专线|TW - 穿越云
 - name: 🇨🇳 ‍中国
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id004
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
-  - p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN
+  proxies: &id004
+  - 🇭🇰 [ss]香港01专线|优质线路 - 穿越云
+  - 🇭🇰 [ss]香港02专线|优质线路 - 穿越云
+  - 🇭🇰 [ss]香港03专线|优质线路 - 穿越云
+  - 🇭🇰 [ss]香港04专线|优质线路 - 穿越云
+  - 🇭🇰 [ss]流媒体|香港|专线|HK - 穿越云
+  - 🇹🇼 [ss]台湾彰化01专线|TW - 穿越云
+  - 🇹🇼 [ss]台湾彰化02专线|TW - 穿越云
 - name: 🇸🇬 ‍新加坡
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id005
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
-  - p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG
+  proxies: &id005
+  - 🇸🇬 [ss]新加坡高速| IEPL专线 - 穿越云
+  - 🇸🇬 [ss]新加坡1高速| IEPL专线 - 穿越云
 - name: 🇯🇵 ‍日本
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id006
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
-  - p_All_All_All_All_JP_JP_JP_JP
+  proxies: &id006
+  - 🇯🇵 [ss]日本转发01 - 穿越云
+  - 🇯🇵 [ss]日本转发02 - 穿越云
+  - 🇯🇵 [ss]流媒体|日本|专线|JP - 穿越云
+  - 🇯🇵 [ss]日本01专线|优质线路 - 穿越云
+  - 🇯🇵 [ss]日本02专线|优质线路 - 穿越云
+  - 🇯🇵 [ss]日本03专线|优质线路 - 穿越云
 - name: 🇺🇸 ‍美国
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 300
-  use: &id007
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_All_All_US_US_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
-  - p_All_All_All_All_US_US_US_US
+  proxies: &id007
+  - 🇺🇸 [ss]美国高速1| IEPL - 穿越云
+  - 🇺🇸 [ss]美国高速2| IEPL - 穿越云
 - name: 🎏 ‍其他
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
   tolerance: 100
-  use: &id008
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
-  - p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other
+  proxies: &id008
+  - 🇨🇦 [ss]加拿大01专线 - 穿越云
+  - 🇨🇦 [ss]加拿大02专线 - 穿越云
+  - 🇩🇪 [ss]德国01专线|跨境电商-tiktok - 穿越云
+  - 🇩🇪 [ss]德国02专线|跨境电商-tiktok - 穿越云
+  - 🇲🇾 [ss]马来西亚01专线|优质线路 - 穿越云
+  - 🇲🇾 [ss]马来西亚02专线|优质线路 - 穿越云
+  - 🇲🇾 [ss]马来西亚03专线|优质线路 - 穿越云
+  - 🇬🇧 [ss]英国高速| IEPL专线 - 穿越云
+  - 🇨🇦 [ss]加拿大高速| IEPL专线 - 穿越云
+  - 🇬🇧 [ss]英国高速1| IEPL专线 - 穿越云
+  - 🇨🇦 [ss]加拿大1高速| IEPL专线 - 穿越云
+  - 🇰🇷 [ss]韩国高速| IEPL专线 - 穿越云
+  - 🇰🇷 [ss]韩国1高速| IEPL专线 - 穿越云
+  - 🇰🇷 [ss]韩国2高速| IEPL专线 - 穿越云
+  - 🇻🇳 [ss]越南高速|IEPL - 穿越云
+  - 🇵🇭 [ss]菲律宾高速|IEPL - 穿越云
+  - 🇫🇷 [ss]法国高速|IEPL - 穿越云
+  - 🇻🇳 [ss]越南1高速|IEPL - 穿越云
+  - 🇵🇭 [ss]菲律宾1高速|IEPL - 穿越云
+  - 🇫🇷 [ss]法国1高速|IEPL - 穿越云
+  - 🇮🇩 [ss]印尼|高速|IEPL - 穿越云
+  - 🇮🇩 [ss]印尼1|高速|IEPL - 穿越云
 - name: 👆🏻🇭🇰 ‍香港
   type: select
-  use: *id002
+  proxies: *id002
 - name: 👆🏻🇹🇼 ‍台湾
   type: select
-  use: *id003
+  proxies: *id003
 - name: 👆🏻🇨🇳 ‍中国
   type: select
-  use: *id004
+  proxies: *id004
 - name: 👆🏻🇸🇬 ‍新加坡
   type: select
-  use: *id005
+  proxies: *id005
 - name: 👆🏻🇯🇵 ‍日本
   type: select
-  use: *id006
+  proxies: *id006
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  use: *id007
+  proxies: *id007
 - name: 👆🏻🎏 ‍其他
   type: select
-  use: *id008
-proxy-providers:
-  p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP.yaml
-    interval: 180
-    path: trials_providers/p_All_All_All_All_All_All_JP_JP_JP_JP_JP_JP.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN.yaml
-    interval: 180
-    path: trials_providers/p_All_All_All_All_All_All_HK_HK_HK_HK_HK_HK_CN_CN_CN_CN_CN_CN.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other.yaml
-    interval: 180
-    path: trials_providers/p_All_All_All_All_All_All_Other_Other_Other_Other_Other_Other.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN.yaml
-    interval: 180
-    path: trials_providers/p_All_All_All_All_All_All_TW_TW_TW_TW_TW_TW_CN_CN_CN_CN_CN_CN.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_All_All_All_All_US_US_US_US_US_US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_All_All_US_US_US_US_US_US.yaml
-    interval: 180
-    path: trials_providers/p_All_All_All_All_All_All_US_US_US_US_US_US.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG.yaml
-    interval: 180
-    path: trials_providers/p_All_All_All_All_All_All_SG_SG_SG_SG_SG_SG.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN.yaml
-    interval: 180
-    path: trials_providers/p_All_All_All_All_HK_HK_HK_HK_CN_CN_CN_CN.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_All_All_JP_JP_JP_JP:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_JP_JP_JP_JP.yaml
-    interval: 180
-    path: trials_providers/p_All_All_All_All_JP_JP_JP_JP.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_All_All_US_US_US_US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_All_All_US_US_US_US.yaml
-    interval: 180
-    path: trials_providers/p_All_All_All_All_US_US_US_US.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
+  proxies: *id008
+proxies:
+- {name: '🇯🇵 [ss]日本转发01 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50322, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇯🇵 [ss]日本转发02 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50322, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇭🇰 [ss]香港01专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50318, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇭🇰 [ss]香港02专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50318, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇭🇰 [ss]香港03专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50318, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇭🇰 [ss]香港04专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50318, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇨🇦 [ss]加拿大01专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50321, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇨🇦 [ss]加拿大02专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50321, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇩🇪 [ss]德国01专线|跨境电商-tiktok - 穿越云', server: cyy-iepl.netchadmin.top, port: 50327, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇩🇪 [ss]德国02专线|跨境电商-tiktok - 穿越云', server: cyy-iepl.netchadmin.top, port: 50327, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇭🇰 [ss]流媒体|香港|专线|HK - 穿越云', server: cyy-iepl.netchadmin.top, port: 50310, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇯🇵 [ss]流媒体|日本|专线|JP - 穿越云', server: cyy-iepl.netchadmin.top, port: 50313, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇹🇼 [ss]台湾彰化01专线|TW - 穿越云', server: cyy-iepl.netchadmin.top, port: 50326, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇲🇾 [ss]马来西亚01专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50324, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇯🇵 [ss]日本01专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50325, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇲🇾 [ss]马来西亚02专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50324, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇲🇾 [ss]马来西亚03专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50324, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇯🇵 [ss]日本02专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50325, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇯🇵 [ss]日本03专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50325, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇹🇼 [ss]台湾彰化02专线|TW - 穿越云', server: cyy-iepl.netchadmin.top, port: 50326, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇺🇸 [ss]美国高速1| IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50317, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇺🇸 [ss]美国高速2| IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50317, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇬🇧 [ss]英国高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50319, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇨🇦 [ss]加拿大高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50320, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇬🇧 [ss]英国高速1| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50319, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇨🇦 [ss]加拿大1高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50320, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇰🇷 [ss]韩国高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50309, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇸🇬 [ss]新加坡高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50314, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇰🇷 [ss]韩国1高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50309, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇰🇷 [ss]韩国2高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50309, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇸🇬 [ss]新加坡1高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50314, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇻🇳 [ss]越南高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50311, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇵🇭 [ss]菲律宾高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50316, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇫🇷 [ss]法国高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50315, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇻🇳 [ss]越南1高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50311, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇵🇭 [ss]菲律宾1高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50316, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇫🇷 [ss]法国1高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50315, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇮🇩 [ss]印尼|高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50312, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
+- {name: '🇮🇩 [ss]印尼1|高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50312, type: ss, cipher: chacha20-ietf-poly1305, password: be9888dc-6fd4-45c0-9920-4887e00f2ddc, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

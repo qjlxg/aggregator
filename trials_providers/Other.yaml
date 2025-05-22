@@ -1,0 +1,135 @@
+%YAML 1.1
+---
+proxies:
+- &id001 {name: '🇨🇦 [ss]加拿大01专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50321, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id002 {name: '🇨🇦 [ss]加拿大02专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50321, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id003 {name: '🇩🇪 [ss]德国01专线|跨境电商-tiktok - 穿越云', server: cyy-iepl.netchadmin.top, port: 50327, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id004 {name: '🇩🇪 [ss]德国02专线|跨境电商-tiktok - 穿越云', server: cyy-iepl.netchadmin.top, port: 50327, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id005 {name: '🇲🇾 [ss]马来西亚01专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50324, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id006 {name: '🇲🇾 [ss]马来西亚02专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50324, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id007 {name: '🇲🇾 [ss]马来西亚03专线|优质线路 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50324, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id008 {name: '🇬🇧 [ss]英国高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50319, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id009 {name: '🇨🇦 [ss]加拿大高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50320, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id010 {name: '🇬🇧 [ss]英国高速1| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50319, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id011 {name: '🇨🇦 [ss]加拿大1高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50320, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id012 {name: '🇰🇷 [ss]韩国高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50309, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id013 {name: '🇰🇷 [ss]韩国1高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50309, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id014 {name: '🇰🇷 [ss]韩国2高速| IEPL专线 - 穿越云', server: cyy-iepl.netchadmin.top, port: 50309, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id015 {name: '🇻🇳 [ss]越南高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50311, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id016 {name: '🇵🇭 [ss]菲律宾高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50316, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id017 {name: '🇫🇷 [ss]法国高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50315, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id018 {name: '🇻🇳 [ss]越南1高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50311, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id019 {name: '🇵🇭 [ss]菲律宾1高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50316, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id020 {name: '🇫🇷 [ss]法国1高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50315, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id021 {name: '🇮🇩 [ss]印尼|高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50312, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- &id022 {name: '🇮🇩 [ss]印尼1|高速|IEPL - 穿越云', server: cyy-iepl.netchadmin.top, port: 50312, type: ss, cipher: chacha20-ietf-poly1305, password: 0b7d8819-a76c-426b-80dc-3b5ee56933e2, udp: true}
+- *id001
+- *id002
+- *id003
+- *id004
+- *id005
+- *id006
+- *id007
+- *id008
+- *id009
+- *id010
+- *id011
+- *id012
+- *id013
+- *id014
+- *id015
+- *id016
+- *id017
+- *id018
+- *id019
+- *id020
+- *id021
+- *id022
+- *id001
+- *id002
+- *id003
+- *id004
+- *id005
+- *id006
+- *id007
+- *id008
+- *id009
+- *id010
+- *id011
+- *id012
+- *id013
+- *id014
+- *id015
+- *id016
+- *id017
+- *id018
+- *id019
+- *id020
+- *id021
+- *id022
+- *id001
+- *id002
+- *id003
+- *id004
+- *id005
+- *id006
+- *id007
+- *id008
+- *id009
+- *id010
+- *id011
+- *id012
+- *id013
+- *id014
+- *id015
+- *id016
+- *id017
+- *id018
+- *id019
+- *id020
+- *id021
+- *id022
+- *id001
+- *id002
+- *id003
+- *id004
+- *id005
+- *id006
+- *id007
+- *id008
+- *id009
+- *id010
+- *id011
+- *id012
+- *id013
+- *id014
+- *id015
+- *id016
+- *id017
+- *id018
+- *id019
+- *id020
+- *id021
+- *id022
+- *id001
+- *id002
+- *id003
+- *id004
+- *id005
+- *id006
+- *id007
+- *id008
+- *id009
+- *id010
+- *id011
+- *id012
+- *id013
+- *id014
+- *id015
+- *id016
+- *id017
+- *id018
+- *id019
+- *id020
+- *id021
+- *id022
