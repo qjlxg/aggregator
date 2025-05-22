@@ -1,0 +1,119 @@
+# clash_template.yml
+# 这是 Clash 配置的基础模板，脚本会自动填充 'proxies' 和 'proxy-groups' 中的代理列表。
+
+# General 配置
+port: 7890             # HTTP 代理端口
+socks-port: 7891       # SOCKS5 代理端口
+redir-port: 7892       # Redir 代理端口 (Linux/macOS 透明代理)
+tproxy-port: 7893      # TProxy 代理端口 (Linux 透明代理)
+mixed-port: 7890       # 混合代理端口 (Clash 1.2.0+ 支持)
+allow-lan: true        # 允许局域网连接
+mode: rule             # 代理模式：rule (规则), global (全局), direct (直连)
+log-level: info        # 日志级别：silent, info, warning, error, debug
+external-controller: 127.0.0.1:9090 # 外部控制器地址
+external-ui: dashboard # 外部UI，例如 'dashboard' 或 'yacd'
+
+# DNS 配置
+dns:
+  enable: true
+  listen: 0.0.0.0:53
+  enhanced-mode: fake-ip      # 增强模式：fake-ip 或 redir-host
+  fake-ip-range: 198.18.0.1/16 # fake-ip 范围
+  use-hosts: true
+  default-nameserver:
+    - 114.114.114.114
+    - 223.5.5.5
+  nameserver:
+    - https://dns.cloudflare.com/dns-query
+    - https://dns.google/dns-query
+    - quic://dns.adguard.com
+  fallback:
+    - tls://8.8.4.4:853
+    - tls://1.1.1.1:853
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+      - 0.0.0.0/32 # for localhost/empty
+
+# 代理列表（脚本会自动填充到这里）
+proxies: [] # 这是一个占位符，脚本会在这里插入实际的代理节点列表
+
+# 代理组
+proxy-groups:
+  # 🚀 节点选择：这是一个手动选择节点的组
+  - name: 🚀 节点选择
+    type: select
+    proxies:
+      - DIRECT # 默认包含直连选项
+      # 脚本会将所有可用的代理节点名称填充到这个组的后面
+      # 例如：- Proxy-Name-1
+      #       - Proxy-Name-2
+
+  # 🔰 Fallback：这是一个备用组，当主节点不可用时切换到下一个
+  - name: 🔰 Fallback
+    type: fallback
+    url: http://www.gstatic.com/generate_204 # 用于测试代理可用性的URL
+    interval: 300 # 测试间隔（秒）
+    timeout: 3000 # 测试超时（毫秒）
+    lazy: true # 惰性测试，只在需要时测试
+    proxies:
+      # 脚本会将所有可用的代理节点名称填充到这个组
+      # 例如：- Proxy-Name-1
+      #       - Proxy-Name-2
+
+  # 🌍 国外网站（按需添加，可以根据你的规则进行命名和代理组配置）
+  - name: 🌍 国外网站
+    type: select
+    proxies:
+      - 🚀 节点选择 # 引用上面的节点选择组
+      - DIRECT
+
+  # 🪜 代理（常用组，例如，用于流媒体）
+  - name: 🪜 代理
+    type: select
+    proxies:
+      - 🚀 节点选择
+      - DIRECT
+
+  # 🔗 直连 (常用组)
+  - name: 🔗 直连
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 节点选择 # 也可以把代理组放进去，但通常直连组就只有DIRECT
+
+  # 广告拦截（通常是 reject 策略）
+  - name: 🚫 广告
+    type: select
+    proxies:
+      - REJECT # 拒绝连接
+      - DIRECT # 或者选择直连
+
+  # 其他你自定义的策略组，例如：
+  # - name: 🎯 国内媒体
+  #   type: select
+  #   proxies:
+  #     - DIRECT
+  #     - 🔰 Fallback
+
+# 规则（非常重要，定义流量如何走向）
+rules:
+  # geoip 规则
+  - GEOIP,CN,🔗 直连 # 中国 IP 直连
+  - MATCH,🌍 国外网站 # 其他所有流量走国外网站代理组
+  
+  # 示例规则，你可以根据需要调整和添加
+  # - DOMAIN-SUFFIX,google.com,🪜 代理
+  # - DOMAIN-KEYWORD,youtube,🪜 代理
+  # - IP-CIDR,192.168.0.0/16,DIRECT
+  # - IP-CIDR,10.0.0.0/8,DIRECT
+  # - IP-CIDR,172.16.0.0/12,DIRECT
+  # - DOMAIN-SUFFIX,cn,🔗 直连
+  # - DOMAIN-SUFFIX,com,🪜 代理
+  # - PROCESS-NAME,clash,DIRECT # 避免代理自己
+  # - DOMAIN-SUFFIX,ad.com,🚫 广告 # 简单的广告拦截
+  # - DOMAIN-KEYWORD,ad,🚫 广告
+  # - DOMAIN,example.com,DIRECT # 某个特定域名直连
+  # - FINAL,🚀 节点选择 # 最终规则，所有不匹配前面规则的流量都走这里
