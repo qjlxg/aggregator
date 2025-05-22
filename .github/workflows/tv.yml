@@ -3,7 +3,7 @@ name: tv
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 06,18 * * *' # Cron表达式，注意逗号后的空格
+    - cron: '0 */8 * * *'
   push:
     branches:
       - main
