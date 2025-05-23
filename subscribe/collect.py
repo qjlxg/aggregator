@@ -16,24 +16,17 @@ import yaml
 
 # Custom YAML representer to avoid quotes around plain strings (like numbers)
 def represent_str_plain(dumper, data):
-    # This custom representer explicitly tells PyYAML how to handle string types.
-    # If the string consists only of digits, it tries to represent it without quotes.
-    # For other strings, it uses default representation.
     if data.isdigit():
         return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='')
     return dumper.represent_scalar('tag:yaml.org,2002:str', data)
 
 # Add the custom representer to YAML Dumper
-# Ensure this is applied to SafeDumper as well, as you are using SafeDumper.
 if hasattr(yaml, 'Dumper'):
     yaml.add_representer(str, represent_str_plain, Dumper=yaml.Dumper)
 if hasattr(yaml, 'SafeDumper'):
     yaml.add_representer(str, represent_str_plain, Dumper=yaml.SafeDumper)
 
 # 导入项目内部模块
-# 假设这些模块 (crawl, executable, push, utils, workflow, airport, logger, urlvalidator, clash, subconverter)
-# 存在于与此脚本同级的目录结构中，并且提供了脚本所需的功能。
-# 注意：clash 模块中的节点检测相关函数在此脚本中不再使用。
 import crawl
 import executable
 import push
@@ -43,7 +36,6 @@ from airport import AirPort
 from logger import logger
 from urlvalidator import isurl
 from workflow import TaskConfig
-# import clash # 不再需要 clash 模块进行节点检测
 import subconverter
 
 # Load environment variables from a .env file if it exists
@@ -151,11 +143,6 @@ class SubscriptionManager:
         if not subscriptions:
             return []
 
-        # 在没有节点检测的情况下，这里可以进行一个基本的 URL 可访问性检查，
-        # 或者完全跳过检查，直接使用加载到的订阅。
-        # 为了简化并去除节点检测，我们这里直接返回加载到的订阅。
-        # 如果需要基本的 URL 可访问性检查，可以调用 utils.multi_thread_run 和 crawl.check_status，
-        # 但要确保 check_status 不依赖于 Clash 或其他节点检测工具。
         logger.info("跳过现有订阅的可用性校验（节点检测功能已移除）。")
         return list(subscriptions)
 
@@ -265,8 +252,6 @@ class SubscriptionManager:
                         special_protocols=self.special_protocols,
                     )
                 )
-                # Note: We don't add the domain to task_set here, as it's not a subscription URL yet.
-                # The actual subscription URL will be obtained during task execution.
 
         logger.info(f"总共生成 {len(tasks)} 个任务 (包括现有订阅和待注册域名)。")
         return tasks, domains # Return the list of tasks and the parsed domains dictionary
@@ -282,7 +267,6 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
         repo_files[fname] = fetch_repo_file(fname)
 
     # Determine the path of subconverter executable
-    # We don't need clash executable anymore
     _, subconverter_bin = executable.which_bin()
     if not subconverter_bin:
         logger.error("找不到 subconverter 可执行文件，请检查配置。")
@@ -292,7 +276,6 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
     subscribes_file = "subscribes.txt" # File containing existing subscriptions
 
     # Initialize SubscriptionManager
-    # Pass None for clash_bin as it's not used for detection
     manager = SubscriptionManager(subconverter_bin, args.num, display, repo_files)
 
     # Assign tasks (either from existing subscriptions or new domains)
@@ -323,7 +306,6 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
         os.remove(generate_conf)
 
     # Execute tasks (crawl domains and get subscriptions, or process existing subs)
-    # results format: [(task_name, [proxy1, proxy2, ...]), ...]
     results = utils.multi_thread_run(func=workflow.executewrapper, tasks=tasks, num_threads=args.num, show_progress=display)
 
     # Collect all proxies from task results
@@ -338,14 +320,12 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
     unique_proxies = []
     seen_proxies = set()
     for proxy in proxies:
-        # Ensure proxy is a dictionary and has required keys before accessing
         if not isinstance(proxy, dict):
             logger.warning(f"跳过无效代理对象: {proxy}")
             continue
         name = proxy.get("name", "").strip().lower()
         server = proxy.get("server", "").strip().lower()
-        port = str(proxy.get("port", "")).strip() # Ensure port is string for key
-        # Create a unique key for deduplication
+        port = str(proxy.get("port", "")).strip()
         proxy_key = f"{name}-{server}-{port}"
         if proxy_key and proxy_key not in seen_proxies:
             unique_proxies.append(proxy)
@@ -353,73 +333,98 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
 
     logger.info(f"去重前节点数: {len(proxies)}, 去重后节点数: {len(unique_proxies)}")
 
-    # --- 修正后的代码：过滤并强制转换 password 字段 ---
-    filtered_and_processed_proxies = []
+    # --- 最终修正：在生成 YAML 文件内容并保存前，对 password 字段进行字符串替换 ---
+    # 定义要检查的特定标签和值前缀的正则表达式
+    # 匹配 `password: !<str> ` 后跟任意非换行符的字符，直到行尾
+    # 捕获组 `(.*)` 用于捕获实际的密码值
+    PROBLEM_PASSWORD_REGEX = r"^( *)(password: )!<str> (.*)$" # 匹配 `password: !<str> ` 后面跟着内容
+
+    # 过滤掉 password 字段包含 !<str> 的节点 (在 Python 字典层面)
+    # 并且，在生成 YAML 内容前，将 !<str> 标签移除，只保留原始密码值
+    filtered_and_cleaned_proxies = []
     discarded_count_password = 0
-    # 定义要检查的特定标签和值前缀
-    PROBLEM_PASSWORD_PREFIX = '!<str> '
 
     for proxy in unique_proxies:
-        # 检查 'password' 字段是否存在
         if "password" in proxy:
             password_value = proxy["password"]
-            # 优先处理并丢弃包含 '!<str> ' 前缀的节点
-            if isinstance(password_value, str) and password_value.startswith(PROBLEM_PASSWORD_PREFIX):
-                logger.warning(f"丢弃节点 '{proxy.get('name', '未知')}' (server: {proxy.get('server', '未知')}, port: {proxy.get('port', '未知')})，因其 'password' 字段包含 '{PROBLEM_PASSWORD_PREFIX}' 标签。原始值: '{password_value}'")
+            # 检查 password_value 是否是字符串并且以 '!<str> ' 开头
+            # 我们在这里先执行丢弃逻辑
+            if isinstance(password_value, str) and password_value.startswith('!<str> '):
+                logger.warning(f"丢弃节点 '{proxy.get('name', '未知')}' (server: {proxy.get('server', '未知')}, port: {proxy.get('port', '未知')})，因其 'password' 字段包含 '!<str>' 标签。原始值: '{password_value}'")
                 discarded_count_password += 1
-                continue # 跳过当前节点
-            
-            # 对于保留的节点，确保 password 字段被强制转换为字符串
-            # 即使它已经是字符串，这个操作也能帮助 PyYAML 更明确地处理
-            # 并阻止 PyYAML 在序列化时自动添加 !<str> 标签 (对于纯数字字符串)
-            proxy["password"] = str(password_value)
-            
-        filtered_and_processed_proxies.append(proxy)
+                continue # 跳过当前节点，不添加到 filtered_and_cleaned_proxies
+        
+        # 对于没有被丢弃的节点，确保 password 值是字符串
+        # 即使它已经是字符串，强制转换也能帮助后续处理
+        if "password" in proxy:
+            proxy["password"] = str(proxy["password"])
 
-    unique_proxies = filtered_and_processed_proxies # 更新 unique_proxies 为过滤并处理后的列表
-    logger.info(f"因 'password' 字段包含 '{PROBLEM_PASSWORD_PREFIX}' 而丢弃的节点数: {discarded_count_password}")
-    logger.info(f"处理并过滤后，剩余节点数: {len(unique_proxies)}")
-    # --- 结束修正 ---
+        filtered_and_cleaned_proxies.append(proxy)
+
+
+    nodes = filtered_and_cleaned_proxies # 使用经过过滤和初步处理的节点列表
+    logger.info(f"因 'password' 字段包含 '!<str>' 而丢弃的节点数: {discarded_count_password}")
+    logger.info(f"初步过滤和处理后，剩余节点数: {len(nodes)}")
+    # --- 结束初步过滤 ---
 
     # Rename unique proxies sequentially (Optional, but keeps consistency)
-    for i, proxy in enumerate(unique_proxies, start=1):
+    for i, proxy in enumerate(nodes, start=1): # 注意这里使用 nodes 列表
         number = f"{i:02d}"
-        proxy["name"] = f"yandex-{number}" # Rename using a prefix and sequential number
-
-    # --- Prepare Data for Output ---
-    # In this version, nodes is simply the list of unique proxies
-    nodes = unique_proxies
+        proxy["name"] = f"yandex-{number}"
 
     # Extract subscription URLs from proxies that were successfully processed (they have a 'sub' key)
-    # Note: This extracts subs from the *unique_proxies* list.
-    subscriptions = {p.pop("sub", "") for p in unique_proxies if p.get("sub", "")}
+    subscriptions = {p.pop("sub", "") for p in nodes if p.get("sub", "")}
 
     # Remove temporary/internal keys from proxy dictionaries before saving
-    for p in unique_proxies:
+    for p in nodes:
         p.pop("chatgpt", False)
         p.pop("liveness", True)
-        # Remove any other keys added during crawling/processing that shouldn't be in the final output
 
     # Data structure for the final YAML output
-    data = {"proxies": nodes} # 'nodes' here is the list of unique_proxies
+    data = {"proxies": nodes}
 
     # List of all collected subscription URLs (old and new)
     urls = list(subscriptions)
 
     # --- Generate and Save Final YAML ---
-    # Define the final output file path
     final_output_filename = "clash.yaml"
     final_output_filepath = os.path.join(DATA_BASE, final_output_filename)
+    
+    # 定义一个临时文件路径，用于存放清理后的 YAML 内容作为 subconverter 的输入
+    temp_cleaned_yaml_filename = "clash_cleaned_for_subconverter.yaml"
+    temp_cleaned_yaml_filepath = os.path.join(DATA_BASE, temp_cleaned_yaml_filename)
 
-    # Save the final YAML data to the specified file
     try:
+        # 1. 首先，将 Python 对象 dump 到一个字符串，而不直接写入文件
+        # 这可以让我们在写入文件前对字符串内容进行处理
+        yaml_content_raw = yaml.dump(data, allow_unicode=True, Dumper=yaml.SafeDumper)
+        
+        # 2. 对生成的 YAML 字符串内容进行正则表达式替换
+        # 查找所有匹配 `password: !<str> ` 的行，并将其替换为 `password: `
+        # 注意：这里我们不再丢弃节点，而是直接移除标签。
+        # 考虑到您反馈说之前丢弃的方法也没奏效，这意味着即使丢弃了，某种机制下仍然会出现标签。
+        # 所以，我们现在直接对生成的文本进行清理。
+        
+        # 新增的清理逻辑：移除 YAML 字符串中的 !<str> 标签
+        # 模式：匹配 'password:' 之后可能出现的空格，然后是 '!<str> '
+        # group(1) 是开头的缩进空格
+        # group(2) 是 'password: '
+        # group(3) 是实际的密码值
+        cleaned_yaml_content = re.sub(PROBLEM_PASSWORD_REGEX, r"\1\2\3", yaml_content_raw, flags=re.MULTILINE)
+        
+        # 3. 将清理后的 YAML 内容保存到最终的 clash.yaml 文件中
         with open(final_output_filepath, "w+", encoding="utf8") as f:
-            # Use SafeDumper with allow_unicode=True for better compatibility
-            yaml.dump(data, f, allow_unicode=True, Dumper=yaml.SafeDumper)
+            f.write(cleaned_yaml_content)
         logger.info(f"最终节点数据 (未检测可用性) 已保存至: {final_output_filepath}")
+
+        # 4. 将清理后的 YAML 内容也保存到临时文件，供 subconverter 使用
+        with open(temp_cleaned_yaml_filepath, "w+", encoding="utf8") as f:
+            f.write(cleaned_yaml_content)
+        logger.info(f"清理后的节点数据已保存至临时文件: {temp_cleaned_yaml_filepath} 供 subconverter 使用。")
+
     except Exception as e:
-        logger.error(f"保存最终节点数据到 {final_output_filepath} 失败: {e}")
-        sys.exit(1) # Exit if saving the main output fails
+        logger.error(f"保存或清理最终节点数据失败: {e}")
+        sys.exit(1)
 
 
     # Clean up old subconverter generate.ini again if it exists
@@ -428,40 +433,33 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
 
     # --- Generate Other Target Formats using Subconverter ---
     targets, records = [], {}
-    # Prepare targets for subconverter based on command line arguments
     for target in args.targets:
         target = utils.trim(target).lower()
         convert_name = f'convert_{target.replace("&", "_").replace("=", "_")}'
         filename = subconverter.get_filename(target=target)
-        # Determine if output should be list-only based on target and --all flag
         list_only = False if target in ("v2ray", "mixed") or "ss" in target else not args.all
         targets.append((convert_name, filename, target, list_only, args.vitiate))
 
+    # **重点修改：将 subconverter 的源文件指向清理后的临时文件**
+    subconverter_source_filepath = temp_cleaned_yaml_filepath
 
-    subconverter_source_filepath = final_output_filepath
-
-    # Process each target format
     for t in targets:
-        # Generate subconverter configuration for the target
         success = subconverter.generate_conf(generate_conf, t[0], subconverter_source_filepath, t[1], t[2], True, t[3], t[4])
         if not success:
             logger.error(f"无法为目标生成 subconverter 配置文件: {t[2]}")
             continue
 
-        # Run subconverter to convert the source file to the target format
         if subconverter.convert(binname=subconverter_bin, artifact=t[0]):
-            # Move the generated artifact to the data directory
             filepath = os.path.join(DATA_BASE, t[1])
             try:
                 shutil.move(os.path.join(PATH, "subconverter", t[1]), filepath)
-                records[t[1]] = filepath # Record the path of the generated file
+                records[t[1]] = filepath
                 logger.info(f"生成目标文件 {t[1]} 并保存至 {filepath}")
             except Exception as e:
                 logger.error(f"移动生成文件 {t[1]} 到 {filepath} 失败: {e}")
         else:
             logger.error(f"Subconverter 转换目标 {t[2]} 失败。")
 
-    # Check if any target conversion was successful
     if not records:
         logger.error(f"所有目标转换失败。")
 
@@ -476,43 +474,32 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
     life, traffic = max(0, args.life), max(0, args.flow)
     if life > 0 or traffic > 0:
         logger.info(f"根据剩余可用时长 ({life}小时) 和流量 ({traffic}GB) 过滤订阅链接。")
-        # Identify new subscriptions obtained in this run
         new_subscriptions = [x for x in urls if x not in old_subscriptions]
-        # Prepare tasks to check status of new subscriptions (using basic check_status if available)
-        # Note: check_status might still perform basic URL reachability checks, but not full proxy availability.
         tasks_check = [[x, 2, traffic, life, 0, True] for x in new_subscriptions]
-        # Check status of new subscriptions
         results = utils.multi_thread_run(func=crawl.check_status, tasks=tasks_check, num_threads=args.num, show_progress=display)
-        total = len(urls) # Total subscriptions before filtering
-        # Keep new subscriptions that passed the status check
+        total = len(urls)
         filtered_new_subscriptions = [new_subscriptions[i] for i in range(len(new_subscriptions)) if results[i][0] and not results[i][1]]
-        # Combine filtered new subscriptions with old subscriptions
         urls = filtered_new_subscriptions
-        urls.extend(old_subscriptions) # Add back old subscriptions (they were already validated earlier)
-        discard = total - len(urls) # Calculate discarded count
+        urls.extend(old_subscriptions)
+        discard = total - len(urls)
         logger.info(f"订阅链接过滤完成，总数: {total}, 保留: {len(urls)}, 丢弃: {discard}")
     else:
         logger.info("未设置剩余可用时长或流量，跳过订阅链接过滤。")
-        # If no filtering, just use the collected subscription URLs
-
 
     # --- Push Updated Files to Repository ---
-    # Push the updated list of valid subscriptions
     try:
         push_repo_file("subscribes.txt", "\n".join(urls))
         logger.info("subscribes.txt 已更新并推送到仓库。")
     except Exception as e:
         logger.error(f"推送 subscribes.txt 失败: {e}")
 
-    # Push the updated list of valid domains (extracted from valid subscriptions)
     try:
         domains_lines = [utils.extract_domain(url=x, include_protocal=True) for x in urls]
-        push_repo_file("valid-domains.txt", "\n".join(list(set(domains_lines)))) # Use set to ensure unique domains
+        push_repo_file("valid-domains.txt", "\n".join(list(set(domains_lines))))
         logger.info("valid-domains.txt 已更新并推送到仓库。")
     except Exception as e:
         logger.error(f"推送 valid-domains.txt 失败: {e}")
 
-    # Push the updated list of domains with coupon/invite codes
     try:
         domains_txt_content = ""
         for k, v in domains_dict.items():
@@ -525,18 +512,15 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
     except Exception as e:
         logger.error(f"推送 domains.txt 失败: {e}")
 
-    # Push the coupons.txt file (assuming it might have been updated during crawling)
     try:
         push_repo_file("coupons.txt", repo_files.get("coupons.txt", ""))
         logger.info("coupons.txt 已推送到仓库。")
     except Exception as e:
         logger.error(f"推送 coupons.txt 失败: {e}")
 
-
-    # Clean up clash working directory (even though we didn't use clash, the directory might exist)
-    # Assuming workflow.cleanup can handle a non-existent directory or empty file list safely.
+    # Clean up clash working directory and temporary files
     clash_workspace = os.path.join(PATH, "clash")
-    workflow.cleanup(clash_workspace, [])
+    workflow.cleanup(clash_workspace, [temp_cleaned_yaml_filepath]) # 清理临时文件
     logger.info("聚合订阅过程完成。")
 
 
@@ -547,48 +531,36 @@ class CustomHelpFormatter(argparse.HelpFormatter):
             parts = []
             if action.option_strings:
                 parts.extend(action.option_strings)
-                # Special handling for nargs if it's not a flag and not the targets argument
                 if action.nargs != 0 and action.option_strings != ["-t", "--targets"]:
                     default = action.dest.upper()
                     args_string = self._format_args(action, default)
                     parts[-1] += " " + args_string
                 else:
-                    # For targets, just show the options
-                    pass # Keep the default formatting for choices
+                    pass
             else:
-                # Positional arguments
                 args_string = self._format_args(action, action.dest)
                 parts.append(args_string)
             return ", ".join(parts)
         else:
-            # Default formatting for other actions
             return super()._format_action_invocation(action)
 
 # Main execution block
 if __name__ == "__main__":
-    # Setup argument parser with custom formatter
     parser = argparse.ArgumentParser(formatter_class=CustomHelpFormatter)
-    # Removed -s/--skip argument as node checking is removed
-    # Removed -u/--url argument as test URL is not needed without checking
-    # Removed -d/--delay argument as delay is not needed for checking
     parser.add_argument("-a", "--all", dest="all", action="store_true", default=False, help="生成 clash 完整配置 (包含所有节点，不只可用节点)")
     parser.add_argument("-c", "--chuck", dest="chuck", action="store_true", default=False, help="丢弃可能需要人工验证的候选网站")
-    # parser.add_argument("-d", "--delay", type=int, required=False, default=5000, help="允许的代理最大延迟 (毫秒)") # Removed
     parser.add_argument("-e", "--easygoing", dest="easygoing", action="store_true", default=False, help="遇到邮箱白名单问题时尝试使用 Gmail 别名")
     parser.add_argument("-f", "--flow", type=int, required=False, default=0, help="可用剩余流量，单位: GB (用于过滤订阅链接)")
     parser.add_argument("-g", "--gist", type=str, required=False, default=os.environ.get("GIST_LINK", ""), help="GitHub 用户名和 gist id，用 '/' 分隔 (目前代码未使用此参数)")
     parser.add_argument("-i", "--invisible", dest="invisible", action="store_true", default=False, help="不显示检测进度条")
     parser.add_argument("-k", "--key", type=str, required=False, default=os.environ.get("GIST_PAT", ""), help="用于编辑 gist 的 GitHub personal access token (已从环境变量读取)")
     parser.add_argument("-l", "--life", type=int, required=False, default=0, help="剩余可用时长，单位: 小时 (用于过滤订阅链接)")
-    parser.add_argument("-n", "--num", type=int, required=False, default=64, help="处理任务使用的线程数") # Updated help text
+    parser.add_argument("-n", "--num", type=int, required=False, default=64, help="处理任务使用的线程数")
     parser.add_argument("-o", "--overwrite", dest="overwrite", action="store_true", default=False, help="覆盖已存在的域名信息，强制重新爬取")
     parser.add_argument("-p", "--pages", type=int, required=False, default=sys.maxsize, help="爬取 Telegram 时的最大页数")
     parser.add_argument("-r", "--refresh", dest="refresh", action="store_true", default=False, help="仅使用现有订阅刷新并剔除过期节点，不注册新账号")
-    # parser.add_argument("-s", "--skip", dest="skip", action="store_true", default=False, help="跳过可用性检测，直接使用过滤规则筛选节点") # Removed
     parser.add_argument("-t", "--targets", nargs="+", choices=subconverter.CONVERT_TARGETS, default=["clash", "v2ray", "singbox"], help=f"选择要生成的配置类型，默认为 clash, v2ray 和 singbox，支持: {', '.join(subconverter.CONVERT_TARGETS)}")
-    # parser.add_argument("-u", "--url", type=str, required=False, default="https://www.google.com/generate_204", help="测试节点可用性使用的 URL") # Removed
     parser.add_argument("-v", "--vitiate", dest="vitiate", action="store_true", default=False, help="忽略 subconverter 默认代理过滤规则")
     parser.add_argument("-y", "--yourself", type=str, required=False, default=os.environ.get("CUSTOMIZE_LINK", ""), help="你维护的机场列表的 URL (格式与 domains.txt 类似)")
 
-    # Parse command line arguments and run the aggregation process
     aggregate_no_check(args=parser.parse_args())
