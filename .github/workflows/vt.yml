@@ -1,0 +1,45 @@
+name: vt
+
+on:
+  workflow_dispatch: # 手动触发
+  schedule:
+    - cron: '0 */8 * * *' # 每8小时运行一次
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 授予写入权限，以便脚本能够提交文件到仓库
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 tenacity
+
+      - name: Install FFmpeg (includes ffprobe)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Run main script
+        # 传递 GITHUB_TOKEN 环境变量给脚本
+        env:
+          GITHUB_TOKEN: ${{ secrets.BOT }} # *** 这里已修改为 secrets.BOT ***
+        run: python ${{ github.workspace }}/vt.py
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add .
+          git commit -m "Update IPTV channel list" || echo "No changes to commit"
+          git push
