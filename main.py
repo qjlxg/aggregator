@@ -90,7 +90,7 @@ def process_url(url, timeout=10):
 
 def filter_and_modify_sources(corrections):
     filtered_corrections = []
-    name_dict = ['购物', '理财', '导视', '指南', '测试', '芒果', 'CGTN']
+    name_dict = ['购物', '理财', '导视', '指南', '测试', '芒果', 'CGTN','(480p)','(360p)','(240p)','(406p)',' (540p)','(600p)','(576p)'.'[Not 24/7]','DJ','音乐','演唱会','舞曲','春晚','格斗','粤','祝','体育','广播','博斯','神话']
     url_dict = []
 
     for name, url in corrections:
