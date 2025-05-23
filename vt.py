@@ -30,7 +30,7 @@ SEARCH_KEYWORDS = [
 ]
 # 搜索结果的最大数量 (每次请求)
 PER_PAGE = 100
-# 限制搜索结果的总页数，防止请求过多，已增加
+# 限制搜索结果的总页数，防止请求过多
 MAX_SEARCH_PAGES = 5
 
 # --- 辅助函数 ---
@@ -415,11 +415,15 @@ def auto_discover_github_urls(urls_file_path, github_token):
 
     logging.info("开始从 GitHub 自动发现新的 IPTV 源 URL...")
 
-    for keyword in SEARCH_KEYWORDS:
+    for i, keyword in enumerate(SEARCH_KEYWORDS):
+        if i > 0: # 在处理第一个关键词之后，每次切换关键词时都进行等待
+            logging.info(f"切换到下一个关键词。为避免速率限制，等待 10 秒...")
+            time.sleep(10) # 增加关键词切换时的等待时间
+
         page = 1
         while page <= MAX_SEARCH_PAGES:
             params = {
-                "q": keyword, # <-- 关键修改：只传递 keyword，不再拼接额外的 'in:path' 和 'extension'
+                "q": keyword, # 只传递 keyword
                 "sort": "indexed", # 按索引时间排序，获取最新更新
                 "order": "desc",
                 "per_page": PER_PAGE,
@@ -435,6 +439,17 @@ def auto_discover_github_urls(urls_file_path, github_token):
                 response.raise_for_status() # 如果状态码不是 2xx，则抛出 HTTPError
                 data = response.json()
 
+                # 检查 GitHub API 响应头中的速率限制信息
+                rate_limit_remaining = int(response.headers.get('X-RateLimit-Remaining', 0))
+                rate_limit_reset = int(response.headers.get('X-RateLimit-Reset', 0))
+                
+                if rate_limit_remaining == 0:
+                    wait_seconds = max(0, rate_limit_reset - time.time()) + 5 # 额外等待 5 秒
+                    logging.warning(f"GitHub API 速率限制！剩余请求为 0。等待 {wait_seconds:.0f} 秒后重试。")
+                    time.sleep(wait_seconds)
+                    # 再次尝试本页（但由于是 403 错误，这里可能不会起作用，但增加健壮性）
+                    continue # 跳过当前循环的剩余部分，立即进入下一次循环尝试同一页
+
                 if not data.get('items'):
                     logging.info(f"关键词 '{keyword}' 在第 {page} 页未找到更多结果。")
                     break
@@ -444,7 +459,6 @@ def auto_discover_github_urls(urls_file_path, github_token):
                     raw_url = None
                     
                     # 尝试从 item['html_url'] 构建 raw.githubusercontent.com URL
-                    # 匹配 typical GitHub blob URL: https://github.com/<user>/<repo>/blob/<branch>/<path>
                     match = re.search(r'https?://github\.com/([^/]+)/([^/]+)/blob/([^/]+)/(.*)', html_url)
                     
                     if match:
@@ -468,22 +482,21 @@ def auto_discover_github_urls(urls_file_path, github_token):
 
                 logging.info(f"关键词 '{keyword}'，第 {page} 页搜索完成。当前发现 {len(found_urls)} 条原始 URL。")
                 
-                # 检查是否还有下一页
-                # GitHub API 返回的 items 数量可能少于 PER_PAGE，表示这是最后一页
                 if len(data['items']) < PER_PAGE:
                     break # 达到最后一页或无更多结果
 
                 page += 1
-                time.sleep(1) # 礼貌性地等待，避免触发速率限制
+                time.sleep(2) # 每次页面请求之间等待 2 秒，比 1 秒更安全
 
             except requests.exceptions.RequestException as e:
                 logging.error(f"GitHub API 请求失败 (关键词: {keyword}, 页码: {page}): {e}")
-                # 检查是否是速率限制错误
-                if response.status_code == 403 and 'X-RateLimit-Remaining' in response.headers and int(response.headers['X-RateLimit-Remaining']) == 0:
-                    reset_time = int(response.headers['X-RateLimit-Reset'])
-                    wait_seconds = max(0, reset_time - time.time()) + 5 # 多等5秒
+                # 检查是否是 403 速率限制错误，如果不是 403，则跳出当前关键词的搜索
+                if response.status_code == 403:
+                    rate_limit_reset_time = int(response.headers.get('X-RateLimit-Reset', 0))
+                    wait_seconds = max(0, rate_limit_reset_time - time.time()) + 5 # 额外等待 5 秒
                     logging.warning(f"GitHub API 速率限制！等待 {wait_seconds:.0f} 秒后重试。")
                     time.sleep(wait_seconds)
+                    continue # 重试当前页
                 else:
                     break # 其他错误则跳出当前关键词的搜索
             except Exception as e:
@@ -512,7 +525,6 @@ def main():
     urls_file_path = os.path.join(config_dir, 'urls.txt')
 
     # --- START OF DEBUG LOGGING ---
-    # This will check if the GITHUB_TOKEN environment variable is set
     if os.getenv('GITHUB_TOKEN'):
         logging.info("环境变量 'GITHUB_TOKEN' IS SET.")
     else:
@@ -520,7 +532,6 @@ def main():
     # --- END OF DEBUG LOGGING ---
 
     # 1. 自动搜索 GitHub URL 并更新到 urls.txt
-    # 确保在 GitHub Actions 中设置 GITHUB_TOKEN 环境变量 (例如，使用 secrets.BOT)
     auto_discover_github_urls(urls_file_path, GITHUB_TOKEN)
 
     # 2. 从 urls.txt 读取需要处理的 URL 列表 (包括新发现的)
@@ -531,13 +542,11 @@ def main():
 
     # 3. 处理所有 config/urls.txt 中的频道列表
     all_channels = []
-    # 使用线程池处理每个 URL，提高效率
     with ThreadPoolExecutor(max_workers=5) as executor:
         future_to_url = {executor.submit(process_url, url): url for url in urls}
         for future in as_completed(future_to_url):
             url = future_to_url[future]
             try:
-                # future.result() 是一个生成器，需要迭代获取所有频道
                 for name, addr in future.result():
                     all_channels.append((name, addr))
             except Exception as exc:
@@ -545,7 +554,6 @@ def main():
 
     # 4. 过滤和清理频道名称
     filtered_channels = filter_and_modify_sources(all_channels)
-    # 使用集合去重，然后转回列表
     unique_channels = list(set(filtered_channels))
     unique_channels_str = [f"{name},{url}" for name, url in unique_channels]
 
@@ -569,7 +577,7 @@ def main():
     # 6. 处理地方频道和模板
     local_channels_directory = os.path.join(os.getcwd(), '地方频道')
     os.makedirs(local_channels_directory, exist_ok=True)
-    clear_txt_files(local_channels_directory) # 清理旧的TXT文件
+    clear_txt_files(local_channels_directory)
 
     template_directory = os.path.join(os.getcwd(), '频道模板')
     os.makedirs(template_directory, exist_ok=True)
@@ -598,7 +606,7 @@ def main():
 
         output_file_path = os.path.join(local_channels_directory, f"{template_name}_iptv.txt")
         with open(output_file_path, 'w', encoding='utf-8') as f:
-            f.write(f"{template_name},#genre#\n") # 写入分类头
+            f.write(f"{template_name},#genre#\n")
             for channel in current_template_matched_channels:
                 f.write(channel + '\n')
         logging.info(f"频道列表已写入: {template_name}_iptv.txt, 包含 {len(current_template_matched_channels)} 条频道。")
