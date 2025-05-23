@@ -365,7 +365,7 @@ def main(max_pages_per_source=90, max_workers=20):
         logging.error("未能将最终订阅列表保存到 GitHub。")
 
 if __name__ == '__main__':
-    max_pages_per_source = 9
+    max_pages_per_source = 5
     max_workers = 20
 
     main(max_pages_per_source, max_workers)
