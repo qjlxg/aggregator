@@ -24,7 +24,7 @@ jobs:
           pip install requests PyYAML maxminddb # 保留必要的依赖
 
       - name: Run conversion script
-        env: # 保留脚本运行必要的环境变量
+        env: 
           BOT: ${{ secrets.BOT }}
           URL_LIST_REPO_API: ${{ secrets.URL_LIST_REPO_API }}
           CLASH_TEMPLATE_PATH: "clash_template.yml"
@@ -32,9 +32,8 @@ jobs:
           TCP_TIMEOUT: "1"
           TCP_RETRIES: "1"
           TCP_DELAY: "0.5"
-          # MAX_WORKERS: "30" # 如果Python脚本内部有硬编码或默认值，可以考虑移除
           EXCLUDE_NODES_BY_SERVER: ""
-          FAILED_URL_THRESHOLD: "3" # 如果URL更新逻辑在脚本内部处理，保留此项
+          FAILED_URL_THRESHOLD: "3"
           EXCLUDE_CHINA_NODES: "true"
           GEOIP_DB_PATH: "clash/Country.mmdb"
         run: python subscribe/convert_to_base64.py # 脚本直接运行，输出到控制台
@@ -48,28 +47,28 @@ jobs:
             base64.txt
           retention-days: 7
 
-      # 移除了原先的 "Display script outputs" 或 "Append Script Summary to Job Summary" 步骤
-
       - name: Commit and push changes (if any)
-        if: success() # 只在前面的步骤都成功时才运行
+        if: success() # Only run if previous steps succeed
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
 
-          # 只添加核心的配置文件
-          git add base64.txt base64.yaml || true # || true 避免在文件无变化时出错
+          # Fetch the latest changes from the remote repository
+          git fetch origin
 
-          # 检查是否有待提交的更改
-          if git diff --cached --exit-code --quiet; then
-            echo "未检测到 base64.txt 或 base64.yaml 更改，跳过提交。"
+          # Rebase the local branch on top of the remote main branch
+          git rebase origin/main
+
+          # Add the core configuration files
+          git add base64.txt base64.yaml || true # Prevent errors if no changes
+
+          # Check if there are changes to commit
+          if ! git diff --cached --exit-code --quiet; then
+            # Commit the changes
+            git commit -m "feat: 更新生成的 Clash 配置 (base64.yaml, base64.txt)"
+
+            # Push the changes to the main branch
+            git push origin main
           else
-            REF_NAME=$(echo "${{ github.ref }}" | sed 's_refs/heads/__')
-            echo "当前分支: ${REF_NAME}"
-
-            # 如果没有实际更改，git commit 会失败，加 || true 确保脚本不中断
-            git commit -m "feat: 更新生成的 Clash 配置 (base64.yaml, base64.txt)" || true 
-
-            echo "推送更改到 origin/${REF_NAME}..."
-            # 删除了 git pull 命令，直接使用 --force-with-lease 进行推送
-            git push origin "HEAD:${REF_NAME}" --force-with-lease
+            echo "未检测到 base64.txt 或 base64.yaml 更改，跳过提交。"
           fi
