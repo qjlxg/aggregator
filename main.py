@@ -509,19 +509,19 @@ def main():
 
     merge_iptv_files(local_channels_directory)
 
-    ---
+
     ## 输出未匹配模板的频道列表
 
-    ```python
+
     # Find channels that are in iptv_speed_channels but NOT in any template
     unmatched_channels = []
     for channel_line in iptv_speed_channels:
         channel_name = channel_line.split(',')[0].strip()
         if channel_name not in all_template_channel_names:
             unmatched_channels.append(channel_line)
-    ```
 
-    ```python
+
+  
     unmatched_output_file_path = os.path.join(os.getcwd(), 'unmatched_channels.txt')
     with open(unmatched_output_file_path, 'w', encoding='utf-8') as f:
         for channel_line in unmatched_channels:
@@ -529,7 +529,7 @@ def main():
             f.write(channel_line.split(',')[0].strip() + '\n') 
     logging.info(f"\n未匹配任何模板但检测成功的频道列表已保存到文件: {unmatched_output_file_path}，共 {len(unmatched_channels)} 条。")
 
-    ```
+   
 
 if __name__ == "__main__":
     main()
