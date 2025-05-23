@@ -29,6 +29,236 @@ dns:
     ipcidr:
     - 240.0.0.0/4
 proxies:
+- name: 🇺🇸 Madcity-US 02-c63db0
+  server: 104.18.148.234
+  port: 443
+  type: vless
+  uuid: e3820a55-ff58-4e42-ac82-df9a9376e699
+  tls: true
+  alpn:
+  - h3%2Ch2%2Chttp%2F1.1
+  tfo: false
+  skip-cert-verify: true
+  servername: madcity2.777999.lol
+  client-fingerprint: chrome
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: madcity2.777999.lol
+- name: 🇺🇸 Madcity-US 01-98db5f
+  server: 5.10.244.109
+  port: 443
+  type: vless
+  uuid: e3820a55-ff58-4e42-ac82-df9a9376e699
+  tls: true
+  alpn:
+  - h3%2Ch2%2Chttp%2F1.1
+  tfo: false
+  skip-cert-verify: true
+  servername: madcity2.777999.lol
+  client-fingerprint: chrome
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: madcity2.777999.lol
+- name: 🇸🇬 Oracle-SG 移动快乐 02-c74e41
+  server: 104.25.253.197
+  port: 8443
+  type: vless
+  uuid: e46d518d-4a20-4f9a-873d-a86e9455321c
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  servername: tactics-beverly-complications-immigrants.trycloudflare.com
+  network: ws
+  ws-opts:
+    path: /e46d518d-4a20-4f9a-873d-a86e9455321c-vless?ed=2048
+    headers:
+      Host: tactics-beverly-complications-immigrants.trycloudflare.com
+- name: 🇨🇳 TW-Wap-97259e
+  server: 66.235.200.17
+  port: 2053
+  type: vless
+  uuid: 920d2c36-fb41-4fd3-abd3-9bb11224b704
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: 248cbff8
+    headers:
+      Host: waphk.ovo2024.dpdns.org
+- name: Woiden-eu1-6e3181
+  server: 66.179.48.80
+  port: 443
+  type: vless
+  uuid: 6c7a6a6a-6a6a-4000-8000-000000000002
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  servername: eu1-woiden.lzj520hxw.dpdns.org
+  network: ws
+  ws-opts:
+    path: /t.me/lzjjjjjjjjjjj
+    headers:
+      Host: eu1-woiden.lzj520hxw.dpdns.org
+- name: 🇺🇸 美国-加州 | 原生IDC[EHP]-e02c1f
+  server: icook.hk
+  port: 443
+  type: vless
+  uuid: 9f06e3ae-02d2-43ce-9eec-bffcac9ce24c
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  servername: test.enkelte.ggff.net
+  client-fingerprint: randomized
+  network: ws
+  ws-opts:
+    path: /http://admin:admin@45.76.64.127:30550
+    headers:
+      Host: test.enkelte.ggff.net
+- name: 🇺🇸 Madcity-US 03-afba3a
+  server: 104.128.89.43
+  port: 23357
+  type: vless
+  uuid: e42ba52a-0c12-41a5-bad8-2250d8e3b52a
+  tls: true
+  alpn:
+  - h3%2Ch2%2Chttp%2F1.1
+  tfo: false
+  skip-cert-verify: true
+  servername: 114514.777999.lol
+  client-fingerprint: chrome
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: 114514.777999.lol
+- name: Oracle SJC | 2Gbps-Zed WAre提供 2-88eadf
+  server: 148.135.106.248
+  port: 18454
+  type: vless
+  uuid: 2c66c3e9-56b6-4401-e2b5-ea6f872e7a59
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  servername: zedwareoracle.lzj520hxw.dpdns.org
+  network: ws
+  ws-opts:
+    path: /by-zedware-network/
+    headers:
+      Host: zedwareoracle.lzj520hxw.dpdns.org
+- name: 🇺🇸 Hax-us2-e56e09
+  server: 192.9.129.108
+  port: 55573
+  type: vless
+  uuid: 6c7a6a6a-6a6a-4000-8000-000000000002
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /lzjjjjjjjjj666666666
+    headers:
+      Host: us2-hax.lzj520hxw.dpdns.org
+- name: 🇸🇬 SG-CDN 2-e6887c
+  server: 5.78.114.254
+  port: 443
+  type: vmess
+  uuid: 0160afb7-f896-45af-a790-41b0ada08ed7
+  alterId: 0
+  cipher: auto
+  tls: true
+  skip-cert-verify: true
+  servername: freesg-win.lzj520hxw.dpdns.org
+  network: ws
+  ws-opts:
+    path: /t.me/lzjjjjjjjjjjj
+    headers:
+      Host: freesg-win.lzj520hxw.dpdns.org
+- name: 🇷🇺 莫斯科RU-LLC_Baxet-0167bd
+  server: 81.22.132.215
+  port: 18770
+  type: vless
+  uuid: 6c7a6a6a-6a6a-4000-8000-000000000002
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /lzjjjjjjjjjjjjj
+    headers:
+      Host: msk.lzj520hxw.dpdns.org
+- name: 🇸🇬 Legendvps-SG-0c85f8
+  server: www.racknerd.com
+  port: 443
+  type: vless
+  uuid: 6c7a6a6a-6a6a-4000-8000-000000000002
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /lzjjjjjjj
+    headers:
+      Host: legsgv4.lzj520hxw.dpdns.org
+- name: 巴勒斯坦出口灵车-954b15
+  server: 45.9.62.225
+  port: 10301
+  type: vless
+  uuid: 89f356ee-3ec4-4b2b-c82c-e82f28adc43a
+  tls: true
+  tfo: false
+  flow: xtls-rprx-vision
+  skip-cert-verify: true
+  reality-opts:
+    public-key: R2gKMF0Tetlnesc1pPkZH9NaOeehw-f5_U9JKG_cLjU
+  servername: icloud.cdn-apple.com
+  client-fingerprint: chrome
+  network: tcp
+- name: 🇭🇰 HK-CDN-5a93f9
+  server: 45.77.28.75
+  port: 443
+  type: vless
+  uuid: 6c7a6a6a-6a6a-4000-8000-000000000002
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /lzjjjj666
+    headers:
+      Host: freehk.lzj520hxw.dpdns.org
+- name: 🇸🇬 Oracle-SG 移动快乐 01-67ca88
+  server: 64.176.38.232
+  port: 443
+  type: vless
+  uuid: e46d518d-4a20-4f9a-873d-a86e9455321c
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  servername: tactics-beverly-complications-immigrants.trycloudflare.com
+  network: ws
+  ws-opts:
+    path: /e46d518d-4a20-4f9a-873d-a86e9455321c-vless?ed=2048
+    headers:
+      Host: tactics-beverly-complications-immigrants.trycloudflare.com
+- name: 🇺🇾 乌拉圭-Antel家宽-daae33
+  server: 200.40.131.20
+  port: 15801
+  type: vless
+  uuid: 7e8f4c4a-66e9-487b-d7db-0f93379c3af6
+  tls: true
+  tfo: false
+  flow: xtls-rprx-vision
+  skip-cert-verify: true
+  reality-opts:
+    public-key: rYH4wPTVzSwtpXgI3U7YxppIP6oudD-425vT7pyhj1w
+  servername: icloud.cdn-apple.com
+  client-fingerprint: chrome
+  network: tcp
 - name: 🪬12@oneclickvpnkeys-2394c8
   type: trojan
   server: 104.17.147.22
@@ -50,6 +280,113 @@ proxies:
   password: 1549e70f-dc57-45e3-ac7c-515f0161db72
   tls: true
   servername: 6667.HUAnGSHanG.dpdNs.orG
+- name: 🇹🇷 土耳其双ISP-2cbfd3
+  server: 46.203.248.224
+  port: 20411
+  type: vless
+  uuid: 54ffbe99-7aaf-4ceb-9a82-048fb2489757
+  tls: true
+  tfo: false
+  flow: xtls-rprx-vision
+  skip-cert-verify: true
+  reality-opts:
+    public-key: 9rx7JwMO-KRZZEM9TQBO19BOAmmGjJyjN86ll2J7uVc
+  servername: www.speedtest.net
+  client-fingerprint: chrome
+  network: tcp
+- name: 11🌍@oneclickvpnkeys-4f4edd
+  type: trojan
+  server: cloudgetservice.mcloudservice.site
+  port: 443
+  password: aTArbZ2F0E
+  tls: true
+  servername: uSa-vp-27.bLAzECLOUD.SITE
+- name: 🇯🇵 JP-DCI-感谢Ducky_Cloud的大力支持 2-c59b14
+  server: 156.251.180.181
+  port: 21698
+  type: vless
+  uuid: 6c7a6a6a-6a6a-4000-8000-000000000002
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /t.me/lzjjjjjjjjjjj
+    headers:
+      Host: dcijp.lzj520hxw.dpdns.org
+- name: 🇭🇰 HK-Reality-cd2ca5
+  server: 38.225.100.31
+  port: 443
+  type: vless
+  uuid: 6c7a6a6a-6a6a-4000-8000-000000000002
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  reality-opts:
+    public-key: 0i6yMuVJ_Kt4rz0s7q_kzx5HhD79JJzAKSJ1uGCf128
+    short-id: '79'
+  servername: www.tesla.com
+  client-fingerprint: chrome
+  network: tcp
+- name: 🇫🇷 FR-OVHcloud-芙芙提供-8d2535
+  server: www.visa.com.tw
+  port: 443
+  type: vmess
+  uuid: 4f1f29d7-bf65-4005-a4e3-147c8c917760
+  alterId: 0
+  cipher: auto
+  tls: true
+  skip-cert-verify: true
+  servername: exceptional-attract-monster-icq.trycloudflare.com
+  network: ws
+  ws-opts:
+    path: /vmess-argo?ed=2048
+    headers:
+      Host: exceptional-attract-monster-icq.trycloudflare.com
+- name: 🇰🇷 KT-ICN韩国家宽-Zed WAre提供-9012e8
+  server: www.visa.com.tw
+  port: 443
+  type: vmess
+  uuid: d0eb0f6f-68a8-4ece-c33f-73c5d71ac3a3
+  alterId: 0
+  cipher: auto
+  tls: true
+  skip-cert-verify: true
+  servername: kt-icn-2.ecp.dpdns.org
+  network: ws
+  ws-opts:
+    path: /zedware-network/korea-telecom/?ed=2560
+    headers:
+      Host: kt-icn-2.ecp.dpdns.org
+- name: Oracle SJC | 2Gbps-Zed WAre提供-2df9c1
+  server: www.visa.com.tw
+  port: 443
+  type: vmess
+  uuid: 982087ef-8851-44df-eb8e-836f3362f3f1
+  alterId: 0
+  cipher: auto
+  tls: true
+  skip-cert-verify: true
+  servername: oracle-sjc.ecp.dpdns.org
+  network: ws
+  ws-opts:
+    path: /by-zedware-network/?ed=2560
+    headers:
+      Host: oracle-sjc.ecp.dpdns.org
+- name: 🇸🇬 SG-CDN 3-ccfcdd
+  server: ip.sb
+  port: 443
+  type: vless
+  uuid: 596a06cb-1bd4-4974-8af2-aaaf0bd10c5c
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  servername: freesg-windows.lzj520hxw.dpdns.org
+  network: ws
+  ws-opts:
+    path: /t.me/lzjjjjjjjjjjj
+    headers:
+      Host: freesg-windows.lzj520hxw.dpdns.org
 - name: ✈️37@oneclickvpnkeys-92b63c
   type: trojan
   server: 104.21.71.83
@@ -64,6 +401,76 @@ proxies:
   password: Aimer
   tls: true
   servername: tyep.esslh.filegear-sg.me
+- name: 🪬89@oneclickvpnkeys-31b7da
+  type: trojan
+  server: 92.243.74.180
+  port: 8443
+  password: Aimer
+  tls: true
+  servername: tyep.esslh.filegear-sg.me
+- name: Oracle SIN | 50Mbps-Zed WAre提供-a5a497
+  server: 158.178.242.195
+  port: 45582
+  type: vless
+  uuid: ab9167d1-ffe8-4dfc-e512-2c4b78b52bae
+  tls: true
+  tfo: false
+  flow: xtls-rprx-vision
+  skip-cert-verify: true
+  reality-opts:
+    public-key: qhTzYYIgBzDLNYR79oxftqdo1kzL-1_hGJKfqrOliCY
+  servername: www.cloudflare.com
+  client-fingerprint: chrome
+  network: tcp
+- name: 🇸🇬 SG-Reality 2-6ee68d
+  server: 113.29.230.248
+  port: 443
+  type: vless
+  uuid: 6c7a6a6a-6a6a-4000-8000-000000000002
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  reality-opts:
+    public-key: KYN6xf5hityRrwEXYUBBl4hyhAnTqWWeOQrM-rDKFg4
+    short-id: 717e
+  servername: icloud.cdn-apple.com
+  client-fingerprint: chrome
+  network: tcp
+- name: 🇸🇬 SG-Reality 3-060b2e
+  server: 113.29.230.165
+  port: 443
+  type: vless
+  uuid: a273398e-8458-464f-8d3e-eb2e1167fcb9
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  reality-opts:
+    public-key: JuU5_hLFZP150ksDqY-rstRkPEUHnL-mJk9XvOHHcmY
+    short-id: 79a8fb4c5603806c
+  servername: icloud.cdn-apple.com
+  client-fingerprint: chrome
+  network: tcp
+- name: 🎨98@oneclickvpnkeys-8193aa
+  type: trojan
+  server: 162.159.152.2
+  port: 443
+  password: bpb-trojan
+  tls: true
+  servername: zamim340.ggff.net
+- name: 🇸🇬 SG-Reality-d245a6
+  server: 203.174.82.38
+  port: 443
+  type: vless
+  uuid: 6c7a6a6a-6a6a-4000-8000-000000000002
+  tls: true
+  tfo: false
+  skip-cert-verify: true
+  reality-opts:
+    public-key: uPD_wxAAJB-cIp4JKeO6LdrmNieYpNyL0B_d1_JWi1s
+    short-id: acf6
+  servername: swdist.apple.com
+  client-fingerprint: chrome
+  network: tcp
 - name: 22💮@oneclickvpnkeys-401c3d
   type: trojan
   server: 27.50.49.224
@@ -78,20 +485,6 @@ proxies:
   password: bpb-trojan
   tls: true
   servername: zamim340.ggff.net
-- name: 🪬89@oneclickvpnkeys-31b7da
-  type: trojan
-  server: 92.243.74.180
-  port: 8443
-  password: Aimer
-  tls: true
-  servername: tyep.esslh.filegear-sg.me
-- name: 🎨98@oneclickvpnkeys-8193aa
-  type: trojan
-  server: 162.159.152.2
-  port: 443
-  password: bpb-trojan
-  tls: true
-  servername: zamim340.ggff.net
 - name: 🍀95@oneclickvpnkeys-764e26
   type: trojan
   server: 104.26.5.60
@@ -99,6 +492,13 @@ proxies:
   password: bpb-trojan
   tls: true
   servername: zamim340.ggff.net
+- name: 🌍35@oneclickvpnkeys-f874f0
+  type: trojan
+  server: 141.227.160.88
+  port: 1935
+  password: OLq0FfOlp7
+  tls: true
+  servername: x1-sweden-ovh-v2.devefun.net
 - name: 💡40@oneclickvpnkeys-4aeb25
   type: trojan
   server: 89.187.181.179
@@ -107,27 +507,6 @@ proxies:
   tls: true
   servername: 89.187.181.179
   skip-cert-verify: true
-- name: 🇹🇲3🍀@oneclickvpnkeys-0fdca3
-  type: trojan
-  server: 107.182.190.79
-  port: 1083
-  password: f0f08f6b-7bb2-4cbb-a017-65f8005a6007
-  tls: true
-  servername: test2.xiaoshihoukepangle.sbs
-- name: 11🌍@oneclickvpnkeys-4f4edd
-  type: trojan
-  server: cloudgetservice.mcloudservice.site
-  port: 443
-  password: aTArbZ2F0E
-  tls: true
-  servername: uSa-vp-27.bLAzECLOUD.SITE
-- name: 🌐30@oneclickvpnkeys-9814ce
-  type: trojan
-  server: 57.128.165.173
-  port: 1935
-  password: klZqKyxq0H
-  tls: true
-  servername: x1-england-ovh-v2.devefun.net
 - name: 3🌍@oneclickvpnkeys-78dfe9
   type: trojan
   server: 94.131.20.3
@@ -135,13 +514,21 @@ proxies:
   password: e6a2e741-0fce-440b-910c-b81325e2263a
   tls: true
   servername: cache-giver-wife.stark-industries.solutions
-- name: 🌐6@oneclickvpnkeys-ce6533
-  type: trojan
-  server: 51.68.13.106
-  port: 1935
-  password: FiSo7J6vfS
+- name: 🇭🇰 HK直连-6776c7
+  server: 141.11.149.24
+  port: 24345
+  type: vless
+  uuid: f9b96512-ea4c-4d96-8230-4d59f08cb86b
   tls: true
-  servername: x1fr-ovh.devefun.net
+  tfo: false
+  flow: xtls-rprx-vision
+  skip-cert-verify: true
+  reality-opts:
+    public-key: kLLgWdHhIYkn8cJs-uVCHtl5A3W6sfmkE7R3PdCWD2U
+    short-id: adf0228a65
+  servername: yahoo.com
+  client-fingerprint: chrome
+  network: tcp
 - name: 🌍3@oneclickvpnkeys-303b17
   type: trojan
   server: 57.129.89.172
@@ -149,13 +536,45 @@ proxies:
   password: pqlnPNu423
   tls: true
   servername: x1-germany-ovh-v2.devefun.net
-- name: 🌍35@oneclickvpnkeys-f874f0
+- name: 🌐30@oneclickvpnkeys-9814ce
   type: trojan
-  server: 141.227.160.88
+  server: 57.128.165.173
   port: 1935
-  password: OLq0FfOlp7
+  password: klZqKyxq0H
   tls: true
-  servername: x1-sweden-ovh-v2.devefun.net
+  servername: x1-england-ovh-v2.devefun.net
+- name: 🇹🇲3🍀@oneclickvpnkeys-0fdca3
+  type: trojan
+  server: 107.182.190.79
+  port: 1083
+  password: f0f08f6b-7bb2-4cbb-a017-65f8005a6007
+  tls: true
+  servername: test2.xiaoshihoukepangle.sbs
+- name: 🌐6@oneclickvpnkeys-ce6533
+  type: trojan
+  server: 51.68.13.106
+  port: 1935
+  password: FiSo7J6vfS
+  tls: true
+  servername: x1fr-ovh.devefun.net
+- name: 🇭🇰 HK|深港中转-884f57
+  server: 47.110.54.239
+  port: 41878
+  type: vless
+  uuid: b25bb79f-6712-4c99-b14c-773f5cc763b8
+  tls: false
+  tfo: false
+  skip-cert-verify: true
+  network: tcp
+- name: 🇭🇰 HK|广港中转-eaa81b
+  server: 39.108.87.165
+  port: 49311
+  type: vless
+  uuid: b25bb79f-6712-4c99-b14c-773f5cc763b8
+  tls: false
+  tfo: false
+  skip-cert-verify: true
+  network: tcp
 - name: 🌍77@oneclickvpnkeys-6aa159
   type: trojan
   server: ty.457.pp.ua
@@ -176,24 +595,54 @@ proxy-groups:
   type: select
   proxies:
   - DIRECT
+  - 🇺🇸 Madcity-US 02-c63db0
+  - 🇺🇸 Madcity-US 01-98db5f
+  - 🇸🇬 Oracle-SG 移动快乐 02-c74e41
+  - 🇨🇳 TW-Wap-97259e
+  - Woiden-eu1-6e3181
+  - 🇺🇸 美国-加州 | 原生IDC[EHP]-e02c1f
+  - 🇺🇸 Madcity-US 03-afba3a
+  - Oracle SJC | 2Gbps-Zed WAre提供 2-88eadf
+  - 🇺🇸 Hax-us2-e56e09
+  - 🇸🇬 SG-CDN 2-e6887c
+  - 🇷🇺 莫斯科RU-LLC_Baxet-0167bd
+  - 🇸🇬 Legendvps-SG-0c85f8
+  - 巴勒斯坦出口灵车-954b15
+  - 🇭🇰 HK-CDN-5a93f9
+  - 🇸🇬 Oracle-SG 移动快乐 01-67ca88
+  - 🇺🇾 乌拉圭-Antel家宽-daae33
   - 🪬12@oneclickvpnkeys-2394c8
   - 🌍95@oneclickvpnkeys-eb2501
   - 🌍85@oneclickvpnkeys-af4beb
+  - 🇹🇷 土耳其双ISP-2cbfd3
+  - 11🌍@oneclickvpnkeys-4f4edd
+  - 🇯🇵 JP-DCI-感谢Ducky_Cloud的大力支持 2-c59b14
+  - 🇭🇰 HK-Reality-cd2ca5
+  - 🇫🇷 FR-OVHcloud-芙芙提供-8d2535
+  - 🇰🇷 KT-ICN韩国家宽-Zed WAre提供-9012e8
+  - Oracle SJC | 2Gbps-Zed WAre提供-2df9c1
+  - 🇸🇬 SG-CDN 3-ccfcdd
   - ✈️37@oneclickvpnkeys-92b63c
   - ⛳38@oneclickvpnkeys-f5d2db
+  - 🪬89@oneclickvpnkeys-31b7da
+  - Oracle SIN | 50Mbps-Zed WAre提供-a5a497
+  - 🇸🇬 SG-Reality 2-6ee68d
+  - 🇸🇬 SG-Reality 3-060b2e
+  - 🎨98@oneclickvpnkeys-8193aa
+  - 🇸🇬 SG-Reality-d245a6
   - 22💮@oneclickvpnkeys-401c3d
   - 🧿8@oneclickvpnkeys-da0b9d
-  - 🪬89@oneclickvpnkeys-31b7da
-  - 🎨98@oneclickvpnkeys-8193aa
   - 🍀95@oneclickvpnkeys-764e26
-  - 💡40@oneclickvpnkeys-4aeb25
-  - 🇹🇲3🍀@oneclickvpnkeys-0fdca3
-  - 11🌍@oneclickvpnkeys-4f4edd
-  - 🌐30@oneclickvpnkeys-9814ce
-  - 3🌍@oneclickvpnkeys-78dfe9
-  - 🌐6@oneclickvpnkeys-ce6533
-  - 🌍3@oneclickvpnkeys-303b17
   - 🌍35@oneclickvpnkeys-f874f0
+  - 💡40@oneclickvpnkeys-4aeb25
+  - 3🌍@oneclickvpnkeys-78dfe9
+  - 🇭🇰 HK直连-6776c7
+  - 🌍3@oneclickvpnkeys-303b17
+  - 🌐30@oneclickvpnkeys-9814ce
+  - 🇹🇲3🍀@oneclickvpnkeys-0fdca3
+  - 🌐6@oneclickvpnkeys-ce6533
+  - 🇭🇰 HK|深港中转-884f57
+  - 🇭🇰 HK|广港中转-eaa81b
   - 🌍77@oneclickvpnkeys-6aa159
   - 🥏16@oneclickvpnkeys-cc0403
 - name: 📲 国外媒体
@@ -201,24 +650,54 @@ proxy-groups:
   proxies:
   - 🚀 节点选择
   - DIRECT
+  - 🇺🇸 Madcity-US 02-c63db0
+  - 🇺🇸 Madcity-US 01-98db5f
+  - 🇸🇬 Oracle-SG 移动快乐 02-c74e41
+  - 🇨🇳 TW-Wap-97259e
+  - Woiden-eu1-6e3181
+  - 🇺🇸 美国-加州 | 原生IDC[EHP]-e02c1f
+  - 🇺🇸 Madcity-US 03-afba3a
+  - Oracle SJC | 2Gbps-Zed WAre提供 2-88eadf
+  - 🇺🇸 Hax-us2-e56e09
+  - 🇸🇬 SG-CDN 2-e6887c
+  - 🇷🇺 莫斯科RU-LLC_Baxet-0167bd
+  - 🇸🇬 Legendvps-SG-0c85f8
+  - 巴勒斯坦出口灵车-954b15
+  - 🇭🇰 HK-CDN-5a93f9
+  - 🇸🇬 Oracle-SG 移动快乐 01-67ca88
+  - 🇺🇾 乌拉圭-Antel家宽-daae33
   - 🪬12@oneclickvpnkeys-2394c8
   - 🌍95@oneclickvpnkeys-eb2501
   - 🌍85@oneclickvpnkeys-af4beb
+  - 🇹🇷 土耳其双ISP-2cbfd3
+  - 11🌍@oneclickvpnkeys-4f4edd
+  - 🇯🇵 JP-DCI-感谢Ducky_Cloud的大力支持 2-c59b14
+  - 🇭🇰 HK-Reality-cd2ca5
+  - 🇫🇷 FR-OVHcloud-芙芙提供-8d2535
+  - 🇰🇷 KT-ICN韩国家宽-Zed WAre提供-9012e8
+  - Oracle SJC | 2Gbps-Zed WAre提供-2df9c1
+  - 🇸🇬 SG-CDN 3-ccfcdd
   - ✈️37@oneclickvpnkeys-92b63c
   - ⛳38@oneclickvpnkeys-f5d2db
+  - 🪬89@oneclickvpnkeys-31b7da
+  - Oracle SIN | 50Mbps-Zed WAre提供-a5a497
+  - 🇸🇬 SG-Reality 2-6ee68d
+  - 🇸🇬 SG-Reality 3-060b2e
+  - 🎨98@oneclickvpnkeys-8193aa
+  - 🇸🇬 SG-Reality-d245a6
   - 22💮@oneclickvpnkeys-401c3d
   - 🧿8@oneclickvpnkeys-da0b9d
-  - 🪬89@oneclickvpnkeys-31b7da
-  - 🎨98@oneclickvpnkeys-8193aa
   - 🍀95@oneclickvpnkeys-764e26
-  - 💡40@oneclickvpnkeys-4aeb25
-  - 🇹🇲3🍀@oneclickvpnkeys-0fdca3
-  - 11🌍@oneclickvpnkeys-4f4edd
-  - 🌐30@oneclickvpnkeys-9814ce
-  - 3🌍@oneclickvpnkeys-78dfe9
-  - 🌐6@oneclickvpnkeys-ce6533
-  - 🌍3@oneclickvpnkeys-303b17
   - 🌍35@oneclickvpnkeys-f874f0
+  - 💡40@oneclickvpnkeys-4aeb25
+  - 3🌍@oneclickvpnkeys-78dfe9
+  - 🇭🇰 HK直连-6776c7
+  - 🌍3@oneclickvpnkeys-303b17
+  - 🌐30@oneclickvpnkeys-9814ce
+  - 🇹🇲3🍀@oneclickvpnkeys-0fdca3
+  - 🌐6@oneclickvpnkeys-ce6533
+  - 🇭🇰 HK|深港中转-884f57
+  - 🇭🇰 HK|广港中转-eaa81b
   - 🌍77@oneclickvpnkeys-6aa159
   - 🥏16@oneclickvpnkeys-cc0403
 - name: 🤖 AI/ChatGPT
@@ -226,24 +705,54 @@ proxy-groups:
   proxies:
   - 🚀 节点选择
   - DIRECT
+  - 🇺🇸 Madcity-US 02-c63db0
+  - 🇺🇸 Madcity-US 01-98db5f
+  - 🇸🇬 Oracle-SG 移动快乐 02-c74e41
+  - 🇨🇳 TW-Wap-97259e
+  - Woiden-eu1-6e3181
+  - 🇺🇸 美国-加州 | 原生IDC[EHP]-e02c1f
+  - 🇺🇸 Madcity-US 03-afba3a
+  - Oracle SJC | 2Gbps-Zed WAre提供 2-88eadf
+  - 🇺🇸 Hax-us2-e56e09
+  - 🇸🇬 SG-CDN 2-e6887c
+  - 🇷🇺 莫斯科RU-LLC_Baxet-0167bd
+  - 🇸🇬 Legendvps-SG-0c85f8
+  - 巴勒斯坦出口灵车-954b15
+  - 🇭🇰 HK-CDN-5a93f9
+  - 🇸🇬 Oracle-SG 移动快乐 01-67ca88
+  - 🇺🇾 乌拉圭-Antel家宽-daae33
   - 🪬12@oneclickvpnkeys-2394c8
   - 🌍95@oneclickvpnkeys-eb2501
   - 🌍85@oneclickvpnkeys-af4beb
+  - 🇹🇷 土耳其双ISP-2cbfd3
+  - 11🌍@oneclickvpnkeys-4f4edd
+  - 🇯🇵 JP-DCI-感谢Ducky_Cloud的大力支持 2-c59b14
+  - 🇭🇰 HK-Reality-cd2ca5
+  - 🇫🇷 FR-OVHcloud-芙芙提供-8d2535
+  - 🇰🇷 KT-ICN韩国家宽-Zed WAre提供-9012e8
+  - Oracle SJC | 2Gbps-Zed WAre提供-2df9c1
+  - 🇸🇬 SG-CDN 3-ccfcdd
   - ✈️37@oneclickvpnkeys-92b63c
   - ⛳38@oneclickvpnkeys-f5d2db
+  - 🪬89@oneclickvpnkeys-31b7da
+  - Oracle SIN | 50Mbps-Zed WAre提供-a5a497
+  - 🇸🇬 SG-Reality 2-6ee68d
+  - 🇸🇬 SG-Reality 3-060b2e
+  - 🎨98@oneclickvpnkeys-8193aa
+  - 🇸🇬 SG-Reality-d245a6
   - 22💮@oneclickvpnkeys-401c3d
   - 🧿8@oneclickvpnkeys-da0b9d
-  - 🪬89@oneclickvpnkeys-31b7da
-  - 🎨98@oneclickvpnkeys-8193aa
   - 🍀95@oneclickvpnkeys-764e26
-  - 💡40@oneclickvpnkeys-4aeb25
-  - 🇹🇲3🍀@oneclickvpnkeys-0fdca3
-  - 11🌍@oneclickvpnkeys-4f4edd
-  - 🌐30@oneclickvpnkeys-9814ce
-  - 3🌍@oneclickvpnkeys-78dfe9
-  - 🌐6@oneclickvpnkeys-ce6533
-  - 🌍3@oneclickvpnkeys-303b17
   - 🌍35@oneclickvpnkeys-f874f0
+  - 💡40@oneclickvpnkeys-4aeb25
+  - 3🌍@oneclickvpnkeys-78dfe9
+  - 🇭🇰 HK直连-6776c7
+  - 🌍3@oneclickvpnkeys-303b17
+  - 🌐30@oneclickvpnkeys-9814ce
+  - 🇹🇲3🍀@oneclickvpnkeys-0fdca3
+  - 🌐6@oneclickvpnkeys-ce6533
+  - 🇭🇰 HK|深港中转-884f57
+  - 🇭🇰 HK|广港中转-eaa81b
   - 🌍77@oneclickvpnkeys-6aa159
   - 🥏16@oneclickvpnkeys-cc0403
 - name: 🌍 其他流量
@@ -251,24 +760,54 @@ proxy-groups:
   proxies:
   - 🚀 节点选择
   - DIRECT
+  - 🇺🇸 Madcity-US 02-c63db0
+  - 🇺🇸 Madcity-US 01-98db5f
+  - 🇸🇬 Oracle-SG 移动快乐 02-c74e41
+  - 🇨🇳 TW-Wap-97259e
+  - Woiden-eu1-6e3181
+  - 🇺🇸 美国-加州 | 原生IDC[EHP]-e02c1f
+  - 🇺🇸 Madcity-US 03-afba3a
+  - Oracle SJC | 2Gbps-Zed WAre提供 2-88eadf
+  - 🇺🇸 Hax-us2-e56e09
+  - 🇸🇬 SG-CDN 2-e6887c
+  - 🇷🇺 莫斯科RU-LLC_Baxet-0167bd
+  - 🇸🇬 Legendvps-SG-0c85f8
+  - 巴勒斯坦出口灵车-954b15
+  - 🇭🇰 HK-CDN-5a93f9
+  - 🇸🇬 Oracle-SG 移动快乐 01-67ca88
+  - 🇺🇾 乌拉圭-Antel家宽-daae33
   - 🪬12@oneclickvpnkeys-2394c8
   - 🌍95@oneclickvpnkeys-eb2501
   - 🌍85@oneclickvpnkeys-af4beb
+  - 🇹🇷 土耳其双ISP-2cbfd3
+  - 11🌍@oneclickvpnkeys-4f4edd
+  - 🇯🇵 JP-DCI-感谢Ducky_Cloud的大力支持 2-c59b14
+  - 🇭🇰 HK-Reality-cd2ca5
+  - 🇫🇷 FR-OVHcloud-芙芙提供-8d2535
+  - 🇰🇷 KT-ICN韩国家宽-Zed WAre提供-9012e8
+  - Oracle SJC | 2Gbps-Zed WAre提供-2df9c1
+  - 🇸🇬 SG-CDN 3-ccfcdd
   - ✈️37@oneclickvpnkeys-92b63c
   - ⛳38@oneclickvpnkeys-f5d2db
+  - 🪬89@oneclickvpnkeys-31b7da
+  - Oracle SIN | 50Mbps-Zed WAre提供-a5a497
+  - 🇸🇬 SG-Reality 2-6ee68d
+  - 🇸🇬 SG-Reality 3-060b2e
+  - 🎨98@oneclickvpnkeys-8193aa
+  - 🇸🇬 SG-Reality-d245a6
   - 22💮@oneclickvpnkeys-401c3d
   - 🧿8@oneclickvpnkeys-da0b9d
-  - 🪬89@oneclickvpnkeys-31b7da
-  - 🎨98@oneclickvpnkeys-8193aa
   - 🍀95@oneclickvpnkeys-764e26
-  - 💡40@oneclickvpnkeys-4aeb25
-  - 🇹🇲3🍀@oneclickvpnkeys-0fdca3
-  - 11🌍@oneclickvpnkeys-4f4edd
-  - 🌐30@oneclickvpnkeys-9814ce
-  - 3🌍@oneclickvpnkeys-78dfe9
-  - 🌐6@oneclickvpnkeys-ce6533
-  - 🌍3@oneclickvpnkeys-303b17
   - 🌍35@oneclickvpnkeys-f874f0
+  - 💡40@oneclickvpnkeys-4aeb25
+  - 3🌍@oneclickvpnkeys-78dfe9
+  - 🇭🇰 HK直连-6776c7
+  - 🌍3@oneclickvpnkeys-303b17
+  - 🌐30@oneclickvpnkeys-9814ce
+  - 🇹🇲3🍀@oneclickvpnkeys-0fdca3
+  - 🌐6@oneclickvpnkeys-ce6533
+  - 🇭🇰 HK|深港中转-884f57
+  - 🇭🇰 HK|广港中转-eaa81b
   - 🌍77@oneclickvpnkeys-6aa159
   - 🥏16@oneclickvpnkeys-cc0403
 - name: 🐟 漏网之鱼
@@ -276,24 +815,54 @@ proxy-groups:
   proxies:
   - 🚀 节点选择
   - DIRECT
+  - 🇺🇸 Madcity-US 02-c63db0
+  - 🇺🇸 Madcity-US 01-98db5f
+  - 🇸🇬 Oracle-SG 移动快乐 02-c74e41
+  - 🇨🇳 TW-Wap-97259e
+  - Woiden-eu1-6e3181
+  - 🇺🇸 美国-加州 | 原生IDC[EHP]-e02c1f
+  - 🇺🇸 Madcity-US 03-afba3a
+  - Oracle SJC | 2Gbps-Zed WAre提供 2-88eadf
+  - 🇺🇸 Hax-us2-e56e09
+  - 🇸🇬 SG-CDN 2-e6887c
+  - 🇷🇺 莫斯科RU-LLC_Baxet-0167bd
+  - 🇸🇬 Legendvps-SG-0c85f8
+  - 巴勒斯坦出口灵车-954b15
+  - 🇭🇰 HK-CDN-5a93f9
+  - 🇸🇬 Oracle-SG 移动快乐 01-67ca88
+  - 🇺🇾 乌拉圭-Antel家宽-daae33
   - 🪬12@oneclickvpnkeys-2394c8
   - 🌍95@oneclickvpnkeys-eb2501
   - 🌍85@oneclickvpnkeys-af4beb
+  - 🇹🇷 土耳其双ISP-2cbfd3
+  - 11🌍@oneclickvpnkeys-4f4edd
+  - 🇯🇵 JP-DCI-感谢Ducky_Cloud的大力支持 2-c59b14
+  - 🇭🇰 HK-Reality-cd2ca5
+  - 🇫🇷 FR-OVHcloud-芙芙提供-8d2535
+  - 🇰🇷 KT-ICN韩国家宽-Zed WAre提供-9012e8
+  - Oracle SJC | 2Gbps-Zed WAre提供-2df9c1
+  - 🇸🇬 SG-CDN 3-ccfcdd
   - ✈️37@oneclickvpnkeys-92b63c
   - ⛳38@oneclickvpnkeys-f5d2db
+  - 🪬89@oneclickvpnkeys-31b7da
+  - Oracle SIN | 50Mbps-Zed WAre提供-a5a497
+  - 🇸🇬 SG-Reality 2-6ee68d
+  - 🇸🇬 SG-Reality 3-060b2e
+  - 🎨98@oneclickvpnkeys-8193aa
+  - 🇸🇬 SG-Reality-d245a6
   - 22💮@oneclickvpnkeys-401c3d
   - 🧿8@oneclickvpnkeys-da0b9d
-  - 🪬89@oneclickvpnkeys-31b7da
-  - 🎨98@oneclickvpnkeys-8193aa
   - 🍀95@oneclickvpnkeys-764e26
-  - 💡40@oneclickvpnkeys-4aeb25
-  - 🇹🇲3🍀@oneclickvpnkeys-0fdca3
-  - 11🌍@oneclickvpnkeys-4f4edd
-  - 🌐30@oneclickvpnkeys-9814ce
-  - 3🌍@oneclickvpnkeys-78dfe9
-  - 🌐6@oneclickvpnkeys-ce6533
-  - 🌍3@oneclickvpnkeys-303b17
   - 🌍35@oneclickvpnkeys-f874f0
+  - 💡40@oneclickvpnkeys-4aeb25
+  - 3🌍@oneclickvpnkeys-78dfe9
+  - 🇭🇰 HK直连-6776c7
+  - 🌍3@oneclickvpnkeys-303b17
+  - 🌐30@oneclickvpnkeys-9814ce
+  - 🇹🇲3🍀@oneclickvpnkeys-0fdca3
+  - 🌐6@oneclickvpnkeys-ce6533
+  - 🇭🇰 HK|深港中转-884f57
+  - 🇭🇰 HK|广港中转-eaa81b
   - 🌍77@oneclickvpnkeys-6aa159
   - 🥏16@oneclickvpnkeys-cc0403
 - name: 🛑 广告拦截
@@ -304,24 +873,54 @@ proxy-groups:
 - name: 🔰 Fallback
   type: fallback
   proxies:
+  - 🇺🇸 Madcity-US 02-c63db0
+  - 🇺🇸 Madcity-US 01-98db5f
+  - 🇸🇬 Oracle-SG 移动快乐 02-c74e41
+  - 🇨🇳 TW-Wap-97259e
+  - Woiden-eu1-6e3181
+  - 🇺🇸 美国-加州 | 原生IDC[EHP]-e02c1f
+  - 🇺🇸 Madcity-US 03-afba3a
+  - Oracle SJC | 2Gbps-Zed WAre提供 2-88eadf
+  - 🇺🇸 Hax-us2-e56e09
+  - 🇸🇬 SG-CDN 2-e6887c
+  - 🇷🇺 莫斯科RU-LLC_Baxet-0167bd
+  - 🇸🇬 Legendvps-SG-0c85f8
+  - 巴勒斯坦出口灵车-954b15
+  - 🇭🇰 HK-CDN-5a93f9
+  - 🇸🇬 Oracle-SG 移动快乐 01-67ca88
+  - 🇺🇾 乌拉圭-Antel家宽-daae33
   - 🪬12@oneclickvpnkeys-2394c8
   - 🌍95@oneclickvpnkeys-eb2501
   - 🌍85@oneclickvpnkeys-af4beb
+  - 🇹🇷 土耳其双ISP-2cbfd3
+  - 11🌍@oneclickvpnkeys-4f4edd
+  - 🇯🇵 JP-DCI-感谢Ducky_Cloud的大力支持 2-c59b14
+  - 🇭🇰 HK-Reality-cd2ca5
+  - 🇫🇷 FR-OVHcloud-芙芙提供-8d2535
+  - 🇰🇷 KT-ICN韩国家宽-Zed WAre提供-9012e8
+  - Oracle SJC | 2Gbps-Zed WAre提供-2df9c1
+  - 🇸🇬 SG-CDN 3-ccfcdd
   - ✈️37@oneclickvpnkeys-92b63c
   - ⛳38@oneclickvpnkeys-f5d2db
+  - 🪬89@oneclickvpnkeys-31b7da
+  - Oracle SIN | 50Mbps-Zed WAre提供-a5a497
+  - 🇸🇬 SG-Reality 2-6ee68d
+  - 🇸🇬 SG-Reality 3-060b2e
+  - 🎨98@oneclickvpnkeys-8193aa
+  - 🇸🇬 SG-Reality-d245a6
   - 22💮@oneclickvpnkeys-401c3d
   - 🧿8@oneclickvpnkeys-da0b9d
-  - 🪬89@oneclickvpnkeys-31b7da
-  - 🎨98@oneclickvpnkeys-8193aa
   - 🍀95@oneclickvpnkeys-764e26
-  - 💡40@oneclickvpnkeys-4aeb25
-  - 🇹🇲3🍀@oneclickvpnkeys-0fdca3
-  - 11🌍@oneclickvpnkeys-4f4edd
-  - 🌐30@oneclickvpnkeys-9814ce
-  - 3🌍@oneclickvpnkeys-78dfe9
-  - 🌐6@oneclickvpnkeys-ce6533
-  - 🌍3@oneclickvpnkeys-303b17
   - 🌍35@oneclickvpnkeys-f874f0
+  - 💡40@oneclickvpnkeys-4aeb25
+  - 3🌍@oneclickvpnkeys-78dfe9
+  - 🇭🇰 HK直连-6776c7
+  - 🌍3@oneclickvpnkeys-303b17
+  - 🌐30@oneclickvpnkeys-9814ce
+  - 🇹🇲3🍀@oneclickvpnkeys-0fdca3
+  - 🌐6@oneclickvpnkeys-ce6533
+  - 🇭🇰 HK|深港中转-884f57
+  - 🇭🇰 HK|广港中转-eaa81b
   - 🌍77@oneclickvpnkeys-6aa159
   - 🥏16@oneclickvpnkeys-cc0403
   url: http://www.google.com/generate_204
