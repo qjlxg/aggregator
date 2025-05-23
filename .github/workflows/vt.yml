@@ -45,7 +45,7 @@ jobs: # 工作流中的任务列表
           # 将名为 'BOT' 的 GitHub Secret 的值赋给名为 'GITHUB_TOKEN' 的环境变量
           # Python 脚本中的 os.getenv('GITHUB_TOKEN') 会读取到这个值
           GITHUB_TOKEN: ${{ secrets.BOT }}
-        run: python ${{ github.workspace }}/main.py # 执行 main.py 脚本
+        run: python ${{ github.workspace }}/vt.py 
 
       - name: Commit changes # 步骤名称：提交更改
         run: | # 执行多行 shell 命令
