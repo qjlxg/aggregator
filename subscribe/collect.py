@@ -16,11 +16,15 @@ import yaml
 
 # Custom YAML representer to avoid quotes around plain strings (like numbers)
 def represent_str_plain(dumper, data):
+    # This custom representer explicitly tells PyYAML how to handle string types.
+    # If the string consists only of digits, it tries to represent it without quotes.
+    # For other strings, it uses default representation.
     if data.isdigit():
         return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='')
     return dumper.represent_scalar('tag:yaml.org,2002:str', data)
 
 # Add the custom representer to YAML Dumper
+# Ensure this is applied to SafeDumper as well, as you are using SafeDumper.
 if hasattr(yaml, 'Dumper'):
     yaml.add_representer(str, represent_str_plain, Dumper=yaml.Dumper)
 if hasattr(yaml, 'SafeDumper'):
@@ -349,27 +353,33 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
 
     logger.info(f"去重前节点数: {len(proxies)}, 去重后节点数: {len(unique_proxies)}")
 
-    # --- 修正后的代码：过滤掉 password 字段包含 !<str> 的节点 ---
+    # --- 修正后的代码：过滤并强制转换 password 字段 ---
+    filtered_and_processed_proxies = []
+    discarded_count_password = 0
     # 定义要检查的特定标签和值前缀
     PROBLEM_PASSWORD_PREFIX = '!<str> '
-    
-    filtered_proxies = []
-    discarded_count_password = 0
+
     for proxy in unique_proxies:
-        # 检查 'password' 字段是否存在且其值为字符串
-        if "password" in proxy and isinstance(proxy["password"], str):
+        # 检查 'password' 字段是否存在
+        if "password" in proxy:
             password_value = proxy["password"]
-            # 如果 password 字段以 PROBLEM_PASSWORD_PREFIX 开头，则丢弃该节点
-            if password_value.startswith(PROBLEM_PASSWORD_PREFIX):
+            # 优先处理并丢弃包含 '!<str> ' 前缀的节点
+            if isinstance(password_value, str) and password_value.startswith(PROBLEM_PASSWORD_PREFIX):
                 logger.warning(f"丢弃节点 '{proxy.get('name', '未知')}' (server: {proxy.get('server', '未知')}, port: {proxy.get('port', '未知')})，因其 'password' 字段包含 '{PROBLEM_PASSWORD_PREFIX}' 标签。原始值: '{password_value}'")
                 discarded_count_password += 1
-                continue # 跳过当前节点，不添加到 filtered_proxies
-        filtered_proxies.append(proxy)
+                continue # 跳过当前节点
+            
+            # 对于保留的节点，确保 password 字段被强制转换为字符串
+            # 即使它已经是字符串，这个操作也能帮助 PyYAML 更明确地处理
+            # 并阻止 PyYAML 在序列化时自动添加 !<str> 标签 (对于纯数字字符串)
+            proxy["password"] = str(password_value)
+            
+        filtered_and_processed_proxies.append(proxy)
 
-    unique_proxies = filtered_proxies # 更新 unique_proxies 为过滤后的列表
+    unique_proxies = filtered_and_processed_proxies # 更新 unique_proxies 为过滤并处理后的列表
     logger.info(f"因 'password' 字段包含 '{PROBLEM_PASSWORD_PREFIX}' 而丢弃的节点数: {discarded_count_password}")
-    logger.info(f"过滤掉含 '{PROBLEM_PASSWORD_PREFIX}' 密码的节点后，剩余节点数: {len(unique_proxies)}")
-    # --- 结束修改 ---
+    logger.info(f"处理并过滤后，剩余节点数: {len(unique_proxies)}")
+    # --- 结束修正 ---
 
     # Rename unique proxies sequentially (Optional, but keeps consistency)
     for i, proxy in enumerate(unique_proxies, start=1):
@@ -404,6 +414,7 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
     # Save the final YAML data to the specified file
     try:
         with open(final_output_filepath, "w+", encoding="utf8") as f:
+            # Use SafeDumper with allow_unicode=True for better compatibility
             yaml.dump(data, f, allow_unicode=True, Dumper=yaml.SafeDumper)
         logger.info(f"最终节点数据 (未检测可用性) 已保存至: {final_output_filepath}")
     except Exception as e:
