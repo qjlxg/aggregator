@@ -18,13 +18,19 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 GITHUB_API_BASE_URL = "https://api.github.com"
 SEARCH_CODE_ENDPOINT = "/search/code"
 # 从环境变量中获取 GitHub Token
-GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
-# 搜索关键词（m3u 或 m3u8 文件）
-SEARCH_KEYWORDS = ["filename:m3u8 extension:m3u8", "filename:m3u extension:m3u"]
+GITHUB_TOKEN = os.getenv('GITHUB_TOKEN') # 确保你的 GitHub Actions Secret 正确配置并传递名为 GITHUB_TOKEN 的环境变量
+# 搜索关键词（m3u 或 m3u8 文件），已优化
+SEARCH_KEYWORDS = [
+    "m3u8 in:file extension:m3u8",
+    "m3u in:file extension:m3u",
+    "iptv playlist in:file extension:m3u,m3u8",
+    "raw.githubusercontent.com filename:.m3u8",
+    "raw.githubusercontent.com filename:.m3u"
+]
 # 搜索结果的最大数量 (每次请求)
 PER_PAGE = 100
-# 限制搜索结果的总页数，防止请求过多
-MAX_SEARCH_PAGES = 3
+# 限制搜索结果的总页数，防止请求过多，已增加
+MAX_SEARCH_PAGES = 5
 
 # --- 辅助函数 ---
 
@@ -433,24 +439,38 @@ def auto_discover_github_urls(urls_file_path, github_token):
                     break
 
                 for item in data['items']:
-                    # 尝试从 raw_url 中提取 URL
-                    raw_url = item.get('html_url', '').replace('/blob/', '/raw/')
-                    if raw_url and 'raw.githubusercontent.com' in raw_url:
-                        # 确保 URL 是一个有效的 m3u/m3u8 URL
-                        if raw_url.endswith(('.m3u', '.m3u8', '.txt')):
+                    html_url = item.get('html_url', '')
+                    raw_url = None
+                    
+                    # 尝试从 item['html_url'] 构建 raw.githubusercontent.com URL
+                    # 匹配 typical GitHub blob URL: https://github.com/<user>/<repo>/blob/<branch>/<path>
+                    match = re.search(r'https?://github\.com/([^/]+)/([^/]+)/blob/([^/]+)/(.*)', html_url)
+                    
+                    if match:
+                        user = match.group(1)
+                        repo = match.group(2)
+                        branch = match.group(3)
+                        path = match.group(4)
+                        raw_url = f"https://raw.githubusercontent.com/{user}/{repo}/{branch}/{path}"
+                    
+                    if raw_url:
+                        # 确保 URL 是一个有效的 m3u/m3u8/txt URL 并且是来自 raw.githubusercontent.com
+                        if raw_url.startswith("https://raw.githubusercontent.com/") and \
+                           raw_url.lower().endswith(('.m3u', '.m3u8', '.txt')):
                             cleaned_url = clean_url_params(raw_url)
                             found_urls.add(cleaned_url)
-                            logging.debug(f"发现 URL: {cleaned_url}")
+                            logging.debug(f"发现原始 GitHub URL: {cleaned_url}")
                         else:
-                            logging.debug(f"跳过非 M3U/M3U8/TXT 链接: {raw_url}")
+                            logging.debug(f"跳过非原始 GitHub M3U/M3U8/TXT 链接 (不符合raw.githubusercontent.com 或扩展名): {raw_url}")
                     else:
-                        logging.debug(f"跳过非 raw.githubusercontent.com 链接: {raw_url}")
+                        logging.debug(f"无法从 HTML URL 构建原始 URL: {html_url}")
 
-                logging.info(f"关键词 '{keyword}'，第 {page} 页搜索完成。当前发现 {len(found_urls)} 条 URL。")
+                logging.info(f"关键词 '{keyword}'，第 {page} 页搜索完成。当前发现 {len(found_urls)} 条原始 URL。")
                 
                 # 检查是否还有下一页
+                # GitHub API 返回的 items 数量可能少于 PER_PAGE，表示这是最后一页
                 if len(data['items']) < PER_PAGE:
-                    break # 达到最后一页
+                    break # 达到最后一页或无更多结果
 
                 page += 1
                 time.sleep(1) # 礼貌性地等待，避免触发速率限制
@@ -466,7 +486,7 @@ def auto_discover_github_urls(urls_file_path, github_token):
                 else:
                     break # 其他错误则跳出当前关键词的搜索
             except Exception as e:
-                logging.error(f"GitHub URL 自动发现时发生错误: {e}")
+                logging.error(f"GitHub URL 自动发现时发生未知错误: {e}")
                 break # 发生未知错误时跳出
 
     new_urls_count = 0
@@ -491,7 +511,7 @@ def main():
     urls_file_path = os.path.join(config_dir, 'urls.txt')
 
     # 1. 自动搜索 GitHub URL 并更新到 urls.txt
-    # 确保在 GitHub Actions 中设置 GITHUB_TOKEN 环境变量
+    # 确保在 GitHub Actions 中设置 GITHUB_TOKEN 环境变量 (例如，使用 secrets.BOT)
     auto_discover_github_urls(urls_file_path, GITHUB_TOKEN)
 
     # 2. 从 urls.txt 读取需要处理的 URL 列表 (包括新发现的)
