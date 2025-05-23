@@ -1,57 +1,44 @@
-name: vt # 工作流的名称，会在 GitHub Actions 界面显示
+name: vt
 
 on:
-  workflow_dispatch: # 允许手动触发这个工作流，在 GitHub Actions 页面可以点击 "Run workflow"
+  workflow_dispatch: # 手动触发
   schedule:
-    - cron: '0 */8 * * *' # 定义定时运行的计划。这里是每8小时运行一次
-      # cron 表达式解释：
-      # * * * * *
-      # | | | | |
-      # | | | | ----- 星期几 (0 - 6) (星期日是 0 或 7)
-      # | | | ------- 月份 (1 - 12)
-      # | | --------- 一个月中的日期 (1 - 31)
-      # | ----------- 小时 (0 - 23)
-      # ------------- 分钟 (0 - 59)
-      # '0 */8 * * *' 表示：每隔 8 小时 (例如 00:00, 08:00, 16:00) 的 0 分钟执行
+    - cron: '0 */8 * * *' # 每8小时运行一次
 
-jobs: # 工作流中的任务列表
-  build: # 定义一个名为 'build' 的任务
-    runs-on: ubuntu-latest # 指定任务运行的环境，这里使用最新的 Ubuntu 操作系统
+jobs:
+  build:
+    runs-on: ubuntu-latest
     permissions:
-      contents: write # 授予 GitHub Actions 写入仓库内容的权限，这样脚本才能提交文件
+      contents: write # 授予写入权限，以便脚本能够提交文件到仓库
 
-    steps: # 任务的执行步骤
-      - name: Checkout code # 步骤名称：检出代码
-        uses: actions/checkout@v4 # 使用 GitHub Actions 的官方 action 来克隆仓库代码
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up Python # 步骤名称：设置 Python 环境
-        uses: actions/setup-python@v5 # 使用 GitHub Actions 的官方 action 来安装 Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.12 # 指定要安装的 Python 版本
+          python-version: 3.12
 
-      - name: Install dependencies # 步骤名称：安装 Python 依赖
-        run: | # 执行多行 shell 命令
-          python -m pip install --upgrade pip # 升级 pip
-          pip install requests beautifulsoup4 tenacity # 安装脚本所需的 Python 库
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 tenacity
 
-      - name: Install FFmpeg (includes ffprobe) # 步骤名称：安装 FFmpeg（包含 ffprobe）
-        run: | # 执行多行 shell 命令
-          sudo apt-get update # 更新 apt 软件包列表
-          sudo apt-get install -y ffmpeg # 安装 FFmpeg，它包含了 ffprobe
+      - name: Install FFmpeg (includes ffprobe)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
 
-      - name: Run main script # 步骤名称：运行主脚本
-        # env 块用于设置环境变量，这些变量可以在 run 步骤中访问
+      - name: Run main script
         env:
-          # 将名为 'BOT' 的 GitHub Secret 的值赋给名为 'GITHUB_TOKEN' 的环境变量
-          # Python 脚本中的 os.getenv('GITHUB_TOKEN') 会读取到这个值
-          GITHUB_TOKEN: ${{ secrets.BOT }}
-        run: python ${{ github.workspace }}/vt.py 
+          GITHUB_TOKEN: ${{ secrets.BOT }} # 这里使用你设置的 Secret 名称 'BOT'
+        run: python ${{ github.workspace }}/vt.py
 
-      - name: Commit changes # 步骤名称：提交更改
-        run: | # 执行多行 shell 命令
-          git config --global user.email "actions@github.com" # 配置 Git 用户的邮箱
-          git config --global user.name "GitHub Actions" # 配置 Git 用户的名称
-          git add . # 添加所有修改过的文件到 Git 暂存区
-          # 如果没有文件更改，git commit 会失败，`|| echo "No changes to commit"` 会防止工作流失败
+      - name: Commit changes
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add .
           git commit -m "Update IPTV channel list" || echo "No changes to commit"
-          git push # 推送更改到远程仓库
+          git push
