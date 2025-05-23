@@ -347,21 +347,28 @@ def aggregate_no_check(args: argparse.Namespace) -> None:
             unique_proxies.append(proxy)
             seen_proxies.add(proxy_key)
 
-    logger.info(f"去重后节点数: {len(unique_proxies)}")
+    logger.info(f"去重前节点数: {len(proxies)}, 去重后节点数: {len(unique_proxies)}")
 
-    # --- 开始修改 ---
-    # 过滤掉 password 字段包含 !<str> 的节点
+    # --- 修正后的代码：过滤掉 password 字段包含 !<str> 的节点 ---
+    # 定义要检查的特定标签和值前缀
+    PROBLEM_PASSWORD_PREFIX = '!<str> '
+    
     filtered_proxies = []
+    discarded_count_password = 0
     for proxy in unique_proxies:
-        if "password" in proxy:
+        # 检查 'password' 字段是否存在且其值为字符串
+        if "password" in proxy and isinstance(proxy["password"], str):
             password_value = proxy["password"]
-            if isinstance(password_value, str) and password_value.startswith('!<str> '):
-                logger.warning(f"丢弃节点 {proxy.get('name', '未知')}，因其 password 字段包含 !<str> 标签。")
+            # 如果 password 字段以 PROBLEM_PASSWORD_PREFIX 开头，则丢弃该节点
+            if password_value.startswith(PROBLEM_PASSWORD_PREFIX):
+                logger.warning(f"丢弃节点 '{proxy.get('name', '未知')}' (server: {proxy.get('server', '未知')}, port: {proxy.get('port', '未知')})，因其 'password' 字段包含 '{PROBLEM_PASSWORD_PREFIX}' 标签。原始值: '{password_value}'")
+                discarded_count_password += 1
                 continue # 跳过当前节点，不添加到 filtered_proxies
         filtered_proxies.append(proxy)
 
     unique_proxies = filtered_proxies # 更新 unique_proxies 为过滤后的列表
-    logger.info(f"过滤掉含 !<str> 密码的节点后，剩余节点数: {len(unique_proxies)}")
+    logger.info(f"因 'password' 字段包含 '{PROBLEM_PASSWORD_PREFIX}' 而丢弃的节点数: {discarded_count_password}")
+    logger.info(f"过滤掉含 '{PROBLEM_PASSWORD_PREFIX}' 密码的节点后，剩余节点数: {len(unique_proxies)}")
     # --- 结束修改 ---
 
     # Rename unique proxies sequentially (Optional, but keeps consistency)
