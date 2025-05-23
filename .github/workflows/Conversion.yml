@@ -39,16 +39,13 @@ jobs:
           GEOIP_DB_PATH: "clash/Country.mmdb"
         run: python subscribe/convert_to_base64.py # 脚本直接运行，输出到控制台
 
-      - name: Pull latest changes
-        run: git pull origin main --rebase --autostash
+
         
-      - name: Configure Git # 这部分仍然是可选的，PyGithub 会直接提交
+      - name: Configure Git 
         run: |
          git config --local user.email "github-actions[bot]@users.noreply.github.com"
          git config --local user.name "GitHub Actions Bot"
- 
-      - name: Commit and Push Changes
-        run: |
          git add .
          git diff --staged --quiet || git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S') by GitHub Action"
          git push origin main
+      
