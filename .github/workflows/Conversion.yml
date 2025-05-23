@@ -32,7 +32,7 @@ jobs:
           TCP_TIMEOUT: "1"
           TCP_RETRIES: "1"
           TCP_DELAY: "0.5"
-          # MAX_WORKERS: "30" # Python脚本内部有硬编码或默认值，可以考虑移除
+          # MAX_WORKERS: "30" # 如果Python脚本内部有硬编码或默认值，可以考虑移除
           EXCLUDE_NODES_BY_SERVER: ""
           FAILED_URL_THRESHOLD: "3" # 如果URL更新逻辑在脚本内部处理，保留此项
           EXCLUDE_CHINA_NODES: "true"
@@ -43,7 +43,18 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add . # 将所有更改暂存
-          git pull origin main --rebase # 然后再拉取并rebase远程更改
-          git diff --staged --quiet || git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S') by GitHub Action"
+          
+          # 检查是否有文件更改，如果有则暂存并提交
+          if ! git diff --quiet || ! git diff --staged --quiet; then
+            git add .
+            git commit -m "Automated update before pull/rebase: $(date '+%Y-%m-%d %H:%M:%S')"
+          fi
+          
+          git pull origin main --rebase # 现在拉取并rebase远程更改
+          
+          # 检查是否有新的更改需要提交，如果上面 rebase 发生了冲突解决或新的内容
+          if ! git diff --staged --quiet; then
+            git commit -m "Updated at $(date '+%Y-%m-%d %H:%M:%S') by GitHub Action"
+          fi
+          
           git push origin main
