@@ -23,23 +23,15 @@ proxy-groups:
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
   tolerance: 100
-  proxies: &id001
-  - 🇭🇰 香港节点-t - 好梯子：xin.students.xin
-  - 🇭🇰 香港节点-t（备用） - 好梯子：xin.students.xin
-  - 🇯🇵 日本节点-t - 好梯子：xin.students.xin
-  - 🇯🇵 日本节点-t（备用） - 好梯子：xin.students.xin
-  - 🇺🇸 美国节点-t - 好梯子：xin.students.xin
-  - 🇺🇸 美国节点-t（备用） - 好梯子：xin.students.xin
-  - ℹ️ 不推荐节点G - 好梯子：xin.students.xin
-  - 🇬🇧 英国节点-t - 好梯子：xin.students.xin
-  - 🇬🇧 英国节点-t（备用） - 好梯子：xin.students.xin
-  - 🇧🇷 巴西节点-t（游戏充值便宜） - 好梯子：xin.students.xin
+  use: &id001
+  - HK
+  - JP
+  - US
+  - Other
 - name: 👆🏻 ‍指定
   type: select
-  proxies: *id001
+  use: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -80,61 +72,73 @@ proxy-groups:
   - 💩 ‍广告
 - name: 🇭🇰 ‍香港
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id002
-  - 🇭🇰 香港节点-t - 好梯子：xin.students.xin
-  - 🇭🇰 香港节点-t（备用） - 好梯子：xin.students.xin
+  use: &id002
+  - HK
 - name: 🇯🇵 ‍日本
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id003
-  - 🇯🇵 日本节点-t - 好梯子：xin.students.xin
-  - 🇯🇵 日本节点-t（备用） - 好梯子：xin.students.xin
+  use: &id003
+  - JP
 - name: 🇺🇸 ‍美国
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 300
-  proxies: &id004
-  - 🇺🇸 美国节点-t - 好梯子：xin.students.xin
-  - 🇺🇸 美国节点-t（备用） - 好梯子：xin.students.xin
+  use: &id004
+  - US
 - name: 🎏 ‍其他
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
   tolerance: 100
-  proxies: &id005
-  - ℹ️ 不推荐节点G - 好梯子：xin.students.xin
-  - 🇬🇧 英国节点-t - 好梯子：xin.students.xin
-  - 🇬🇧 英国节点-t（备用） - 好梯子：xin.students.xin
-  - 🇧🇷 巴西节点-t（游戏充值便宜） - 好梯子：xin.students.xin
+  use: &id005
+  - Other
 - name: 👆🏻🇭🇰 ‍香港
   type: select
-  proxies: *id002
+  use: *id002
 - name: 👆🏻🇯🇵 ‍日本
   type: select
-  proxies: *id003
+  use: *id003
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  proxies: *id004
+  use: *id004
 - name: 👆🏻🎏 ‍其他
   type: select
-  proxies: *id005
-proxies:
-- {name: ℹ️ 不推荐节点G - 好梯子：xin.students.xin, server: gdhk1-07312200.666888.biz, port: 22357, type: ss, cipher: chacha20-ietf-poly1305, password: 6f169fda-d049-4179-a3a2-0e1c98dfb39f, udp: true}
-- {name: 🇬🇧 英国节点-t - 好梯子：xin.students.xin, server: tunnel-08301515.666888.biz, port: 32391, type: ss, cipher: chacha20-ietf-poly1305, password: 6f169fda-d049-4179-a3a2-0e1c98dfb39f, udp: true}
-- {name: 🇬🇧 英国节点-t（备用） - 好梯子：xin.students.xin, server: tunnel-07312159.666888.biz, port: 19203, type: ss, cipher: chacha20-ietf-poly1305, password: 6f169fda-d049-4179-a3a2-0e1c98dfb39f, udp: true}
-- {name: 🇧🇷 巴西节点-t（游戏充值便宜） - 好梯子：xin.students.xin, server: tunnel-07312159.666888.biz, port: 29461, type: ss, cipher: chacha20-ietf-poly1305, password: 6f169fda-d049-4179-a3a2-0e1c98dfb39f, udp: true}
-- {name: 🇭🇰 香港节点-t - 好梯子：xin.students.xin, server: tunnel-07312159.666888.biz, port: 23458, type: ss, cipher: chacha20-ietf-poly1305, password: 6f169fda-d049-4179-a3a2-0e1c98dfb39f, udp: true}
-- {name: 🇭🇰 香港节点-t（备用） - 好梯子：xin.students.xin, server: tunnel-08301515.666888.biz, port: 12342, type: ss, cipher: chacha20-ietf-poly1305, password: 6f169fda-d049-4179-a3a2-0e1c98dfb39f, udp: true}
-- {name: 🇯🇵 日本节点-t - 好梯子：xin.students.xin, server: tunnel-07312159.666888.biz, port: 14201, type: ss, cipher: chacha20-ietf-poly1305, password: 6f169fda-d049-4179-a3a2-0e1c98dfb39f, udp: true}
-- {name: 🇯🇵 日本节点-t（备用） - 好梯子：xin.students.xin, server: tunnel-08301515.666888.biz, port: 23967, type: ss, cipher: chacha20-ietf-poly1305, password: 6f169fda-d049-4179-a3a2-0e1c98dfb39f, udp: true}
-- {name: 🇺🇸 美国节点-t - 好梯子：xin.students.xin, server: tunnel-08301515.666888.biz, port: 29384, type: ss, cipher: chacha20-ietf-poly1305, password: 6f169fda-d049-4179-a3a2-0e1c98dfb39f, udp: true}
-- {name: 🇺🇸 美国节点-t（备用） - 好梯子：xin.students.xin, server: tunnel-07312159.666888.biz, port: 29864, type: ss, cipher: chacha20-ietf-poly1305, password: 6f169fda-d049-4179-a3a2-0e1c98dfb39f, udp: true}
+  use: *id005
+proxy-providers:
+  HK:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/xin.students.xin/HK.yaml
+    interval: 180
+    path: trials_providers/xin.students.xin/HK.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  JP:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/xin.students.xin/JP.yaml
+    interval: 180
+    path: trials_providers/xin.students.xin/JP.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  US:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/xin.students.xin/US.yaml
+    interval: 180
+    path: trials_providers/xin.students.xin/US.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  Other:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/xin.students.xin/Other.yaml
+    interval: 180
+    path: trials_providers/xin.students.xin/Other.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
