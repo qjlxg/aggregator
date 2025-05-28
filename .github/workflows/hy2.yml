@@ -2,7 +2,7 @@ name: Proxy Node Scraper
 
 on:
   schedule:
-    # 上海时间每天早上8点（CST），相当于 UTC 时间前一天 00:00
+    # 北京时间每天早上8点（CST），相当于 UTC 时间 00:00
     - cron: '0 0 * * *'
   workflow_dispatch: # 支持手动触发
 
@@ -22,7 +22,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests pyyaml aiohttp
+        pip install requests pyyaml aiohttp pytz
 
     - name: Run hy2.py
       env:
@@ -34,11 +34,11 @@ jobs:
       run: |
         git config user.name "GitHub Action"
         git config user.email "action@github.com"
-        git add data/hy2.txt
+        git add data/hy2.txt data/urls.txt
         if git diff --quiet && git diff --staged --quiet; then
           echo "No changes to commit"
           exit 0
         fi
-        git commit -m "Update hy2.txt with new proxy nodes"
+        git commit -m "Update hy2.txt and urls.txt with new proxy nodes"
         git push
       continue-on-error: true
