@@ -29,17 +29,42 @@ proxy-groups:
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
   tolerance: 100
-  use: &id001
-  - HK
-  - TW
-  - SG
-  - JP
-  - US
-  - Other
+  proxies: &id001
+  - 🇭🇰 香港01 - 迅云加速
+  - 🇭🇰 香港02 - 迅云加速
+  - 🇭🇰 香港03 - 迅云加速
+  - 🇭🇰 香港04 - 迅云加速
+  - 🇹🇼 台湾01 - 迅云加速
+  - 🇹🇼 台湾02 - 迅云加速
+  - 🇹🇼 台湾03 - 迅云加速
+  - 🇹🇼 台湾04 - 迅云加速
+  - 🇸🇬 新加坡01 - 迅云加速
+  - 🇸🇬 新加坡02 - 迅云加速
+  - 🇸🇬 新加坡03 - 迅云加速
+  - 🇸🇬 新加坡04 - 迅云加速
+  - 🇯🇵 日本01 - 迅云加速
+  - 🇯🇵 日本02 - 迅云加速
+  - 🇯🇵 日本03 - 迅云加速
+  - 🇯🇵 日本04 - 迅云加速
+  - 🇺🇸 美国01 - 迅云加速
+  - 🇺🇸 美国02 - 迅云加速
+  - 🇺🇸 美国03 - 迅云加速
+  - 🇺🇸 美国04 - 迅云加速
+  - ℹ️ 迅云跳转域名：xyjs.app - 迅云加速
+  - 🇬🇧 英国01 - 迅云加速
+  - 🇬🇧 英国02 - 迅云加速
+  - 🇬🇧 英国03 - 迅云加速
+  - 🇬🇧 英国04 - 迅云加速
+  - 🇨🇦 加拿大01 - 迅云加速
+  - 🇨🇦 加拿大02 - 迅云加速
+  - 🇨🇦 加拿大03 - 迅云加速
+  - 🇨🇦 加拿大04 - 迅云加速
 - name: 👆🏻 ‍指定
   type: select
-  use: *id001
+  proxies: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -88,116 +113,134 @@ proxy-groups:
   - 💩 ‍广告
 - name: 🇭🇰 ‍香港
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id002
-  - HK
+  proxies: &id002
+  - 🇭🇰 香港01 - 迅云加速
+  - 🇭🇰 香港02 - 迅云加速
+  - 🇭🇰 香港03 - 迅云加速
+  - 🇭🇰 香港04 - 迅云加速
 - name: 🇹🇼 ‍台湾
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id003
-  - TW
+  proxies: &id003
+  - 🇹🇼 台湾01 - 迅云加速
+  - 🇹🇼 台湾02 - 迅云加速
+  - 🇹🇼 台湾03 - 迅云加速
+  - 🇹🇼 台湾04 - 迅云加速
 - name: 🇨🇳 ‍中国
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id004
-  - HK
-  - TW
+  proxies: &id004
+  - 🇭🇰 香港01 - 迅云加速
+  - 🇭🇰 香港02 - 迅云加速
+  - 🇭🇰 香港03 - 迅云加速
+  - 🇭🇰 香港04 - 迅云加速
+  - 🇹🇼 台湾01 - 迅云加速
+  - 🇹🇼 台湾02 - 迅云加速
+  - 🇹🇼 台湾03 - 迅云加速
+  - 🇹🇼 台湾04 - 迅云加速
 - name: 🇸🇬 ‍新加坡
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id005
-  - SG
+  proxies: &id005
+  - 🇸🇬 新加坡01 - 迅云加速
+  - 🇸🇬 新加坡02 - 迅云加速
+  - 🇸🇬 新加坡03 - 迅云加速
+  - 🇸🇬 新加坡04 - 迅云加速
 - name: 🇯🇵 ‍日本
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id006
-  - JP
+  proxies: &id006
+  - 🇯🇵 日本01 - 迅云加速
+  - 🇯🇵 日本02 - 迅云加速
+  - 🇯🇵 日本03 - 迅云加速
+  - 🇯🇵 日本04 - 迅云加速
 - name: 🇺🇸 ‍美国
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 300
-  use: &id007
-  - US
+  proxies: &id007
+  - 🇺🇸 美国01 - 迅云加速
+  - 🇺🇸 美国02 - 迅云加速
+  - 🇺🇸 美国03 - 迅云加速
+  - 🇺🇸 美国04 - 迅云加速
 - name: 🎏 ‍其他
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
   tolerance: 100
-  use: &id008
-  - Other
+  proxies: &id008
+  - ℹ️ 迅云跳转域名：xyjs.app - 迅云加速
+  - 🇬🇧 英国01 - 迅云加速
+  - 🇬🇧 英国02 - 迅云加速
+  - 🇬🇧 英国03 - 迅云加速
+  - 🇬🇧 英国04 - 迅云加速
+  - 🇨🇦 加拿大01 - 迅云加速
+  - 🇨🇦 加拿大02 - 迅云加速
+  - 🇨🇦 加拿大03 - 迅云加速
+  - 🇨🇦 加拿大04 - 迅云加速
 - name: 👆🏻🇭🇰 ‍香港
   type: select
-  use: *id002
+  proxies: *id002
 - name: 👆🏻🇹🇼 ‍台湾
   type: select
-  use: *id003
+  proxies: *id003
 - name: 👆🏻🇨🇳 ‍中国
   type: select
-  use: *id004
+  proxies: *id004
 - name: 👆🏻🇸🇬 ‍新加坡
   type: select
-  use: *id005
+  proxies: *id005
 - name: 👆🏻🇯🇵 ‍日本
   type: select
-  use: *id006
+  proxies: *id006
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  use: *id007
+  proxies: *id007
 - name: 👆🏻🎏 ‍其他
   type: select
-  use: *id008
-proxy-providers:
-  HK:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/HK.yaml
-    interval: 180
-    path: trials_providers/HK.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  TW:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/TW.yaml
-    interval: 180
-    path: trials_providers/TW.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  SG:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/SG.yaml
-    interval: 180
-    path: trials_providers/SG.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  JP:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/JP.yaml
-    interval: 180
-    path: trials_providers/JP.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/US.yaml
-    interval: 180
-    path: trials_providers/US.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  Other:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/Other.yaml
-    interval: 180
-    path: trials_providers/Other.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
+  proxies: *id008
+proxies:
+- {name: ℹ️ 迅云跳转域名：xyjs.app - 迅云加速, server: node1.cenidcbf.ink, port: 19688, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇯🇵 日本01 - 迅云加速, server: node1.cenidcbf.ink, port: 19688, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇯🇵 日本02 - 迅云加速, server: node2.cenidcbf.ink, port: 23746, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇯🇵 日本03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 47376, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇯🇵 日本04 - 迅云加速, server: 120.233.146.220, port: 20910, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇭🇰 香港01 - 迅云加速, server: node1.cenidcbf.ink, port: 13058, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇭🇰 香港02 - 迅云加速, server: node2.cenidcbf.ink, port: 14202, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇭🇰 香港03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 42341, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇭🇰 香港04 - 迅云加速, server: 120.233.146.220, port: 19634, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇸🇬 新加坡01 - 迅云加速, server: node1.cenidcbf.ink, port: 14195, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇸🇬 新加坡02 - 迅云加速, server: node2.cenidcbf.ink, port: 43105, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇸🇬 新加坡03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 49593, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇸🇬 新加坡04 - 迅云加速, server: 120.233.146.220, port: 33277, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇹🇼 台湾01 - 迅云加速, server: node1.cenidcbf.ink, port: 16755, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇹🇼 台湾02 - 迅云加速, server: node2.cenidcbf.ink, port: 32007, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇹🇼 台湾03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 13456, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇹🇼 台湾04 - 迅云加速, server: 120.233.146.220, port: 11184, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇬🇧 英国01 - 迅云加速, server: node1.cenidcbf.ink, port: 17587, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇬🇧 英国02 - 迅云加速, server: node2.cenidcbf.ink, port: 22194, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇬🇧 英国03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 25586, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇬🇧 英国04 - 迅云加速, server: 120.233.146.220, port: 25911, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇺🇸 美国01 - 迅云加速, server: node1.cenidcbf.ink, port: 45823, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇺🇸 美国02 - 迅云加速, server: node2.cenidcbf.ink, port: 15628, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇺🇸 美国03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 35651, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇺🇸 美国04 - 迅云加速, server: 120.233.146.220, port: 40729, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇨🇦 加拿大01 - 迅云加速, server: node1.cenidcbf.ink, port: 44306, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇨🇦 加拿大02 - 迅云加速, server: node2.cenidcbf.ink, port: 34927, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇨🇦 加拿大03 - 迅云加速, server: wh1-ahmddlekrnnse6ta.bestzumo.com, port: 49883, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
+- {name: 🇨🇦 加拿大04 - 迅云加速, server: 120.233.146.220, port: 24308, type: ss, cipher: chacha20-ietf-poly1305, password: 35e5544c-9234-49c2-8080-9431bc2afd3f, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
