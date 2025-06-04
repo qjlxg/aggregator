@@ -1,0 +1,59 @@
+name: ss
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'ss.py'
+  schedule:
+    - cron: '0 */3 * * *'
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 关键权限设置
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ssh-key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        persist-credentials: true
+        
+    - name: 设置时区
+      run: sudo timedatectl set-timezone 'Asia/Shanghai'
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install requests tqdm
+        pip install python-dotenv tqdm
+        
+    - name: Run collection script       
+      run: python subscribe/ss.py
+      env:
+        SOURCE_URLS: ${{ secrets.SOURCE_URLS }}      
+
+    - name: 提交更改
+      run: |                 
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add ss.txt
+        git add . 
+        git commit -m "$(date '+%Y-%m-%d %H:%M:%S')" || echo "Nothing to commit"
+
+    - name: 拉取远程并合并
+      run: |
+        git fetch origin main
+        git merge --strategy-option ours origin/main  # 优先保留本地生成的 ss.txt
+
+    - name: 推送更改
+      uses: ad-m/github-push-action@master
+      with:
+        branch: main
