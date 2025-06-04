@@ -716,8 +716,8 @@ def work_no_check(links, allowed_types=[]):
 if __name__ == '__main__':
     # Define initial links (can be subscription URLs, raw proxy links, or file URLs)
     links = [
-        "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/ss.yaml", # Example YAML URL
-        "https://raw.githubusercontent.com/mermeroo/V2RAY-CLASH-BASE64-Subscription.Links/main/SUB%20LINKS", # Example Base64 URL
+        "", # Example YAML URL
+        "https://github.com/qjlxg/skywrt/raw/refs/heads/main/sources.list", # Example Base64 URL
         # Add other URLs here
         # Example raw link: "ss://YWVzLTI1Ni1nY206VGVzdDEyM0AxLjIuMy40OjEyMzQ1#TestNode"
     ]
