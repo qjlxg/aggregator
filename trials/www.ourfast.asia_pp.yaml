@@ -17,8 +17,7 @@ proxy-groups:
   type: url-test
   tolerance: 100
   use: &id001
-  - p_All_All_US_US
-  - p_All_All_US_US
+  - All
 - name: 👆🏻 ‍指定
   type: select
   use: *id001
@@ -53,11 +52,11 @@ proxy-groups:
   - 🛩️ ‍墙内
   - 💩 ‍广告
 proxy-providers:
-  p_All_All_US_US:
+  All:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_US_US.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.ourfast.asia/All.yaml
     interval: 180
-    path: trials_providers/p_All_All_US_US.yaml
+    path: trials_providers/www.ourfast.asia/All.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204

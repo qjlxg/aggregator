@@ -9,8 +9,21 @@ proxy-groups:
 - name: ✈️ ‍起飞
   type: select
   proxies:
+  - ⚡ ‍低延迟
+  - 👆🏻 ‍指定
   - DIRECT
   - REJECT
+- name: ⚡ ‍低延迟
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
+  tolerance: 100
+  proxies: &id001
+  - 🇺🇸 美国 - OurFast
+  - 🇺🇸 美国 - OurFast
+- name: 👆🏻 ‍指定
+  type: select
+  proxies: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -28,10 +41,12 @@ proxy-groups:
   proxies:
   - 🛩️ ‍墙内
   - ✈️ ‍起飞
+  - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
   - ✈️ ‍起飞
+  - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
   type: select
@@ -39,7 +54,8 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-proxies: []
+proxies:
+- {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: 6ce7420f-b8d6-4ba8-ac3e-66703a68f2a2, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
