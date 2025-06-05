@@ -122,7 +122,7 @@ def save_urls_to_file(urls, filename='./trial.cfg'):
     """Save URLs to a file."""
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     try:
-        with open(filename, 'w', encoding='utf-8') as f:
+        with open(filename, 'a', encoding='utf-8') as f:
             for url in sorted(list(urls)):
                 f.write(url + '\n')
         logging.info(f"URLs saved to {filename} (count: {len(urls)})")
