@@ -27,9 +27,7 @@ proxy-groups:
   proxies: &id001
   - 香港🇭🇰-Free优化节点-CDN | 2x - TiAmo Cloud
   - 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud
-  - 美国🇺🇸-Free试用节点-CDN | 2x - TiAmo Cloud
   - 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud
-  - 巴西🇧🇷-Free优化节点-CDN | 2x - TiAmo Cloud
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -83,7 +81,6 @@ proxy-groups:
   tolerance: 300
   proxies: &id003
   - 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud
-  - 美国🇺🇸-Free试用节点-CDN | 2x - TiAmo Cloud
 - name: 🎏 ‍其他
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -91,7 +88,6 @@ proxy-groups:
   tolerance: 100
   proxies: &id004
   - 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud
-  - 巴西🇧🇷-Free优化节点-CDN | 2x - TiAmo Cloud
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
@@ -105,8 +101,6 @@ proxies:
 - {name: 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci1.tiamoci.us.kg, port: 80, type: vmess, uuid: 52947dee-0c58-4e43-9aaf-5e856a3bf5e2, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci1.tiamoci.us.kg}}, udp: true}
 - {name: 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci2.tiamoci.us.kg, port: 80, type: vmess, uuid: 52947dee-0c58-4e43-9aaf-5e856a3bf5e2, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci2.tiamoci.us.kg}}, udp: true}
 - {name: 香港🇭🇰-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci3.tiamoci.us.kg, port: 80, type: vmess, uuid: 52947dee-0c58-4e43-9aaf-5e856a3bf5e2, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci3.tiamoci.us.kg}}, udp: true}
-- {name: 巴西🇧🇷-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci4.tiamoci.us.kg, port: 80, type: vmess, uuid: 52947dee-0c58-4e43-9aaf-5e856a3bf5e2, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci4.tiamoci.us.kg}}, udp: true}
-- {name: 美国🇺🇸-Free试用节点-CDN | 2x - TiAmo Cloud, server: tci5.tiamoci.us.kg, port: 80, type: vmess, uuid: 52947dee-0c58-4e43-9aaf-5e856a3bf5e2, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci5.tiamoci.us.kg}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
