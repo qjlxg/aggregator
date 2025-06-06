@@ -127,6 +127,26 @@ def get_next_page_url(html):
         return 'https://t.me' + load_more['href']
     return None
 
+def fetch_page(url, timeout=15, max_retries=3):
+    """
+    抓取页面内容，带重试和随机User-Agent。
+    Fetch page content with retries and random User-Agent.
+    """
+    headers = {'User-Agent': random.choice(USER_AGENTS)}
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers, timeout=timeout)
+            response.raise_for_status() # 对 4XX/5XX 状态码抛出 HTTPError
+            return response.text
+        except requests.exceptions.RequestException as e:
+            logging.warning(f"在尝试 {attempt + 1}/{max_retries} 次后，抓取 {url} 失败: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(random.uniform(5, 12 + attempt * 2)) # 每次重试增加延迟
+            else:
+                logging.error(f"在 {max_retries} 次尝试后，抓取 {url} 最终失败。")
+                return None
+    return None # 理论上不会执行到这里，因为max_retries耗尽时会直接返回None
+
 def load_existing_urls(filename='./trial.cfg'):
     """
     从文件中加载已有的URL集合。
@@ -182,13 +202,12 @@ def main(start_urls, max_pages_per_source=90, max_workers=10):
 
     for base_url in start_urls:
         logging.info(f"======== 开始处理来源: {base_url} ========")
-        # current_source_urls = set() # 这个集合用于跟踪当前来源找到的URL，但最终都合并到overall_found_urls
         current_url = base_url
         page_count_for_source = 0
 
         while current_url and page_count_for_source < max_pages_per_source:
             logging.info(f"正在抓取页面: {current_url} (来源: {base_url}, 第 {page_count_for_source + 1}/{max_pages_per_source} 页)")
-            html = fetch_page(current_url)
+            html = fetch_page(current_url) # 这里调用 fetch_page
             if html is None:
                 logging.warning(f"无法从 {current_url} 获取内容，停止此来源的抓取。")
                 break
@@ -196,9 +215,7 @@ def main(start_urls, max_pages_per_source=90, max_workers=10):
             new_urls = get_urls_from_html(html)
             if new_urls:
                 logging.info(f"此页面发现 {len(new_urls)} 个新URL。")
-                # current_source_urls.update(new_urls) # 可以取消此行，因为最终都到overall_found_urls
                 overall_found_urls.update(new_urls) # 直接添加到总集合中
-                # logging.info(f"当前来源URL数量: {len(current_source_urls)}") # 可以取消此行
                 logging.info(f"所有来源发现的总URL数量: {len(overall_found_urls)}")
 
             next_page_url = get_next_page_url(html)
@@ -217,10 +234,19 @@ def main(start_urls, max_pages_per_source=90, max_workers=10):
     else:
         logging.info("开始并发URL连通性测试...")
         valid_urls_set = set() # 使用集合存储有效的URL
+        # 由于 overall_found_urls 是一个集合，map 函数需要一个可迭代对象，将其转换为列表。
+        # 同时，为了保留每个URL对应的测试结果，将 zip 迭代器转换为列表或直接处理。
+        # 更高效的方式是直接对集合进行 map，然后筛选。
+        
+        # 将集合转换为列表，以便 ThreadPoolExecutor.map 可以处理
+        urls_to_test = list(overall_found_urls) 
+        
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            # overall_found_urls 是一个集合，需要转换为列表才能传递给 map
-            # 使用 zip 将原始URL与测试结果配对
-            for url, is_connectable in zip(list(overall_found_urls), executor.map(test_url_connectivity, list(overall_found_urls))):
+            # map 返回一个迭代器，按输入顺序返回结果
+            results = executor.map(test_url_connectivity, urls_to_test)
+            
+            # 遍历原始URL和对应的结果
+            for url, is_connectable in zip(urls_to_test, results):
                 if is_connectable:
                     valid_urls_set.add(url) # 添加到有效的URL集合中
 
