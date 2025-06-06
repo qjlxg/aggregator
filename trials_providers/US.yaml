@@ -1,5 +1,5 @@
 %YAML 1.1
 ---
 proxies:
-- &id001 {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, tfo: true, type: vmess, uuid: 6ce7420f-b8d6-4ba8-ac3e-66703a68f2a2, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
+- &id001 {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: 6ce7420f-b8d6-4ba8-ac3e-66703a68f2a2, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
 - *id001
