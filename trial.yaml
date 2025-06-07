@@ -11,6 +11,10 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
+  - 🇺🇸 ‍美国
+  - 🎏 ‍其他
+  - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -19,6 +23,8 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
+  - SS1-T - 速迪云加速
+  - 🇺🇸 vmess_US - 速迪云加速
   - 🇺🇸 美国 - OurFast
   - 🇺🇸 美国 - OurFast
 - name: 👆🏻 ‍指定
@@ -45,7 +51,11 @@ proxy-groups:
 - name: 🤖 ‍AI
   type: select
   proxies:
+  - 🇺🇸 ‍美国
+  - 🎏 ‍其他
   - ✈️ ‍起飞
+  - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -54,7 +64,31 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
+- name: 🇺🇸 ‍美国
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 300
+  proxies: &id002
+  - 🇺🇸 vmess_US - 速迪云加速
+  - 🇺🇸 美国 - OurFast
+  - 🇺🇸 美国 - OurFast
+- name: 🎏 ‍其他
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
+  tolerance: 100
+  proxies: &id003
+  - SS1-T - 速迪云加速
+- name: 👆🏻🇺🇸 ‍美国
+  type: select
+  proxies: *id002
+- name: 👆🏻🎏 ‍其他
+  type: select
+  proxies: *id003
 proxies:
+- {name: SS1-T - 速迪云加速, server: 132.145.102.60, port: 21001, type: ss, cipher: chacha20-ietf-poly1305, password: 1d453a09-d854-45ed-a0aa-5c9bee2ca4b4, udp: true}
+- {name: 🇺🇸 vmess_US - 速迪云加速, server: us-n1.speedyyun.com, port: 25314, type: vmess, uuid: 1d453a09-d854-45ed-a0aa-5c9bee2ca4b4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /victorias, headers: {Host: us-n1.speedyyun.com}}, udp: true}
 - {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: 6d3e6880-7164-44fc-a0f7-7b7642534fbe, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT

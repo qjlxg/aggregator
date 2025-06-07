@@ -19,15 +19,15 @@ proxy-groups:
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
   tolerance: 100
-  use: &id001
-  - Other
-  - p_All_US
-  - p_All_All_US_US
-  - p_All_All_US_US
+  proxies: &id001
+  - 🇺🇸 vmess_US - 速迪云加速
+  - SS1-T - 速迪云加速
 - name: 👆🏻 ‍指定
   type: select
-  use: *id001
+  proxies: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -64,50 +64,27 @@ proxy-groups:
   - 💩 ‍广告
 - name: 🇺🇸 ‍美国
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 300
-  use: &id002
-  - p_All_US
-  - p_All_All_US_US
-  - p_All_All_US_US
+  proxies: &id002
+  - 🇺🇸 vmess_US - 速迪云加速
 - name: 🎏 ‍其他
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
   tolerance: 100
-  use: &id003
-  - Other
+  proxies: &id003
+  - SS1-T - 速迪云加速
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  use: *id002
+  proxies: *id002
 - name: 👆🏻🎏 ‍其他
   type: select
-  use: *id003
-proxy-providers:
-  Other:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/Other.yaml
-    interval: 180
-    path: trials_providers/Other.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_US.yaml
-    interval: 180
-    path: trials_providers/p_All_US.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_US_US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_US_US.yaml
-    interval: 180
-    path: trials_providers/p_All_All_US_US.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
+  proxies: *id003
+proxies:
+- {name: SS1-T - 速迪云加速, server: 132.145.102.60, port: 21001, type: ss, cipher: chacha20-ietf-poly1305, password: 1d453a09-d854-45ed-a0aa-5c9bee2ca4b4, udp: true}
+- {name: 🇺🇸 vmess_US - 速迪云加速, server: us-n1.speedyyun.com, port: 25314, type: vmess, uuid: 1d453a09-d854-45ed-a0aa-5c9bee2ca4b4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /victorias, headers: {Host: us-n1.speedyyun.com}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

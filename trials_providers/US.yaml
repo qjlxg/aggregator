@@ -1,5 +1,6 @@
 %YAML 1.1
 ---
 proxies:
+- {name: 🇺🇸 vmess_US - 速迪云加速, server: us-n1.speedyyun.com, port: 25314, type: vmess, uuid: 1d453a09-d854-45ed-a0aa-5c9bee2ca4b4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /victorias, headers: {Host: us-n1.speedyyun.com}}, udp: true}
 - &id001 {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: 6d3e6880-7164-44fc-a0f7-7b7642534fbe, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
 - *id001

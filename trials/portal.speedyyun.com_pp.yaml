@@ -21,10 +21,8 @@ proxy-groups:
   type: url-test
   tolerance: 100
   use: &id001
+  - US
   - Other
-  - p_All_US
-  - p_All_All_US_US
-  - p_All_All_US_US
 - name: 👆🏻 ‍指定
   type: select
   use: *id001
@@ -66,9 +64,7 @@ proxy-groups:
   type: url-test
   tolerance: 300
   use: &id002
-  - p_All_US
-  - p_All_All_US_US
-  - p_All_All_US_US
+  - US
 - name: 🎏 ‍其他
   type: url-test
   tolerance: 100
@@ -81,29 +77,20 @@ proxy-groups:
   type: select
   use: *id003
 proxy-providers:
+  US:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/portal.speedyyun.com/US.yaml
+    interval: 180
+    path: trials_providers/portal.speedyyun.com/US.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
   Other:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/Other.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/portal.speedyyun.com/Other.yaml
     interval: 180
-    path: trials_providers/Other.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_US.yaml
-    interval: 180
-    path: trials_providers/p_All_US.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_All_US_US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_US_US.yaml
-    interval: 180
-    path: trials_providers/p_All_All_US_US.yaml
+    path: trials_providers/portal.speedyyun.com/Other.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
