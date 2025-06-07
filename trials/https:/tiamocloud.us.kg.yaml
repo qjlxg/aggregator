@@ -28,7 +28,8 @@ proxy-groups:
   tolerance: 100
   proxies: &id001
   - 香港🇭🇰-Free优化节点-CDN | 2x - TiAmo Cloud
-  - 新加坡🇸🇬-Free优化节点-CDN | 2x - TiAmo Cloud
+  - 香港🇭🇰-Free试用节点-CDN | 2x - TiAmo Cloud
+  - 新加坡🇸🇬-Free试用节点-CDN | 2x - TiAmo Cloud
   - 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud
   - 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud
 - name: 👆🏻 ‍指定
@@ -79,13 +80,14 @@ proxy-groups:
   tolerance: 100
   proxies: &id002
   - 香港🇭🇰-Free优化节点-CDN | 2x - TiAmo Cloud
+  - 香港🇭🇰-Free试用节点-CDN | 2x - TiAmo Cloud
 - name: 🇸🇬 ‍新加坡
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id003
-  - 新加坡🇸🇬-Free优化节点-CDN | 2x - TiAmo Cloud
+  - 新加坡🇸🇬-Free试用节点-CDN | 2x - TiAmo Cloud
 - name: 🇺🇸 ‍美国
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -113,10 +115,11 @@ proxy-groups:
   type: select
   proxies: *id005
 proxies:
-- {name: 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci1.tiamoci.us.kg, port: 8080, type: vmess, uuid: 52947dee-0c58-4e43-9aaf-5e856a3bf5e2, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci1.tiamoci.us.kg}}, udp: true}
-- {name: 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci2.tiamoci.us.kg, port: 8080, type: vmess, uuid: 52947dee-0c58-4e43-9aaf-5e856a3bf5e2, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci2.tiamoci.us.kg}}, udp: true}
-- {name: 香港🇭🇰-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci3.tiamoci.us.kg, port: 8080, type: vmess, uuid: 52947dee-0c58-4e43-9aaf-5e856a3bf5e2, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci3.tiamoci.us.kg}}, udp: true}
-- {name: 新加坡🇸🇬-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci4.tiamoci.us.kg, port: 8080, type: vmess, uuid: 52947dee-0c58-4e43-9aaf-5e856a3bf5e2, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci4.tiamoci.us.kg}}, udp: true}
+- {name: 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci1.tiamoci.us.kg, port: 8080, type: vmess, uuid: d8a07420-953d-4cc9-9148-4de865bbfaa6, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci1.tiamoci.us.kg}}, udp: true}
+- {name: 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci2.tiamoci.us.kg, port: 8080, type: vmess, uuid: d8a07420-953d-4cc9-9148-4de865bbfaa6, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci2.tiamoci.us.kg}}, udp: true}
+- {name: 香港🇭🇰-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci3.tiamoci.us.kg, port: 8080, type: vmess, uuid: d8a07420-953d-4cc9-9148-4de865bbfaa6, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci3.tiamoci.us.kg}}, udp: true}
+- {name: 香港🇭🇰-Free试用节点-CDN | 2x - TiAmo Cloud, server: tci4.tiamoci.us.kg, port: 8080, type: vmess, uuid: d8a07420-953d-4cc9-9148-4de865bbfaa6, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci4.tiamoci.us.kg}}, udp: true}
+- {name: 新加坡🇸🇬-Free试用节点-CDN | 2x - TiAmo Cloud, server: tci5.tiamoci.us.kg, port: 8080, type: vmess, uuid: d8a07420-953d-4cc9-9148-4de865bbfaa6, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci5.tiamoci.us.kg}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
