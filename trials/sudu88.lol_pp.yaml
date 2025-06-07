@@ -29,20 +29,12 @@ proxy-groups:
   type: url-test
   tolerance: 100
   use: &id001
-  - p_All_All_Other_Other
-  - p_All_All_Other_Other
-  - p_All_All_SG_SG
-  - p_All_All_SG_SG
-  - p_All_All_HK_HK_CN_CN
-  - p_All_All_HK_HK_CN_CN
-  - p_All_All_JP_JP
-  - p_All_All_JP_JP
-  - p_All_All_US_US
-  - p_All_All_US_US
-  - p_All_All_CN_CN
-  - p_All_All_CN_CN
-  - p_All_Other
-  - p_All_US
+  - HK
+  - SG
+  - JP
+  - US
+  - Other
+  - p_All_CN
 - name: 👆🏻 ‍指定
   type: select
   use: *id001
@@ -92,42 +84,33 @@ proxy-groups:
   type: url-test
   tolerance: 100
   use: &id002
-  - p_All_All_HK_HK_CN_CN
-  - p_All_All_HK_HK_CN_CN
+  - HK
 - name: 🇨🇳 ‍中国
   type: url-test
   tolerance: 100
   use: &id003
-  - p_All_All_HK_HK_CN_CN
-  - p_All_All_HK_HK_CN_CN
-  - p_All_All_CN_CN
-  - p_All_All_CN_CN
+  - HK
+  - p_All_CN
 - name: 🇸🇬 ‍新加坡
   type: url-test
   tolerance: 100
   use: &id004
-  - p_All_All_SG_SG
-  - p_All_All_SG_SG
+  - SG
 - name: 🇯🇵 ‍日本
   type: url-test
   tolerance: 100
   use: &id005
-  - p_All_All_JP_JP
-  - p_All_All_JP_JP
+  - JP
 - name: 🇺🇸 ‍美国
   type: url-test
   tolerance: 300
   use: &id006
-  - p_All_All_US_US
-  - p_All_All_US_US
-  - p_All_US
+  - US
 - name: 🎏 ‍其他
   type: url-test
   tolerance: 100
   use: &id007
-  - p_All_All_Other_Other
-  - p_All_All_Other_Other
-  - p_All_Other
+  - Other
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   use: *id002
@@ -147,74 +130,56 @@ proxy-groups:
   type: select
   use: *id007
 proxy-providers:
-  p_All_All_Other_Other:
+  HK:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_Other_Other.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/sudu88.lol/HK.yaml
     interval: 180
-    path: trials_providers/p_All_All_Other_Other.yaml
+    path: trials_providers/sudu88.lol/HK.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
-  p_All_All_SG_SG:
+  SG:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_SG_SG.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/sudu88.lol/SG.yaml
     interval: 180
-    path: trials_providers/p_All_All_SG_SG.yaml
+    path: trials_providers/sudu88.lol/SG.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
-  p_All_All_HK_HK_CN_CN:
+  JP:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_HK_HK_CN_CN.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/sudu88.lol/JP.yaml
     interval: 180
-    path: trials_providers/p_All_All_HK_HK_CN_CN.yaml
+    path: trials_providers/sudu88.lol/JP.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
-  p_All_All_JP_JP:
+  US:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_JP_JP.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/sudu88.lol/US.yaml
     interval: 180
-    path: trials_providers/p_All_All_JP_JP.yaml
+    path: trials_providers/sudu88.lol/US.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
-  p_All_All_US_US:
+  Other:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_US_US.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/sudu88.lol/Other.yaml
     interval: 180
-    path: trials_providers/p_All_All_US_US.yaml
+    path: trials_providers/sudu88.lol/Other.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
-  p_All_All_CN_CN:
+  p_All_CN:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_CN_CN.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/sudu88.lol/p_All_CN.yaml
     interval: 180
-    path: trials_providers/p_All_All_CN_CN.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_Other:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_Other.yaml
-    interval: 180
-    path: trials_providers/p_All_Other.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_US.yaml
-    interval: 180
-    path: trials_providers/p_All_US.yaml
+    path: trials_providers/sudu88.lol/p_All_CN.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
