@@ -1,17 +1,17 @@
 %YAML 1.1
 ---
 proxies:
-- &id001 {name: 🇭🇰 香港新高速4-LK - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 41320, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id002 {name: 🇭🇰 香港新高速5-LK - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 41321, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id003 {name: 🇭🇰 香港新高速6-LK - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 41322, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id004 {name: 🇭🇰 香港新高速7-LK - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 41323, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id005 {name: 🇭🇰 香港新高速1-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 45631, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id006 {name: 🇭🇰 香港新高速2-AY（动画疯，bilibili） - 云上云, server: gdydbzgsv.ccooz.top, port: 46632, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id007 {name: 🇭🇰 香港新高速3-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 45633, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id008 {name: 🇭🇰 深港专线1-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 34500, tfo: true, type: ss, cipher: aes-256-gcm, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id009 {name: 🇭🇰 深港专线3-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 34502, tfo: true, type: ss, cipher: aes-256-gcm, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id010 {name: 🇭🇰 深港专线4-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 34503, tfo: true, type: ss, cipher: aes-256-gcm, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id011 {name: 🇨🇳 test2（新疆可用） - 云上云, server: 156.229.167.167, port: 32443, tfo: true, type: ss, cipher: aes-256-gcm, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
+- &id001 {name: 🇭🇰 香港新高速4-LK - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 41320, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
+- &id002 {name: 🇭🇰 香港新高速5-LK - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 41321, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
+- &id003 {name: 🇭🇰 香港新高速6-LK - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 41322, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
+- &id004 {name: 🇭🇰 香港新高速7-LK - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 41323, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
+- &id005 {name: 🇭🇰 香港新高速1-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 45631, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
+- &id006 {name: 🇭🇰 香港新高速2-AY（动画疯，bilibili） - 云上云, server: gdydbzgsv.ccooz.top, port: 46632, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
+- &id007 {name: 🇭🇰 香港新高速3-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 45633, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
+- &id008 {name: 🇭🇰 深港专线1-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 34500, type: ss, cipher: aes-256-gcm, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
+- &id009 {name: 🇭🇰 深港专线3-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 34502, type: ss, cipher: aes-256-gcm, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
+- &id010 {name: 🇭🇰 深港专线4-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 34503, type: ss, cipher: aes-256-gcm, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
+- &id011 {name: 🇨🇳 test2（新疆可用） - 云上云, server: 156.229.167.167, port: 32443, type: ss, cipher: aes-256-gcm, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
 - *id001
 - *id002
 - *id003
