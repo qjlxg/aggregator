@@ -1,17 +1,17 @@
 %YAML 1.1
 ---
 proxies:
-- &id001 {name: 🇯🇵 日本高速-AY（本站节点全网畅通） - 云上云, server: gdydbzgsv.ccooz.top, port: 45640, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id002 {name: 🇯🇵 日本高速1-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 45641, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id003 {name: 🇯🇵 日本高速2-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 45642, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id004 {name: 🇯🇵 日本高速3-AY 解锁hulu - 云上云, server: gdydbzgsv.ccooz.top, port: 45643, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id005 {name: 🇯🇵 日本高速4-LK - 云上云, server: 163.142.180.97, port: 45644, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id006 {name: 🇯🇵 日本高速5-LK - 云上云, server: 163.142.180.97, port: 45645, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id007 {name: 🇯🇵 日本高速7-LK - 云上云, server: 163.142.180.97, port: 45647, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id008 {name: 🇯🇵 日本高速6-LK - 云上云, server: 163.142.180.97, port: 45646, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id009 {name: 🇯🇵 日本sakura原生双isp（速度一般）-LK - 云上云, server: 163.142.180.97, port: 18888, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id010 {name: 🇯🇵 日本sakura原生双isp（速度一般）-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 18889, type: ss, cipher: chacha20-ietf-poly1305, password: 7803aa81-0e47-4310-8c0a-6f987948e03e, udp: true}
-- &id011 {name: 🇯🇵 日本sakura家宽（海外专用，国内勿用） - 云上云, server: 156.231.116.127, port: 40644, type: vmess, uuid: 7803aa81-0e47-4310-8c0a-6f987948e03e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
+- &id001 {name: 🇯🇵 日本高速-AY（本站节点全网畅通） - 云上云, server: gdydbzgsv.ccooz.top, port: 45640, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, udp: true}
+- &id002 {name: 🇯🇵 日本高速1-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 45641, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, udp: true}
+- &id003 {name: 🇯🇵 日本高速2-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 45642, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, udp: true}
+- &id004 {name: 🇯🇵 日本高速3-AY 解锁hulu - 云上云, server: gdydbzgsv.ccooz.top, port: 45643, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, udp: true}
+- &id005 {name: 🇯🇵 日本高速4-LK - 云上云, server: 163.142.180.97, port: 45644, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, udp: true}
+- &id006 {name: 🇯🇵 日本高速5-LK - 云上云, server: 163.142.180.97, port: 45645, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, udp: true}
+- &id007 {name: 🇯🇵 日本高速7-LK - 云上云, server: 163.142.180.97, port: 45647, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, udp: true}
+- &id008 {name: 🇯🇵 日本高速6-LK - 云上云, server: 163.142.180.97, port: 45646, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, udp: true}
+- &id009 {name: 🇯🇵 日本sakura原生双isp（速度一般）-LK - 云上云, server: 163.142.180.97, port: 18888, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, udp: true}
+- &id010 {name: 🇯🇵 日本sakura原生双isp（速度一般）-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 18889, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, udp: true}
+- &id011 {name: 🇯🇵 日本sakura家宽（海外专用，国内勿用） - 云上云, server: 156.231.116.127, port: 40644, tfo: true, type: vmess, uuid: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
 - *id001
 - *id002
 - *id003
