@@ -26,7 +26,7 @@ jobs:
       - name: Run conversion script
         env: 
           BOT: ${{ secrets.BOT }}
-          URL_LIST_REPO_API: ${{ secrets.URL_LIST_REPO_API }}
+          URL_LIST_REPO_API: ${{ vars.URL_LIST_REPO_API }}
           CLASH_TEMPLATE_PATH: "clash_template.yml"
           ENABLE_CONNECTIVITY_TEST: "true"
           TCP_TIMEOUT: "1"
