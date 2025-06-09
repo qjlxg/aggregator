@@ -109,6 +109,7 @@ proxy-groups:
   - 🇭🇰 深港专线1-DB（3倍率） - 云上云
   - 🇭🇰 深港专线3-DB（3倍率） - 云上云
   - 🇭🇰 深港专线4-DB（3倍率） - 云上云
+  - 🇭🇰 ⚡️香港-01 - 魔术盒VPN
   - 🇭🇰 香港新高速4-LK - 云上云
   - 🇭🇰 香港新高速5-LK - 云上云
   - 🇭🇰 香港新高速6-LK - 云上云
@@ -119,6 +120,7 @@ proxy-groups:
   - 🇭🇰 深港专线1-DB（3倍率） - 云上云
   - 🇭🇰 深港专线3-DB（3倍率） - 云上云
   - 🇭🇰 深港专线4-DB（3倍率） - 云上云
+  - 🇭🇰 ⚡️香港-01 - 魔术盒VPN
   - 🇯🇵 日本高速-AY（本站节点全网畅通） - 云上云
   - 🇯🇵 日本高速1-AY - 云上云
   - 🇯🇵 日本高速2-AY - 云上云
@@ -166,7 +168,10 @@ proxy-groups:
   - 🇨🇳 test2（新疆可用） - 云上云
   - 🇨🇳 test2（新疆可用） - 云上云
   - SS1-T - 速迪云加速
+  - 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud
+  - 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud
   - 🇺🇸 vmess_US - 速迪云加速
+  - 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -228,6 +233,7 @@ proxy-groups:
   - 🇭🇰 深港专线1-DB（3倍率） - 云上云
   - 🇭🇰 深港专线3-DB（3倍率） - 云上云
   - 🇭🇰 深港专线4-DB（3倍率） - 云上云
+  - 🇭🇰 ⚡️香港-01 - 魔术盒VPN
   - 🇭🇰 香港新高速4-LK - 云上云
   - 🇭🇰 香港新高速5-LK - 云上云
   - 🇭🇰 香港新高速6-LK - 云上云
@@ -238,6 +244,7 @@ proxy-groups:
   - 🇭🇰 深港专线1-DB（3倍率） - 云上云
   - 🇭🇰 深港专线3-DB（3倍率） - 云上云
   - 🇭🇰 深港专线4-DB（3倍率） - 云上云
+  - 🇭🇰 ⚡️香港-01 - 魔术盒VPN
 - name: 🇨🇳 ‍中国
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -254,6 +261,7 @@ proxy-groups:
   - 🇭🇰 深港专线1-DB（3倍率） - 云上云
   - 🇭🇰 深港专线3-DB（3倍率） - 云上云
   - 🇭🇰 深港专线4-DB（3倍率） - 云上云
+  - 🇭🇰 ⚡️香港-01 - 魔术盒VPN
   - 🇭🇰 香港新高速4-LK - 云上云
   - 🇭🇰 香港新高速5-LK - 云上云
   - 🇭🇰 香港新高速6-LK - 云上云
@@ -264,6 +272,7 @@ proxy-groups:
   - 🇭🇰 深港专线1-DB（3倍率） - 云上云
   - 🇭🇰 深港专线3-DB（3倍率） - 云上云
   - 🇭🇰 深港专线4-DB（3倍率） - 云上云
+  - 🇭🇰 ⚡️香港-01 - 魔术盒VPN
   - 🇨🇳 test2（新疆可用） - 云上云
   - 🇨🇳 test2（新疆可用） - 云上云
 - name: 🇸🇬 ‍新加坡
@@ -353,6 +362,7 @@ proxy-groups:
   - 🇺🇸 美国专线9-DB（3倍率） - 云上云
   - 🇺🇸 美国 - OurFast
   - 🇺🇸 vmess_US - 速迪云加速
+  - 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud
 - name: 🎏 ‍其他
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -404,6 +414,8 @@ proxy-groups:
   - 🇩🇪 德国asali（海外专用，国内勿用） - 云上云
   - 🇰🇵 朝鲜内网（海外专用，国内勿用） - 云上云
   - SS1-T - 速迪云加速
+  - 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud
+  - 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
@@ -491,7 +503,11 @@ proxies:
 - {name: 🇺🇸 美国专线9-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 26521, tfo: true, type: ss, cipher: aes-256-gcm, password: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, udp: true}
 - {name: SS1-T - 速迪云加速, server: 132.145.102.60, port: 21001, type: ss, cipher: chacha20-ietf-poly1305, password: 1d453a09-d854-45ed-a0aa-5c9bee2ca4b4, udp: true}
 - {name: 🇺🇸 vmess_US - 速迪云加速, server: us-n1.speedyyun.com, port: 25314, type: vmess, uuid: 1d453a09-d854-45ed-a0aa-5c9bee2ca4b4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /victorias, headers: {Host: us-n1.speedyyun.com}}, udp: true}
-- {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: f5c3a626-1f12-4970-8b4a-9e46c4796c96, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
+- {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: dfc1f377-6788-411d-a829-2ec2c6cff6f7, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
+- {name: 🇭🇰 ⚡️香港-01 - 魔术盒VPN, server: 107.174.107.183, port: 30000, type: trojan, password: decfca67-06c9-4af8-be99-1aecc7a7d34f, skip-cert-verify: true, udp: true}
+- {name: 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci2.tiamoci.us.kg, port: 8080, type: vmess, uuid: 53892d11-81b9-464a-abd8-78c72c48f1b0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci2.tiamoci.us.kg}}, udp: true}
+- {name: 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci3.tiamoci.us.kg, port: 8080, type: vmess, uuid: 53892d11-81b9-464a-abd8-78c72c48f1b0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci3.tiamoci.us.kg}}, udp: true}
+- {name: 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci1.tiamoci.us.kg, port: 8080, type: vmess, uuid: 53892d11-81b9-464a-abd8-78c72c48f1b0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci1.tiamoci.us.kg}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
