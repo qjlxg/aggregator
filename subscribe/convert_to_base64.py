@@ -29,7 +29,7 @@ EXCLUDE_KEYWORDS = [
     "microsoft.com", "apple.com", "baidu.com", "qq.com",
     ".woff", ".woff2", ".ttf", ".otf", ".eot",
     ".zip", ".rar", ".7z", ".tar.gz", ".exe", ".dmg", ".apk",
-    "/assets/", "/static/", "/images/", "/scripts/", "/styles/", "/fonts/",
+    "/static/", "/images/", "/scripts/", "/styles/", "/fonts/",
     "robots.txt", "sitemap.xml", "favicon.ico",
     "rss", "atom",
     "/LICENSE", "/README.md", "/CHANGELOG.md",
