@@ -106,7 +106,7 @@ def parse_trojan(trojan_url):
         proxy = {
             'name': name,
             'type': 'trojan',
-            'server': server,  # 修复：添加缺失的引号
+            'server': server,  # 修复：确保正确闭合
             'port': port,
             'password': password,
             'tls': tls,
@@ -405,12 +405,12 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS_CONNECTIVITY_TEST) as executor:
             future_to_proxy = {
                 executor.submit(test_tcp_connectivity, p['server'], p['port']): p
-                for p in proxies_to_test_list if p.get('server') and isinstance(p.get('port'), int)
+                for p in proxies_to_test_list if p.get('server') and p.get('port') is not None
             }
             processed_count = 0
             total_testable_proxies = len(future_to_proxy)
 
-            for future in concurrent.futures.DEFAULT_TIMEOUT as_completed(future_to_proxy):
+            for future in concurrent.futures.as_completed(future_to_proxy):
                 proxy_dict = future_to_proxy[future]
                 server = proxy_dict.get('server')
                 port = proxy_dict.get('port')
@@ -482,7 +482,7 @@ def get_github_file_content(api_url, token):
         print(f"Error fetching file from GitHub (Request Error): {req_err}")
         return None, None
     except Exception as e:
-        print(f"Error fetching file from GitHub (Other Error): {e}: {e}")
+        print(f"Error fetching file from GitHub (Other Error): {e}")
         return None, None
 
 def update_github_file_content(repo_contents_api_base, token, file_path, new_content, sha, commit_message):
@@ -652,3 +652,11 @@ def main():
             commit_message
         )
         if update_success:
+            print("url.txt file updated successfully.")
+        else:
+            print("Failed to update url.txt file.")
+    else:
+        print("url.txt file content unchanged, no update needed.")
+
+if __name__ == "__main__":
+    main()
