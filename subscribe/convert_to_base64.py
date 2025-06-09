@@ -66,6 +66,8 @@ def parse_vmess(vmess_url):
         network = config.get('net', 'tcp')
         tls = config.get('tls', '') == 'tls'
         servername = config.get('sni', config.get('host', '')) if tls else ''
+        skip_cert_verify = config.get('skip-cert-verify', False)  # 修复：明确定义
+
         proxy = {
             'name': name,
             'type': 'vmess',
@@ -85,7 +87,7 @@ def parse_vmess(vmess_url):
 
         return proxy
     except Exception as e:
-        print(f"解析 Vmess 链接失败: {vmess_url[:50]}...，原因： {e}")
+        print(f"解析 Vmess 链接失败: {vmess_url[:50]}...，原因: {e}")
         return None
 
 def parse_trojan(trojan_url):
@@ -104,7 +106,7 @@ def parse_trojan(trojan_url):
         proxy = {
             'name': name,
             'type': 'trojan',
-            'server,
+            'server': server,  # 修复：添加缺失的引号
             'port': port,
             'password': password,
             'tls': tls,
@@ -116,7 +118,7 @@ def parse_trojan(trojan_url):
 
         return proxy
     except Exception as e:
-        print(f"解析 Trojan 链接失败: {trojan_url[:50]}...，原因： {e}")
+        print(f"解析 Trojan 链接失败: {trojan_url[:50]}...，原因: {e}")
         return None
 
 def parse_shadowsocks(ss_url):
@@ -178,7 +180,7 @@ def parse_shadowsocks(ss_url):
         except base64.binascii.Error as b64_err:
             raise ValueError(f"Base64 decoding error: {b64_err}")
     except Exception as e:
-        print(f"解析 Shadowsocks 链接失败: {ss_url[:100]}...，原因： {e}")
+        print(f"解析 Shadowsocks 链接失败: {ss_url[:100]}...，原因: {e}")
         return None
 
 def parse_hysteria2(hy2_url):
@@ -211,7 +213,7 @@ def parse_hysteria2(hy2_url):
             proxy['alpn'] = ','.join(params['alpn'])
         return proxy
     except Exception as e:
-        print(f"解析 Hysteria2 链接失败: {hy2_url[:50]}...，原因： {e}")
+        print(f"解析 Hysteria2 链接失败: {hy2_url[:50]}...，原因: {e}")
         return None
 
 # --- Connectivity Test Function ---
@@ -408,7 +410,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
             processed_count = 0
             total_testable_proxies = len(future_to_proxy)
 
-            for future in concurrent.futures.as_completed(future_to_proxy):
+            for future in concurrent.futures.DEFAULT_TIMEOUT as_completed(future_to_proxy):
                 proxy_dict = future_to_proxy[future]
                 server = proxy_dict.get('server')
                 port = proxy_dict.get('port')
@@ -480,7 +482,7 @@ def get_github_file_content(api_url, token):
         print(f"Error fetching file from GitHub (Request Error): {req_err}")
         return None, None
     except Exception as e:
-        print(f"Error fetching file from GitHub (Other Error): {e}")
+        print(f"Error fetching file from GitHub (Other Error): {e}: {e}")
         return None, None
 
 def update_github_file_content(repo_contents_api_base, token, file_path, new_content, sha, commit_message):
@@ -650,11 +652,3 @@ def main():
             commit_message
         )
         if update_success:
-            print("url.txt file updated successfully.")
-        else:
-            print("Failed to update url.txt file.")
-    else:
-        print("url.txt file content unchanged, no update needed.")
-
-if __name__ == "__main__":
-    main()
