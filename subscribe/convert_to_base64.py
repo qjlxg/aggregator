@@ -17,25 +17,9 @@ EXCLUDE_KEYWORDS = [
     "cdn.jsdelivr.net", "statically.io", "googletagmanager.com",
     "www.w3.org", "fonts.googleapis.com", "schemes.ogf.org", "clashsub.net",
     "t.me", "api.w.org",
-    # 之前可能导致误过滤的通用文件类型关键词，已根据调试反馈注释掉。
-    # 这样可以避免跳过包含这些字符串但实际上是有效订阅的URL。
-    # "html", "css", "js", "ico", "png", "jpg", "jpeg", "gif", "svg", "webp", "xml", "json", "txt",
+    # "html", "css", "js", "ico", "png", "jpg", "jpeg", "gif", "svg", "webp", "xml", "json", "txt", # <--- Comment out or remove these
     "google-analytics.com", "cloudflare.com/cdn-cgi/", "gstatic.com", "googleapis.com",
-    "disqus.com", "gravatar.com", "s.w.org",
-    "amazon.com", "aliyuncs.com", "tencentcos.cn",
-    "cdn.bootcss.com", "cdnjs.cloudflare.com",
-    "bit.ly", "tinyurl.com", "cutt.ly", "shorturl.at", "surl.li", "suo.yt", "v1.mk",
-    "youtube.com", "facebook.com", "twitter.com", "weibo.com",
-    "mail.google.com", "docs.google.com",
-    "microsoft.com", "apple.com", "baidu.com", "qq.com",
-    ".woff", ".woff2", ".ttf", ".otf", ".eot",
-    ".zip", ".rar", ".7z", ".tar.gz", ".exe", ".dmg", ".apk",
-    "/assets/", "/static/", "/images/", "/scripts/", "/styles/", "/fonts/",
-    "robots.txt", "sitemap.xml", "favicon.ico",
-    "rss", "atom",
-    "/LICENSE", "/README.md", "/CHANGELOG.md",
-    ".git", ".svn",
-    "swagger-ui.html", "openapi.json"
+    # ... keep the rest of your exclude list as is, unless you find other problematic keywords
 ]
 
 # --- Proxy Parsing Functions ---
