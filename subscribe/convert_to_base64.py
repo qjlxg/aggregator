@@ -11,34 +11,32 @@ import time
 import concurrent.futures
 
 # --- Global Constants ---
-# 修正了拼写错误: MAX_WORKERS_CONNECTIVITY_TEST
 MAX_WORKERS_CONNECTIVITY_TEST = 30
 EXCLUDE_KEYWORDS = [
     "cdn.jsdelivr.net", "statically.io", "googletagmanager.com",
     "www.w3.org", "fonts.googleapis.com", "schemes.ogf.org", "clashsub.net",
     "t.me", "api.w.org",
-    # "html", "css", "js", "ico", "png", "jpg", "jpeg", "gif", "svg", "webp", "xml", "json", "txt", # <--- Comment out or remove these
-    "google-analytics.com", "cloudflare.com/cdn-cgi/", "gstatic.com", "googleapis.com",
-    # ... keep the rest of your exclude list as is, unless you find other problematic keywords
-]
+   ]
 
 # --- Proxy Parsing Functions ---
 def generate_proxy_fingerprint(proxy_data):
     """
     根据代理的核心连接信息生成一个唯一的哈希指纹。
-    这用于识别和去重相同的代理，即使它们的名称或非核心配置（如传输协议、SNI等）不同）。
-    --- 修复了 TypeError：确保 alterId 被转换为字符串 ---
+    这用于识别和去重相同的代理，即使它们的名称或非核心配置（如传输协议、SNI等）不同。
+    --- 精确修复：确保所有数值类型在加入指纹前都转换为字符串 ---
     """
     p_type = proxy_data.get('type', '').lower()
     server = proxy_data.get('server', '')
-    port = str(proxy_data.get('port', '')) # 确保 port 是字符串
+    # 确保 port 始终转换为字符串，即使它是 None 或其他非字符串类型
+    port = str(proxy_data.get('port', '')) 
 
     fingerprint_parts = [p_type, server, port]
 
     if p_type == 'vmess':
         # Vmess 的核心是 server, port, uuid 和 alterId (aid)
         fingerprint_parts.append(proxy_data.get('uuid', ''))
-        fingerprint_parts.append(str(proxy_data.get('alterId', ''))) # **关键修复：确保 alterId 是字符串**
+        # 确保 alterId 始终转换为字符串，即使它是 None 或整数
+        fingerprint_parts.append(str(proxy_data.get('alterId', ''))) 
     elif p_type == 'trojan':
         # Trojan 的核心是 server, port, password
         fingerprint_parts.append(proxy_data.get('password', ''))
@@ -155,24 +153,19 @@ def parse_shadowsocks(ss_url):
                 raise ValueError(f"Invalid format after base64 decoding: Missing '@' separator or incorrect structure.")
 
             method_password = parts[0]
-            server_port_and_tail = parts[1]
-            clean_server_port_match = re.match(r'^[\w\d\.\-]+\:\d+', server_port_and_tail)
-            if clean_server_port_match:
-                server_port_str = clean_server_port_match.group(0)
-            else:
-                raise ValueError(f"Invalid server:port format in: '{server_port_and_tail}'")
-
             method_password_parts = method_password.split(':', 1)
             if len(method_password_parts) != 2:
                 raise ValueError(f"Invalid method:password format: '{method_password}'")
             method = method_password_parts[0]
             password = method_password_parts[1]
 
-            server_port_parts = server_port_str.split(':')
-            if len(server_port_parts) != 2:
-                raise ValueError(f"Invalid server:port format: '{server_port_str}'")
-            server = server_port_parts[0]
-            port = int(server_port_parts[1])
+            server_port_and_tail = parts[1]
+            clean_server_port_match = re.match(r'^[\w\d\.\-]+\:(\d+)', server_port_and_tail) # 捕获端口号
+            if clean_server_port_match:
+                server = server_port_and_tail.split(':')[0]
+                port = int(clean_server_port_match.group(1)) # 直接从匹配组获取端口并转换为整数
+            else:
+                raise ValueError(f"Invalid server:port format in: '{server_port_and_tail}'")
 
             proxy = {
                 'name': name,
@@ -228,13 +221,18 @@ def parse_hysteria2(hy2_url):
 def test_tcp_connectivity(server, port, timeout=1, retries=1, delay=0.5):
     for i in range(retries + 1):
         try:
-            sock = socket.create_connection((server, port), timeout=timeout)
+            # 确保 port 是整数类型，socket.create_connection 需要
+            sock = socket.create_connection((server, int(port)), timeout=timeout)
             sock.close()
             return True
-        except (socket.timeout, ConnectionRefusedError, OSError):
+        except (socket.timeout, ConnectionRefusedError, OSError, ValueError) as e:
+            # ValueError 可能是因为 port 转换失败
             if i < retries:
                 time.sleep(delay)
-        except Exception:
+            # else:
+            #     print(f"Debug: Failed TCP connect to {server}:{port} after {retries+1} retries. Reason: {e}")
+        except Exception as e:
+            # print(f"Debug: Unexpected error during TCP connect to {server}:{port}: {e}")
             return False
     return False
 
@@ -340,7 +338,6 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
             try:
                 decoded_content_utf8 = content.decode('utf-8')
                 decoded_successfully = True
-                # print(f"  --- URL: {url} Successfully decoded as UTF-8 ---")
                 
                 proxies_from_utf8 = _parse_proxies_from_decoded_text(decoded_content_utf8, url)
                 if proxies_from_utf8:
@@ -360,24 +357,17 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                             proxies_from_b64_in_utf8 = _parse_proxies_from_decoded_text(decoded_from_base64_in_utf8, url)
                             if proxies_from_b64_in_utf8:
                                 current_proxies_from_url.extend(proxies_from_b64_in_utf8)
-                            # else:
-                            #     print(f"  --- URL: {url} Base64 decoded (from UTF-8 source) but no proxies found. ---")
                         except (base64.binascii.Error, UnicodeDecodeError) as e_b64_utf8:
                             print(f"  --- URL: {url} Looked like Base64 (in UTF-8 text) but failed to decode/parse: {e_b64_utf8} ---")
                         except Exception as e_generic_b64_utf8: # Catch any other unexpected error
                             print(f"  --- URL: {url} Unexpected error during Base64 (in UTF-8 text) processing: {e_generic_b64_utf8} ---")
             except UnicodeDecodeError:
                 print(f"  --- URL: {url} UTF-8 decoding failed. Will try direct Base64. ---")
-                # decoded_successfully remains False
 
             # Attempt 2: If no proxies found yet, OR initial UTF-8 decoding failed, try direct Base64 decoding of original content
             if not current_proxies_from_url:
-                # print(f"  --- URL: {url} No proxies found via UTF-8 path or UTF-8 decode failed. Attempting direct Base64. ---")
                 try:
-                    # content is bytes. Strip potential whitespace bytes if the source was text-like before b64 encoding.
                     cleaned_byte_content = content.strip()
-                    # Add padding if necessary, robustly
-                    # Attempt to decode as ASCII first to get string length for padding, handle errors gracefully
                     try:
                         b64_text_equivalent = cleaned_byte_content.decode('ascii')
                     except UnicodeDecodeError:
@@ -388,15 +378,9 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                             cleaned_byte_content += b'=' * (4 - missing_padding)
 
                     decoded_content_b64 = base64.b64decode(cleaned_byte_content).decode('utf-8')
-                    # print(f"  --- URL: {url} Successfully decoded raw content as Base64 then UTF-8 ---")
                     proxies_from_b64 = _parse_proxies_from_decoded_text(decoded_content_b64, url)
                     if proxies_from_b64:
                         current_proxies_from_url.extend(proxies_from_b64)
-                    # elif decoded_successfully: # if UTF-8 was successful but found nothing, and b64 also found nothing
-                    #     print(f"  --- URL: {url} Direct Base64 decoding yielded no proxies (original was UTF-8). ---")
-                    # else: # if UTF-8 failed, and b64 also found nothing
-                    #     print(f"  --- URL: {url} Direct Base64 decoding yielded no proxies (original was not UTF-8). ---")
-
                 except (base64.binascii.Error, UnicodeDecodeError) as b64_err:
                     if not decoded_successfully: # Only print this if UTF-8 also failed
                             print(f"  --- URL: {url} Direct Base64 decoding or subsequent UTF-8 conversion failed: {b64_err} ---")
@@ -420,7 +404,8 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
     # --- Deduplication and Connectivity Test (Parallelized) ---
     unique_proxies_for_test = {}
     for proxy_dict in all_raw_proxies:
-        if proxy_dict and isinstance(proxy_dict, dict) and 'server' in proxy_dict and 'port' in proxy_dict : # Ensure it's a valid dict
+        # 确保 proxy_dict 是有效的字典，且包含 server 和 port
+        if proxy_dict and isinstance(proxy_dict, dict) and 'server' in proxy_dict and 'port' in proxy_dict : 
             fingerprint = generate_proxy_fingerprint(proxy_dict)
             if fingerprint not in unique_proxies_for_test:
                 unique_proxies_for_test[fingerprint] = proxy_dict
@@ -434,6 +419,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
         print(f"\n开始并行连通性测试，共 {len(proxies_to_test_list)} 个唯一代理...")
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS_CONNECTIVITY_TEST) as executor:
             future_to_proxy = {
+                # 确保传递给 test_tcp_connectivity 的 port 是 int 类型
                 executor.submit(test_tcp_connectivity, p['server'], p['port']): p
                 for p in proxies_to_test_list if p.get('server') and isinstance(p.get('port'), int)
             }
@@ -449,6 +435,7 @@ def fetch_and_decode_urls_to_clash_proxies(urls, enable_connectivity_test=True):
                     is_reachable = future.result()
                     if is_reachable:
                         original_name = proxy_dict.get('name', f"{proxy_dict.get('type', 'UNKNOWN').upper()}-{proxy_dict.get('server', 'unknown')}")
+                        # 确保指纹在命名时也是字符串
                         short_fingerprint = generate_proxy_fingerprint(proxy_dict)[:6]
                         max_name_len = 50 
 
