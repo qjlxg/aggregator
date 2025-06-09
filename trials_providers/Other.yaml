@@ -24,6 +24,8 @@ proxies:
 - &id021 {name: 🇩🇪 德国asali（海外专用，国内勿用） - 云上云, server: 156.231.116.127, port: 40644, tfo: true, type: vmess, uuid: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
 - &id022 {name: 🇰🇵 朝鲜内网（海外专用，国内勿用） - 云上云, server: 156.231.116.127, port: 40644, tfo: true, type: vmess, uuid: 6c7b3a09-4ef4-4ce5-b01b-e11d23dc4a4f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
 - {name: SS1-T - 速迪云加速, server: 132.145.102.60, port: 21001, type: ss, cipher: chacha20-ietf-poly1305, password: 1d453a09-d854-45ed-a0aa-5c9bee2ca4b4, udp: true}
+- {name: 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci2.tiamoci.us.kg, port: 8080, type: vmess, uuid: 53892d11-81b9-464a-abd8-78c72c48f1b0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci2.tiamoci.us.kg}}, udp: true}
+- {name: 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci3.tiamoci.us.kg, port: 8080, type: vmess, uuid: 53892d11-81b9-464a-abd8-78c72c48f1b0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci3.tiamoci.us.kg}}, udp: true}
 - *id001
 - *id002
 - *id003
