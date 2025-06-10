@@ -11,10 +11,10 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
-  - 🇭🇰 ‍香港
   - 🇺🇸 ‍美国
-  - 👆🏻🇭🇰 ‍香港
+  - 🎏 ‍其他
   - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -23,8 +23,9 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇭🇰 香港 - OurFast
-  - 🇺🇸 美国 - OurFast
+  - 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud
+  - 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud
+  - 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -44,16 +45,16 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇭🇰 ‍香港
   - ✈️ ‍起飞
-  - 👆🏻🇭🇰 ‍香港
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
   - 🇺🇸 ‍美国
+  - 🎏 ‍其他
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -62,29 +63,31 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇭🇰 ‍香港
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id002
-  - 🇭🇰 香港 - OurFast
 - name: 🇺🇸 ‍美国
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 300
+  proxies: &id002
+  - 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud
+- name: 🎏 ‍其他
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
+  tolerance: 100
   proxies: &id003
-  - 🇺🇸 美国 - OurFast
-- name: 👆🏻🇭🇰 ‍香港
+  - 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud
+  - 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud
+- name: 👆🏻🇺🇸 ‍美国
   type: select
   proxies: *id002
-- name: 👆🏻🇺🇸 ‍美国
+- name: 👆🏻🎏 ‍其他
   type: select
   proxies: *id003
 proxies:
-- {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, tfo: true, type: vmess, uuid: 7af5d9e6-75ee-4ac3-87b0-66233c0a9d73, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
-- {name: 🇭🇰 香港 - OurFast, server: node12.ourfast.asia, port: 443, tfo: true, type: vmess, uuid: 7af5d9e6-75ee-4ac3-87b0-66233c0a9d73, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: node12.ourfast.asia}}, udp: true}
+- {name: 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci1.tiamoci.us.kg, port: 8080, type: vmess, uuid: 5cbb9c9f-a7aa-4926-844c-21e4349fc693, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci1.tiamoci.us.kg}}, udp: true}
+- {name: 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci2.tiamoci.us.kg, port: 8080, type: vmess, uuid: 5cbb9c9f-a7aa-4926-844c-21e4349fc693, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci2.tiamoci.us.kg}}, udp: true}
+- {name: 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci3.tiamoci.us.kg, port: 8080, type: vmess, uuid: 5cbb9c9f-a7aa-4926-844c-21e4349fc693, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci3.tiamoci.us.kg}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
