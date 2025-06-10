@@ -1,8 +1,8 @@
 %YAML 1.1
 ---
 proxies:
-- &id070 {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: 7af5d9e6-75ee-4ac3-87b0-66233c0a9d73, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
-- &id071 {name: 🇭🇰 香港 - OurFast, server: node12.ourfast.asia, port: 443, type: vmess, uuid: 7af5d9e6-75ee-4ac3-87b0-66233c0a9d73, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: node12.ourfast.asia}}, udp: true}
+- &id070 {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: ecf3e11d-06eb-4671-ba2d-6219680a52de, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
+- &id071 {name: 🇭🇰 香港 - OurFast, server: node12.ourfast.asia, port: 443, type: vmess, uuid: ecf3e11d-06eb-4671-ba2d-6219680a52de, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: node12.ourfast.asia}}, udp: true}
 - &id001 {name: ℹ️ 续费网址https://ysy.lol - 云上云, server: iepl-ve5gw38.gym0boy.com, port: 25520, type: ss, cipher: aes-256-gcm, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
 - &id002 {name: ℹ️ 官网网址：https://ysy.lol - 云上云, server: gdydbzgsv.ccooz.top, port: 54320, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
 - &id003 {name: 🇸🇬 新加坡高速4-CH（全节点解锁人工智能） - 云上云, server: sfneran.vxzjv.xyz, port: 45624, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
@@ -69,11 +69,11 @@ proxies:
 - &id064 {name: 🇩🇪 德国asali（海外专用，国内勿用） - 云上云, server: 156.231.116.127, port: 40644, type: vmess, uuid: 1754ac2e-4a75-4588-b4b8-3590e88386f7, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
 - &id065 {name: 🇰🇵 朝鲜内网（海外专用，国内勿用） - 云上云, server: 156.231.116.127, port: 40644, type: vmess, uuid: 1754ac2e-4a75-4588-b4b8-3590e88386f7, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
 - &id066 {name: 🇨🇳 test2（新疆可用） - 云上云, server: 156.229.167.167, port: 32443, type: ss, cipher: aes-256-gcm, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
-- {name: 🇸🇬 ⚡️新加坡-01 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30000, type: ss, cipher: aes-128-gcm, password: 2df33a4e-4c07-4f4e-951e-b3bb247c22fa, udp: true}
-- {name: 🇸🇬 ⚡️新加坡-02 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30002, type: ss, cipher: aes-128-gcm, password: 2df33a4e-4c07-4f4e-951e-b3bb247c22fa, udp: true}
-- {name: 🇸🇬 ⚡️新加坡-03 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30003, type: ss, cipher: aes-128-gcm, password: 2df33a4e-4c07-4f4e-951e-b3bb247c22fa, udp: true}
-- {name: 🇸🇬 ⚡️新加坡-04 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30004, type: ss, cipher: aes-128-gcm, password: 2df33a4e-4c07-4f4e-951e-b3bb247c22fa, udp: true}
-- {name: 🇸🇬 ⚡️新加坡-05 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30005, type: ss, cipher: aes-128-gcm, password: 2df33a4e-4c07-4f4e-951e-b3bb247c22fa, udp: true}
+- &id072 {name: 🇸🇬 ⚡️新加坡-01 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30000, type: ss, cipher: aes-128-gcm, password: 71020ee7-39ba-4cc9-bf24-08770a16b73e, udp: true}
+- &id073 {name: 🇸🇬 ⚡️新加坡-02 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30002, type: ss, cipher: aes-128-gcm, password: 71020ee7-39ba-4cc9-bf24-08770a16b73e, udp: true}
+- &id074 {name: 🇸🇬 ⚡️新加坡-03 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30003, type: ss, cipher: aes-128-gcm, password: 71020ee7-39ba-4cc9-bf24-08770a16b73e, udp: true}
+- &id075 {name: 🇸🇬 ⚡️新加坡-04 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30004, type: ss, cipher: aes-128-gcm, password: 71020ee7-39ba-4cc9-bf24-08770a16b73e, udp: true}
+- &id076 {name: 🇸🇬 ⚡️新加坡-05 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30005, type: ss, cipher: aes-128-gcm, password: 71020ee7-39ba-4cc9-bf24-08770a16b73e, udp: true}
 - *id001
 - *id002
 - *id003
@@ -140,9 +140,9 @@ proxies:
 - *id064
 - *id065
 - *id066
-- &id067 {name: 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci1.tiamoci.us.kg, port: 8080, type: vmess, uuid: cea6af7b-547b-4cb5-9290-87b383b44a96, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci1.tiamoci.us.kg}}, udp: true}
-- &id068 {name: 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci2.tiamoci.us.kg, port: 8080, type: vmess, uuid: cea6af7b-547b-4cb5-9290-87b383b44a96, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci2.tiamoci.us.kg}}, udp: true}
-- &id069 {name: 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci3.tiamoci.us.kg, port: 8080, type: vmess, uuid: cea6af7b-547b-4cb5-9290-87b383b44a96, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci3.tiamoci.us.kg}}, udp: true}
+- &id067 {name: 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci1.tiamoci.us.kg, port: 8080, type: vmess, uuid: 83e5f512-3b34-4402-b09d-f59056e25278, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci1.tiamoci.us.kg}}, udp: true}
+- &id068 {name: 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci2.tiamoci.us.kg, port: 8080, type: vmess, uuid: 83e5f512-3b34-4402-b09d-f59056e25278, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci2.tiamoci.us.kg}}, udp: true}
+- &id069 {name: 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci3.tiamoci.us.kg, port: 8080, type: vmess, uuid: 83e5f512-3b34-4402-b09d-f59056e25278, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci3.tiamoci.us.kg}}, udp: true}
 - *id067
 - *id068
 - *id069
@@ -150,4 +150,8 @@ proxies:
 - *id071
 - {name: SS1-T - 速迪云加速, server: 132.145.102.60, port: 21001, type: ss, cipher: chacha20-ietf-poly1305, password: 1d453a09-d854-45ed-a0aa-5c9bee2ca4b4, udp: true}
 - {name: 🇺🇸 vmess_US - 速迪云加速, server: us-n1.speedyyun.com, port: 25314, type: vmess, uuid: 1d453a09-d854-45ed-a0aa-5c9bee2ca4b4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /victorias, headers: {Host: us-n1.speedyyun.com}}, udp: true}
-- {name: 🇭🇰 ⚡️香港-01 - 魔术盒VPN, server: 107.174.107.183, port: 30000, tfo: true, type: trojan, password: 531d1837-3088-4da0-8698-cbbb04e9d744, skip-cert-verify: true, udp: true}
+- *id072
+- *id073
+- *id074
+- *id075
+- *id076
