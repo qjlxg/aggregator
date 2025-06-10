@@ -1,17 +1,19 @@
 %YAML 1.1
 ---
 proxies:
-- &id012 {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: 7af5d9e6-75ee-4ac3-87b0-66233c0a9d73, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
-- &id001 {name: 🇺🇸 美国专线5-LK（2倍率） - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 45605, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
-- &id002 {name: 🇺🇸 美国专线6-LK（2倍率） - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 45606, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
-- &id003 {name: 🇺🇸 美国专线7-LK（3倍率） - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 45607, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
-- &id004 {name: 🇺🇸 美国专线8-LK（3倍率） - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 45608, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
-- &id005 {name: 🇺🇸 美国专线1-CH - 云上云, server: sfneran.vxzjv.xyz, port: 45601, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
-- &id006 {name: 🇺🇸 美国专线2-CH - 云上云, server: sfneran.vxzjv.xyz, port: 45602, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
-- &id007 {name: 🇺🇸 美国专线3-CH - 云上云, server: sfneran.vxzjv.xyz, port: 45603, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
-- &id008 {name: 🇺🇸 美国专线4-CH - 云上云, server: sfneran.vxzjv.xyz, port: 45604, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
-- &id009 {name: 🇺🇸 美国专线-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 45600, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
-- &id010 {name: 🇺🇸 美国专线9-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 26521, type: ss, cipher: aes-256-gcm, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
+- &id003 {name: 🇺🇸 美国专线5-LK（2倍率） - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 45605, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
+- &id004 {name: 🇺🇸 美国专线6-LK（2倍率） - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 45606, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
+- &id005 {name: 🇺🇸 美国专线7-LK（3倍率） - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 45607, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
+- &id006 {name: 🇺🇸 美国专线8-LK（3倍率） - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 45608, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
+- &id007 {name: 🇺🇸 美国专线1-CH - 云上云, server: sfneran.vxzjv.xyz, port: 45601, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
+- &id008 {name: 🇺🇸 美国专线2-CH - 云上云, server: sfneran.vxzjv.xyz, port: 45602, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
+- &id009 {name: 🇺🇸 美国专线3-CH - 云上云, server: sfneran.vxzjv.xyz, port: 45603, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
+- &id010 {name: 🇺🇸 美国专线4-CH - 云上云, server: sfneran.vxzjv.xyz, port: 45604, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
+- &id011 {name: 🇺🇸 美国专线-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 45600, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
+- &id012 {name: 🇺🇸 美国专线9-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 26521, type: ss, cipher: aes-256-gcm, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
+- &id001 {name: 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci1.tiamoci.us.kg, port: 8080, type: vmess, uuid: cea6af7b-547b-4cb5-9290-87b383b44a96, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci1.tiamoci.us.kg}}, udp: true}
+- {name: 🇺🇸 vmess_US - 速迪云加速, server: us-n1.speedyyun.com, port: 25314, type: vmess, uuid: 1d453a09-d854-45ed-a0aa-5c9bee2ca4b4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /victorias, headers: {Host: us-n1.speedyyun.com}}, udp: true}
+- &id002 {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: a3582be0-3961-419a-8d79-88ae56c6148a, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
 - *id001
 - *id002
 - *id003
@@ -22,7 +24,5 @@ proxies:
 - *id008
 - *id009
 - *id010
-- &id011 {name: 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci1.tiamoci.us.kg, port: 8080, type: vmess, uuid: cea6af7b-547b-4cb5-9290-87b383b44a96, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci1.tiamoci.us.kg}}, udp: true}
 - *id011
 - *id012
-- {name: 🇺🇸 vmess_US - 速迪云加速, server: us-n1.speedyyun.com, port: 25314, type: vmess, uuid: 1d453a09-d854-45ed-a0aa-5c9bee2ca4b4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /victorias, headers: {Host: us-n1.speedyyun.com}}, udp: true}
