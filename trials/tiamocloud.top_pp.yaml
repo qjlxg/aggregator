@@ -11,23 +11,21 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
-  - 🇭🇰 ‍香港
   - 🇺🇸 ‍美国
-  - 👆🏻🇭🇰 ‍香港
+  - 🎏 ‍其他
   - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
   tolerance: 100
-  proxies: &id001
-  - 🇭🇰 香港 - OurFast
-  - 🇺🇸 美国 - OurFast
+  use: &id001
+  - US
+  - Other
 - name: 👆🏻 ‍指定
   type: select
-  proxies: *id001
+  use: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -44,16 +42,16 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇭🇰 ‍香港
   - ✈️ ‍起飞
-  - 👆🏻🇭🇰 ‍香港
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
   - 🇺🇸 ‍美国
+  - 🎏 ‍其他
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -62,29 +60,41 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇭🇰 ‍香港
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id002
-  - 🇭🇰 香港 - OurFast
 - name: 🇺🇸 ‍美国
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 300
-  proxies: &id003
-  - 🇺🇸 美国 - OurFast
-- name: 👆🏻🇭🇰 ‍香港
-  type: select
-  proxies: *id002
+  use: &id002
+  - US
+- name: 🎏 ‍其他
+  type: url-test
+  tolerance: 100
+  use: &id003
+  - Other
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  proxies: *id003
-proxies:
-- {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, tfo: true, type: vmess, uuid: 7af5d9e6-75ee-4ac3-87b0-66233c0a9d73, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
-- {name: 🇭🇰 香港 - OurFast, server: node12.ourfast.asia, port: 443, tfo: true, type: vmess, uuid: 7af5d9e6-75ee-4ac3-87b0-66233c0a9d73, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: node12.ourfast.asia}}, udp: true}
+  use: *id002
+- name: 👆🏻🎏 ‍其他
+  type: select
+  use: *id003
+proxy-providers:
+  US:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/tiamocloud.top/US.yaml
+    interval: 180
+    path: trials_providers/tiamocloud.top/US.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  Other:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/tiamocloud.top/Other.yaml
+    interval: 180
+    path: trials_providers/tiamocloud.top/Other.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

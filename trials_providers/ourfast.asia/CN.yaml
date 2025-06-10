@@ -1,4 +1,4 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 🇭🇰 香港 - OurFast, server: node12.ourfast.asia, port: 443, type: vmess, uuid: 81a24987-ee0b-4c36-9281-cd0c6634bf78, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: node12.ourfast.asia}}, udp: true}
+- {name: 🇭🇰 香港 - OurFast, server: node12.ourfast.asia, port: 443, tfo: true, type: vmess, uuid: 7af5d9e6-75ee-4ac3-87b0-66233c0a9d73, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: node12.ourfast.asia}}, udp: true}
