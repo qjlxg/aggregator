@@ -11,13 +11,18 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
+  - 🇭🇰 ‍香港
+  - 🇺🇸 ‍美国
+  - 👆🏻🇭🇰 ‍香港
+  - 👆🏻🇺🇸 ‍美国
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
   tolerance: 100
   use: &id001
-  - All
+  - HK
+  - US
 - name: 👆🏻 ‍指定
   type: select
   use: *id001
@@ -37,12 +42,16 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
+  - 🇭🇰 ‍香港
   - ✈️ ‍起飞
+  - 👆🏻🇭🇰 ‍香港
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
+  - 🇺🇸 ‍美国
   - ✈️ ‍起飞
+  - 👆🏻🇺🇸 ‍美国
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -51,12 +60,37 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
+- name: 🇭🇰 ‍香港
+  type: url-test
+  tolerance: 100
+  use: &id002
+  - HK
+- name: 🇺🇸 ‍美国
+  type: url-test
+  tolerance: 300
+  use: &id003
+  - US
+- name: 👆🏻🇭🇰 ‍香港
+  type: select
+  use: *id002
+- name: 👆🏻🇺🇸 ‍美国
+  type: select
+  use: *id003
 proxy-providers:
-  All:
+  HK:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/ourfast.asia/All.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/ourfast.asia/HK.yaml
     interval: 180
-    path: trials_providers/ourfast.asia/All.yaml
+    path: trials_providers/ourfast.asia/HK.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  US:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/ourfast.asia/US.yaml
+    interval: 180
+    path: trials_providers/ourfast.asia/US.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
