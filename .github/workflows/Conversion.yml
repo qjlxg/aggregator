@@ -46,7 +46,7 @@ jobs:
           
           # 检查是否有文件更改，如果有则暂存并提交
           if ! git diff --quiet || ! git diff --staged --quiet; then
-            git add data/.
+            git add data/*
             git commit -m "Automated update before pull/rebase: $(date '+%Y-%m-%d %H:%M:%S')"
           fi
           
