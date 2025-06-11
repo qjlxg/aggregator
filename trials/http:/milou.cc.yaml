@@ -9,8 +9,21 @@ proxy-groups:
 - name: ✈️ ‍起飞
   type: select
   proxies:
+  - ⚡ ‍低延迟
+  - 👆🏻 ‍指定
   - DIRECT
   - REJECT
+- name: ⚡ ‍低延迟
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
+  tolerance: 100
+  proxies: &id001
+  - ℹ️ [最新网址 life.milou.life/redir 不要连接这条线路] - Milou
+  - ℹ️ 最新网址156.255.3.106/index - Milou
+- name: 👆🏻 ‍指定
+  type: select
+  proxies: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -28,10 +41,12 @@ proxy-groups:
   proxies:
   - 🛩️ ‍墙内
   - ✈️ ‍起飞
+  - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
   - ✈️ ‍起飞
+  - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
   type: select
@@ -39,7 +54,9 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-proxy-providers: {}
+proxies:
+- {name: 'ℹ️ [最新网址 life.milou.life/redir 不要连接这条线路] - Milou', server: 8.8.8.8, port: 19999, tfo: true, type: vmess, uuid: 58130ba6-aa4c-3505-8e45-b3d60523c99d, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: ℹ️ 最新网址156.255.3.106/index - Milou, server: 156.255.3.106, port: 10086, tfo: true, type: vmess, uuid: 58130ba6-aa4c-3505-8e45-b3d60523c99d, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

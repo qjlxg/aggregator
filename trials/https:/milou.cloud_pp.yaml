@@ -9,8 +9,18 @@ proxy-groups:
 - name: ✈️ ‍起飞
   type: select
   proxies:
+  - ⚡ ‍低延迟
+  - 👆🏻 ‍指定
   - DIRECT
   - REJECT
+- name: ⚡ ‍低延迟
+  type: url-test
+  tolerance: 100
+  use: &id001
+  - All
+- name: 👆🏻 ‍指定
+  type: select
+  use: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -28,10 +38,12 @@ proxy-groups:
   proxies:
   - 🛩️ ‍墙内
   - ✈️ ‍起飞
+  - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
   - ✈️ ‍起飞
+  - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
   type: select
@@ -39,7 +51,16 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-proxy-providers: {}
+proxy-providers:
+  All:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://milou.cloud/All.yaml
+    interval: 180
+    path: trials_providers/https://milou.cloud/All.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
