@@ -1,7 +1,6 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: ecf3e11d-06eb-4671-ba2d-6219680a52de, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
 - {name: 🇺🇸 美国专线5-LK（2倍率） - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 45605, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
 - {name: 🇺🇸 美国专线6-LK（2倍率） - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 45606, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
 - {name: 🇺🇸 美国专线7-LK（3倍率） - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 45607, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
@@ -13,3 +12,4 @@ proxies:
 - {name: 🇺🇸 美国专线-AY - 云上云, server: gdydbzgsv.ccooz.top, port: 45600, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
 - {name: 🇺🇸 美国专线9-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 26521, type: ss, cipher: aes-256-gcm, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
 - {name: 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci1.tiamoci.us.kg, port: 8080, type: vmess, uuid: 83e5f512-3b34-4402-b09d-f59056e25278, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci1.tiamoci.us.kg}}, udp: true}
+- {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: ce2e4003-df1b-4a54-93cf-fac161d2ceb3, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}

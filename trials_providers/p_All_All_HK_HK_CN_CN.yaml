@@ -1,7 +1,6 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 🇭🇰 香港 - OurFast, server: node12.ourfast.asia, port: 443, type: vmess, uuid: ecf3e11d-06eb-4671-ba2d-6219680a52de, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: node12.ourfast.asia}}, udp: true}
 - {name: 🇭🇰 香港新高速4-LK - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 41320, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
 - {name: 🇭🇰 香港新高速5-LK - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 41321, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
 - {name: 🇭🇰 香港新高速6-LK - 云上云, server: jg647hf446ghvw.gym0boy.com, port: 41322, type: ss, cipher: chacha20-ietf-poly1305, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
@@ -12,3 +11,4 @@ proxies:
 - {name: 🇭🇰 深港专线1-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 34500, type: ss, cipher: aes-256-gcm, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
 - {name: 🇭🇰 深港专线3-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 34502, type: ss, cipher: aes-256-gcm, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
 - {name: 🇭🇰 深港专线4-DB（3倍率） - 云上云, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 34503, type: ss, cipher: aes-256-gcm, password: 1754ac2e-4a75-4588-b4b8-3590e88386f7, udp: true}
+- {name: 🇭🇰 香港 - OurFast, server: node12.ourfast.asia, port: 443, type: vmess, uuid: ce2e4003-df1b-4a54-93cf-fac161d2ceb3, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: node12.ourfast.asia}}, udp: true}
