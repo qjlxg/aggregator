@@ -12,19 +12,9 @@ proxy-groups:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
   - 🇭🇰 ‍香港
-  - 🇹🇼 ‍台湾
-  - 🇨🇳 ‍中国
-  - 🇸🇬 ‍新加坡
-  - 🇯🇵 ‍日本
   - 🇺🇸 ‍美国
-  - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇨🇳 ‍中国
-  - 👆🏻🇸🇬 ‍新加坡
-  - 👆🏻🇯🇵 ‍日本
   - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -33,39 +23,8 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇭🇰 [电信专线] 香港 x A区 - 南北云
-  - 🇭🇰 [联通专线] 香港 x A区 - 南北云
-  - 🇭🇰 [移动专线] 香港 x A区 - 南北云
-  - 🇹🇼 [电信专线] 台湾 x A区 - 南北云
-  - 🇹🇼 [联通专线] 台湾 x A区 - 南北云
-  - 🇹🇼 [移动专线] 台湾 x A区 - 南北云
-  - 🇸🇬 [电信专线] 新加坡 x A区 - 南北云
-  - 🇸🇬 [联通专线] 新加坡 x A区 - 南北云
-  - 🇸🇬 [移动专线] 新加坡 x A区 - 南北云
-  - 🇯🇵 [电信专线] 日本 x A区 - 南北云
-  - 🇯🇵 [联通专线] 日本 x A区 - 南北云
-  - 🇯🇵 [移动专线] 日本 x A区 - 南北云
-  - 🇺🇸 [电信专线] 美国 x A区 - 南北云
-  - 🇺🇸 [联通专线] 美国 x A区 - 南北云
-  - 🇺🇸 [移动专线] 美国 x A区 - 南北云
-  - 🇮🇳 [电信专线] 印度 x A区 - 南北云
-  - 🇮🇳 [联通专线] 印度 x A区 - 南北云
-  - 🇮🇳 [移动专线] 印度 x A区 - 南北云
-  - 🇻🇳 [电信专线] 越南 x A区 - 南北云
-  - 🇻🇳 [联通专线] 越南 x A区 - 南北云
-  - 🇻🇳 [移动专线] 越南 x A区 - 南北云
-  - 🇩🇪 [电信专线] 德国 xA区 - 南北云
-  - 🇩🇪 [联通专线] 德国 x A区 - 南北云
-  - 🇩🇪 [移动专线] 德国 x A区 - 南北云
-  - 🇰🇷 [电信专线] 韩国 x A区 - 南北云
-  - 🇰🇷 [联通专线] 韩国 x A区 - 南北云
-  - 🇰🇷 [移动专线] 韩国 x A区 - 南北云
-  - 🇫🇷 [电信专线] 法国 x A区 - 南北云
-  - 🇫🇷 [联通专线] 法国 x A区 - 南北云
-  - 🇫🇷 [移动专线] 法国 x A区 - 南北云
-  - 🇨🇳官网地址：cfvpn.com - 南北云
-  - 🇨🇳注册试用1小时限1MB - 南北云
-  - 🇨🇳 ---------------------- - 南北云
+  - 🇭🇰 香港 - OurFast
+  - 🇺🇸 美国 - OurFast
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -86,27 +45,15 @@ proxy-groups:
   proxies:
   - 🛩️ ‍墙内
   - 🇭🇰 ‍香港
-  - 🇹🇼 ‍台湾
-  - 🇨🇳 ‍中国
   - ✈️ ‍起飞
   - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇨🇳 ‍中国
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
   - 🇺🇸 ‍美国
-  - 🇹🇼 ‍台湾
-  - 🇸🇬 ‍新加坡
-  - 🇯🇵 ‍日本
-  - 🎏 ‍其他
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇸🇬 ‍新加坡
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -121,136 +68,23 @@ proxy-groups:
   interval: 15
   tolerance: 100
   proxies: &id002
-  - 🇭🇰 [电信专线] 香港 x A区 - 南北云
-  - 🇭🇰 [联通专线] 香港 x A区 - 南北云
-  - 🇭🇰 [移动专线] 香港 x A区 - 南北云
-- name: 🇹🇼 ‍台湾
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id003
-  - 🇹🇼 [电信专线] 台湾 x A区 - 南北云
-  - 🇹🇼 [联通专线] 台湾 x A区 - 南北云
-  - 🇹🇼 [移动专线] 台湾 x A区 - 南北云
-- name: 🇨🇳 ‍中国
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id004
-  - 🇭🇰 [电信专线] 香港 x A区 - 南北云
-  - 🇭🇰 [联通专线] 香港 x A区 - 南北云
-  - 🇭🇰 [移动专线] 香港 x A区 - 南北云
-  - 🇹🇼 [电信专线] 台湾 x A区 - 南北云
-  - 🇹🇼 [联通专线] 台湾 x A区 - 南北云
-  - 🇹🇼 [移动专线] 台湾 x A区 - 南北云
-  - 🇨🇳官网地址：cfvpn.com - 南北云
-  - 🇨🇳注册试用1小时限1MB - 南北云
-  - 🇨🇳 ---------------------- - 南北云
-- name: 🇸🇬 ‍新加坡
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id005
-  - 🇸🇬 [电信专线] 新加坡 x A区 - 南北云
-  - 🇸🇬 [联通专线] 新加坡 x A区 - 南北云
-  - 🇸🇬 [移动专线] 新加坡 x A区 - 南北云
-- name: 🇯🇵 ‍日本
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id006
-  - 🇯🇵 [电信专线] 日本 x A区 - 南北云
-  - 🇯🇵 [联通专线] 日本 x A区 - 南北云
-  - 🇯🇵 [移动专线] 日本 x A区 - 南北云
+  - 🇭🇰 香港 - OurFast
 - name: 🇺🇸 ‍美国
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 300
-  proxies: &id007
-  - 🇺🇸 [电信专线] 美国 x A区 - 南北云
-  - 🇺🇸 [联通专线] 美国 x A区 - 南北云
-  - 🇺🇸 [移动专线] 美国 x A区 - 南北云
-- name: 🎏 ‍其他
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
-  tolerance: 100
-  proxies: &id008
-  - 🇮🇳 [电信专线] 印度 x A区 - 南北云
-  - 🇮🇳 [联通专线] 印度 x A区 - 南北云
-  - 🇮🇳 [移动专线] 印度 x A区 - 南北云
-  - 🇻🇳 [电信专线] 越南 x A区 - 南北云
-  - 🇻🇳 [联通专线] 越南 x A区 - 南北云
-  - 🇻🇳 [移动专线] 越南 x A区 - 南北云
-  - 🇩🇪 [电信专线] 德国 xA区 - 南北云
-  - 🇩🇪 [联通专线] 德国 x A区 - 南北云
-  - 🇩🇪 [移动专线] 德国 x A区 - 南北云
-  - 🇰🇷 [电信专线] 韩国 x A区 - 南北云
-  - 🇰🇷 [联通专线] 韩国 x A区 - 南北云
-  - 🇰🇷 [移动专线] 韩国 x A区 - 南北云
-  - 🇫🇷 [电信专线] 法国 x A区 - 南北云
-  - 🇫🇷 [联通专线] 法国 x A区 - 南北云
-  - 🇫🇷 [移动专线] 法国 x A区 - 南北云
+  proxies: &id003
+  - 🇺🇸 美国 - OurFast
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
-- name: 👆🏻🇹🇼 ‍台湾
-  type: select
-  proxies: *id003
-- name: 👆🏻🇨🇳 ‍中国
-  type: select
-  proxies: *id004
-- name: 👆🏻🇸🇬 ‍新加坡
-  type: select
-  proxies: *id005
-- name: 👆🏻🇯🇵 ‍日本
-  type: select
-  proxies: *id006
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  proxies: *id007
-- name: 👆🏻🎏 ‍其他
-  type: select
-  proxies: *id008
+  proxies: *id003
 proxies:
-- {name: 🇨🇳官网地址：cfvpn.com - 南北云, server: zf-cm.bgblwow.org, port: 57304, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: 🇨🇳注册试用1小时限1MB - 南北云, server: zf-cm.bgblwow.org, port: 57304, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇸🇬 [电信专线] 新加坡 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 50412, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇸🇬 [联通专线] 新加坡 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 55375, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇸🇬 [移动专线] 新加坡 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 59384, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇭🇰 [电信专线] 香港 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 58911, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇭🇰 [联通专线] 香港 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 53754, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇭🇰 [移动专线] 香港 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 59543, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇮🇳 [电信专线] 印度 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 59062, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇮🇳 [联通专线] 印度 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 50369, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇮🇳 [移动专线] 印度 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 54274, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇹🇼 [电信专线] 台湾 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 59345, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇹🇼 [联通专线] 台湾 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 56963, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇹🇼 [移动专线] 台湾 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 57989, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇻🇳 [电信专线] 越南 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 52384, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇻🇳 [联通专线] 越南 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 55774, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇻🇳 [移动专线] 越南 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 58537, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇯🇵 [电信专线] 日本 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 52707, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇯🇵 [联通专线] 日本 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 59719, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇯🇵 [移动专线] 日本 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 55439, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇩🇪 [电信专线] 德国 xA区 - 南北云', server: zf-ct.bgblwow.org, port: 54881, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇩🇪 [联通专线] 德国 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 51577, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇩🇪 [移动专线] 德国 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 58056, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇰🇷 [电信专线] 韩国 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 57459, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇰🇷 [联通专线] 韩国 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 55064, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇰🇷 [移动专线] 韩国 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 55782, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇫🇷 [电信专线] 法国 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 59720, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇫🇷 [联通专线] 法国 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 50748, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇫🇷 [移动专线] 法国 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 59741, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇺🇸 [电信专线] 美国 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 58850, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇺🇸 [联通专线] 美国 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 57572, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇺🇸 [移动专线] 美国 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 50984, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: 🇨🇳 ---------------------- - 南北云, server: zf-cm.bgblwow.org, port: 57304, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
+- {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: ca78eac9-11f6-4a75-b07d-68c8f8457ad3, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
+- {name: 🇭🇰 香港 - OurFast, server: node12.ourfast.asia, port: 443, type: vmess, uuid: ca78eac9-11f6-4a75-b07d-68c8f8457ad3, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: node12.ourfast.asia}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
