@@ -3,6 +3,6 @@
 proxies:
 - {name: 🇺🇸 美国 - OurFast, server: node3.ourfast.asia, port: 443, type: vmess, uuid: 03f0c7a4-ea2b-4600-86eb-58e64244db1d, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: node3.ourfast.asia, network: ws, ws-opts: {path: /, headers: {Host: node3.ourfast.asia}}, udp: true}
 - {name: 🇺🇸 vmess_US - 速迪云加速, server: us-n1.speedyyun.com, port: 25314, type: vmess, uuid: 4c43a517-81da-458d-b8f9-c2782600653b, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /victorias, headers: {Host: us-n1.speedyyun.com}}, udp: true}
-- {name: '🇺🇸 [电信专线] 美国 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 58850, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 05ba937b-7a6b-46cb-b94c-908a305a0c33, udp: true}
-- {name: '🇺🇸 [联通专线] 美国 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 57572, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 05ba937b-7a6b-46cb-b94c-908a305a0c33, udp: true}
-- {name: '🇺🇸 [移动专线] 美国 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 50984, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 05ba937b-7a6b-46cb-b94c-908a305a0c33, udp: true}
+- {name: '🇺🇸 [电信专线] 美国 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 58850, type: ss, cipher: chacha20-ietf-poly1305, password: 53561894-187d-493f-8496-e53c4b300ef2, udp: true}
+- {name: '🇺🇸 [联通专线] 美国 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 57572, type: ss, cipher: chacha20-ietf-poly1305, password: 53561894-187d-493f-8496-e53c4b300ef2, udp: true}
+- {name: '🇺🇸 [移动专线] 美国 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 50984, type: ss, cipher: chacha20-ietf-poly1305, password: 53561894-187d-493f-8496-e53c4b300ef2, udp: true}
