@@ -1,16 +1,16 @@
 %YAML 1.1
 ---
 proxies:
-- &id001 {name: 🇸🇬 ⚡️新加坡-02 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30002, type: ss, cipher: aes-128-gcm, password: d94c1093-61e9-4321-a39a-2e45188240c3, udp: true}
-- &id002 {name: 🇸🇬 ⚡️新加坡-01 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30000, type: ss, cipher: aes-128-gcm, password: d94c1093-61e9-4321-a39a-2e45188240c3, udp: true}
-- &id003 {name: 🇸🇬 ⚡️新加坡-03 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30003, type: ss, cipher: aes-128-gcm, password: d94c1093-61e9-4321-a39a-2e45188240c3, udp: true}
-- &id004 {name: 🇸🇬 ⚡️新加坡-04 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30004, type: ss, cipher: aes-128-gcm, password: d94c1093-61e9-4321-a39a-2e45188240c3, udp: true}
-- &id005 {name: 🇸🇬 ⚡️新加坡-05 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30005, type: ss, cipher: aes-128-gcm, password: d94c1093-61e9-4321-a39a-2e45188240c3, udp: true}
+- &id001 {name: 🇸🇬 ⚡️新加坡-02 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30002, type: ss, cipher: aes-128-gcm, password: 5a783181-c8d2-4cbe-a63a-2fa2f52e30ed, udp: true}
+- &id002 {name: 🇸🇬 ⚡️新加坡-01 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30000, type: ss, cipher: aes-128-gcm, password: 5a783181-c8d2-4cbe-a63a-2fa2f52e30ed, udp: true}
+- &id003 {name: 🇸🇬 ⚡️新加坡-03 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30003, type: ss, cipher: aes-128-gcm, password: 5a783181-c8d2-4cbe-a63a-2fa2f52e30ed, udp: true}
+- &id004 {name: 🇸🇬 ⚡️新加坡-04 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30004, type: ss, cipher: aes-128-gcm, password: 5a783181-c8d2-4cbe-a63a-2fa2f52e30ed, udp: true}
+- &id005 {name: 🇸🇬 ⚡️新加坡-05 - 魔术盒VPN, server: xyz.111bbbccc555.xyz, port: 30005, type: ss, cipher: aes-128-gcm, password: 5a783181-c8d2-4cbe-a63a-2fa2f52e30ed, udp: true}
 - *id001
 - *id002
 - *id003
 - *id004
 - *id005
-- {name: '🇸🇬 [电信专线] 新加坡 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 50412, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
-- {name: '🇸🇬 [联通专线] 新加坡 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 55375, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
-- {name: '🇸🇬 [移动专线] 新加坡 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 59384, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇸🇬 [电信专线] 新加坡 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 50412, type: ss, cipher: chacha20-ietf-poly1305, password: d8f0ea78-2a52-4998-a56b-7e5f20224507, udp: true}
+- {name: '🇸🇬 [联通专线] 新加坡 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 55375, type: ss, cipher: chacha20-ietf-poly1305, password: d8f0ea78-2a52-4998-a56b-7e5f20224507, udp: true}
+- {name: '🇸🇬 [移动专线] 新加坡 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 59384, type: ss, cipher: chacha20-ietf-poly1305, password: d8f0ea78-2a52-4998-a56b-7e5f20224507, udp: true}
