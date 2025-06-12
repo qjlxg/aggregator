@@ -1,6 +1,6 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci1.tiamoci.us.kg, port: 8080, type: vmess, uuid: 35edcbc5-bd13-4c96-98d4-6a0508bc5e42, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci1.tiamoci.us.kg}}, udp: true}
-- {name: 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci2.tiamoci.us.kg, port: 8080, type: vmess, uuid: 35edcbc5-bd13-4c96-98d4-6a0508bc5e42, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci2.tiamoci.us.kg}}, udp: true}
-- {name: 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci3.tiamoci.us.kg, port: 8080, type: vmess, uuid: 35edcbc5-bd13-4c96-98d4-6a0508bc5e42, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci3.tiamoci.us.kg}}, udp: true}
+- {name: 美国🇺🇸-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci1.tiamoci.us.kg, port: 8080, tfo: true, type: vmess, uuid: 35edcbc5-bd13-4c96-98d4-6a0508bc5e42, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci1.tiamoci.us.kg}}, udp: true}
+- {name: 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci2.tiamoci.us.kg, port: 8080, tfo: true, type: vmess, uuid: 35edcbc5-bd13-4c96-98d4-6a0508bc5e42, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci2.tiamoci.us.kg}}, udp: true}
+- {name: 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci3.tiamoci.us.kg, port: 8080, tfo: true, type: vmess, uuid: 35edcbc5-bd13-4c96-98d4-6a0508bc5e42, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci3.tiamoci.us.kg}}, udp: true}

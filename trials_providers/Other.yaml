@@ -1,23 +1,23 @@
 %YAML 1.1
 ---
 proxies:
-- &id001 {name: 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci2.tiamoci.us.kg, port: 8080, type: vmess, uuid: 3dab6d8b-28ab-491f-9d52-bed5504b46e5, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci2.tiamoci.us.kg}}, udp: true}
-- &id002 {name: 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci3.tiamoci.us.kg, port: 8080, type: vmess, uuid: 3dab6d8b-28ab-491f-9d52-bed5504b46e5, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci3.tiamoci.us.kg}}, udp: true}
+- &id001 {name: 英国🇬🇧-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci2.tiamoci.us.kg, port: 8080, type: vmess, uuid: 9fc6591e-d95a-4262-af73-bab0c6489045, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci2.tiamoci.us.kg}}, udp: true}
+- &id002 {name: 荷兰🇳🇱-Free优化节点-CDN | 2x - TiAmo Cloud, server: tci3.tiamoci.us.kg, port: 8080, type: vmess, uuid: 9fc6591e-d95a-4262-af73-bab0c6489045, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: tci3.tiamoci.us.kg}}, udp: true}
+- {name: SS1-T - 速迪云加速, server: 132.145.102.60, port: 21001, type: ss, cipher: chacha20-ietf-poly1305, password: 4c43a517-81da-458d-b8f9-c2782600653b, udp: true}
+- {name: '🇮🇳 [电信专线] 印度 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 59062, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇮🇳 [联通专线] 印度 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 50369, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇮🇳 [移动专线] 印度 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 54274, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇻🇳 [电信专线] 越南 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 52384, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇻🇳 [联通专线] 越南 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 55774, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇻🇳 [移动专线] 越南 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 58537, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇩🇪 [电信专线] 德国 xA区 - 南北云', server: zf-ct.bgblwow.org, port: 54881, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇩🇪 [联通专线] 德国 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 51577, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇩🇪 [移动专线] 德国 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 58056, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇰🇷 [电信专线] 韩国 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 57459, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇰🇷 [联通专线] 韩国 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 55064, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇰🇷 [移动专线] 韩国 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 55782, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇫🇷 [电信专线] 法国 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 59720, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇫🇷 [联通专线] 法国 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 50748, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
+- {name: '🇫🇷 [移动专线] 法国 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 59741, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 6217de6f-a776-451b-9b5a-81dc049acccc, udp: true}
 - *id001
 - *id002
-- {name: SS1-T - 速迪云加速, server: 132.145.102.60, port: 21001, type: ss, cipher: chacha20-ietf-poly1305, password: 4c43a517-81da-458d-b8f9-c2782600653b, udp: true}
-- {name: '🇮🇳 [电信专线] 印度 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 59062, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇮🇳 [联通专线] 印度 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 50369, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇮🇳 [移动专线] 印度 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 54274, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇻🇳 [电信专线] 越南 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 52384, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇻🇳 [联通专线] 越南 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 55774, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇻🇳 [移动专线] 越南 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 58537, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇩🇪 [电信专线] 德国 xA区 - 南北云', server: zf-ct.bgblwow.org, port: 54881, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇩🇪 [联通专线] 德国 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 51577, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇩🇪 [移动专线] 德国 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 58056, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇰🇷 [电信专线] 韩国 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 57459, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇰🇷 [联通专线] 韩国 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 55064, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇰🇷 [移动专线] 韩国 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 55782, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇫🇷 [电信专线] 法国 x A区 - 南北云', server: zf-ct.bgblwow.org, port: 59720, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇫🇷 [联通专线] 法国 x A区 - 南北云', server: zf-cu.bgblwow.org, port: 50748, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
-- {name: '🇫🇷 [移动专线] 法国 x A区 - 南北云', server: zf-cm.bgblwow.org, port: 59741, type: ss, cipher: chacha20-ietf-poly1305, password: d164f228-a00c-449f-92de-60d246bdd601, udp: true}
