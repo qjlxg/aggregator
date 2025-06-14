@@ -1,10 +1,10 @@
 %YAML 1.1
 ---
 proxies:
-- &id001 {name: 🇺🇸 美国1无中转 - 跨境电商云, server: 38.182.100.129, port: 10050, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: c7f1dc1d-bb60-4c5c-b8fb-b9a9c20e6986, udp: true}
-- &id002 {name: 🇺🇸 美国2无中转 - 跨境电商云, server: 108.165.171.133, port: 10050, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: c7f1dc1d-bb60-4c5c-b8fb-b9a9c20e6986, udp: true}
-- &id003 {name: 🇺🇸 美国1 - 跨境电商云, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34313, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: c7f1dc1d-bb60-4c5c-b8fb-b9a9c20e6986, udp: true}
-- &id004 {name: 🇺🇸 美国2 - 跨境电商云, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34336, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: c7f1dc1d-bb60-4c5c-b8fb-b9a9c20e6986, udp: true}
+- &id001 {name: 🇺🇸 美国1无中转 - 跨境电商云, server: 38.182.100.129, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: c7f1dc1d-bb60-4c5c-b8fb-b9a9c20e6986, udp: true}
+- &id002 {name: 🇺🇸 美国2无中转 - 跨境电商云, server: 108.165.171.133, port: 10050, type: ss, cipher: chacha20-ietf-poly1305, password: c7f1dc1d-bb60-4c5c-b8fb-b9a9c20e6986, udp: true}
+- &id003 {name: 🇺🇸 美国1 - 跨境电商云, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34313, type: ss, cipher: chacha20-ietf-poly1305, password: c7f1dc1d-bb60-4c5c-b8fb-b9a9c20e6986, udp: true}
+- &id004 {name: 🇺🇸 美国2 - 跨境电商云, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34336, type: ss, cipher: chacha20-ietf-poly1305, password: c7f1dc1d-bb60-4c5c-b8fb-b9a9c20e6986, udp: true}
 - *id001
 - *id002
 - *id003
