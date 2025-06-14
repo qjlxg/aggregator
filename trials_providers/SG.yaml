@@ -1,4 +1,11 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 🇸🇬 新加坡TJ - RuXinGe, server: tj.cpddx.club, port: 8443, tfo: true, type: trojan, password: ddceb54b-fa67-40a6-8eb3-af1636395bff, sni: tj.cpddx.club, skip-cert-verify: true, network: ws, ws-opts: {path: '', headers: {Host: tj.cpddx.club}}, udp: true}
+- &id001 {name: 🇸🇬 新加坡1无中转 - 跨境电商云, server: 176.221.19.170, port: 10050, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: c7f1dc1d-bb60-4c5c-b8fb-b9a9c20e6986, udp: true}
+- &id002 {name: 🇸🇬 新加坡2无中转 - 跨境电商云, server: 176.221.19.131, port: 10050, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: c7f1dc1d-bb60-4c5c-b8fb-b9a9c20e6986, udp: true}
+- &id003 {name: 🇸🇬 新加坡1 - 跨境电商云, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34311, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: c7f1dc1d-bb60-4c5c-b8fb-b9a9c20e6986, udp: true}
+- &id004 {name: 🇸🇬 新加坡2 - 跨境电商云, server: iii1ilili1lilil1ilili.tikshopiiiiiiiii.com, port: 34312, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: c7f1dc1d-bb60-4c5c-b8fb-b9a9c20e6986, udp: true}
+- *id001
+- *id002
+- *id003
+- *id004
