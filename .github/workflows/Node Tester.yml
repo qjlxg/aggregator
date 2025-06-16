@@ -1,0 +1,35 @@
+name: Node Tester
+
+on:
+  workflow_dispatch: # 允许手动触发
+  schedule:
+    - cron: '0 * * * *' # 每小时运行一次，您可以根据需要调整
+
+jobs:
+  test-nodes:
+    runs-on: ubuntu-latest # 在最新的 Ubuntu 虚拟机上运行
+
+    steps:
+    - name: Checkout repository # 检出您的代码
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js # 设置 Node.js 环境
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20' # 使用 Node.js 20 版本
+
+    - name: Install dependencies # 安装 js-yaml
+      run: npm install
+
+    - name: Run Node Tests # 执行您的测试脚本
+      run: node test_nodes.js
+
+    - name: Commit test results # 提交 521.yaml 回仓库
+      run: |
+        git config user.name "github-actions[bot]" # 配置 Git 用户名
+        git config user.email "github-actions[bot]@users.noreply.github.com" # 配置 Git 邮箱
+        git add data/521.yaml # 添加更改
+        git commit -m "Update node test results [skip ci]" || echo "No changes to commit" # 提交，并跳过CI循环
+        git push # 推送到远程仓库
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 自动提供的 GITHUB_TOKEN
