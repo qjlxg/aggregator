@@ -1,35 +1,55 @@
-name: Node Tester
+name: Node Tester # 工作流的名称，在 GitHub Actions 页面会显示
 
 on:
-  workflow_dispatch: # 允许手动触发
+  workflow_dispatch: # 允许在 GitHub Actions 界面手动触发此工作流
   schedule:
-    - cron: '0 * * * *' # 每小时运行一次，您可以根据需要调整
+    - cron: '0 * * * *' # 定时任务：每小时的第0分钟运行（即每小时运行一次）。
+                        # 你可以根据需要调整这个 cron 表达式。
+                        # 例如：'0 0 * * *' 每天午夜运行一次。
+                        # cron 表达式的格式：分钟 小时 日 月 星期 (都用UTC时间)
 
 jobs:
   test-nodes:
-    runs-on: ubuntu-latest # 在最新的 Ubuntu 虚拟机上运行
+    runs-on: ubuntu-latest # 指定工作流运行的操作系统环境，这里使用最新的 Ubuntu 虚拟机
 
     steps:
-    - name: Checkout repository # 检出您的代码
-      uses: actions/checkout@v4
+    - name: Checkout repository # 步骤1：检出你的 GitHub 仓库代码
+      uses: actions/checkout@v4 # 使用官方的 checkout action 来获取仓库内容
 
-    - name: Set up Node.js # 设置 Node.js 环境
-      uses: actions/setup-node@v4
+    - name: List files for debugging # 步骤2 (可选，用于调试)：列出仓库中的所有文件和目录
+      # 如果你遇到文件找不到的问题（例如 `ENOENT` 错误），这个步骤可以帮助你确认文件结构。
+      # 确认 `package.json` 和 `test_nodes.js` 是否在预期路径。
+      run: ls -R
+
+    - name: Set up Node.js # 步骤3：设置 Node.js 运行环境
+      uses: actions/setup-node@v4 # 使用官方的 setup-node action
       with:
-        node-version: '20' # 使用 Node.js 20 版本
+        node-version: '20' # 指定使用的 Node.js 版本，建议使用 LTS 版本
 
-    - name: Install dependencies # 安装 js-yaml
+    - name: Install dependencies # 步骤4：安装 JavaScript 依赖（例如 js-yaml）
+      # npm 默认会查找当前目录下的 package.json 文件
       run: npm install
+      working-directory: ./ # <-- **重要：** 确保这个路径是 `package.json` 所在的目录
+                            # 如果 `package.json` 在仓库根目录，用 `./`
+                            # 如果在子目录（例如 `my-app/`），请改为 `./my-app/`
 
-    - name: Run Node Tests # 执行您的测试脚本
+    - name: Run Node Tests # 步骤5：运行你的节点测试脚本
       run: node test_nodes.js
+      working-directory: ./ # <-- **重要：** 确保这个路径是 `test_nodes.js` 所在的目录
+                            # 如果 `test_nodes.js` 在仓库根目录，用 `./`
+                            # 如果在子目录（例如 `my-app/`），请改为 `./my-app/`
 
-    - name: Commit test results # 提交 521.yaml 回仓库
+    - name: Commit test results # 步骤6：将测试结果文件提交回仓库
+      # 这段脚本将配置 Git 用户信息，添加并提交 `data/521.yaml` 文件，然后推送到远程仓库。
+      # `[skip ci]` 标签会避免本次提交再次触发这个工作流，防止无限循环。
       run: |
-        git config user.name "github-actions[bot]" # 配置 Git 用户名
+        git config user.name "github-actions[bot]" # 配置 Git 用户名，使用 GitHub 提供的机器人用户
         git config user.email "github-actions[bot]@users.noreply.github.com" # 配置 Git 邮箱
-        git add data/521.yaml # 添加更改
-        git commit -m "Update node test results [skip ci]" || echo "No changes to commit" # 提交，并跳过CI循环
-        git push # 推送到远程仓库
+        # 添加 data/521.yaml 文件到 Git 暂存区
+        # 确保 `data/521.yaml` 相对于仓库的根目录是正确的
+        git add data/521.yaml
+        # 提交更改。`|| echo "No changes to commit"` 是为了防止在没有文件更改时提交失败
+        git commit -m "Update node test results [skip ci]" || echo "No changes to commit"
+        git push # 推送更改到远程仓库
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # 自动提供的 GITHUB_TOKEN
+        GITHUB_TOKEN: ${{ secrets.BOT }} # GitHub 自动提供的令牌，用于认证 Git 操作
