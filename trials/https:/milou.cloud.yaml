@@ -55,8 +55,8 @@ proxy-groups:
   - 🛩️ ‍墙内
   - 💩 ‍广告
 proxies:
-- {name: 'ℹ️ [最新网址 life.milou.life/redir 不要连接这条线路] - Milou', server: 8.8.8.8, port: 19999, type: vmess, uuid: a371afb8-88ce-34f4-be0e-39987311fb18, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: ℹ️ 最新网址156.255.3.106/index - Milou, server: 156.255.3.106, port: 10086, type: vmess, uuid: a371afb8-88ce-34f4-be0e-39987311fb18, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 'ℹ️ [最新网址 life.milou.life/redir 不要连接这条线路] - Milou', server: 8.8.8.8, port: 19999, tfo: true, type: vmess, uuid: e83ce2a2-ec5a-3542-a945-dc7e2f565045, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: ℹ️ 最新网址156.255.3.106/index - Milou, server: 156.255.3.106, port: 10086, tfo: true, type: vmess, uuid: e83ce2a2-ec5a-3542-a945-dc7e2f565045, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
