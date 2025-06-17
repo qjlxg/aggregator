@@ -1,5 +1,4 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 🇯🇵 日本直连-vmess - 起点带宽不限速, server: v18.nmcf.me, port: 8000, type: vmess, uuid: d40aacfe-b3f3-4698-b935-f4924217564b, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
-- {name: 🇯🇵 IEPL专线-日本-1 - 起点带宽不限速, server: 59.42.247.189, port: 8004, type: vmess, uuid: d40aacfe-b3f3-4698-b935-f4924217564b, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
+- {name: 🇯🇵 vmess-直连-JP - 起点带宽不限速, server: v18.nmcf.me, port: 8000, type: vmess, uuid: ea3328ad-9d34-483f-a85e-a1090fd133e5, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
