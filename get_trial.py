@@ -1,18 +1,40 @@
 import os
+import string
+import secrets
 from concurrent.futures import ThreadPoolExecutor, as_completed, TimeoutError
 from datetime import timedelta
-from random import choice, randint
+from random import choice
 from time import time
 from urllib.parse import urlsplit, urlunsplit
+import multiprocessing
 
 from apis import PanelSession, TempEmail, guess_panel, panel_class_map
 from subconverter import gen_base64_and_clash_config, get
 from utils import (clear_files, g0, keep, list_file_paths, list_folder_paths,
-                   rand_id, read, read_cfg, remove, size2str, str2timestamp,
+                   read, read_cfg, remove, size2str, str2timestamp,
                    timestamp2str, to_zero, write, write_cfg)
 
-MAX_WORKERS = 16
+# 全局配置
+MAX_WORKERS = min(16, multiprocessing.cpu_count() * 2)  # 动态设置最大工作线程数
 MAX_TASK_TIMEOUT = 45  # 单任务最大等待时间（秒）
+DEFAULT_EMAIL_DOMAINS = ['gmail.com', 'qq.com', 'outlook.com']  # 默认邮箱域名池
+
+def generate_random_username(length=12) -> str:
+    """生成指定长度的随机用户名，仅包含字母和数字"""
+    chars = string.ascii_lowercase + string.digits
+    return ''.join(secrets.choice(chars) for _ in range(length))
+
+def get_available_domain(cache: dict[str, list[str]]) -> str:
+    """从域名池中选择一个未被封禁的域名"""
+    banned_domains = cache.get('banned_domains', [])
+    available_domains = [d for d in DEFAULT_EMAIL_DOMAINS if d not in banned_domains]
+    if not available_domains:
+        raise Exception("所有默认域名均被封禁")
+    return choice(available_domains)
+
+def log_error(host: str, email: str, message: str, log: list):
+    """记录错误日志，包含主机、邮箱和错误信息"""
+    log.append(f"{host}({email}): {message}")
 
 def get_sub(session: PanelSession, opt: dict, cache: dict[str, list[str]]):
     url = cache['sub_url'][0]
@@ -53,7 +75,7 @@ def should_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]]):
         or (opt.get('expire') != 'never' and info.get('expire') and str2timestamp(info.get('expire')) - now < ((now - str2timestamp(cache['time'][0])) / 7 if 'reg_limit' in opt else 2400))
     ), info, *rest
 
-def _register(session: PanelSession, email, *args, **kwargs):
+def _register(session: PanelSession, email: str, *args, **kwargs):
     try:
         return session.register(email, *args, **kwargs)
     except Exception as e:
@@ -62,9 +84,11 @@ def _register(session: PanelSession, email, *args, **kwargs):
 def _get_email_and_email_code(kwargs, session: PanelSession, opt: dict, cache: dict[str, list[str]]):
     retry = 0
     while retry < 5:
-        tm = TempEmail(banned_domains=cache.get('banned_domains'))
+        tm = TempEmail(banned_domains=cache.get('banned_domains', []))
         try:
-            email = kwargs['email'] = tm.email
+            email_domain = get_available_domain(cache)
+            email = kwargs['email'] = f"{generate_random_username()}@{email_domain}"
+            tm.email = email
         except Exception as e:
             raise Exception(f'获取邮箱失败: {e}')
         try:
@@ -72,13 +96,13 @@ def _get_email_and_email_code(kwargs, session: PanelSession, opt: dict, cache: d
         except Exception as e:
             msg = str(e)
             if '禁' in msg or '黑' in msg:
-                cache['banned_domains'].append(email.split('@')[1])
+                cache['banned_domains'].append(email_domain)
                 retry += 1
                 continue
             raise Exception(f'发送邮箱验证码失败({email}): {e}')
         email_code = tm.get_email_code(g0(cache, 'name'))
         if not email_code:
-            cache['banned_domains'].append(email.split('@')[1])
+            cache['banned_domains'].append(email_domain)
             retry += 1
             continue
         kwargs['email_code'] = email_code
@@ -86,6 +110,18 @@ def _get_email_and_email_code(kwargs, session: PanelSession, opt: dict, cache: d
     raise Exception('获取邮箱验证码失败，重试次数过多')
 
 def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list) -> bool:
+    """
+    注册新用户，使用随机用户名和邮箱。
+
+    Args:
+        session: PanelSession对象，用于执行注册操作
+        opt: 配置选项字典
+        cache: 缓存字典，存储注册相关信息
+        log: 日志列表，记录操作信息
+
+    Returns:
+        bool: 注册是否成功
+    """
     kwargs = keep(opt, 'name_eq_email', 'reg_fmt', 'aff')
 
     if 'invite_code' in cache:
@@ -93,15 +129,8 @@ def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log:
     elif 'invite_code' in opt:
         kwargs['invite_code'] = choice(opt['invite_code'].split())
 
-    # --- 优化点：注册用户名随机生成 ---
-    # 如果 opt 中没有 'username' 且 PanelSession 支持随机用户名生成（例如通过 rand_id()）
-    # 或者如果 opt['name_eq_email'] 为 True，则用户名应该和邮箱一致，此时邮箱随机即可
-    if 'username' not in kwargs and not kwargs.get('name_eq_email'):
-        kwargs['username'] = rand_id() # 生成随机用户名
-
-    email = kwargs['email'] = f"{rand_id()}@{g0(cache, 'email_domain', default='gmail.com')}"
-    # --- 优化点结束 ---
-
+    email_domain = get_available_domain(cache)
+    email = kwargs['email'] = f"{generate_random_username()}@{email_domain}"
     retry = 0
     while retry < 5:
         if not (msg := _register(session, **kwargs)):
@@ -111,8 +140,7 @@ def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log:
                     try:
                         code, num, money = session.get_invite_info()
                     except Exception as e:
-                        if g0(cache, 'auto_invite') == 'T':
-                            log.append(f'{session.host}({email}): {e}')
+                        log_error(session.host, email, str(e), log)
                         if '邀请' in str(e):
                             cache['auto_invite'] = 'F'
                         return False
@@ -134,17 +162,13 @@ def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log:
                     if 'email_code' in kwargs:
                         email = _get_email_and_email_code(kwargs, session, opt, cache)
                     else:
-                        email = kwargs['email'] = f"{rand_id()}@{email.split('@')[1]}"
-                        # --- 优化点：如果重新生成邮箱，则重新生成随机用户名 ---
-                        if 'username' in kwargs and not kwargs.get('name_eq_email'):
-                            kwargs['username'] = rand_id()
-                        # --- 优化点结束 ---
+                        email = kwargs['email'] = f"{generate_random_username()}@{email.split('@')[1]}"
 
                     if (msg := _register(session, **kwargs)):
                         break
 
                 if 'invite_code' in kwargs:
-                    if 'invite_code' not in cache or int(cache['invite_code'][1]) == 1 or randint(0, 1):
+                    if 'invite_code' not in cache or int(cache['invite_code'][1]) == 1 or secrets.choice([0, 1]):
                         session.login()
                         try_buy(session, opt, cache, log)
                         try:
@@ -153,7 +177,7 @@ def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log:
                             if 'invite_code' not in cache:
                                 cache['auto_invite'] = 'F'
                             else:
-                                log.append(f'{session.host}({email}): {e}')
+                                log_error(session.host, email, str(e), log)
                         return True
                     else:
                         n = int(cache['invite_code'][1])
@@ -161,21 +185,13 @@ def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log:
                             cache['invite_code'][1] = n - 1
             return False
         if '后缀' in msg:
-            if email.split('@')[1] != 'gmail.com':
-                break
-            email = kwargs['email'] = f'{rand_id()}@qq.com'
-            # --- 优化点：如果重新生成邮箱，则重新生成随机用户名 ---
-            if 'username' in kwargs and not kwargs.get('name_eq_email'):
-                kwargs['username'] = rand_id()
-            # --- 优化点结束 ---
+            email_domain = 'qq.com' if email_domain != 'qq.com' else 'gmail.com'
+            email = kwargs['email'] = f"{generate_random_username()}@{email_domain}"
         elif '验证码' in msg:
             email = _get_email_and_email_code(kwargs, session, opt, cache)
         elif '联' in msg:
             kwargs['im_type'] = True
-        elif (
-            '邀请人' in msg
-            and g0(cache, 'invite_code', '') == kwargs.get('invite_code')
-        ):
+        elif '邀请人' in msg and g0(cache, 'invite_code', '') == kwargs.get('invite_code'):
             del cache['invite_code']
             if 'invite_code' in opt:
                 kwargs['invite_code'] = choice(opt['invite_code'].split())
@@ -185,6 +201,7 @@ def register(session: PanelSession, opt: dict, cache: dict[str, list[str]], log:
             break
         retry += 1
     if retry >= 5:
+        log_error(session.host, email, f"注册失败: {msg}", log)
         raise Exception(f'注册失败({email}): {msg}{" " + kwargs.get("invite_code") if "邀" in msg else ""}')
     return True
 
@@ -205,7 +222,7 @@ def try_checkin(session: PanelSession, opt: dict, cache: dict[str, list[str]], l
                 cache.pop('尝试签到失败', None)
             except Exception as e:
                 cache['尝试签到失败'] = [e]
-                log.append(f'尝试签到失败({session.host}): {e}')
+                log_error(session.host, cache['email'][0], f"尝试签到失败: {e}", log)
     else:
         cache.pop('last_checkin', None)
 
@@ -222,12 +239,12 @@ def try_buy(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: 
                 del cache['buy']
                 cache.pop('auto_invite', None)
                 cache.pop('invite_code', None)
-                log.append(f'上次购买成功但这次购买失败({session.host}): {e}')
+                log_error(session.host, cache.get('email', [''])[0], f"上次购买成功但这次购买失败: {e}", log)
         plan = session.buy()
         cache['buy'] = plan or 'pass'
         return plan
     except Exception as e:
-        log.append(f'购买失败({session.host}): {e}')
+        log_error(session.host, cache.get('email', [''])[0], f"购买失败: {e}", log)
     return False
 
 def do_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]], log: list, force_reg=False) -> bool:
@@ -278,7 +295,7 @@ def try_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]], log:
         turn, *sub = should_turn(session, opt, cache)
     except Exception as e:
         cache['更新旧订阅失败'] = [e]
-        log.append(f'更新旧订阅失败({session.host})({cache["sub_url"][0]}): {e}')
+        log_error(session.host, cache.get('email', [''])[0], f"更新旧订阅失败({cache['sub_url'][0]}): {e}", log)
         return None
 
     if turn:
@@ -286,13 +303,13 @@ def try_turn(session: PanelSession, opt: dict, cache: dict[str, list[str]], log:
             do_turn(session, opt, cache, log, force_reg=turn == 2)
         except Exception as e:
             cache['更新订阅链接/续费续签失败'] = [e]
-            log.append(f'更新订阅链接/续费续签失败({session.host}): {e}')
+            log_error(session.host, cache.get('email', [''])[0], f"更新订阅链接/续费续签失败: {e}", log)
             return sub
         try:
             sub = get_sub(session, opt, cache)
         except Exception as e:
             cache['获取订阅失败'] = [e]
-            log.append(f'获取订阅失败({session.host})({cache["sub_url"][0]}): {e}')
+            log_error(session.host, cache.get('email', [''])[0], f"获取订阅失败({cache['sub_url'][0]}): {e}", log)
 
     return sub
 
@@ -329,7 +346,7 @@ def save_sub(info, base64, clash, base64_url, clash_url, host, opt: dict, cache:
         cache_sub_info(info, opt, cache)
     except Exception as e:
         cache['保存订阅信息失败'] = [e]
-        log.append(f'保存订阅信息失败({host})({clash_url}): {e}')
+        log_error(host, cache.get('email', [''])[0], f"保存订阅信息失败({clash_url}): {e}", log)
     try:
         node_n = save_sub_base64_and_clash(base64, clash, host, opt)
         if (d := node_n - int(g0(cache, 'node_n', 0))) != 0:
@@ -337,7 +354,7 @@ def save_sub(info, base64, clash, base64_url, clash_url, host, opt: dict, cache:
         cache['node_n'] = node_n
     except Exception as e:
         cache['保存base64/clash订阅失败'] = [e]
-        log.append(f'保存base64/clash订阅失败({host})({base64_url})({clash_url}): {e}')
+        log_error(host, cache.get('email', [''])[0], f"保存base64/clash订阅失败({base64_url})({clash_url}): {e}", log)
 
 def get_and_save(session: PanelSession, host, opt: dict, cache: dict[str, list[str]], log: list):
     try:
@@ -346,7 +363,7 @@ def get_and_save(session: PanelSession, host, opt: dict, cache: dict[str, list[s
         if sub:
             save_sub(*sub, host, opt, cache, log)
     except Exception as e:
-        log.append(f"{host} get_and_save 异常: {e}")
+        log_error(host, cache.get('email', [''])[0], f"get_and_save 异常: {e}", log)
 
 def new_panel_session(host, cache: dict[str, list[str]], log: list) -> PanelSession | None:
     try:
@@ -362,7 +379,7 @@ def new_panel_session(host, cache: dict[str, list[str]], log: list) -> PanelSess
         return panel_class_map[g0(cache, 'type')](g0(cache, 'api_host', host), **keep(cache, 'auth_path', getitem=g0))
     except Exception as e:
         log.append(f"{host} new_panel_session 异常: {e}")
-    return None
+        return None
 
 def get_trial(host, opt: dict, cache: dict[str, list[str]]):
     log = []
