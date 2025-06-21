@@ -12,17 +12,9 @@ proxy-groups:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
   - 🇭🇰 ‍香港
-  - 🇹🇼 ‍台湾
-  - 🇨🇳 ‍中国
   - 🇯🇵 ‍日本
-  - 🇺🇸 ‍美国
-  - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇨🇳 ‍中国
   - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -31,28 +23,8 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇹🇼 Tw台湾-t - V2Board
-  - 🇹🇼 Tw台湾-s - V2Board
-  - 🇹🇼 Tw台湾-v - V2Board
-  - 🇺🇸 Us大带宽t - V2Board
-  - 🇺🇸 Us大带宽s - V2Board
-  - 🇺🇸 Us大带宽 - V2Board
-  - 影视线路1 - 火箭极驰加速器
-  - 影视线路2 - 火箭极驰加速器
-  - 影视线路3 - 火箭极驰加速器
-  - 影视线路4 - 火箭极驰加速器
-  - 影视线路5 - 火箭极驰加速器
-  - 游戏线路1 - 火箭极驰加速器
-  - 游戏线路2 - 火箭极驰加速器
-  - 游戏线路3 - 火箭极驰加速器
-  - 游戏线路4 - 火箭极驰加速器
-  - 游戏线路5 - 火箭极驰加速器
-  - 🇮🇪 爱尔兰-都柏林 - 神盾
-  - 🇯🇵 JP01 12小时试用线路 满意在订购 - 火箭
-  - 🇯🇵 JP01 12小时试用线路 满意在订购 - 火箭
   - 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭
-  - 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭
-  - 🇭🇰 香港-线路1 - 神盾
+  - 🇯🇵 JP01 12小时试用线路 满意在订购 - 火箭
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -73,25 +45,15 @@ proxy-groups:
   proxies:
   - 🛩️ ‍墙内
   - 🇭🇰 ‍香港
-  - 🇹🇼 ‍台湾
-  - 🇨🇳 ‍中国
   - ✈️ ‍起飞
   - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇨🇳 ‍中国
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🇺🇸 ‍美国
-  - 🇹🇼 ‍台湾
   - 🇯🇵 ‍日本
-  - 🎏 ‍其他
   - ✈️ ‍起飞
-  - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🇹🇼 ‍台湾
   - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -107,102 +69,22 @@ proxy-groups:
   tolerance: 100
   proxies: &id002
   - 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭
-  - 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭
-  - 🇭🇰 香港-线路1 - 神盾
-- name: 🇹🇼 ‍台湾
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id003
-  - 🇹🇼 Tw台湾-t - V2Board
-  - 🇹🇼 Tw台湾-s - V2Board
-  - 🇹🇼 Tw台湾-v - V2Board
-- name: 🇨🇳 ‍中国
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id004
-  - 🇹🇼 Tw台湾-t - V2Board
-  - 🇹🇼 Tw台湾-s - V2Board
-  - 🇹🇼 Tw台湾-v - V2Board
-  - 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭
-  - 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭
-  - 🇭🇰 香港-线路1 - 神盾
 - name: 🇯🇵 ‍日本
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
-  proxies: &id005
+  proxies: &id003
   - 🇯🇵 JP01 12小时试用线路 满意在订购 - 火箭
-  - 🇯🇵 JP01 12小时试用线路 满意在订购 - 火箭
-- name: 🇺🇸 ‍美国
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 300
-  proxies: &id006
-  - 🇺🇸 Us大带宽t - V2Board
-  - 🇺🇸 Us大带宽s - V2Board
-  - 🇺🇸 Us大带宽 - V2Board
-- name: 🎏 ‍其他
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
-  tolerance: 100
-  proxies: &id007
-  - 影视线路1 - 火箭极驰加速器
-  - 影视线路2 - 火箭极驰加速器
-  - 影视线路3 - 火箭极驰加速器
-  - 影视线路4 - 火箭极驰加速器
-  - 影视线路5 - 火箭极驰加速器
-  - 游戏线路1 - 火箭极驰加速器
-  - 游戏线路2 - 火箭极驰加速器
-  - 游戏线路3 - 火箭极驰加速器
-  - 游戏线路4 - 火箭极驰加速器
-  - 游戏线路5 - 火箭极驰加速器
-  - 🇮🇪 爱尔兰-都柏林 - 神盾
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
-- name: 👆🏻🇹🇼 ‍台湾
-  type: select
-  proxies: *id003
-- name: 👆🏻🇨🇳 ‍中国
-  type: select
-  proxies: *id004
 - name: 👆🏻🇯🇵 ‍日本
   type: select
-  proxies: *id005
-- name: 👆🏻🇺🇸 ‍美国
-  type: select
-  proxies: *id006
-- name: 👆🏻🎏 ‍其他
-  type: select
-  proxies: *id007
+  proxies: *id003
 proxies:
-- {name: 影视线路1 - 火箭极驰加速器, server: 8.141.114.199, port: 44564, type: ss, cipher: chacha20-ietf-poly1305, password: 93989db2-5c81-4200-ae7a-a90e25dc6a4f, udp: true}
-- {name: 影视线路2 - 火箭极驰加速器, server: 8.141.114.199, port: 44564, type: ss, cipher: chacha20-ietf-poly1305, password: 93989db2-5c81-4200-ae7a-a90e25dc6a4f, udp: true}
-- {name: 影视线路3 - 火箭极驰加速器, server: 8.141.114.199, port: 44564, type: ss, cipher: chacha20-ietf-poly1305, password: 93989db2-5c81-4200-ae7a-a90e25dc6a4f, udp: true}
-- {name: 影视线路4 - 火箭极驰加速器, server: 8.141.114.199, port: 44564, type: ss, cipher: chacha20-ietf-poly1305, password: 93989db2-5c81-4200-ae7a-a90e25dc6a4f, udp: true}
-- {name: 影视线路5 - 火箭极驰加速器, server: 8.141.114.199, port: 44564, type: ss, cipher: chacha20-ietf-poly1305, password: 93989db2-5c81-4200-ae7a-a90e25dc6a4f, udp: true}
-- {name: 游戏线路1 - 火箭极驰加速器, server: 8.141.114.199, port: 44564, type: ss, cipher: chacha20-ietf-poly1305, password: 93989db2-5c81-4200-ae7a-a90e25dc6a4f, udp: true}
-- {name: 游戏线路2 - 火箭极驰加速器, server: 8.141.114.199, port: 44564, type: ss, cipher: chacha20-ietf-poly1305, password: 93989db2-5c81-4200-ae7a-a90e25dc6a4f, udp: true}
-- {name: 游戏线路3 - 火箭极驰加速器, server: 8.141.114.199, port: 44564, type: ss, cipher: chacha20-ietf-poly1305, password: 93989db2-5c81-4200-ae7a-a90e25dc6a4f, udp: true}
-- {name: 游戏线路4 - 火箭极驰加速器, server: 8.141.114.199, port: 44564, type: ss, cipher: chacha20-ietf-poly1305, password: 93989db2-5c81-4200-ae7a-a90e25dc6a4f, udp: true}
-- {name: 游戏线路5 - 火箭极驰加速器, server: 8.141.114.199, port: 44564, type: ss, cipher: chacha20-ietf-poly1305, password: 93989db2-5c81-4200-ae7a-a90e25dc6a4f, udp: true}
-- {name: 🇯🇵 JP01 12小时试用线路 满意在订购 - 火箭, server: qqb12.198139.xyz, port: 17140, tfo: true, type: ss, cipher: aes-128-gcm, password: e5c2d0d9-0dec-4946-bee6-5fe4972c12c9, udp: true}
-- {name: 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭, server: qqb12.198139.xyz, port: 50016, tfo: true, type: ss, cipher: aes-128-gcm, password: e5c2d0d9-0dec-4946-bee6-5fe4972c12c9, udp: true}
-- {name: 🇮🇪 爱尔兰-都柏林 - 神盾, server: 107.175.187.181, port: 22800, type: ss, cipher: chacha20-ietf-poly1305, password: 1c076fb5-c0c0-4bb6-9440-8af7b34a92f4, udp: true}
-- {name: 🇭🇰 香港-线路1 - 神盾, server: 156.224.77.215, port: 22800, type: ss, cipher: chacha20-ietf-poly1305, password: 1c076fb5-c0c0-4bb6-9440-8af7b34a92f4, udp: true}
-- {name: 🇺🇸 Us大带宽t - V2Board, server: tw1.adminsystem.cc, port: 10026, type: trojan, password: a32fb5e0-5813-4111-9d39-f19296b98555, skip-cert-verify: true, udp: true}
-- {name: 🇹🇼 Tw台湾-t - V2Board, server: tw2.adminsystem.cc, port: 10026, type: trojan, password: a32fb5e0-5813-4111-9d39-f19296b98555, skip-cert-verify: true, udp: true}
-- {name: 🇺🇸 Us大带宽s - V2Board, server: tw1.adminsystem.cc, port: 10025, type: ss, cipher: chacha20-ietf-poly1305, password: a32fb5e0-5813-4111-9d39-f19296b98555, udp: true}
-- {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 10024, type: ss, cipher: chacha20-ietf-poly1305, password: a32fb5e0-5813-4111-9d39-f19296b98555, udp: true}
-- {name: 🇺🇸 Us大带宽 - V2Board, server: tw1.adminsystem.cc, port: 10024, type: vmess, uuid: a32fb5e0-5813-4111-9d39-f19296b98555, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.baidu.com}}, udp: true}
-- {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 10025, type: vmess, uuid: a32fb5e0-5813-4111-9d39-f19296b98555, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
+- {name: 🇯🇵 JP01 12小时试用线路 满意在订购 - 火箭, server: qqb12.198139.xyz, port: 17140, tfo: true, type: ss, cipher: aes-128-gcm, password: cf401b54-d137-4199-8926-b48626cf947d, udp: true}
+- {name: 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭, server: qqb12.198139.xyz, port: 50016, tfo: true, type: ss, cipher: aes-128-gcm, password: cf401b54-d137-4199-8926-b48626cf947d, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
