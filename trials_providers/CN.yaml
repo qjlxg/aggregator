@@ -6,6 +6,6 @@ proxies:
 - &id001 {name: 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭, server: qqb12.198139.xyz, port: 50016, type: ss, cipher: aes-128-gcm, password: e5c2d0d9-0dec-4946-bee6-5fe4972c12c9, udp: true}
 - {name: 🇭🇰 香港-线路1 - 神盾, server: 156.224.77.215, port: 22800, type: ss, cipher: chacha20-ietf-poly1305, password: 1c076fb5-c0c0-4bb6-9440-8af7b34a92f4, udp: true}
 - *id001
-- {name: 🇹🇼 Tw台湾-t - V2Board, server: tw2.adminsystem.cc, port: 10026, type: trojan, password: 804982ab-431e-4a41-a706-a5edff54c277, skip-cert-verify: true, udp: true}
-- {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 10024, type: ss, cipher: chacha20-ietf-poly1305, password: 804982ab-431e-4a41-a706-a5edff54c277, udp: true}
-- {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 10025, type: vmess, uuid: 804982ab-431e-4a41-a706-a5edff54c277, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
+- {name: 🇹🇼 Tw台湾-t - V2Board, server: tw2.adminsystem.cc, port: 10026, type: trojan, password: af6d5a49-a407-43c8-a913-034933f13cc7, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 10024, type: ss, cipher: chacha20-ietf-poly1305, password: af6d5a49-a407-43c8-a913-034933f13cc7, udp: true}
+- {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 10025, type: vmess, uuid: af6d5a49-a407-43c8-a913-034933f13cc7, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
