@@ -83,8 +83,8 @@ proxy-groups:
   type: select
   proxies: *id003
 proxies:
-- {name: 🇮🇪 爱尔兰-都柏林 - 神盾, server: 107.175.187.181, port: 22800, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 1c076fb5-c0c0-4bb6-9440-8af7b34a92f4, udp: true}
-- {name: 🇭🇰 香港-线路1 - 神盾, server: 156.224.77.215, port: 22800, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 1c076fb5-c0c0-4bb6-9440-8af7b34a92f4, udp: true}
+- {name: 🇮🇪 爱尔兰-都柏林 - 神盾, server: 107.175.187.181, port: 22800, type: ss, cipher: chacha20-ietf-poly1305, password: 1c076fb5-c0c0-4bb6-9440-8af7b34a92f4, udp: true}
+- {name: 🇭🇰 香港-线路1 - 神盾, server: 156.224.77.215, port: 22800, type: ss, cipher: chacha20-ietf-poly1305, password: 1c076fb5-c0c0-4bb6-9440-8af7b34a92f4, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
