@@ -8,10 +8,10 @@ proxies:
 - {name: 🇺🇸 美国05|流媒体解锁|US - Benz, server: gtm-sg-6l13qzfse05.netchadmin.top, port: 21601, type: ss, cipher: chacha20-ietf-poly1305, password: b5676e31-20f2-47c5-a8e6-36210d2642ea, udp: true}
 - {name: 🇺🇸 美国06|流媒体解锁|US - Benz, server: gtm-sg-6l13qzfse05.netchadmin.top, port: 37171, type: ss, cipher: chacha20-ietf-poly1305, password: b5676e31-20f2-47c5-a8e6-36210d2642ea, udp: true}
 - {name: 🇺🇸 美国07|流媒体解锁|US - Benz, server: gtm-sg-6l13qzfse05.netchadmin.top, port: 17903, type: ss, cipher: chacha20-ietf-poly1305, password: b5676e31-20f2-47c5-a8e6-36210d2642ea, udp: true}
-- {name: 🇺🇸 Us大带宽t - V2Board, server: tw1.adminsystem.cc, port: 10026, type: trojan, password: 46bc7381-8594-4fe5-9a00-e69209b1b9ea, skip-cert-verify: true, udp: true}
-- {name: 🇺🇸 Us大带宽s - V2Board, server: tw1.adminsystem.cc, port: 10025, type: ss, cipher: chacha20-ietf-poly1305, password: 46bc7381-8594-4fe5-9a00-e69209b1b9ea, udp: true}
-- {name: 🇺🇸 Us大带宽 - V2Board, server: tw1.adminsystem.cc, port: 10024, type: vmess, uuid: 46bc7381-8594-4fe5-9a00-e69209b1b9ea, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.baidu.com}}, udp: true}
-- &id001 {name: 🇺🇸 美国高速节点1 - 新云游, server: 144.34.178.66, port: 1443, type: trojan, password: 85718341-7849-43ec-803e-2d8d3fb6d08d, sni: node4.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 Us大带宽t - V2Board, server: tw1.adminsystem.cc, port: 10026, type: trojan, password: 07f60ff6-e42e-48f4-95f8-e458cb47013d, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 Us大带宽s - V2Board, server: tw1.adminsystem.cc, port: 10025, type: ss, cipher: chacha20-ietf-poly1305, password: 07f60ff6-e42e-48f4-95f8-e458cb47013d, udp: true}
+- {name: 🇺🇸 Us大带宽 - V2Board, server: tw1.adminsystem.cc, port: 10024, type: vmess, uuid: 07f60ff6-e42e-48f4-95f8-e458cb47013d, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.baidu.com}}, udp: true}
+- &id001 {name: 🇺🇸 美国高速节点1 - 新云游, server: 144.34.178.66, port: 1443, type: trojan, password: fde4d114-b7eb-473a-bfa8-88d812ebef2a, sni: node4.yuntongclouds.com, skip-cert-verify: true, udp: true}
 - {name: 🇺🇸 三网专线->美国01 - 虫洞加速, server: speed.48736.loan, port: 38188, type: ss, cipher: chacha20-ietf-poly1305, password: bdea3375-f762-4490-8521-c1160fc8f19f, udp: true}
 - *id001
-- {name: 🇺🇸 US美国BV02 - 飞鸽云, server: jd.fgcloud.xyz, port: 50016, type: ss, cipher: aes-128-gcm, password: a92090d9-039b-41f3-bc1f-6a9faf1b4fb7, udp: true}
+- {name: 🇺🇸 US美国BV02 - 飞鸽云, server: jd.fgcloud.xyz, port: 50016, type: ss, cipher: aes-128-gcm, password: 23a4127d-77b8-41d0-b378-39f49de6023d, udp: true}
