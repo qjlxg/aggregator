@@ -31,16 +31,22 @@ proxy-groups:
   type: url-test
   tolerance: 100
   use: &id001
-  - TW
   - SG
-  - US
   - Other
+  - p_All_TW_CN
   - p_All_JP
+  - p_All_US
   - p_All_All_JP_JP
   - p_All_All_JP_JP
   - p_All_All_HK_HK_CN_CN
   - p_All_All_HK_HK_CN_CN
   - p_All_HK_CN
+  - p_All_All_TW_TW_CN_CN
+  - p_All_All_TW_TW_CN_CN
+  - p_All_All_US_US
+  - p_All_All_US_US
+  - p_All_All_CN_CN
+  - p_All_All_CN_CN
 - name: 👆🏻 ‍指定
   type: select
   use: *id001
@@ -101,15 +107,21 @@ proxy-groups:
   type: url-test
   tolerance: 100
   use: &id003
-  - TW
+  - p_All_TW_CN
+  - p_All_All_TW_TW_CN_CN
+  - p_All_All_TW_TW_CN_CN
 - name: 🇨🇳 ‍中国
   type: url-test
   tolerance: 100
   use: &id004
-  - TW
+  - p_All_TW_CN
   - p_All_All_HK_HK_CN_CN
   - p_All_All_HK_HK_CN_CN
   - p_All_HK_CN
+  - p_All_All_TW_TW_CN_CN
+  - p_All_All_TW_TW_CN_CN
+  - p_All_All_CN_CN
+  - p_All_All_CN_CN
 - name: 🇸🇬 ‍新加坡
   type: url-test
   tolerance: 100
@@ -126,7 +138,9 @@ proxy-groups:
   type: url-test
   tolerance: 300
   use: &id007
-  - US
+  - p_All_US
+  - p_All_All_US_US
+  - p_All_All_US_US
 - name: 🎏 ‍其他
   type: url-test
   tolerance: 100
@@ -154,29 +168,11 @@ proxy-groups:
   type: select
   use: *id008
 proxy-providers:
-  TW:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/TW.yaml
-    interval: 180
-    path: trials_providers/TW.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
   SG:
     type: http
     url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/SG.yaml
     interval: 180
     path: trials_providers/SG.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/US.yaml
-    interval: 180
-    path: trials_providers/US.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
@@ -190,11 +186,29 @@ proxy-providers:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
+  p_All_TW_CN:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_TW_CN.yaml
+    interval: 180
+    path: trials_providers/p_All_TW_CN.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
   p_All_JP:
     type: http
     url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_JP.yaml
     interval: 180
     path: trials_providers/p_All_JP.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  p_All_US:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_US.yaml
+    interval: 180
+    path: trials_providers/p_All_US.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
@@ -222,6 +236,33 @@ proxy-providers:
     url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_HK_CN.yaml
     interval: 180
     path: trials_providers/p_All_HK_CN.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  p_All_All_TW_TW_CN_CN:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_TW_TW_CN_CN.yaml
+    interval: 180
+    path: trials_providers/p_All_All_TW_TW_CN_CN.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  p_All_All_US_US:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_US_US.yaml
+    interval: 180
+    path: trials_providers/p_All_All_US_US.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  p_All_All_CN_CN:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_CN_CN.yaml
+    interval: 180
+    path: trials_providers/p_All_All_CN_CN.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204

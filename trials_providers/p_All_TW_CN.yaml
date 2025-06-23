@@ -1,0 +1,10 @@
+%YAML 1.1
+---
+proxies:
+- {name: 🇹🇼 台湾01|流媒体解锁|TW - Benz, server: gtm-sg-6l13qzfse05.netchadmin.top, port: 16049, type: ss, cipher: chacha20-ietf-poly1305, password: b5676e31-20f2-47c5-a8e6-36210d2642ea, udp: true}
+- {name: 🇹🇼 台湾02|流媒体解锁|TW - Benz, server: gtm-sg-6l13qzfse05.netchadmin.top, port: 16049, type: ss, cipher: chacha20-ietf-poly1305, password: b5676e31-20f2-47c5-a8e6-36210d2642ea, udp: true}
+- {name: 🇹🇼 Tw台湾-t - V2Board, server: tw2.adminsystem.cc, port: 10026, type: trojan, password: 26d5b878-83ba-4c4f-bf50-3bbdf2ecc8c4, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 10024, type: ss, cipher: chacha20-ietf-poly1305, password: 26d5b878-83ba-4c4f-bf50-3bbdf2ecc8c4, udp: true}
+- {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 10025, type: vmess, uuid: 26d5b878-83ba-4c4f-bf50-3bbdf2ecc8c4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
+- {name: 🇹🇼 TW台湾lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50027, type: ss, cipher: aes-128-gcm, password: c1e4ebfe-34e2-487e-8a7f-af43bf06e51e, udp: true}
+- {name: 🇹🇼 TW台湾NF01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50021, type: ss, cipher: aes-128-gcm, password: c1e4ebfe-34e2-487e-8a7f-af43bf06e51e, udp: true}

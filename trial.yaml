@@ -33,23 +33,10 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇹🇼 台湾01|流媒体解锁|TW - Benz
-  - 🇹🇼 台湾02|流媒体解锁|TW - Benz
-  - 🇹🇼 Tw台湾-t - V2Board
-  - 🇹🇼 Tw台湾-s - V2Board
-  - 🇹🇼 Tw台湾-v - V2Board
   - 🇸🇬 新加坡01|流媒体解锁|SG - Benz
   - 🇸🇬 新加坡02|流媒体解锁|SG - Benz
-  - 🇺🇸 美国01|流媒体解锁|US - Benz
-  - 🇺🇸 美国02|流媒体解锁|US - Benz
-  - 🇺🇸 美国03|流媒体解锁|US - Benz
-  - 🇺🇸 美国04|流媒体解锁|US - Benz
-  - 🇺🇸 美国05|流媒体解锁|US - Benz
-  - 🇺🇸 美国06|流媒体解锁|US - Benz
-  - 🇺🇸 美国07|流媒体解锁|US - Benz
-  - 🇺🇸 Us大带宽t - V2Board
-  - 🇺🇸 Us大带宽s - V2Board
-  - 🇺🇸 Us大带宽 - V2Board
+  - 🇸🇬 三网专线->新加坡01 - 虫洞加速
+  - 🇸🇬 SG新加坡lite01 - 飞鸽云
   - 影视线路1 - 火箭极驰加速器
   - 影视线路2 - 火箭极驰加速器
   - 影视线路3 - 火箭极驰加速器
@@ -83,13 +70,48 @@ proxy-groups:
   - Premium+ - VPN-DATA
   - luxury - VPN-DATA
   - 🇮🇪 爱尔兰-都柏林 - 神盾
+  - 'ℹ️ 官网 : 飞鸽云.com - 飞鸽云'
+  - 🇹🇼 台湾01|流媒体解锁|TW - Benz
+  - 🇹🇼 台湾02|流媒体解锁|TW - Benz
+  - 🇹🇼 Tw台湾-t - V2Board
+  - 🇹🇼 Tw台湾-s - V2Board
+  - 🇹🇼 Tw台湾-v - V2Board
+  - 🇹🇼 TW台湾lite01 - 飞鸽云
+  - 🇹🇼 TW台湾NF01 - 飞鸽云
   - 🇯🇵 日本01|流媒体解锁|JP - Benz
   - 🇯🇵 日本02|流媒体解锁|JP - Benz
+  - 🇯🇵 三网专线->日本01 - 虫洞加速
+  - 🇯🇵 JP日本BV01 - 飞鸽云
+  - 🇺🇸 美国01|流媒体解锁|US - Benz
+  - 🇺🇸 美国02|流媒体解锁|US - Benz
+  - 🇺🇸 美国03|流媒体解锁|US - Benz
+  - 🇺🇸 美国04|流媒体解锁|US - Benz
+  - 🇺🇸 美国05|流媒体解锁|US - Benz
+  - 🇺🇸 美国06|流媒体解锁|US - Benz
+  - 🇺🇸 美国07|流媒体解锁|US - Benz
+  - 🇺🇸 Us大带宽t - V2Board
+  - 🇺🇸 Us大带宽s - V2Board
+  - 🇺🇸 Us大带宽 - V2Board
+  - 🇺🇸 三网专线->美国01 - 虫洞加速
+  - 🇺🇸 US美国BV02 - 飞鸽云
   - 🇯🇵 JP01 12小时试用线路 满意在订购 - 火箭
   - 🇯🇵 JP01 12小时试用线路 满意在订购 - 火箭
   - 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭
   - 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭
   - 🇭🇰 香港-线路1 - 神盾
+  - 🇭🇰 HK香港lite01 - 飞鸽云
+  - 🇭🇰 HK香港BG03 - 飞鸽云
+  - 🇭🇰 HK香港BV05 - 飞鸽云
+  - 🇹🇼 台湾高速节点 - 新云游
+  - 🇹🇼 台湾高速节点2 - 新云游
+  - 🇹🇼 台湾高速节点3 - 新云游
+  - 🇹🇼 台湾高速节点 - 新云游
+  - 🇹🇼 台湾高速节点2 - 新云游
+  - 🇹🇼 台湾高速节点3 - 新云游
+  - 🇺🇸 美国高速节点1 - 新云游
+  - 🇺🇸 美国高速节点1 - 新云游
+  - 🇨🇳 中国联通节点1 - 新云游
+  - 🇨🇳 中国联通节点1 - 新云游
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -148,6 +170,9 @@ proxy-groups:
   - 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭
   - 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭
   - 🇭🇰 香港-线路1 - 神盾
+  - 🇭🇰 HK香港lite01 - 飞鸽云
+  - 🇭🇰 HK香港BG03 - 飞鸽云
+  - 🇭🇰 HK香港BV05 - 飞鸽云
 - name: 🇹🇼 ‍台湾
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -159,6 +184,14 @@ proxy-groups:
   - 🇹🇼 Tw台湾-t - V2Board
   - 🇹🇼 Tw台湾-s - V2Board
   - 🇹🇼 Tw台湾-v - V2Board
+  - 🇹🇼 TW台湾lite01 - 飞鸽云
+  - 🇹🇼 TW台湾NF01 - 飞鸽云
+  - 🇹🇼 台湾高速节点 - 新云游
+  - 🇹🇼 台湾高速节点2 - 新云游
+  - 🇹🇼 台湾高速节点3 - 新云游
+  - 🇹🇼 台湾高速节点 - 新云游
+  - 🇹🇼 台湾高速节点2 - 新云游
+  - 🇹🇼 台湾高速节点3 - 新云游
 - name: 🇨🇳 ‍中国
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -170,9 +203,22 @@ proxy-groups:
   - 🇹🇼 Tw台湾-t - V2Board
   - 🇹🇼 Tw台湾-s - V2Board
   - 🇹🇼 Tw台湾-v - V2Board
+  - 🇹🇼 TW台湾lite01 - 飞鸽云
+  - 🇹🇼 TW台湾NF01 - 飞鸽云
   - 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭
   - 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭
   - 🇭🇰 香港-线路1 - 神盾
+  - 🇭🇰 HK香港lite01 - 飞鸽云
+  - 🇭🇰 HK香港BG03 - 飞鸽云
+  - 🇭🇰 HK香港BV05 - 飞鸽云
+  - 🇹🇼 台湾高速节点 - 新云游
+  - 🇹🇼 台湾高速节点2 - 新云游
+  - 🇹🇼 台湾高速节点3 - 新云游
+  - 🇹🇼 台湾高速节点 - 新云游
+  - 🇹🇼 台湾高速节点2 - 新云游
+  - 🇹🇼 台湾高速节点3 - 新云游
+  - 🇨🇳 中国联通节点1 - 新云游
+  - 🇨🇳 中国联通节点1 - 新云游
 - name: 🇸🇬 ‍新加坡
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -181,6 +227,8 @@ proxy-groups:
   proxies: &id005
   - 🇸🇬 新加坡01|流媒体解锁|SG - Benz
   - 🇸🇬 新加坡02|流媒体解锁|SG - Benz
+  - 🇸🇬 三网专线->新加坡01 - 虫洞加速
+  - 🇸🇬 SG新加坡lite01 - 飞鸽云
 - name: 🇯🇵 ‍日本
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -189,6 +237,8 @@ proxy-groups:
   proxies: &id006
   - 🇯🇵 日本01|流媒体解锁|JP - Benz
   - 🇯🇵 日本02|流媒体解锁|JP - Benz
+  - 🇯🇵 三网专线->日本01 - 虫洞加速
+  - 🇯🇵 JP日本BV01 - 飞鸽云
   - 🇯🇵 JP01 12小时试用线路 满意在订购 - 火箭
   - 🇯🇵 JP01 12小时试用线路 满意在订购 - 火箭
 - name: 🇺🇸 ‍美国
@@ -207,6 +257,10 @@ proxy-groups:
   - 🇺🇸 Us大带宽t - V2Board
   - 🇺🇸 Us大带宽s - V2Board
   - 🇺🇸 Us大带宽 - V2Board
+  - 🇺🇸 三网专线->美国01 - 虫洞加速
+  - 🇺🇸 US美国BV02 - 飞鸽云
+  - 🇺🇸 美国高速节点1 - 新云游
+  - 🇺🇸 美国高速节点1 - 新云游
 - name: 🎏 ‍其他
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -246,6 +300,7 @@ proxy-groups:
   - Premium+ - VPN-DATA
   - luxury - VPN-DATA
   - 🇮🇪 爱尔兰-都柏林 - 神盾
+  - 'ℹ️ 官网 : 飞鸽云.com - 飞鸽云'
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
@@ -323,6 +378,23 @@ proxies:
 - {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 10024, type: ss, cipher: chacha20-ietf-poly1305, password: 26d5b878-83ba-4c4f-bf50-3bbdf2ecc8c4, udp: true}
 - {name: 🇺🇸 Us大带宽 - V2Board, server: tw1.adminsystem.cc, port: 10024, type: vmess, uuid: 26d5b878-83ba-4c4f-bf50-3bbdf2ecc8c4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.baidu.com}}, udp: true}
 - {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 10025, type: vmess, uuid: 26d5b878-83ba-4c4f-bf50-3bbdf2ecc8c4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
+- {name: 🇹🇼 台湾高速节点 - 新云游, server: 103.137.63.77, port: 443, type: trojan, password: aca292b2-124c-4c0e-b71f-b3cbc593779b, sni: node1.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾高速节点2 - 新云游, server: 118.232.199.29, port: 443, type: trojan, password: aca292b2-124c-4c0e-b71f-b3cbc593779b, sni: node2.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾高速节点3 - 新云游, server: 118.232.199.14, port: 443, type: trojan, password: aca292b2-124c-4c0e-b71f-b3cbc593779b, sni: node3.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 美国高速节点1 - 新云游, server: 144.34.178.66, port: 1443, type: trojan, password: aca292b2-124c-4c0e-b71f-b3cbc593779b, sni: node4.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇨🇳 中国联通节点1 - 新云游, server: 115.231.220.33, port: 5443, type: trojan, password: aca292b2-124c-4c0e-b71f-b3cbc593779b, sni: nodecn1.jiayinetwork.es, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 三网专线->美国01 - 虫洞加速, server: speed.48736.loan, port: 38188, type: ss, cipher: chacha20-ietf-poly1305, password: bdea3375-f762-4490-8521-c1160fc8f19f, udp: true}
+- {name: 🇸🇬 三网专线->新加坡01 - 虫洞加速, server: speed.48736.loan, port: 56925, type: ss, cipher: chacha20-ietf-poly1305, password: bdea3375-f762-4490-8521-c1160fc8f19f, udp: true}
+- {name: 🇯🇵 三网专线->日本01 - 虫洞加速, server: speed.48736.loan, port: 53393, type: ss, cipher: chacha20-ietf-poly1305, password: bdea3375-f762-4490-8521-c1160fc8f19f, udp: true}
+- {name: 'ℹ️ 官网 : 飞鸽云.com - 飞鸽云', server: jd.00000, port: 32000, type: ss, cipher: aes-128-gcm, password: c1e4ebfe-34e2-487e-8a7f-af43bf06e51e, udp: true}
+- {name: 🇭🇰 HK香港lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50000, type: ss, cipher: aes-128-gcm, password: c1e4ebfe-34e2-487e-8a7f-af43bf06e51e, udp: true}
+- {name: 🇭🇰 HK香港BG03 - 飞鸽云, server: jd.fgcloud.xyz, port: 50002, type: ss, cipher: aes-128-gcm, password: c1e4ebfe-34e2-487e-8a7f-af43bf06e51e, udp: true}
+- {name: 🇭🇰 HK香港BV05 - 飞鸽云, server: jd.fgcloud.xyz, port: 50005, type: ss, cipher: aes-128-gcm, password: c1e4ebfe-34e2-487e-8a7f-af43bf06e51e, udp: true}
+- {name: 🇹🇼 TW台湾lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50027, type: ss, cipher: aes-128-gcm, password: c1e4ebfe-34e2-487e-8a7f-af43bf06e51e, udp: true}
+- {name: 🇹🇼 TW台湾NF01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50021, type: ss, cipher: aes-128-gcm, password: c1e4ebfe-34e2-487e-8a7f-af43bf06e51e, udp: true}
+- {name: 🇯🇵 JP日本BV01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50009, type: ss, cipher: aes-128-gcm, password: c1e4ebfe-34e2-487e-8a7f-af43bf06e51e, udp: true}
+- {name: 🇸🇬 SG新加坡lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50015, type: ss, cipher: aes-128-gcm, password: c1e4ebfe-34e2-487e-8a7f-af43bf06e51e, udp: true}
+- {name: 🇺🇸 US美国BV02 - 飞鸽云, server: jd.fgcloud.xyz, port: 50016, type: ss, cipher: aes-128-gcm, password: c1e4ebfe-34e2-487e-8a7f-af43bf06e51e, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
