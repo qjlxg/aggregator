@@ -93,12 +93,12 @@ proxy-groups:
   type: select
   proxies: *id003
 proxies:
-- {name: 🇺🇸 Us大带宽t - V2Board, server: tw1.adminsystem.cc, port: 10026, type: trojan, password: 07f60ff6-e42e-48f4-95f8-e458cb47013d, skip-cert-verify: true, udp: true}
-- {name: 🇹🇼 Tw台湾-t - V2Board, server: tw2.adminsystem.cc, port: 10026, type: trojan, password: 07f60ff6-e42e-48f4-95f8-e458cb47013d, skip-cert-verify: true, udp: true}
-- {name: 🇺🇸 Us大带宽s - V2Board, server: tw1.adminsystem.cc, port: 10025, type: ss, cipher: chacha20-ietf-poly1305, password: 07f60ff6-e42e-48f4-95f8-e458cb47013d, udp: true}
-- {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 10024, type: ss, cipher: chacha20-ietf-poly1305, password: 07f60ff6-e42e-48f4-95f8-e458cb47013d, udp: true}
-- {name: 🇺🇸 Us大带宽 - V2Board, server: tw1.adminsystem.cc, port: 10024, type: vmess, uuid: 07f60ff6-e42e-48f4-95f8-e458cb47013d, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.baidu.com}}, udp: true}
-- {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 10025, type: vmess, uuid: 07f60ff6-e42e-48f4-95f8-e458cb47013d, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
+- {name: 🇺🇸 Us大带宽t - V2Board, server: tw1.adminsystem.cc, port: 10026, type: trojan, password: c3044725-6193-40e9-a442-2ddcb4bca2e5, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 Tw台湾-t - V2Board, server: tw2.adminsystem.cc, port: 10026, type: trojan, password: c3044725-6193-40e9-a442-2ddcb4bca2e5, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 Us大带宽s - V2Board, server: tw1.adminsystem.cc, port: 10025, type: ss, cipher: chacha20-ietf-poly1305, password: c3044725-6193-40e9-a442-2ddcb4bca2e5, udp: true}
+- {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 10024, type: ss, cipher: chacha20-ietf-poly1305, password: c3044725-6193-40e9-a442-2ddcb4bca2e5, udp: true}
+- {name: 🇺🇸 Us大带宽 - V2Board, server: tw1.adminsystem.cc, port: 10024, type: vmess, uuid: c3044725-6193-40e9-a442-2ddcb4bca2e5, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.baidu.com}}, udp: true}
+- {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 10025, type: vmess, uuid: c3044725-6193-40e9-a442-2ddcb4bca2e5, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
