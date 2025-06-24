@@ -1,6 +1,6 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 🇹🇼 Tw台湾-t - V2Board, server: tw2.adminsystem.cc, port: 10026, tfo: true, type: trojan, password: da3d3bd9-bb08-4c4b-9b41-ceb0f453720c, skip-cert-verify: true, udp: true}
-- {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 10024, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: da3d3bd9-bb08-4c4b-9b41-ceb0f453720c, udp: true}
-- {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 10025, tfo: true, type: vmess, uuid: da3d3bd9-bb08-4c4b-9b41-ceb0f453720c, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
+- {name: 🇹🇼 Tw台湾-t - V2Board, server: tw2.adminsystem.cc, port: 10026, type: trojan, password: a036bbe6-b22a-42b5-8eb6-ed11c317bd1d, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 10024, type: ss, cipher: chacha20-ietf-poly1305, password: a036bbe6-b22a-42b5-8eb6-ed11c317bd1d, udp: true}
+- {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 10025, type: vmess, uuid: a036bbe6-b22a-42b5-8eb6-ed11c317bd1d, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
