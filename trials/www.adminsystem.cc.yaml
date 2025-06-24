@@ -11,10 +11,10 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
+  - 🇭🇰 ‍香港
   - 🇹🇼 ‍台湾
-  - 🇺🇸 ‍美国
+  - 👆🏻🇭🇰 ‍香港
   - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇺🇸 ‍美国
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -23,12 +23,12 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
+  - 🇭🇰 Hk大带宽t - V2Board
+  - 🇭🇰 Hk大带宽s - V2Board
+  - 🇭🇰 Hk大带宽 - V2Board
   - 🇹🇼 Tw台湾-t - V2Board
   - 🇹🇼 Tw台湾-s - V2Board
   - 🇹🇼 Tw台湾-v - V2Board
-  - 🇺🇸 Us大带宽t - V2Board
-  - 🇺🇸 Us大带宽s - V2Board
-  - 🇺🇸 Us大带宽 - V2Board
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -48,17 +48,17 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
+  - 🇭🇰 ‍香港
   - 🇹🇼 ‍台湾
   - ✈️ ‍起飞
+  - 👆🏻🇭🇰 ‍香港
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🇺🇸 ‍美国
   - 🇹🇼 ‍台湾
   - ✈️ ‍起飞
-  - 👆🏻🇺🇸 ‍美国
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
@@ -68,37 +68,37 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇹🇼 ‍台湾
+- name: 🇭🇰 ‍香港
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id002
-  - 🇹🇼 Tw台湾-t - V2Board
-  - 🇹🇼 Tw台湾-s - V2Board
-  - 🇹🇼 Tw台湾-v - V2Board
-- name: 🇺🇸 ‍美国
+  - 🇭🇰 Hk大带宽t - V2Board
+  - 🇭🇰 Hk大带宽s - V2Board
+  - 🇭🇰 Hk大带宽 - V2Board
+- name: 🇹🇼 ‍台湾
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
-  tolerance: 300
+  tolerance: 100
   proxies: &id003
-  - 🇺🇸 Us大带宽t - V2Board
-  - 🇺🇸 Us大带宽s - V2Board
-  - 🇺🇸 Us大带宽 - V2Board
-- name: 👆🏻🇹🇼 ‍台湾
+  - 🇹🇼 Tw台湾-t - V2Board
+  - 🇹🇼 Tw台湾-s - V2Board
+  - 🇹🇼 Tw台湾-v - V2Board
+- name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
-- name: 👆🏻🇺🇸 ‍美国
+- name: 👆🏻🇹🇼 ‍台湾
   type: select
   proxies: *id003
 proxies:
-- {name: 🇺🇸 Us大带宽t - V2Board, server: tw1.adminsystem.cc, port: 10026, type: trojan, password: a036bbe6-b22a-42b5-8eb6-ed11c317bd1d, skip-cert-verify: true, udp: true}
-- {name: 🇹🇼 Tw台湾-t - V2Board, server: tw2.adminsystem.cc, port: 10026, type: trojan, password: a036bbe6-b22a-42b5-8eb6-ed11c317bd1d, skip-cert-verify: true, udp: true}
-- {name: 🇺🇸 Us大带宽s - V2Board, server: tw1.adminsystem.cc, port: 10025, type: ss, cipher: chacha20-ietf-poly1305, password: a036bbe6-b22a-42b5-8eb6-ed11c317bd1d, udp: true}
-- {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 10024, type: ss, cipher: chacha20-ietf-poly1305, password: a036bbe6-b22a-42b5-8eb6-ed11c317bd1d, udp: true}
-- {name: 🇺🇸 Us大带宽 - V2Board, server: tw1.adminsystem.cc, port: 10024, type: vmess, uuid: a036bbe6-b22a-42b5-8eb6-ed11c317bd1d, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.baidu.com}}, udp: true}
-- {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 10025, type: vmess, uuid: a036bbe6-b22a-42b5-8eb6-ed11c317bd1d, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
+- {name: 🇭🇰 Hk大带宽t - V2Board, server: xg1.adminsystem.cc, port: 10026, type: trojan, password: 09b623b5-4cf7-4452-9827-1434a73b9e33, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 Tw台湾-t - V2Board, server: tw2.adminsystem.cc, port: 11026, type: trojan, password: 09b623b5-4cf7-4452-9827-1434a73b9e33, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 Hk大带宽s - V2Board, server: xg1.adminsystem.cc, port: 10025, type: ss, cipher: chacha20-ietf-poly1305, password: 09b623b5-4cf7-4452-9827-1434a73b9e33, udp: true}
+- {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 11024, type: ss, cipher: chacha20-ietf-poly1305, password: 09b623b5-4cf7-4452-9827-1434a73b9e33, udp: true}
+- {name: 🇭🇰 Hk大带宽 - V2Board, server: xg1.adminsystem.cc, port: 10024, type: vmess, uuid: 09b623b5-4cf7-4452-9827-1434a73b9e33, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.baidu.com}}, udp: true}
+- {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 11025, type: vmess, uuid: 09b623b5-4cf7-4452-9827-1434a73b9e33, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

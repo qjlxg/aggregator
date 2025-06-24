@@ -11,18 +11,18 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
+  - 🇭🇰 ‍香港
   - 🇹🇼 ‍台湾
-  - 🇺🇸 ‍美国
+  - 👆🏻🇭🇰 ‍香港
   - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇺🇸 ‍美国
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
   tolerance: 100
   use: &id001
+  - HK
   - TW
-  - US
 - name: 👆🏻 ‍指定
   type: select
   use: *id001
@@ -42,17 +42,17 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
+  - 🇭🇰 ‍香港
   - 🇹🇼 ‍台湾
   - ✈️ ‍起飞
+  - 👆🏻🇭🇰 ‍香港
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🇺🇸 ‍美国
   - 🇹🇼 ‍台湾
   - ✈️ ‍起飞
-  - 👆🏻🇺🇸 ‍美国
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
@@ -62,37 +62,37 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇹🇼 ‍台湾
+- name: 🇭🇰 ‍香港
   type: url-test
   tolerance: 100
   use: &id002
-  - TW
-- name: 🇺🇸 ‍美国
+  - HK
+- name: 🇹🇼 ‍台湾
   type: url-test
-  tolerance: 300
+  tolerance: 100
   use: &id003
-  - US
-- name: 👆🏻🇹🇼 ‍台湾
+  - TW
+- name: 👆🏻🇭🇰 ‍香港
   type: select
   use: *id002
-- name: 👆🏻🇺🇸 ‍美国
+- name: 👆🏻🇹🇼 ‍台湾
   type: select
   use: *id003
 proxy-providers:
+  HK:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.adminsystem.cc/HK.yaml
+    interval: 180
+    path: trials_providers/www.adminsystem.cc/HK.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
   TW:
     type: http
     url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.adminsystem.cc/TW.yaml
     interval: 180
     path: trials_providers/www.adminsystem.cc/TW.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.adminsystem.cc/US.yaml
-    interval: 180
-    path: trials_providers/www.adminsystem.cc/US.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
