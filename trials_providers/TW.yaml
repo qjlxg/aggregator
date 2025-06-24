@@ -1,14 +1,14 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 🇹🇼 台湾01|流媒体解锁|TW - Benz, server: gtm-sg-6l13qzfse05.netchadmin.top, port: 16049, type: ss, cipher: chacha20-ietf-poly1305, password: b5676e31-20f2-47c5-a8e6-36210d2642ea, udp: true}
-- {name: 🇹🇼 台湾02|流媒体解锁|TW - Benz, server: gtm-sg-6l13qzfse05.netchadmin.top, port: 16049, type: ss, cipher: chacha20-ietf-poly1305, password: b5676e31-20f2-47c5-a8e6-36210d2642ea, udp: true}
-- {name: 🇹🇼 Tw台湾-t - V2Board, server: tw2.adminsystem.cc, port: 10026, type: trojan, password: c3044725-6193-40e9-a442-2ddcb4bca2e5, skip-cert-verify: true, udp: true}
-- {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 10024, type: ss, cipher: chacha20-ietf-poly1305, password: c3044725-6193-40e9-a442-2ddcb4bca2e5, udp: true}
-- {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 10025, type: vmess, uuid: c3044725-6193-40e9-a442-2ddcb4bca2e5, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
-- &id001 {name: 🇹🇼 台湾高速节点 - 新云游, server: 103.137.63.77, port: 443, type: trojan, password: f24ec014-d856-40c8-819e-197287cce3e4, sni: node1.yuntongclouds.com, skip-cert-verify: true, udp: true}
-- &id002 {name: 🇹🇼 台湾高速节点2 - 新云游, server: 118.232.199.29, port: 443, type: trojan, password: f24ec014-d856-40c8-819e-197287cce3e4, sni: node2.yuntongclouds.com, skip-cert-verify: true, udp: true}
-- &id003 {name: 🇹🇼 台湾高速节点3 - 新云游, server: 118.232.199.14, port: 443, type: trojan, password: f24ec014-d856-40c8-819e-197287cce3e4, sni: node3.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾01|流媒体解锁|TW - Benz, server: gtm-sg-6l13qzfse05.netchadmin.top, port: 16049, type: ss, cipher: chacha20-ietf-poly1305, password: d343fed6-a2bd-44a6-b4e1-0ac9641ab75d, udp: true}
+- {name: 🇹🇼 台湾02|流媒体解锁|TW - Benz, server: gtm-sg-6l13qzfse05.netchadmin.top, port: 16049, type: ss, cipher: chacha20-ietf-poly1305, password: d343fed6-a2bd-44a6-b4e1-0ac9641ab75d, udp: true}
+- {name: 🇹🇼 Tw台湾-t - V2Board, server: tw2.adminsystem.cc, port: 10026, tfo: true, type: trojan, password: da3d3bd9-bb08-4c4b-9b41-ceb0f453720c, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 Tw台湾-s - V2Board, server: tw2.adminsystem.cc, port: 10024, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: da3d3bd9-bb08-4c4b-9b41-ceb0f453720c, udp: true}
+- {name: 🇹🇼 Tw台湾-v - V2Board, server: tw2.adminsystem.cc, port: 10025, tfo: true, type: vmess, uuid: da3d3bd9-bb08-4c4b-9b41-ceb0f453720c, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.10010.com}}, udp: true}
+- &id001 {name: 🇹🇼 台湾高速节点 - 新云游, server: 103.137.63.77, port: 443, type: trojan, password: 3c763f2c-1f4c-469a-9f8f-b42fc019bd61, sni: node1.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- &id002 {name: 🇹🇼 台湾高速节点2 - 新云游, server: 118.232.199.29, port: 443, type: trojan, password: 3c763f2c-1f4c-469a-9f8f-b42fc019bd61, sni: node2.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- &id003 {name: 🇹🇼 台湾高速节点3 - 新云游, server: 118.232.199.14, port: 443, type: trojan, password: 3c763f2c-1f4c-469a-9f8f-b42fc019bd61, sni: node3.yuntongclouds.com, skip-cert-verify: true, udp: true}
 - *id001
 - *id002
 - *id003
