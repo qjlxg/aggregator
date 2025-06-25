@@ -33,15 +33,32 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇭🇰 HK香港lite01 - 飞鸽云
-  - 🇭🇰 HK香港BG03 - 飞鸽云
-  - 🇭🇰 HK香港BV05 - 飞鸽云
-  - 🇹🇼 TW台湾lite01 - 飞鸽云
-  - 🇹🇼 TW台湾NF01 - 飞鸽云
-  - 🇸🇬 SG新加坡lite01 - 飞鸽云
-  - 🇯🇵 JP日本BV01 - 飞鸽云
-  - 🇺🇸 US美国BV02 - 飞鸽云
-  - 'ℹ️ 官网 : 飞鸽云.com - 飞鸽云'
+  - 🇭🇰 香港1[IEPL] - 无界畅游
+  - 🇭🇰 香港1[BGP] - 无界畅游
+  - 🇭🇰 香港2[IEPL] - 无界畅游
+  - 🇭🇰 香港2[BGP] - 无界畅游
+  - 🇭🇰 香港3[IEPL] - 无界畅游
+  - 🇭🇰 香港3[BGP] - 无界畅游
+  - 🇹🇼 台湾1[IEPL] - 无界畅游
+  - 🇹🇼 台湾1[BGP] - 无界畅游
+  - 🇸🇬 新加坡2[IEPL] - 无界畅游
+  - 🇸🇬 新加坡2[BGP] - 无界畅游
+  - 🇯🇵 日本1[IEPL] - 无界畅游
+  - 🇯🇵 日本1[BGP] - 无界畅游
+  - 🇯🇵 日本2[IEPL] - 无界畅游
+  - 🇯🇵 日本2[BGP] - 无界畅游
+  - 🇺🇸 美国1[IEPL] - 无界畅游
+  - 🇺🇸 美国1[BGP] - 无界畅游
+  - ℹ️ 官网：wujie.lol - 无界畅游
+  - ℹ️ 备用地址：wujie001.com - 无界畅游
+  - 🇰🇷 首尔1[IEPL] - 无界畅游
+  - 🇰🇷 首尔1[BGP] - 无界畅游
+  - 🇦🇺 悉尼1[IEPL] - 无界畅游
+  - 🇦🇺 悉尼1[BGP] - 无界畅游
+  - 🇩🇪 德国2[IEPL] - 无界畅游
+  - 🇩🇪 德国2[BGP] - 无界畅游
+  - 非洲1[IEPL] - 无界畅游
+  - 非洲1[BGP] - 无界畅游
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -97,56 +114,76 @@ proxy-groups:
   interval: 15
   tolerance: 100
   proxies: &id002
-  - 🇭🇰 HK香港lite01 - 飞鸽云
-  - 🇭🇰 HK香港BG03 - 飞鸽云
-  - 🇭🇰 HK香港BV05 - 飞鸽云
+  - 🇭🇰 香港1[IEPL] - 无界畅游
+  - 🇭🇰 香港1[BGP] - 无界畅游
+  - 🇭🇰 香港2[IEPL] - 无界畅游
+  - 🇭🇰 香港2[BGP] - 无界畅游
+  - 🇭🇰 香港3[IEPL] - 无界畅游
+  - 🇭🇰 香港3[BGP] - 无界畅游
 - name: 🇹🇼 ‍台湾
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id003
-  - 🇹🇼 TW台湾lite01 - 飞鸽云
-  - 🇹🇼 TW台湾NF01 - 飞鸽云
+  - 🇹🇼 台湾1[IEPL] - 无界畅游
+  - 🇹🇼 台湾1[BGP] - 无界畅游
 - name: 🇨🇳 ‍中国
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id004
-  - 🇭🇰 HK香港lite01 - 飞鸽云
-  - 🇭🇰 HK香港BG03 - 飞鸽云
-  - 🇭🇰 HK香港BV05 - 飞鸽云
-  - 🇹🇼 TW台湾lite01 - 飞鸽云
-  - 🇹🇼 TW台湾NF01 - 飞鸽云
+  - 🇭🇰 香港1[IEPL] - 无界畅游
+  - 🇭🇰 香港1[BGP] - 无界畅游
+  - 🇭🇰 香港2[IEPL] - 无界畅游
+  - 🇭🇰 香港2[BGP] - 无界畅游
+  - 🇭🇰 香港3[IEPL] - 无界畅游
+  - 🇭🇰 香港3[BGP] - 无界畅游
+  - 🇹🇼 台湾1[IEPL] - 无界畅游
+  - 🇹🇼 台湾1[BGP] - 无界畅游
 - name: 🇸🇬 ‍新加坡
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id005
-  - 🇸🇬 SG新加坡lite01 - 飞鸽云
+  - 🇸🇬 新加坡2[IEPL] - 无界畅游
+  - 🇸🇬 新加坡2[BGP] - 无界畅游
 - name: 🇯🇵 ‍日本
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id006
-  - 🇯🇵 JP日本BV01 - 飞鸽云
+  - 🇯🇵 日本1[IEPL] - 无界畅游
+  - 🇯🇵 日本1[BGP] - 无界畅游
+  - 🇯🇵 日本2[IEPL] - 无界畅游
+  - 🇯🇵 日本2[BGP] - 无界畅游
 - name: 🇺🇸 ‍美国
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 300
   proxies: &id007
-  - 🇺🇸 US美国BV02 - 飞鸽云
+  - 🇺🇸 美国1[IEPL] - 无界畅游
+  - 🇺🇸 美国1[BGP] - 无界畅游
 - name: 🎏 ‍其他
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 30
   tolerance: 100
   proxies: &id008
-  - 'ℹ️ 官网 : 飞鸽云.com - 飞鸽云'
+  - ℹ️ 官网：wujie.lol - 无界畅游
+  - ℹ️ 备用地址：wujie001.com - 无界畅游
+  - 🇰🇷 首尔1[IEPL] - 无界畅游
+  - 🇰🇷 首尔1[BGP] - 无界畅游
+  - 🇦🇺 悉尼1[IEPL] - 无界畅游
+  - 🇦🇺 悉尼1[BGP] - 无界畅游
+  - 🇩🇪 德国2[IEPL] - 无界畅游
+  - 🇩🇪 德国2[BGP] - 无界畅游
+  - 非洲1[IEPL] - 无界畅游
+  - 非洲1[BGP] - 无界畅游
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
@@ -169,15 +206,32 @@ proxy-groups:
   type: select
   proxies: *id008
 proxies:
-- {name: 'ℹ️ 官网 : 飞鸽云.com - 飞鸽云', server: jd.00000, port: 32000, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇭🇰 HK香港lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50000, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇭🇰 HK香港BG03 - 飞鸽云, server: jd.fgcloud.xyz, port: 50002, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇭🇰 HK香港BV05 - 飞鸽云, server: jd.fgcloud.xyz, port: 50005, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇹🇼 TW台湾lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50027, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇹🇼 TW台湾NF01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50021, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇯🇵 JP日本BV01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50009, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇸🇬 SG新加坡lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50015, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇺🇸 US美国BV02 - 飞鸽云, server: jd.fgcloud.xyz, port: 50016, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
+- {name: ℹ️ 官网：wujie.lol - 无界畅游, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23003, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: ℹ️ 备用地址：wujie001.com - 无界畅游, server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23003, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇭🇰 香港1[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23003, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇭🇰 香港1[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23034, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇭🇰 香港2[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23014, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇭🇰 香港2[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23114, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇭🇰 香港3[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23030, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇭🇰 香港3[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23137, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇹🇼 台湾1[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23001, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇹🇼 台湾1[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23101, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇸🇬 新加坡2[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23039, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇸🇬 新加坡2[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23139, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇯🇵 日本1[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23123, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇯🇵 日本1[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23123, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇯🇵 日本2[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23031, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇯🇵 日本2[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23152, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇰🇷 首尔1[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23044, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇰🇷 首尔1[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23043, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇦🇺 悉尼1[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23045, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇦🇺 悉尼1[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23046, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇩🇪 德国2[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23011, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇩🇪 德国2[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23111, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇺🇸 美国1[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23042, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇺🇸 美国1[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23142, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '非洲1[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23022, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '非洲1[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23023, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

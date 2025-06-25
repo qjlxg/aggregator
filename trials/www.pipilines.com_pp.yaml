@@ -29,22 +29,17 @@ proxy-groups:
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
   tolerance: 100
-  proxies: &id001
-  - 🇭🇰 HK香港lite01 - 飞鸽云
-  - 🇭🇰 HK香港BG03 - 飞鸽云
-  - 🇭🇰 HK香港BV05 - 飞鸽云
-  - 🇹🇼 TW台湾lite01 - 飞鸽云
-  - 🇹🇼 TW台湾NF01 - 飞鸽云
-  - 🇸🇬 SG新加坡lite01 - 飞鸽云
-  - 🇯🇵 JP日本BV01 - 飞鸽云
-  - 🇺🇸 US美国BV02 - 飞鸽云
-  - 'ℹ️ 官网 : 飞鸽云.com - 飞鸽云'
+  use: &id001
+  - HK
+  - TW
+  - SG
+  - JP
+  - US
+  - Other
 - name: 👆🏻 ‍指定
   type: select
-  proxies: *id001
+  use: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -93,91 +88,116 @@ proxy-groups:
   - 💩 ‍广告
 - name: 🇭🇰 ‍香港
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id002
-  - 🇭🇰 HK香港lite01 - 飞鸽云
-  - 🇭🇰 HK香港BG03 - 飞鸽云
-  - 🇭🇰 HK香港BV05 - 飞鸽云
+  use: &id002
+  - HK
 - name: 🇹🇼 ‍台湾
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id003
-  - 🇹🇼 TW台湾lite01 - 飞鸽云
-  - 🇹🇼 TW台湾NF01 - 飞鸽云
+  use: &id003
+  - TW
 - name: 🇨🇳 ‍中国
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id004
-  - 🇭🇰 HK香港lite01 - 飞鸽云
-  - 🇭🇰 HK香港BG03 - 飞鸽云
-  - 🇭🇰 HK香港BV05 - 飞鸽云
-  - 🇹🇼 TW台湾lite01 - 飞鸽云
-  - 🇹🇼 TW台湾NF01 - 飞鸽云
+  use: &id004
+  - HK
+  - TW
 - name: 🇸🇬 ‍新加坡
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id005
-  - 🇸🇬 SG新加坡lite01 - 飞鸽云
+  use: &id005
+  - SG
 - name: 🇯🇵 ‍日本
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id006
-  - 🇯🇵 JP日本BV01 - 飞鸽云
+  use: &id006
+  - JP
 - name: 🇺🇸 ‍美国
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 300
-  proxies: &id007
-  - 🇺🇸 US美国BV02 - 飞鸽云
+  use: &id007
+  - US
 - name: 🎏 ‍其他
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
   tolerance: 100
-  proxies: &id008
-  - 'ℹ️ 官网 : 飞鸽云.com - 飞鸽云'
+  use: &id008
+  - Other
 - name: 👆🏻🇭🇰 ‍香港
   type: select
-  proxies: *id002
+  use: *id002
 - name: 👆🏻🇹🇼 ‍台湾
   type: select
-  proxies: *id003
+  use: *id003
 - name: 👆🏻🇨🇳 ‍中国
   type: select
-  proxies: *id004
+  use: *id004
 - name: 👆🏻🇸🇬 ‍新加坡
   type: select
-  proxies: *id005
+  use: *id005
 - name: 👆🏻🇯🇵 ‍日本
   type: select
-  proxies: *id006
+  use: *id006
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  proxies: *id007
+  use: *id007
 - name: 👆🏻🎏 ‍其他
   type: select
-  proxies: *id008
-proxies:
-- {name: 'ℹ️ 官网 : 飞鸽云.com - 飞鸽云', server: jd.00000, port: 32000, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇭🇰 HK香港lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50000, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇭🇰 HK香港BG03 - 飞鸽云, server: jd.fgcloud.xyz, port: 50002, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇭🇰 HK香港BV05 - 飞鸽云, server: jd.fgcloud.xyz, port: 50005, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇹🇼 TW台湾lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50027, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇹🇼 TW台湾NF01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50021, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇯🇵 JP日本BV01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50009, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇸🇬 SG新加坡lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50015, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇺🇸 US美国BV02 - 飞鸽云, server: jd.fgcloud.xyz, port: 50016, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
+  use: *id008
+proxy-providers:
+  HK:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.pipilines.com/HK.yaml
+    interval: 180
+    path: trials_providers/www.pipilines.com/HK.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  TW:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.pipilines.com/TW.yaml
+    interval: 180
+    path: trials_providers/www.pipilines.com/TW.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  SG:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.pipilines.com/SG.yaml
+    interval: 180
+    path: trials_providers/www.pipilines.com/SG.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  JP:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.pipilines.com/JP.yaml
+    interval: 180
+    path: trials_providers/www.pipilines.com/JP.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  US:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.pipilines.com/US.yaml
+    interval: 180
+    path: trials_providers/www.pipilines.com/US.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  Other:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.pipilines.com/Other.yaml
+    interval: 180
+    path: trials_providers/www.pipilines.com/Other.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
