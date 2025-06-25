@@ -169,15 +169,15 @@ proxy-groups:
   type: select
   proxies: *id008
 proxies:
-- {name: 'ℹ️ 官网 : 飞鸽云.com - 飞鸽云', server: jd.00000, port: 32000, type: ss, cipher: aes-128-gcm, password: d4b043eb-822e-4c24-ac73-141aaef7b3ac, udp: true}
-- {name: 🇭🇰 HK香港lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50000, type: ss, cipher: aes-128-gcm, password: d4b043eb-822e-4c24-ac73-141aaef7b3ac, udp: true}
-- {name: 🇭🇰 HK香港BG03 - 飞鸽云, server: jd.fgcloud.xyz, port: 50002, type: ss, cipher: aes-128-gcm, password: d4b043eb-822e-4c24-ac73-141aaef7b3ac, udp: true}
-- {name: 🇭🇰 HK香港BV05 - 飞鸽云, server: jd.fgcloud.xyz, port: 50005, type: ss, cipher: aes-128-gcm, password: d4b043eb-822e-4c24-ac73-141aaef7b3ac, udp: true}
-- {name: 🇹🇼 TW台湾lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50027, type: ss, cipher: aes-128-gcm, password: d4b043eb-822e-4c24-ac73-141aaef7b3ac, udp: true}
-- {name: 🇹🇼 TW台湾NF01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50021, type: ss, cipher: aes-128-gcm, password: d4b043eb-822e-4c24-ac73-141aaef7b3ac, udp: true}
-- {name: 🇯🇵 JP日本BV01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50009, type: ss, cipher: aes-128-gcm, password: d4b043eb-822e-4c24-ac73-141aaef7b3ac, udp: true}
-- {name: 🇸🇬 SG新加坡lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50015, type: ss, cipher: aes-128-gcm, password: d4b043eb-822e-4c24-ac73-141aaef7b3ac, udp: true}
-- {name: 🇺🇸 US美国BV02 - 飞鸽云, server: jd.fgcloud.xyz, port: 50016, type: ss, cipher: aes-128-gcm, password: d4b043eb-822e-4c24-ac73-141aaef7b3ac, udp: true}
+- {name: 'ℹ️ 官网 : 飞鸽云.com - 飞鸽云', server: jd.00000, port: 32000, type: ss, cipher: aes-128-gcm, password: 21a2e194-e2c7-41cf-b122-b79eefba288e, udp: true}
+- {name: 🇭🇰 HK香港lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50000, type: ss, cipher: aes-128-gcm, password: 21a2e194-e2c7-41cf-b122-b79eefba288e, udp: true}
+- {name: 🇭🇰 HK香港BG03 - 飞鸽云, server: jd.fgcloud.xyz, port: 50002, type: ss, cipher: aes-128-gcm, password: 21a2e194-e2c7-41cf-b122-b79eefba288e, udp: true}
+- {name: 🇭🇰 HK香港BV05 - 飞鸽云, server: jd.fgcloud.xyz, port: 50005, type: ss, cipher: aes-128-gcm, password: 21a2e194-e2c7-41cf-b122-b79eefba288e, udp: true}
+- {name: 🇹🇼 TW台湾lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50027, type: ss, cipher: aes-128-gcm, password: 21a2e194-e2c7-41cf-b122-b79eefba288e, udp: true}
+- {name: 🇹🇼 TW台湾NF01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50021, type: ss, cipher: aes-128-gcm, password: 21a2e194-e2c7-41cf-b122-b79eefba288e, udp: true}
+- {name: 🇯🇵 JP日本BV01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50009, type: ss, cipher: aes-128-gcm, password: 21a2e194-e2c7-41cf-b122-b79eefba288e, udp: true}
+- {name: 🇸🇬 SG新加坡lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50015, type: ss, cipher: aes-128-gcm, password: 21a2e194-e2c7-41cf-b122-b79eefba288e, udp: true}
+- {name: 🇺🇸 US美国BV02 - 飞鸽云, server: jd.fgcloud.xyz, port: 50016, type: ss, cipher: aes-128-gcm, password: 21a2e194-e2c7-41cf-b122-b79eefba288e, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
