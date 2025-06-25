@@ -12,8 +12,18 @@ proxy-groups:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
   - 🇭🇰 ‍香港
+  - 🇹🇼 ‍台湾
+  - 🇨🇳 ‍中国
+  - 🇸🇬 ‍新加坡
+  - 🇯🇵 ‍日本
+  - 🇺🇸 ‍美国
   - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇨🇳 ‍中国
+  - 👆🏻🇸🇬 ‍新加坡
+  - 👆🏻🇯🇵 ‍日本
+  - 👆🏻🇺🇸 ‍美国
   - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
@@ -23,8 +33,22 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇭🇰 香港-线路1 - 神盾
-  - 🇮🇪 爱尔兰-都柏林 - 神盾
+  - 🇭🇰 香港1 BGP (沪)1.5X - 🐬海豚vpn(超稳定)
+  - 🇭🇰 香港2 BGP(广)1.5X - 🐬海豚vpn(超稳定)
+  - 🇹🇼 台湾1 BGP (广)1.5X - 🐬海豚vpn(超稳定)
+  - 🇹🇼 台湾2 BGP (广)1.5X - 🐬海豚vpn(超稳定)
+  - 🇸🇬 新加坡1 BGP (定)1.5X - 🐬海豚vpn(超稳定)
+  - 🇸🇬 新加坡2 BGP (定)1.5X - 🐬海豚vpn(超稳定)
+  - 🇯🇵 日本1 BGP+IPLC (杭)2X - 🐬海豚vpn(超稳定)
+  - 🇯🇵 日本4 BGP+IPLC (杭)2X - 🐬海豚vpn(超稳定)
+  - 🇺🇸 美国1-试用节点 - 🐬海豚vpn(超稳定)
+  - 🇺🇸 美国2-试用节点 - 🐬海豚vpn(超稳定)
+  - 🇺🇸 中转|美国1 BGP(定)1.0X - 🐬海豚vpn(超稳定)
+  - 🇺🇸 中转|美国2 BGP(定)1.0X - 🐬海豚vpn(超稳定)
+  - ℹ️ 试用一小时 2g 购买后请更新订阅 - 🐬海豚vpn(超稳定)
+  - ℹ️ 购买后获取更多节点 - 🐬海豚vpn(超稳定)
+  - 🇹🇭 泰国1BGP1(广) x1 - 🐬海豚vpn(超稳定)
+  - 🇹🇭 泰国2BGP1(广) x1 - 🐬海豚vpn(超稳定)
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -45,14 +69,26 @@ proxy-groups:
   proxies:
   - 🛩️ ‍墙内
   - 🇭🇰 ‍香港
+  - 🇹🇼 ‍台湾
+  - 🇨🇳 ‍中国
   - ✈️ ‍起飞
   - 👆🏻🇭🇰 ‍香港
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇨🇳 ‍中国
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
+  - 🇺🇸 ‍美国
+  - 🇹🇼 ‍台湾
+  - 🇸🇬 ‍新加坡
+  - 🇯🇵 ‍日本
   - 🎏 ‍其他
   - ✈️ ‍起飞
+  - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇸🇬 ‍新加坡
+  - 👆🏻🇯🇵 ‍日本
   - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
@@ -68,23 +104,100 @@ proxy-groups:
   interval: 15
   tolerance: 100
   proxies: &id002
-  - 🇭🇰 香港-线路1 - 神盾
+  - 🇭🇰 香港1 BGP (沪)1.5X - 🐬海豚vpn(超稳定)
+  - 🇭🇰 香港2 BGP(广)1.5X - 🐬海豚vpn(超稳定)
+- name: 🇹🇼 ‍台湾
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id003
+  - 🇹🇼 台湾1 BGP (广)1.5X - 🐬海豚vpn(超稳定)
+  - 🇹🇼 台湾2 BGP (广)1.5X - 🐬海豚vpn(超稳定)
+- name: 🇨🇳 ‍中国
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id004
+  - 🇭🇰 香港1 BGP (沪)1.5X - 🐬海豚vpn(超稳定)
+  - 🇭🇰 香港2 BGP(广)1.5X - 🐬海豚vpn(超稳定)
+  - 🇹🇼 台湾1 BGP (广)1.5X - 🐬海豚vpn(超稳定)
+  - 🇹🇼 台湾2 BGP (广)1.5X - 🐬海豚vpn(超稳定)
+- name: 🇸🇬 ‍新加坡
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id005
+  - 🇸🇬 新加坡1 BGP (定)1.5X - 🐬海豚vpn(超稳定)
+  - 🇸🇬 新加坡2 BGP (定)1.5X - 🐬海豚vpn(超稳定)
+- name: 🇯🇵 ‍日本
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id006
+  - 🇯🇵 日本1 BGP+IPLC (杭)2X - 🐬海豚vpn(超稳定)
+  - 🇯🇵 日本4 BGP+IPLC (杭)2X - 🐬海豚vpn(超稳定)
+- name: 🇺🇸 ‍美国
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 300
+  proxies: &id007
+  - 🇺🇸 美国1-试用节点 - 🐬海豚vpn(超稳定)
+  - 🇺🇸 美国2-试用节点 - 🐬海豚vpn(超稳定)
+  - 🇺🇸 中转|美国1 BGP(定)1.0X - 🐬海豚vpn(超稳定)
+  - 🇺🇸 中转|美国2 BGP(定)1.0X - 🐬海豚vpn(超稳定)
 - name: 🎏 ‍其他
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 30
   tolerance: 100
-  proxies: &id003
-  - 🇮🇪 爱尔兰-都柏林 - 神盾
+  proxies: &id008
+  - ℹ️ 试用一小时 2g 购买后请更新订阅 - 🐬海豚vpn(超稳定)
+  - ℹ️ 购买后获取更多节点 - 🐬海豚vpn(超稳定)
+  - 🇹🇭 泰国1BGP1(广) x1 - 🐬海豚vpn(超稳定)
+  - 🇹🇭 泰国2BGP1(广) x1 - 🐬海豚vpn(超稳定)
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
-- name: 👆🏻🎏 ‍其他
+- name: 👆🏻🇹🇼 ‍台湾
   type: select
   proxies: *id003
+- name: 👆🏻🇨🇳 ‍中国
+  type: select
+  proxies: *id004
+- name: 👆🏻🇸🇬 ‍新加坡
+  type: select
+  proxies: *id005
+- name: 👆🏻🇯🇵 ‍日本
+  type: select
+  proxies: *id006
+- name: 👆🏻🇺🇸 ‍美国
+  type: select
+  proxies: *id007
+- name: 👆🏻🎏 ‍其他
+  type: select
+  proxies: *id008
 proxies:
-- {name: 🇮🇪 爱尔兰-都柏林 - 神盾, server: 107.175.187.181, port: 22800, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 4f4f54b2-0a2e-42aa-a310-8429f72b4e72, udp: true}
-- {name: 🇭🇰 香港-线路1 - 神盾, server: 156.224.77.215, port: 22800, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 4f4f54b2-0a2e-42aa-a310-8429f72b4e72, udp: true}
+- {name: ℹ️ 试用一小时 2g 购买后请更新订阅 - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 42707, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: ℹ️ 购买后获取更多节点 - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 42707, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇺🇸 美国1-试用节点 - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 42707, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇺🇸 美国2-试用节点 - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 42707, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇭🇰 香港1 BGP (沪)1.5X - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 21831, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇭🇰 香港2 BGP(广)1.5X - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 25107, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇺🇸 中转|美国1 BGP(定)1.0X - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 42707, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇺🇸 中转|美国2 BGP(定)1.0X - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 42707, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇸🇬 新加坡1 BGP (定)1.5X - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 34303, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇸🇬 新加坡2 BGP (定)1.5X - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 34303, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇹🇼 台湾1 BGP (广)1.5X - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 35973, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇹🇼 台湾2 BGP (广)1.5X - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 35973, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇯🇵 日本1 BGP+IPLC (杭)2X - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 16892, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇯🇵 日本4 BGP+IPLC (杭)2X - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 16892, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇹🇭 泰国1BGP1(广) x1 - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 24559, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇹🇭 泰国2BGP1(广) x1 - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 24559, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

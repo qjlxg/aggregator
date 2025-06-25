@@ -1,18 +1,20 @@
 %YAML 1.1
 ---
 proxies:
+- {name: 🇭🇰 香港1 BGP (沪)1.5X - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 21831, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
+- {name: 🇭🇰 香港2 BGP(广)1.5X - 🐬海豚vpn(超稳定), server: gygyjiqi.sefgswgekt.top, port: 25107, type: ss, cipher: chacha20-ietf-poly1305, password: d0c0049b-7df0-4e0f-b34a-817e27ba482b, udp: true}
 - &id001 {name: 🇭🇰 HK02 12小时联通试用线路 满意在订购 - 火箭, server: qqb12.198139.xyz, port: 50016, type: ss, cipher: aes-128-gcm, password: e5c2d0d9-0dec-4946-bee6-5fe4972c12c9, udp: true}
-- {name: '🇭🇰 香港1[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23003, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
-- {name: '🇭🇰 香港1[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23034, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
-- {name: '🇭🇰 香港2[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23014, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
-- {name: '🇭🇰 香港2[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23114, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
-- {name: '🇭🇰 香港3[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23030, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
-- {name: '🇭🇰 香港3[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23137, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
-- {name: 🇭🇰 香港-线路1 - 神盾, server: 156.224.77.215, port: 22800, type: ss, cipher: chacha20-ietf-poly1305, password: 4f4f54b2-0a2e-42aa-a310-8429f72b4e72, udp: true}
+- {name: '🇭🇰 香港1[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23003, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇭🇰 香港1[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23034, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇭🇰 香港2[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23014, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇭🇰 香港2[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23114, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇭🇰 香港3[IEPL] - 无界畅游', server: iepl.500.dx.ny.cdnlinkms001.xyz, port: 23030, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: '🇭🇰 香港3[BGP] - 无界畅游', server: js.bgp.ny.cdnlinkms001.xyz, port: 23137, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: dbabb27e-bea3-4635-ae55-9e214be96726, udp: true}
+- {name: 🇭🇰 香港-线路1 - 神盾, server: 156.224.77.215, port: 22800, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: 4f4f54b2-0a2e-42aa-a310-8429f72b4e72, udp: true}
 - *id001
 - {name: 🇭🇰 Hk大带宽t - V2Board, server: xg1.adminsystem.cc, port: 10026, type: trojan, password: 09b623b5-4cf7-4452-9827-1434a73b9e33, skip-cert-verify: true, udp: true}
 - {name: 🇭🇰 Hk大带宽s - V2Board, server: xg1.adminsystem.cc, port: 10025, type: ss, cipher: chacha20-ietf-poly1305, password: 09b623b5-4cf7-4452-9827-1434a73b9e33, udp: true}
 - {name: 🇭🇰 Hk大带宽 - V2Board, server: xg1.adminsystem.cc, port: 10024, type: vmess, uuid: 09b623b5-4cf7-4452-9827-1434a73b9e33, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: www.baidu.com}}, udp: true}
-- {name: 🇭🇰 HK香港lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50000, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇭🇰 HK香港BG03 - 飞鸽云, server: jd.fgcloud.xyz, port: 50002, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
-- {name: 🇭🇰 HK香港BV05 - 飞鸽云, server: jd.fgcloud.xyz, port: 50005, type: ss, cipher: aes-128-gcm, password: 34baeb06-40a3-4029-9802-da9cecf1c88c, udp: true}
+- {name: 🇭🇰 HK香港lite01 - 飞鸽云, server: jd.fgcloud.xyz, port: 50000, type: ss, cipher: aes-128-gcm, password: 1fab9106-7773-4b1c-859f-f68ab119441c, udp: true}
+- {name: 🇭🇰 HK香港BG03 - 飞鸽云, server: jd.fgcloud.xyz, port: 50002, type: ss, cipher: aes-128-gcm, password: 1fab9106-7773-4b1c-859f-f68ab119441c, udp: true}
+- {name: 🇭🇰 HK香港BV05 - 飞鸽云, server: jd.fgcloud.xyz, port: 50005, type: ss, cipher: aes-128-gcm, password: 1fab9106-7773-4b1c-859f-f68ab119441c, udp: true}
