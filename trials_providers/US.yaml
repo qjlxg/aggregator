@@ -3,9 +3,9 @@
 proxies:
 - &id001 {name: 🇺🇸 US-Los Angeles-01 - 脉冲云, server: gyaa.yy9866.com, port: 21000, type: ss, cipher: chacha20-ietf-poly1305, password: bab31e35-99e7-4c09-881e-ab05aafc48f3, udp: true}
 - *id001
-- &id002 {name: 🇺🇸 中转美国1(动态) x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 40063, type: ss, cipher: chacha20-ietf-poly1305, password: 07f483d6-5d4a-4f95-b906-f64a8ea7e706, udp: true}
-- &id003 {name: 🇺🇸 中转美国2(动态) x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 40063, type: ss, cipher: chacha20-ietf-poly1305, password: 07f483d6-5d4a-4f95-b906-f64a8ea7e706, udp: true}
-- &id004 {name: 🇺🇸 中转美国3(动态) x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 40063, type: ss, cipher: chacha20-ietf-poly1305, password: 07f483d6-5d4a-4f95-b906-f64a8ea7e706, udp: true}
+- &id002 {name: 🇺🇸 中转美国1(动态) x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 40063, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: ea594c8d-6aec-43c7-bc93-17f62b3581c3, udp: true}
+- &id003 {name: 🇺🇸 中转美国2(动态) x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 40063, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: ea594c8d-6aec-43c7-bc93-17f62b3581c3, udp: true}
+- &id004 {name: 🇺🇸 中转美国3(动态) x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 40063, tfo: true, type: ss, cipher: chacha20-ietf-poly1305, password: ea594c8d-6aec-43c7-bc93-17f62b3581c3, udp: true}
 - {name: 🇺🇸 United States - Atom, server: always.chenyi.pw, port: 23206, type: ss, cipher: chacha20-ietf-poly1305, password: ee2d689a-87a0-4907-91cd-45b2c476dcac, udp: true}
 - *id002
 - *id003
@@ -18,11 +18,11 @@ proxies:
 - {name: 🇺🇸 美国02 - 迅云加速, server: node2.cenidcbf.ink, port: 15628, type: ss, cipher: chacha20-ietf-poly1305, password: 614e2738-656f-446c-98fa-ed1352337f34, udp: true}
 - {name: 🇺🇸 美国03 - 迅云加速, server: ne-shzft6zn.neurix.cc, port: 59079, type: ss, cipher: chacha20-ietf-poly1305, password: 614e2738-656f-446c-98fa-ed1352337f34, udp: true}
 - {name: 🇺🇸 美国04 - 迅云加速, server: ne-gzv6dk4l.neurix.cc, port: 42692, type: ss, cipher: chacha20-ietf-poly1305, password: 614e2738-656f-446c-98fa-ed1352337f34, udp: true}
-- {name: 🇺🇸 ss(广移)美国1 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 46197, type: ss, cipher: chacha20-ietf-poly1305, password: 2e1df904-8c61-42a8-bf5b-bacc59c6b4bc, udp: true}
-- {name: 🇺🇸 ss(广移)美国2 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 46197, type: ss, cipher: chacha20-ietf-poly1305, password: 2e1df904-8c61-42a8-bf5b-bacc59c6b4bc, udp: true}
-- {name: 🇺🇸 ss(广移)美国2-1 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 12589, type: ss, cipher: chacha20-ietf-poly1305, password: 2e1df904-8c61-42a8-bf5b-bacc59c6b4bc, udp: true}
-- {name: 🇺🇸 ss(广移)美国2-2 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 12589, type: ss, cipher: chacha20-ietf-poly1305, password: 2e1df904-8c61-42a8-bf5b-bacc59c6b4bc, udp: true}
-- &id005 {name: 🇺🇸 C美国-快云网络kywl.eu【免费节点】 - 快云网络, server: dgxj.520662.xyz, port: 80, type: vmess, uuid: 5c9420e0-4bf8-4209-9075-d6869d5328f4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: dgxj.520662.xyz}}, udp: true}
+- {name: 🇺🇸 ss(广移)美国1 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 46197, type: ss, cipher: chacha20-ietf-poly1305, password: 93032024-5392-4f6f-a71b-5b67b1f35649, udp: true}
+- {name: 🇺🇸 ss(广移)美国2 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 46197, type: ss, cipher: chacha20-ietf-poly1305, password: 93032024-5392-4f6f-a71b-5b67b1f35649, udp: true}
+- {name: 🇺🇸 ss(广移)美国2-1 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 12589, type: ss, cipher: chacha20-ietf-poly1305, password: 93032024-5392-4f6f-a71b-5b67b1f35649, udp: true}
+- {name: 🇺🇸 ss(广移)美国2-2 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 12589, type: ss, cipher: chacha20-ietf-poly1305, password: 93032024-5392-4f6f-a71b-5b67b1f35649, udp: true}
+- &id005 {name: 🇺🇸 C美国-快云网络kywl.eu【免费节点】 - 快云网络, server: dgxj.520662.xyz, port: 80, tfo: true, type: vmess, uuid: 5c9420e0-4bf8-4209-9075-d6869d5328f4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: dgxj.520662.xyz}}, udp: true}
 - *id005
 - *id001
 - *id001
