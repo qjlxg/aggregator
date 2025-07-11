@@ -28,6 +28,7 @@ proxy-groups:
   - 香港🇭🇰-九龙-CDN | 1x - Chiikawa Network
   - 美国🇺🇸-布法罗-CDN | 1x - Chiikawa Network
   - 美国🇺🇸-阿什本-CDN | 1x - Chiikawa Network
+  - 荷兰🇳🇱-阿姆-CDN | 1x - Chiikawa Network
   - 英国🇬🇧-伦敦-CDN | 1x - Chiikawa Network
 - name: 👆🏻 ‍指定
   type: select
@@ -89,6 +90,7 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id004
+  - 荷兰🇳🇱-阿姆-CDN | 1x - Chiikawa Network
   - 英国🇬🇧-伦敦-CDN | 1x - Chiikawa Network
 - name: 👆🏻🇭🇰 ‍香港
   type: select
@@ -102,8 +104,9 @@ proxy-groups:
 proxies:
 - {name: 美国🇺🇸-布法罗-CDN | 1x - Chiikawa Network, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: c613334c-31f1-47c9-887f-67ce9d121837, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free1.chiikawanetworkcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free1.chiikawanetworkcfjiasucdn.us.kg}}, udp: true}
 - {name: 美国🇺🇸-阿什本-CDN | 1x - Chiikawa Network, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: c613334c-31f1-47c9-887f-67ce9d121837, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free2.chiikawanetworkcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free2.chiikawanetworkcfjiasucdn.us.kg}}, udp: true}
-- {name: 英国🇬🇧-伦敦-CDN | 1x - Chiikawa Network, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: c613334c-31f1-47c9-887f-67ce9d121837, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free3.chiikawanetworkcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free3.chiikawanetworkcfjiasucdn.us.kg}}, udp: true}
-- {name: 香港🇭🇰-九龙-CDN | 1x - Chiikawa Network, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: c613334c-31f1-47c9-887f-67ce9d121837, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free4.chiikawanetworkcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free4.chiikawanetworkcfjiasucdn.us.kg}}, udp: true}
+- {name: 荷兰🇳🇱-阿姆-CDN | 1x - Chiikawa Network, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: c613334c-31f1-47c9-887f-67ce9d121837, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free3.chiikawanetworkcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free3.chiikawanetworkcfjiasucdn.us.kg}}, udp: true}
+- {name: 英国🇬🇧-伦敦-CDN | 1x - Chiikawa Network, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: c613334c-31f1-47c9-887f-67ce9d121837, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free4.chiikawanetworkcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free4.chiikawanetworkcfjiasucdn.us.kg}}, udp: true}
+- {name: 香港🇭🇰-九龙-CDN | 1x - Chiikawa Network, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: c613334c-31f1-47c9-887f-67ce9d121837, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free5.chiikawanetworkcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free5.chiikawanetworkcfjiasucdn.us.kg}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
