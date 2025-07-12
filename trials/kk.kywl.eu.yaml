@@ -54,7 +54,7 @@ proxy-groups:
   - 🛩️ ‍墙内
   - 💩 ‍广告
 proxies:
-- {name: 🇺🇸 C美国-快云网络kywl.eu【免费节点】 - 快云网络, server: dgdd.520662.xyz, port: 80, type: vmess, uuid: 5c9420e0-4bf8-4209-9075-d6869d5328f4, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: dgdd.520662.xyz}}, udp: true}
+- {name: 🇺🇸 C美国-快云网络kywl.eu【免费节点】 - 快云网络, server: dgxj.520662.xyz, port: 47588, type: vmess, uuid: 5c9420e0-4bf8-4209-9075-d6869d5328f4, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: dgxj.520662.xyz, network: ws, ws-opts: {path: /, headers: {Host: dgxj.520662.xyz}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
