@@ -1,8 +1,8 @@
 %YAML 1.1
 ---
 proxies:
-- &id001 {name: 🇭🇰 HK-(官网:maichongvpn.com) - 脉冲云, server: gyaa.yy9866.com, port: 49763, type: ss, cipher: chacha20-ietf-poly1305, password: accf6a1b-333f-4a85-a071-f573c8cd5f9b, udp: true}
-- &id002 {name: 🇨🇳 CN-TaiBei-01 - 脉冲云, server: gyaa.yy9866.com, port: 21525, type: ss, cipher: chacha20-ietf-poly1305, password: accf6a1b-333f-4a85-a071-f573c8cd5f9b, udp: true}
+- &id001 {name: 🇭🇰 HK-(官网:maichongvpn.com) - 脉冲云, server: gyaa.yy9866.com, port: 49763, type: ss, cipher: chacha20-ietf-poly1305, password: 8f4152c4-e921-43ac-97f4-7d3a02044008, udp: true}
+- &id002 {name: 🇨🇳 CN-TaiBei-01 - 脉冲云, server: gyaa.yy9866.com, port: 21525, type: ss, cipher: chacha20-ietf-poly1305, password: 8f4152c4-e921-43ac-97f4-7d3a02044008, udp: true}
 - &id007 {name: 🇭🇰 香港 (广港)1 x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 55408, type: ss, cipher: chacha20-ietf-poly1305, password: 12f41139-cb4f-4a7a-b543-1a210a741e85, udp: true}
 - &id008 {name: 🇭🇰 香港 (广港)2 x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 55408, type: ss, cipher: chacha20-ietf-poly1305, password: 12f41139-cb4f-4a7a-b543-1a210a741e85, udp: true}
 - &id009 {name: 🇭🇰 香港 (广港)3 x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 55408, type: ss, cipher: chacha20-ietf-poly1305, password: 12f41139-cb4f-4a7a-b543-1a210a741e85, udp: true}
@@ -47,20 +47,20 @@ proxies:
 - *id004
 - *id005
 - *id006
-- &id019 {name: 🇹🇼 台灣高速 N1 - Putao私人機場🔥, server: neko1.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id020 {name: 🇹🇼 台灣高速 N2 - Putao私人機場🔥, server: neko2.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id021 {name: 🇹🇼 台灣高速 N3 - Putao私人機場🔥, server: neko3.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id022 {name: 🇹🇼 台灣高速 N4 - Putao私人機場🔥, server: neko4.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id023 {name: 🇹🇼 台灣高速 N5 - Putao私人機場🔥, server: neko5.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id024 {name: 🇹🇼 台灣高速 N6 - Putao私人機場🔥, server: neko6.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id025 {name: 🇹🇼 台灣高速 N7 - Putao私人機場🔥, server: neko7.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id026 {name: 🇹🇼 台灣高速 IK1 - Putao私人機場🔥, server: ik1.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id027 {name: 🇹🇼 台灣高速 IK2 - Putao私人機場🔥, server: ik2.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id028 {name: 🇹🇼 台灣高速 IK3 - Putao私人機場🔥, server: ik3.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id029 {name: 🇹🇼 台灣高速 IK4 - Putao私人機場🔥, server: ik4.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id030 {name: 🇹🇼 台灣高速 IK5 - Putao私人機場🔥, server: ik5.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id031 {name: 🇹🇼 台灣高速 IK6 - Putao私人機場🔥, server: ik6.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id032 {name: 🇹🇼 台灣高速 IK8 - Putao私人機場🔥, server: ik8.i2345.org, port: 9998, type: vmess, uuid: 46b435b0-18ee-448d-ace5-8f8087cc6675, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id019 {name: 🇹🇼 台灣高速 N1 - Putao私人機場🔥, server: neko1.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id020 {name: 🇹🇼 台灣高速 N2 - Putao私人機場🔥, server: neko2.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id021 {name: 🇹🇼 台灣高速 N3 - Putao私人機場🔥, server: neko3.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id022 {name: 🇹🇼 台灣高速 N4 - Putao私人機場🔥, server: neko4.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id023 {name: 🇹🇼 台灣高速 N5 - Putao私人機場🔥, server: neko5.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id024 {name: 🇹🇼 台灣高速 N6 - Putao私人機場🔥, server: neko6.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id025 {name: 🇹🇼 台灣高速 N7 - Putao私人機場🔥, server: neko7.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id026 {name: 🇹🇼 台灣高速 IK1 - Putao私人機場🔥, server: ik1.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id027 {name: 🇹🇼 台灣高速 IK2 - Putao私人機場🔥, server: ik2.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id028 {name: 🇹🇼 台灣高速 IK3 - Putao私人機場🔥, server: ik3.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id029 {name: 🇹🇼 台灣高速 IK4 - Putao私人機場🔥, server: ik4.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id030 {name: 🇹🇼 台灣高速 IK5 - Putao私人機場🔥, server: ik5.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id031 {name: 🇹🇼 台灣高速 IK6 - Putao私人機場🔥, server: ik6.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id032 {name: 🇹🇼 台灣高速 IK8 - Putao私人機場🔥, server: ik8.i2345.org, port: 9998, type: vmess, uuid: 4d8876fb-e482-4964-b3b5-ec850934eef0, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 - *id007
 - *id008
 - *id009
