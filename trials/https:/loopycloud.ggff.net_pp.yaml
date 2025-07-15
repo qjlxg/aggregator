@@ -12,43 +12,26 @@ proxy-groups:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
   - 🇭🇰 ‍香港
-  - 🇨🇳 ‍中国
   - 🇸🇬 ‍新加坡
-  - 🇯🇵 ‍日本
   - 🇺🇸 ‍美国
   - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇨🇳 ‍中国
   - 👆🏻🇸🇬 ‍新加坡
-  - 👆🏻🇯🇵 ‍日本
   - 👆🏻🇺🇸 ‍美国
   - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
   tolerance: 100
-  proxies: &id001
-  - 🇭🇰 HK-(官网:maichongvpn.com) - 脉冲云
-  - 🇸🇬 Singapore-01 - 脉冲云
-  - 🇯🇵 JP-Tokyo-01 - 脉冲云
-  - 🇺🇸 US-Los Angeles-01 - 脉冲云
-  - 🇫🇷 FR-Paris - 脉冲云
-  - 🇦🇺 AU-Sydney - 脉冲云
-  - 🇳🇱 NL-Amsterdam - 脉冲云
-  - 🇨🇦 CA-Toronto - 脉冲云
-  - 🇬🇧 GB-London - 脉冲云
-  - 🇪🇸 ES-Madrid - 脉冲云
-  - 🇮🇹 IT-Milan - 脉冲云
-  - 🇦🇹 AT-Vienna - 脉冲云
-  - 🇩🇪 DE-Nuremberg - 脉冲云
-  - 🇰🇷 KR-Seoul - 脉冲云
-  - 🇨🇳 CN-TaiBei-01 - 脉冲云
+  use: &id001
+  - HK
+  - SG
+  - US
+  - Other
 - name: 👆🏻 ‍指定
   type: select
-  proxies: *id001
+  use: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -66,22 +49,18 @@ proxy-groups:
   proxies:
   - 🛩️ ‍墙内
   - 🇭🇰 ‍香港
-  - 🇨🇳 ‍中国
   - ✈️ ‍起飞
   - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇨🇳 ‍中国
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
   - 🇺🇸 ‍美国
   - 🇸🇬 ‍新加坡
-  - 🇯🇵 ‍日本
   - 🎏 ‍其他
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
   - 👆🏻🇸🇬 ‍新加坡
-  - 👆🏻🇯🇵 ‍日本
   - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
@@ -93,90 +72,73 @@ proxy-groups:
   - 💩 ‍广告
 - name: 🇭🇰 ‍香港
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id002
-  - 🇭🇰 HK-(官网:maichongvpn.com) - 脉冲云
-- name: 🇨🇳 ‍中国
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id003
-  - 🇭🇰 HK-(官网:maichongvpn.com) - 脉冲云
-  - 🇨🇳 CN-TaiBei-01 - 脉冲云
+  use: &id002
+  - HK
 - name: 🇸🇬 ‍新加坡
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id004
-  - 🇸🇬 Singapore-01 - 脉冲云
-- name: 🇯🇵 ‍日本
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id005
-  - 🇯🇵 JP-Tokyo-01 - 脉冲云
+  use: &id003
+  - SG
 - name: 🇺🇸 ‍美国
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 300
-  proxies: &id006
-  - 🇺🇸 US-Los Angeles-01 - 脉冲云
+  use: &id004
+  - US
 - name: 🎏 ‍其他
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
   tolerance: 100
-  proxies: &id007
-  - 🇫🇷 FR-Paris - 脉冲云
-  - 🇦🇺 AU-Sydney - 脉冲云
-  - 🇳🇱 NL-Amsterdam - 脉冲云
-  - 🇨🇦 CA-Toronto - 脉冲云
-  - 🇬🇧 GB-London - 脉冲云
-  - 🇪🇸 ES-Madrid - 脉冲云
-  - 🇮🇹 IT-Milan - 脉冲云
-  - 🇦🇹 AT-Vienna - 脉冲云
-  - 🇩🇪 DE-Nuremberg - 脉冲云
-  - 🇰🇷 KR-Seoul - 脉冲云
+  use: &id005
+  - Other
 - name: 👆🏻🇭🇰 ‍香港
   type: select
-  proxies: *id002
-- name: 👆🏻🇨🇳 ‍中国
-  type: select
-  proxies: *id003
+  use: *id002
 - name: 👆🏻🇸🇬 ‍新加坡
   type: select
-  proxies: *id004
-- name: 👆🏻🇯🇵 ‍日本
-  type: select
-  proxies: *id005
+  use: *id003
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  proxies: *id006
+  use: *id004
 - name: 👆🏻🎏 ‍其他
   type: select
-  proxies: *id007
-proxies:
-- {name: 🇭🇰 HK-(官网:maichongvpn.com) - 脉冲云, server: gyaa.yy9866.com, port: 49763, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇸🇬 Singapore-01 - 脉冲云, server: gyaa.yy9866.com, port: 8965, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇺🇸 US-Los Angeles-01 - 脉冲云, server: gyaa.yy9866.com, port: 21000, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇯🇵 JP-Tokyo-01 - 脉冲云, server: gyaa.yy9866.com, port: 48917, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇨🇳 CN-TaiBei-01 - 脉冲云, server: gyaa.yy9866.com, port: 21525, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇫🇷 FR-Paris - 脉冲云, server: gyaa.yy9866.com, port: 16947, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇦🇺 AU-Sydney - 脉冲云, server: gyaa.yy9866.com, port: 39263, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇳🇱 NL-Amsterdam - 脉冲云, server: gyaa.yy9866.com, port: 23262, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇨🇦 CA-Toronto - 脉冲云, server: gyaa.yy9866.com, port: 28322, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇬🇧 GB-London - 脉冲云, server: gyaa.yy9866.com, port: 45092, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇪🇸 ES-Madrid - 脉冲云, server: gyaa.yy9866.com, port: 34502, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇮🇹 IT-Milan - 脉冲云, server: gyaa.yy9866.com, port: 39062, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇦🇹 AT-Vienna - 脉冲云, server: gyaa.yy9866.com, port: 23896, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇩🇪 DE-Nuremberg - 脉冲云, server: gyaa.yy9866.com, port: 22425, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
-- {name: 🇰🇷 KR-Seoul - 脉冲云, server: gyaa.yy9866.com, port: 27828, type: ss, cipher: chacha20-ietf-poly1305, password: 696aa931-d712-4fa2-954c-2c5d142fb569, udp: true}
+  use: *id005
+proxy-providers:
+  HK:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://loopycloud.ggff.net/HK.yaml
+    interval: 180
+    path: trials_providers/https://loopycloud.ggff.net/HK.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  SG:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://loopycloud.ggff.net/SG.yaml
+    interval: 180
+    path: trials_providers/https://loopycloud.ggff.net/SG.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  US:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://loopycloud.ggff.net/US.yaml
+    interval: 180
+    path: trials_providers/https://loopycloud.ggff.net/US.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  Other:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://loopycloud.ggff.net/Other.yaml
+    interval: 180
+    path: trials_providers/https://loopycloud.ggff.net/Other.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
