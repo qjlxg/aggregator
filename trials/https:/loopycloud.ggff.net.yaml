@@ -29,8 +29,8 @@ proxy-groups:
   proxies: &id001
   - 香港🇭🇰-九龙-CDN | 1x - Loopy Cloud
   - 新加坡🇸🇬-CDN | 1x - Loopy Cloud
-  - 美国🇺🇸-布法罗-CDN | 1x - Loopy Cloud
   - 美国🇺🇸-阿什本-CDN | 1x - Loopy Cloud
+  - 美国🇺🇸-布法罗-CDN | 1x - Loopy Cloud
   - 荷兰🇳🇱-阿姆-CDN | 1x - Loopy Cloud
   - 英国🇬🇧-伦敦-CDN | 1x - Loopy Cloud
   - ℹ️ 🏁通知：无法使用请更新订阅 - Loopy Cloud
@@ -96,8 +96,8 @@ proxy-groups:
   interval: 15
   tolerance: 300
   proxies: &id004
-  - 美国🇺🇸-布法罗-CDN | 1x - Loopy Cloud
   - 美国🇺🇸-阿什本-CDN | 1x - Loopy Cloud
+  - 美国🇺🇸-布法罗-CDN | 1x - Loopy Cloud
 - name: 🎏 ‍其他
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -121,8 +121,8 @@ proxy-groups:
   type: select
   proxies: *id005
 proxies:
-- {name: 美国🇺🇸-布法罗-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free1.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free1.loopycloudcfjiasucdn.us.kg}}, udp: true}
-- {name: 美国🇺🇸-阿什本-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free2.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free2.loopycloudcfjiasucdn.us.kg}}, udp: true}
+- {name: 美国🇺🇸-阿什本-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free1.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free1.loopycloudcfjiasucdn.us.kg}}, udp: true}
+- {name: 美国🇺🇸-布法罗-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free2.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free2.loopycloudcfjiasucdn.us.kg}}, udp: true}
 - {name: 荷兰🇳🇱-阿姆-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free3.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free3.loopycloudcfjiasucdn.us.kg}}, udp: true}
 - {name: 英国🇬🇧-伦敦-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free4.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free4.loopycloudcfjiasucdn.us.kg}}, udp: true}
 - {name: 香港🇭🇰-九龙-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free5.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free5.loopycloudcfjiasucdn.us.kg}}, udp: true}
