@@ -27,8 +27,6 @@ proxy-groups:
   proxies: &id001
   - 香港🇭🇰-九龙-CDN | 1x - Loopy Cloud
   - 新加坡🇸🇬-CDN | 1x - Loopy Cloud
-  - 荷兰🇳🇱-阿姆-CDN | 1x - Loopy Cloud
-  - 英国🇬🇧-伦敦-CDN | 1x - Loopy Cloud
   - ℹ️ 🏁通知：无法使用请更新订阅 - Loopy Cloud
   - ℹ️ 🏁官网：loopycloud.ggff.net - Loopy Cloud
 - name: 👆🏻 ‍指定
@@ -90,8 +88,6 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id004
-  - 荷兰🇳🇱-阿姆-CDN | 1x - Loopy Cloud
-  - 英国🇬🇧-伦敦-CDN | 1x - Loopy Cloud
   - ℹ️ 🏁通知：无法使用请更新订阅 - Loopy Cloud
   - ℹ️ 🏁官网：loopycloud.ggff.net - Loopy Cloud
 - name: 👆🏻🇭🇰 ‍香港
@@ -104,8 +100,6 @@ proxy-groups:
   type: select
   proxies: *id004
 proxies:
-- {name: 荷兰🇳🇱-阿姆-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free3.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free3.loopycloudcfjiasucdn.us.kg}}, udp: true}
-- {name: 英国🇬🇧-伦敦-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free4.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free4.loopycloudcfjiasucdn.us.kg}}, udp: true}
 - {name: 香港🇭🇰-九龙-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free5.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free5.loopycloudcfjiasucdn.us.kg}}, udp: true}
 - {name: 新加坡🇸🇬-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free6.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free6.loopycloudcfjiasucdn.us.kg}}, udp: true}
 - {name: ℹ️ 🏁通知：无法使用请更新订阅 - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: 1750158741.tencentapp.cn, network: ws, ws-opts: {path: /, headers: {Host: 1750158741.tencentapp.cn}}, udp: true}
