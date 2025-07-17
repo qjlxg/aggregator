@@ -11,10 +11,8 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
-  - 🇭🇰 ‍香港
   - 🇸🇬 ‍新加坡
   - 🎏 ‍其他
-  - 👆🏻🇭🇰 ‍香港
   - 👆🏻🇸🇬 ‍新加坡
   - 👆🏻🎏 ‍其他
   - DIRECT
@@ -25,7 +23,6 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 香港🇭🇰-九龙-CDN | 1x - Loopy Cloud
   - 新加坡🇸🇬-CDN | 1x - Loopy Cloud
   - ℹ️ 🏁通知：无法使用请更新订阅 - Loopy Cloud
   - ℹ️ 🏁官网：loopycloud.ggff.net - Loopy Cloud
@@ -48,9 +45,7 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇭🇰 ‍香港
   - ✈️ ‍起飞
-  - 👆🏻🇭🇰 ‍香港
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
@@ -68,39 +63,28 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇭🇰 ‍香港
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id002
-  - 香港🇭🇰-九龙-CDN | 1x - Loopy Cloud
 - name: 🇸🇬 ‍新加坡
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
-  proxies: &id003
+  proxies: &id002
   - 新加坡🇸🇬-CDN | 1x - Loopy Cloud
 - name: 🎏 ‍其他
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 30
   tolerance: 100
-  proxies: &id004
+  proxies: &id003
   - ℹ️ 🏁通知：无法使用请更新订阅 - Loopy Cloud
   - ℹ️ 🏁官网：loopycloud.ggff.net - Loopy Cloud
-- name: 👆🏻🇭🇰 ‍香港
-  type: select
-  proxies: *id002
 - name: 👆🏻🇸🇬 ‍新加坡
   type: select
-  proxies: *id003
+  proxies: *id002
 - name: 👆🏻🎏 ‍其他
   type: select
-  proxies: *id004
+  proxies: *id003
 proxies:
-- {name: 香港🇭🇰-九龙-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free5.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free5.loopycloudcfjiasucdn.us.kg}}, udp: true}
 - {name: 新加坡🇸🇬-CDN | 1x - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: free6.loopycloudcfjiasucdn.us.kg, network: ws, ws-opts: {path: /, headers: {Host: free6.loopycloudcfjiasucdn.us.kg}}, udp: true}
 - {name: ℹ️ 🏁通知：无法使用请更新订阅 - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: 1750158741.tencentapp.cn, network: ws, ws-opts: {path: /, headers: {Host: 1750158741.tencentapp.cn}}, udp: true}
 - {name: ℹ️ 🏁官网：loopycloud.ggff.net - Loopy Cloud, server: 1750158741.tencentapp.cn, port: 443, type: vmess, uuid: b4cb4844-04ab-4805-b372-ef349fbc12c1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: 1750158741.tencentapp.cn, network: ws, ws-opts: {path: /, headers: {Host: 1750158741.tencentapp.cn}}, udp: true}
