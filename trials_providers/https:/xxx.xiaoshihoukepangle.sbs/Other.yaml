@@ -1,6 +1,0 @@
-%YAML 1.1
----
-proxies:
-- {name: Trojan - XBoard, server: test2.xiaoshihoukepangle.sbs, port: 1083, type: trojan, password: 1cdc8a65-0e64-49c8-b0c3-a21f3ec99489, sni: test2.xiaoshihoukepangle.sbs, skip-cert-verify: true, udp: true}
-- {name: SS - XBoard, server: test.xiaoshihoukepangle.sbs, port: 1081, type: ss, cipher: chacha20-ietf-poly1305, password: 1cdc8a65-0e64-49c8-b0c3-a21f3ec99489, udp: true}
-- {name: Vmess - XBoard, server: test1.xiaoshihoukepangle.sbs, port: 1082, type: vmess, uuid: 1cdc8a65-0e64-49c8-b0c3-a21f3ec99489, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: test1.xiaoshihoukepangle.sbs, network: ws, ws-opts: {path: /xiaoshihoukepangleVmess, headers: {Host: www.bing.com}}, udp: true}

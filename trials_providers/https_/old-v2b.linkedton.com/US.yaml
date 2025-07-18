@@ -1,9 +1,0 @@
-%YAML 1.1
----
-proxies:
-- {name: 🇺🇸 US| Trojan - V2Board, server: test.api-aws.com, port: 443, type: trojan, password: c98306f6-3e55-47c6-ba27-bb5343de5da5, sni: test.api-aws.com, skip-cert-verify: true, udp: true}
-- {name: 🇺🇸 US| Shadowsocks - V2Board, server: 38.130.98.152, port: 23655, type: ss, cipher: aes-256-gcm, password: c98306f6-3e55-47c6-ba27-bb5343de5da5, udp: true}
-- {name: 🇺🇸 US| V2ray TCP - V2Board, server: 38.130.98.152, port: 8843, type: vmess, uuid: c98306f6-3e55-47c6-ba27-bb5343de5da5, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇺🇸 US| V2ray+gRPC - V2Board, server: test.api-aws.com, port: 8443, type: vmess, uuid: c98306f6-3e55-47c6-ba27-bb5343de5da5, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: test.api-aws.com, network: grpc, grpc-opts: {grpc-service-name: web}, udp: true}
-- {name: 🇺🇸 US| VLESS+gRPC (GET ERROR MSG) - V2Board, server: dc6.api-aws.com, port: 8443, type: vmess, uuid: c98306f6-3e55-47c6-ba27-bb5343de5da5, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: dc6.api-aws.com, network: grpc, grpc-opts: {grpc-service-name: webinar}, udp: true}
-- {name: 🇺🇸 US| VMESS+Websocket (ERROR RESTY Get) - V2Board, server: 38.126.114.213, port: 23552, type: vmess, uuid: c98306f6-3e55-47c6-ba27-bb5343de5da5, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}

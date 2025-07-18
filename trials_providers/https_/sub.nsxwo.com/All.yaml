@@ -1,8 +1,0 @@
-%YAML 1.1
----
-proxies:
-- {name: '🇭🇰 [ss]香港-cn2-2 - Anywhere', server: 120.79.177.160, port: 30000, type: ss, cipher: aes-128-gcm, password: bc18e342-a561-41b4-9e4f-c3217ee38ae1, udp: true}
-- {name: '🇯🇵 [vmess]日本-1 - Anywhere', server: kajp.kia-ai.com, port: 10805, type: vmess, uuid: bc18e342-a561-41b4-9e4f-c3217ee38ae1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: kajp.kia-ai.com}}, udp: true}
-- {name: '🇭🇰 [vmess]香港-1 - Anywhere', server: kahk.kia-ai.com, port: 10805, type: vmess, uuid: bc18e342-a561-41b4-9e4f-c3217ee38ae1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: kahk.kia-ai.com}}, udp: true}
-- {name: '🇯🇵 [vmess]日本-2 - Anywhere', server: kajpa.kia-ai.com, port: 10805, type: vmess, uuid: bc18e342-a561-41b4-9e4f-c3217ee38ae1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: kajpa.kia-ai.com}}, udp: true}
-- {name: '🇭🇰 [vmess]香港-cn2-3 - Anywhere', server: cnhka.kia-ai.com, port: 10807, type: vmess, uuid: bc18e342-a561-41b4-9e4f-c3217ee38ae1, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, network: ws, ws-opts: {path: /, headers: {Host: cnhka.kia-ai.com}}, udp: true}
