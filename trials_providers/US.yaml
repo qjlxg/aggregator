@@ -1,22 +1,22 @@
 %YAML 1.1
 ---
 proxies:
-- &id001 {name: 🇺🇸 US-Los Angeles-01 - 脉冲云, server: gyjd.yy9866.com, port: 21000, type: ss, cipher: chacha20-ietf-poly1305, password: 01cec7ed-ae92-480f-a46b-92968d71c292, udp: true}
-- &id003 {name: 🇺🇸 中转美国1(动态) x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 40063, type: ss, cipher: chacha20-ietf-poly1305, password: 7535e964-b326-4711-824c-fc4e32a28bec, udp: true}
-- &id004 {name: 🇺🇸 中转美国2(动态) x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 40063, type: ss, cipher: chacha20-ietf-poly1305, password: 7535e964-b326-4711-824c-fc4e32a28bec, udp: true}
-- &id005 {name: 🇺🇸 中转美国3(动态) x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 40063, type: ss, cipher: chacha20-ietf-poly1305, password: 7535e964-b326-4711-824c-fc4e32a28bec, udp: true}
+- &id001 {name: 🇺🇸 US-Los Angeles-01 - 脉冲云, server: gyjd.yy9866.com, port: 21000, type: ss, cipher: chacha20-ietf-poly1305, password: 6fd483d8-f952-4ec6-ace5-73a15f0ee755, udp: true}
+- &id003 {name: 🇺🇸 中转美国1(动态) x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 40063, type: ss, cipher: chacha20-ietf-poly1305, password: 4581d392-84fe-40d4-9043-df5a50d13dd1, udp: true}
+- &id004 {name: 🇺🇸 中转美国2(动态) x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 40063, type: ss, cipher: chacha20-ietf-poly1305, password: 4581d392-84fe-40d4-9043-df5a50d13dd1, udp: true}
+- &id005 {name: 🇺🇸 中转美国3(动态) x1 - ⚡闪连一元公益机场, server: gy11.gsulink.top, port: 40063, type: ss, cipher: chacha20-ietf-poly1305, password: 4581d392-84fe-40d4-9043-df5a50d13dd1, udp: true}
 - *id001
-- {name: 🇺🇸 ss(广移)美国1 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 46197, type: ss, cipher: chacha20-ietf-poly1305, password: b2240ab5-ef92-4e6d-aada-9e1285c07467, udp: true}
-- {name: 🇺🇸 ss(广移)美国2 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 46197, type: ss, cipher: chacha20-ietf-poly1305, password: b2240ab5-ef92-4e6d-aada-9e1285c07467, udp: true}
-- {name: 🇺🇸 ss(广移)美国2-1 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 12589, type: ss, cipher: chacha20-ietf-poly1305, password: b2240ab5-ef92-4e6d-aada-9e1285c07467, udp: true}
-- {name: 🇺🇸 ss(广移)美国2-2 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 12589, type: ss, cipher: chacha20-ietf-poly1305, password: b2240ab5-ef92-4e6d-aada-9e1285c07467, udp: true}
+- {name: 🇺🇸 ss(广移)美国1 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 46197, type: ss, cipher: chacha20-ietf-poly1305, password: d884bd27-14a3-4ae8-84a4-45df8c467a54, udp: true}
+- {name: 🇺🇸 ss(广移)美国2 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 46197, type: ss, cipher: chacha20-ietf-poly1305, password: d884bd27-14a3-4ae8-84a4-45df8c467a54, udp: true}
+- {name: 🇺🇸 ss(广移)美国2-1 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 12589, type: ss, cipher: chacha20-ietf-poly1305, password: d884bd27-14a3-4ae8-84a4-45df8c467a54, udp: true}
+- {name: 🇺🇸 ss(广移)美国2-2 - 雷达, server: gygyjiqi.sefgswgekt.top, port: 12589, type: ss, cipher: chacha20-ietf-poly1305, password: d884bd27-14a3-4ae8-84a4-45df8c467a54, udp: true}
 - *id001
 - *id001
 - {name: 🇺🇸 United States - Atom, server: always.chenyi.pw, port: 23206, type: ss, cipher: chacha20-ietf-poly1305, password: 5517268e-454b-490a-b2aa-60cc40c50066, udp: true}
-- {name: 🇺🇸 美国01 - 迅云加速, server: node1.cenidcbf.ink, port: 45823, type: ss, cipher: chacha20-ietf-poly1305, password: 64c5a18a-6898-4286-822e-a260b0e5ebfd, udp: true}
-- {name: 🇺🇸 美国02 - 迅云加速, server: node2.cenidcbf.ink, port: 15628, type: ss, cipher: chacha20-ietf-poly1305, password: 64c5a18a-6898-4286-822e-a260b0e5ebfd, udp: true}
-- {name: 🇺🇸 美国03 - 迅云加速, server: abc.xunyunnode.sbs, port: 59079, type: ss, cipher: chacha20-ietf-poly1305, password: 64c5a18a-6898-4286-822e-a260b0e5ebfd, udp: true}
-- {name: 🇺🇸 美国04 - 迅云加速, server: bgc.xunyunnode.sbs, port: 36079, type: ss, cipher: chacha20-ietf-poly1305, password: 64c5a18a-6898-4286-822e-a260b0e5ebfd, udp: true}
+- {name: 🇺🇸 美国01 - 迅云加速, server: node1.cenidcbf.ink, port: 45823, type: ss, cipher: chacha20-ietf-poly1305, password: 73dc9973-3cb0-4daf-868d-ec8c58f6d012, udp: true}
+- {name: 🇺🇸 美国02 - 迅云加速, server: node2.cenidcbf.ink, port: 15628, type: ss, cipher: chacha20-ietf-poly1305, password: 73dc9973-3cb0-4daf-868d-ec8c58f6d012, udp: true}
+- {name: 🇺🇸 美国03 - 迅云加速, server: abc.xunyunnode.sbs, port: 59079, type: ss, cipher: chacha20-ietf-poly1305, password: 73dc9973-3cb0-4daf-868d-ec8c58f6d012, udp: true}
+- {name: 🇺🇸 美国04 - 迅云加速, server: bgc.xunyunnode.sbs, port: 36079, type: ss, cipher: chacha20-ietf-poly1305, password: 73dc9973-3cb0-4daf-868d-ec8c58f6d012, udp: true}
 - *id001
 - &id002 {name: 🇺🇸 C美国-快云网络kywl.eu【免费节点】 - 快云网络, server: dgxj.520662.xyz, port: 47588, type: vmess, uuid: 8dad7751-14d4-4fc0-8088-a019d3f223be, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: dgxj.520662.xyz, network: ws, ws-opts: {path: /, headers: {Host: dgxj.520662.xyz}}, udp: true}
 - *id002
