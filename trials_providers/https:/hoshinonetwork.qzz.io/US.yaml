@@ -1,0 +1,5 @@
+%YAML 1.1
+---
+proxies:
+- {name: 🇺🇸美国01 - Hoshino Network, server: 1753328541.tencentapp.cn, port: 443, type: vmess, uuid: fff4859b-5e7e-46e3-8da6-6c262bbe1e42, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: us1.hoshinonetwork.pp.ua, network: ws, ws-opts: {path: /, headers: {Host: us1.hoshinonetwork.pp.ua}}, udp: true}
+- {name: 🇺🇸美国02 - Hoshino Network, server: 1753328541.tencentapp.cn, port: 443, type: vmess, uuid: fff4859b-5e7e-46e3-8da6-6c262bbe1e42, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: us2.hoshinonetwork.pp.ua, network: ws, ws-opts: {path: /, headers: {Host: us2.hoshinonetwork.pp.ua}}, udp: true}
