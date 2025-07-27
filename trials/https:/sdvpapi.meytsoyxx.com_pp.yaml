@@ -79,7 +79,7 @@ proxy-groups:
 proxy-providers:
   HK:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://sdvpapi.meytsoyxx.com/HK.yaml
+    url: https://raw.kgithub.com/qjlxg/ag/main/trials_providers/https://sdvpapi.meytsoyxx.com/HK.yaml
     interval: 180
     path: trials_providers/https://sdvpapi.meytsoyxx.com/HK.yaml
     health-check:
@@ -88,7 +88,7 @@ proxy-providers:
       interval: 30
   Other:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://sdvpapi.meytsoyxx.com/Other.yaml
+    url: https://raw.kgithub.com/qjlxg/ag/main/trials_providers/https://sdvpapi.meytsoyxx.com/Other.yaml
     interval: 180
     path: trials_providers/https://sdvpapi.meytsoyxx.com/Other.yaml
     health-check:
