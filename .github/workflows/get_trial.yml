@@ -7,7 +7,7 @@ permissions: write-all
 jobs:
   main:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       DDAL_EMAIL: ${{ secrets.DDAL_EMAIL }}
