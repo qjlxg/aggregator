@@ -1,0 +1,9 @@
+%YAML 1.1
+---
+proxies:
+- {name: 🇺🇸 us-Trojan-01 - 77vpn, server: us-elegang-aws-100.77vpn.com, port: 1080, type: trojan, password: 72cfc8ac-3317-457d-ac31-512960368727, sni: us-elegang-aws-100.77vpn.com, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 us-ssr-01 - 77vpn, server: us-elegang-aws-100.77vpn.com, port: 1081, type: ss, cipher: chacha20-ietf-poly1305, password: 72cfc8ac-3317-457d-ac31-512960368727, udp: true}
+- {name: 🇺🇸 hk-us-ssr-01 - 77vpn, server: 16.162.50.142, port: 10001, type: ss, cipher: chacha20-ietf-poly1305, password: 72cfc8ac-3317-457d-ac31-512960368727, udp: true}
+- {name: 🇺🇸 shanghai-hk-us-ssr-01 - 77vpn, server: 115.120.244.50, port: 20001, type: ss, cipher: chacha20-ietf-poly1305, password: 72cfc8ac-3317-457d-ac31-512960368727, udp: true}
+- {name: 🇺🇸 us-vmess - 77vpn, server: us-elegang-aws-100.77vpn.com, port: 1082, type: vmess, uuid: 72cfc8ac-3317-457d-ac31-512960368727, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: us-elegang-aws-100.77vpn.com, network: ws, ws-opts: {path: /77vpn, headers: {Host: us-elegang-aws-100.77vpn.com}}, udp: true}
+- {name: 🇺🇸 us-grpc-01 - 77vpn, server: us-elegang-aws-100.77vpn.com, port: 1083, type: vmess, uuid: 72cfc8ac-3317-457d-ac31-512960368727, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: us-elegang-aws-100.77vpn.com, network: grpc, grpc-opts: {grpc-service-name: /}, udp: true}

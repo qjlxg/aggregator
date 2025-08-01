@@ -12,15 +12,9 @@ proxy-groups:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
   - 🇭🇰 ‍香港
-  - 🇸🇬 ‍新加坡
-  - 🇯🇵 ‍日本
   - 🇺🇸 ‍美国
-  - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇸🇬 ‍新加坡
-  - 👆🏻🇯🇵 ‍日本
   - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -29,19 +23,17 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇭🇰 香港 - 快云加速
-  - 🇭🇰 香港2 - 快云加速
-  - 🇸🇬 新加坡 - 快云加速
-  - 🇸🇬 新加坡2 - 快云加速
-  - 🇯🇵 日本 - 快云加速
-  - 🇯🇵 日本2 - 快云加速
-  - 🇺🇸 美国1 - 快云加速
-  - ℹ️ 官网:kuaiyun666.xyz - 快云加速
-  - ℹ️ 续费qq:1921546475 - 快云加速
-  - ℹ️ 节点超时请更新订阅 - 快云加速
-  - 🇰🇷 韩国 - 快云加速
-  - 🇹🇭 泰国 - 快云加速
-  - 🇮🇩 印度尼西亚 - 快云加速
+  - 🇭🇰 香港-Trojan-01 - 77vpn
+  - 🇭🇰 香港-ssr-01 - 77vpn
+  - 🇭🇰 shanghai-hk-ssr-01 - 77vpn
+  - 🇭🇰 香港-grpc-01 - 77vpn
+  - 🇭🇰 香港-vmess - 77vpn
+  - 🇺🇸 us-Trojan-01 - 77vpn
+  - 🇺🇸 us-ssr-01 - 77vpn
+  - 🇺🇸 hk-us-ssr-01 - 77vpn
+  - 🇺🇸 shanghai-hk-us-ssr-01 - 77vpn
+  - 🇺🇸 us-vmess - 77vpn
+  - 🇺🇸 us-grpc-01 - 77vpn
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -69,14 +61,8 @@ proxy-groups:
   type: select
   proxies:
   - 🇺🇸 ‍美国
-  - 🇸🇬 ‍新加坡
-  - 🇯🇵 ‍日本
-  - 🎏 ‍其他
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🇸🇬 ‍新加坡
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -91,72 +77,41 @@ proxy-groups:
   interval: 15
   tolerance: 100
   proxies: &id002
-  - 🇭🇰 香港 - 快云加速
-  - 🇭🇰 香港2 - 快云加速
-- name: 🇸🇬 ‍新加坡
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id003
-  - 🇸🇬 新加坡 - 快云加速
-  - 🇸🇬 新加坡2 - 快云加速
-- name: 🇯🇵 ‍日本
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id004
-  - 🇯🇵 日本 - 快云加速
-  - 🇯🇵 日本2 - 快云加速
+  - 🇭🇰 香港-Trojan-01 - 77vpn
+  - 🇭🇰 香港-ssr-01 - 77vpn
+  - 🇭🇰 shanghai-hk-ssr-01 - 77vpn
+  - 🇭🇰 香港-grpc-01 - 77vpn
+  - 🇭🇰 香港-vmess - 77vpn
 - name: 🇺🇸 ‍美国
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 300
-  proxies: &id005
-  - 🇺🇸 美国1 - 快云加速
-- name: 🎏 ‍其他
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
-  tolerance: 100
-  proxies: &id006
-  - ℹ️ 官网:kuaiyun666.xyz - 快云加速
-  - ℹ️ 续费qq:1921546475 - 快云加速
-  - ℹ️ 节点超时请更新订阅 - 快云加速
-  - 🇰🇷 韩国 - 快云加速
-  - 🇹🇭 泰国 - 快云加速
-  - 🇮🇩 印度尼西亚 - 快云加速
+  proxies: &id003
+  - 🇺🇸 us-Trojan-01 - 77vpn
+  - 🇺🇸 us-ssr-01 - 77vpn
+  - 🇺🇸 hk-us-ssr-01 - 77vpn
+  - 🇺🇸 shanghai-hk-us-ssr-01 - 77vpn
+  - 🇺🇸 us-vmess - 77vpn
+  - 🇺🇸 us-grpc-01 - 77vpn
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
-- name: 👆🏻🇸🇬 ‍新加坡
-  type: select
-  proxies: *id003
-- name: 👆🏻🇯🇵 ‍日本
-  type: select
-  proxies: *id004
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  proxies: *id005
-- name: 👆🏻🎏 ‍其他
-  type: select
-  proxies: *id006
+  proxies: *id003
 proxies:
-- {name: ℹ️ 官网:kuaiyun666.xyz - 快云加速, server: ddns.kuaiyun1.cn, port: 16540, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: ℹ️ 续费qq:1921546475 - 快云加速, server: ddns.kuaiyun1.cn, port: 16540, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: ℹ️ 节点超时请更新订阅 - 快云加速, server: ddns.kuaiyun1.cn, port: 16540, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇭🇰 香港 - 快云加速, server: ddns.kuaiyun1.cn, port: 32975, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇭🇰 香港2 - 快云加速, server: ddns.kuaiyun1.cn, port: 15815, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇯🇵 日本 - 快云加速, server: ddns.kuaiyun1.cn, port: 16540, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇯🇵 日本2 - 快云加速, server: ddns.kuaiyun1.cn, port: 39030, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇸🇬 新加坡 - 快云加速, server: ddns.kuaiyun1.cn, port: 17869, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇺🇸 美国1 - 快云加速, server: ddns.kuaiyun1.cn, port: 29760, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇰🇷 韩国 - 快云加速, server: ddns.kuaiyun1.cn, port: 30967, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇹🇭 泰国 - 快云加速, server: ddns.kuaiyun1.cn, port: 48494, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇸🇬 新加坡2 - 快云加速, server: ddns.kuaiyun1.cn, port: 43147, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇮🇩 印度尼西亚 - 快云加速, server: ddns.kuaiyun1.cn, port: 22665, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
+- {name: 🇺🇸 us-Trojan-01 - 77vpn, server: us-elegang-aws-100.77vpn.com, port: 1080, type: trojan, password: 72cfc8ac-3317-457d-ac31-512960368727, sni: us-elegang-aws-100.77vpn.com, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 香港-Trojan-01 - 77vpn, server: hk-aws-171.77vpn.com, port: 1080, type: trojan, password: 72cfc8ac-3317-457d-ac31-512960368727, sni: hk-aws-171.77vpn.com, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 us-ssr-01 - 77vpn, server: us-elegang-aws-100.77vpn.com, port: 1081, type: ss, cipher: chacha20-ietf-poly1305, password: 72cfc8ac-3317-457d-ac31-512960368727, udp: true}
+- {name: 🇺🇸 hk-us-ssr-01 - 77vpn, server: 16.162.50.142, port: 10001, type: ss, cipher: chacha20-ietf-poly1305, password: 72cfc8ac-3317-457d-ac31-512960368727, udp: true}
+- {name: 🇭🇰 香港-ssr-01 - 77vpn, server: hk-aws-171.77vpn.com, port: 1081, type: ss, cipher: chacha20-ietf-poly1305, password: 72cfc8ac-3317-457d-ac31-512960368727, udp: true}
+- {name: 🇺🇸 shanghai-hk-us-ssr-01 - 77vpn, server: 115.120.244.50, port: 20001, type: ss, cipher: chacha20-ietf-poly1305, password: 72cfc8ac-3317-457d-ac31-512960368727, udp: true}
+- {name: 🇭🇰 shanghai-hk-ssr-01 - 77vpn, server: 115.120.244.50, port: 20101, type: ss, cipher: chacha20-ietf-poly1305, password: 72cfc8ac-3317-457d-ac31-512960368727, udp: true}
+- {name: 🇺🇸 us-vmess - 77vpn, server: us-elegang-aws-100.77vpn.com, port: 1082, type: vmess, uuid: 72cfc8ac-3317-457d-ac31-512960368727, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: us-elegang-aws-100.77vpn.com, network: ws, ws-opts: {path: /77vpn, headers: {Host: us-elegang-aws-100.77vpn.com}}, udp: true}
+- {name: 🇺🇸 us-grpc-01 - 77vpn, server: us-elegang-aws-100.77vpn.com, port: 1083, type: vmess, uuid: 72cfc8ac-3317-457d-ac31-512960368727, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: us-elegang-aws-100.77vpn.com, network: grpc, grpc-opts: {grpc-service-name: /}, udp: true}
+- {name: 🇭🇰 香港-grpc-01 - 77vpn, server: hk-aws-171.77vpn.com, port: 1083, type: vmess, uuid: 72cfc8ac-3317-457d-ac31-512960368727, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: hk-aws-171.77vpn.com, network: grpc, grpc-opts: {grpc-service-name: /}, udp: true}
+- {name: 🇭🇰 香港-vmess - 77vpn, server: hk-aws-171.77vpn.com, port: 1082, type: vmess, uuid: 72cfc8ac-3317-457d-ac31-512960368727, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: hk-aws-171.77vpn.com, network: ws, ws-opts: {path: /77vpn, headers: {Host: hk-aws-171.77vpn.com}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

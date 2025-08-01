@@ -118,7 +118,7 @@ proxy-groups:
 proxy-providers:
   HK:
     type: http
-    url: https://raw.kgithub.com/qjlxg/mh/main/trials_providers/https://kuaiyun66.cn/HK.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://kuaiyun66.cn/HK.yaml
     interval: 180
     path: trials_providers/https://kuaiyun66.cn/HK.yaml
     health-check:
@@ -127,7 +127,7 @@ proxy-providers:
       interval: 30
   SG:
     type: http
-    url: https://raw.kgithub.com/qjlxg/mh/main/trials_providers/https://kuaiyun66.cn/SG.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://kuaiyun66.cn/SG.yaml
     interval: 180
     path: trials_providers/https://kuaiyun66.cn/SG.yaml
     health-check:
@@ -136,7 +136,7 @@ proxy-providers:
       interval: 30
   JP:
     type: http
-    url: https://raw.kgithub.com/qjlxg/mh/main/trials_providers/https://kuaiyun66.cn/JP.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://kuaiyun66.cn/JP.yaml
     interval: 180
     path: trials_providers/https://kuaiyun66.cn/JP.yaml
     health-check:
@@ -145,7 +145,7 @@ proxy-providers:
       interval: 30
   US:
     type: http
-    url: https://raw.kgithub.com/qjlxg/mh/main/trials_providers/https://kuaiyun66.cn/US.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://kuaiyun66.cn/US.yaml
     interval: 180
     path: trials_providers/https://kuaiyun66.cn/US.yaml
     health-check:
@@ -154,7 +154,7 @@ proxy-providers:
       interval: 30
   Other:
     type: http
-    url: https://raw.kgithub.com/qjlxg/mh/main/trials_providers/https://kuaiyun66.cn/Other.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://kuaiyun66.cn/Other.yaml
     interval: 180
     path: trials_providers/https://kuaiyun66.cn/Other.yaml
     health-check:

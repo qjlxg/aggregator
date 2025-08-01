@@ -12,39 +12,20 @@ proxy-groups:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
   - 🇭🇰 ‍香港
-  - 🇸🇬 ‍新加坡
-  - 🇯🇵 ‍日本
   - 🇺🇸 ‍美国
-  - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇸🇬 ‍新加坡
-  - 👆🏻🇯🇵 ‍日本
   - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
   tolerance: 100
-  proxies: &id001
-  - 🇭🇰 香港 - 快云加速
-  - 🇭🇰 香港2 - 快云加速
-  - 🇸🇬 新加坡 - 快云加速
-  - 🇸🇬 新加坡2 - 快云加速
-  - 🇯🇵 日本 - 快云加速
-  - 🇯🇵 日本2 - 快云加速
-  - 🇺🇸 美国1 - 快云加速
-  - ℹ️ 官网:kuaiyun666.xyz - 快云加速
-  - ℹ️ 续费qq:1921546475 - 快云加速
-  - ℹ️ 节点超时请更新订阅 - 快云加速
-  - 🇰🇷 韩国 - 快云加速
-  - 🇹🇭 泰国 - 快云加速
-  - 🇮🇩 印度尼西亚 - 快云加速
+  use: &id001
+  - HK
+  - US
 - name: 👆🏻 ‍指定
   type: select
-  proxies: *id001
+  use: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -69,14 +50,8 @@ proxy-groups:
   type: select
   proxies:
   - 🇺🇸 ‍美国
-  - 🇸🇬 ‍新加坡
-  - 🇯🇵 ‍日本
-  - 🎏 ‍其他
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🇸🇬 ‍新加坡
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -87,76 +62,39 @@ proxy-groups:
   - 💩 ‍广告
 - name: 🇭🇰 ‍香港
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id002
-  - 🇭🇰 香港 - 快云加速
-  - 🇭🇰 香港2 - 快云加速
-- name: 🇸🇬 ‍新加坡
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id003
-  - 🇸🇬 新加坡 - 快云加速
-  - 🇸🇬 新加坡2 - 快云加速
-- name: 🇯🇵 ‍日本
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id004
-  - 🇯🇵 日本 - 快云加速
-  - 🇯🇵 日本2 - 快云加速
+  use: &id002
+  - HK
 - name: 🇺🇸 ‍美国
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 300
-  proxies: &id005
-  - 🇺🇸 美国1 - 快云加速
-- name: 🎏 ‍其他
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
-  tolerance: 100
-  proxies: &id006
-  - ℹ️ 官网:kuaiyun666.xyz - 快云加速
-  - ℹ️ 续费qq:1921546475 - 快云加速
-  - ℹ️ 节点超时请更新订阅 - 快云加速
-  - 🇰🇷 韩国 - 快云加速
-  - 🇹🇭 泰国 - 快云加速
-  - 🇮🇩 印度尼西亚 - 快云加速
+  use: &id003
+  - US
 - name: 👆🏻🇭🇰 ‍香港
   type: select
-  proxies: *id002
-- name: 👆🏻🇸🇬 ‍新加坡
-  type: select
-  proxies: *id003
-- name: 👆🏻🇯🇵 ‍日本
-  type: select
-  proxies: *id004
+  use: *id002
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  proxies: *id005
-- name: 👆🏻🎏 ‍其他
-  type: select
-  proxies: *id006
-proxies:
-- {name: ℹ️ 官网:kuaiyun666.xyz - 快云加速, server: ddns.kuaiyun1.cn, port: 16540, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: ℹ️ 续费qq:1921546475 - 快云加速, server: ddns.kuaiyun1.cn, port: 16540, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: ℹ️ 节点超时请更新订阅 - 快云加速, server: ddns.kuaiyun1.cn, port: 16540, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇭🇰 香港 - 快云加速, server: ddns.kuaiyun1.cn, port: 32975, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇭🇰 香港2 - 快云加速, server: ddns.kuaiyun1.cn, port: 15815, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇯🇵 日本 - 快云加速, server: ddns.kuaiyun1.cn, port: 16540, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇯🇵 日本2 - 快云加速, server: ddns.kuaiyun1.cn, port: 39030, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇸🇬 新加坡 - 快云加速, server: ddns.kuaiyun1.cn, port: 17869, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇺🇸 美国1 - 快云加速, server: ddns.kuaiyun1.cn, port: 29760, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇰🇷 韩国 - 快云加速, server: ddns.kuaiyun1.cn, port: 30967, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇹🇭 泰国 - 快云加速, server: ddns.kuaiyun1.cn, port: 48494, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇸🇬 新加坡2 - 快云加速, server: ddns.kuaiyun1.cn, port: 43147, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
-- {name: 🇮🇩 印度尼西亚 - 快云加速, server: ddns.kuaiyun1.cn, port: 22665, type: ss, cipher: aes-256-gcm, password: 965bed84-fc80-408b-942c-b132e30688c0, udp: true}
+  use: *id003
+proxy-providers:
+  HK:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://www.77vpn.com/HK.yaml
+    interval: 180
+    path: trials_providers/https://www.77vpn.com/HK.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  US:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://www.77vpn.com/US.yaml
+    interval: 180
+    path: trials_providers/https://www.77vpn.com/US.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
