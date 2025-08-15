@@ -27,8 +27,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests beautifulsoup4 PyGithub tqdm
 
-    - name: 设置时区
-      run: sudo timedatectl set-timezone 'Asia/Shanghai'
+  
 
     - name: Run Python script
       env:
