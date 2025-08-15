@@ -9,12 +9,12 @@ import threading
 from queue import Queue
 from github import Github
 import sys
-from tqdm import tqdm # 导入 tqdm 库
+from tqdm import tqdm 
 
 # 设置日志配置
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# --- 从环境变量中读取配置 ---
+
 search_keywords_env_str = os.environ.get('SEARCH_KEYWORDS_ENV')
 if search_keywords_env_str:
     SEARCH_KEYWORDS = [kw.strip() for kw in search_keywords_env_str.split(',') if kw.strip()]
@@ -227,7 +227,8 @@ def worker(url_queue, valid_urls, failed_urls, lock, pbar): # 增加 pbar 参数
             logging.error(f"Error testing connectivity for URL {url}: {e}")
         finally:
             url_queue.task_done()
-            pbar.update(1) # 每处理完一个任务就更新进度条
+            if pbar:
+                pbar.update(1) # 每处理完一个任务就更新进度条
 
 def main(start_urls):
     global SUBSCRIPTION_TARGET_REPO, SUBSCRIPTION_SAVE_PATH, GT_TOKEN
