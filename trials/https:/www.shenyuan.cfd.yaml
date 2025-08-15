@@ -12,20 +12,48 @@ proxy-groups:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
   - 🇭🇰 ‍香港
-  - 🎏 ‍其他
+  - 🇹🇼 ‍台湾
+  - 🇨🇳 ‍中国
+  - 🇸🇬 ‍新加坡
+  - 🇯🇵 ‍日本
+  - 🇺🇸 ‍美国
   - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🎏 ‍其他
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇨🇳 ‍中国
+  - 👆🏻🇸🇬 ‍新加坡
+  - 👆🏻🇯🇵 ‍日本
+  - 👆🏻🇺🇸 ‍美国
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
   tolerance: 100
-  use: &id001
-  - HK
-  - Other
+  proxies: &id001
+  - 🇭🇰 香港01 - freedom
+  - 🇭🇰 香港02 - freedom
+  - 🇭🇰 香港03 - freedom
+  - 🇭🇰 香港04 - freedom
+  - 🇹🇼 台湾01 - freedom
+  - 🇹🇼 台湾02 - freedom
+  - 🇹🇼 台湾03 - freedom
+  - 🇹🇼 台湾04 - freedom
+  - 🇸🇬 新加坡01 - freedom
+  - 🇸🇬 新加坡02 - freedom
+  - 🇸🇬 新加坡03 - freedom
+  - 🇸🇬 新加坡04 - freedom
+  - 🇯🇵 日本01 - freedom
+  - 🇯🇵 日本02 - freedom
+  - 🇯🇵 日本03 - freedom
+  - 🇯🇵 日本04 - freedom
+  - 🇺🇸 美国01 - freedom
+  - 🇺🇸 美国02 - freedom
+  - 🇺🇸 美国03 - freedom
+  - 🇺🇸 美国04 - freedom
 - name: 👆🏻 ‍指定
   type: select
-  use: *id001
+  proxies: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -43,15 +71,25 @@ proxy-groups:
   proxies:
   - 🛩️ ‍墙内
   - 🇭🇰 ‍香港
+  - 🇹🇼 ‍台湾
+  - 🇨🇳 ‍中国
   - ✈️ ‍起飞
   - 👆🏻🇭🇰 ‍香港
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇨🇳 ‍中国
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🎏 ‍其他
+  - 🇺🇸 ‍美国
+  - 🇹🇼 ‍台湾
+  - 🇸🇬 ‍新加坡
+  - 🇯🇵 ‍日本
   - ✈️ ‍起飞
-  - 👆🏻🎏 ‍其他
+  - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇸🇬 ‍新加坡
+  - 👆🏻🇯🇵 ‍日本
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -62,39 +100,107 @@ proxy-groups:
   - 💩 ‍广告
 - name: 🇭🇰 ‍香港
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id002
-  - HK
-- name: 🎏 ‍其他
+  proxies: &id002
+  - 🇭🇰 香港01 - freedom
+  - 🇭🇰 香港02 - freedom
+  - 🇭🇰 香港03 - freedom
+  - 🇭🇰 香港04 - freedom
+- name: 🇹🇼 ‍台湾
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id003
-  - Other
+  proxies: &id003
+  - 🇹🇼 台湾01 - freedom
+  - 🇹🇼 台湾02 - freedom
+  - 🇹🇼 台湾03 - freedom
+  - 🇹🇼 台湾04 - freedom
+- name: 🇨🇳 ‍中国
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id004
+  - 🇭🇰 香港01 - freedom
+  - 🇭🇰 香港02 - freedom
+  - 🇭🇰 香港03 - freedom
+  - 🇭🇰 香港04 - freedom
+  - 🇹🇼 台湾01 - freedom
+  - 🇹🇼 台湾02 - freedom
+  - 🇹🇼 台湾03 - freedom
+  - 🇹🇼 台湾04 - freedom
+- name: 🇸🇬 ‍新加坡
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id005
+  - 🇸🇬 新加坡01 - freedom
+  - 🇸🇬 新加坡02 - freedom
+  - 🇸🇬 新加坡03 - freedom
+  - 🇸🇬 新加坡04 - freedom
+- name: 🇯🇵 ‍日本
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id006
+  - 🇯🇵 日本01 - freedom
+  - 🇯🇵 日本02 - freedom
+  - 🇯🇵 日本03 - freedom
+  - 🇯🇵 日本04 - freedom
+- name: 🇺🇸 ‍美国
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 300
+  proxies: &id007
+  - 🇺🇸 美国01 - freedom
+  - 🇺🇸 美国02 - freedom
+  - 🇺🇸 美国03 - freedom
+  - 🇺🇸 美国04 - freedom
 - name: 👆🏻🇭🇰 ‍香港
   type: select
-  use: *id002
-- name: 👆🏻🎏 ‍其他
+  proxies: *id002
+- name: 👆🏻🇹🇼 ‍台湾
   type: select
-  use: *id003
-proxy-providers:
-  HK:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://sdvpapi.meytsoyxx.com/HK.yaml
-    interval: 180
-    path: trials_providers/https://sdvpapi.meytsoyxx.com/HK.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  Other:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://sdvpapi.meytsoyxx.com/Other.yaml
-    interval: 180
-    path: trials_providers/https://sdvpapi.meytsoyxx.com/Other.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
+  proxies: *id003
+- name: 👆🏻🇨🇳 ‍中国
+  type: select
+  proxies: *id004
+- name: 👆🏻🇸🇬 ‍新加坡
+  type: select
+  proxies: *id005
+- name: 👆🏻🇯🇵 ‍日本
+  type: select
+  proxies: *id006
+- name: 👆🏻🇺🇸 ‍美国
+  type: select
+  proxies: *id007
+proxies:
+- {name: 🇭🇰 香港01 - freedom, server: i2plcwjnhrl6.gym0boy.com, port: 24064, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇭🇰 香港02 - freedom, server: i2plcwjnhrl6.gym0boy.com, port: 52005, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇭🇰 香港03 - freedom, server: wujrnbitcet.gym0boy.com, port: 57037, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇭🇰 香港04 - freedom, server: i2plcwjnhrl6.gym0boy.com, port: 15034, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇹🇼 台湾01 - freedom, server: wujrnbitcet.gym0boy.com, port: 30372, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇹🇼 台湾02 - freedom, server: i2plcwjnhrl6.gym0boy.com, port: 50796, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇹🇼 台湾03 - freedom, server: wujrnbitcet.gym0boy.com, port: 40034, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇹🇼 台湾04 - freedom, server: i2plcwjnhrl6.gym0boy.com, port: 30555, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇸🇬 新加坡01 - freedom, server: wujrnbitcet.gym0boy.com, port: 21878, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇸🇬 新加坡02 - freedom, server: i2plcwjnhrl6.gym0boy.com, port: 17377, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇸🇬 新加坡03 - freedom, server: wujrnbitcet.gym0boy.com, port: 37908, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇸🇬 新加坡04 - freedom, server: i2plcwjnhrl6.gym0boy.com, port: 12600, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇯🇵 日本01 - freedom, server: wujrnbitcet.gym0boy.com, port: 27663, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇯🇵 日本02 - freedom, server: i2plcwjnhrl6.gym0boy.com, port: 22609, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇯🇵 日本03 - freedom, server: wujrnbitcet.gym0boy.com, port: 49812, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇯🇵 日本04 - freedom, server: i2plcwjnhrl6.gym0boy.com, port: 28799, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇺🇸 美国01 - freedom, server: wujrnbitcet.gym0boy.com, port: 59270, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇺🇸 美国02 - freedom, server: i2plcwjnhrl6.gym0boy.com, port: 52448, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇺🇸 美国03 - freedom, server: wujrnbitcet.gym0boy.com, port: 29646, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
+- {name: 🇺🇸 美国04 - freedom, server: i2plcwjnhrl6.gym0boy.com, port: 32656, type: ss, cipher: aes-256-gcm, password: fa239423-8334-4704-9471-02bbd02a207f, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
