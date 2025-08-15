@@ -5,7 +5,8 @@ on:
   schedule:
     - cron: '0 */8 * * *' # 每 8 小时运行一次
   workflow_dispatch: # 允许手动触发
-
+env:
+  TZ: Asia/Shanghai
 jobs:
   scrape:
     runs-on: ubuntu-latest
@@ -24,7 +25,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests beautifulsoup4 PyGithub
+        pip install requests beautifulsoup4 PyGithub tqdm
 
     - name: 设置时区
       run: sudo timedatectl set-timezone 'Asia/Shanghai'
