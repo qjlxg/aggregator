@@ -12,7 +12,7 @@ import sys
 from tqdm import tqdm 
 
 # 设置日志配置
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.error, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 search_keywords_env_str = os.environ.get('SEARCH_KEYWORDS_ENV')
