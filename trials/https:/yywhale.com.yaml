@@ -11,10 +11,12 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
-  - 🇭🇰 ‍香港
-  - 🎏 ‍其他
-  - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🎏 ‍其他
+  - 🇹🇼 ‍台湾
+  - 🇨🇳 ‍中国
+  - 🇺🇸 ‍美国
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇨🇳 ‍中国
+  - 👆🏻🇺🇸 ‍美国
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -23,8 +25,11 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇭🇰 香港-线路1 - 神盾
-  - 🇮🇪 爱尔兰-都柏林 - 神盾
+  - 🇹🇼 台湾高速节点 - 新云游
+  - 🇹🇼 台湾高速节点2 - 新云游
+  - 🇹🇼 台湾高速节点3 - 新云游
+  - 🇺🇸 美国高速节点1 - 新云游
+  - 🇨🇳 中国联通节点1 - 新云游
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -44,16 +49,20 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇭🇰 ‍香港
+  - 🇹🇼 ‍台湾
+  - 🇨🇳 ‍中国
   - ✈️ ‍起飞
-  - 👆🏻🇭🇰 ‍香港
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇨🇳 ‍中国
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🎏 ‍其他
+  - 🇺🇸 ‍美国
+  - 🇹🇼 ‍台湾
   - ✈️ ‍起飞
-  - 👆🏻🎏 ‍其他
+  - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🇹🇼 ‍台湾
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -62,29 +71,47 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇭🇰 ‍香港
+- name: 🇹🇼 ‍台湾
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id002
-  - 🇭🇰 香港-线路1 - 神盾
-- name: 🎏 ‍其他
+  - 🇹🇼 台湾高速节点 - 新云游
+  - 🇹🇼 台湾高速节点2 - 新云游
+  - 🇹🇼 台湾高速节点3 - 新云游
+- name: 🇨🇳 ‍中国
   type: url-test
   url: https://i.ytimg.com/generate_204
-  interval: 30
+  interval: 15
   tolerance: 100
   proxies: &id003
-  - 🇮🇪 爱尔兰-都柏林 - 神盾
-- name: 👆🏻🇭🇰 ‍香港
+  - 🇹🇼 台湾高速节点 - 新云游
+  - 🇹🇼 台湾高速节点2 - 新云游
+  - 🇹🇼 台湾高速节点3 - 新云游
+  - 🇨🇳 中国联通节点1 - 新云游
+- name: 🇺🇸 ‍美国
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 300
+  proxies: &id004
+  - 🇺🇸 美国高速节点1 - 新云游
+- name: 👆🏻🇹🇼 ‍台湾
   type: select
   proxies: *id002
-- name: 👆🏻🎏 ‍其他
+- name: 👆🏻🇨🇳 ‍中国
   type: select
   proxies: *id003
+- name: 👆🏻🇺🇸 ‍美国
+  type: select
+  proxies: *id004
 proxies:
-- {name: 🇮🇪 爱尔兰-都柏林 - 神盾, server: 107.175.187.181, port: 22800, type: ss, cipher: chacha20-ietf-poly1305, password: 4d181eb2-31f7-45cf-9ef8-010f374126ea, udp: true}
-- {name: 🇭🇰 香港-线路1 - 神盾, server: 156.224.77.215, port: 22800, type: ss, cipher: chacha20-ietf-poly1305, password: 4d181eb2-31f7-45cf-9ef8-010f374126ea, udp: true}
+- {name: 🇹🇼 台湾高速节点 - 新云游, server: 103.137.63.77, port: 443, type: trojan, password: 9c83459a-8570-4d45-9b47-fc1df408fe28, sni: node1.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾高速节点2 - 新云游, server: 118.232.199.29, port: 443, type: trojan, password: 9c83459a-8570-4d45-9b47-fc1df408fe28, sni: node2.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾高速节点3 - 新云游, server: 118.232.199.14, port: 443, type: trojan, password: 9c83459a-8570-4d45-9b47-fc1df408fe28, sni: node3.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 美国高速节点1 - 新云游, server: 144.34.178.66, port: 1443, type: trojan, password: 9c83459a-8570-4d45-9b47-fc1df408fe28, sni: node4.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇨🇳 中国联通节点1 - 新云游, server: 115.231.220.33, port: 5443, type: trojan, password: 9c83459a-8570-4d45-9b47-fc1df408fe28, sni: nodecn1.jiayinetwork.es, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
