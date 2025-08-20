@@ -11,28 +11,35 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
+  - 🇭🇰 ‍香港
   - 🇹🇼 ‍台湾
   - 🇨🇳 ‍中国
+  - 🇸🇬 ‍新加坡
+  - 🇯🇵 ‍日本
   - 🇺🇸 ‍美国
+  - 🎏 ‍其他
+  - 👆🏻🇭🇰 ‍香港
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻🇨🇳 ‍中国
+  - 👆🏻🇸🇬 ‍新加坡
+  - 👆🏻🇯🇵 ‍日本
   - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
   tolerance: 100
-  proxies: &id001
-  - 🇹🇼 台湾高速节点 - 新云游
-  - 🇹🇼 台湾高速节点2 - 新云游
-  - 🇹🇼 台湾高速节点3 - 新云游
-  - 🇺🇸 美国高速节点1 - 新云游
-  - 🇨🇳 中国联通节点1 - 新云游
+  use: &id001
+  - HK
+  - TW
+  - SG
+  - JP
+  - US
+  - Other
 - name: 👆🏻 ‍指定
   type: select
-  proxies: *id001
+  use: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -49,9 +56,11 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
+  - 🇭🇰 ‍香港
   - 🇹🇼 ‍台湾
   - 🇨🇳 ‍中国
   - ✈️ ‍起飞
+  - 👆🏻🇭🇰 ‍香港
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻🇨🇳 ‍中国
   - 👆🏻 ‍指定
@@ -60,9 +69,15 @@ proxy-groups:
   proxies:
   - 🇺🇸 ‍美国
   - 🇹🇼 ‍台湾
+  - 🇸🇬 ‍新加坡
+  - 🇯🇵 ‍日本
+  - 🎏 ‍其他
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
   - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇸🇬 ‍新加坡
+  - 👆🏻🇯🇵 ‍日本
+  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -71,47 +86,118 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
+- name: 🇭🇰 ‍香港
+  type: url-test
+  tolerance: 100
+  use: &id002
+  - HK
 - name: 🇹🇼 ‍台湾
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id002
-  - 🇹🇼 台湾高速节点 - 新云游
-  - 🇹🇼 台湾高速节点2 - 新云游
-  - 🇹🇼 台湾高速节点3 - 新云游
+  use: &id003
+  - TW
 - name: 🇨🇳 ‍中国
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 100
-  proxies: &id003
-  - 🇹🇼 台湾高速节点 - 新云游
-  - 🇹🇼 台湾高速节点2 - 新云游
-  - 🇹🇼 台湾高速节点3 - 新云游
-  - 🇨🇳 中国联通节点1 - 新云游
+  use: &id004
+  - HK
+  - TW
+- name: 🇸🇬 ‍新加坡
+  type: url-test
+  tolerance: 100
+  use: &id005
+  - SG
+- name: 🇯🇵 ‍日本
+  type: url-test
+  tolerance: 100
+  use: &id006
+  - JP
 - name: 🇺🇸 ‍美国
   type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
   tolerance: 300
-  proxies: &id004
-  - 🇺🇸 美国高速节点1 - 新云游
+  use: &id007
+  - US
+- name: 🎏 ‍其他
+  type: url-test
+  tolerance: 100
+  use: &id008
+  - Other
+- name: 👆🏻🇭🇰 ‍香港
+  type: select
+  use: *id002
 - name: 👆🏻🇹🇼 ‍台湾
   type: select
-  proxies: *id002
+  use: *id003
 - name: 👆🏻🇨🇳 ‍中国
   type: select
-  proxies: *id003
+  use: *id004
+- name: 👆🏻🇸🇬 ‍新加坡
+  type: select
+  use: *id005
+- name: 👆🏻🇯🇵 ‍日本
+  type: select
+  use: *id006
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  proxies: *id004
-proxies:
-- {name: 🇹🇼 台湾高速节点 - 新云游, server: 103.137.63.77, port: 443, type: trojan, password: 78f731d7-e97a-4363-8d5a-670e3dbdf96c, sni: node1.yuntongclouds.com, skip-cert-verify: true, udp: true}
-- {name: 🇹🇼 台湾高速节点2 - 新云游, server: 118.232.199.29, port: 443, type: trojan, password: 78f731d7-e97a-4363-8d5a-670e3dbdf96c, sni: node2.yuntongclouds.com, skip-cert-verify: true, udp: true}
-- {name: 🇹🇼 台湾高速节点3 - 新云游, server: 118.232.199.14, port: 443, type: trojan, password: 78f731d7-e97a-4363-8d5a-670e3dbdf96c, sni: node3.yuntongclouds.com, skip-cert-verify: true, udp: true}
-- {name: 🇺🇸 美国高速节点1 - 新云游, server: 144.34.178.66, port: 1443, type: trojan, password: 78f731d7-e97a-4363-8d5a-670e3dbdf96c, sni: node4.yuntongclouds.com, skip-cert-verify: true, udp: true}
-- {name: 🇨🇳 中国联通节点1 - 新云游, server: 115.231.220.33, port: 5443, type: trojan, password: 78f731d7-e97a-4363-8d5a-670e3dbdf96c, sni: nodecn1.jiayinetwork.es, skip-cert-verify: true, udp: true}
+  use: *id007
+- name: 👆🏻🎏 ‍其他
+  type: select
+  use: *id008
+proxy-providers:
+  HK:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://ld88.nxxbbf.com/HK.yaml
+    interval: 180
+    path: trials_providers/https://ld88.nxxbbf.com/HK.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  TW:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://ld88.nxxbbf.com/TW.yaml
+    interval: 180
+    path: trials_providers/https://ld88.nxxbbf.com/TW.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  SG:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://ld88.nxxbbf.com/SG.yaml
+    interval: 180
+    path: trials_providers/https://ld88.nxxbbf.com/SG.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  JP:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://ld88.nxxbbf.com/JP.yaml
+    interval: 180
+    path: trials_providers/https://ld88.nxxbbf.com/JP.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  US:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://ld88.nxxbbf.com/US.yaml
+    interval: 180
+    path: trials_providers/https://ld88.nxxbbf.com/US.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  Other:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/https://ld88.nxxbbf.com/Other.yaml
+    interval: 180
+    path: trials_providers/https://ld88.nxxbbf.com/Other.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
