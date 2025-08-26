@@ -1,0 +1,175 @@
+proxies:
+    - alterId: 0
+      cipher: auto
+      name: "\U0001F1FA\U0001F1F8 US | ⬇️ 89.92 MB/s"
+      network: tcp
+      port: 1080
+      server: 47.254.120.126
+      type: vmess
+      uuid: 0230b8b5-0a71-4d7a-bf02-dafeba769140
+    - cipher: chacha20-ietf-poly1305
+      name: "\U0001F1E8\U0001F1E6 CA | ⬇️ 46.39 MB/s"
+      password: f8f7aCzcPKbsF8p3
+      port: 990
+      server: 64.74.163.130
+      type: ss
+    - cipher: auto
+      name: "\U0001F1E8\U0001F1E6 CA | ⬇️ 42.89 MB/s"
+      network: ws
+      port: 80
+      server: 162.159.134.61
+      servername: xite.oyenpadu.shop
+      skip-cert-verify: true
+      tls: false
+      type: vless
+      udp: true
+      uuid: 3355ad27-c83a-4a6e-9e3c-f284da32c49c
+      ws-opts:
+        headers:
+            Host: xite.oyenpadu.shop
+        path: /vless
+    - client-fingerprint: random
+      name: "\U0001F1E8\U0001F1E6 CA | ⬇️ 41.00 MB/s"
+      network: ws
+      port: 2096
+      server: 172.64.229.220
+      servername: bp.singbox.ggff.net
+      skip-cert-verify: false
+      tfo: false
+      tls: true
+      type: vless
+      uuid: 222a1c34-96f5-45fd-bedd-b9ac4b477b98
+      ws-opts:
+        headers:
+            Host: bp.singbox.ggff.net
+        path: /r6PSatuYdS9gZH6L/c2pjLm8wMG8ub29v
+    - client-fingerprint: chrome
+      flow: xtls-rprx-vision
+      name: "\U0001F1FA\U0001F1F8 US | ⬇️ 40.68 MB/s"
+      port: 5847
+      reality-opts:
+        public-key: NpqF483u4nXH0cztdyX7VbkpbDEW0sO07cGya0WvCHM
+      server: 84.33.244.7
+      servername: www.microsoft.com
+      skip-cert-verify: false
+      tfo: false
+      tls: true
+      type: vless
+      udp: true
+      uuid: 67f0fefa-a922-428c-ac02-37e1d5aaed72
+      xudp: true
+    - cipher: chacha20-ietf-poly1305
+      name: "\U0001F1FA\U0001F1F8 US | ⬇️ 31.36 MB/s"
+      password: QCXDxuDlTTMD7jtgHUjIoj
+      port: 8080
+      server: 45.87.175.157
+      type: ss
+    - client-fingerprint: chrome
+      name: "\U0001F1E8\U0001F1E6 CA | ⬇️ 24.59 MB/s"
+      network: ws
+      port: 443
+      server: a1_alist.yzqiang.site
+      sni: c379b284.vs-494.pages.dev
+      tls: true
+      type: vless
+      udp: false
+      uuid: b940be1b-3998-45d2-bf7b-06e7b6c4987a
+      ws-opts:
+        headers:
+            host: c379b284.vs-494.pages.dev
+        path: /?ed=2560
+    - client-fingerprint: chrome
+      name: "\U0001F1E8\U0001F1E6 CA | ⬇️ 24.12 MB/s"
+      network: ws
+      port: 443
+      server: 104.17.21.6
+      sni: c379b284.vs-494.pages.dev
+      tls: true
+      type: vless
+      udp: false
+      uuid: b940be1b-3998-45d2-bf7b-06e7b6c4987a
+      ws-opts:
+        headers:
+            host: c379b284.vs-494.pages.dev
+        path: /?ed=2560
+    - name: "\U0001F1FA\U0001F1F8 US | ⬇️ 21.32 MB/s"
+      network: ws
+      password: 45e0b101-e731-4b78-b160-731fc72b82d0
+      port: 8443
+      server: tj.cpddx.club
+      skip-cert-verify: true
+      sni: tj.cpddx.club
+      type: trojan
+      udp: true
+      ws-opts:
+        headers:
+            Host: tj.cpddx.club
+        path: ""
+    - name: "\U0001F1FA\U0001F1F8 US | ⬇️ 19.18 MB/s"
+      network: ws
+      password: 57f79a11-e931-40c9-98db-695b12767cc9
+      port: 8443
+      server: tj.cpddx.club
+      skip-cert-verify: true
+      sni: tj.cpddx.club
+      type: trojan
+      udp: true
+      ws-opts:
+        headers:
+            Host: tj.cpddx.club
+        path: ""
+    - cipher: chacha20-ietf-poly1305
+      name: "\U0001F1E9\U0001F1EA DE | ⬇️ 18.95 MB/s"
+      password: c40641c1f89e7acb
+      port: 57456
+      server: 147.45.178.200
+      type: ss
+    - client-fingerprint: random
+      name: "\U0001F1F0\U0001F1F7 KR | ⬇️ 18.58 MB/s"
+      network: ws
+      port: 23022
+      server: 64.110.70.205
+      servername: bp.singbox.ggff.net
+      skip-cert-verify: false
+      tfo: false
+      tls: true
+      type: vless
+      uuid: 222a1c34-96f5-45fd-bedd-b9ac4b477b98
+      ws-opts:
+        headers:
+            Host: bp.singbox.ggff.net
+        path: /r6PSatuYdS9gZH6L/c2pjLm8wMG8ub29v
+    - name: "\U0001F1FA\U0001F1F8 US | ⬇️ 18.13 MB/s"
+      network: ws
+      password: 17eae95f-fbeb-4185-9b34-431fac0fab77
+      port: 8443
+      server: tj.cpddx.club
+      skip-cert-verify: true
+      sni: tj.cpddx.club
+      type: trojan
+      udp: true
+      ws-opts:
+        headers:
+            Host: tj.cpddx.club
+        path: ""
+proxy-groups:
+    - interval: 300
+      name: 自动选择
+      proxies:
+        - "\U0001F1FA\U0001F1F8 US | ⬇️ 89.92 MB/s"
+        - "\U0001F1E8\U0001F1E6 CA | ⬇️ 46.39 MB/s"
+        - "\U0001F1E8\U0001F1E6 CA | ⬇️ 42.89 MB/s"
+        - "\U0001F1E8\U0001F1E6 CA | ⬇️ 41.00 MB/s"
+        - "\U0001F1FA\U0001F1F8 US | ⬇️ 40.68 MB/s"
+        - "\U0001F1FA\U0001F1F8 US | ⬇️ 31.36 MB/s"
+        - "\U0001F1E8\U0001F1E6 CA | ⬇️ 24.59 MB/s"
+        - "\U0001F1E8\U0001F1E6 CA | ⬇️ 24.12 MB/s"
+        - "\U0001F1FA\U0001F1F8 US | ⬇️ 21.32 MB/s"
+        - "\U0001F1FA\U0001F1F8 US | ⬇️ 19.18 MB/s"
+        - "\U0001F1E9\U0001F1EA DE | ⬇️ 18.95 MB/s"
+        - "\U0001F1F0\U0001F1F7 KR | ⬇️ 18.58 MB/s"
+        - "\U0001F1FA\U0001F1F8 US | ⬇️ 18.13 MB/s"
+      type: url-test
+      url: http://www.gstatic.com/generate_204
+rules:
+    - MATCH,自动选择
