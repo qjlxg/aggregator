@@ -1,6 +1,0 @@
-%YAML 1.1
----
-proxies:
-- &id001 {name: 🇺🇸 美国高速节点1 - 新云游, server: 144.34.178.66, port: 1443, type: trojan, password: e8b71b5e-0196-49c9-8f96-006260a558f3, sni: node4.yuntongclouds.com, skip-cert-verify: true, udp: true}
-- *id001
-- {name: 🇺🇸 美国2 - 飞猫, server: 2600:3c01::f03c:94ff:fea1:1f2a, port: 10086, type: vmess, uuid: 8a8c2869-71db-422b-9539-3ce8fc0e6e62, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
