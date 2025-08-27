@@ -1,8 +1,0 @@
-%YAML 1.1
----
-proxies:
-- {name: 🇺🇸 美国1.2 - gost, server: jp05.vip.xjay.xyz, port: 37558, type: vmess, uuid: b31df886-8df7-4080-9514-eaecb8486663, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇺🇸 美国2.2 - gost, server: usa2.vip.xjay.xyz, port: 45625, type: vmess, uuid: b31df886-8df7-4080-9514-eaecb8486663, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇺🇸 美国3 - gost, server: usa3.vip.xjay.xyz, port: 22559, type: vmess, uuid: b31df886-8df7-4080-9514-eaecb8486663, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- &id001 {name: 🇺🇸 美国高速节点1 - 新云游, server: 144.34.178.66, port: 1443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: node4.yuntongclouds.com, skip-cert-verify: true, udp: true}
-- *id001
