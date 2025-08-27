@@ -11,24 +11,27 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
-  - 🇹🇼 ‍台湾
-  - 🇨🇳 ‍中国
-  - 🇺🇸 ‍美国
-  - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇨🇳 ‍中国
-  - 👆🏻🇺🇸 ‍美国
+  - 🇭🇰 ‍香港
+  - 🇯🇵 ‍日本
+  - 🎏 ‍其他
+  - 👆🏻🇭🇰 ‍香港
+  - 👆🏻🇯🇵 ‍日本
+  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
   tolerance: 100
-  use: &id001
-  - TW
-  - US
-  - p_All_CN
+  proxies: &id001
+  - 🇭🇰骨干网50M香港 - CK云
+  - 🇭🇰 50M香港直连x6 - CK云
+  - 🇯🇵 50M日本樱花04 - CK云
+  - ℹ️ 官网地址ck.hennessyintl.info - CK云
 - name: 👆🏻 ‍指定
   type: select
-  use: *id001
+  proxies: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -45,20 +48,18 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇹🇼 ‍台湾
-  - 🇨🇳 ‍中国
+  - 🇭🇰 ‍香港
   - ✈️ ‍起飞
-  - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇨🇳 ‍中国
+  - 👆🏻🇭🇰 ‍香港
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🇺🇸 ‍美国
-  - 🇹🇼 ‍台湾
+  - 🇯🇵 ‍日本
+  - 🎏 ‍其他
   - ✈️ ‍起飞
-  - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇯🇵 ‍日本
+  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -67,59 +68,42 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇹🇼 ‍台湾
+- name: 🇭🇰 ‍香港
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id002
-  - TW
-- name: 🇨🇳 ‍中国
+  proxies: &id002
+  - 🇭🇰骨干网50M香港 - CK云
+  - 🇭🇰 50M香港直连x6 - CK云
+- name: 🇯🇵 ‍日本
   type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
   tolerance: 100
-  use: &id003
-  - TW
-  - p_All_CN
-- name: 🇺🇸 ‍美国
+  proxies: &id003
+  - 🇯🇵 50M日本樱花04 - CK云
+- name: 🎏 ‍其他
   type: url-test
-  tolerance: 300
-  use: &id004
-  - US
-- name: 👆🏻🇹🇼 ‍台湾
+  url: https://i.ytimg.com/generate_204
+  interval: 30
+  tolerance: 100
+  proxies: &id004
+  - ℹ️ 官网地址ck.hennessyintl.info - CK云
+- name: 👆🏻🇭🇰 ‍香港
   type: select
-  use: *id002
-- name: 👆🏻🇨🇳 ‍中国
+  proxies: *id002
+- name: 👆🏻🇯🇵 ‍日本
   type: select
-  use: *id003
-- name: 👆🏻🇺🇸 ‍美国
+  proxies: *id003
+- name: 👆🏻🎏 ‍其他
   type: select
-  use: *id004
-proxy-providers:
-  TW:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.yywhale.com/TW.yaml
-    interval: 180
-    path: trials_providers/www.yywhale.com/TW.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  US:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.yywhale.com/US.yaml
-    interval: 180
-    path: trials_providers/www.yywhale.com/US.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  p_All_CN:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.yywhale.com/p_All_CN.yaml
-    interval: 180
-    path: trials_providers/www.yywhale.com/p_All_CN.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
+  proxies: *id004
+proxies:
+- {name: 🇭🇰骨干网50M香港 - CK云, server: vip.dncaps.info, port: 8443, type: trojan, password: ec41a73f-ba6c-4cf3-9c16-a5c9df4d4aef, sni: www.bing.com, skip-cert-verify: true, udp: true}
+- {name: ℹ️ 官网地址ck.hennessyintl.info - CK云, server: jp.enblinvest.info, port: 8443, type: trojan, password: ec41a73f-ba6c-4cf3-9c16-a5c9df4d4aef, sni: www.bing.com, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 50M香港直连x6 - CK云, server: hk.bamkor.info, port: 8339, type: trojan, password: ec41a73f-ba6c-4cf3-9c16-a5c9df4d4aef, sni: itunes.apple.com, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 50M日本樱花04 - CK云, server: hk02.bamkor.info, port: 8666, type: trojan, password: ec41a73f-ba6c-4cf3-9c16-a5c9df4d4aef, sni: itunes.apple.com, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

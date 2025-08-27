@@ -92,27 +92,27 @@ proxy-groups:
 proxy-providers:
   HK:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.fly8.win/HK.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/fly8.win/HK.yaml
     interval: 180
-    path: trials_providers/www.fly8.win/HK.yaml
+    path: trials_providers/fly8.win/HK.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
   JP:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.fly8.win/JP.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/fly8.win/JP.yaml
     interval: 180
-    path: trials_providers/www.fly8.win/JP.yaml
+    path: trials_providers/fly8.win/JP.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
   US:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/www.fly8.win/US.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/fly8.win/US.yaml
     interval: 180
-    path: trials_providers/www.fly8.win/US.yaml
+    path: trials_providers/fly8.win/US.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204

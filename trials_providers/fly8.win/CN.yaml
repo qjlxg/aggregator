@@ -1,0 +1,5 @@
+%YAML 1.1
+---
+proxies:
+- {name: 🇭🇰 香港2 - 飞猫, server: 51pro.win, port: 443, type: vmess, uuid: e88f5769-ae05-4f88-8d1d-06130e7898f0, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: 51pro.win, network: ws, ws-opts: {path: /, headers: {Host: 51pro.win}}, udp: true}
+- {name: 🇭🇰 香港1 - 飞猫, server: cat1.vfly4.win, port: 443, type: vmess, uuid: e88f5769-ae05-4f88-8d1d-06130e7898f0, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: cat1.vfly4.win, network: ws, ws-opts: {path: /flycat, headers: {Host: cat1.vfly4.win}}, udp: true}

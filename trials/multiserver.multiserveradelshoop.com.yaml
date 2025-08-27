@@ -11,12 +11,6 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
-  - 🇭🇰 ‍香港
-  - 🇯🇵 ‍日本
-  - 🇺🇸 ‍美国
-  - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🇺🇸 ‍美国
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -25,10 +19,8 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇭🇰 香港2 - 飞猫
-  - 🇭🇰 香港1 - 飞猫
-  - 🇯🇵 日本1 - 飞猫
-  - 🇺🇸 美国2 - 飞猫
+  - ⛔اشتراک را تمدید کنید⛔ - multi
+  - ⛔اشتراک منقضی شده است⛔ - multi
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -48,18 +40,12 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇭🇰 ‍香港
   - ✈️ ‍起飞
-  - 👆🏻🇭🇰 ‍香港
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🇺🇸 ‍美国
-  - 🇯🇵 ‍日本
   - ✈️ ‍起飞
-  - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🇯🇵 ‍日本
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -68,42 +54,9 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇭🇰 ‍香港
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id002
-  - 🇭🇰 香港2 - 飞猫
-  - 🇭🇰 香港1 - 飞猫
-- name: 🇯🇵 ‍日本
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id003
-  - 🇯🇵 日本1 - 飞猫
-- name: 🇺🇸 ‍美国
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 300
-  proxies: &id004
-  - 🇺🇸 美国2 - 飞猫
-- name: 👆🏻🇭🇰 ‍香港
-  type: select
-  proxies: *id002
-- name: 👆🏻🇯🇵 ‍日本
-  type: select
-  proxies: *id003
-- name: 👆🏻🇺🇸 ‍美国
-  type: select
-  proxies: *id004
 proxies:
-- {name: 🇭🇰 香港2 - 飞猫, server: 51pro.win, port: 443, type: vmess, uuid: 2b648f75-6dff-49c7-a19d-47f127b7aa05, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: 51pro.win, network: ws, ws-opts: {path: /, headers: {Host: 51pro.win}}, udp: true}
-- {name: 🇺🇸 美国2 - 飞猫, server: 2600:3c01::f03c:94ff:fea1:1f2a, port: 10086, type: vmess, uuid: 2b648f75-6dff-49c7-a19d-47f127b7aa05, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /}, udp: true}
-- {name: 🇯🇵 日本1 - 飞猫, server: japan.vfly4.win, port: 443, type: vmess, uuid: 2b648f75-6dff-49c7-a19d-47f127b7aa05, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: japan.vfly4.win, network: ws, ws-opts: {path: /flycat, headers: {Host: japan.vfly4.win}}, udp: true}
-- {name: 🇭🇰 香港1 - 飞猫, server: cat1.vfly4.win, port: 443, type: vmess, uuid: 2b648f75-6dff-49c7-a19d-47f127b7aa05, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: cat1.vfly4.win, network: ws, ws-opts: {path: /flycat, headers: {Host: cat1.vfly4.win}}, udp: true}
+- {name: ⛔اشتراک را تمدید کنید⛔ - multi, server: empty.node, port: 443, type: trojan, password: bbe25e8d-1049-4dd1-842b-5a06cea4f6d9, sni: empty.node, skip-cert-verify: true, udp: true}
+- {name: ⛔اشتراک منقضی شده است⛔ - multi, server: empty.node, port: 443, type: trojan, password: bbe25e8d-1049-4dd1-842b-5a06cea4f6d9, sni: empty.node, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
