@@ -16,13 +16,11 @@ proxy-groups:
   - 🇨🇳 ‍中国
   - 🇯🇵 ‍日本
   - 🇺🇸 ‍美国
-  - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻🇨🇳 ‍中国
   - 👆🏻🇯🇵 ‍日本
   - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -30,10 +28,15 @@ proxy-groups:
   tolerance: 100
   use: &id001
   - HK
-  - TW
   - JP
-  - US
-  - Other
+  - p_All_TW_CN
+  - p_All_US
+  - p_All_All_TW_TW_CN_CN
+  - p_All_All_TW_TW_CN_CN
+  - p_All_All_US_US
+  - p_All_All_US_US
+  - p_All_All_CN_CN
+  - p_All_All_CN_CN
 - name: 👆🏻 ‍指定
   type: select
   use: *id001
@@ -67,12 +70,10 @@ proxy-groups:
   - 🇺🇸 ‍美国
   - 🇹🇼 ‍台湾
   - 🇯🇵 ‍日本
-  - 🎏 ‍其他
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -90,13 +91,19 @@ proxy-groups:
   type: url-test
   tolerance: 100
   use: &id003
-  - TW
+  - p_All_TW_CN
+  - p_All_All_TW_TW_CN_CN
+  - p_All_All_TW_TW_CN_CN
 - name: 🇨🇳 ‍中国
   type: url-test
   tolerance: 100
   use: &id004
   - HK
-  - TW
+  - p_All_TW_CN
+  - p_All_All_TW_TW_CN_CN
+  - p_All_All_TW_TW_CN_CN
+  - p_All_All_CN_CN
+  - p_All_All_CN_CN
 - name: 🇯🇵 ‍日本
   type: url-test
   tolerance: 100
@@ -106,12 +113,9 @@ proxy-groups:
   type: url-test
   tolerance: 300
   use: &id006
-  - US
-- name: 🎏 ‍其他
-  type: url-test
-  tolerance: 100
-  use: &id007
-  - Other
+  - p_All_US
+  - p_All_All_US_US
+  - p_All_All_US_US
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   use: *id002
@@ -127,24 +131,12 @@ proxy-groups:
 - name: 👆🏻🇺🇸 ‍美国
   type: select
   use: *id006
-- name: 👆🏻🎏 ‍其他
-  type: select
-  use: *id007
 proxy-providers:
   HK:
     type: http
     url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/HK.yaml
     interval: 180
     path: trials_providers/HK.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  TW:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/TW.yaml
-    interval: 180
-    path: trials_providers/TW.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
@@ -158,20 +150,47 @@ proxy-providers:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
-  US:
+  p_All_TW_CN:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/US.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_TW_CN.yaml
     interval: 180
-    path: trials_providers/US.yaml
+    path: trials_providers/p_All_TW_CN.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
       interval: 30
-  Other:
+  p_All_US:
     type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/Other.yaml
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_US.yaml
     interval: 180
-    path: trials_providers/Other.yaml
+    path: trials_providers/p_All_US.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  p_All_All_TW_TW_CN_CN:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_TW_TW_CN_CN.yaml
+    interval: 180
+    path: trials_providers/p_All_All_TW_TW_CN_CN.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  p_All_All_US_US:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_US_US.yaml
+    interval: 180
+    path: trials_providers/p_All_All_US_US.yaml
+    health-check:
+      enable: true
+      url: https://i.ytimg.com/generate_204
+      interval: 30
+  p_All_All_CN_CN:
+    type: http
+    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/p_All_All_CN_CN.yaml
+    interval: 180
+    path: trials_providers/p_All_All_CN_CN.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204

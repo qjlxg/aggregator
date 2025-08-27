@@ -11,12 +11,12 @@ proxy-groups:
   proxies:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
-  - 🇭🇰 ‍香港
-  - 🇯🇵 ‍日本
-  - 🎏 ‍其他
-  - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🎏 ‍其他
+  - 🇹🇼 ‍台湾
+  - 🇨🇳 ‍中国
+  - 🇺🇸 ‍美国
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇨🇳 ‍中国
+  - 👆🏻🇺🇸 ‍美国
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -25,10 +25,11 @@ proxy-groups:
   interval: 30
   tolerance: 100
   proxies: &id001
-  - 🇭🇰骨干网50M香港 - CK云
-  - 🇭🇰 50M香港直连x6 - CK云
-  - 🇯🇵 50M日本樱花04 - CK云
-  - ℹ️ 官网地址ck.hennessyintl.info - CK云
+  - 🇹🇼 台湾高速节点 - 新云游
+  - 🇹🇼 台湾高速节点2 - 新云游
+  - 🇹🇼 台湾高速节点3 - 新云游
+  - 🇺🇸 美国高速节点1 - 新云游
+  - 🇨🇳 中国联通节点1 - 新云游
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -48,18 +49,20 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇭🇰 ‍香港
+  - 🇹🇼 ‍台湾
+  - 🇨🇳 ‍中国
   - ✈️ ‍起飞
-  - 👆🏻🇭🇰 ‍香港
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇨🇳 ‍中国
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🇯🇵 ‍日本
-  - 🎏 ‍其他
+  - 🇺🇸 ‍美国
+  - 🇹🇼 ‍台湾
   - ✈️ ‍起飞
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🎏 ‍其他
+  - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🇹🇼 ‍台湾
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -68,42 +71,47 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇭🇰 ‍香港
+- name: 🇹🇼 ‍台湾
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id002
-  - 🇭🇰骨干网50M香港 - CK云
-  - 🇭🇰 50M香港直连x6 - CK云
-- name: 🇯🇵 ‍日本
+  - 🇹🇼 台湾高速节点 - 新云游
+  - 🇹🇼 台湾高速节点2 - 新云游
+  - 🇹🇼 台湾高速节点3 - 新云游
+- name: 🇨🇳 ‍中国
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id003
-  - 🇯🇵 50M日本樱花04 - CK云
-- name: 🎏 ‍其他
+  - 🇹🇼 台湾高速节点 - 新云游
+  - 🇹🇼 台湾高速节点2 - 新云游
+  - 🇹🇼 台湾高速节点3 - 新云游
+  - 🇨🇳 中国联通节点1 - 新云游
+- name: 🇺🇸 ‍美国
   type: url-test
   url: https://i.ytimg.com/generate_204
-  interval: 30
-  tolerance: 100
+  interval: 15
+  tolerance: 300
   proxies: &id004
-  - ℹ️ 官网地址ck.hennessyintl.info - CK云
-- name: 👆🏻🇭🇰 ‍香港
+  - 🇺🇸 美国高速节点1 - 新云游
+- name: 👆🏻🇹🇼 ‍台湾
   type: select
   proxies: *id002
-- name: 👆🏻🇯🇵 ‍日本
+- name: 👆🏻🇨🇳 ‍中国
   type: select
   proxies: *id003
-- name: 👆🏻🎏 ‍其他
+- name: 👆🏻🇺🇸 ‍美国
   type: select
   proxies: *id004
 proxies:
-- {name: 🇭🇰骨干网50M香港 - CK云, server: vip.dncaps.info, port: 8443, type: trojan, password: ec41a73f-ba6c-4cf3-9c16-a5c9df4d4aef, sni: www.bing.com, skip-cert-verify: true, udp: true}
-- {name: ℹ️ 官网地址ck.hennessyintl.info - CK云, server: jp.enblinvest.info, port: 8443, type: trojan, password: ec41a73f-ba6c-4cf3-9c16-a5c9df4d4aef, sni: www.bing.com, skip-cert-verify: true, udp: true}
-- {name: 🇭🇰 50M香港直连x6 - CK云, server: hk.bamkor.info, port: 8339, type: trojan, password: ec41a73f-ba6c-4cf3-9c16-a5c9df4d4aef, sni: itunes.apple.com, skip-cert-verify: true, udp: true}
-- {name: 🇯🇵 50M日本樱花04 - CK云, server: hk02.bamkor.info, port: 8666, type: trojan, password: ec41a73f-ba6c-4cf3-9c16-a5c9df4d4aef, sni: itunes.apple.com, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾高速节点 - 新云游, server: 103.137.63.77, port: 443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: node1.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾高速节点2 - 新云游, server: 118.232.199.29, port: 443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: node2.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾高速节点3 - 新云游, server: 118.232.199.14, port: 443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: node3.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 美国高速节点1 - 新云游, server: 144.34.178.66, port: 1443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: node4.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- {name: 🇨🇳 中国联通节点1 - 新云游, server: 115.231.220.33, port: 5443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: nodecn1.jiayinetwork.es, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

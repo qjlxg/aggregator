@@ -1,10 +1,13 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 🇹🇼 台湾.01 - gost, server: hk17.xjay.xyz, port: 34575, type: vmess, uuid: 96730894-7ebd-4355-9148-16366fa74426, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇭🇰 香港8.1 - gost, server: hk18.xjay.xyz, port: 48458, type: vmess, uuid: 96730894-7ebd-4355-9148-16366fa74426, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇭🇰骨干网50M香港 - CK云, server: vip.dncaps.info, port: 8443, type: trojan, password: ec41a73f-ba6c-4cf3-9c16-a5c9df4d4aef, sni: www.bing.com, skip-cert-verify: true, udp: true}
-- {name: 🇭🇰 50M香港直连x6 - CK云, server: hk.bamkor.info, port: 8339, type: trojan, password: ec41a73f-ba6c-4cf3-9c16-a5c9df4d4aef, sni: itunes.apple.com, skip-cert-verify: true, udp: true}
-- {name: 🇭🇰 香港-线路1 - 神盾, server: 156.224.77.215, port: 22800, type: ss, cipher: chacha20-ietf-poly1305, password: 78900ab0-20f3-47e8-80b3-5dc11b5b5362, udp: true}
-- {name: 🇭🇰 香港2 - 飞猫, server: 51pro.win, port: 443, type: vmess, uuid: e88f5769-ae05-4f88-8d1d-06130e7898f0, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: 51pro.win, network: ws, ws-opts: {path: /, headers: {Host: 51pro.win}}, udp: true}
-- {name: 🇭🇰 香港1 - 飞猫, server: cat1.vfly4.win, port: 443, type: vmess, uuid: e88f5769-ae05-4f88-8d1d-06130e7898f0, alterId: 0, cipher: auto, tls: true, skip-cert-verify: true, servername: cat1.vfly4.win, network: ws, ws-opts: {path: /flycat, headers: {Host: cat1.vfly4.win}}, udp: true}
+- {name: 🇹🇼 台湾.01 - gost, server: hk17.xjay.xyz, port: 34575, type: vmess, uuid: b31df886-8df7-4080-9514-eaecb8486663, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 香港8.1 - gost, server: hk18.xjay.xyz, port: 48458, type: vmess, uuid: b31df886-8df7-4080-9514-eaecb8486663, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id001 {name: 🇹🇼 台湾高速节点 - 新云游, server: 103.137.63.77, port: 443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: node1.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- &id002 {name: 🇹🇼 台湾高速节点2 - 新云游, server: 118.232.199.29, port: 443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: node2.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- &id003 {name: 🇹🇼 台湾高速节点3 - 新云游, server: 118.232.199.14, port: 443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: node3.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- &id004 {name: 🇨🇳 中国联通节点1 - 新云游, server: 115.231.220.33, port: 5443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: nodecn1.jiayinetwork.es, skip-cert-verify: true, udp: true}
+- *id001
+- *id002
+- *id003
+- *id004

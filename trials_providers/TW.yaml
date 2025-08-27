@@ -1,4 +1,10 @@
 %YAML 1.1
 ---
 proxies:
-- {name: 🇹🇼 台湾.01 - gost, server: hk17.xjay.xyz, port: 34575, type: vmess, uuid: 96730894-7ebd-4355-9148-16366fa74426, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾.01 - gost, server: hk17.xjay.xyz, port: 34575, type: vmess, uuid: b31df886-8df7-4080-9514-eaecb8486663, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- &id001 {name: 🇹🇼 台湾高速节点 - 新云游, server: 103.137.63.77, port: 443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: node1.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- &id002 {name: 🇹🇼 台湾高速节点2 - 新云游, server: 118.232.199.29, port: 443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: node2.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- &id003 {name: 🇹🇼 台湾高速节点3 - 新云游, server: 118.232.199.14, port: 443, type: trojan, password: 00a4a7b7-bbfa-4980-ae0f-c76fef5c96d5, sni: node3.yuntongclouds.com, skip-cert-verify: true, udp: true}
+- *id001
+- *id002
+- *id003
