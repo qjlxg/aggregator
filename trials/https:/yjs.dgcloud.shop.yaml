@@ -17,14 +17,12 @@ proxy-groups:
   - 🇸🇬 ‍新加坡
   - 🇯🇵 ‍日本
   - 🇺🇸 ‍美国
-  - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻🇨🇳 ‍中国
   - 👆🏻🇸🇬 ‍新加坡
   - 👆🏻🇯🇵 ‍日本
   - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -40,7 +38,6 @@ proxy-groups:
   - 🇯🇵 日本节点2←长沙移动入口 - 独孤云加速
   - 🇺🇸 美国节点←长沙移动入口 - 独孤云加速
   - 🇺🇸 美国节点2←长沙移动入口 - 独孤云加速
-  - 🇹🇷 土耳其节点←长沙移动入口 - 独孤云加速
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -75,13 +72,11 @@ proxy-groups:
   - 🇹🇼 ‍台湾
   - 🇸🇬 ‍新加坡
   - 🇯🇵 ‍日本
-  - 🎏 ‍其他
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻🇸🇬 ‍新加坡
   - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -135,13 +130,6 @@ proxy-groups:
   proxies: &id007
   - 🇺🇸 美国节点←长沙移动入口 - 独孤云加速
   - 🇺🇸 美国节点2←长沙移动入口 - 独孤云加速
-- name: 🎏 ‍其他
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
-  tolerance: 100
-  proxies: &id008
-  - 🇹🇷 土耳其节点←长沙移动入口 - 独孤云加速
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
@@ -160,9 +148,6 @@ proxy-groups:
 - name: 👆🏻🇺🇸 ‍美国
   type: select
   proxies: *id007
-- name: 👆🏻🎏 ‍其他
-  type: select
-  proxies: *id008
 proxies:
 - {name: 🇭🇰 香港节点←长沙移动入口 - 独孤云加速, server: synmfy9fomrihw.dgcloud.shop, port: 18960, type: vmess, uuid: 87d46077-4891-4c1e-afb7-9356f86146fc, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 - {name: 🇹🇼 台湾HINET(推荐)←长沙移动入口 - 独孤云加速, server: synmfy9fomrihw.dgcloud.shop, port: 30201, type: vmess, uuid: 87d46077-4891-4c1e-afb7-9356f86146fc, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
@@ -171,7 +156,6 @@ proxies:
 - {name: 🇯🇵 日本节点2←长沙移动入口 - 独孤云加速, server: synmfy9fomrihw.dgcloud.shop, port: 35566, type: vmess, uuid: 87d46077-4891-4c1e-afb7-9356f86146fc, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 - {name: 🇺🇸 美国节点←长沙移动入口 - 独孤云加速, server: synmfy9fomrihw.dgcloud.shop, port: 33658, type: vmess, uuid: 87d46077-4891-4c1e-afb7-9356f86146fc, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 - {name: 🇺🇸 美国节点2←长沙移动入口 - 独孤云加速, server: synmfy9fomrihw.dgcloud.shop, port: 36547, type: vmess, uuid: 87d46077-4891-4c1e-afb7-9356f86146fc, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇹🇷 土耳其节点←长沙移动入口 - 独孤云加速, server: synmfy9fomrihw.dgcloud.shop, port: 31222, type: vmess, uuid: 87d46077-4891-4c1e-afb7-9356f86146fc, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
