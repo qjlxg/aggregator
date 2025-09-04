@@ -115,10 +115,10 @@ proxy-groups:
   type: select
   proxies: *id005
 proxies:
-- {name: 🇹🇼 台湾节点 - byi加速器, server: g4bk7yx3nd5q.byijsq.com, port: 20101, type: vmess, uuid: ba376a4d-a010-3680-811d-bd92e2d23bbd, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, servername: byjsq.kozow.com, udp: true}
-- {name: 🇸🇬 新加坡节点 - byi加速器, server: g4bk7yx3nd5q.byijsq.com, port: 27605, type: vmess, uuid: ba376a4d-a010-3680-811d-bd92e2d23bbd, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, servername: sg.byijsq.com, udp: true}
-- {name: 🇯🇵 日本节点3 - byi加速器, server: g4bk7yx3nd5q.byijsq.com, port: 20103, type: vmess, uuid: ba376a4d-a010-3680-811d-bd92e2d23bbd, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, servername: jp3.byijsq.com, udp: true}
-- {name: 🇺🇸 美国节点 - byi加速器, server: g4bk7yx3nd5q.byijsq.com, port: 20106, type: vmess, uuid: ba376a4d-a010-3680-811d-bd92e2d23bbd, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, servername: usnode.byijsq.com, udp: true}
+- {name: 🇹🇼 台湾节点 - byi加速器, server: g4bk7yx3nd5q.byijsq.com, port: 20101, type: vmess, uuid: ff7297c7-88b9-3fb1-8733-52c858dd86c7, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, servername: byjsq.kozow.com, udp: true}
+- {name: 🇸🇬 新加坡节点 - byi加速器, server: g4bk7yx3nd5q.byijsq.com, port: 27605, type: vmess, uuid: ff7297c7-88b9-3fb1-8733-52c858dd86c7, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, servername: sg.byijsq.com, udp: true}
+- {name: 🇯🇵 日本节点3 - byi加速器, server: g4bk7yx3nd5q.byijsq.com, port: 20103, type: vmess, uuid: ff7297c7-88b9-3fb1-8733-52c858dd86c7, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, servername: jp3.byijsq.com, udp: true}
+- {name: 🇺🇸 美国节点 - byi加速器, server: g4bk7yx3nd5q.byijsq.com, port: 20106, type: vmess, uuid: ff7297c7-88b9-3fb1-8733-52c858dd86c7, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, servername: usnode.byijsq.com, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
