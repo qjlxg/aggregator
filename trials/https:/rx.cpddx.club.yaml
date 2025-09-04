@@ -54,7 +54,7 @@ proxy-groups:
   - 🛩️ ‍墙内
   - 💩 ‍广告
 proxies:
-- {name: 🇸🇬 新加坡TJ - RuXinGe, server: tj.cpddx.club, port: 8443, type: trojan, password: 84d38a5b-62dc-4124-aba1-dca1e2131db5, sni: tj.cpddx.club, skip-cert-verify: true, network: ws, ws-opts: {path: '', headers: {Host: tj.cpddx.club}}, udp: true}
+- {name: 🇸🇬 新加坡TJ - RuXinGe, server: tj.cpddx.club, port: 8443, type: trojan, password: 035d5a62-57a3-46f6-bf65-d7e6a33c5a4c, sni: tj.cpddx.club, skip-cert-verify: true, network: ws, ws-opts: {path: '', headers: {Host: tj.cpddx.club}}, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
