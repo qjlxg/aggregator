@@ -12,10 +12,8 @@ proxy-groups:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
   - 🇭🇰 ‍香港
-  - 🇯🇵 ‍日本
   - 🇺🇸 ‍美国
   - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇯🇵 ‍日本
   - 👆🏻🇺🇸 ‍美国
   - DIRECT
   - REJECT
@@ -24,7 +22,6 @@ proxy-groups:
   tolerance: 100
   use: &id001
   - HK
-  - JP
   - US
 - name: 👆🏻 ‍指定
   type: select
@@ -53,10 +50,8 @@ proxy-groups:
   type: select
   proxies:
   - 🇺🇸 ‍美国
-  - 🇯🇵 ‍日本
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🇯🇵 ‍日本
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -70,40 +65,23 @@ proxy-groups:
   tolerance: 100
   use: &id002
   - HK
-- name: 🇯🇵 ‍日本
-  type: url-test
-  tolerance: 100
-  use: &id003
-  - JP
 - name: 🇺🇸 ‍美国
   type: url-test
   tolerance: 300
-  use: &id004
+  use: &id003
   - US
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   use: *id002
-- name: 👆🏻🇯🇵 ‍日本
-  type: select
-  use: *id003
 - name: 👆🏻🇺🇸 ‍美国
   type: select
-  use: *id004
+  use: *id003
 proxy-providers:
   HK:
     type: http
     url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/http://v2.moon2046.com/HK.yaml
     interval: 180
     path: trials_providers/http://v2.moon2046.com/HK.yaml
-    health-check:
-      enable: true
-      url: https://i.ytimg.com/generate_204
-      interval: 30
-  JP:
-    type: http
-    url: https://raw.kgithub.com/qjlxg/aggregator/main/trials_providers/http://v2.moon2046.com/JP.yaml
-    interval: 180
-    path: trials_providers/http://v2.moon2046.com/JP.yaml
     health-check:
       enable: true
       url: https://i.ytimg.com/generate_204
