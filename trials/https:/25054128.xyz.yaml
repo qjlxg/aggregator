@@ -123,15 +123,15 @@ proxy-groups:
   type: select
   proxies: *id005
 proxies:
-- {name: 🇭🇰 Hongkong#1 - 虚幻加速, server: svip1.pingboy.top, port: 17993, type: vmess, uuid: f6c9f304-900f-41b2-bdf3-7e1f724d8a61, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇭🇰 Hongkong#3 - 虚幻加速, server: svip1.pingboy.top, port: 38913, type: vmess, uuid: f6c9f304-900f-41b2-bdf3-7e1f724d8a61, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇭🇰 Hongkong#5 - 虚幻加速, server: svip1.pingboy.top, port: 39840, type: vmess, uuid: f6c9f304-900f-41b2-bdf3-7e1f724d8a61, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇯🇵 Japan#1 - 虚幻加速, server: svip1.pingboy.top, port: 19015, type: vmess, uuid: f6c9f304-900f-41b2-bdf3-7e1f724d8a61, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇯🇵 Japan#3 - 虚幻加速, server: svip1.pingboy.top, port: 19015, type: vmess, uuid: f6c9f304-900f-41b2-bdf3-7e1f724d8a61, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇸🇬 Singapore#1 - 虚幻加速, server: svip1.pingboy.top, port: 28673, type: vmess, uuid: f6c9f304-900f-41b2-bdf3-7e1f724d8a61, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇸🇬 Singapore#3 - 虚幻加速, server: svip1.pingboy.top, port: 28673, type: vmess, uuid: f6c9f304-900f-41b2-bdf3-7e1f724d8a61, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇺🇸 United States#1 - 虚幻加速, server: svip1.pingboy.top, port: 15327, type: vmess, uuid: f6c9f304-900f-41b2-bdf3-7e1f724d8a61, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 🇺🇸 United States#3 - 虚幻加速, server: svip1.pingboy.top, port: 15327, type: vmess, uuid: f6c9f304-900f-41b2-bdf3-7e1f724d8a61, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 Hongkong#1 - 虚幻加速, server: svip1.pingboy.top, port: 17993, type: vmess, uuid: c671ebce-c12e-4fed-b7bd-20386babf53e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 Hongkong#3 - 虚幻加速, server: svip1.pingboy.top, port: 38913, type: vmess, uuid: c671ebce-c12e-4fed-b7bd-20386babf53e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 Hongkong#5 - 虚幻加速, server: svip1.pingboy.top, port: 39840, type: vmess, uuid: c671ebce-c12e-4fed-b7bd-20386babf53e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 Japan#1 - 虚幻加速, server: svip1.pingboy.top, port: 19015, type: vmess, uuid: c671ebce-c12e-4fed-b7bd-20386babf53e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 Japan#3 - 虚幻加速, server: svip1.pingboy.top, port: 19015, type: vmess, uuid: c671ebce-c12e-4fed-b7bd-20386babf53e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇸🇬 Singapore#1 - 虚幻加速, server: svip1.pingboy.top, port: 28673, type: vmess, uuid: c671ebce-c12e-4fed-b7bd-20386babf53e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇸🇬 Singapore#3 - 虚幻加速, server: svip1.pingboy.top, port: 28673, type: vmess, uuid: c671ebce-c12e-4fed-b7bd-20386babf53e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 United States#1 - 虚幻加速, server: svip1.pingboy.top, port: 15327, type: vmess, uuid: c671ebce-c12e-4fed-b7bd-20386babf53e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 United States#3 - 虚幻加速, server: svip1.pingboy.top, port: 15327, type: vmess, uuid: c671ebce-c12e-4fed-b7bd-20386babf53e, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
