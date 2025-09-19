@@ -17,12 +17,14 @@ proxy-groups:
   - 🇸🇬 ‍新加坡
   - 🇯🇵 ‍日本
   - 🇺🇸 ‍美国
+  - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻🇨🇳 ‍中国
   - 👆🏻🇸🇬 ‍新加坡
   - 👆🏻🇯🇵 ‍日本
   - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -32,16 +34,17 @@ proxy-groups:
   tolerance: 100
   proxies: &id001
   - 🇭🇰 香港 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
-  - 🇭🇰 国际专线 · 香港HK · 58 - Newflix加速器
-  - 🇭🇰 【VIP解锁】国际专线 · 香港HK · 58 · VIP - Newflix加速器
-  - 🇭🇰 【VIP解锁】国际专线 · 香港HK · 244 · VIP - Newflix加速器
-  - 🇭🇰 【VIP解锁】国际专线 · 香港HK · 74 · VIP - Newflix加速器
-  - 🇭🇰 【VIP解锁】国际专线 · 香港HK · 113 · VIP - Newflix加速器
-  - 🇹🇼 【VIP解锁】国际专线 · 台湾TW · 89 · VIP - Newflix加速器
-  - 🇸🇬 【VIP解锁】国际专线 · 新加坡SG · 146 · VIP - Newflix加速器
-  - 🇯🇵 国际专线 · 日本JP · 114 - Newflix加速器
-  - 🇺🇸 国际专线 · 美国US · 110 - Newflix加速器
-  - 🇺🇸 【VIP解锁】国际专线 · 美国US · 205 · VIP - Newflix加速器
+  - 🇭🇰 香港 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇭🇰 香港 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇭🇰 香港 · 4号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇹🇼 台湾 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇸🇬 新加坡 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇯🇵 日本 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇯🇵 日本 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇯🇵 日本 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇺🇸 美国 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇺🇸 美国 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 线路全面升级中，预计9月20日完成，全场补3天时长。 - Newflix加速器
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -76,11 +79,13 @@ proxy-groups:
   - 🇹🇼 ‍台湾
   - 🇸🇬 ‍新加坡
   - 🇯🇵 ‍日本
+  - 🎏 ‍其他
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻🇸🇬 ‍新加坡
   - 👆🏻🇯🇵 ‍日本
+  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -96,18 +101,16 @@ proxy-groups:
   tolerance: 100
   proxies: &id002
   - 🇭🇰 香港 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
-  - 🇭🇰 国际专线 · 香港HK · 58 - Newflix加速器
-  - 🇭🇰 【VIP解锁】国际专线 · 香港HK · 58 · VIP - Newflix加速器
-  - 🇭🇰 【VIP解锁】国际专线 · 香港HK · 244 · VIP - Newflix加速器
-  - 🇭🇰 【VIP解锁】国际专线 · 香港HK · 74 · VIP - Newflix加速器
-  - 🇭🇰 【VIP解锁】国际专线 · 香港HK · 113 · VIP - Newflix加速器
+  - 🇭🇰 香港 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇭🇰 香港 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇭🇰 香港 · 4号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
 - name: 🇹🇼 ‍台湾
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id003
-  - 🇹🇼 【VIP解锁】国际专线 · 台湾TW · 89 · VIP - Newflix加速器
+  - 🇹🇼 台湾 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
 - name: 🇨🇳 ‍中国
   type: url-test
   url: https://i.ytimg.com/generate_204
@@ -115,34 +118,41 @@ proxy-groups:
   tolerance: 100
   proxies: &id004
   - 🇭🇰 香港 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
-  - 🇭🇰 国际专线 · 香港HK · 58 - Newflix加速器
-  - 🇭🇰 【VIP解锁】国际专线 · 香港HK · 58 · VIP - Newflix加速器
-  - 🇭🇰 【VIP解锁】国际专线 · 香港HK · 244 · VIP - Newflix加速器
-  - 🇭🇰 【VIP解锁】国际专线 · 香港HK · 74 · VIP - Newflix加速器
-  - 🇭🇰 【VIP解锁】国际专线 · 香港HK · 113 · VIP - Newflix加速器
-  - 🇹🇼 【VIP解锁】国际专线 · 台湾TW · 89 · VIP - Newflix加速器
+  - 🇭🇰 香港 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇭🇰 香港 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇭🇰 香港 · 4号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇹🇼 台湾 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
 - name: 🇸🇬 ‍新加坡
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id005
-  - 🇸🇬 【VIP解锁】国际专线 · 新加坡SG · 146 · VIP - Newflix加速器
+  - 🇸🇬 新加坡 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
 - name: 🇯🇵 ‍日本
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 100
   proxies: &id006
-  - 🇯🇵 国际专线 · 日本JP · 114 - Newflix加速器
+  - 🇯🇵 日本 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇯🇵 日本 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇯🇵 日本 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
 - name: 🇺🇸 ‍美国
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 300
   proxies: &id007
-  - 🇺🇸 国际专线 · 美国US · 110 - Newflix加速器
-  - 🇺🇸 【VIP解锁】国际专线 · 美国US · 205 · VIP - Newflix加速器
+  - 🇺🇸 美国 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+  - 🇺🇸 美国 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器
+- name: 🎏 ‍其他
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
+  tolerance: 100
+  proxies: &id008
+  - 线路全面升级中，预计9月20日完成，全场补3天时长。 - Newflix加速器
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
@@ -161,18 +171,22 @@ proxy-groups:
 - name: 👆🏻🇺🇸 ‍美国
   type: select
   proxies: *id007
+- name: 👆🏻🎏 ‍其他
+  type: select
+  proxies: *id008
 proxies:
 - {name: 🇭🇰 香港 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器, server: cdntwa.xiaomispeed.com, port: 41101, type: trojan, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, sni: cdntwa.xiaomispeed.com, skip-cert-verify: true, udp: true}
-- {name: 🇯🇵 国际专线 · 日本JP · 114 - Newflix加速器, server: 120.233.44.183, port: 39221, type: ss, cipher: chacha20-ietf-poly1305, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, udp: true}
-- {name: 🇺🇸 国际专线 · 美国US · 110 - Newflix加速器, server: 120.233.44.183, port: 33727, type: ss, cipher: chacha20-ietf-poly1305, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, udp: true}
-- {name: 🇭🇰 国际专线 · 香港HK · 58 - Newflix加速器, server: 120.233.44.183, port: 39878, type: ss, cipher: chacha20-ietf-poly1305, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, udp: true}
-- {name: 🇭🇰 【VIP解锁】国际专线 · 香港HK · 58 · VIP - Newflix加速器, server: 1.1.1.1, port: 443, type: ss, cipher: chacha20-ietf-poly1305, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, udp: true}
-- {name: 🇭🇰 【VIP解锁】国际专线 · 香港HK · 244 · VIP - Newflix加速器, server: 1.1.1.1, port: 443, type: ss, cipher: chacha20-ietf-poly1305, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, udp: true}
-- {name: 🇭🇰 【VIP解锁】国际专线 · 香港HK · 74 · VIP - Newflix加速器, server: 1.1.1.1, port: 443, type: ss, cipher: chacha20-ietf-poly1305, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, udp: true}
-- {name: 🇭🇰 【VIP解锁】国际专线 · 香港HK · 113 · VIP - Newflix加速器, server: 1.1.1.1, port: 443, type: ss, cipher: chacha20-ietf-poly1305, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, udp: true}
-- {name: 🇺🇸 【VIP解锁】国际专线 · 美国US · 205 · VIP - Newflix加速器, server: 1.1.1.1, port: 443, type: ss, cipher: chacha20-ietf-poly1305, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, udp: true}
-- {name: 🇹🇼 【VIP解锁】国际专线 · 台湾TW · 89 · VIP - Newflix加速器, server: 1.1.1.1, port: 443, type: ss, cipher: chacha20-ietf-poly1305, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, udp: true}
-- {name: 🇸🇬 【VIP解锁】国际专线 · 新加坡SG · 146 · VIP - Newflix加速器, server: 1.1.1.1, port: 443, type: ss, cipher: chacha20-ietf-poly1305, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, udp: true}
+- {name: 🇭🇰 香港 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器, server: cdntwa.xiaomispeed.com, port: 41102, type: trojan, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, sni: cdntwa.xiaomispeed.com, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 香港 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器, server: cdntwa.xiaomispeed.com, port: 41103, type: trojan, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, sni: cdntwa.xiaomispeed.com, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 香港 · 4号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器, server: cdntwa.xiaomispeed.com, port: 41104, type: trojan, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, sni: cdntwa.xiaomispeed.com, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器, server: cdntwa.xiaomispeed.com, port: 42201, type: trojan, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, sni: cdntwa.xiaomispeed.com, skip-cert-verify: true, udp: true}
+- {name: 🇸🇬 新加坡 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器, server: cdntwa.xiaomispeed.com, port: 43301, type: trojan, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, sni: cdntwa.xiaomispeed.com, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器, server: cdntwa.xiaomispeed.com, port: 44401, type: trojan, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, sni: cdntwa.xiaomispeed.com, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器, server: cdntwa.xiaomispeed.com, port: 44402, type: trojan, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, sni: cdntwa.xiaomispeed.com, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器, server: cdntwa.xiaomispeed.com, port: 44403, type: trojan, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, sni: cdntwa.xiaomispeed.com, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 美国 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器, server: cdntwa.xiaomispeed.com, port: 45501, type: trojan, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, sni: cdntwa.xiaomispeed.com, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 美国 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - Newflix加速器, server: cdntwa.xiaomispeed.com, port: 45502, type: trojan, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, sni: cdntwa.xiaomispeed.com, skip-cert-verify: true, udp: true}
+- {name: 线路全面升级中，预计9月20日完成，全场补3天时长。 - Newflix加速器, server: cdntwa.xiaomispeed.com, port: 39221, type: ss, cipher: chacha20-ietf-poly1305, password: 5f2deca2-1701-4dbd-84ef-a4dcc6db527e, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT

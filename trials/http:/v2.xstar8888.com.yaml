@@ -12,9 +12,19 @@ proxy-groups:
   - ⚡ ‍低延迟
   - 👆🏻 ‍指定
   - 🇭🇰 ‍香港
+  - 🇹🇼 ‍台湾
+  - 🇨🇳 ‍中国
+  - 🇸🇬 ‍新加坡
+  - 🇯🇵 ‍日本
   - 🇺🇸 ‍美国
+  - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇨🇳 ‍中国
+  - 👆🏻🇸🇬 ‍新加坡
+  - 👆🏻🇯🇵 ‍日本
   - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
 - name: ⚡ ‍低延迟
@@ -26,8 +36,15 @@ proxy-groups:
   - 🇭🇰 香港 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
   - 🇭🇰 香港 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
   - 🇭🇰 香港 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
-  - 🇭🇰 香港 · 11号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇭🇰 香港 · 4号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇹🇼 台湾 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇸🇬 新加坡 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇯🇵 日本 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇯🇵 日本 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇯🇵 日本 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
   - 🇺🇸 美国 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇺🇸 美国 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 线路全面升级中，预计9月20日完成，全场补3天时长。 - 北极星加速器
 - name: 👆🏻 ‍指定
   type: select
   proxies: *id001
@@ -48,15 +65,27 @@ proxy-groups:
   proxies:
   - 🛩️ ‍墙内
   - 🇭🇰 ‍香港
+  - 🇹🇼 ‍台湾
+  - 🇨🇳 ‍中国
   - ✈️ ‍起飞
   - 👆🏻🇭🇰 ‍香港
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇨🇳 ‍中国
   - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
   - 🇺🇸 ‍美国
+  - 🇹🇼 ‍台湾
+  - 🇸🇬 ‍新加坡
+  - 🇯🇵 ‍日本
+  - 🎏 ‍其他
   - ✈️ ‍起飞
   - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇸🇬 ‍新加坡
+  - 👆🏻🇯🇵 ‍日本
+  - 👆🏻🎏 ‍其他
   - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
@@ -74,26 +103,90 @@ proxy-groups:
   - 🇭🇰 香港 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
   - 🇭🇰 香港 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
   - 🇭🇰 香港 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
-  - 🇭🇰 香港 · 11号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇭🇰 香港 · 4号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+- name: 🇹🇼 ‍台湾
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id003
+  - 🇹🇼 台湾 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+- name: 🇨🇳 ‍中国
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id004
+  - 🇭🇰 香港 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇭🇰 香港 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇭🇰 香港 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇭🇰 香港 · 4号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇹🇼 台湾 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+- name: 🇸🇬 ‍新加坡
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id005
+  - 🇸🇬 新加坡 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+- name: 🇯🇵 ‍日本
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id006
+  - 🇯🇵 日本 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇯🇵 日本 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇯🇵 日本 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
 - name: 🇺🇸 ‍美国
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 15
   tolerance: 300
-  proxies: &id003
+  proxies: &id007
   - 🇺🇸 美国 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+  - 🇺🇸 美国 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器
+- name: 🎏 ‍其他
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
+  tolerance: 100
+  proxies: &id008
+  - 线路全面升级中，预计9月20日完成，全场补3天时长。 - 北极星加速器
 - name: 👆🏻🇭🇰 ‍香港
   type: select
   proxies: *id002
-- name: 👆🏻🇺🇸 ‍美国
+- name: 👆🏻🇹🇼 ‍台湾
   type: select
   proxies: *id003
+- name: 👆🏻🇨🇳 ‍中国
+  type: select
+  proxies: *id004
+- name: 👆🏻🇸🇬 ‍新加坡
+  type: select
+  proxies: *id005
+- name: 👆🏻🇯🇵 ‍日本
+  type: select
+  proxies: *id006
+- name: 👆🏻🇺🇸 ‍美国
+  type: select
+  proxies: *id007
+- name: 👆🏻🎏 ‍其他
+  type: select
+  proxies: *id008
 proxies:
-- {name: 🇭🇰 香港 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 21106, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
-- {name: 🇭🇰 香港 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 21107, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
-- {name: 🇭🇰 香港 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 21108, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
-- {name: 🇭🇰 香港 · 11号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 31101, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
-- {name: 🇺🇸 美国 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: cdntwa.xiaomispeed.com, port: 45502, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: cdntwa.xiaomispeed.com, skip-cert-verify: true, udp: true}
+- {name: 线路全面升级中，预计9月20日完成，全场补3天时长。 - 北极星加速器, server: 120.241.40.34, port: 28888, type: ss, cipher: chacha20-ietf-poly1305, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, udp: true}
+- {name: 🇭🇰 香港 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 31101, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 香港 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 31102, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 香港 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 31103, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 香港 · 4号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 31104, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 32201, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
+- {name: 🇸🇬 新加坡 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 33301, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 34401, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 34402, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本 · 3号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 34403, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 美国 · 1号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 35501, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 美国 · 2号线 · Netflix等流媒体解锁 · ChatGPT解锁 - 北极星加速器, server: green.cdntencentmusic.com, port: 35502, type: trojan, password: 1f97490c-650e-4e6e-8a93-22ad60d5b7bb, sni: green.cdntencentmusic.com, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
