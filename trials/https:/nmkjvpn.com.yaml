@@ -9,37 +9,8 @@ proxy-groups:
 - name: ✈️ ‍起飞
   type: select
   proxies:
-  - ⚡ ‍低延迟
-  - 👆🏻 ‍指定
-  - 🇭🇰 ‍香港
-  - 🇹🇼 ‍台湾
-  - 🇨🇳 ‍中国
-  - 🇸🇬 ‍新加坡
-  - 🇯🇵 ‍日本
-  - 🇺🇸 ‍美国
-  - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇨🇳 ‍中国
-  - 👆🏻🇸🇬 ‍新加坡
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻🇺🇸 ‍美国
   - DIRECT
   - REJECT
-- name: ⚡ ‍低延迟
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 30
-  tolerance: 100
-  proxies: &id001
-  - 🇭🇰 IEPL-专线中专-HK - 起点带宽不限速
-  - 🇭🇰 vmess-直连-HK - 起点带宽不限速
-  - 🇹🇼 vmess-直连-TW - 起点带宽不限速
-  - 🇸🇬 vmess-直连-SG - 起点带宽不限速
-  - 🇯🇵 vmess-直连-JP - 起点带宽不限速
-  - 🇺🇸 Trojan-直连-US - 起点带宽不限速
-- name: 👆🏻 ‍指定
-  type: select
-  proxies: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -56,27 +27,11 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
-  - 🇭🇰 ‍香港
-  - 🇹🇼 ‍台湾
-  - 🇨🇳 ‍中国
   - ✈️ ‍起飞
-  - 👆🏻🇭🇰 ‍香港
-  - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇨🇳 ‍中国
-  - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
-  - 🇺🇸 ‍美国
-  - 🇹🇼 ‍台湾
-  - 🇸🇬 ‍新加坡
-  - 🇯🇵 ‍日本
   - ✈️ ‍起飞
-  - 👆🏻🇺🇸 ‍美国
-  - 👆🏻🇹🇼 ‍台湾
-  - 👆🏻🇸🇬 ‍新加坡
-  - 👆🏻🇯🇵 ‍日本
-  - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
   type: select
@@ -84,76 +39,13 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
-- name: 🇭🇰 ‍香港
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id002
-  - 🇭🇰 IEPL-专线中专-HK - 起点带宽不限速
-  - 🇭🇰 vmess-直连-HK - 起点带宽不限速
-- name: 🇹🇼 ‍台湾
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id003
-  - 🇹🇼 vmess-直连-TW - 起点带宽不限速
-- name: 🇨🇳 ‍中国
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id004
-  - 🇭🇰 IEPL-专线中专-HK - 起点带宽不限速
-  - 🇭🇰 vmess-直连-HK - 起点带宽不限速
-  - 🇹🇼 vmess-直连-TW - 起点带宽不限速
-- name: 🇸🇬 ‍新加坡
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id005
-  - 🇸🇬 vmess-直连-SG - 起点带宽不限速
-- name: 🇯🇵 ‍日本
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 100
-  proxies: &id006
-  - 🇯🇵 vmess-直连-JP - 起点带宽不限速
-- name: 🇺🇸 ‍美国
-  type: url-test
-  url: https://i.ytimg.com/generate_204
-  interval: 15
-  tolerance: 300
-  proxies: &id007
-  - 🇺🇸 Trojan-直连-US - 起点带宽不限速
-- name: 👆🏻🇭🇰 ‍香港
-  type: select
-  proxies: *id002
-- name: 👆🏻🇹🇼 ‍台湾
-  type: select
-  proxies: *id003
-- name: 👆🏻🇨🇳 ‍中国
-  type: select
-  proxies: *id004
-- name: 👆🏻🇸🇬 ‍新加坡
-  type: select
-  proxies: *id005
-- name: 👆🏻🇯🇵 ‍日本
-  type: select
-  proxies: *id006
-- name: 👆🏻🇺🇸 ‍美国
-  type: select
-  proxies: *id007
 proxies:
-- {name: 🇭🇰 IEPL-专线中专-HK - 起点带宽不限速, server: v6.nmcf.me, port: 48422, type: vmess, uuid: e4daaf30-2bbe-41d0-8db4-f1bb06cee78f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
-- {name: 🇹🇼 vmess-直连-TW - 起点带宽不限速, server: v5.nmcf.me, port: 8002, type: vmess, uuid: e4daaf30-2bbe-41d0-8db4-f1bb06cee78f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
-- {name: 🇯🇵 vmess-直连-JP - 起点带宽不限速, server: v18.nmcf.me, port: 8000, type: vmess, uuid: e4daaf30-2bbe-41d0-8db4-f1bb06cee78f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
-- {name: 🇸🇬 vmess-直连-SG - 起点带宽不限速, server: v7.nmcf.me, port: 8000, type: vmess, uuid: e4daaf30-2bbe-41d0-8db4-f1bb06cee78f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
-- {name: 🇭🇰 vmess-直连-HK - 起点带宽不限速, server: v4.nmcf.me, port: 8001, type: vmess, uuid: e4daaf30-2bbe-41d0-8db4-f1bb06cee78f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
-- {name: 🇺🇸 Trojan-直连-US - 起点带宽不限速, server: v12.nmcf.me, port: 443, type: trojan, password: e4daaf30-2bbe-41d0-8db4-f1bb06cee78f, sni: v12.nmcf.me, skip-cert-verify: true, udp: true}
+- {name: IEPL-专线中专-HK - 起点带宽不限速, server: v6.nmcf.me, port: 48422, type: vmess, uuid: e4daaf30-2bbe-41d0-8db4-f1bb06cee78f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
+- {name: vmess-直连-TW - 起点带宽不限速, server: v5.nmcf.me, port: 8002, type: vmess, uuid: e4daaf30-2bbe-41d0-8db4-f1bb06cee78f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
+- {name: vmess-直连-JP - 起点带宽不限速, server: v18.nmcf.me, port: 8000, type: vmess, uuid: e4daaf30-2bbe-41d0-8db4-f1bb06cee78f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
+- {name: vmess-直连-SG - 起点带宽不限速, server: v7.nmcf.me, port: 8000, type: vmess, uuid: e4daaf30-2bbe-41d0-8db4-f1bb06cee78f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
+- {name: vmess-直连-HK - 起点带宽不限速, server: v4.nmcf.me, port: 8001, type: vmess, uuid: e4daaf30-2bbe-41d0-8db4-f1bb06cee78f, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, network: ws, ws-opts: {path: /nmkj, headers: {Host: www.bing.com}}, udp: true}
+- {name: Trojan-直连-US - 起点带宽不限速, server: v12.nmcf.me, port: 443, type: trojan, password: e4daaf30-2bbe-41d0-8db4-f1bb06cee78f, sni: v12.nmcf.me, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
