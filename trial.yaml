@@ -169,6 +169,9 @@ proxy-groups:
   type: select
   proxies: *id007
 proxies:
+- {name: 🇯🇵日本01 | IPLC三网直连 - 爬梯看世界, server: ptcdn.chainpt.art, port: 34378, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
+- {name: 🇯🇵日本02 | IPLC三网直连 - 爬梯看世界, server: ptcdn.chainpt.art, port: 11672, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
+- {name: 🇯🇵日本03 | IPLC三网直连 - 爬梯看世界, server: ptcdn.chainpt.art, port: 58377, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
 - {name: 🇺🇸美国01 (支持GPT) - 爬梯看世界, server: ptcdn.chainpt.art, port: 30130, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
 - {name: 🇺🇸美国02 - 爬梯看世界, server: ptcdn.chainpt.art, port: 36481, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
 - {name: 🇺🇸美国03 | 芝加哥(支持GPT) - 爬梯看世界, server: ptcdn.chainpt.art, port: 36575, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
@@ -180,9 +183,6 @@ proxies:
 - {name: 🇭🇰香港04 | IPLC三网直连 - 爬梯看世界, server: ptcdn.chainpt.art, port: 27886, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
 - {name: 🇭🇰香港05 | IPLC三网直连 - 爬梯看世界, server: ptcdn.chainpt.art, port: 25447, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
 - {name: 🇹🇼台湾 - 爬梯看世界, server: ptcdn.chainpt.art, port: 12721, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
-- {name: 🇯🇵日本01 | IPLC三网直连 - 爬梯看世界, server: ptcdn.chainpt.art, port: 34378, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
-- {name: 🇯🇵日本02 | IPLC三网直连 - 爬梯看世界, server: ptcdn.chainpt.art, port: 11672, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
-- {name: 🇯🇵日本03 | IPLC三网直连 - 爬梯看世界, server: ptcdn.chainpt.art, port: 58377, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
 - {name: ℹ️ 永久官网：www.ptchain.app - 爬梯看世界, server: ptcdn.chainpt.art, port: 48537, type: ss, cipher: chacha20-ietf-poly1305, password: 5649543b-1d2e-499d-bc35-7a8f734ba5b9, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
