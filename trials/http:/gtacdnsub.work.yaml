@@ -16,12 +16,14 @@ proxy-groups:
   - 🇨🇳 ‍中国
   - 🇸🇬 ‍新加坡
   - 🇯🇵 ‍日本
+  - 🇺🇸 ‍美国
   - 🎏 ‍其他
   - 👆🏻🇭🇰 ‍香港
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻🇨🇳 ‍中国
   - 👆🏻🇸🇬 ‍新加坡
   - 👆🏻🇯🇵 ‍日本
+  - 👆🏻🇺🇸 ‍美国
   - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
@@ -57,6 +59,10 @@ proxy-groups:
   - 🇯🇵 日本大阪IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ
   - 🇯🇵 日本东京IEPL 03 - ɢᴛᴀ ᴄʟᴏᴜᴅ
   - 🇯🇵 日本东京IEPL 04 - ɢᴛᴀ ᴄʟᴏᴜᴅ
+  - 🇺🇸 美国洛杉矶 1 - ɢᴛᴀ ᴄʟᴏᴜᴅ
+  - 🇺🇸 美国洛杉矶 2 - ɢᴛᴀ ᴄʟᴏᴜᴅ
+  - 🇺🇸 美国凤凰城 3 - ɢᴛᴀ ᴄʟᴏᴜᴅ
+  - 🇺🇸 美国凤凰城 4 - ɢᴛᴀ ᴄʟᴏᴜᴅ
   - 🇻🇳 越南 河内IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ
   - 🇻🇳 越南 河内IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ
   - 🇰🇭 柬埔寨IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ
@@ -102,11 +108,13 @@ proxy-groups:
 - name: 🤖 ‍AI
   type: select
   proxies:
+  - 🇺🇸 ‍美国
   - 🇹🇼 ‍台湾
   - 🇸🇬 ‍新加坡
   - 🇯🇵 ‍日本
   - 🎏 ‍其他
   - ✈️ ‍起飞
+  - 👆🏻🇺🇸 ‍美国
   - 👆🏻🇹🇼 ‍台湾
   - 👆🏻🇸🇬 ‍新加坡
   - 👆🏻🇯🇵 ‍日本
@@ -193,12 +201,22 @@ proxy-groups:
   - 🇯🇵 日本大阪IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ
   - 🇯🇵 日本东京IEPL 03 - ɢᴛᴀ ᴄʟᴏᴜᴅ
   - 🇯🇵 日本东京IEPL 04 - ɢᴛᴀ ᴄʟᴏᴜᴅ
+- name: 🇺🇸 ‍美国
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 300
+  proxies: &id007
+  - 🇺🇸 美国洛杉矶 1 - ɢᴛᴀ ᴄʟᴏᴜᴅ
+  - 🇺🇸 美国洛杉矶 2 - ɢᴛᴀ ᴄʟᴏᴜᴅ
+  - 🇺🇸 美国凤凰城 3 - ɢᴛᴀ ᴄʟᴏᴜᴅ
+  - 🇺🇸 美国凤凰城 4 - ɢᴛᴀ ᴄʟᴏᴜᴅ
 - name: 🎏 ‍其他
   type: url-test
   url: https://i.ytimg.com/generate_204
   interval: 30
   tolerance: 100
-  proxies: &id007
+  proxies: &id008
   - 🇻🇳 越南 河内IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ
   - 🇻🇳 越南 河内IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ
   - 🇰🇭 柬埔寨IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ
@@ -229,51 +247,58 @@ proxy-groups:
 - name: 👆🏻🇯🇵 ‍日本
   type: select
   proxies: *id006
-- name: 👆🏻🎏 ‍其他
+- name: 👆🏻🇺🇸 ‍美国
   type: select
   proxies: *id007
+- name: 👆🏻🎏 ‍其他
+  type: select
+  proxies: *id008
 proxies:
-- {name: 🇭🇰 如遇不能使用，请先更新订阅 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 25943, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: '🇭🇰 倍率: IEPL1-2x IPLC15x - ɢᴛᴀ ᴄʟᴏᴜᴅ', server: 183.240.113.231, port: 25943, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 25943, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 25943, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港IEPL 03 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 27198, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港IEPL 04 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 27198, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港IEPL 05 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 15424, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港IEPL 06 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 15424, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港IEPL 07 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 19542, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港IEPL 08 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 19542, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港IEPL 09 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 23797, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港IEPL 10 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 23797, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港IEPL 11 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 23797, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港IEPL 12 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 23797, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港家宽IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 25928, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇭🇰 香港家宽IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 25928, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇹🇼 🇨🇳 台湾台北IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 19472, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇹🇼 🇨🇳 台湾台北IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 19472, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇯🇵 日本东京IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 17523, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇯🇵 日本东京IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 17523, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇯🇵 日本大阪IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 15234, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇯🇵 日本大阪IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 15234, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇯🇵 日本东京IEPL 03 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 18824, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇯🇵 日本东京IEPL 04 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 18824, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇸🇬 新加坡IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 28049, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇸🇬 新加坡IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 28049, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇻🇳 越南 河内IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 35907, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇻🇳 越南 河内IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 35907, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇰🇭 柬埔寨IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 14651, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇰🇭 柬埔寨IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 14651, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇹🇭  泰国IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 25734, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇹🇭  泰国IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 25734, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇮🇩 印度尼西亚IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 33209, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇮🇩 印度尼西亚IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 33209, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇲🇲 缅甸IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 27239, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇲🇲 缅甸IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 121.204.244.31, port: 27239, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇹🇷 土耳其 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 35925, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇩🇪 德国纽伦堡 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 35925, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇫🇷 法国 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 35925, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇬🇧 英国 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 35925, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
-- {name: 🇮🇹 意大利 都灵 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: 183.240.113.231, port: 35925, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 如遇不能使用，请先更新订阅 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 25943, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: '🇭🇰 倍率: IEPL1-2x IPLC15x - ɢᴛᴀ ᴄʟᴏᴜᴅ', server: gzydcloud.gtacdnsub.work, port: 25943, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 25943, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 25943, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港IEPL 03 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 27198, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港IEPL 04 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 27198, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港IEPL 05 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 15424, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港IEPL 06 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 15424, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港IEPL 07 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 19542, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港IEPL 08 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 19542, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港IEPL 09 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 23797, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港IEPL 10 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 23797, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港IEPL 11 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 23797, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港IEPL 12 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 23797, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港家宽IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 25928, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇭🇰 香港家宽IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 25928, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇹🇼 🇨🇳 台湾台北IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 19472, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇹🇼 🇨🇳 台湾台北IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 19472, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇯🇵 日本东京IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 17523, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇯🇵 日本东京IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 17523, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇯🇵 日本大阪IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 15234, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇯🇵 日本大阪IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 15234, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇯🇵 日本东京IEPL 03 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 18824, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇯🇵 日本东京IEPL 04 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 18824, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇸🇬 新加坡IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 28049, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇸🇬 新加坡IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 28049, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇺🇸 美国洛杉矶 1 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 49829, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇺🇸 美国洛杉矶 2 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 49829, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇺🇸 美国凤凰城 3 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 17901, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇺🇸 美国凤凰城 4 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 17901, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇻🇳 越南 河内IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 35907, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇻🇳 越南 河内IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 35907, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇰🇭 柬埔寨IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 14651, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇰🇭 柬埔寨IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 14651, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇹🇭  泰国IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 25734, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇹🇭  泰国IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 25734, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇮🇩 印度尼西亚IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 33209, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇮🇩 印度尼西亚IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 33209, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇲🇲 缅甸IEPL 01 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 27239, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇲🇲 缅甸IEPL 02 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: qzdxcloud.gtacdnsub.work, port: 27239, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇹🇷 土耳其 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 35925, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇩🇪 德国纽伦堡 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 35925, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇫🇷 法国 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 35925, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇬🇧 英国 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 35925, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
+- {name: 🇮🇹 意大利 都灵 - ɢᴛᴀ ᴄʟᴏᴜᴅ, server: gzydcloud.gtacdnsub.work, port: 35925, type: ss, cipher: aes-128-gcm, password: 710f9372-3a3d-4b19-a571-8ceedfd53fc6, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
