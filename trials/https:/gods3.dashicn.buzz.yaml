@@ -9,8 +9,57 @@ proxy-groups:
 - name: ✈️ ‍起飞
   type: select
   proxies:
+  - ⚡ ‍低延迟
+  - 👆🏻 ‍指定
+  - 🇭🇰 ‍香港
+  - 🇹🇼 ‍台湾
+  - 🇨🇳 ‍中国
+  - 🇸🇬 ‍新加坡
+  - 🇯🇵 ‍日本
+  - 🇺🇸 ‍美国
+  - 🎏 ‍其他
+  - 👆🏻🇭🇰 ‍香港
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇨🇳 ‍中国
+  - 👆🏻🇸🇬 ‍新加坡
+  - 👆🏻🇯🇵 ‍日本
+  - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🎏 ‍其他
   - DIRECT
   - REJECT
+- name: ⚡ ‍低延迟
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
+  tolerance: 100
+  proxies: &id001
+  - 🇭🇰 香港NO.1（GPT奈飞等） - 大师专线
+  - 🇭🇰 香港NO.2（GPT奈飞等） - 大师专线
+  - 🇹🇼 台湾1(GPT等流媒体1.5倍） - 大师专线
+  - 🇹🇼 台湾2(GPT等流媒体1.5倍） - 大师专线
+  - 🇸🇬 新加坡NO.1 - 大师专线
+  - 🇸🇬 新加坡NO.2 - 大师专线
+  - 🇯🇵 日本NO.1 - 大师专线
+  - 🇯🇵 日本NO.2 - 大师专线
+  - 🇺🇸 美国NO.1（GPT） - 大师专线
+  - 🇺🇸 美国NO.2（GPT） - 大师专线
+  - ℹ️ 国内直连网站都是临时的，挂梯子可直接进 - 大师专线
+  - ℹ️ 国内直进官网：https://gods3.dashicn.buzz官网更新规律ggds2，ggds3，ggds4 - 大师专线
+  - 🇬🇧 (IEPL)英国1 - 大师专线
+  - 🇬🇧 (隧道)英国2 - 大师专线
+  - 🇰🇷 [3X]韩国 专线NO1 - 大师专线
+  - 🇰🇷 [3X]韩国 专线NO2 - 大师专线
+  - 🇦🇺 澳大利亚原生1 - 大师专线
+  - 🇦🇺 澳大利亚原生2 - 大师专线
+  - 🇨🇦 加拿大1 - 大师专线
+  - 🇨🇦 加拿大2 - 大师专线
+  - 🇮🇳 印度1 - 大师专线
+  - 🇮🇳 印度2 - 大师专线
+  - 🇫🇷 法国1 - 大师专线
+  - 🇫🇷 法国2 - 大师专线
+- name: 👆🏻 ‍指定
+  type: select
+  proxies: *id001
 - name: 🛩️ ‍墙内
   type: select
   proxies:
@@ -27,11 +76,29 @@ proxy-groups:
   type: select
   proxies:
   - 🛩️ ‍墙内
+  - 🇭🇰 ‍香港
+  - 🇹🇼 ‍台湾
+  - 🇨🇳 ‍中国
   - ✈️ ‍起飞
+  - 👆🏻🇭🇰 ‍香港
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇨🇳 ‍中国
+  - 👆🏻 ‍指定
 - name: 🤖 ‍AI
   type: select
   proxies:
+  - 🇺🇸 ‍美国
+  - 🇹🇼 ‍台湾
+  - 🇸🇬 ‍新加坡
+  - 🇯🇵 ‍日本
+  - 🎏 ‍其他
   - ✈️ ‍起飞
+  - 👆🏻🇺🇸 ‍美国
+  - 👆🏻🇹🇼 ‍台湾
+  - 👆🏻🇸🇬 ‍新加坡
+  - 👆🏻🇯🇵 ‍日本
+  - 👆🏻🎏 ‍其他
+  - 👆🏻 ‍指定
   - 🛩️ ‍墙内
 - name: 🌐 ‍未知站点
   type: select
@@ -39,31 +106,122 @@ proxy-groups:
   - ✈️ ‍起飞
   - 🛩️ ‍墙内
   - 💩 ‍广告
+- name: 🇭🇰 ‍香港
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id002
+  - 🇭🇰 香港NO.1（GPT奈飞等） - 大师专线
+  - 🇭🇰 香港NO.2（GPT奈飞等） - 大师专线
+- name: 🇹🇼 ‍台湾
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id003
+  - 🇹🇼 台湾1(GPT等流媒体1.5倍） - 大师专线
+  - 🇹🇼 台湾2(GPT等流媒体1.5倍） - 大师专线
+- name: 🇨🇳 ‍中国
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id004
+  - 🇭🇰 香港NO.1（GPT奈飞等） - 大师专线
+  - 🇭🇰 香港NO.2（GPT奈飞等） - 大师专线
+  - 🇹🇼 台湾1(GPT等流媒体1.5倍） - 大师专线
+  - 🇹🇼 台湾2(GPT等流媒体1.5倍） - 大师专线
+- name: 🇸🇬 ‍新加坡
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id005
+  - 🇸🇬 新加坡NO.1 - 大师专线
+  - 🇸🇬 新加坡NO.2 - 大师专线
+- name: 🇯🇵 ‍日本
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 100
+  proxies: &id006
+  - 🇯🇵 日本NO.1 - 大师专线
+  - 🇯🇵 日本NO.2 - 大师专线
+- name: 🇺🇸 ‍美国
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 15
+  tolerance: 300
+  proxies: &id007
+  - 🇺🇸 美国NO.1（GPT） - 大师专线
+  - 🇺🇸 美国NO.2（GPT） - 大师专线
+- name: 🎏 ‍其他
+  type: url-test
+  url: https://i.ytimg.com/generate_204
+  interval: 30
+  tolerance: 100
+  proxies: &id008
+  - ℹ️ 国内直连网站都是临时的，挂梯子可直接进 - 大师专线
+  - ℹ️ 国内直进官网：https://gods3.dashicn.buzz官网更新规律ggds2，ggds3，ggds4 - 大师专线
+  - 🇬🇧 (IEPL)英国1 - 大师专线
+  - 🇬🇧 (隧道)英国2 - 大师专线
+  - 🇰🇷 [3X]韩国 专线NO1 - 大师专线
+  - 🇰🇷 [3X]韩国 专线NO2 - 大师专线
+  - 🇦🇺 澳大利亚原生1 - 大师专线
+  - 🇦🇺 澳大利亚原生2 - 大师专线
+  - 🇨🇦 加拿大1 - 大师专线
+  - 🇨🇦 加拿大2 - 大师专线
+  - 🇮🇳 印度1 - 大师专线
+  - 🇮🇳 印度2 - 大师专线
+  - 🇫🇷 法国1 - 大师专线
+  - 🇫🇷 法国2 - 大师专线
+- name: 👆🏻🇭🇰 ‍香港
+  type: select
+  proxies: *id002
+- name: 👆🏻🇹🇼 ‍台湾
+  type: select
+  proxies: *id003
+- name: 👆🏻🇨🇳 ‍中国
+  type: select
+  proxies: *id004
+- name: 👆🏻🇸🇬 ‍新加坡
+  type: select
+  proxies: *id005
+- name: 👆🏻🇯🇵 ‍日本
+  type: select
+  proxies: *id006
+- name: 👆🏻🇺🇸 ‍美国
+  type: select
+  proxies: *id007
+- name: 👆🏻🎏 ‍其他
+  type: select
+  proxies: *id008
 proxies:
-- {name: 国内直连网站都是临时的，挂梯子可直接进 - 大师专线, server: haa.dashuai.cyou, port: 45050, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 国内直进官网：https://gods3.dashicn.buzz官网更新规律ggds2，ggds3，ggds4 - 大师专线, server: haa.dashuai.cyou, port: 45050, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 台湾1(GPT等流媒体1.5倍） - 大师专线, server: haa.dashuai.cyou, port: 45078, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 台湾2(GPT等流媒体1.5倍） - 大师专线, server: xdd.dashuai.cyou, port: 45077, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: ℹ️ 国内直连网站都是临时的，挂梯子可直接进 - 大师专线, server: haa.dashuai.cyou, port: 45050, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: ℹ️ 国内直进官网：https://gods3.dashicn.buzz官网更新规律ggds2，ggds3，ggds4 - 大师专线, server: haa.dashuai.cyou, port: 45050, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾1(GPT等流媒体1.5倍） - 大师专线, server: haa.dashuai.cyou, port: 45078, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 台湾2(GPT等流媒体1.5倍） - 大师专线, server: xdd.dashuai.cyou, port: 45077, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 - {name: 🇭🇰 香港NO.1（GPT奈飞等） - 大师专线, server: haa.dashuai.cyou, port: 45050, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 - {name: 🇭🇰 香港NO.2（GPT奈飞等） - 大师专线, server: xdd.dashuai.cyou, port: 45051, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 - {name: 🇺🇸 美国NO.1（GPT） - 大师专线, server: haa.dashuai.cyou, port: 45052, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 - {name: 🇺🇸 美国NO.2（GPT） - 大师专线, server: xdd.dashuai.cyou, port: 45053, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: (IEPL)英国1 - 大师专线, server: haa.dashuai.cyou, port: 45066, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: (隧道)英国2 - 大师专线, server: xdd.dashuai.cyou, port: 45067, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 新加坡NO.1 - 大师专线, server: haa.dashuai.cyou, port: 45054, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 新加坡NO.2 - 大师专线, server: xdd.dashuai.cyou, port: 45055, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 日本NO.1 - 大师专线, server: haa.dashuai.cyou, port: 45056, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 日本NO.2 - 大师专线, server: xdd.dashuai.cyou, port: 45057, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: '[3X]韩国 专线NO1 - 大师专线', server: haa.dashuai.cyou, port: 45076, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: '[3X]韩国 专线NO2 - 大师专线', server: xdd.dashuai.cyou, port: 45075, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 澳大利亚原生1 - 大师专线, server: haa.dashuai.cyou, port: 45062, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 澳大利亚原生2 - 大师专线, server: xdd.dashuai.cyou, port: 45063, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 加拿大1 - 大师专线, server: haa.dashuai.cyou, port: 45064, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 加拿大2 - 大师专线, server: xdd.dashuai.cyou, port: 45065, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 印度1 - 大师专线, server: haa.dashuai.cyou, port: 45074, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 印度2 - 大师专线, server: xdd.dashuai.cyou, port: 45073, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 法国1 - 大师专线, server: haa.dashuai.cyou, port: 45072, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
-- {name: 法国2 - 大师专线, server: xdd.dashuai.cyou, port: 45071, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇬🇧 (IEPL)英国1 - 大师专线, server: haa.dashuai.cyou, port: 45066, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇬🇧 (隧道)英国2 - 大师专线, server: xdd.dashuai.cyou, port: 45067, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇸🇬 新加坡NO.1 - 大师专线, server: haa.dashuai.cyou, port: 45054, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇸🇬 新加坡NO.2 - 大师专线, server: xdd.dashuai.cyou, port: 45055, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本NO.1 - 大师专线, server: haa.dashuai.cyou, port: 45056, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本NO.2 - 大师专线, server: xdd.dashuai.cyou, port: 45057, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: '🇰🇷 [3X]韩国 专线NO1 - 大师专线', server: haa.dashuai.cyou, port: 45076, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: '🇰🇷 [3X]韩国 专线NO2 - 大师专线', server: xdd.dashuai.cyou, port: 45075, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇦🇺 澳大利亚原生1 - 大师专线, server: haa.dashuai.cyou, port: 45062, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇦🇺 澳大利亚原生2 - 大师专线, server: xdd.dashuai.cyou, port: 45063, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇨🇦 加拿大1 - 大师专线, server: haa.dashuai.cyou, port: 45064, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇨🇦 加拿大2 - 大师专线, server: xdd.dashuai.cyou, port: 45065, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇮🇳 印度1 - 大师专线, server: haa.dashuai.cyou, port: 45074, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇮🇳 印度2 - 大师专线, server: xdd.dashuai.cyou, port: 45073, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇫🇷 法国1 - 大师专线, server: haa.dashuai.cyou, port: 45072, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
+- {name: 🇫🇷 法国2 - 大师专线, server: xdd.dashuai.cyou, port: 45071, type: vmess, uuid: f1a23968-ad2f-44bf-938d-022de309f2d1, alterId: 0, cipher: auto, tls: false, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
