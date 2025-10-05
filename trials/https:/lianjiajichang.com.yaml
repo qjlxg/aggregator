@@ -145,11 +145,11 @@ proxy-groups:
   type: select
   proxies: *id007
 proxies:
-- {name: 🇺🇸 美国BGP 中转 1.5x - 廉价机场, server: 7788.node9.lianjianode.xyz, port: 25001, type: trojan, password: b104b24a-1767-4c82-951a-b4273443494c, sni: api.ucloud.cn, skip-cert-verify: true, udp: true}
-- {name: 🇹🇼 🇨🇳 台湾BGP 中转 1.5x - 廉价机场, server: 7788.node9.lianjianode.xyz, port: 25002, type: trojan, password: b104b24a-1767-4c82-951a-b4273443494c, sni: www.ahu.edu.cn, skip-cert-verify: true, udp: true}
-- {name: 🇯🇵 日本BGP 中转 1.5x - 廉价机场, server: 7788.node9.lianjianode.xyz, port: 25003, type: trojan, password: b104b24a-1767-4c82-951a-b4273443494c, sni: passport.ucloud.cn, skip-cert-verify: true, udp: true}
-- {name: 🇸🇬 新加坡BGP 中转 1.5x - 廉价机场, server: 7788.node9.lianjianode.xyz, port: 25004, type: trojan, password: b104b24a-1767-4c82-951a-b4273443494c, sni: www.ucloud.cn, skip-cert-verify: true, udp: true}
-- {name: 🇭🇰 香港BGP 中转 1.5x - 廉价机场, server: 7788.node9.lianjianode.xyz, port: 25005, type: trojan, password: b104b24a-1767-4c82-951a-b4273443494c, sni: console.ucloud.cn, skip-cert-verify: true, udp: true}
+- {name: 🇺🇸 美国BGP 中转 1.5x - 廉价机场, server: 7788.node9.lianjianode.xyz, port: 25001, type: trojan, password: 45597922-dbb7-4056-b41b-276e800a109f, sni: api.ucloud.cn, skip-cert-verify: true, udp: true}
+- {name: 🇹🇼 🇨🇳 台湾BGP 中转 1.5x - 廉价机场, server: 7788.node9.lianjianode.xyz, port: 25002, type: trojan, password: 45597922-dbb7-4056-b41b-276e800a109f, sni: www.ahu.edu.cn, skip-cert-verify: true, udp: true}
+- {name: 🇯🇵 日本BGP 中转 1.5x - 廉价机场, server: 7788.node9.lianjianode.xyz, port: 25003, type: trojan, password: 45597922-dbb7-4056-b41b-276e800a109f, sni: passport.ucloud.cn, skip-cert-verify: true, udp: true}
+- {name: 🇸🇬 新加坡BGP 中转 1.5x - 廉价机场, server: 7788.node9.lianjianode.xyz, port: 25004, type: trojan, password: 45597922-dbb7-4056-b41b-276e800a109f, sni: www.ucloud.cn, skip-cert-verify: true, udp: true}
+- {name: 🇭🇰 香港BGP 中转 1.5x - 廉价机场, server: 7788.node9.lianjianode.xyz, port: 25005, type: trojan, password: 45597922-dbb7-4056-b41b-276e800a109f, sni: console.ucloud.cn, skip-cert-verify: true, udp: true}
 rules:
 - DOMAIN-SUFFIX,acl4.ssr,DIRECT
 - DOMAIN-SUFFIX,ip6-localhost,DIRECT
