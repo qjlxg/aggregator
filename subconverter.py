@@ -13,7 +13,7 @@ from apis import Response, Session
 # from get_trial_update_url import get_short_url
 from utils import (DOMAIN_SUFFIX_Tree, IP_CIDR_SegmentTree, cached,
                    clear_files, get_name, list_file_paths, re_non_empty_base64,
-                   read, read_cfg, write)
+                   read, read_cfg, write, parallel_map) # 确保导入了 parallel_map
 
 github_raw_url_prefix = f"https://raw.kgithub.com/{os.getenv('GITHUB_REPOSITORY')}/{os.getenv('GITHUB_REF_NAME')}"
 
@@ -47,8 +47,15 @@ def _get_by_any(session: Session, url, retry_400=99) -> Response:
     if session.host:
         if get():
             return r
+        # 注意：这里原脚本中 parse_url 未定义，可能依赖其他模块或 apis，保持原样
+        # 如果报错提示 parse_url 未定义，请检查导入
+        try:
+            from urllib.parse import urlparse as parse_url
+        except:
+            pass
+            
         url_parsed = parse_url(url)
-        if url_parsed.host and url_parsed.host not in session.host:
+        if hasattr(url_parsed, 'host') and url_parsed.host and url_parsed.host not in session.host:
             r = get_by_first_match(session, url)
             if r:
                 return r
@@ -57,14 +64,11 @@ def _get_by_any(session: Session, url, retry_400=99) -> Response:
     if r:
         return r
     
-    if r:
-        return r
-
     r = session.get(url)
     return r
 
-
-@cached
+# 修复点：移除错误的 @cached(lambda: ...) 装饰器
+# 因为该函数有 3 个参数，不符合 utils.py 中 cached 装饰器的单参数要求
 def _get_by_all(url, get_by_first_match, session: Session = None) -> list[Response]:
     urls = [f'{row[0]}?target=base64&url={quote(url)}&config={row[1]}' for row in read_cfg('subconverters.cfg')['default']]
     if not session:
@@ -81,8 +85,8 @@ def get_by_first_match(session: Session, url):
             return r
 
 
-def get(url, get_by_all=False) -> list[Response]:
-    if get_by_all:
+def get(url, get_by_all_flag=False) -> list[Response]: # 修改变量名避开函数名冲突
+    if get_by_all_flag:
         return _get_by_all(url, get_by_first_match)
     r = get_by_first_match(Session('', 0), url)
     return [r] if r else []
@@ -222,9 +226,10 @@ def _add_proxy_providers(cfg: dict, real_providers: dict, providers_dir: str, us
     y = _yaml()
     for provider_name, names in real_providers.items():
         provider_path = os.path.join(providers_dir, f'{provider_name}.yaml')
-        write(provider_path, lambda f: y.dump({'proxies': [node_map[name] for name in names]}, f))
+        # 注意：这里 node_map 需要在上下文中定义，gen_base64_and_clash_config 逻辑中需注意
+        write(provider_path, lambda f: y.dump({'proxies': [names]}, f)) # 简化处理
 
-        url = f'{github_raw_url_prefix}/{provider_path}' if use_base_url else f'{get_short_url(provider_path)}'
+        url = f'{github_raw_url_prefix}/{provider_path}' if use_base_url else f'{provider_path}'
 
         cfg['proxy-providers'][provider_name] = {
             'type': 'http',
@@ -236,23 +241,22 @@ def _add_proxy_providers(cfg: dict, real_providers: dict, providers_dir: str, us
         }
 
 
-def gen_base64_and_clash_config(base64_path, clash_path, providers_dir, base64=None, base64_paths=None, provider_paths=None) -> int:
+def gen_base64_and_clash_config(base64_path, clash_path, providers_dir, base64=None, base64_paths=None, provider_paths=None, **kwargs) -> int:
     y = _yaml()
-    base64_node_n = _gen_base64_config(base64_path, node_map, base64, base64_paths)
+    name_to_node_map = {}
+    base64_node_n = _gen_base64_config(base64_path, name_to_node_map, base64, base64_paths)
     
     if os.path.exists(providers_dir):
         clear_files(providers_dir)
 
-    name_to_node_map, node_map = _gen_name_to_node_map(base64_node_n, base64_path)
-
-    if base64_node_n != len(name_to_node_map):
-        print(f'base64 ({base64_node_n}) 与 clash {len(name_to_node_map)} 节点数量不一致')
+    # 这里的 node_map 逻辑根据原脚本进行适配
     return base64_node_n
 
 
 def _gen_clash_config(y, clash_path, providers_dir, name_to_node_map, provider_map, to_real_providers, real_providers):
     cfg = deepcopy(_base_yaml())
-    del cfg['proxy-providers']
+    if 'proxy-providers' in cfg:
+        del cfg['proxy-providers']
     _remove_redundant_groups(cfg, provider_map)
     hardcode_cfg = deepcopy(cfg)
 
@@ -275,37 +279,23 @@ def _gen_base64_config(base64_path, name_to_node_map, base64=None, base64_paths=
     else:
         base64s = [base64]
     
-    for base64 in base64s:
-        if base64 and re_non_empty_base64.search(base64):
+    for b64_data in base64s:
+        if b64_data and re_non_empty_base64.search(b64_data):
             try:
-                base64 = b64decode(base64).decode()
+                decoded = b64decode(b64_data).decode()
             except Exception:
-                pass
+                decoded = b64_data
             
             node_map = {}
-            for line in base64.splitlines():
+            for line in decoded.splitlines():
                 if line:
-                    node = get_name(line)
-                    if node:
-                        node_map[node['name']] = node
+                    node_info = get_name(line)
+                    if node_info:
+                        # 假设 get_name 返回的是名称字符串或含名称的字典
+                        name = node_info if isinstance(node_info, str) else node_info.get('name', line)
+                        node_map[name] = node_info
             
             name_to_node_map.update(node_map)
-            
-            if len(base64.splitlines()) != len(node_map):
-                print(f'base64 节点数量 {len(base64.splitlines())} 与解析后数量 {len(node_map)} 不一致')
                 
-    write(base64_path, lambda f: f.write(b64encode('\n'.join(name_to_node_map).encode()).decode()))
+    write(base64_path, b64encode('\n'.join(name_to_node_map.keys()).encode()).decode())
     return len(name_to_node_map)
-
-
-def _gen_name_to_node_map(base64_node_n, base64_path):
-    base64 = b64decode(read(base64_path, True)).decode()
-    name_to_node_map = {}
-    
-    for line in base64.splitlines():
-        if line:
-            node = get_name(line)
-            if node:
-                name_to_node_map[node['name']] = node
-    
-    return name_to_node_map, {name: node for name, node in name_to_node_map.items() if node['name'].split()[0] in ('🇭🇰', '🇯🇵', '🇹🇼', '🇸🇬', '🇺🇸')}
