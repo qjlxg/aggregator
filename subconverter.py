@@ -64,7 +64,7 @@ def _get_by_any(session: Session, url, retry_400=99) -> Response:
     return r
 
 
-@cached(lambda: f'{os.getenv("GITHUB_REPOSITORY")}-{os.getenv("GITHUB_REF_NAME")}')
+@cached
 def _get_by_all(url, get_by_first_match, session: Session = None) -> list[Response]:
     urls = [f'{row[0]}?target=base64&url={quote(url)}&config={row[1]}' for row in read_cfg('subconverters.cfg')['default']]
     if not session:
