@@ -39,8 +39,8 @@ jobs:
           while IFS= read -r line || [ -n "$line" ]; do
             [[ -z "$line" || "$line" == "#"* ]] && continue
             echo "Searching: $line"
-            # 关键改动：添加 --regex false 强制关闭正则模式，确保路径匹配成功
-            echo "$line" | metabigor github --json --regex false >> "results/raw_${DATE_STR}.json"
+            # 移除 --regex 标志，直接用最标准的 json 输出
+            echo "$line" | metabigor github --json >> "results/raw_${DATE_STR}.json"
             sleep 5
           done < targets.txt
 
@@ -55,35 +55,38 @@ jobs:
           repo_file = 'results/found_repos.txt'
           domain_file = 'results/found_domains.txt'
           
-          if not os.path.exists(raw_file): exit(0)
+          if not os.path.exists(raw_file): 
+              print('No data found to extract.'); exit(0)
           
           repos = set()
           domains = set()
-          # 匹配域名/URL 的简单正则
-          url_pattern = re.compile(r'https?://[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')
+          # 改进的 URL 匹配正则
+          url_pattern = re.compile(r'https?://[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}')
           
-          with open(raw_file, 'r') as f:
-              for line in f:
-                  try:
-                      data = json.loads(line)
-                      if 'hits' in data:
-                          for hit in data['hits']:
-                              # 提取 GitHub 仓库
-                              repo_name = hit.get('repo', {}).get('raw')
-                              if repo_name: repos.add(f'https://github.com/{repo_name}')
-                              
-                              # 提取代码片段里的 URL
-                              content = str(hit.get('content', {}).get('raw', ''))
-                              found_urls = url_pattern.findall(content)
-                              for u in found_urls:
-                                  # 过滤掉常见的无用域名
-                                  if 'github.com' not in u and 'schema.org' not in u:
-                                      domains.add(u)
-                  except: continue
+          try:
+              with open(raw_file, 'r') as f:
+                  for line in f:
+                      if not line.strip(): continue
+                      try:
+                          data = json.loads(line)
+                          if 'hits' in data:
+                              for hit in data['hits']:
+                                  # 1. 提取仓库
+                                  r = hit.get('repo', {}).get('raw')
+                                  if r: repos.add(f'https://github.com/{r}')
+                                  
+                                  # 2. 从内容里抠 URL
+                                  content = str(hit.get('content', {}).get('raw', ''))
+                                  for u in url_pattern.findall(content):
+                                      if 'github.com' not in u and 'schema.org' not in u:
+                                          domains.add(u)
+                      except json.JSONDecodeError: continue
+          except Exception as e:
+              print(f'Error processing file: {e}')
           
           with open(repo_file, 'w') as f: f.write('\n'.join(sorted(repos)))
           with open(domain_file, 'w') as f: f.write('\n'.join(sorted(domains)))
-          print(f'Done! Found {len(repos)} repos and {len(domains)} potential endpoints.')
+          print(f'Done! Found {len(repos)} repos and {len(domains)} unique domains.')
           "
 
       - name: Commit and Push
@@ -91,5 +94,5 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add results/
-          git commit -m "Auto Recon: $(date +%F)" || exit 0
+          git commit -m "Auto Recon Update: $(date +%F)" || exit 0
           git push
