@@ -1,0 +1,52 @@
+name: Auto Asset Monitor
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # 每天凌晨 0:00 运行
+  workflow_dispatch: # 支持手动点击运行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+
+      - name: Install Metabigor
+        run: |
+          go install github.com/j3ssie/metabigor@latest
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+
+      - name: Update Metabigor Database
+        run: metabigor update
+
+      - name: Run Search and Collect
+        run: |
+          mkdir -p results
+          # 读取 targets.txt 中的每一行进行 GitHub 代码搜索
+          while IFS= read -r line || [ -n "$line" ]; do
+            echo "Searching for: $line"
+            # 使用 metabigor 搜索 GitHub 资产并保存为 JSON
+            # 加上 sleep 防止请求过快被标记为爬虫
+            echo "$line" | metabigor github --json >> "results/data_$(date +%F).json"
+            sleep 5 
+          done < targets.txt
+
+      - name: Deduplicate and Format
+        run: |
+          # 简单的去重处理（可选）
+          sort -u "results/data_$(date +%F).json" -o "results/assets_latest.json"
+
+      - name: Commit and Push
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add results/
+          git commit -m "Update assets: $(date +%F)" || exit 0
+          git push
