@@ -1,7 +1,20 @@
+# 1. 主题特征（配合点号正则）
 theme.Rocket
 theme.Aurora
 assets.umi\.js
-v2board\.app_url
+
+# 2. 面板特征词（搜代码里的配置文件）
+"v2board\.app_url"
+"v2board\.subscribe_url"
+"v2board\.safe_mode"
+"xboard\.app_url"
+
+# 3. 静态资源特征（很容易带出面板域名）
+/assets/umi.js
+/theme/Aurora/assets/
+/theme/Rocket/assets/
+
+# 4. 面板名称
 v2board
 xboard
 SSPanel-Uim
