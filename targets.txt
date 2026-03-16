@@ -1,20 +1,14 @@
-# 1. 主题特征（配合点号正则）
-theme.Rocket
-theme.Aurora
-assets.umi\.js
+# 强制搜索 V2Board/Xboard 独有的配置行
+"v2board.app_url"
+"v2board.subscribe_url"
+"xboard.app_url"
+"V2BOARD_ADMIN_PATH"
+"XBOARD_ADMIN_PATH"
 
-# 2. 面板特征词（搜代码里的配置文件）
-"v2board\.app_url"
-"v2board\.subscribe_url"
-"v2board\.safe_mode"
-"xboard\.app_url"
+# 搜特定主题的静态资源引用
+"theme/Aurora/assets"
+"theme/Rocket/assets"
 
-# 3. 静态资源特征（很容易带出面板域名）
-/assets/umi.js
-/theme/Aurora/assets/
-/theme/Rocket/assets/
-
-# 4. 面板名称
-v2board
-xboard
-SSPanel-Uim
+# 搜可能泄露的数据库配置（高价值）
+"DB_PASSWORD" v2board
+"DB_HOST" xboard
