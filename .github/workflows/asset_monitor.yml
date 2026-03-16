@@ -2,12 +2,19 @@ name: Auto Asset Monitor
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 每天凌晨 0:00 运行
-  workflow_dispatch: # 支持手动点击运行
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/asset_monitor.yml'
+      - 'targets.txt'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      ASSUME_NO_MOVING_GC_UNSAFE_RISK_IT_WITH: go1.22
 
     steps:
       - name: Checkout code
@@ -26,27 +33,49 @@ jobs:
       - name: Update Metabigor Database
         run: metabigor update
 
+      - name: Prepare Targets
+        run: |
+          if [ ! -f targets.txt ]; then
+            echo "错误：请在仓库根目录创建 targets.txt"
+            exit 1
+          fi
+          # 清洗可能存在的 Windows 换行符
+          sed -i 's/\r$//' targets.txt
+
       - name: Run Search and Collect
         run: |
           mkdir -p results
-          # 读取 targets.txt 中的每一行进行 GitHub 代码搜索
+          DATE_STR=$(date +%Y-%m-%d)
+          
+          echo "开始搜索任务..."
           while IFS= read -r line || [ -n "$line" ]; do
-            echo "Searching for: $line"
-            # 使用 metabigor 搜索 GitHub 资产并保存为 JSON
-            # 加上 sleep 防止请求过快被标记为爬虫
-            echo "$line" | metabigor github --json >> "results/data_$(date +%F).json"
-            sleep 5 
+            [[ -z "$line" || "$line" == "#"* ]] && continue
+            
+            echo "正在搜索关键词: $line"
+            # github 模块抓取结果
+            echo "$line" | metabigor github --json >> "results/raw_${DATE_STR}.json"
+            
+            # 增加延迟保护，防止被 grep.app 封锁
+            sleep 5
           done < targets.txt
 
-      - name: Deduplicate and Format
+      - name: Post-process Results
         run: |
-          # 简单的去重处理（可选）
-          sort -u "results/data_$(date +%F).json" -o "results/assets_latest.json"
+          DATE_STR=$(date +%Y-%m-%d)
+          RAW_FILE="results/raw_${DATE_STR}.json"
+          FINAL_FILE="results/assets_latest.json"
+          
+          if [ -f "$RAW_FILE" ]; then
+            sort -u "$RAW_FILE" -o "$FINAL_FILE"
+            echo "结果已保存至 $FINAL_FILE"
+          else
+            echo "未发现新资产"
+          fi
 
       - name: Commit and Push
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           git add results/
-          git commit -m "Update assets: $(date +%F)" || exit 0
+          git commit -m "自动更新资产列表: $(date +%Y-%m-%d)" || exit 0
           git push
