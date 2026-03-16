@@ -27,14 +27,14 @@ jobs:
 
       - name: Build Metabigor from Source
         run: |
-          # 按照官方说明从源码编译
           git clone https://github.com/j3ssie/metabigor.git
           cd metabigor
-          # 如果没有 make，可以直接用 go build
-          go build -o metabigor main.go
-          # 将生成的二进制文件移动到系统路径
+          # 修正点：进入 cmd 目录编译，或者直接指向路径
+          go build -o metabigor cmd/metabigor/main.go
           sudo mv metabigor /usr/local/bin/
           cd ..
+          # 验证是否安装成功及命令是否存在
+          metabigor --help
 
       - name: Prepare Targets
         run: |
@@ -49,15 +49,14 @@ jobs:
           mkdir -p results
           DATE_STR=$(date +%F)
           
-          echo "Starting GitHub search using grep.app via metabigor..."
+          echo "Starting GitHub search..."
           while IFS= read -r line || [ -n "$line" ]; do
             [[ -z "$line" || "$line" == "#"* ]] && continue
             
             echo "Searching: $line"
-            # 严格按照官方文档的 pipe 语法
+            # 尝试使用新版的直接输入方式
             echo "$line" | metabigor github --json >> "results/raw_${DATE_STR}.json"
             
-            # 适当延迟防止 API 限制
             sleep 5
           done < targets.txt
 
@@ -65,7 +64,6 @@ jobs:
         run: |
           DATE_STR=$(date +%F)
           if [ -f "results/raw_${DATE_STR}.json" ]; then
-            # 物理去重并保留一份最新汇总
             sort -u "results/raw_${DATE_STR}.json" -o "results/assets_latest.json"
           fi
 
