@@ -13,6 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    # 环境变量保留，以防万一
     env:
       ASSUME_NO_MOVING_GC_UNSAFE_RISK_IT_WITH: go1.22
 
@@ -20,26 +21,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.22'
-
-      - name: Build Metabigor from Source
+      - name: Install Metabigor from Release
         run: |
-          git clone https://github.com/j3ssie/metabigor.git
-          cd metabigor
-          # 修正点：进入 cmd 目录编译，或者直接指向路径
-          go build -o metabigor cmd/metabigor/main.go
+          # 1. 下载 v2.1.0 的 Linux 64位版本
+          wget https://github.com/j3ssie/metabigor/releases/download/v2.1.0/metabigor_v2.1.0_linux_amd64.tar.gz
+          
+          # 2. 解压
+          tar -xvf metabigor_v2.1.0_linux_amd64.tar.gz
+          
+          # 3. 移动到可执行路径并赋予权限
           sudo mv metabigor /usr/local/bin/
-          cd ..
-          # 验证是否安装成功及命令是否存在
+          chmod +x /usr/local/bin/metabigor
+          
+          # 4. 验证安装
+          metabigor --version
           metabigor --help
 
       - name: Prepare Targets
         run: |
           if [ ! -f targets.txt ]; then
-            echo "targets.txt not found"
+            echo "targets.txt missing"
             exit 1
           fi
           sed -i 's/\r$//' targets.txt
@@ -49,14 +50,15 @@ jobs:
           mkdir -p results
           DATE_STR=$(date +%F)
           
-          echo "Starting GitHub search..."
+          echo "Scanning GitHub using v2.1.0 Release..."
           while IFS= read -r line || [ -n "$line" ]; do
             [[ -z "$line" || "$line" == "#"* ]] && continue
             
-            echo "Searching: $line"
-            # 尝试使用新版的直接输入方式
+            echo "Searching keyword: $line"
+            # v2.1.0 依然支持 pipe 语法
             echo "$line" | metabigor github --json >> "results/raw_${DATE_STR}.json"
             
+            # 5秒间隔防止被 grep.app 封禁
             sleep 5
           done < targets.txt
 
@@ -72,5 +74,5 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add results/
-          git commit -m "Asset Update: $(date +%F)" || exit 0
+          git commit -m "Asset Update v2.1.0: $(date +%F)" || exit 0
           git push
