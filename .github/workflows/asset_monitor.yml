@@ -36,12 +36,21 @@ jobs:
         run: |
           mkdir -p results
           DATE_STR=$(date +%F)
+          RAW_FILE="results/raw_${DATE_STR}.json"
+          
+          # 清空或初始化当天的原始数据文件
+          > "$RAW_FILE"
+
           while IFS= read -r line || [ -n "$line" ]; do
+            # 跳过空行和注释
             [[ -z "$line" || "$line" == "#"* ]] && continue
+            
             echo "Searching: $line"
-            # 移除 --regex 标志，直接用最标准的 json 输出
-            echo "$line" | metabigor github --json >> "results/raw_${DATE_STR}.json"
-            sleep 5
+            # 使用最稳妥的管道输入，并获取 json
+            echo "$line" | metabigor github --json >> "$RAW_FILE"
+            
+            # 频率限制，避免被 grep.app 封锁 IP
+            sleep 3
           done < targets.txt
 
       - name: Python Intelligence Extraction
@@ -52,41 +61,56 @@ jobs:
           
           date_str = datetime.now().strftime('%Y-%m-%d')
           raw_file = f'results/raw_{date_str}.json'
-          repo_file = 'results/found_repos.txt'
           domain_file = 'results/found_domains.txt'
+          repo_file = 'results/found_repos.txt'
           
-          if not os.path.exists(raw_file): 
-              print('No data found to extract.'); exit(0)
+          if not os.path.exists(raw_file) or os.path.getsize(raw_file) == 0:
+              print('No data found to extract.')
+              exit(0)
           
-          repos = set()
-          domains = set()
-          # 改进的 URL 匹配正则
-          url_pattern = re.compile(r'https?://[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}')
+          found_urls = set()
+          found_repos = set()
           
+          # 提取 URL 的正则
+          url_pattern = re.compile(r'https?://[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')
+          # 排除名单
+          excludes = ['github.com', 'schema.org', 'wikipedia.org', 'google.com', 'example.com', 'localhost', 'w3.org']
+
           try:
               with open(raw_file, 'r') as f:
                   for line in f:
                       if not line.strip(): continue
                       try:
                           data = json.loads(line)
-                          if 'hits' in data:
-                              for hit in data['hits']:
-                                  # 1. 提取仓库
-                                  r = hit.get('repo', {}).get('raw')
-                                  if r: repos.add(f'https://github.com/{r}')
-                                  
-                                  # 2. 从内容里抠 URL
-                                  content = str(hit.get('content', {}).get('raw', ''))
-                                  for u in url_pattern.findall(content):
-                                      if 'github.com' not in u and 'schema.org' not in u:
-                                          domains.add(u)
-                      except json.JSONDecodeError: continue
+                          # 适配 metabigor 的 JSON 结构
+                          hits = data.get('hits', {}).get('hits', [])
+                          for hit in hits:
+                              # 记录来源仓库
+                              repo_name = hit.get('repo', {}).get('raw')
+                              if repo_name:
+                                  found_repos.add(f'https://github.com/{repo_name}')
+                              
+                              # 从代码片段中抠 URL
+                              content = str(hit.get('content', {}).get('raw', ''))
+                              urls = url_pattern.findall(content)
+                              for u in urls:
+                                  u_low = u.lower().rstrip('/')
+                                  if not any(ex in u_low for ex in excludes):
+                                      found_urls.add(u_low)
+                      except json.JSONDecodeError:
+                          continue
           except Exception as e:
-              print(f'Error processing file: {e}')
+              print(f'Error processing: {e}')
           
-          with open(repo_file, 'w') as f: f.write('\n'.join(sorted(repos)))
-          with open(domain_file, 'w') as f: f.write('\n'.join(sorted(domains)))
-          print(f'Done! Found {len(repos)} repos and {len(domains)} unique domains.')
+          # 写入去重后的域名
+          with open(domain_file, 'w') as f:
+              f.write('\n'.join(sorted(list(found_urls))))
+          
+          # 写入去重后的仓库
+          with open(repo_file, 'w') as f:
+              f.write('\n'.join(sorted(list(found_repos))))
+              
+          print(f'Success: Found {len(found_urls)} domains and {len(found_repos)} repos.')
           "
 
       - name: Commit and Push
