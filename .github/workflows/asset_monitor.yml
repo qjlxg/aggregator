@@ -2,7 +2,7 @@ name: Auto Asset Monitor
 
 on:
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 2 * * *' 
   workflow_dispatch:
   push:
     paths:
@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      # 维持兼容性环境变量
       ASSUME_NO_MOVING_GC_UNSAFE_RISK_IT_WITH: go1.22
 
     steps:
@@ -25,20 +26,18 @@ jobs:
         with:
           go-version: '1.22'
 
-      - name: Install Metabigor
+      - name: Install Metabigor (Stable Version)
         run: |
-          go install github.com/j3ssie/metabigor@latest
+          # 强制安装 v1.10.0 稳定版，确保 github 命令可用
+          go install github.com/j3ssie/metabigor@v1.10.0
           echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
-
-     
 
       - name: Prepare Targets
         run: |
           if [ ! -f targets.txt ]; then
-            echo "错误：请在仓库根目录创建 targets.txt"
+            echo "targets.txt missing"
             exit 1
           fi
-          # 清洗可能存在的 Windows 换行符
           sed -i 's/\r$//' targets.txt
 
       - name: Run Search and Collect
@@ -46,29 +45,22 @@ jobs:
           mkdir -p results
           DATE_STR=$(date +%Y-%m-%d)
           
-          echo "开始搜索任务..."
+          echo "Scanning via Metabigor v1.10.0..."
           while IFS= read -r line || [ -n "$line" ]; do
             [[ -z "$line" || "$line" == "#"* ]] && continue
             
-            echo "正在搜索关键词: $line"
-            # github 模块抓取结果
+            echo "Searching: $line"
+            # v1.x 版本的标准用法
             echo "$line" | metabigor github --json >> "results/raw_${DATE_STR}.json"
             
-            # 增加延迟保护，防止被 grep.app 封锁
             sleep 5
           done < targets.txt
 
       - name: Post-process Results
         run: |
           DATE_STR=$(date +%Y-%m-%d)
-          RAW_FILE="results/raw_${DATE_STR}.json"
-          FINAL_FILE="results/assets_latest.json"
-          
-          if [ -f "$RAW_FILE" ]; then
-            sort -u "$RAW_FILE" -o "$FINAL_FILE"
-            echo "结果已保存至 $FINAL_FILE"
-          else
-            echo "未发现新资产"
+          if [ -f "results/raw_${DATE_STR}.json" ]; then
+            sort -u "results/raw_${DATE_STR}.json" -o "results/assets_latest.json"
           fi
 
       - name: Commit and Push
@@ -76,5 +68,5 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add results/
-          git commit -m "自动更新资产列表: $(date +%Y-%m-%d)" || exit 0
+          git commit -m "Auto-update assets: $(date +%Y-%m-%d)" || exit 0
           git push
