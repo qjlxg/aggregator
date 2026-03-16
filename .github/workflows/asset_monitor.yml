@@ -30,8 +30,7 @@ jobs:
           go install github.com/j3ssie/metabigor@latest
           echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
-      - name: Update Metabigor Database
-        run: metabigor update
+     
 
       - name: Prepare Targets
         run: |
