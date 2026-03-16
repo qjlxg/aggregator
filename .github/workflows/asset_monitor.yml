@@ -13,7 +13,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # 环境变量保留，以防万一
     env:
       ASSUME_NO_MOVING_GC_UNSAFE_RISK_IT_WITH: go1.22
 
@@ -21,58 +20,67 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Metabigor from Release
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Build Metabigor
         run: |
-          # 1. 下载 v2.1.0 的 Linux 64位版本
-          wget https://github.com/j3ssie/metabigor/releases/download/v2.1.0/metabigor_v2.1.0_linux_amd64.tar.gz
-          
-          # 2. 解压
-          tar -xvf metabigor_v2.1.0_linux_amd64.tar.gz
-          
-          # 3. 移动到可执行路径并赋予权限
+          git clone https://github.com/j3ssie/metabigor.git
+          cd metabigor
+          go build -o metabigor cmd/metabigor/main.go
           sudo mv metabigor /usr/local/bin/
-          chmod +x /usr/local/bin/metabigor
-          
-          # 4. 验证安装
-          metabigor --version
-          metabigor --help
+          cd ..
 
       - name: Prepare Targets
         run: |
-          if [ ! -f targets.txt ]; then
-            echo "targets.txt missing"
-            exit 1
-          fi
+          if [ ! -f targets.txt ]; then echo "v2board" > targets.txt; fi
           sed -i 's/\r$//' targets.txt
 
       - name: Run Search and Collect
         run: |
           mkdir -p results
           DATE_STR=$(date +%F)
-          
-          echo "Scanning GitHub using v2.1.0 Release..."
           while IFS= read -r line || [ -n "$line" ]; do
             [[ -z "$line" || "$line" == "#"* ]] && continue
-            
-            echo "Searching keyword: $line"
-            # v2.1.0 依然支持 pipe 语法
+            echo "Searching: $line"
+            # 增加延迟并尝试搜索
             echo "$line" | metabigor github --json >> "results/raw_${DATE_STR}.json"
-            
-            # 5秒间隔防止被 grep.app 封禁
             sleep 5
           done < targets.txt
 
-      - name: Post-process Results
+      - name: Extract Clean Assets (Python)
         run: |
-          DATE_STR=$(date +%F)
-          if [ -f "results/raw_${DATE_STR}.json" ]; then
-            sort -u "results/raw_${DATE_STR}.json" -o "results/assets_latest.json"
-          fi
+          python3 -c "
+          import json, os
+          from datetime import datetime
+          date_str = datetime.now().strftime('%Y-%m-%d')
+          raw_file = f'results/raw_{date_str}.json'
+          out_file = 'results/cleaned_repos.txt'
+          if not os.path.exists(raw_file): exit(0)
+          
+          repos = set()
+          with open(raw_file, 'r') as f:
+              for line in f:
+                  try:
+                      # 兼容有些版本输出多行JSON的情况
+                      data = json.loads(line)
+                      if 'hits' in data:
+                          for hit in data['hits']:
+                              name = hit.get('repo', {}).get('raw')
+                              if name: repos.add(f'https://github.com/{name}')
+                  except: continue
+          
+          with open(out_file, 'w') as f:
+              f.write('\n'.join(sorted(repos)))
+          print(f'Done! Extracted {len(repos)} unique repos.')
+          "
 
       - name: Commit and Push
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add results/
-          git commit -m "Asset Update v2.1.0: $(date +%F)" || exit 0
+          git commit -m "Asset Update: $(date +%F)" || exit 0
           git push
