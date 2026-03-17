@@ -1,18 +1,21 @@
-name: search_collector
+name: onyphe_collector
 
 on:
   push:
+    # 只要这两个文件发生变动，就会触发运行
     paths:
-      - 'search_collector.py'
-      - '.github/workflows/search_collector.yml'
-  workflow_dispatch: # 支持手动运行
+      - 'onyphe_collector.py'
+      - '.github/workflows/onyphe_collector.yml'
+  workflow_dispatch: # 支持在 Actions 页面手动点击运行
   schedule:
-    - cron: '0 20 * * *' # 每天北京时间凌晨4点 (UTC 20:00)
+    - cron: '0 22 * * *' # 每天北京时间早上 6 点自动运行一次
 
 jobs:
-  run_scraper:
+  run_task:
     runs-on: ubuntu-latest
-    
+    permissions:
+      contents: write # 必须赋予写入权限以回传结果
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -22,21 +25,26 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Dependencies
+      - name: Install Environment
         run: |
-          python -m pip install --upgrade pip
           pip install playwright
           playwright install chromium
 
-      - name: Run Search Script
+      - name: Execute Scraper
         env:
-          TZ: Asia/Shanghai
-        run: python search_collector.py
+          TZ: Asia/Shanghai # 设置为上海时区
+        run: python onyphe_collector.py
 
-      - name: Commit and Push results
+      - name: Push to Repository
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add search_results.txt
-          # 只有当文件发生变化时才提交，防止报错
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update search results: $(date +'%Y-%m-%d %H:%M')" && git push)
+          
+          # 检查是否有结果文件更新
+          if [ -f onyphe_results.txt ]; then
+            git add onyphe_results.txt
+            # 只有在内容真正变化时才提交，防止空 commit 导致 Actions 失败
+            git diff --quiet && git diff --staged --quiet || (git commit -m "Update assets: $(date +'%Y-%m-%d %H:%M') (Asia/Shanghai)" && git push)
+          else
+            echo "No output file found."
+          fi
