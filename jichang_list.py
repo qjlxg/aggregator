@@ -2,45 +2,55 @@ import requests
 import re
 from urllib.parse import urlparse
 
-# 定向采集的目标页面（测速博主的在线列表）
+# 依然使用这些优质源
 TARGET_SOURCES = [
     'https://raw.githubusercontent.com/messense/free-fq/main/README.md',
-    'https://t.me/s/Duyaoss',           # 毒药的 TG 预览页
-    'https://t.me/s/jichangdog',         # 机场狗
-    'https://www.duyaoss.com/archives/1/', # 毒药官网文章
-    'https://jichangdog.com/'            # 机场狗官网
+    'https://t.me/s/Duyaoss',
+    'https://t.me/s/jichangdog',
+    'https://www.duyaoss.com/archives/1/',
+    'https://jichangdog.com/'
 ]
 
-def fetch_domains():
+def fetch_clean_domains():
     all_domains = set()
-    # 排除博主域名和干扰项
-    blacklist = ['github.com', 'duyaoss.com', 'jichangdog.com', 'google.com', 't.me', 'p6p.net']
     
-    # 通用域名匹配正则
+    # 1. 严格黑名单：这些词出现在域名里直接滚蛋
+    trash_keywords = [
+        'google', 'baidu', 'weixin', 'weibo', 'x.com', 'twitter', 'github', 
+        'blogspot', 'gravatar', 'wccftech', 'v2ray', 'clash', 'githubusercontent',
+        'cloudflare', 'amazonaws', 'jsdmirror', 'cdn', 'static', 'fonts', 'api'
+    ]
+    
+    # 2. 机场偏好后缀
+    valid_suffixes = ('.xyz', '.top', '.shop', '.cc', '.net', '.org', '.icu', '.ink', '.cfd', '.link')
+
     domain_pattern = re.compile(r'https?://([a-zA-Z0-9][-a-zA-Z0-9]{0,62}(?:\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+)')
 
     for url in TARGET_SOURCES:
-        print(f"[*] 正在收割源: {url}")
         try:
-            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-            r = requests.get(url, headers=headers, timeout=20)
+            print(f"[*] 扫描源: {url}")
+            r = requests.get(url, timeout=15)
             if r.status_code == 200:
-                # 寻找所有链接
                 found = domain_pattern.findall(r.text)
                 for d in found:
                     d = d.lower().replace('www.', '')
-                    # 过滤逻辑：后缀检查 + 黑名单检查
-                    if any(d.endswith(ext) for ext in ['.com', '.net', '.top', '.xyz', '.shop', '.cc', '.me']):
-                        if not any(b in d for b in blacklist):
-                            all_domains.add(d)
-        except Exception as e:
-            print(f"[!] 无法访问 {url}: {e}")
+                    
+                    # 过滤逻辑 A: 长度检查（太短的可能是博主缩写）
+                    if len(d) < 5: continue
+                    
+                    # 过滤逻辑 B: 后缀检查
+                    if not d.endswith(valid_suffixes): continue
+                    
+                    # 过滤逻辑 C: 关键词检查
+                    if any(trash in d for trash in trash_keywords): continue
+                    
+                    all_domains.add(d)
+        except: continue
 
     return sorted(list(all_domains))
 
 if __name__ == "__main__":
-    domains = fetch_domains()
-    if domains:
-        with open("trial.cfg", "w", encoding="utf-8") as f:
-            f.write("\n".join(domains))
-        print(f"[+] 采集完成，共获取 {len(domains)} 个精品域名。")
+    domains = fetch_clean_domains()
+    with open("trial.cfg", "w", encoding="utf-8") as f:
+        f.write("\n".join(domains))
+    print(f"[+] 清洗完毕！共保留 {len(domains)} 个潜在机场入口。")
