@@ -1,0 +1,42 @@
+name: search_collector
+
+on:
+  push:
+    paths:
+      - 'search_collector.py'
+      - '.github/workflows/search_collector.yml'
+  workflow_dispatch: # 支持手动运行
+  schedule:
+    - cron: '0 20 * * *' # 每天北京时间凌晨4点 (UTC 20:00)
+
+jobs:
+  run_scraper:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright
+          playwright install chromium
+
+      - name: Run Search Script
+        env:
+          TZ: Asia/Shanghai
+        run: python search_collector.py
+
+      - name: Commit and Push results
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add search_results.txt
+          # 只有当文件发生变化时才提交，防止报错
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update search results: $(date +'%Y-%m-%d %H:%M')" && git push)
