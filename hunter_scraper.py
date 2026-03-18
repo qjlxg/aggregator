@@ -15,10 +15,10 @@ def fetch_all_domains():
         print("错误: 未在环境变量中找到 HUNTER_API_KEY")
         return
 
-    # 1. 准备时间参数 (格式: YYYY-MM-DD HH:mm:ss)
-    # 设置从 2024 年开始到现在，覆盖大部分存活站点
-    start_time = "2026-01-01 00:00:00"
-    end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # 1. 尝试使用纯日期格式 YYYY-MM-DD (去掉时分秒)
+    # 这是大多数网络安全 API (如 FOFA/Hunter) 最喜欢的格式
+    start_time = "2026-01-01"
+    end_time = datetime.now().strftime("%Y-%m-%d")
 
     # 2. Base64 编码查询词
     encoded_query = base64.urlsafe_b64encode(SEARCH_QUERY.encode()).decode()
@@ -28,7 +28,7 @@ def fetch_all_domains():
     print(f"开始抓取结果... 时间范围: {start_time} 至 {end_time}")
 
     while True:
-        # 在 URL 中加入 start_time 和 end_time
+        # 构造 URL
         url = (
             f"https://api.hunter.how/search?api-key={API_KEY}"
             f"&query={encoded_query}"
@@ -39,11 +39,14 @@ def fetch_all_domains():
         )
         
         try:
+            # 打印请求的 URL (隐藏 API KEY 的一部分) 用于调试
+            debug_url = url.replace(API_KEY, API_KEY[:6] + "***")
+            print(f"请求 URL: {debug_url}")
+            
             response = requests.get(url, timeout=30)
             data = response.json()
             
             if data.get('code') == 200:
-                # 兼容不同版本的 API 返回结构
                 result_data = data.get('data', {})
                 items = result_data.get('list', []) if result_data else []
                 
@@ -56,15 +59,15 @@ def fetch_all_domains():
                     if domain:
                         all_domains.add(domain)
                 
-                print(f"第 {page} 页完成，当前去重后总数: {len(all_domains)}")
+                print(f"第 {page} 页完成，当前累计: {len(all_domains)}")
                 
-                # 判断是否还有下一页
+                # 判断是否翻页结束
                 total = result_data.get('total', 0)
                 if len(all_domains) >= total or len(items) < PAGE_SIZE:
                     break
                 
                 page += 1
-                time.sleep(2) # 礼貌抓取
+                time.sleep(2) 
             else:
                 print(f"API 错误提示: {data.get('message')} (Code: {data.get('code')})")
                 break
@@ -79,7 +82,7 @@ def fetch_all_domains():
                 f.write(d + "\n")
         print(f"任务完成！共保存 {len(all_domains)} 个域名到 {SAVE_FILE}")
     else:
-        print("警告：未抓取到任何有效域名。")
+        print("警告：结果为空。如果格式依然错误，请尝试将 start_time 设为更近的日期。")
 
 if __name__ == "__main__":
     fetch_all_domains()
