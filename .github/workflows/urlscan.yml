@@ -1,19 +1,15 @@
-name: URLScan Asset Scraper
+name: GitHub Code Scanner
 
 on:
   push:
-    # 只有当以下文件变动时才触发，避免无关文件（如 results.txt）变动导致死循环
     paths:
-      - 'urlscan_scraper.py'
-      - '.github/workflows/urlscan.yml'
-    branches:
-      - main  # 或者你的默认分支名（如 master）
+      - 'github_scanner.py'
   schedule:
-    - cron: '0 */8 * * *' 
-  workflow_dispatch: # 保留手动触发按钮
+    - cron: '0 */12 * * *' # 每 12 小时自动跑一次
+  workflow_dispatch:
 
 jobs:
-  scrape:
+  run-task:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -25,23 +21,24 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
 
       - name: Install Requests
         run: pip install requests
 
-      - name: Run URLScan Scraper
-        run: python urlscan_scraper.py
+      - name: Run Scanner
+        env:
+          BOT: ${{ secrets.BOT }} # 这里对应你截图里的 Name
+        run: python github_scanner.py
 
-      - name: Commit and Push
+      - name: Commit Results
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "URLScan-Bot"
-          git add urlscan_results.txt
-          # 检查是否有新扫描到的资产，如果有则提交
-          if [ -n "$(git status --porcelain urlscan_results.txt)" ]; then
-            git commit -m "Update assets from urlscan [skip ci]"
+          git config --local user.email "bot@github.com"
+          git config --local user.name "Scanner-Bot"
+          git add discovered_sites.txt
+          if [ -n "$(git status --porcelain discovered_sites.txt)" ]; then
+            git commit -m "New assets found [skip ci]"
             git push
           else
-            echo "No new assets found, skipping commit."
+            echo "No new results"
           fi
