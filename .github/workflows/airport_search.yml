@@ -1,0 +1,40 @@
+name: airport_search
+
+on:
+  push:
+    paths:
+      - 'airport_search.py'
+      - '.github/workflows/airport_search.yml'
+  workflow_dispatch: # 支持手动运行
+  schedule:
+    - cron: '0 2 * * *' # 每天北京时间上午 10 点运行 (UTC 2:00)
+
+jobs:
+  run-search:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v3
+
+    - name: 设置 Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: 安装依赖
+      run: |
+        pip install requests pytz
+
+    - name: 执行搜索脚本
+      env:
+        BOT: ${{ secrets.BOT }} # 必须在仓库 Settings -> Secrets 中添加 BOT
+      run: python airport_search.py
+
+    - name: 提交结果到仓库
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add results.txt
+        # 只有在文件有变动时才提交，避免报错
+        git diff --quiet && git diff --staged --quiet || (git commit -m "自动更新机场列表: $(date)" && git push)
