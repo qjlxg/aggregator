@@ -3,6 +3,10 @@ import re
 import time
 import os
 import base64
+import urllib3
+
+# 1. 屏蔽烦人的 SSL 警告日志
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # --- 配置区 ---
 GITHUB_TOKEN = os.getenv("BOT")
@@ -11,15 +15,25 @@ KEYWORDS = [
     '"xboard" "docker-compose"',
     '"v2board" "admin"'
 ]
+
+# 严苛的黑名单：过滤掉文档、图标、统计插件等干扰项
+BLACKLIST = [
+    'github.com', 'githubusercontent.com', 'ant.design', 'zhihu.com', 
+    'npmjs.com', 'codecov.io', 'alipayobjects.com', 'jsdelivr.net', 
+    'badgen.net', 'bundlephobia.com', 'google.com', 'twitter.com',
+    'facebook.com', 'docker.com', 'microsoft.com', 'apple.com',
+    'wikipedia.org', 'cloudflare.com', 'v2fly.org', 'trojan-gfw'
+]
+
 HEADERS = {
     "Accept": "application/vnd.github+json",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
     "Authorization": f"token {GITHUB_TOKEN}" if GITHUB_TOKEN else ""
 }
 
 def search_repos(keyword):
-    """第一步：搜索包含关键词的仓库"""
-    print(f"[*] 正在 GitHub 搜索: {keyword}")
+    """搜索包含关键词的仓库代码"""
+    print(f"[*] 正在搜索 GitHub 代码: {keyword}")
     url = f"https://api.github.com/search/code?q={keyword}"
     try:
         res = requests.get(url, headers=HEADERS, timeout=15)
@@ -29,48 +43,57 @@ def search_repos(keyword):
     except:
         return []
 
-def extract_urls_from_text(text):
-    """从文本中提取非 GitHub 的 URL"""
+def extract_urls(text):
+    """从文本中提取 URL 并进行初步过滤"""
     regex = r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+'
     links = re.findall(regex, text)
-    # 过滤掉常见的无关链接
-    exclude = ['github.com', 'githubusercontent.com', 'schema.org', 'wikipedia.org', 'docker.com', 'baidu.com']
-    return [l.rstrip('.') for l in links if not any(ex in l for ex in exclude)]
+    clean_links = []
+    for l in links:
+        l = l.rstrip('.')
+        # 排除黑名单中的域名
+        if not any(b in l.lower() for b in BLACKLIST):
+            clean_links.append(l)
+    return list(set(clean_links))
 
-def get_repo_secrets(repo_fullname):
-    """第二步：深度探测仓库内容（README 和 配置文件）"""
+def get_repo_contents(repo_fullname):
+    """探测仓库内的关键文件"""
     urls = []
-    # 检查 README 和一些可能的配置文件
-    files_to_check = ['README.md', 'docker-compose.yml', '.env.example', 'config.php']
-    
-    for file in files_to_check:
+    # 扫描 README 和常见的配置文件
+    for file in ['README.md', 'docker-compose.yml', '.env.example']:
         file_url = f"https://api.github.com/repos/{repo_fullname}/contents/{file}"
         try:
             res = requests.get(file_url, headers=HEADERS, timeout=10)
             if res.status_code == 200:
                 content = base64.b64decode(res.json()['content']).decode('utf-8', errors='ignore')
-                urls.extend(extract_urls_from_text(content))
+                urls.extend(extract_urls(content))
         except:
             continue
     return list(set(urls))
 
-def is_live_panel(url):
-    """第三步：存活验证"""
+def verify_live_panel(url):
+    """二次验证：确保 URL 存活且具有面板特征"""
     try:
-        # 针对面板通常重定向或需要较长时间响应，设置 10s 超时
-        r = requests.get(url, timeout=10, verify=False, allow_redirects=True)
+        # 模拟真实浏览器请求，避免被简单的 WAF 拦截
+        r = requests.get(url, timeout=10, verify=False, allow_redirects=True, headers=HEADERS)
         if r.status_code == 200:
-            # 进一步验证是否包含面板特征
-            features = ['v2board', 'xboard', 'umi.js', 'auth/login']
-            if any(f in r.text.lower() for f in features):
+            html = r.text.lower()
+            # 只有包含这些特征词的才会被记录
+            features = ['v2board', 'xboard', 'sspanel', 'umi.js', 'auth/login', 'v2b']
+            if any(f in html for f in features):
+                print(f"[+] 发现目标: {url}")
                 return True
     except:
         pass
     return False
 
 if __name__ == "__main__":
-    final_live_sites = set()
+    live_sites = set()
     processed_repos = set()
+
+    # 读取旧数据实现增量去重
+    if os.path.exists("live_panels.txt"):
+        with open("live_panels.txt", "r") as f:
+            live_sites = set(line.strip() for line in f)
 
     for kw in KEYWORDS:
         items = search_repos(kw)
@@ -78,22 +101,20 @@ if __name__ == "__main__":
             repo_name = item['repository']['full_name']
             if repo_name in processed_repos: continue
             
-            # 提取潜在链接
-            potential_links = get_repo_secrets(repo_name)
+            # 深入仓库抓取链接
+            potential_links = get_repo_contents(repo_name)
             
-            # 验证存活
+            # 验证每一个链接
             for link in potential_links:
-                print(f"[*] 验证链接: {link}")
-                if is_live_panel(link):
-                    print(f"[+] 发现存活面板: {link}")
-                    final_live_sites.add(link)
+                if link not in live_sites and verify_live_panel(link):
+                    live_sites.add(link)
             
             processed_repos.add(repo_name)
-            time.sleep(2) # 避开频率限制
+            time.sleep(5) # 遵守 API 速率限制
 
-    # 写入结果
+    # 结果保存
     with open("live_panels.txt", "w") as f:
-        for site in sorted(final_live_sites):
+        for site in sorted(live_sites):
             f.write(site + "\n")
             
-    print(f"\n[OK] 闭环运行结束。共发现 {len(final_live_sites)} 个存活面板。")
+    print(f"\n[DONE] 扫描完成。当前共搜集到 {len(live_sites)} 个存活面板。")
