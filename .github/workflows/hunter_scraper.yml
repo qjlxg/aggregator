@@ -1,0 +1,38 @@
+name: hunter_scraper
+
+on:
+  workflow_dispatch: # 支持手动运行
+  push:
+    paths:
+      - 'hunter_scraper.py'
+      - '.github/workflows/hunter_scraper.yml'
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install requests
+
+      - name: Run Hunter Scraper
+        env:
+          # 需要在 GitHub Repo Settings -> Secrets and variables -> Actions 中添加 HUNTER_API_KEY
+          HUNTER_API_KEY: ${{ secrets.HUNTER_API_KEY }}
+        run: python hunter_scraper.py
+
+      - name: Commit and Push Results
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add hunter_results.txt
+          # 只有当文件有变动时才提交，防止报错
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update hunter domains (Shanghai Time: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M:%S'))" && git push)
