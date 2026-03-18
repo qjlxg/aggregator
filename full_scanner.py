@@ -2,94 +2,100 @@ import requests
 import re
 import time
 import os
+import base64
 import urllib3
 from concurrent.futures import ThreadPoolExecutor
 
-# 屏蔽警告
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # --- 配置区 ---
 GITHUB_TOKEN = os.getenv("BOT")
+# 搜索更直接的“泄露点”：配置文件
 SEARCH_KEYWORDS = [
-    'layouts__index.async.js',
-    'v2board admin',
-    'xboard docker-compose'
+    'extension:yml "V2BOARD_URL"',
+    'extension:yaml "XBOARD_URL"',
+    'filename:docker-compose.yml "8080:80"',
+    'filename:.env "DB_PASSWORD" "v2board"',
+    '"/theme/Rocket/assets/" extension:php'
 ]
 
-# 更加精准的黑名单，把那些刷屏的域名全部干掉
+# 严格过滤掉已知的干扰大厂域名
 BLACKLIST = [
-    'github.com', 'githubusercontent.com', 'ant.design', 'zhihu.com', 
-    'npmjs.com', 'codecov.io', 'alipayobjects.com', 'jsdelivr.net', 
-    'badgen.net', 'bundlephobia.com', 'google.com', 'twitter.com',
-    'facebook.com', 'docker.com', 'microsoft.com', 'apple.com',
-    'wikipedia.org', 'cloudflare.com', 'v2fly.org', 'trojan-gfw',
-    'shields.io', 'travis-ci.org', 'reactjs.org', 'vuejs.org'
+    'github.com', 'vercel.app', 'github.io', 'ant.design', 'npmjs.com', 
+    'google.com', 'apple.com', 'microsoft.com', 'docker.com', 'baidu.com',
+    'zhihu.com', 'codecov.io', 'jsdelivr.net', 'facebook.com', 'twitter.com'
 ]
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "Accept": "application/vnd.github+json",
+    "User-Agent": "Mozilla/5.0",
     "Authorization": f"token {GITHUB_TOKEN}" if GITHUB_TOKEN else ""
 }
 
-def verify_live(url):
-    """验证链接是否存活"""
-    # 过滤明显的非面板域名
-    if any(domain in url.lower() for domain in BLACKLIST):
-        return None
-    
+def verify_and_check_body(url):
+    """访问 URL 并检查你要求的 Body 特征"""
+    if any(b in url.lower() for b in BLACKLIST): return None
     try:
-        # 只要能正常响应，就先记录下来
-        r = requests.get(url, timeout=10, verify=False, allow_redirects=True, headers=HEADERS)
+        r = requests.get(url, timeout=10, verify=False, allow_redirects=True)
         if r.status_code == 200:
-            print(f"[+] 发现存活站点: {url}")
-            return url
+            html = r.text
+            # 匹配你提供的任意一个特征
+            features = [
+                "/theme/Rocket/assets/", "/theme/Aurora/static/", "v2board", 
+                "xboard", "SSPanel-Uim", "layouts__index.async.js"
+            ]
+            if any(f in html for f in features):
+                print(f"[!] 命中特征站: {url}")
+                return url
     except:
         pass
     return None
 
-def fetch_links_from_github(keyword):
-    """从搜索结果中提取所有链接"""
-    print(f"[*] 正在搜索 GitHub: {keyword}")
-    links = set()
-    url = f"https://api.github.com/search/code?q={keyword}"
-    try:
-        res = requests.get(url, headers=HEADERS, timeout=15)
-        if res.status_code == 200:
-            items = res.json().get('items', [])
-            for item in items:
-                # 1. 尝试从仓库描述中抓链接
-                repo_api_url = item['repository']['url']
-                repo_info = requests.get(repo_api_url, headers=HEADERS, timeout=10).json()
-                if repo_info.get('homepage'):
-                    links.add(repo_info['homepage'])
-                
-                # 2. 从描述中用正则扣链接
-                desc = repo_info.get('description', '')
-                if desc:
-                    found = re.findall(r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', desc)
-                    links.update(found)
-        time.sleep(5)
-    except Exception as e:
-        print(f"[!] 搜索出错: {e}")
+def get_config_links(repo_fullname):
+    """深入仓库文件搜索 URL"""
+    links = []
+    # 尝试读取配置文件
+    for file_path in ['docker-compose.yml', '.env', 'config/v2board.php', '.env.example']:
+        api_url = f"https://api.github.com/repos/{repo_fullname}/contents/{file_path}"
+        try:
+            res = requests.get(api_url, headers=HEADERS, timeout=10)
+            if res.status_code == 200:
+                content = base64.b64decode(res.json()['content']).decode('utf-8', errors='ignore')
+                # 寻找 http 链接
+                found = re.findall(r'https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', content)
+                links.extend(found)
+        except:
+            continue
     return links
 
 if __name__ == "__main__":
-    all_potential = set()
+    potential_pool = set()
+    
     for kw in SEARCH_KEYWORDS:
-        all_potential.update(fetch_links_from_github(kw))
+        print(f"[*] 正在挖掘 GitHub 配置文件: {kw}")
+        url = f"https://api.github.com/search/code?q={kw}"
+        try:
+            res = requests.get(url, headers=HEADERS, timeout=15)
+            if res.status_code == 200:
+                items = res.json().get('items', [])
+                for item in items:
+                    repo_name = item['repository']['full_name']
+                    # 从配置文件中抠链接
+                    potential_pool.update(get_config_links(repo_name))
+            time.sleep(10) # 严格遵守速率限制
+        except Exception as e:
+            print(f"[!] 报错: {e}")
 
-    print(f"[*] 原始搜集到 {len(all_potential)} 个链接，开始存活验证...")
+    print(f"[*] 挖掘到 {len(potential_pool)} 个潜在地址，开始 Body 特征核验...")
 
-    live_sites = set()
-    # 提高线程数到 20，加快速度
-    with ThreadPoolExecutor(max_workers=20) as executor:
-        results = executor.map(verify_live, all_potential)
+    live_panels = set()
+    with ThreadPoolExecutor(max_workers=15) as executor:
+        results = executor.map(verify_and_check_body, potential_pool)
         for r in results:
-            if r: live_sites.add(r)
+            if r: live_panels.add(r)
 
-    # 保存结果
     with open("live_panels.txt", "w") as f:
-        for site in sorted(live_sites):
+        for site in sorted(live_panels):
             f.write(site + "\n")
             
-    print(f"\n[DONE] 扫描完成。当前有效站点总数: {len(live_sites)}")
+    print(f"\n[DONE] 扫描结束，共捕获 {len(live_panels)} 个特征匹配站。")
