@@ -1,0 +1,44 @@
+name: Full Auto Panel Scanner
+
+on:
+  push:
+    paths:
+      - 'full_scanner.py'
+  schedule:
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Run Full Scanner
+        env:
+          BOT: ${{ secrets.BOT }}
+        run: python full_scanner.py
+
+      - name: Push Results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "Scanner-Bot"
+          git add live_panels.txt
+          if [ -n "$(git status --porcelain live_panels.txt)" ]; then
+            git commit -m "Update live panels [skip ci]"
+            git push
+          else
+            echo "No new live panels found."
+          fi
