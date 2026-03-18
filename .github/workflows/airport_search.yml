@@ -5,36 +5,54 @@ on:
     paths:
       - 'airport_search.py'
       - '.github/workflows/airport_search.yml'
-  workflow_dispatch: # 支持手动运行
+  workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *' # 每天北京时间上午 10 点运行 (UTC 2:00)
+    # 每 6 小时运行一次 (UTC 时间: 18:00, 00:00, 06:00, 12:00)
+    # 对应北京时间: 02:00, 08:00, 14:00, 20:00
+    - cron: '0 */6 * * *'
+
+# 授予推送代码的权限
+permissions:
+  contents: write
 
 jobs:
-  run-search:
+  build:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          # 必须检出完整历史以便推送
+          persist-credentials: true
 
-    - name: 设置 Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: 安装依赖
-      run: |
-        pip install requests pytz
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests pytz urllib3
 
-    - name: 执行搜索脚本
-      env:
-        BOT: ${{ secrets.BOT }} # 必须在仓库 Settings -> Secrets 中添加 BOT
-      run: python airport_search.py
+      - name: Run Search Script
+        env:
+          # 使用你在 Secrets 中保存的 BOT Token
+          BOT: ${{ secrets.BOT }}
+          TZ: Asia/Shanghai
+        run: python airport_search.py
 
-    - name: 提交结果到仓库
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add results.txt
-        # 只有在文件有变动时才提交，避免报错
-        git diff --quiet && git diff --staged --quiet || (git commit -m "自动更新机场列表: $(date)" && git push)
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # 检查文件是否有变化
+          git add results.txt
+          if git diff --staged --quiet; then
+            echo "No changes in results.txt, skipping push."
+          else
+            git commit -m "chore: 自动更新机场试用列表 ($(date +'%Y-%m-%d %H:%M:%S'))"
+            git push
+          fi
