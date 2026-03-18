@@ -2,8 +2,9 @@ import requests
 import base64
 import time
 import os
+from datetime import datetime
 
-# 从 GitHub Secrets 中读取 API Key，保证安全
+# 从 GitHub Secrets 中读取 API Key
 API_KEY = os.getenv("HUNTER_API_KEY")
 SEARCH_QUERY = 'web.body="/theme/default/assets/components.chunk.css"'
 SAVE_FILE = "hunter_results.txt"
@@ -14,21 +15,40 @@ def fetch_all_domains():
         print("错误: 未在环境变量中找到 HUNTER_API_KEY")
         return
 
+    # 1. 准备时间参数 (格式: YYYY-MM-DD HH:mm:ss)
+    # 设置从 2024 年开始到现在，覆盖大部分存活站点
+    start_time = "2026-01-01 00:00:00"
+    end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # 2. Base64 编码查询词
     encoded_query = base64.urlsafe_b64encode(SEARCH_QUERY.encode()).decode()
     all_domains = set()
     page = 1
     
-    print(f"开始抓取结果...")
+    print(f"开始抓取结果... 时间范围: {start_time} 至 {end_time}")
 
     while True:
-        url = f"https://api.hunter.how/search?api-key={API_KEY}&query={encoded_query}&page={page}&page_size={PAGE_SIZE}"
+        # 在 URL 中加入 start_time 和 end_time
+        url = (
+            f"https://api.hunter.how/search?api-key={API_KEY}"
+            f"&query={encoded_query}"
+            f"&page={page}"
+            f"&page_size={PAGE_SIZE}"
+            f"&start_time={start_time}"
+            f"&end_time={end_time}"
+        )
+        
         try:
             response = requests.get(url, timeout=30)
             data = response.json()
             
             if data.get('code') == 200:
-                items = data['data'].get('list', [])
+                # 兼容不同版本的 API 返回结构
+                result_data = data.get('data', {})
+                items = result_data.get('list', []) if result_data else []
+                
                 if not items:
+                    print("未发现更多数据，抓取结束。")
                     break
                 
                 for item in items:
@@ -36,25 +56,30 @@ def fetch_all_domains():
                     if domain:
                         all_domains.add(domain)
                 
-                print(f"第 {page} 页抓取完成，目前累计 {len(all_domains)} 个域名")
+                print(f"第 {page} 页完成，当前去重后总数: {len(all_domains)}")
                 
-                if len(items) < PAGE_SIZE:
+                # 判断是否还有下一页
+                total = result_data.get('total', 0)
+                if len(all_domains) >= total or len(items) < PAGE_SIZE:
                     break
                 
                 page += 1
-                time.sleep(2) # 避免触发频率限制
+                time.sleep(2) # 礼貌抓取
             else:
-                print(f"API 错误: {data.get('message')}")
+                print(f"API 错误提示: {data.get('message')} (Code: {data.get('code')})")
                 break
         except Exception as e:
-            print(f"请求异常: {e}")
+            print(f"请求发生异常: {e}")
             break
 
+    # 3. 写入文件
     if all_domains:
         with open(SAVE_FILE, "w", encoding="utf-8") as f:
             for d in sorted(list(all_domains)):
                 f.write(d + "\n")
-        print(f"成功保存 {len(all_domains)} 个域名到 {SAVE_FILE}")
+        print(f"任务完成！共保存 {len(all_domains)} 个域名到 {SAVE_FILE}")
+    else:
+        print("警告：未抓取到任何有效域名。")
 
 if __name__ == "__main__":
     fetch_all_domains()
