@@ -5,40 +5,42 @@ on:
     paths:
       - 'search_and_save.py'
       - '.github/workflows/search_and_save.yml'
-  workflow_dispatch: # 支持手动运行按钮
+  workflow_dispatch: 
 
 jobs:
-  build:
+  run-search:
     runs-on: ubuntu-latest
     env:
-      TZ: Asia/Shanghai # 设置上海时区
+      TZ: Asia/Shanghai
 
     steps:
-      - name: 检出代码
+      - name: 检出仓库
         uses: actions/checkout@v4
         with:
-          # 使用你设置的名为 BOT 的 Secret (建议是 PAT)
           token: ${{ secrets.BOT }}
 
-      - name: 设置 Python
+      - name: 设置 Python 环境
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: 运行去重脚本
+      - name: 安装依赖
+        run: pip install requests
+
+      - name: 执行全站搜索抓取
+        env:
+          BOT_TOKEN: ${{ secrets.BOT }} # 将 Secret 传入脚本
         run: python search_and_save.py
 
-      - name: 提交并推送更改
+      - name: 提交并推送数据
         run: |
-          # 配置机器人身份
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # 检查是否有内容变更
           if [ -n "$(git status --porcelain)" ]; then
             git add .
-            git commit -m "chore: 🤖 自动更新域名列表 [$(date +'%Y-%m-%d %H:%M:%S')]"
+            git commit -m "chore: 🤖 自动抓取 GitHub 域名数据 [$(date +'%Y-%m-%d %H:%M:%S')]"
             git push
           else
-            echo "没有发现文件变动，跳过推送。"
+            echo "数据未发生变化，无需更新。"
           fi
