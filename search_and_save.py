@@ -2,12 +2,13 @@ import os
 import requests
 import base64
 import time
+import re
 
 def main():
-    # 从环境变量获取 Token (由 GitHub Actions 传入)
+    # 获取 GitHub Actions 传入的 Secret
     token = os.getenv('BOT_TOKEN')
     if not token:
-        print("错误: 未找到环境变量 BOT_TOKEN")
+        print("❌ 错误: 环境变量 BOT_TOKEN 为空，请检查 Secrets 设置。")
         return
 
     headers = {
@@ -15,68 +16,66 @@ def main():
         "Accept": "application/vnd.github.v3+json"
     }
 
-    # 定义搜索查询：搜索路径为 data/valid-domains.txt 的文件
-    # 你也可以加上 extension:txt 或 size:>10 来过滤
+    # 搜索全站路径为 data/valid-domains.txt 的文件
     query = "path:data/valid-domains.txt"
     search_url = f"https://api.github.com/search/code?q={query}"
     
     unique_domains = set()
     
-    print(f"正在 GitHub 全站搜索: {query}...")
+    print(f"🔍 正在检索 GitHub 全站数据: {query}...")
     
     try:
         response = requests.get(search_url, headers=headers)
-        if response.status_code != 200:
-            print(f"搜索失败: {response.status_code}, {response.text}")
+        if response.status_code == 403:
+            print("🚫 触发 API 速率限制，请稍后再试或检查 Token 权限。")
+            return
+        elif response.status_code != 200:
+            print(f"❌ 搜索失败: {response.status_code}")
             return
         
         items = response.json().get('items', [])
-        print(f"找到 {len(items)} 个匹配的文件库。")
+        print(f"📂 发现 {len(items)} 个匹配的仓库文件。")
 
         for item in items:
-            repo_full_name = item['repository']['full_name']
-            file_url = item['url'] # 这是获取文件内容的 API 链接
+            repo_name = item['repository']['full_name']
+            file_url = item['url']
             
-            print(f"正在抓取: {repo_full_name} ...")
+            print(f"读取中: {repo_name}...")
             
-            # 获取文件内容（通常是 Base64 编码）
-            file_res = requests.get(file_url, headers=headers)
-            if file_res.status_code == 200:
-                content_json = file_res.json()
-                raw_content = base_base64_decode(content_json.get('content', ''))
-                
-                # 处理内容
-                for line in raw_content.splitlines():
-                    domain = line.strip()
-                    if domain and "." in domain: # 简单的域名校验
-                        unique_domains.add(domain)
+            # 获取内容
+            content_res = requests.get(file_url, headers=headers)
+            if content_res.status_code == 200:
+                data = content_res.json()
+                # GitHub API 返回的内容是 Base64 编码的
+                try:
+                    raw_content = base64.b64decode(data['content']).decode('utf-8')
+                    # 提取 URL (支持 http/https)
+                    links = re.findall(r'https?://[^\s,>]+', raw_content)
+                    for link in links:
+                        # 清洗结尾的斜杠或空格
+                        clean_link = link.strip().rstrip('/')
+                        unique_domains.add(clean_link)
+                except Exception as e:
+                    print(f"解析 {repo_name} 失败: {e}")
             
-            # 遵守 API 速率限制，稍微停顿
-            time.sleep(1)
+            # 间隔 1.5 秒防止被封
+            time.sleep(1.5)
 
     except Exception as e:
-        print(f"运行出错: {e}")
+        print(f"⚠️ 运行异常: {e}")
 
-    # 保存结果
-    output_file = 'data/all-collected-domains.txt'
-    os.makedirs('data', exist_ok=True)
+    # 结果处理
+    output_dir = 'data'
+    output_file = os.path.join(output_dir, 'all-collected-domains.txt')
+    os.makedirs(output_dir, exist_ok=True)
     
     if unique_domains:
         sorted_domains = sorted(list(unique_domains))
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write('\n'.join(sorted_domains) + '\n')
-        print(f"✅ 处理完成！抓取到 {len(unique_domains)} 个唯一域名，保存至 {output_file}")
+        print(f"✅ 抓取成功！总计 {len(sorted_domains)} 个去重链接已保存。")
     else:
-        print("❌ 未抓取到任何有效域名数据。")
-
-def base_base64_decode(encoded_str):
-    """解码 GitHub API 返回的 Base64 内容"""
-    try:
-        # 移除换行符
-        decoded_bytes = base64.b64decode(encoded_str.replace('\n', ''))
-        return decoded_bytes.decode('utf-8')
-    except:
-        return ""
+        print("📭 未能从搜索结果中提取到任何有效链接。")
 
 if __name__ == "__main__":
     main()
