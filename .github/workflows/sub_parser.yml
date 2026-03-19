@@ -1,0 +1,39 @@
+name: sub_parser
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'sub_parser.py'
+      - '.github/workflows/sub_parser.yml'
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install requests pyyaml
+
+      - name: Run
+        env:
+          LINK: ${{ vars.LINK }}
+        run: python sub_parser.py
+
+      - name: Push Changes
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Action"
+          git add data/*
+          git commit -m "Update: $(date)" || exit 0
+          git push
