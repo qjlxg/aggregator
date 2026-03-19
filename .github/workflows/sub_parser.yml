@@ -8,11 +8,8 @@ on:
       - '.github/workflows/sub_parser.yml'
 
 jobs:
-  run-script:
+  run:
     runs-on: ubuntu-latest
-    env:
-      TZ: Asia/Shanghai
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,18 +19,18 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Dependencies
-        run: pip install requests pyyaml
+      - name: Install Deps
+        run: pip install requests maxminddb
 
-      - name: Run
+      - name: Execute
         env:
           LINK: ${{ vars.LINK }}
+          TZ: Asia/Shanghai
         run: python sub_parser.py
 
-      - name: Push Changes
+      - name: Push
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Action"
-          git add data/*
-          git commit -m "Update: $(date)" || exit 0
-          git push
+          git config --local user.email "bot@github.com"
+          git config --local user.name "NodeParserBot"
+          git add data/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update nodes: $(date +'%Y-%m-%d %H:%M')" && git push)
