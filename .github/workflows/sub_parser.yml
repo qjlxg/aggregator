@@ -7,6 +7,10 @@ on:
       - 'sub_parser.py'
       - '.github/workflows/sub_parser.yml'
 
+  schedule:
+    - cron: '0 16 * * *'
+  
+
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -33,4 +37,5 @@ jobs:
           git config --local user.email "bot@github.com"
           git config --local user.name "NodeParserBot"
           git add data/
+        
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update nodes: $(date +'%Y-%m-%d %H:%M')" && git push)
