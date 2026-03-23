@@ -126,7 +126,7 @@ def rename_node(uri, reader):
                 country_name = names.get('zh-CN', names.get('zh-CN', '未知'))
                 flag = get_flag(match.get('country', {}).get('iso_code'))
         
-        return f"{base_uri}#{flag} {country_name} |省着用"
+        return f"{base_uri}#{flag} {country_name} |Windows_me"
     except:
         return uri
 
