@@ -118,7 +118,7 @@ def rename_node(uri, reader):
         parsed = urlparse(base_uri)
         ip = get_ip(parsed.hostname)
         
-        country_name, flag = "Unknown", "🌐"
+        country_name, flag = "🌐Unknown"
         if ip and reader:
             match = reader.get(ip)
             if match:
@@ -126,7 +126,7 @@ def rename_node(uri, reader):
                 country_name = names.get('zh-CN', names.get('en', 'Unknown'))
                 flag = get_flag(match.get('country', {}).get('iso_code'))
         
-        return f"{base_uri}#{flag} {country_name} | 省点用"
+        return f"{base_uri}#{flag} {country_name}|省点用"
     except:
         return uri
 
