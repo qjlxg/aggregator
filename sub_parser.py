@@ -118,15 +118,15 @@ def rename_node(uri, reader):
         parsed = urlparse(base_uri)
         ip = get_ip(parsed.hostname)
         
-        country_name, flag = "🌐Unknown"
+        country_name, flag = "未知", "🌐"
         if ip and reader:
             match = reader.get(ip)
             if match:
                 names = match.get('country', {}).get('names', {})
-                country_name = names.get('zh-CN', names.get('en', 'Unknown'))
+                country_name = names.get('zh-CN', names.get('zh-CN', '未知'))
                 flag = get_flag(match.get('country', {}).get('iso_code'))
         
-        return f"{base_uri}#{flag} {country_name}|省点用"
+        return f"{base_uri}#{flag} {country_name} |省点用"
     except:
         return uri
 
@@ -138,7 +138,7 @@ def fetch_source(url):
         if resp.status_code != 200: return []
         content = resp.text.strip()
         
-        # 流量与到期校验 
+      
         info = {}
         h = resp.headers.get('Subscription-Userinfo', '')
         for item in h.split(';'):
