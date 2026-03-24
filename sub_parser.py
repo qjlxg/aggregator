@@ -5,8 +5,8 @@ from datetime import datetime
 # ================= 配置区 (严格保留您的参数) =================
 MY_SIGNATURE = "🔋 搬砖专用通道 (每月一更)"
 MY_REMARK = "|每月一更"
-SLOGAN_1 = "# 节点虽多，请且用且珍惜"
-SLOGAN_2 = "# 正在连接到月球背面..."
+SLOGAN_1 = "节点虽多，请且用且珍惜"
+SLOGAN_2 = "正在连接到月球背面..."
 # =============================================================
 
 def get_flag(code):
@@ -27,12 +27,18 @@ def get_ip(hostname):
     except: return None
 
 def parse_uri_to_clash(uri):
-    """全协议深度解析引擎 (保持高兼容性)"""
+    """深度解析引擎 (保持原版逻辑)"""
     try:
-        if "://" not in uri or "#" not in uri: return None
-        parts = uri.split('#')
-        tag = unquote(parts[1])
-        base_uri = parts[0]
+        if "://" not in uri: return None
+        # 处理不带 # 的情况
+        if "#" in uri:
+            parts = uri.split('#')
+            base_uri = parts[0]
+            tag = unquote(parts[1])
+        else:
+            base_uri = uri
+            tag = "Unnamed_Node"
+            
         parsed = urlparse(base_uri)
         scheme = parsed.scheme.lower()
         node = {"name": tag, "server": parsed.hostname, "port": parsed.port or 443, "udp": True}
@@ -54,8 +60,7 @@ def parse_uri_to_clash(uri):
             return node
         elif scheme == 'ssr':
             ssr_raw = decode_base64(base_uri.replace("ssr://", ""))
-            main_part = ssr_raw.split('/?')[0]
-            m = main_part.split(':')
+            m = ssr_raw.split('/?')[0].split(':')
             if len(m) >= 6:
                 node.update({"type": "ssr", "server": m[0], "port": int(m[1]), "protocol": m[2], "cipher": m[3], "obfs": m[4], "password": decode_base64(m[5])})
             return node
@@ -83,7 +88,6 @@ def parse_uri_to_clash(uri):
     return None
 
 def rename_node(uri, reader):
-    """重命名逻辑：DNS解析失败则保留原名，确保节点不丢失"""
     try:
         parts = uri.split('#')
         base_uri = parts[0]
@@ -110,19 +114,19 @@ def fetch_source(url):
         content = resp.text.strip()
         info = {}
         h = resp.headers.get('Subscription-Userinfo', '')
-        for item in h.split(';'):
-            if '=' in item:
-                k, v = item.split('=', 1)
-                try: info[k.strip().lower()] = int(v.strip())
-                except: pass
-        if info.get("total", 0) > 0:
-            if (info["total"] - (info.get("upload", 0) + info.get("download", 0))) < (1024**3): return []
+        if h:
+            for item in h.split(';'):
+                if '=' in item:
+                    k, v = item.split('=', 1)
+                    try: info[k.strip().lower()] = int(v.strip())
+                    except: pass
+            if info.get("total", 0) > 0:
+                if (info["total"] - (info.get("upload", 0) + info.get("download", 0))) < (1024**3): return []
         if info.get("expire") and info["expire"] > 0 and int(time.time()) >= info["expire"]: return []
         if "://" not in content:
             decoded = decode_base64(content)
             if decoded: content = decoded
-        pattern = r'(?:vmess|vless|ss|ssr|trojan|hysteria2|hy2|tuic|socks)://[^\s\'"<>]+'
-        return re.findall(pattern, content, re.IGNORECASE)
+        return re.findall(r'(?:vmess|vless|ss|ssr|trojan|hysteria2|hy2|tuic|socks)://[^\s\'"<>]+', content, re.IGNORECASE)
     except: return []
 
 def main():
@@ -142,56 +146,37 @@ def main():
         final_nodes_uris = list(executor.map(lambda u: rename_node(u, reader), unique_uris))
     if reader: reader.close()
 
-    update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     os.makedirs('data', exist_ok=True)
 
-    # 1. 保存 nodes.txt
+    # 1. nodes.txt (纯净节点列表，不加任何注释，防止 Provider 报错)
     with open('data/nodes.txt', 'w', encoding='utf-8') as f:
-        f.write(f"{MY_SIGNATURE}\n{SLOGAN_1}\n{SLOGAN_2}\n# Updated at: {update_time}\n\n" + '\n'.join(final_nodes_uris))
+        f.write('\n'.join(final_nodes_uris))
 
-    # 2. 保存 v2ray.txt
-    clean_slogan = SLOGAN_2.replace('# ','').replace('#','')
-    header_node = f"ss://YWVzLTI1Ni1nY206MTIzNDU2@127.0.0.1:8888#🚀_{clean_slogan}_{MY_REMARK}"
-    v2ray_content = header_node + "\n" + '\n'.join(final_nodes_uris)
-    with open('data/v2ray.txt', 'w', encoding='utf-8') as f:
-        f.write(base64.b64encode(v2ray_content.encode('utf-8')).decode('utf-8'))
-
-    # 3. 生成 Clash YAML (全包含模式，不再使用外部 URL 加载)
+    # 2. clash.yaml (严格遵循 YAML 规范)
     clash_proxies = []
     for uri in final_nodes_uris:
         node_cfg = parse_uri_to_clash(uri)
         if node_cfg: clash_proxies.append(node_cfg)
 
-    clash_config = {
-        "port": 7890, "socks-port": 7891, "allow-lan": True, "mode": "Rule", "log-level": "info",
-        "dns": {
-            "enable": True, "enhanced-mode": "fake-ip", "fake-ip-range": "198.18.0.1/16",
-            "nameserver": ["119.29.29.29", "223.5.5.5"],
-            "fallback": ["8.8.8.8", "tls://1.0.0.1:853"]
-        },
-        "proxies": clash_proxies,
-        "proxy-groups": [
-            {"name": "🔰 节点选择", "type": "select", "proxies": ["⚡ 自动测速", "DIRECT"] + [p['name'] for p in clash_proxies]},
-            {"name": "⚡ 自动测速", "type": "url-test", "url": "http://www.gstatic.com/generate_204", "interval": 300, "proxies": [p['name'] for p in clash_proxies]}
-        ],
-        "rules": ["GEOIP,LAN,DIRECT", "GEOIP,CN,DIRECT", "MATCH,🔰 节点选择"]
-    }
-
     with open('data/clash.yaml', 'w', encoding='utf-8') as f:
-        f.write(f"# --------------------------------------------------\n")
-        f.write(f"# 标题: {MY_SIGNATURE}\n")
-        f.write(f"# 流量: 999,999 GB (约 976.5 TB)\n")
-        f.write(f"# 到期: 2099-12-31\n")
-        f.write(f"# --------------------------------------------------\n")
-        f.write(f"# subscription-userinfo: upload=0; download=0; total=1073740742656000; expire=4070880000\n")
+        # 第一行必须是这个，才能在 Clash 里刷出流量信息
+        f.write(f"# subscription-userinfo: upload=0; download=0; total=1073741824000000; expire=4070880000\n")
         f.write(f'# profile-title: "{MY_SIGNATURE}"\n')
-        f.write(f"{SLOGAN_1}\n")
-        f.write(f"{SLOGAN_2}\n")
-        f.write(f"# Updated at: {update_time}\n")
-        f.write(f"# --------------------------------------------------\n")
-        yaml.dump(clash_config, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
+        f.write(f"# {SLOGAN_1}\n")
+        f.write(f"# {SLOGAN_2}\n\n")
+        
+        config = {
+            "port": 7890, "socks-port": 7891, "allow-lan": True, "mode": "rule", "log-level": "info",
+            "proxies": clash_proxies,
+            "proxy-groups": [
+                {"name": "🔰 节点选择", "type": "select", "proxies": ["🎯 全球直连"] + [p['name'] for p in clash_proxies]},
+                {"name": "🎯 全球直连", "type": "select", "proxies": ["DIRECT", "🔰 节点选择"]}
+            ],
+            "rules": ["MATCH,🔰 节点选择"]
+        }
+        yaml.dump(config, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
 
-    print(f"✨ 任务完成！节点: {len(clash_proxies)}")
+    print(f"✨ 导出成功！节点数: {len(clash_proxies)}")
 
 if __name__ == "__main__":
     main()
