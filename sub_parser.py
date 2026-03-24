@@ -23,9 +23,7 @@ def get_short_id(text):
     return hashlib.md5(text.encode()).hexdigest()[:4]
 
 def parse_usage_and_expire(content, headers):
-    """解析订阅响应头中的流量和过期信息"""
     info = {"upload": 0, "download": 0, "total": 0, "expire": 0}
-    # 尝试从响应头获取 Subscription-Userinfo
     user_info = headers.get('Subscription-Userinfo') or headers.get('subscription-userinfo')
     if user_info:
         parts = user_info.split(';')
@@ -36,7 +34,6 @@ def parse_usage_and_expire(content, headers):
     return info
 
 def parse_uri_to_clash(uri):
-    """支持 SS, VMess, VLESS, Trojan, Hy2, TUIC, Socks"""
     try:
         if "://" not in uri: return None
         parts = uri.split('#')
@@ -70,8 +67,7 @@ def parse_uri_to_clash(uri):
     except: return None
     return None
 
-def rename_node(uri, reader):def rename_node(uri, reader):
-    """强制清洗备注：仅保留 [国旗] [国家名] [口号]_[ID]"""
+def rename_node(uri, reader):
     try:
         base_uri = uri.split('#')[0]
         parsed = urlparse(base_uri)
@@ -87,16 +83,13 @@ def rename_node(uri, reader):def rename_node(uri, reader):
                     country_name = zh_name
                     flag = get_flag(match.get('country', {}).get('iso_code'))
 
-        # 生成带有口号和唯一 ID 的新标签
         short_id = get_short_id(base_uri)
         new_tag = f"{flag} {country_name} 打倒美帝国主义及其一切走狗_{short_id}"
-        
         return f"{base_uri}#{new_tag}"
     except:
         return uri
 
 def fetch_source(url_info):
-    """抓取源并进行流量/时间校验"""
     idx, url = url_info
     try:
         headers = {'User-Agent': 'ClashMeta/1.16.0 v2rayN/6.23'}
@@ -104,23 +97,18 @@ def fetch_source(url_info):
         if resp.status_code != 200: return []
         
         content = resp.text.strip()
-        
-        # --- 流量与到期判定 ---
         info = parse_usage_and_expire(content, resp.headers)
         u, d, total = info.get("upload", 0), info.get("download", 0), info.get("total", 0)
         expire = info.get("expire")
         now = int(time.time())
-
         THRESHOLD_1GB = 1024 * 1024 * 1024
 
         if total > 0:
             remaining = total - (u + d)
             if remaining < THRESHOLD_1GB: return []
-
         if expire and expire > 0:
             if now >= expire: return []
 
-        # --- 提取节点 ---
         if "://" not in content:
             decoded = decode_base64(content)
             if decoded: content = decoded
@@ -141,7 +129,6 @@ def main():
     all_uris = []
     
     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
-        # 使用枚举转换格式以适配 fetch_source
         results = list(executor.map(fetch_source, list(enumerate(links))))
         for r in results: all_uris.extend(r)
     
@@ -159,7 +146,6 @@ def main():
 
     os.makedirs('data', exist_ok=True)
 
-    # 1. 保存 Clash 配置
     with open('data/clash.yaml', 'w', encoding='utf-8') as f:
         f.write('# profile-title: "Aggregated Subscription"\n')
         proxy_names = [p['name'] for p in clash_proxies]
@@ -173,12 +159,10 @@ def main():
         }
         yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)
 
-    # 2. 保存 nodes.txt
     nodes_content = "\n".join(final_uris) + "\n"
     with open('data/nodes.txt', 'w', encoding='utf-8') as f:
         f.write(nodes_content)
 
-    # 3. 保存 v2ray.txt (Base64)
     b64_content = base64.b64encode(nodes_content.encode('utf-8')).decode('utf-8')
     with open('data/v2ray.txt', 'w', encoding='utf-8') as f:
         f.write(b64_content)
