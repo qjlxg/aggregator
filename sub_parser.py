@@ -28,10 +28,11 @@ def get_ip(hostname):
     except: return None
 
 def get_short_id(text):
+    """生成4位唯一哈希，防止重名导致Clash报错"""
     return hashlib.md5(text.encode()).hexdigest()[:4]
 
 def parse_uri_to_clash(uri):
-    """全功能解析引擎：支持 SS, VMess, VLESS, Trojan, Hy2, TUIC, Socks"""
+    """最强全协议解析引擎"""
     try:
         if "://" not in uri: return None
         parts = uri.split('#')
@@ -41,71 +42,42 @@ def parse_uri_to_clash(uri):
         
         parsed = urlparse(base_uri)
         scheme = parsed.scheme.lower()
-        # 基础配置，确保有 Server 和 Port
         if not parsed.hostname: return None
-        node = {"name": tag, "server": parsed.hostname, "port": int(parsed.port or 443), "udp": True}
         
-        query = {}
-        if parsed.query:
-            for pair in parsed.query.split('&'):
-                if '=' in pair:
-                    k, v = pair.split('=', 1)
-                    query[k.lower()] = unquote(v)
+        node = {"name": tag, "server": parsed.hostname, "port": int(parsed.port or 443), "udp": True}
+        query = {k.lower(): unquote(v) for k, v in [p.split('=', 1) for p in parsed.query.split('&') if '=' in p]} if parsed.query else {}
 
         if scheme == 'ss':
             if '@' in parsed.netloc:
-                auth_part = parsed.netloc.split('@')[0]
-                auth_decoded = decode_base64(auth_part)
+                auth_decoded = decode_base64(parsed.netloc.split('@')[0])
                 if ':' in auth_decoded:
                     method, password = auth_decoded.split(':', 1)
                     node.update({"type": "ss", "cipher": method, "password": password})
                     return node
             return None
-        
         elif scheme == 'vmess':
             try:
-                v2_json = json.loads(decode_base64(base_uri.replace("vmess://", "")))
-                node.update({
-                    "type": "vmess", "uuid": v2_json.get('id'), "alterId": int(v2_json.get('aid', 0)),
-                    "cipher": "auto", "tls": v2_json.get('tls') in ["tls", True], "network": v2_json.get('net', 'tcp')
-                })
-                if node["network"] == 'ws':
-                    node["ws-opts"] = {"path": v2_json.get('path', '/'), "headers": {"Host": v2_json.get('host', '')}}
-                elif node["network"] == 'grpc':
-                    node["grpc-opts"] = {"grpc-service-name": v2_json.get('path', '')}
+                v2 = json.loads(decode_base64(base_uri.replace("vmess://", "")))
+                node.update({"type": "vmess", "uuid": v2.get('id'), "alterId": int(v2.get('aid', 0)), "cipher": "auto", "tls": v2.get('tls') in ["tls", True], "network": v2.get('net', 'tcp')})
+                if node["network"] == 'ws': node["ws-opts"] = {"path": v2.get('path', '/'), "headers": {"Host": v2.get('host', '')}}
+                elif node["network"] == 'grpc': node["grpc-opts"] = {"grpc-service-name": v2.get('path', '')}
                 return node
             except: return None
-            
         elif scheme == 'vless':
-            node.update({
-                "type": "vless", "uuid": parsed.username, "tls": query.get('security') in ['tls', 'reality'],
-                "servername": query.get('sni'), "network": query.get('type', 'tcp')
-            })
-            if query.get('security') == 'reality':
-                node["reality-opts"] = {"public-key": query.get('pbk'), "short-id": query.get('sid', '')}
+            node.update({"type": "vless", "uuid": parsed.username, "tls": query.get('security') in ['tls', 'reality'], "servername": query.get('sni'), "network": query.get('type', 'tcp')})
+            if query.get('security') == 'reality': node["reality-opts"] = {"public-key": query.get('pbk'), "short-id": query.get('sid', '')}
             if query.get('flow'): node["flow"] = query.get('flow')
-            if query.get('type') == 'grpc':
-                node["grpc-opts"] = {"grpc-service-name": query.get('serviceName', '')}
+            if query.get('type') == 'grpc': node["grpc-opts"] = {"grpc-service-name": query.get('serviceName', '')}
             return node
-            
         elif scheme in ['hysteria2', 'hy2']:
-            node.update({
-                "type": "hysteria2", "password": parsed.username or query.get('auth'),
-                "sni": query.get('sni'), "skip-cert-verify": True
-            })
+            node.update({"type": "hysteria2", "password": parsed.username or query.get('auth'), "sni": query.get('sni'), "skip-cert-verify": True})
             return node
-            
         elif scheme == 'trojan':
             node.update({"type": "trojan", "password": parsed.username, "sni": query.get('sni'), "skip-cert-verify": True})
             return node
-
         elif scheme == 'tuic':
-            node.update({
-                "type": "tuic", "uuid": parsed.username, "password": parsed.password,
-                "sni": query.get('sni'), "alpn": [query.get('alpn', 'h3')], "skip-cert-verify": True
-            })
+            node.update({"type": "tuic", "uuid": parsed.username, "password": parsed.password, "sni": query.get('sni'), "alpn": [query.get('alpn', 'h3')], "skip-cert-verify": True})
             return node
-
         elif scheme == 'socks':
             node.update({"type": "socks5", "username": parsed.username, "password": parsed.password})
             return node
@@ -113,29 +85,38 @@ def parse_uri_to_clash(uri):
     return None
 
 def rename_node(uri, reader):
+    """保底命名逻辑：确保所有节点格式高度统一"""
     try:
         if "#" not in uri: return uri
         base_uri, original_tag = uri.split('#', 1)
-        original_tag = unquote(original_tag)
+        original_tag = unquote(original_tag).strip()
+        
+        # 过滤广告
         if any(x in original_tag for x in ["剩余流量", "过期时间", "重置", "GB"]): return uri
+
         parsed = urlparse(base_uri)
         ip = get_ip(parsed.hostname)
         country_name, flag = "", ""
+        
         if ip and reader:
             match = reader.get(ip)
             if match:
                 names = match.get('country', {}).get('names', {})
                 country_name = names.get('zh-CN', names.get('en', 'Unknown'))
                 flag = get_flag(match.get('country', {}).get('iso_code'))
-        display_name = country_name if country_name else original_tag
-        display_flag = flag if flag else "🌐"
-        # 附加一个短Hash避免重名
-        return f"{base_uri}#{display_flag} {display_name} {get_short_id(base_uri)} {MY_REMARK}"
-    except: return uri
+        
+        # 统一名称对齐逻辑
+        final_flag = flag if flag else "🌐"
+        # 如果没识别到国家，用原始备注名；如果备注名太乱，保底显示 Unknown
+        final_country = country_name if country_name else (original_tag if len(original_tag) < 15 else "未知节点")
+        
+        return f"{base_uri}#{final_flag} {final_country} {get_short_id(base_uri)} {MY_REMARK}"
+    except:
+        return uri
 
 def fetch_source(url_info):
     idx, url = url_info
-    domain_peek = urlparse(url).netloc[:8] + "..."
+    domain_peek = urlparse(url).netloc[:10] + "..."
     try:
         headers = {'User-Agent': 'ClashMeta/1.16.0'}
         resp = requests.get(url, headers=headers, timeout=15)
@@ -154,6 +135,8 @@ def fetch_source(url_info):
 def main():
     link_env = os.environ.get('LINK', '').strip()
     if not link_env: return
+    
+    # 全局屏蔽网址日志
     for line in link_env.split('\n'):
         if line.strip(): print(f"::add-mask::{line.strip()}")
 
@@ -175,9 +158,8 @@ def main():
         node_cfg = parse_uri_to_clash(uri)
         if node_cfg: clash_proxies.append(node_cfg)
 
-    # 关键：检查是否有有效节点
     if not clash_proxies:
-        print("❌ FATAL ERROR: No valid nodes parsed! Check your LINK sources.")
+        print("❌ 错误：未发现有效节点，请检查订阅源。")
         return
 
     os.makedirs('data', exist_ok=True)
@@ -196,10 +178,9 @@ def main():
             ],
             "rules": ["MATCH,🔰 节点选择"]
         }
-        # 使用 Dumper 确保不生成 YAML 锚点（&id001 等）
         yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
 
-    print(f"✨ Success! Generated {len(clash_proxies)} nodes in clash.yaml")
+    print(f"✨ 任务完成！共计有效节点: {len(clash_proxies)}")
 
 if __name__ == "__main__":
     main()
