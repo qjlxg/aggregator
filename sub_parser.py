@@ -23,7 +23,7 @@ def get_short_id(text):
     return hashlib.md5(text.encode()).hexdigest()[:4]
 
 def parse_uri_to_clash(uri):
-    """将 URI 转换为 Clash 配置字典"""
+    """支持 SS, VMess, VLESS, Trojan, Hy2, TUIC, Socks"""
     try:
         if "://" not in uri: return None
         parts = uri.split('#')
@@ -39,7 +39,8 @@ def parse_uri_to_clash(uri):
                 node.update({"type": "ss", "cipher": auth.split(':')[0], "password": auth.split(':')[1]})
                 return node
         elif parsed.scheme == 'vmess':
-            v2 = json.loads(decode_base64(base_uri.replace("vmess://", "")))
+            v2_json = decode_base64(base_uri.replace("vmess://", ""))
+            v2 = json.loads(v2_json)
             node.update({"type": "vmess", "uuid": v2.get('id'), "alterId": int(v2.get('aid', 0)), "cipher": "auto", "tls": v2.get('tls') in ["tls", True], "network": v2.get('net', 'tcp')})
             if node["network"] == 'ws': node["ws-opts"] = {"path": v2.get('path', '/'), "headers": {"Host": v2.get('host', '')}}
             return node
@@ -57,9 +58,9 @@ def parse_uri_to_clash(uri):
     return None
 
 def rename_node(uri, reader):
-   
+ 
     try:
-       
+      
         base_uri = uri.split('#')[0]
         parsed = urlparse(base_uri)
         
@@ -72,10 +73,13 @@ def rename_node(uri, reader):
             match = reader.get(ip)
             if match:
                 names = match.get('country', {}).get('names', {})
-                country_name = names.get('zh-CN', names.get('en', 'Unknown'))
-                flag = get_flag(match.get('country', {}).get('iso_code'))
+               
+                zh_name = names.get('zh-CN')
+                if zh_name:
+                    country_name = zh_name
+                    flag = get_flag(match.get('country', {}).get('iso_code'))
 
-        
+      
         new_tag = f"{flag} {country_name} {get_short_id(base_uri)}"
         return f"{base_uri}#{new_tag}"
     except:
@@ -96,10 +100,13 @@ def main():
     if not link_env: return
 
    
+    for line in link_env.split('\n'):
+        if line.strip(): print(f"::add-mask::{line.strip()}")
+
     links = [l.strip() for l in link_env.split('\n') if l.strip()]
     all_uris = []
     
-    # 多线程获取
+    # 并发抓取
     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
         results = list(executor.map(fetch_source, list(enumerate(links))))
         for r in results: all_uris.extend(r)
@@ -107,22 +114,21 @@ def main():
     unique_uris = list(set(all_uris))
     reader = maxminddb.open_database('GeoLite2-Country.mmdb') if os.path.exists('GeoLite2-Country.mmdb') else None
     
-
     final_uris = []
     for u in unique_uris:
         renamed = rename_node(u, reader)
         if renamed: final_uris.append(renamed)
     if reader: reader.close()
 
-    # 转换为 Clash 代理列表
+    # 转换为 Clash 代理对象
     clash_proxies = [parse_uri_to_clash(u) for u in final_uris if parse_uri_to_clash(u)]
     if not clash_proxies: return
 
     os.makedirs('data', exist_ok=True)
 
-    # 1. 写入 clash.yaml
+    # 1. 保存 Clash 配置
     with open('data/clash.yaml', 'w', encoding='utf-8') as f:
-        f.write('# profile-title: "Clean Subscription"\n')
+        f.write('# profile-title: "Node Aggregator"\n')
         proxy_names = [p['name'] for p in clash_proxies]
         config = {
             "proxies": clash_proxies,
@@ -134,17 +140,17 @@ def main():
         }
         yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)
 
-    # 2. 写入 nodes.txt
+    # 2. 保存明文列表 (每行一个 URI)
     nodes_content = "\n".join(final_uris) + "\n"
     with open('data/nodes.txt', 'w', encoding='utf-8') as f:
         f.write(nodes_content)
 
-    # 3. 写入 v2ray.txt
+    # 3. 保存 Base64 订阅
     b64_content = base64.b64encode(nodes_content.encode('utf-8')).decode('utf-8')
     with open('data/v2ray.txt', 'w', encoding='utf-8') as f:
         f.write(b64_content)
 
-    print(f"✨ 任务完成！共计有效节点: {len(clash_proxies)}")
+    print(f"✨ 成功！有效节点: {len(clash_proxies)}")
 
 if __name__ == "__main__":
     main()
