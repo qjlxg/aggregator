@@ -2,6 +2,7 @@ import os, requests, base64, re, socket, maxminddb, concurrent.futures, json, ya
 from urllib.parse import urlparse, unquote
 
 # ================= 配置区 =================
+MY_SIGNATURE = "正在连接到月球背面..."
 MY_REMARK = "|🔋 Windows_me"
 # ==========================================
 
