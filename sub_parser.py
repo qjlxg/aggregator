@@ -122,7 +122,10 @@ def fetch_source(url):
     except: return []
 
 def generate_clash_yaml(nodes_file_path):
-    """生成 Clash 配置文件"""
+    # 你的 GitHub 原始链接
+    online_v2ray_url = "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/v2ray.txt"
+    
+    # 使用 f-string 生成模板，确保 proxy-providers 缩进正确
     yaml_template = f"""port: 7890
 socks-port: 7891
 allow-lan: true
@@ -147,8 +150,10 @@ dns:
 
 proxy-providers:
   free-nodes:
-    type: file
-    path: ./nodes.txt
+    type: http
+    url: "{online_v2ray_url}"
+    path: ./proxies.yaml
+    interval: 3600
     health-check:
       enable: true
       url: http://www.gstatic.com/generate_204
@@ -176,6 +181,7 @@ rules:
   - MATCH,🚀 节点选择
 """
     return yaml_template
+   
 
 def main():
     raw_links = os.environ.get('LINK', '').strip().split('\n')
