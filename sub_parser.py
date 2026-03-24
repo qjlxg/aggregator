@@ -98,7 +98,6 @@ def fetch_source(url_info):
         resp = requests.get(url, headers={'User-Agent': 'ClashMeta'}, timeout=15)
         content = resp.text if "://" in resp.text else decode_base64(resp.text)
         nodes = re.findall(r'(?:vmess|vless|ss|ssr|trojan|hysteria2|hy2|tuic|socks)://[^\s\'"<>]+', content, re.IGNORECASE)
-        print(f"DEBUG: Source [{idx}] ({domain_peek}) found {len(nodes)} nodes.")
         return nodes
     except:
         return []
