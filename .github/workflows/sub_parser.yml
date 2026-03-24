@@ -28,7 +28,7 @@ jobs:
 
       - name: Execute
         env:
-          LINK: ${{ vars.LINK }}
+          LINK: ${{ secrets.LINK }}
           TZ: Asia/Shanghai
         run: python sub_parser.py
 
