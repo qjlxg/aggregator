@@ -22,8 +22,10 @@ dns:
 
 proxy-providers:
   free-nodes:
-    type: file
-    path: ./nodes.txt
+    type: http
+    url: "https://github.com/qjlxg/aggregator/raw/refs/heads/main/data/v2ray.txt"
+    path: ./proxies.yaml
+    interval: 3600
     health-check:
       enable: true
       url: http://www.gstatic.com/generate_204
