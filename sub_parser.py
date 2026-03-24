@@ -129,7 +129,10 @@ def main():
     clash_proxies = [parse_uri_to_clash(u) for u in final_uris if parse_uri_to_clash(u)]
     if not clash_proxies: return
 
+# 确保目录存在
     os.makedirs('data', exist_ok=True)
+
+    # 1. 保存 data/clash.yaml
     with open('data/clash.yaml', 'w', encoding='utf-8') as f:
         f.write(f'# profile-title: "{MY_SIGNATURE}"\n')
         proxy_names = [p['name'] for p in clash_proxies]
@@ -143,7 +146,21 @@ def main():
         }
         yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)
 
-    print(f"✨ 任务完成！共计有效节点: {len(clash_proxies)}")
+    # 2. 保存 data/nodes.txt (每行一个明文 URI，末尾强制换行)
+    # 使用 join 后加 \n 是为了确保文件以空行结尾，符合 POSIX 标准
+    nodes_content = "\n".join(final_uris) + "\n"
+    with open('data/nodes.txt', 'w', encoding='utf-8') as f:
+        f.write(nodes_content)
+
+    # 3. 保存 data/v2ray.txt (Base64 编码后的文本)
+    # 注意：Base64 编码前建议包含所有换行符，以防客户端解析多行数据时出错
+    b64_content = base64.b64encode(nodes_content.encode('utf-8')).decode('utf-8')
+    with open('data/v2ray.txt', 'w', encoding='utf-8') as f:
+        f.write(b64_content)
+
+    print(f"✨ 任务完成！")
+    print(f"📊 有效节点数: {len(clash_proxies)}")
+    print(f"📂 已生成: clash.yaml, nodes.txt, v2ray.txt")
 
 if __name__ == "__main__":
     main()
