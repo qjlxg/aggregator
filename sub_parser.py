@@ -28,6 +28,7 @@ def get_ip(hostname):
     except: return None
 
 def parse_uri_to_clash(uri):
+    """全功能解析引擎：支持 SS, VMess, VLESS, Trojan, Hy2, TUIC, Socks"""
     try:
         if "://" not in uri: return None
         parts = uri.split('#')
@@ -54,24 +55,58 @@ def parse_uri_to_clash(uri):
                     method, password = auth_decoded.split(':', 1)
                     node.update({"type": "ss", "cipher": method, "password": password})
             return node
+        
         elif scheme == 'vmess':
             try:
                 v2_json = json.loads(decode_base64(base_uri.replace("vmess://", "")))
-                node.update({"type": "vmess", "uuid": v2_json.get('id'), "alterId": int(v2_json.get('aid', 0)), "cipher": "auto", "tls": v2_json.get('tls') in ["tls", True], "network": v2_json.get('net', 'tcp')})
-                if node["network"] == 'ws': node["ws-opts"] = {"path": v2_json.get('path', '/'), "headers": {"Host": v2_json.get('host', '')}}
+                node.update({
+                    "type": "vmess", "uuid": v2_json.get('id'), 
+                    "alterId": int(v2_json.get('aid', 0)), "cipher": "auto", 
+                    "tls": v2_json.get('tls') in ["tls", True], 
+                    "network": v2_json.get('net', 'tcp')
+                })
+                if node["network"] == 'ws': 
+                    node["ws-opts"] = {"path": v2_json.get('path', '/'), "headers": {"Host": v2_json.get('host', '')}}
+                elif node["network"] == 'grpc':
+                    node["grpc-opts"] = {"grpc-service-name": v2_json.get('path', '')}
                 return node
             except: return None
+            
         elif scheme == 'vless':
-            node.update({"type": "vless", "uuid": parsed.username, "tls": query.get('security') in ['tls', 'reality'], "servername": query.get('sni'), "network": query.get('type', 'tcp')})
+            node.update({
+                "type": "vless", "uuid": parsed.username, 
+                "tls": query.get('security') in ['tls', 'reality'], 
+                "servername": query.get('sni'), "network": query.get('type', 'tcp')
+            })
             if query.get('security') == 'reality':
                 node["reality-opts"] = {"public-key": query.get('pbk'), "short-id": query.get('sid', '')}
+            if query.get('flow'): node["flow"] = query.get('flow')
+            if query.get('type') == 'grpc':
+                node["grpc-opts"] = {"grpc-service-name": query.get('serviceName', '')}
             return node
+            
         elif scheme in ['hysteria2', 'hy2']:
-            node.update({"type": "hysteria2", "password": parsed.username or query.get('auth'), "sni": query.get('sni'), "skip-cert-verify": True})
+            node.update({
+                "type": "hysteria2", "password": parsed.username or query.get('auth'), 
+                "sni": query.get('sni'), "skip-cert-verify": True
+            })
             return node
+            
         elif scheme == 'trojan':
             node.update({"type": "trojan", "password": parsed.username, "sni": query.get('sni'), "skip-cert-verify": True})
             return node
+
+        elif scheme == 'tuic':
+            node.update({
+                "type": "tuic", "uuid": parsed.username, "password": parsed.password,
+                "sni": query.get('sni'), "alpn": [query.get('alpn', 'h3')], "skip-cert-verify": True
+            })
+            return node
+
+        elif scheme == 'socks':
+            node.update({"type": "socks5", "username": parsed.username, "password": parsed.password})
+            return node
+
     except: return None
     return None
 
@@ -81,6 +116,7 @@ def rename_node(uri, reader):
         base_uri, original_tag = uri.split('#', 1)
         original_tag = unquote(original_tag)
         if any(x in original_tag for x in ["剩余流量", "过期时间", "重置", "GB"]): return uri
+
         parsed = urlparse(base_uri)
         ip = get_ip(parsed.hostname)
         country_name, flag = "", ""
@@ -90,6 +126,7 @@ def rename_node(uri, reader):
                 names = match.get('country', {}).get('names', {})
                 country_name = names.get('zh-CN', names.get('en', 'Unknown'))
                 flag = get_flag(match.get('country', {}).get('iso_code'))
+        
         display_name = country_name if country_name else original_tag
         display_flag = flag if flag else "🌐"
         return f"{base_uri}#{display_flag} {display_name} {MY_REMARK}"
@@ -97,8 +134,8 @@ def rename_node(uri, reader):
 
 def fetch_source(url_info):
     idx, url = url_info
-    # 提取域名用于脱敏显示
-    domain = urlparse(url).netloc[:10] + "..." 
+   
+    domain_peek = urlparse(url).netloc[:3] + "..."
     try:
         headers = {'User-Agent': 'ClashMeta/1.16.0'}
         resp = requests.get(url, headers=headers, timeout=15)
@@ -108,26 +145,26 @@ def fetch_source(url_info):
             decoded = decode_base64(content)
             if decoded: content = decoded
         nodes = re.findall(r'(?:vmess|vless|ss|ssr|trojan|hysteria2|hy2|tuic|socks)://[^\s\'"<>]+', content, re.IGNORECASE)
-        print(f"DEBUG: Source [{idx}] ({domain}) fetched {len(nodes)} nodes.")
+        print(f"DEBUG: Source [{idx}] ({domain_peek}) fetched {len(nodes)} nodes.")
         return nodes
     except:
-        print(f"DEBUG: Source [{idx}] ({domain}) request failed.")
+        print(f"DEBUG: Source [{idx}] ({domain_peek}) request failed.")
         return []
 
 def main():
-    link_str = os.environ.get('LINK', '').strip()
-    # 第一步：通知 GitHub Actions 遮蔽这些敏感网址（防止在 env 日志中显示）
-    for line in link_str.split('\n'):
-        if line.strip():
-            print(f"::add-mask::{line.strip()}")
+    link_env = os.environ.get('LINK', '').strip()
+    if not link_env: return
 
-    raw_links = link_str.split('\n')
-    links = [l.strip() for l in raw_links if l.strip()]
-    if not links: return
+   
+    for line in link_env.split('\n'):
+        if line.strip(): print(f"::add-mask::{line.strip()}")
 
+    links = [l.strip() for l in link_env.split('\n') if l.strip()]
     all_uris = []
     link_tasks = list(enumerate(links))
-    
+
+    print(f"🚀 Starting to fetch from {len(links)} sources...")
+
     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
         results = list(executor.map(fetch_source, link_tasks))
         for r in results:
@@ -158,7 +195,9 @@ def main():
 
     with open('data/clash.yaml', 'w', encoding='utf-8') as f:
         f.write(f"# subscription-userinfo: upload=0; download=0; total=1073741824000000; expire=4070880000\n")
-        f.write(f'# profile-title: "{MY_SIGNATURE}"\n\n')
+        f.write(f'# profile-title: "{MY_SIGNATURE}"\n')
+        f.write(f"# {SLOGAN_1} | {SLOGAN_2}\n\n")
+        
         config = {
             "port": 7890, "socks-port": 7891, "allow-lan": True, "mode": "rule",
             "proxies": clash_proxies,
@@ -170,7 +209,7 @@ def main():
         }
         yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)
 
-    print(f"✨ Success! Processed {len(clash_proxies)} nodes.")
+    print(f"✨ Success! Total valid nodes: {len(clash_proxies)}")
 
 if __name__ == "__main__":
     main()
