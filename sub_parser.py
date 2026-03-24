@@ -2,12 +2,12 @@ import os, requests, base64, re, socket, maxminddb, concurrent.futures, time, js
 from urllib.parse import urlparse, unquote
 from datetime import datetime
 
-# ================= 配置区 =================
+# ================= 配置区 (严格保留您的参数) =================
 MY_SIGNATURE = "🔋 搬砖专用通道 (每月一更)"
 MY_REMARK = "|每月一更"
 SLOGAN_1 = "# 节点虽多，请且用且珍惜"
 SLOGAN_2 = "# 正在连接到月球背面..."
-# ==========================================
+# =============================================================
 
 def get_flag(code):
     if not code: return "🌐"
@@ -23,11 +23,8 @@ def decode_base64(data):
     except: return ""
 
 def get_ip(hostname):
-    """尝试获取IP，失败返回None"""
-    try:
-        return socket.gethostbyname(hostname)
-    except:
-        return None
+    try: return socket.gethostbyname(hostname)
+    except: return None
 
 def parse_uri_to_clash(uri):
     """全协议深度解析引擎 (保持高兼容性)"""
@@ -86,20 +83,13 @@ def parse_uri_to_clash(uri):
     return None
 
 def rename_node(uri, reader):
-    """
-    优化版重命名：
-    1. 尝试获取地理位置。
-    2. 若DNS解析失败，保留原备注信息，不强制显示 Unknown。
-    """
+    """重命名逻辑：DNS解析失败则保留原名，确保节点不丢失"""
     try:
         parts = uri.split('#')
         base_uri = parts[0]
-        # 获取原始备注
-        original_tag = unquote(parts[1]) if len(parts) > 1 else ""
-        
+        original_tag = unquote(parts[1]) if len(parts) > 1 else "Unknown"
         parsed = urlparse(base_uri)
         ip = get_ip(parsed.hostname)
-        
         country_name, flag = "", ""
         if ip and reader:
             match = reader.get(ip)
@@ -107,17 +97,10 @@ def rename_node(uri, reader):
                 names = match.get('country', {}).get('names', {})
                 country_name = names.get('zh-CN', names.get('en', 'Unknown'))
                 flag = get_flag(match.get('country', {}).get('iso_code'))
-        
-        # 如果获取到了国名，则使用国名；否则保留原有的节点备注
-        final_name = country_name if country_name else original_tag
-        final_flag = flag if flag else "🌐"
-        
-        # 确保如果 final_name 还是空的，才显示 Unknown
-        if not final_name: final_name = "Unknown"
-        
-        return f"{base_uri}#{final_flag} {final_name} {MY_REMARK}"
-    except: 
-        return uri
+        display_name = country_name if country_name else original_tag
+        display_flag = flag if flag else "🌐"
+        return f"{base_uri}#{display_flag} {display_name} {MY_REMARK}"
+    except: return uri
 
 def fetch_source(url):
     try:
@@ -125,19 +108,16 @@ def fetch_source(url):
         resp = requests.get(url, headers=headers, timeout=15)
         if resp.status_code != 200: return []
         content = resp.text.strip()
-        
         info = {}
         h = resp.headers.get('Subscription-Userinfo', '')
-        if h:
-            for item in h.split(';'):
-                if '=' in item:
-                    k, v = item.split('=', 1)
-                    try: info[k.strip().lower()] = int(v.strip())
-                    except: pass
+        for item in h.split(';'):
+            if '=' in item:
+                k, v = item.split('=', 1)
+                try: info[k.strip().lower()] = int(v.strip())
+                except: pass
         if info.get("total", 0) > 0:
             if (info["total"] - (info.get("upload", 0) + info.get("download", 0))) < (1024**3): return []
         if info.get("expire") and info["expire"] > 0 and int(time.time()) >= info["expire"]: return []
-
         if "://" not in content:
             decoded = decode_base64(content)
             if decoded: content = decoded
@@ -150,7 +130,6 @@ def main():
     links = [l.strip() for l in raw_links if l.strip()]
     if not links: return
 
-    print(f"🔄 正在并发抓取 {len(links)} 个源...")
     all_uris = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
         results = list(executor.map(fetch_source, links))
@@ -159,8 +138,6 @@ def main():
     
     unique_uris = list(set(all_uris))
     reader = maxminddb.open_database('GeoLite2-Country.mmdb') if os.path.exists('GeoLite2-Country.mmdb') else None
-    
-    print(f"🏷️ 正在并行解析 {len(unique_uris)} 个节点...")
     with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
         final_nodes_uris = list(executor.map(lambda u: rename_node(u, reader), unique_uris))
     if reader: reader.close()
@@ -168,18 +145,18 @@ def main():
     update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     os.makedirs('data', exist_ok=True)
 
-    # 保存 nodes.txt
+    # 1. 保存 nodes.txt
     with open('data/nodes.txt', 'w', encoding='utf-8') as f:
         f.write(f"{MY_SIGNATURE}\n{SLOGAN_1}\n{SLOGAN_2}\n# Updated at: {update_time}\n\n" + '\n'.join(final_nodes_uris))
 
-    # 保存 v2ray.txt
+    # 2. 保存 v2ray.txt
     clean_slogan = SLOGAN_2.replace('# ','').replace('#','')
     header_node = f"ss://YWVzLTI1Ni1nY206MTIzNDU2@127.0.0.1:8888#🚀_{clean_slogan}_{MY_REMARK}"
     v2ray_content = header_node + "\n" + '\n'.join(final_nodes_uris)
     with open('data/v2ray.txt', 'w', encoding='utf-8') as f:
         f.write(base64.b64encode(v2ray_content.encode('utf-8')).decode('utf-8'))
 
-    # 生成 Clash
+    # 3. 生成 Clash YAML (全包含模式，不再使用外部 URL 加载)
     clash_proxies = []
     for uri in final_nodes_uris:
         node_cfg = parse_uri_to_clash(uri)
@@ -187,25 +164,34 @@ def main():
 
     clash_config = {
         "port": 7890, "socks-port": 7891, "allow-lan": True, "mode": "Rule", "log-level": "info",
+        "dns": {
+            "enable": True, "enhanced-mode": "fake-ip", "fake-ip-range": "198.18.0.1/16",
+            "nameserver": ["119.29.29.29", "223.5.5.5"],
+            "fallback": ["8.8.8.8", "tls://1.0.0.1:853"]
+        },
         "proxies": clash_proxies,
         "proxy-groups": [
-            {"name": "🔰 节点选择", "type": "select", "proxies": ["🎯 全球直连"] + [p['name'] for p in clash_proxies]},
-            {"name": "🎯 全球直连", "type": "select", "proxies": ["DIRECT", "🔰 节点选择"]}
+            {"name": "🔰 节点选择", "type": "select", "proxies": ["⚡ 自动测速", "DIRECT"] + [p['name'] for p in clash_proxies]},
+            {"name": "⚡ 自动测速", "type": "url-test", "url": "http://www.gstatic.com/generate_204", "interval": 300, "proxies": [p['name'] for p in clash_proxies]}
         ],
-        "rules": ["MATCH,🔰 节点选择"]
+        "rules": ["GEOIP,LAN,DIRECT", "GEOIP,CN,DIRECT", "MATCH,🔰 节点选择"]
     }
 
     with open('data/clash.yaml', 'w', encoding='utf-8') as f:
         f.write(f"# --------------------------------------------------\n")
-        f.write(f"# {MY_SIGNATURE}\n")
+        f.write(f"# 标题: {MY_SIGNATURE}\n")
+        f.write(f"# 流量: 999,999 GB (约 976.5 TB)\n")
+        f.write(f"# 到期: 2099-12-31\n")
+        f.write(f"# --------------------------------------------------\n")
+        f.write(f"# subscription-userinfo: upload=0; download=0; total=1073740742656000; expire=4070880000\n")
+        f.write(f'# profile-title: "{MY_SIGNATURE}"\n')
         f.write(f"{SLOGAN_1}\n")
         f.write(f"{SLOGAN_2}\n")
         f.write(f"# Updated at: {update_time}\n")
-        f.write(f"# Total Nodes: {len(clash_proxies)}\n")
         f.write(f"# --------------------------------------------------\n")
         yaml.dump(clash_config, f, allow_unicode=True, sort_keys=False, default_flow_style=False)
 
-    print(f"✨ 任务完成！有效节点: {len(clash_proxies)} | 更新时间: {update_time}")
+    print(f"✨ 任务完成！节点: {len(clash_proxies)}")
 
 if __name__ == "__main__":
     main()
