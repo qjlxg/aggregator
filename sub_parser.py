@@ -2,8 +2,7 @@ import os, requests, base64, re, socket, maxminddb, concurrent.futures, json, ya
 from urllib.parse import urlparse, unquote
 
 # ================= 配置区 =================
-MY_SIGNATURE = "🔋 Windows_me"
-MY_REMARK = "|每月一更"
+MY_REMARK = "|🔋 Windows_me"
 # ==========================================
 
 def get_flag(code):
