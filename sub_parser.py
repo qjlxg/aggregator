@@ -28,14 +28,11 @@ def get_ip(hostname):
     except: return None
 
 def parse_uri_to_clash(uri):
-    """解析引擎：处理特殊字符，防止 YAML 报错"""
     try:
         if "://" not in uri: return None
         parts = uri.split('#')
         base_uri = parts[0]
-      
         raw_tag = unquote(parts[1]) if len(parts) > 1 else "Unnamed_Node"
-        # 移除 YAML 可能报错的特殊字符
         tag = re.sub(r'[\"\'\[\]\{\}\>\<\#]', '', raw_tag).strip()
         
         parsed = urlparse(base_uri)
@@ -60,22 +57,12 @@ def parse_uri_to_clash(uri):
         elif scheme == 'vmess':
             try:
                 v2_json = json.loads(decode_base64(base_uri.replace("vmess://", "")))
-                node.update({
-                    "type": "vmess", "uuid": v2_json.get('id'), 
-                    "alterId": int(v2_json.get('aid', 0)), "cipher": "auto", 
-                    "tls": v2_json.get('tls') in ["tls", True], 
-                    "network": v2_json.get('net', 'tcp')
-                })
-                if node["network"] == 'ws': 
-                    node["ws-opts"] = {"path": v2_json.get('path', '/'), "headers": {"Host": v2_json.get('host', '')}}
+                node.update({"type": "vmess", "uuid": v2_json.get('id'), "alterId": int(v2_json.get('aid', 0)), "cipher": "auto", "tls": v2_json.get('tls') in ["tls", True], "network": v2_json.get('net', 'tcp')})
+                if node["network"] == 'ws': node["ws-opts"] = {"path": v2_json.get('path', '/'), "headers": {"Host": v2_json.get('host', '')}}
                 return node
             except: return None
         elif scheme == 'vless':
-            node.update({
-                "type": "vless", "uuid": parsed.username, 
-                "tls": query.get('security') in ['tls', 'reality'], 
-                "servername": query.get('sni'), "network": query.get('type', 'tcp')
-            })
+            node.update({"type": "vless", "uuid": parsed.username, "tls": query.get('security') in ['tls', 'reality'], "servername": query.get('sni'), "network": query.get('type', 'tcp')})
             if query.get('security') == 'reality':
                 node["reality-opts"] = {"public-key": query.get('pbk'), "short-id": query.get('sid', '')}
             return node
@@ -93,10 +80,7 @@ def rename_node(uri, reader):
         if "#" not in uri: return uri
         base_uri, original_tag = uri.split('#', 1)
         original_tag = unquote(original_tag)
-        
-        if any(x in original_tag for x in ["剩余流量", "过期时间", "重置", "GB"]):
-            return uri
-
+        if any(x in original_tag for x in ["剩余流量", "过期时间", "重置", "GB"]): return uri
         parsed = urlparse(base_uri)
         ip = get_ip(parsed.hostname)
         country_name, flag = "", ""
@@ -106,7 +90,6 @@ def rename_node(uri, reader):
                 names = match.get('country', {}).get('names', {})
                 country_name = names.get('zh-CN', names.get('en', 'Unknown'))
                 flag = get_flag(match.get('country', {}).get('iso_code'))
-        
         display_name = country_name if country_name else original_tag
         display_flag = flag if flag else "🌐"
         return f"{base_uri}#{display_flag} {display_name} {MY_REMARK}"
@@ -114,6 +97,8 @@ def rename_node(uri, reader):
 
 def fetch_source(url_info):
     idx, url = url_info
+    # 提取域名用于脱敏显示
+    domain = urlparse(url).netloc[:10] + "..." 
     try:
         headers = {'User-Agent': 'ClashMeta/1.16.0'}
         resp = requests.get(url, headers=headers, timeout=15)
@@ -123,44 +108,41 @@ def fetch_source(url_info):
             decoded = decode_base64(content)
             if decoded: content = decoded
         nodes = re.findall(r'(?:vmess|vless|ss|ssr|trojan|hysteria2|hy2|tuic|socks)://[^\s\'"<>]+', content, re.IGNORECASE)
-        print(f"DEBUG: Source [{idx}] fetched {len(nodes)} nodes.")
+        print(f"DEBUG: Source [{idx}] ({domain}) fetched {len(nodes)} nodes.")
         return nodes
-    except Exception as e:
-        print(f"DEBUG: Source [{idx}] request failed.")
+    except:
+        print(f"DEBUG: Source [{idx}] ({domain}) request failed.")
         return []
 
 def main():
-    raw_links = os.environ.get('LINK', '').strip().split('\n')
+    link_str = os.environ.get('LINK', '').strip()
+    # 第一步：通知 GitHub Actions 遮蔽这些敏感网址（防止在 env 日志中显示）
+    for line in link_str.split('\n'):
+        if line.strip():
+            print(f"::add-mask::{line.strip()}")
+
+    raw_links = link_str.split('\n')
     links = [l.strip() for l in raw_links if l.strip()]
-    if not links: 
-        print("ERROR: No links found in environment variable 'LINK'")
-        return
+    if not links: return
 
     all_uris = []
-    # 使用编号代替网址打印，保护隐私
     link_tasks = list(enumerate(links))
-    print(f"Starting to fetch from {len(links)} sources...")
-
+    
     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
         results = list(executor.map(fetch_source, link_tasks))
         for r in results:
             if r: all_uris.extend(r)
     
     unique_uris = list(set(all_uris))
-    print(f"Total unique nodes found: {len(unique_uris)}")
-
     reader = maxminddb.open_database('GeoLite2-Country.mmdb') if os.path.exists('GeoLite2-Country.mmdb') else None
     with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
         final_nodes_uris = list(executor.map(lambda u: rename_node(u, reader), unique_uris))
     if reader: reader.close()
 
     os.makedirs('data', exist_ok=True)
-
-    # 1. 生成 nodes.txt
     with open('data/nodes.txt', 'w', encoding='utf-8') as f:
         f.write('\n'.join(final_nodes_uris))
 
-    # 2. 生成 clash.yaml 并处理重名
     clash_proxies = []
     name_counter = {}
     for uri in final_nodes_uris:
@@ -176,9 +158,7 @@ def main():
 
     with open('data/clash.yaml', 'w', encoding='utf-8') as f:
         f.write(f"# subscription-userinfo: upload=0; download=0; total=1073741824000000; expire=4070880000\n")
-        f.write(f'# profile-title: "{MY_SIGNATURE}"\n')
-        f.write(f"# {SLOGAN_1} | {SLOGAN_2}\n\n")
-        
+        f.write(f'# profile-title: "{MY_SIGNATURE}"\n\n')
         config = {
             "port": 7890, "socks-port": 7891, "allow-lan": True, "mode": "rule",
             "proxies": clash_proxies,
@@ -190,7 +170,7 @@ def main():
         }
         yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)
 
-    print(f"✨ Success! Total valid Clash nodes: {len(clash_proxies)}")
+    print(f"✨ Success! Processed {len(clash_proxies)} nodes.")
 
 if __name__ == "__main__":
     main()
