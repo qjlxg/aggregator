@@ -98,14 +98,14 @@ def main():
         print("❌ 未找到LINK。")
         return
 
-    # 打印隐藏敏感链接
+   
     for line in link_env.split('\n'):
         if line.strip(): print(f"::add-mask::{line.strip()}")
 
     links = [l.strip() for l in link_env.split('\n') if l.strip()]
     all_uris = []
     
-    # 多线程抓取
+    
     with concurrent.futures.ThreadPoolExecutor(max_workers=20) as executor:
         results = list(executor.map(fetch_source, list(enumerate(links))))
         for r in results: all_uris.extend(r)
@@ -124,7 +124,7 @@ def main():
         print("⚠️ 未抓取到有效节点。")
         return
 
-    # 确保输出目录存在
+  
     os.makedirs('data', exist_ok=True)
 
     # 1. 保存 data/clash.yaml
