@@ -70,8 +70,8 @@ def parse_uri_to_clash(uri):
     except: return None
     return None
 
-def rename_node(uri, reader):
-    """强制清洗备注：仅保留 [国旗] [国家名] [唯一ID]"""
+def rename_node(uri, reader):def rename_node(uri, reader):
+    """强制清洗备注：仅保留 [国旗] [国家名] [口号]_[ID]"""
     try:
         base_uri = uri.split('#')[0]
         parsed = urlparse(base_uri)
@@ -87,7 +87,10 @@ def rename_node(uri, reader):
                     country_name = zh_name
                     flag = get_flag(match.get('country', {}).get('iso_code'))
 
-        new_tag = f"{flag} {country_name} {get_short_id(base_uri)}"
+        # 生成带有口号和唯一 ID 的新标签
+        short_id = get_short_id(base_uri)
+        new_tag = f"{flag} {country_name} 打倒美帝国主义及其一切走狗_{short_id}"
+        
         return f"{base_uri}#{new_tag}"
     except:
         return uri
