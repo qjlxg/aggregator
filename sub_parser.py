@@ -137,7 +137,7 @@ def fetch_source(url):
         return []
 
 def main():
-    # 缺失环境变量时直接报错崩溃
+  
     link_env = os.environ['LINK'].strip()
 
     for line in link_env.split('\n'):
@@ -166,7 +166,7 @@ def main():
     node_count = len(clash_proxies)
     os.makedirs('data', exist_ok=True)
 
-    # 1. 生成 Clash YAML
+  
     full_config = CLASH_BASE_CONFIG.copy()
     proxy_names = [p['name'] for p in clash_proxies]
     
