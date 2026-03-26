@@ -1,5 +1,6 @@
 import os, requests, base64, re, socket, maxminddb, concurrent.futures, json, yaml, hashlib, time
 from urllib.parse import urlparse, unquote
+from datetime import datetime
 
 def get_flag(code):
     if not code: return "🌐"
@@ -145,9 +146,18 @@ def main():
     if not clash_proxies: return
 
     os.makedirs('data', exist_ok=True)
+    
+    # 获取当前时间
+    update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    node_count = len(clash_proxies)
 
+    # 1. 写入 Clash 配置文件
     with open('data/clash.yaml', 'w', encoding='utf-8') as f:
-        f.write('# profile-title: "Aggregated Subscription"\n')
+        # 在 profile-title 中加入时间和数量
+        f.write(f'# profile-title: "Aggregated Subscription ({update_time} | Nodes: {node_count})"\n')
+        f.write(f'# last-updated: {update_time}\n')
+        f.write(f'# node-count: {node_count}\n')
+        
         proxy_names = [p['name'] for p in clash_proxies]
         config = {
             "proxies": clash_proxies,
@@ -159,15 +169,21 @@ def main():
         }
         yaml.safe_dump(config, f, allow_unicode=True, sort_keys=False)
 
-    nodes_content = "\n".join(final_uris) + "\n"
+    # 2. 写入明文节点列表 (nodes.txt)
     with open('data/nodes.txt', 'w', encoding='utf-8') as f:
-        f.write(nodes_content)
+        # 在第一行添加注释信息（部分客户端支持忽略 # 开头的行）
+        f.write(f"# Updated: {update_time} | Total Nodes: {node_count}\n")
+        f.write("\n".join(final_uris) + "\n")
 
+    # 3. 写入 Base64 订阅内容 (v2ray.txt)
+    nodes_content = "\n".join(final_uris) + "\n"
     b64_content = base64.b64encode(nodes_content.encode('utf-8')).decode('utf-8')
     with open('data/v2ray.txt', 'w', encoding='utf-8') as f:
         f.write(b64_content)
 
-    print(f"✨ 任务完成！有效节点: {len(clash_proxies)}")
+    print(f"✨ 任务完成！")
+    print(f"📅 更新时间: {update_time}")
+    print(f"🔗 有效节点: {node_count}")
 
 if __name__ == "__main__":
     main()
