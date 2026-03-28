@@ -1,5 +1,4 @@
-# 🚀 全球节点聚合器 (Aggregator)
-
+# 🚀 节点聚合器
 ![Update Time](https://img.shields.io/badge/Update--Time-Auto--Updating-blue?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)
@@ -36,9 +35,9 @@
 ---
 
 ### 📡 节点详情
-* **更新频率**: 每 X 小时自动更新 (由 GitHub Actions 驱动)。
+* **更新频率**: 不定时更新 。
 * **地理识别**: 基于 `MaxMind GeoLite2` 数据库。
-* **支持协议**: SS, VMess, VLESS, Trojan, Hysteria2.
+* **支持协议**: SS, VMess, VLESS, Trojan, Hysteria2,anytls.
 
 ---
 
