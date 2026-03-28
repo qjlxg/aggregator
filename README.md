@@ -35,9 +35,9 @@
 ---
 
 ### 📡 节点详情
-* **更新频率**: 不定时更新 。
+* **更新频率**:  不定时更新 。
 * **地理识别**: 基于 `MaxMind GeoLite2` 数据库。
-* **支持协议**: SS, VMess, VLESS, Trojan, Hysteria2,anytls.
+* **支持协议**: SS, VMess, VLESS, Trojan, Hysteria2,anytls。
 
 ---
 
