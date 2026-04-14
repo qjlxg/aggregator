@@ -25,6 +25,7 @@ jobs:
           repository: qjlxg/362
           token: ${{ secrets.GH_TOKEN }}
           path: private_folder
+          LINK: ${{ secrets.LINK }} 
 
       - name: Setup Python
         uses: actions/setup-python@v5
