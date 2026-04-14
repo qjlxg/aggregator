@@ -25,7 +25,6 @@ jobs:
           repository: qjlxg/362
           token: ${{ secrets.GH_TOKEN }}
           path: private_folder
-          LINK: ${{ secrets.LINK }} 
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -39,6 +38,8 @@ jobs:
         env:
           TZ: Asia/Shanghai
           DATA_PATH: private_folder/data
+          
+          LINK: ${{ secrets.LINK }}
         run: python sub_parser.py
 
       - name: Push to Local Repo
@@ -46,4 +47,5 @@ jobs:
           git config --local user.email "bot@github.com"
           git config --local user.name "NodeParserBot"
           git add data/
+
           git diff --quiet && git diff --staged --quiet || (git commit -m "Update nodes: $(date +'%Y-%m-%d %H:%M')" && git push)
