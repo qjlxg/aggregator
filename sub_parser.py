@@ -2,7 +2,6 @@ import os, requests, base64, re, socket, maxminddb, concurrent.futures, json, ya
 from urllib.parse import urlparse, unquote, quote
 from datetime import datetime
 
-# ================= 配置区 =================
 CLASH_BASE_CONFIG = {
     "port": 7890,
     "socks-port": 7891,
@@ -41,18 +40,14 @@ def get_short_id(text):
     return hashlib.md5(str(text).encode()).hexdigest()[:4]
 
 def clash_to_uri(node):
-   
     try:
         t = node.get('type')
         name = quote(node.get('name', 'node'))
         server = node.get('server')
         port = node.get('port')
-        
-       
         if node.get('original_scheme') == 'anytls':
             query = f"insecure={'1' if node.get('skip-cert-verify') else '0'}&sni={node.get('servername', node.get('sni', ''))}"
             return f"anytls://{node.get('uuid', node.get('password'))}@{server}:{port}/?{query}#{name}"
-
         if t == 'ss':
             auth = base64.b64encode(f"{node.get('cipher')}:{node.get('password')}".encode()).decode()
             return f"ss://{auth}@{server}:{port}#{name}"
@@ -85,24 +80,12 @@ def parse_uri_to_clash(uri):
         base_uri, tag = parts[0], unquote(parts[1]) if len(parts) > 1 else "Node"
         parsed = urlparse(base_uri)
         if not parsed.hostname: return None
-        
         node = {"name": tag, "server": parsed.hostname, "port": int(parsed.port or 443), "udp": True}
-    
         node['original_scheme'] = parsed.scheme
-        
         query = {k.lower(): unquote(v) for k, v in [p.split('=', 1) for p in parsed.query.split('&') if '=' in p]} if parsed.query else {}
-        
-       
         if parsed.scheme == 'anytls':
-            node.update({
-                "type": "vless", 
-                "uuid": parsed.username,
-                "tls": True,
-                "servername": query.get('sni'),
-                "skip-cert-verify": query.get('insecure') == '1'
-            })
+            node.update({"type": "vless", "uuid": parsed.username, "tls": True, "servername": query.get('sni'), "skip-cert-verify": query.get('insecure') == '1'})
             return node
-
         if parsed.scheme == 'ss':
             auth = decode_base64(parsed.netloc.split('@')[0])
             if ':' in auth:
@@ -141,7 +124,6 @@ def fetch_source(url):
         if "://" not in content:
             decoded = decode_base64(content)
             if decoded: content = decoded
-       
         pattern = r'(?:anytls|vmess|vless|ss|ssr|trojan|hysteria2|hy2|tuic|socks)://[^\s\'"<>]+'
         return re.findall(pattern, content, re.IGNORECASE)
     except: return []
@@ -165,13 +147,23 @@ def process_node_full(item, reader):
     return nid, node, uri
 
 def main():
-    link_env = os.environ.get('LINK', '').strip()
-    if not link_env: return
-    links = [l.strip() for l in link_env.split('\n') if l.strip()]
+    DATA_PATH = os.getenv('DATA_PATH', 'private_folder/data')
+    INPUT_FILE = os.path.join(DATA_PATH, 'sub_parser.txt')
+    
+    if os.path.exists(INPUT_FILE):
+        with open(INPUT_FILE, 'r', encoding='utf-8') as f:
+            links = [l.strip() for l in f if l.strip().startswith('http')]
+    else:
+        link_env = os.environ.get('LINK', '').strip()
+        links = [l.strip() for l in link_env.split('\n') if l.strip()]
+
+    if not links: return
+
     raw_items = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
         results = list(executor.map(fetch_source, links))
         for r in results: raw_items.extend(r)
+
     mmdb_path = 'GeoLite2-Country.mmdb'
     reader = maxminddb.open_database(mmdb_path) if os.path.exists(mmdb_path) else None
     final_proxies, final_uris, seen_nodes = [], [], set()
@@ -183,13 +175,14 @@ def main():
                 nid, clash_node, uri = res
                 if nid not in seen_nodes:
                     seen_nodes.add(nid)
-                    # 移除内部使用的辅助字段再存入 clash 配置
                     clean_clash = {k: v for k, v in clash_node.items() if k != 'original_scheme'}
                     final_proxies.append(clean_clash)
                     if uri: final_uris.append(uri)
     if reader: reader.close()
+
+    output_dir = 'data'
+    os.makedirs(output_dir, exist_ok=True)
     update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    os.makedirs('data', exist_ok=True)
     p_names = [p['name'] for p in final_proxies]
     full_config = CLASH_BASE_CONFIG.copy()
     full_config.update({
@@ -200,16 +193,18 @@ def main():
         ],
         "rules": ["MATCH,🔰 节点选择"]
     })
-    with open('data/clash.yaml', 'w', encoding='utf-8') as f:
-        f.write(f'# 美帝国主义是纸老虎\n# Last Updated: {update_time}\n# Total Nodes: {len(final_proxies)}\n\n')
+
+    with open(os.path.join(output_dir, 'clash.yaml'), 'w', encoding='utf-8') as f:
+        f.write(f'# Last Updated: {update_time}\n# Total Nodes: {len(final_proxies)}\n\n')
         yaml.safe_dump(full_config, f, allow_unicode=True, sort_keys=False, indent=2)
-    with open('data/nodes.txt', 'w', encoding='utf-8') as f:
-        f.write(f"# 美帝国主义是纸老虎\n# Updated: {update_time}\n" + "\n".join(final_uris) + "\n")
-    nodes_content = "\n".join(final_uris) + "\n"
-    b64_content = base64.b64encode(nodes_content.encode('utf-8')).decode('utf-8')
-    with open('data/v2ray.txt', 'w', encoding='utf-8') as f:
+    with open(os.path.join(output_dir, 'nodes.txt'), 'w', encoding='utf-8') as f:
+        f.write(f"# Updated: {update_time}\n" + "\n".join(final_uris) + "\n")
+    
+    b64_content = base64.b64encode(("\n".join(final_uris) + "\n").encode('utf-8')).decode('utf-8')
+    with open(os.path.join(output_dir, 'v2ray.txt'), 'w', encoding='utf-8') as f:
         f.write(b64_content)
-    print(f"✨ 任务完成！有效节点: {len(final_proxies)}")
+    
+    print(f"--- Done | Nodes: {len(final_proxies)} ---")
 
 if __name__ == "__main__":
     main()
