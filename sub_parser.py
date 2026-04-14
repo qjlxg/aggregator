@@ -2,6 +2,7 @@ import os, requests, base64, re, socket, maxminddb, concurrent.futures, json, ya
 from urllib.parse import urlparse, unquote, quote
 from datetime import datetime
 
+# ================= 配置区 =================
 CLASH_BASE_CONFIG = {
     "port": 7890,
     "socks-port": 7891,
@@ -113,7 +114,7 @@ def parse_uri_to_clash(uri):
 def fetch_source(url):
     try:
         headers = {'User-Agent': 'ClashMeta/1.16.0 v2rayN/6.23'}
-        resp = requests.get(url, headers=headers, timeout=3)
+        resp = requests.get(url, headers=headers, timeout=5)
         if resp.status_code != 200: return []
         content = resp.text.strip()
         if "proxies:" in content or ("port:" in content and "mode:" in content):
@@ -150,22 +151,44 @@ def main():
     DATA_PATH = os.getenv('DATA_PATH', 'private_folder/data')
     INPUT_FILE = os.path.join(DATA_PATH, 'sub_parser.txt')
     
+    links = []
+    raw_nodes = [] 
+    
     if os.path.exists(INPUT_FILE):
         with open(INPUT_FILE, 'r', encoding='utf-8') as f:
-            links = [l.strip() for l in f if l.strip().startswith('http')]
+            for line in f:
+                line = line.strip()
+                if not line: continue
+                if line.startswith('http'):
+                    links.append(line)
+                elif '://' in line:
+                    raw_nodes.append(line)
     else:
+      
         link_env = os.environ.get('LINK', '').strip()
-        links = [l.strip() for l in link_env.split('\n') if l.strip()]
-
-    if not links: return
+        if link_env:
+            for l in link_env.split('\n'):
+                l = l.strip()
+                if l.startswith('http'): links.append(l)
+                elif '://' in l: raw_nodes.append(l)
 
     raw_items = []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
-        results = list(executor.map(fetch_source, links))
-        for r in results: raw_items.extend(r)
+    # 处理远程订阅
+    if links:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
+            results = list(executor.map(fetch_source, links))
+            for r in results: raw_items.extend(r)
+    
+    # 合并本地读取的明文节点
+    raw_items.extend(raw_nodes)
+
+    if not raw_items:
+        print("No nodes or links found. Exiting.")
+        return
 
     mmdb_path = 'GeoLite2-Country.mmdb'
     reader = maxminddb.open_database(mmdb_path) if os.path.exists(mmdb_path) else None
+    
     final_proxies, final_uris, seen_nodes = [], [], set()
     with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:
         futures = [executor.submit(process_node_full, item, reader) for item in raw_items]
@@ -184,6 +207,7 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
     update_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     p_names = [p['name'] for p in final_proxies]
+    
     full_config = CLASH_BASE_CONFIG.copy()
     full_config.update({
         "proxies": final_proxies,
@@ -194,9 +218,11 @@ def main():
         "rules": ["MATCH,🔰 节点选择"]
     })
 
+    # 保存文件
     with open(os.path.join(output_dir, 'clash.yaml'), 'w', encoding='utf-8') as f:
         f.write(f'# Last Updated: {update_time}\n# Total Nodes: {len(final_proxies)}\n\n')
         yaml.safe_dump(full_config, f, allow_unicode=True, sort_keys=False, indent=2)
+    
     with open(os.path.join(output_dir, 'nodes.txt'), 'w', encoding='utf-8') as f:
         f.write(f"# Updated: {update_time}\n" + "\n".join(final_uris) + "\n")
     
@@ -204,7 +230,7 @@ def main():
     with open(os.path.join(output_dir, 'v2ray.txt'), 'w', encoding='utf-8') as f:
         f.write(b64_content)
     
-    print(f"--- Done | Nodes: {len(final_proxies)} ---")
+    print(f"--- Done | Processed: {len(raw_items)} | Unique Nodes: {len(final_proxies)} ---")
 
 if __name__ == "__main__":
     main()
