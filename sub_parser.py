@@ -153,7 +153,8 @@ def main():
     
     links = []
     raw_nodes = [] 
-    
+
+  
     if os.path.exists(INPUT_FILE):
         with open(INPUT_FILE, 'r', encoding='utf-8') as f:
             for line in f:
@@ -163,23 +164,34 @@ def main():
                     links.append(line)
                 elif '://' in line:
                     raw_nodes.append(line)
-    else:
-      
-        link_env = os.environ.get('LINK', '').strip()
-        if link_env:
-            for l in link_env.split('\n'):
-                l = l.strip()
-                if l.startswith('http'): links.append(l)
-                elif '://' in l: raw_nodes.append(l)
+        print(f"--- Info: Loaded {len(links)} links and {len(raw_nodes)} raw nodes from file ---")
+
+
+    link_env = os.environ.get('LINK', '').strip()
+    if link_env:
+        env_count = 0
+        for l in link_env.split('\n'):
+            l = l.strip()
+            if not l: continue
+            if l.startswith('http'): 
+                links.append(l)
+                env_count += 1
+            elif '://' in l: 
+                raw_nodes.append(l)
+                env_count += 1
+        print(f"--- Info: Loaded {env_count} items from env LINK ---")
+
+
+    links = list(set(links))
 
     raw_items = []
-    # 处理远程订阅
+   
     if links:
         with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
             results = list(executor.map(fetch_source, links))
             for r in results: raw_items.extend(r)
     
-    # 合并本地读取的明文节点
+    # 合并所有直接读取的节点
     raw_items.extend(raw_nodes)
 
     if not raw_items:
@@ -218,7 +230,7 @@ def main():
         "rules": ["MATCH,🔰 节点选择"]
     })
 
-    # 保存文件
+    # 保存结果
     with open(os.path.join(output_dir, 'clash.yaml'), 'w', encoding='utf-8') as f:
         f.write(f'# Last Updated: {update_time}\n# Total Nodes: {len(final_proxies)}\n\n')
         yaml.safe_dump(full_config, f, allow_unicode=True, sort_keys=False, indent=2)
@@ -230,7 +242,7 @@ def main():
     with open(os.path.join(output_dir, 'v2ray.txt'), 'w', encoding='utf-8') as f:
         f.write(b64_content)
     
-    print(f"--- Done | Processed: {len(raw_items)} | Unique Nodes: {len(final_proxies)} ---")
+    print(f"--- Done | Unique Nodes: {len(final_proxies)} ---")
 
 if __name__ == "__main__":
     main()
