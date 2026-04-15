@@ -53,13 +53,11 @@ def clash_to_uri(node):
             auth = base64.b64encode(f"{node.get('cipher')}:{node.get('password')}".encode()).decode()
             return f"ss://{auth}@{server}:{port}#{name}"
         elif t == 'ssr':
-            # SSR 格式: host:port:protocol:method:obfs:base64pass/?obfsparam=base64&protoparam=base64&remarks=base64
+            # SSR URI: base64(host:port:protocol:method:obfs:base64pass/?obfsparam=base64&protoparam=base64&remarks=base64)
             pass_b64 = base64.b64encode(node.get('password', '').encode()).decode().replace('=', '')
             main_part = f"{server}:{port}:{node.get('protocol')}:{node.get('cipher')}:{node.get('obfs')}:{pass_b64}"
             remarks = base64.b64encode(node.get('name', '').encode()).decode().replace('=', '')
-            proto_param = base64.b64encode(node.get('protocol-param', '').encode()).decode().replace('=', '')
-            obfs_param = base64.b64encode(node.get('obfs-param', '').encode()).decode().replace('=', '')
-            ssr_uri = base64.b64encode(f"{main_part}/?remarks={remarks}&protoparam={proto_param}&obfsparam={obfs_param}".encode()).decode().replace('=', '')
+            ssr_uri = base64.b64encode(f"{main_part}/?remarks={remarks}".encode()).decode().replace('=', '')
             return f"ssr://{ssr_uri}"
         elif t == 'vmess':
             v2 = {
@@ -73,14 +71,18 @@ def clash_to_uri(node):
             v2_json = base64.b64encode(json.dumps(v2).encode()).decode()
             return f"vmess://{v2_json}"
         elif t == 'vless':
-            query = f"type={node.get('network', 'tcp')}&security={'tls' if node.get('tls') else 'none'}&sni={node.get('servername', '')}"
+            sec = 'reality' if node.get('reality-opts') else 'tls' if node.get('tls') else 'none'
+            query = f"type={node.get('network', 'tcp')}&security={sec}&sni={node.get('servername', node.get('sni', ''))}&flow={node.get('flow', '')}&fp={node.get('client-fingerprint', '')}"
+            if node.get('reality-opts'):
+                query += f"&pbk={node['reality-opts'].get('public-key', '')}&sid={node['reality-opts'].get('short-id', '')}"
             return f"vless://{node.get('uuid')}@{server}:{port}?{query}#{name}"
         elif t == 'trojan':
             return f"trojan://{node.get('password')}@{server}:{port}?sni={node.get('sni', '')}#{name}"
         elif t == 'hysteria2':
-            return f"hysteria2://{node.get('password')}@{server}:{port}#{name}"
+            query = f"sni={node.get('sni', '')}&obfs={node.get('obfs', '')}&obfs-password={node.get('obfs-password', '')}"
+            return f"hysteria2://{node.get('password')}@{server}:{port}?{query}#{name}"
         elif t == 'tuic':
-            return f"tuic://{node.get('uuid')}:{node.get('password')}@{server}:{port}/?sni={node.get('sni', '')}&congestion_control={node.get('congestion-controller', 'bbr')}&alpn={node.get('alpn', ['h3'])[0]}#{name}"
+            return f"tuic://{node.get('uuid')}:{node.get('password')}@{server}:{port}/?sni={node.get('sni', '')}#{name}"
     except: pass
     return None
 
@@ -88,30 +90,19 @@ def parse_uri_to_clash(uri):
     if isinstance(uri, dict): return uri
     try:
         if "://" not in uri: return None
+        # SSR 特殊处理：其 URI 整体是 base64
+        if uri.startswith('ssr://'):
+            raw = decode_base64(uri.replace("ssr://", ""))
+            main_part, params_part = raw.split('/?', 1) if '/?' in raw else (raw, "")
+            p = main_part.split(':')
+            node = {"name": "SSR Node", "type": "ssr", "server": p[0], "port": int(p[1]), "protocol": p[2], "cipher": p[3], "obfs": p[4], "password": decode_base64(p[5]), "udp": True}
+            query = {k.lower(): decode_base64(v) for k, v in [param.split('=', 1) for param in params_part.split('&') if '=' in param]}
+            if query.get('remarks'): node['name'] = query['remarks']
+            return node
+
         parts = uri.split('#')
         base_uri, tag = parts[0], unquote(parts[1]) if len(parts) > 1 else "Node"
         parsed = urlparse(base_uri)
-        
-        # 处理 SSR (因为 SSR 比较特殊，URI 整体是加密的)
-        if uri.startswith('ssr://'):
-            data = decode_base64(uri.replace("ssr://", ""))
-            if not data: return None
-            # 分离 main_part 和 params
-            main_part, params_part = data.split('/?', 1) if '/?' in data else (data, "")
-            parts = main_part.split(':')
-            if len(parts) < 6: return None
-            node = {
-                "name": tag, "type": "ssr", "server": parts[0], "port": int(parts[1]),
-                "protocol": parts[2], "cipher": parts[3], "obfs": parts[4],
-                "password": decode_base64(parts[5]), "udp": True
-            }
-            # 解析参数
-            query = {k.lower(): v for k, v in [p.split('=', 1) for p in params_part.split('&') if '=' in p]}
-            if 'remarks' in query: node['name'] = decode_base64(query['remarks'])
-            if 'protoparam' in query: node['protocol-param'] = decode_base64(query['protoparam'])
-            if 'obfsparam' in query: node['obfs-param'] = decode_base64(query['obfsparam'])
-            return node
-
         if not parsed.hostname: return None
         node = {"name": tag, "server": parsed.hostname, "port": int(parsed.port or 443), "udp": True}
         node['original_scheme'] = parsed.scheme
@@ -120,7 +111,7 @@ def parse_uri_to_clash(uri):
         if parsed.scheme == 'anytls':
             node.update({"type": "vless", "uuid": parsed.username, "tls": True, "servername": query.get('sni'), "skip-cert-verify": query.get('insecure') == '1'})
             return node
-        elif parsed.scheme == 'ss':
+        if parsed.scheme == 'ss':
             auth = decode_base64(parsed.netloc.split('@')[0])
             if ':' in auth:
                 node.update({"type": "ss", "cipher": auth.split(':')[0], "password": auth.split(':')[1]})
@@ -132,22 +123,18 @@ def parse_uri_to_clash(uri):
             if node["network"] == 'ws': node["ws-opts"] = {"path": v2.get('path', '/'), "headers": {"Host": v2.get('host', '')}}
             return node
         elif parsed.scheme == 'vless':
-            node.update({"type": "vless", "uuid": parsed.username, "tls": query.get('security') in ['tls', 'reality'], "servername": query.get('sni'), "network": query.get('type', 'tcp')})
+            node.update({"type": "vless", "uuid": parsed.username, "tls": query.get('security') in ['tls', 'reality'], "servername": query.get('sni'), "network": query.get('type', 'tcp'), "flow": query.get('flow', '')})
             if query.get('security') == 'reality': node["reality-opts"] = {"public-key": query.get('pbk'), "short-id": query.get('sid', '')}
+            if query.get('fp'): node["client-fingerprint"] = query.get('fp')
             return node
         elif parsed.scheme in ['hysteria2', 'hy2']:
-            node.update({"type": "hysteria2", "password": parsed.username or query.get('auth'), "sni": query.get('sni'), "skip-cert-verify": True})
+            node.update({"type": "hysteria2", "password": parsed.username or query.get('auth'), "sni": query.get('sni'), "skip-cert-verify": True, "obfs": query.get('obfs', ''), "obfs-password": query.get('obfs-password', '')})
+            return node
+        elif parsed.scheme == 'tuic':
+            node.update({"type": "tuic", "uuid": parsed.username, "password": parsed.password, "sni": query.get('sni'), "alpn": ["h3"]})
             return node
         elif parsed.scheme == 'trojan':
             node.update({"type": "trojan", "password": parsed.username, "sni": query.get('sni'), "skip-cert-verify": True})
-            return node
-        elif parsed.scheme == 'tuic':
-            node.update({
-                "type": "tuic", "uuid": parsed.username, "password": parsed.password,
-                "sni": query.get('sni'), "alpn": [query.get('alpn', 'h3')],
-                "congestion-controller": query.get('congestion_control', 'bbr'),
-                "skip-cert-verify": True
-            })
             return node
     except: return None
     return None
