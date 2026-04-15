@@ -30,11 +30,10 @@ def get_flag(code):
 def decode_base64(data):
     if not data: return ""
     try:
-        data = data.replace("-", "+").replace("_", "/")
-        clean_data = re.sub(r'[^A-Za-z0-9+/=]', '', data.strip())
-        missing_padding = len(clean_data) % 4
-        if missing_padding: clean_data += '=' * (4 - missing_padding)
-        return base64.b64decode(clean_data).decode('utf-8', errors='ignore')
+        data = data.replace("-", "+").replace("_", "/").strip()
+        missing_padding = len(data) % 4
+        if missing_padding: data += '=' * (4 - missing_padding)
+        return base64.b64decode(data).decode('utf-8', errors='ignore')
     except: return ""
 
 def get_short_id(text):
@@ -53,7 +52,6 @@ def clash_to_uri(node):
             auth = base64.b64encode(f"{node.get('cipher')}:{node.get('password')}".encode()).decode()
             return f"ss://{auth}@{server}:{port}#{name}"
         elif t == 'ssr':
-            # SSR URI: base64(host:port:protocol:method:obfs:base64pass/?obfsparam=base64&protoparam=base64&remarks=base64)
             pass_b64 = base64.b64encode(node.get('password', '').encode()).decode().replace('=', '')
             main_part = f"{server}:{port}:{node.get('protocol')}:{node.get('cipher')}:{node.get('obfs')}:{pass_b64}"
             remarks = base64.b64encode(node.get('name', '').encode()).decode().replace('=', '')
@@ -90,13 +88,13 @@ def parse_uri_to_clash(uri):
     if isinstance(uri, dict): return uri
     try:
         if "://" not in uri: return None
-        # SSR 特殊处理：其 URI 整体是 base64
+        # SSR 特殊解码逻辑
         if uri.startswith('ssr://'):
             raw = decode_base64(uri.replace("ssr://", ""))
-            main_part, params_part = raw.split('/?', 1) if '/?' in raw else (raw, "")
-            p = main_part.split(':')
+            main, params = raw.split('/?', 1) if '/?' in raw else (raw, "")
+            p = main.split(':')
             node = {"name": "SSR Node", "type": "ssr", "server": p[0], "port": int(p[1]), "protocol": p[2], "cipher": p[3], "obfs": p[4], "password": decode_base64(p[5]), "udp": True}
-            query = {k.lower(): decode_base64(v) for k, v in [param.split('=', 1) for param in params_part.split('&') if '=' in param]}
+            query = {k.lower(): decode_base64(v) for k, v in [param.split('=', 1) for param in params.split('&') if '=' in param]}
             if query.get('remarks'): node['name'] = query['remarks']
             return node
 
@@ -161,7 +159,8 @@ def process_node_full(item, reader):
     node = parse_uri_to_clash(item)
     if not node: return None
     server = node.get('server')
-    nid = f"{server}:{node.get('port')}:{node.get('type')}"
+    # 增加名称到 ID 判定，防止同 IP 不同域名的节点丢失
+    nid = f"{server}:{node.get('port')}:{node.get('type')}:{node.get('name')}"
     ip = get_ip(server)
     c_name, flag = "未知地区", "🌐"
     if ip and reader:
@@ -178,47 +177,35 @@ def process_node_full(item, reader):
 def main():
     DATA_PATH = os.getenv('DATA_PATH', 'private_folder/data')
     INPUT_FILE = os.path.join(DATA_PATH, 'sub_parser.txt')
-    
-    links = []
-    raw_nodes = [] 
+    links, raw_nodes = [], []
 
     if os.path.exists(INPUT_FILE):
         with open(INPUT_FILE, 'r', encoding='utf-8') as f:
             for line in f:
                 line = line.strip()
                 if not line: continue
-                if line.startswith('http'):
-                    links.append(line)
-                elif '://' in line:
-                    raw_nodes.append(line)
+                if line.startswith('http'): links.append(line)
+                elif '://' in line: raw_nodes.append(line)
         print(f"--- Info: Loaded {len(links)} links and {len(raw_nodes)} raw nodes from file ---")
 
     link_env = os.environ.get('LINK', '').strip()
     if link_env:
-        env_count = 0
         for l in link_env.split('\n'):
             l = l.strip()
             if not l: continue
-            if l.startswith('http'): 
-                links.append(l)
-                env_count += 1
-            elif '://' in l: 
-                raw_nodes.append(l)
-                env_count += 1
-        print(f"--- Info: Loaded {env_count} items from env LINK ---")
+            if l.startswith('http'): links.append(l)
+            elif '://' in l: raw_nodes.append(l)
 
     links = list(set(links))
     raw_items = []
-   
     if links:
         with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
             results = list(executor.map(fetch_source, links))
             for r in results: raw_items.extend(r)
-    
     raw_items.extend(raw_nodes)
 
     if not raw_items:
-        print("No nodes or links found. Exiting.")
+        print("No nodes found.")
         return
 
     mmdb_path = 'GeoLite2-Country.mmdb'
