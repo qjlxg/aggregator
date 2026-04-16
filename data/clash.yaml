@@ -1,4 +1,4 @@
-# Last Updated: 2026-04-16 21:11:06
+# Last Updated: 2026-04-17 01:24:22
 # Total Nodes: 29
 
 port: 7890
@@ -20,26 +20,68 @@ dns:
   - tls://1.0.0.1:853
   - tls://dns.google:853
 proxies:
-- name: 🇲🇽 墨西哥 打倒美帝国主义及其一切走狗_99f0
-  server: 139.177.103.135
-  port: 8443
+- name: 🇨🇭 瑞士 打倒美帝国主义及其一切走狗_3044
+  server: 152.67.81.171
+  port: 8444
   udp: true
   type: vless
-  uuid: eca940d8-bec1-4cd5-84f4-d8205254d54b
+  uuid: 52684330-a9d5-408f-ad5e-d90bcee24e41
   tls: true
   servername: tesla.com
   network: tcp
   flow: xtls-rprx-vision
   reality-opts:
-    public-key: LiSrIOq9pojF5iZc2c660LUAESwEWbxzt1YR96xz4k4
+    public-key: 7qOCfcEvImVg65UNXmT_84xj7yhUgDJ82ZIlsbA5Ejo
+    short-id: ''
+  client-fingerprint: qq
+- name: 🇬🇧 英国 打倒美帝国主义及其一切走狗_f1b9
+  server: 132.145.18.153
+  port: 8444
+  udp: true
+  type: vless
+  uuid: b8704c68-d81b-440b-8ef1-8b62a29c3c7f
+  tls: true
+  servername: tesla.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: F55VuVaLRNMeRSdYl9ZT2TEkhP4uvWNa3bo1MAMHMh0
+    short-id: ''
+  client-fingerprint: qq
+- name: 🇮🇱 以色列 打倒美帝国主义及其一切走狗_5415
+  server: 129.159.153.228
+  port: 30625
+  udp: true
+  type: vless
+  uuid: db583d31-06f4-4c00-9993-71bf4f1cdc4c
+  tls: true
+  servername: tesla.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: _mmuhX29Kr5FgZ4xp-FDVoXPRGoIU62N6sbsFTbZijQ
     short-id: ''
   client-fingerprint: firefox
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_3e37
+  server: 140.245.109.76
+  port: 8444
+  udp: true
+  type: vless
+  uuid: 8e98defe-2790-4487-96db-1160d7e7dc33
+  tls: true
+  servername: tesla.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: OYHRKufAg09vpdsYBQB_vjikJ9DyE1KurtHQZRRLeWQ
+    short-id: ''
+  client-fingerprint: edge
 - name: 🇫🇷 法国 打倒美帝国主义及其一切走狗_9443
   server: 129.151.239.170
   port: 8444
   udp: true
   type: vless
-  uuid: d37143ab-9ffc-4853-a087-479e692a2488
+  uuid: 10b85335-d6fe-4141-bde2-84968fedea16
   tls: true
   servername: tesla.com
   network: tcp
@@ -47,13 +89,49 @@ proxies:
   reality-opts:
     public-key: Pgzq-J8UfuBeYi0XSVTn3uYYmi9Rm2dpegks9Ko8M0Y
     short-id: ''
-  client-fingerprint: ios
+  client-fingerprint: chrome
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_6a36
+  server: hk.aicvideo.info
+  port: 8809
+  udp: true
+  type: trojan
+  password: 4dc8eeda-fdfb-4660-8ceb-3e872956cb94
+  sni: hk.aicvideo.info
+  skip-cert-verify: true
+- name: 🇲🇽 墨西哥 打倒美帝国主义及其一切走狗_99f0
+  server: 139.177.103.135
+  port: 8443
+  udp: true
+  type: vless
+  uuid: 52684330-a9d5-408f-ad5e-d90bcee24e41
+  tls: true
+  servername: tesla.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: LiSrIOq9pojF5iZc2c660LUAESwEWbxzt1YR96xz4k4
+    short-id: ''
+  client-fingerprint: chrome
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_56d0
+  server: 129.159.35.198
+  port: 8444
+  udp: true
+  type: vless
+  uuid: db583d31-06f4-4c00-9993-71bf4f1cdc4c
+  tls: true
+  servername: tesla.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: 4sZ7HGlhMkiRluu7fysK2XK-W_AgV7vqIucpVxCpmms
+    short-id: ''
+  client-fingerprint: firefox
 - name: 🇨🇦 加拿大 打倒美帝国主义及其一切走狗_2311
   server: 155.248.229.115
   port: 8443
   udp: true
   type: vless
-  uuid: 5ff37149-8bd8-44d9-a087-cd2993605a4a
+  uuid: c8b0eddf-2dc6-48aa-99ef-ef6ee53b3028
   tls: true
   servername: tesla.com
   network: tcp
@@ -67,7 +145,7 @@ proxies:
   port: 6228
   udp: true
   type: vless
-  uuid: cacd71b1-a43a-420c-8d3c-c67692dca988
+  uuid: 8a8421b7-fb9b-4454-8524-327fa80dd51d
   tls: true
   servername: tesla.com
   network: tcp
@@ -75,107 +153,9 @@ proxies:
   reality-opts:
     public-key: A7mu8mjNk0MgUFMfCDk6mzoF8allWMSqOnQBNxUNZno
     short-id: ''
-  client-fingerprint: qq
-- name: 🇫🇷 法国 打倒美帝国主义及其一切走狗_5e9f
-  server: 158.178.198.63
-  port: 8444
-  udp: true
-  type: vless
-  uuid: 2f1aec39-3295-48b1-be80-bb6884b0d20b
-  tls: true
-  servername: tesla.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: U2BHsyRo3bF289dW-3sDOyBxgAicl2AgoMjLpyIjNRo
-    short-id: ''
-  client-fingerprint: chrome
-- name: 🇨🇭 瑞士 打倒美帝国主义及其一切走狗_3044
-  server: 152.67.81.171
-  port: 8444
-  udp: true
-  type: vless
-  uuid: 0117e140-dfe1-4638-9a72-0125a71182a8
-  tls: true
-  servername: tesla.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: 7qOCfcEvImVg65UNXmT_84xj7yhUgDJ82ZIlsbA5Ejo
-    short-id: ''
   client-fingerprint: ios
-- name: 🇬🇧 英国 打倒美帝国主义及其一切走狗_f1b9
-  server: 132.145.18.153
-  port: 8444
-  udp: true
-  type: vless
-  uuid: 6a335257-1eb6-4b62-9148-805e78cde38c
-  tls: true
-  servername: tesla.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: F55VuVaLRNMeRSdYl9ZT2TEkhP4uvWNa3bo1MAMHMh0
-    short-id: ''
-  client-fingerprint: ios
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_7689
-  server: 140.245.109.76
-  port: 8444
-  udp: true
-  type: vless
-  uuid: a7d6ded7-f8f4-494b-9ed7-7ce22aa34173
-  tls: true
-  servername: tesla.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: OYHRKufAg09vpdsYBQB_vjikJ9DyE1KurtHQZRRLeWQ
-    short-id: ''
-  client-fingerprint: ios
-- name: 🇮🇱 以色列 打倒美帝国主义及其一切走狗_5415
-  server: 129.159.153.228
-  port: 30625
-  udp: true
-  type: vless
-  uuid: a7d6ded7-f8f4-494b-9ed7-7ce22aa34173
-  tls: true
-  servername: tesla.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: _mmuhX29Kr5FgZ4xp-FDVoXPRGoIU62N6sbsFTbZijQ
-    short-id: ''
-  client-fingerprint: chrome
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_3e37
-  server: 140.245.109.76
-  port: 8444
-  udp: true
-  type: vless
-  uuid: 573e4f28-3be8-4c7c-878c-3d1de21f7dbe
-  tls: true
-  servername: tesla.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: OYHRKufAg09vpdsYBQB_vjikJ9DyE1KurtHQZRRLeWQ
-    short-id: ''
-  client-fingerprint: firefox
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_56d0
-  server: 129.159.35.198
-  port: 8444
-  udp: true
-  type: vless
-  uuid: 3bcd7ad2-1610-4157-9680-84d42a04726e
-  tls: true
-  servername: tesla.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: 4sZ7HGlhMkiRluu7fysK2XK-W_AgV7vqIucpVxCpmms
-    short-id: ''
-  client-fingerprint: safari
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_f9fc
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1ntk1n1x1otkxmfx1ntizmfx1njcxzlx1zmyxyvx1otu3zlx1njcxzlx1njcwovx1nju0ocisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoiyzcwnzviodmtmmq4zi00yjc2lwi2zmqty2m4mjlhztzknzvhiiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_e206
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxxrniiwiywrkijoiagsuywljdmlkzw8uaw5mbyisinbvcnqioii4ndqziiwiawqioijjnza3nwi4my0yzdhmltrinzytyjzmzc1jyzgyowflnmq3nweilcjhawqioiiwiiwibmv0ijoidgnwiiwidhlwzsi6im5vbmuilcjob3n0ijoiiiwicgf0aci6iiisinrscyi6inrscyj9
   port: 443
   udp: true
   type: vmess
@@ -190,113 +170,35 @@ proxies:
   udp: true
   type: ss
   cipher: chacha20-ietf-poly1305
-  password: 4dc8eeda-fdfb-4660-8ceb-3e872956cb94
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_b9b0
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxxrniiwiywrkijoiagsuywljdmlkzw8uaw5mbyisinbvcnqioii4ndqziiwiawqioii0ntzjndk3zs0wmmjjltrindytodgzzi0wnjc0n2nhymrmymqilcjhawqioiiwiiwibmv0ijoidgnwiiwidhlwzsi6im5vbmuilcjob3n0ijoiiiwicgf0aci6iiisinrscyi6inrscyj9
-  port: 443
+  password: 456c497e-02bc-4b46-883f-06747cabdfbd
+- name: 🇫🇷 法国 打倒美帝国主义及其一切走狗_5e9f
+  server: 158.178.198.63
+  port: 8444
   udp: true
-  type: vmess
-  uuid: 456c497e-02bc-4b46-883f-06747cabdfbd
-  alterId: 0
-  cipher: auto
+  type: vless
+  uuid: 8a8421b7-fb9b-4454-8524-327fa80dd51d
   tls: true
+  servername: tesla.com
   network: tcp
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_6a36
-  server: hk.aicvideo.info
-  port: 8809
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: U2BHsyRo3bF289dW-3sDOyBxgAicl2AgoMjLpyIjNRo
+    short-id: ''
+  client-fingerprint: edge
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_7689
+  server: 140.245.109.76
+  port: 8444
   udp: true
-  type: trojan
-  password: 768b923a-4918-46ad-96e7-9cf5543ddc4c
-  sni: hk.aicvideo.info
-  skip-cert-verify: true
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_4873
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxxrniiwiywrkijoiagsuywljdmlkzw8uaw5mbyisinbvcnqioii4ndqziiwiawqioii0zgm4zwvkys1mzgziltq2njatognlyi0zztg3mjk1nmniotqilcjhawqioiiwiiwibmv0ijoidgnwiiwidhlwzsi6im5vbmuilcjob3n0ijoiiiwicgf0aci6iiisinrscyi6inrscyj9
-  port: 443
-  udp: true
-  type: vmess
-  uuid: 4dc8eeda-fdfb-4660-8ceb-3e872956cb94
-  alterId: 0
-  cipher: auto
+  type: vless
+  uuid: bf48badd-086e-409a-a932-720f46af1794
   tls: true
+  servername: tesla.com
   network: tcp
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_897e
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxxrniiwiywrkijoiagsuywljdmlkzw8uaw5mbyisinbvcnqioii4ndqziiwiawqioii3njhiotizys00ote4ltq2ywqtotzlny05y2y1ntqzzgrjngmilcjhawqioiiwiiwibmv0ijoidgnwiiwidhlwzsi6im5vbmuilcjob3n0ijoiiiwicgf0aci6iiisinrscyi6inrscyj9
-  port: 443
-  udp: true
-  type: vmess
-  uuid: 768b923a-4918-46ad-96e7-9cf5543ddc4c
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_e206
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxxrniiwiywrkijoiagsuywljdmlkzw8uaw5mbyisinbvcnqioii4ndqziiwiawqioijjnza3nwi4my0yzdhmltrinzytyjzmzc1jyzgyowflnmq3nweilcjhawqioiiwiiwibmv0ijoidgnwiiwidhlwzsi6im5vbmuilcjob3n0ijoiiiwicgf0aci6iiisinrscyi6inrscyj9
-  port: 443
-  udp: true
-  type: vmess
-  uuid: c7075b83-2d8f-4b76-b6fd-cc829ae6d75a
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_07f7
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1nti2ovx1ngy1ovx1nmq0mvx1otfjzlx1zmyxytk4ms4xiedciiwiywrkijoiagsuywljdmlkzw8uaw5mbyisinbvcnqioii4ndqziiwiawqioii0zgm4zwvkys1mzgziltq2njatognlyi0zztg3mjk1nmniotqilcjhawqioiiwiiwibmv0ijoidgnwiiwidhlwzsi6im5vbmuilcjob3n0ijoiiiwicgf0aci6iiisinrscyi6inrscyj9
-  port: 443
-  udp: true
-  type: vmess
-  uuid: 4dc8eeda-fdfb-4660-8ceb-3e872956cb94
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_653e
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxxztbgvzcyisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodgxmcisimlkijoingrjogvlzgetzmrmyi00njywlthjzwitm2u4nzi5ntzjyjk0iiwiywlkijoimcisim5ldci6indziiwidhlwzsi6indziiwiag9zdci6ind3dy5iaw5nlmnvbsisinbhdggioijcl2rncyisinrscyi6inrscyisinnuasi6imhrlmfpy3zpzgvvlmluzm8ifq==
-  port: 443
-  udp: true
-  type: vmess
-  uuid: 4dc8eeda-fdfb-4660-8ceb-3e872956cb94
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: ws
-  ws-opts:
-    path: /dgs
-    headers:
-      Host: www.bing.com
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_3648
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1ntk1n1x1otkxmfx1ntizmfx1njcxzlx1zmyxyvx1otu3zlx1njcxzlx1njcwovx1nju0ocisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoinzy4yjkym2etndkxoc00nmfkltk2ztctownmntu0m2rkyzrjiiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
-  port: 443
-  udp: true
-  type: vmess
-  uuid: 768b923a-4918-46ad-96e7-9cf5543ddc4c
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_cba8
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1nti2ovx1ngy1ovx1nmq0mvx1otfjzlx1zmyxytk4ni40mybhqiisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoinzy4yjkym2etndkxoc00nmfkltk2ztctownmntu0m2rkyzrjiiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
-  port: 443
-  udp: true
-  type: vmess
-  uuid: 768b923a-4918-46ad-96e7-9cf5543ddc4c
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: tcp
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_8520
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxxztbgvzcyisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodgxmcisimlkijoindu2yzq5n2utmdjiyy00yjq2ltg4m2ytmdy3nddjywjkzmjkiiwiywlkijoimcisim5ldci6indziiwidhlwzsi6indziiwiag9zdci6ind3dy5iaw5nlmnvbsisinbhdggioijcl2rncyisinrscyi6inrscyisinnuasi6imhrlmfpy3zpzgvvlmluzm8ifq==
-  port: 443
-  udp: true
-  type: vmess
-  uuid: 456c497e-02bc-4b46-883f-06747cabdfbd
-  alterId: 0
-  cipher: auto
-  tls: true
-  network: ws
-  ws-opts:
-    path: /dgs
-    headers:
-      Host: www.bing.com
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: OYHRKufAg09vpdsYBQB_vjikJ9DyE1KurtHQZRRLeWQ
+    short-id: ''
+  client-fingerprint: safari
 - name: 🌐 未知地区 打倒美帝国主义及其一切走狗_5751
   server: eyj2ijoimiisinbzijoiw3ztzxnzxxztbgvzcyisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodgxmcisimlkijoiyzcwnzviodmtmmq4zi00yjc2lwi2zmqty2m4mjlhztzknzvhiiwiywlkijoimcisim5ldci6indziiwidhlwzsi6indziiwiag9zdci6ind3dy5iaw5nlmnvbsisinbhdggioijcl2rncyisinrscyi6inrscyisinnuasi6imhrlmfpy3zpzgvvlmluzm8ifq==
   port: 443
@@ -311,8 +213,22 @@ proxies:
     path: /dgs
     headers:
       Host: www.bing.com
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_fde0
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1nti2ovx1ngy1ovx1nmq0mvx1otfjzlx1zmyxytkwos4xnsbhqiisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoiyzcwnzviodmtmmq4zi00yjc2lwi2zmqty2m4mjlhztzknzvhiiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_653e
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxxztbgvzcyisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodgxmcisimlkijoingrjogvlzgetzmrmyi00njywlthjzwitm2u4nzi5ntzjyjk0iiwiywlkijoimcisim5ldci6indziiwidhlwzsi6indziiwiag9zdci6ind3dy5iaw5nlmnvbsisinbhdggioijcl2rncyisinrscyi6inrscyisinnuasi6imhrlmfpy3zpzgvvlmluzm8ifq==
+  port: 443
+  udp: true
+  type: vmess
+  uuid: 4dc8eeda-fdfb-4660-8ceb-3e872956cb94
+  alterId: 0
+  cipher: auto
+  tls: true
+  network: ws
+  ws-opts:
+    path: /dgs
+    headers:
+      Host: www.bing.com
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_f9fc
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1ntk1n1x1otkxmfx1ntizmfx1njcxzlx1zmyxyvx1otu3zlx1njcxzlx1njcwovx1nju0ocisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoiyzcwnzviodmtmmq4zi00yjc2lwi2zmqty2m4mjlhztzknzvhiiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
   port: 443
   udp: true
   type: vmess
@@ -321,22 +237,72 @@ proxies:
   cipher: auto
   tls: true
   network: tcp
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_9a2a
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1nti2ovx1ngy1ovx1nmq0mvx1otfjzlx1zmyxytkzni4xocbhqiisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoindu2yzq5n2utmdjiyy00yjq2ltg4m2ytmdy3nddjywjkzmjkiiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_897e
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxxrniiwiywrkijoiagsuywljdmlkzw8uaw5mbyisinbvcnqioii4ndqziiwiawqioii3njhiotizys00ote4ltq2ywqtotzlny05y2y1ntqzzgrjngmilcjhawqioiiwiiwibmv0ijoidgnwiiwidhlwzsi6im5vbmuilcjob3n0ijoiiiwicgf0aci6iiisinrscyi6inrscyj9
   port: 443
   udp: true
   type: vmess
-  uuid: 456c497e-02bc-4b46-883f-06747cabdfbd
+  uuid: 768b923a-4918-46ad-96e7-9cf5543ddc4c
   alterId: 0
   cipher: auto
   tls: true
   network: tcp
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_0c57
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1ntk1n1x1otkxmfx1ntizmfx1njcxzlx1zmyxyvx1otu3zlx1njcxzlx1njcwovx1nju0ocisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoindu2yzq5n2utmdjiyy00yjq2ltg4m2ytmdy3nddjywjkzmjkiiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_3648
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1ntk1n1x1otkxmfx1ntizmfx1njcxzlx1zmyxyvx1otu3zlx1njcxzlx1njcwovx1nju0ocisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoinzy4yjkym2etndkxoc00nmfkltk2ztctownmntu0m2rkyzrjiiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
   port: 443
   udp: true
   type: vmess
-  uuid: 456c497e-02bc-4b46-883f-06747cabdfbd
+  uuid: 768b923a-4918-46ad-96e7-9cf5543ddc4c
+  alterId: 0
+  cipher: auto
+  tls: true
+  network: tcp
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_1efc
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1ntk1n1x1otkxmfx1ntizmfx1njcxzlx1zmyxyvx1otu3zlx1njcxzlx1njcwovx1nju0ocisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoingrjogvlzgetzmrmyi00njywlthjzwitm2u4nzi5ntzjyjk0iiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
+  port: 443
+  udp: true
+  type: vmess
+  uuid: 4dc8eeda-fdfb-4660-8ceb-3e872956cb94
+  alterId: 0
+  cipher: auto
+  tls: true
+  network: tcp
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_0142
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1nti2ovx1ngy1ovx1nmq0mvx1otfjzlx1zmyxytk5ny44nybhqiisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoinzy4yjkym2etndkxoc00nmfkltk2ztctownmntu0m2rkyzrjiiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
+  port: 443
+  udp: true
+  type: vmess
+  uuid: 768b923a-4918-46ad-96e7-9cf5543ddc4c
+  alterId: 0
+  cipher: auto
+  tls: true
+  network: tcp
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_6432
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1nti2ovx1ngy1ovx1nmq0mvx1otfjzlx1zmyxytk3ms4znybhqiisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoingrjogvlzgetzmrmyi00njywlthjzwitm2u4nzi5ntzjyjk0iiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
+  port: 443
+  udp: true
+  type: vmess
+  uuid: 4dc8eeda-fdfb-4660-8ceb-3e872956cb94
+  alterId: 0
+  cipher: auto
+  tls: true
+  network: tcp
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_a40c
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1nti2ovx1ngy1ovx1nmq0mvx1otfjzlx1zmyxytkwoc43ncbhqiisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoiyzcwnzviodmtmmq4zi00yjc2lwi2zmqty2m4mjlhztzknzvhiiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
+  port: 443
+  udp: true
+  type: vmess
+  uuid: c7075b83-2d8f-4b76-b6fd-cc829ae6d75a
+  alterId: 0
+  cipher: auto
+  tls: true
+  network: tcp
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_4873
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxxrniiwiywrkijoiagsuywljdmlkzw8uaw5mbyisinbvcnqioii4ndqziiwiawqioii0zgm4zwvkys1mzgziltq2njatognlyi0zztg3mjk1nmniotqilcjhawqioiiwiiwibmv0ijoidgnwiiwidhlwzsi6im5vbmuilcjob3n0ijoiiiwicgf0aci6iiisinrscyi6inrscyj9
+  port: 443
+  udp: true
+  type: vmess
+  uuid: 4dc8eeda-fdfb-4660-8ceb-3e872956cb94
   alterId: 0
   cipher: auto
   tls: true
@@ -355,84 +321,118 @@ proxies:
     path: /dgs
     headers:
       Host: www.bing.com
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_1efc
-  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1ntk1n1x1otkxmfx1ntizmfx1njcxzlx1zmyxyvx1otu3zlx1njcxzlx1njcwovx1nju0ocisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoingrjogvlzgetzmrmyi00njywlthjzwitm2u4nzi5ntzjyjk0iiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_d5c1
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1nti2ovx1ngy1ovx1nmq0mvx1otfjzlx1zmyxytkzns4yocbhqiisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoindu2yzq5n2utmdjiyy00yjq2ltg4m2ytmdy3nddjywjkzmjkiiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
   port: 443
   udp: true
   type: vmess
-  uuid: 4dc8eeda-fdfb-4660-8ceb-3e872956cb94
+  uuid: 456c497e-02bc-4b46-883f-06747cabdfbd
   alterId: 0
   cipher: auto
   tls: true
   network: tcp
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_b9b0
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxxrniiwiywrkijoiagsuywljdmlkzw8uaw5mbyisinbvcnqioii4ndqziiwiawqioii0ntzjndk3zs0wmmjjltrindytodgzzi0wnjc0n2nhymrmymqilcjhawqioiiwiiwibmv0ijoidgnwiiwidhlwzsi6im5vbmuilcjob3n0ijoiiiwicgf0aci6iiisinrscyi6inrscyj9
+  port: 443
+  udp: true
+  type: vmess
+  uuid: 456c497e-02bc-4b46-883f-06747cabdfbd
+  alterId: 0
+  cipher: auto
+  tls: true
+  network: tcp
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_0c57
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxvx1ntk1n1x1otkxmfx1ntizmfx1njcxzlx1zmyxyvx1otu3zlx1njcxzlx1njcwovx1nju0ocisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodq0myisimlkijoindu2yzq5n2utmdjiyy00yjq2ltg4m2ytmdy3nddjywjkzmjkiiwiywlkijoimcisim5ldci6inrjccisinr5cguioijub25liiwiag9zdci6iiisinbhdggioiiilcj0bhmioij0bhmifq==
+  port: 443
+  udp: true
+  type: vmess
+  uuid: 456c497e-02bc-4b46-883f-06747cabdfbd
+  alterId: 0
+  cipher: auto
+  tls: true
+  network: tcp
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_8520
+  server: eyj2ijoimiisinbzijoiw3ztzxnzxxztbgvzcyisimfkzci6imhrlmfpy3zpzgvvlmluzm8ilcjwb3j0ijoiodgxmcisimlkijoindu2yzq5n2utmdjiyy00yjq2ltg4m2ytmdy3nddjywjkzmjkiiwiywlkijoimcisim5ldci6indziiwidhlwzsi6indziiwiag9zdci6ind3dy5iaw5nlmnvbsisinbhdggioijcl2rncyisinrscyi6inrscyisinnuasi6imhrlmfpy3zpzgvvlmluzm8ifq==
+  port: 443
+  udp: true
+  type: vmess
+  uuid: 456c497e-02bc-4b46-883f-06747cabdfbd
+  alterId: 0
+  cipher: auto
+  tls: true
+  network: ws
+  ws-opts:
+    path: /dgs
+    headers:
+      Host: www.bing.com
 proxy-groups:
 - name: 🔰 节点选择
   type: select
   proxies:
   - 🚀 自动测速
   - DIRECT
-  - 🇲🇽 墨西哥 打倒美帝国主义及其一切走狗_99f0
-  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_9443
-  - 🇨🇦 加拿大 打倒美帝国主义及其一切走狗_2311
-  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_a036
-  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_5e9f
   - 🇨🇭 瑞士 打倒美帝国主义及其一切走狗_3044
   - 🇬🇧 英国 打倒美帝国主义及其一切走狗_f1b9
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_7689
   - 🇮🇱 以色列 打倒美帝国主义及其一切走狗_5415
   - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_3e37
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_56d0
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_f9fc
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_ef7a
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_b9b0
+  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_9443
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_6a36
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_4873
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_897e
+  - 🇲🇽 墨西哥 打倒美帝国主义及其一切走狗_99f0
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_56d0
+  - 🇨🇦 加拿大 打倒美帝国主义及其一切走狗_2311
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_a036
   - 🌐 未知地区 打倒美帝国主义及其一切走狗_e206
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_07f7
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_653e
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_3648
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_cba8
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8520
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_ef7a
+  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_5e9f
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_7689
   - 🌐 未知地区 打倒美帝国主义及其一切走狗_5751
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fde0
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9a2a
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_0c57
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_bc8e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_653e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_f9fc
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_897e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_3648
   - 🌐 未知地区 打倒美帝国主义及其一切走狗_1efc
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_0142
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_6432
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_a40c
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_4873
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_bc8e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_d5c1
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_b9b0
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_0c57
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8520
 - name: 🚀 自动测速
   type: url-test
   url: http://www.gstatic.com/generate_204
   interval: 300
   proxies:
-  - 🇲🇽 墨西哥 打倒美帝国主义及其一切走狗_99f0
-  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_9443
-  - 🇨🇦 加拿大 打倒美帝国主义及其一切走狗_2311
-  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_a036
-  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_5e9f
   - 🇨🇭 瑞士 打倒美帝国主义及其一切走狗_3044
   - 🇬🇧 英国 打倒美帝国主义及其一切走狗_f1b9
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_7689
   - 🇮🇱 以色列 打倒美帝国主义及其一切走狗_5415
   - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_3e37
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_56d0
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_f9fc
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_ef7a
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_b9b0
+  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_9443
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_6a36
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_4873
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_897e
+  - 🇲🇽 墨西哥 打倒美帝国主义及其一切走狗_99f0
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_56d0
+  - 🇨🇦 加拿大 打倒美帝国主义及其一切走狗_2311
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_a036
   - 🌐 未知地区 打倒美帝国主义及其一切走狗_e206
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_07f7
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_653e
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_3648
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_cba8
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8520
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_ef7a
+  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_5e9f
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_7689
   - 🌐 未知地区 打倒美帝国主义及其一切走狗_5751
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fde0
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9a2a
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_0c57
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_bc8e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_653e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_f9fc
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_897e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_3648
   - 🌐 未知地区 打倒美帝国主义及其一切走狗_1efc
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_0142
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_6432
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_a40c
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_4873
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_bc8e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_d5c1
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_b9b0
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_0c57
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8520
 rules:
 - MATCH,🔰 节点选择
