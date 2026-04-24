@@ -36,8 +36,6 @@ def decode_base64(data):
     if not data: return ""
     try:
         data = data.replace("-", "+").replace("_", "/").strip()
-        # 插入逻辑：清洗掉可能干扰解码的非法字符
-        data = re.sub(r'[^a-zA-Z0-9+/=]', '', data)
         missing_padding = len(data) % 4
         if missing_padding: data += '=' * (4 - missing_padding)
         return base64.b64decode(data).decode('utf-8', errors='ignore')
@@ -147,24 +145,20 @@ def parse_uri_to_clash(uri):
 def fetch_source(url):
     try:
         headers = {'User-Agent': 'ClashMeta/1.16.0 v2rayN/6.23'}
-        # 插入逻辑：添加 verify=False 并增加超时容错
-        resp = requests.get(url, headers=headers, timeout=10, verify=False)
+        # 插入逻辑：添加 verify=False 跳过 SSL 证书校验
+        resp = requests.get(url, headers=headers, timeout=5, verify=False)
         if resp.status_code != 200: return []
         content = resp.text.strip()
-        
-        # 插入逻辑：并发尝试。合并原始内容和解码后的内容，确保覆盖混合源
-        decoded = decode_base64(content)
-        combined_content = content + "\n" + decoded
-
-        if "proxies:" in combined_content or ("port:" in combined_content and "mode:" in combined_content):
+        if "proxies:" in content or ("port:" in content and "mode:" in content):
             try:
-                data = yaml.safe_load(combined_content)
+                data = yaml.safe_load(content)
                 if isinstance(data, dict) and 'proxies' in data: return data['proxies']
             except: pass
-        
-        # 使用正则提取所有可能的 URI
+        if "://" not in content:
+            decoded = decode_base64(content)
+            if decoded: content = decoded
         pattern = r'(?:anytls|vmess|vless|ss|ssr|trojan|hysteria2|hy2|tuic|socks)://[^\s\'"<>]+'
-        return re.findall(pattern, combined_content, re.IGNORECASE)
+        return re.findall(pattern, content, re.IGNORECASE)
     except: return []
 
 def process_node_full(item, reader):
