@@ -1,5 +1,5 @@
-# Last Updated: 2026-04-24 16:21:35
-# Total Nodes: 19
+# Last Updated: 2026-04-24 16:22:31
+# Total Nodes: 5
 
 port: 7890
 socks-port: 7891
@@ -20,248 +20,88 @@ dns:
   - tls://1.0.0.1:853
   - tls://dns.google:853
 proxies:
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_4085
-  server: 34.4.30.138
-  port: 22443
-  udp: true
-  type: tuic
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  password: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  sni: null
-  alpn:
-  - h3
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_6eef
-  server: 35.212.138.122
-  port: 443
-  udp: true
-  type: tuic
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  password: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  sni: null
-  alpn:
-  - h3
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_fb45
-  server: 162.159.44.188
-  port: 80
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_2676
+  server: 141.98.197.149
+  port: 8080
   udp: true
   type: vless
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  tls: false
-  servername: null
-  network: ws
-  flow: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_6693
-  server: 162.159.44.188
-  port: 443
-  udp: true
-  type: vless
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
+  uuid: bb9fd54c-3e53-49ea-962c-18b0943850de
   tls: true
-  servername: cdn-amd2.tmc66.cc.cd
-  network: ws
-  flow: ''
-  client-fingerprint: chrome
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_5f10
-  server: 162.159.44.188
-  port: 80
+  servername: www.timeanddate.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: zFSk9BHFjXqyNK4SWAYkjCuqy1zuGTuCiTs3pBetXSA
+    short-id: ''
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_5b15
+  server: 85.113.71.97
+  port: 8080
   udp: true
   type: vless
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  tls: false
-  servername: null
-  network: ws
-  flow: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_d8f8
-  server: 162.159.44.188
-  port: 443
-  udp: true
-  type: vless
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
+  uuid: bb9fd54c-3e53-49ea-962c-18b0943850de
   tls: true
-  servername: cdn-amd.tmc2.dpdns.org
-  network: ws
-  flow: ''
-  client-fingerprint: safari
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_6c82
-  server: 162.159.44.188
-  port: 80
+  servername: www.amazon.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: gIZroPoitLL_o4L_u4krqQl_y5PcwlZDH3VogB789Fg
+    short-id: ''
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_5af1
+  server: 72.18.214.24
+  port: 8080
   udp: true
   type: vless
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  tls: false
-  servername: null
-  network: ws
-  flow: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_fb88
-  server: 162.159.44.188
-  port: 443
-  udp: true
-  type: vless
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
+  uuid: bb9fd54c-3e53-49ea-962c-18b0943850de
   tls: true
-  servername: cdn-amd.tmc2.dpdns.org
-  network: ws
-  flow: ''
-  client-fingerprint: qq
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_56db
-  server: 162.159.44.188
-  port: 80
+  servername: www.bing.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: bEbiC3A7c6xyeFc1YMq3gNziyWFG7Kx_Bz3P7OS0lH8
+    short-id: ''
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a48
+  server: 141.98.197.15
+  port: 8080
   udp: true
   type: vless
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  tls: false
-  servername: null
-  network: ws
-  flow: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_e02a
-  server: 162.159.44.188
-  port: 80
-  udp: true
-  type: vless
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  tls: false
-  servername: null
-  network: ws
-  flow: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_e5c7
-  server: 162.159.44.188
-  port: 80
-  udp: true
-  type: vless
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  tls: false
-  servername: null
-  network: ws
-  flow: ''
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_d4c0
-  server: 35.215.77.106
-  port: 8444
-  udp: true
-  type: tuic
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  password: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  sni: null
-  alpn:
-  - h3
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_02f1
-  server: 35.213.68.0
-  port: 8444
-  udp: true
-  type: tuic
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  password: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  sni: null
-  alpn:
-  - h3
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_f140
-  server: 35.206.251.134
-  port: 443
-  udp: true
-  type: tuic
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  password: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  sni: null
-  alpn:
-  - h3
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_2ca4
-  server: 162.159.44.188
-  port: 443
-  udp: true
-  type: vless
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
+  uuid: bb9fd54c-3e53-49ea-962c-18b0943850de
   tls: true
-  servername: cdn-amd2.tmc66.cc.cd
-  network: ws
+  servername: www.yahoo.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: NHWqJ4z3YYxk-PIxWJoNhDZEXd3lbmNLcQdGLWI4WgA
+    short-id: ''
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_c939
+  server: node.kinkairy.vip
+  port: 443
+  udp: true
+  type: vless
+  uuid: c58ee77e-2d42-4df5-8465-cd63a8733d1b
+  tls: true
+  servername: node.kinkairy.vip
+  network: tcp
   flow: ''
-  client-fingerprint: safari
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_15e8
-  server: 35.215.115.75
-  port: 443
-  udp: true
-  type: tuic
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  password: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  sni: tuic3.tmc2.dpdns.org
-  alpn:
-  - h3
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_8c72
-  server: 35.215.93.206
-  port: 8444
-  udp: true
-  type: tuic
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  password: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  sni: www.cloudflare.com
-  alpn:
-  - h3
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_be67
-  server: tuic12.tjq.dpdns.org
-  port: 443
-  udp: true
-  type: tuic
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  password: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  sni: tuic12.tjq.dpdns.org
-  alpn:
-  - h3
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_16d2
-  server: tuic10.tjq.dpdns.org
-  port: 443
-  udp: true
-  type: tuic
-  uuid: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  password: 3dbb5f9e-5e40-4721-bbad-6c145f5a9109
-  sni: tuic10.tjq.dpdns.org
-  alpn:
-  - h3
 proxy-groups:
 - name: 🔰 节点选择
   type: select
   proxies:
   - 🚀 自动测速
   - DIRECT
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_4085
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_6eef
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fb45
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_6693
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5f10
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_d8f8
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_6c82
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fb88
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_56db
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_e02a
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_e5c7
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_d4c0
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_02f1
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_f140
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_2ca4
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_15e8
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_8c72
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_be67
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_16d2
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2676
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5b15
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_5af1
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a48
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_c939
 - name: 🚀 自动测速
   type: url-test
   url: http://www.gstatic.com/generate_204
   interval: 300
   proxies:
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_4085
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_6eef
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fb45
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_6693
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5f10
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_d8f8
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_6c82
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fb88
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_56db
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_e02a
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_e5c7
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_d4c0
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_02f1
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_f140
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_2ca4
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_15e8
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_8c72
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_be67
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_16d2
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2676
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5b15
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_5af1
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a48
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_c939
 rules:
 - MATCH,🔰 节点选择
