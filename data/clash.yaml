@@ -1,5 +1,5 @@
-# Last Updated: 2026-04-24 16:22:31
-# Total Nodes: 5
+# Last Updated: 2026-04-24 16:29:12
+# Total Nodes: 8
 
 port: 7890
 socks-port: 7891
@@ -33,6 +33,47 @@ proxies:
   reality-opts:
     public-key: zFSk9BHFjXqyNK4SWAYkjCuqy1zuGTuCiTs3pBetXSA
     short-id: ''
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a48
+  server: 141.98.197.15
+  port: 8080
+  udp: true
+  type: vless
+  uuid: bb9fd54c-3e53-49ea-962c-18b0943850de
+  tls: true
+  servername: www.yahoo.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: NHWqJ4z3YYxk-PIxWJoNhDZEXd3lbmNLcQdGLWI4WgA
+    short-id: ''
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_a32e
+  server: eyj2ijoimiisinbzijoirljfrsisimfkzci6ijewnc4xnjgums4xmdiilcjwb3j0ijoiodiymiisimlkijoimwm5zdzjzmutzgy5yy00mgjjlwjjyjktogjhn2rjmzfhywuziiwiywlkijoimcisim5ldci6indziiwidhlwzsi6indziiwiag9zdci6iiisinbhdggioiiilcj0bhmioiiifq==
+  port: 443
+  udp: true
+  type: vmess
+  uuid: 1c9d6cfe-df9c-40bc-bcb9-8ba7dc31aae3
+  alterId: 0
+  cipher: auto
+  tls: false
+  network: ws
+  ws-opts:
+    path: ''
+    headers:
+      Host: ''
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_4a95
+  server: eyj2ijoimiisinbzijoiy2ruigzyzwuilcjhzgqioiixmdqumty4ljeumtayiiwicg9ydci6ijg0ndmilcjpzci6ijfjowq2y2zllwrmowmtndbiyy1iy2i5lthiytdkyzmxywflmyisimfpzci6ijailcjuzxqioij3cyisinr5cguioij3cyisimhvc3qioiiilcjwyxroijoiiiwidgxzijoidgxziiwic25pijoiy2rulnnwcm91dg5ldhdvcmtzlmnvin0=
+  port: 443
+  udp: true
+  type: vmess
+  uuid: 1c9d6cfe-df9c-40bc-bcb9-8ba7dc31aae3
+  alterId: 0
+  cipher: auto
+  tls: true
+  network: ws
+  ws-opts:
+    path: ''
+    headers:
+      Host: ''
 - name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_5b15
   server: 85.113.71.97
   port: 8080
@@ -59,19 +100,20 @@ proxies:
   reality-opts:
     public-key: bEbiC3A7c6xyeFc1YMq3gNziyWFG7Kx_Bz3P7OS0lH8
     short-id: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a48
-  server: 141.98.197.15
-  port: 8080
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_8c26
+  server: eyj2ijoimiisinbzijoib25sesbpbibvaglviiwiywrkijoimtmuntguntaumtixiiwicg9ydci6ijgwiiwiawqioiixyzlknmnmzs1kzjljltqwymmtymnios04yme3zgmzmwfhztmilcjhawqioiiwiiwibmv0ijoid3milcj0exblijoid3milcjob3n0ijoiiiwicgf0aci6iiisinrscyi6iij9
+  port: 443
   udp: true
-  type: vless
-  uuid: bb9fd54c-3e53-49ea-962c-18b0943850de
-  tls: true
-  servername: www.yahoo.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: NHWqJ4z3YYxk-PIxWJoNhDZEXd3lbmNLcQdGLWI4WgA
-    short-id: ''
+  type: vmess
+  uuid: 1c9d6cfe-df9c-40bc-bcb9-8ba7dc31aae3
+  alterId: 0
+  cipher: auto
+  tls: false
+  network: ws
+  ws-opts:
+    path: ''
+    headers:
+      Host: ''
 - name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_c939
   server: node.kinkairy.vip
   port: 443
@@ -89,9 +131,12 @@ proxy-groups:
   - 🚀 自动测速
   - DIRECT
   - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2676
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a48
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_a32e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_4a95
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5b15
   - 🇺🇸 美国 打倒美帝国主义及其一切走狗_5af1
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a48
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8c26
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_c939
 - name: 🚀 自动测速
   type: url-test
@@ -99,9 +144,12 @@ proxy-groups:
   interval: 300
   proxies:
   - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2676
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a48
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_a32e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_4a95
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5b15
   - 🇺🇸 美国 打倒美帝国主义及其一切走狗_5af1
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a48
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8c26
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_c939
 rules:
 - MATCH,🔰 节点选择
