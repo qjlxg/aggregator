@@ -1,5 +1,5 @@
-# Last Updated: 2026-04-24 13:40:50
-# Total Nodes: 159
+# Last Updated: 2026-04-24 13:41:54
+# Total Nodes: 303
 
 port: 7890
 socks-port: 7891
@@ -20,42 +20,24 @@ dns:
   - tls://1.0.0.1:853
   - tls://dns.google:853
 proxies:
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_93d5
-  server: aws-linkhy23.liangxin1.xyz
-  port: 60000
-  udp: true
-  type: hysteria2
-  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  sni: bilibili-tw.biliimg.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_5d2c
-  server: 103.197.71.103
-  port: 20000
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_0ac5
-  server: 194.9.6.32
-  port: 48484
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
+- alterId: 2
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_610a
   network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: adbd0a82-3336-11ed-bd7c-f23c913c8d2b
   ws-opts:
-    path: /
     headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_f303
-  server: 160.202.167.53
-  port: 20000
+      Host: hkt.gotochinatown.net
+    path: /
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8147
+  server: 203.27.106.139
+  port: 50000
   udp: true
   type: hysteria2
   password: e10e10bf-6a37-4733-96b2-97fb0690266c
@@ -63,147 +45,32 @@ proxies:
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
-- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_aa7e
-  server: 204.10.194.86
-  port: 443
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_2e26
+  server: 203.27.106.139
+  port: 50000
   udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: iosapps.itunes.apple.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: 9xhRQRC70QdPgNlgB1rLvT382AiRlFi_cEkCAK2BcjI
-    short-id: b5e2e30a
-  client-fingerprint: safari
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_cfeb
-  server: 23.95.18.12
-  port: 18443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
   skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
+  obfs: ''
+  obfs-password: ''
+- alterId: '2'
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_3b9e
   network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 62b7824e-47dc-11ef-9f2d-f23c9164ca5d
   ws-opts:
-    path: /
     headers:
-      Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_8879
-  server: yfcfcf.wangpan.shop
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: yfjc-jp1.wangpan.shop
-  network: ws
-  flow: ''
-  client-fingerprint: ios
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_9e9b
-  server: yfcfcf.wangpan.shop
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: yfjc-us1.wangpan.shop
-  network: ws
-  flow: ''
-  client-fingerprint: safari
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_9a9c
-  server: yfcfcf.wangpan.shop
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: yfjc-sg1.wangpan.shop
-  network: ws
-  flow: ''
-  client-fingerprint: chrome
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_4ddc
-  server: aws-link10.liangxin1.xyz
-  port: 443
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: www.lamer.com.sg
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: xQO7CBh6ymSW9qfw9OGHykh7PLTzWQZjxDT-H4ul2AE
-    short-id: 2bb6da88
-  client-fingerprint: chrome
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_5e61
-  server: 104.26.0.114
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
+      Host: hkt.gotochinatown.net
     path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_5bd4
-  server: aws-link19.liangxin1.xyz
-  port: 443
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: download-porter.hoyoverse.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: QE5l0RUqs4OsH3j3u_xHm06-4NlILmQivZUJqiEx11o
-    short-id: 6314e825
-  client-fingerprint: chrome
-- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_8e36
-  server: 178.62.221.41
-  port: 2083
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_1dbb
-  server: 198.105.125.167
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_cc4a
-  server: aws-link25.liangxin1.xyz
-  port: 34578
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: download-porter.hoyoverse.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: PSn2s5TN4e7n0LkzPunu2IA1hSmOoPYFu3d_psl2Nmc
-    short-id: e534c8be
-  client-fingerprint: chrome
+  xudp: true
 - name: 🇫🇷 法国 打倒美帝国主义及其一切走狗_101c
   server: 141.253.124.138
   port: 443
@@ -218,8 +85,8 @@ proxies:
     public-key: gkl6bqL44xulia53I8gd_BtiVRzU1rsIu4WeffywLBY
     short-id: 78f5a5a5
   client-fingerprint: ios
-- name: 🇦🇺 澳大利亚 打倒美帝国主义及其一切走狗_3485
-  server: 192.9.162.124
+- name: 🇫🇷 法国 打倒美帝国主义及其一切走狗_6a50
+  server: 51.91.253.211
   port: 8443
   type: vless
   uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
@@ -231,121 +98,15 @@ proxies:
     path: /
     headers:
       Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_4a8d
-  server: 127.0.0.1
-  port: 35248
+- cipher: aes-256-cfb
+  name: 🇻🇳 越南 打倒美帝国主义及其一切走狗_04e6
+  password: Xn8jKdmDM00IeO%#$#fJAMtsEAEUOpH/YWYtYqDFnT0SV
+  port: 38388
+  server: 103.186.154.215
+  type: ss
   udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: www.lamer.com.hk
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: IGsSxC0wgn7wLy0NM0QN_yOREDKT_814Y_3_rbgDoTc
-    short-id: c8c0f951
-  client-fingerprint: chrome
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_20f3
-  server: 203.10.98.187
-  port: 443
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_bd4f
-  server: yfcfcf.wangpan.shop
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: yfjc-jp2.wangpan.shop
-  network: ws
-  flow: ''
-  client-fingerprint: ios
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_a46e
-  server: 43.245.223.34
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: cdn-dynmedia-1.microsoft.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: BiwY7Que5N4TjVfseuMWWC2AO1U8G196O1fEFocOK0w
-    short-id: 8004932d
-  client-fingerprint: ios
-- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_f5c8
-  server: 77.221.157.251
-  port: 2053
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_5e8e
-  server: yfcfcf.wangpan.shop
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: yfjc-jp3.wangpan.shop
-  network: ws
-  flow: ''
-  client-fingerprint: chrome
-- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_05c0
-  server: 5.180.21.2
-  port: 2053
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_798a
-  server: aws-link3.liangxin1.xyz
-  port: 27758
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: www.lamer.com.hk
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: EYa4ic3GAxqznV61U-OOww-WKsu5wuQQptyS3fw7czM
-    short-id: c50db39f
-  client-fingerprint: chrome
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_5b0a
-  server: 172.67.67.33
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_fede
-  server: 203.10.99.51
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_5d2c
+  server: 103.197.71.103
   port: 20000
   udp: true
   type: hysteria2
@@ -354,8 +115,25 @@ proxies:
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_2609
-  server: 8.35.211.62
+- alpn:
+  - http/1.1
+  client-fingerprint: random
+  name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_4a18
+  network: ws
+  port: 443
+  server: 192.0.63.161
+  servername: snippet.chinav.eu.cc
+  skip-cert-verify: false
+  tls: true
+  type: vless
+  udp: true
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.chinav.eu.cc
+    path: /danfeng
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_dfa8
+  server: 185.164.163.149
   port: 443
   type: vless
   uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
@@ -367,9 +145,35 @@ proxies:
     path: /
     headers:
       Host: edt2-lgy.pages.dev
-- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_27fa
-  server: 91.107.134.254
-  port: 36521
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_24dc
+  network: ws
+  port: 443
+  server: 192.0.63.134
+  servername: snippet.danfeng.kozow.com
+  tls: true
+  type: vless
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.danfeng.kozow.com
+    path: /danfeng?ed=2560
+- name: 🇨🇦 加拿大 打倒美帝国主义及其一切走狗_e084
+  network: ws
+  password: 8b45d379-702f-41b3-a6b2-9c87a01dcd5c
+  port: 443
+  server: 23.227.38.178
+  skip-cert-verify: true
+  sni: q6clkp794liy3y90.hktimecsgo.xyz
+  tls: true
+  type: trojan
+  udp: true
+  ws-opts:
+    headers:
+      Host: q6clkp794liy3y90.hktimecsgo.xyz
+    path: /images
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_0359
+  server: 104.19.54.138
+  port: 443
   type: vless
   uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
   tls: true
@@ -380,7 +184,138 @@ proxies:
     path: /
     headers:
       Host: edt2-lgy.pages.dev
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_8cba
+- alterId: '2'
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_5b6f
+  network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 93fb69fc-77cf-11ee-85ee-f23c91369f2d
+  ws-opts:
+    headers:
+      Host: hkt.gotochinatown.net
+    path: /
+  xudp: true
+- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_e927
+  server: 161.35.77.249
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_d767
+  network: ws
+  port: 443
+  server: 192.0.54.131
+  servername: snippet.danfeng.kozow.com
+  tls: true
+  type: vless
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.danfeng.kozow.com
+    path: /danfeng?ed=2560
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_13b6
+  network: ws
+  port: 443
+  server: 192.0.63.216
+  servername: snippet.danfeng.theworkpc.com
+  tls: true
+  type: vless
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.danfeng.theworkpc.com
+    path: /danfeng?ed=2560
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_b7d7
+  server: 43.245.223.80
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: osxapps.itunes.apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: ohHYewuCouiKzI-fFvhKzYY62m_oDtElS23sosvA6Wc
+    short-id: fbb5600c
+  client-fingerprint: safari
+- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_4334
+  server: 5.187.0.166
+  port: 8443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_d6cb
+  password: 0f771058-7892-4d46-b77e-a69e811b9cbc
+  port: 443
+  server: 84.201.25.156
+  skip-cert-verify: true
+  sni: hls-svod.itunes.apple.com
+  tls: false
+  type: hysteria2
+- alterId: '2'
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_e4fb
+  network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 2e42c1ee-aaaa-11ec-bb74-f23c9164ca5d
+  ws-opts:
+    headers:
+      Host: hkt.gotochinatown.net
+    path: /
+  xudp: true
+- alterId: 2
+  cipher: auto
+  country: 🇭🇰HK
+  h2-opts: {}
+  http-opts: {}
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_ffc5
+  network: ws
+  port: 80
+  server: ebc00a3a-t6r5s0-tn57fp-5ifr.hkt.gotochinatown.net
+  servername: broadcastlv.chat.bilibili.com
+  skip-cert-verify: true
+  type: vmess
+  uuid: ecfab6c8-df5b-11ed-98a7-f23c913c8d2b
+  ws-opts:
+    headers:
+      HOST: broadcastlv.chat.bilibili.com
+    path: /
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_34ee
+  server: 103.197.71.102
+  port: 20000
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6fb3
   server: 203.10.98.187
   port: 443
   udp: true
@@ -390,6 +325,177 @@ proxies:
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
+- cipher: aes-256-cfb
+  name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_f6c7
+  password: amazonskr05
+  port: 443
+  server: 98.84.179.216
+  type: ss
+  udp: true
+- client-fingerprint: chrome
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_0ceb
+  network: ws
+  port: 7443
+  server: 222.167.202.60
+  servername: 2026.hhhhh.eu.org
+  tls: true
+  type: vless
+  uuid: 06ef598c-1555-4887-b3f9-08214a2f6792
+  ws-opts:
+    headers:
+      Host: 2026.hhhhh.eu.org
+    path: /222.167.202.60:7443
+- alterId: '2'
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_7132
+  network: ws
+  port: 80
+  server: 84146e14-t6r5s0-tiuovf-v3c2.hkt.gotochinatown.net
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 5f091cbe-fb34-11ea-9777-f23c9164ca5d
+  ws-opts:
+    headers:
+      Host: 84146e14-t6r5s0-tiuovf-v3c2.hkt.gotochinatown.net
+    path: /
+  xudp: true
+- alterId: 2
+  cipher: auto
+  country: 🇭🇰HK
+  h2-opts: {}
+  http-opts: {}
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_2f3d
+  network: ws
+  port: 80
+  server: b40b1edb-t6r5s0-tm3dx0-1r9dt.hkt.gotochinatown.net
+  servername: broadcastlv.chat.bilibili.com
+  skip-cert-verify: true
+  type: vmess
+  uuid: de003c72-0157-11ef-86da-f23c91cfbbc9
+  ws-opts:
+    headers:
+      HOST: broadcastlv.chat.bilibili.com
+    path: /
+- cipher: aes-256-cfb
+  name: 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_c611
+  password: amazonskr05
+  port: 443
+  server: 54.75.105.59
+  type: ss
+  udp: true
+- name: 🇫🇷 法国 打倒美帝国主义及其一切走狗_7f48
+  server: 144.24.206.147
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: tv.apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: cu2H4WP9LU3ZdD85MNr8w4jUS79Wx6YVUxVeRGVBQyc
+    short-id: be05a235
+  client-fingerprint: safari
+- name: 🇦🇹 奥地利 打倒美帝国主义及其一切走狗_7289
+  network: ws
+  port: 8443
+  server: 152.53.146.92
+  servername: snippet.fgfw.ndjp.net
+  tls: true
+  type: vless
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.fgfw.ndjp.net
+    path: /danfeng
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_ee6f
+  server: 209.38.36.100
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_a50f
+  server: 104.26.14.169
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_eac9
+  server: 165.22.206.200
+  port: 2087
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- alterId: 2.0
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_2b82
+  network: ws
+  port: 80
+  server: c4ced910-t70f40-tdahby-1tnab.hkt.gotochinatown.net
+  servername: c4ced910-t70f40-tdahby-1tnab.hkt.gotochinatown.net
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: ca9c0c54-1513-11f0-8a7b-f23c913c8d2b
+  ws-opts:
+    headers:
+      Host: c4ced910-t70f40-tdahby-1tnab.hkt.gotochinatown.net
+    path: /
+  xudp: true
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_a67e
+  server: 206.189.13.113
+  port: 2096
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- alterId: '2'
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_0e20
+  network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 20f87b02-0eaa-11eb-8684-f23c913c8d2b
+  ws-opts:
+    headers:
+      Host: hkt.gotochinatown.net
+    path: /
+  xudp: true
 - name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_0f74
   server: 158.101.195.118
   port: 443
@@ -404,9 +510,23 @@ proxies:
     public-key: BU86Bh8IfiMcQllCNU2sFi4z1GfpPOaTxCepPpNmgC4
     short-id: 710e95ee
   client-fingerprint: ios
-- name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_0e1c
-  server: 112.146.85.54
-  port: 50000
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_3645
+  network: ws
+  port: 7443
+  server: 222.167.202.70
+  servername: 2026.hhhhh.eu.org
+  skip-cert-verify: false
+  tls: true
+  type: vless
+  udp: true
+  uuid: 06ef598c-1555-4887-b3f9-08214a2f6792
+  ws-opts:
+    headers:
+      Host: 2026.hhhhh.eu.org
+    path: /222.167.202.70:7443
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_61af
+  server: 23.94.213.132
+  port: 27149
   type: vless
   uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
   tls: true
@@ -417,8 +537,20 @@ proxies:
     path: /
     headers:
       Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_8fa6
-  server: 162.159.39.123
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_f536
+  network: ws
+  port: 443
+  server: 192.0.63.230
+  servername: snippet.danfeng.kozow.com
+  tls: true
+  type: vless
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.danfeng.kozow.com
+    path: /danfeng?ed=2560
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_b365
+  server: 172.67.69.203
   port: 443
   type: vless
   uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
@@ -430,6 +562,69 @@ proxies:
     path: /
     headers:
       Host: edt2-lgy.pages.dev
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_c5b2
+  server: 217.60.248.94
+  port: 2053
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- alterId: '2'
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_02bc
+  network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 28a8a4d0-3e02-11eb-a8bf-f23c91cfbbc9
+  ws-opts:
+    headers:
+      Host: hkt.gotochinatown.net
+    path: /
+  xudp: true
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_0e96
+  server: 203.10.98.187
+  port: 443
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_1cc7
+  network: ws
+  port: 443
+  server: 192.0.63.76
+  servername: snippet.danfeng.theworkpc.com
+  skip-cert-verify: false
+  tls: true
+  type: vless
+  udp: true
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.danfeng.theworkpc.com
+    path: /danfeng?ed=2560
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a83
+  server: 203.10.98.187
+  port: 443
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
 - name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_3ccc
   server: 203.10.97.121
   port: 60000
@@ -440,20 +635,46 @@ proxies:
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_acdc
-  server: yfcfcf.wangpan.shop
+- cipher: aes-256-cfb
+  name: 🇻🇳 越南 打倒美帝国主义及其一切走狗_c130
+  password: Xn8jKdmDM00IeO%#$#fJAMtsEAEUOpH/YWYtYqDFnT0SV
+  port: 38388
+  server: 103.186.154.64
+  type: ss
+- client-fingerprint: chrome
+  name: 🇹🇷 土耳其 打倒美帝国主义及其一切走狗_7812
+  network: ws
+  port: 2053
+  server: 188.132.192.194
+  servername: snippet.fgfw.ccwu.cc
+  tls: true
+  type: vless
+  udp: true
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.fgfw.ccwu.cc
+      User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like
+        Gecko) Chrome/42.0.2311.135 Safari/537.36
+    path: /danfeng
+  xudp: true
+- name: 🇬🇧 英国 打倒美帝国主义及其一切走狗_2b70
+  server: 193.123.187.39
   port: 443
   udp: true
   type: vless
   uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
   tls: true
-  servername: yfjc-us1.wangpan.shop
-  network: ws
-  flow: ''
+  servername: buylite.music.apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: i7DUE1GbZSybS9hVNoLXkNBUOhy_428gM8v5fKfjS0Q
+    short-id: 375cd304
   client-fingerprint: ios
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_2e26
-  server: 203.27.106.139
-  port: 50000
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_8cba
+  server: 203.10.98.187
+  port: 443
   udp: true
   type: hysteria2
   password: e10e10bf-6a37-4733-96b2-97fb0690266c
@@ -461,18 +682,17 @@ proxies:
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8a7d
-  server: aws-linkhy10.liangxin1.xyz
-  port: 60000
-  udp: true
-  type: hysteria2
-  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  sni: iosapps.itunes.apple.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_54f7
-  server: 103.197.71.101
+- alterId: 0
+  cipher: auto
+  name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_f5e8
+  network: tcp
+  port: 180
+  server: 82.198.246.97
+  servername: t.me%2Fripaojiedian
+  type: vmess
+  uuid: d13fc2f5-3e05-4795-81eb-44143a09e552
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_3398
+  server: 203.10.99.59
   port: 20000
   udp: true
   type: hysteria2
@@ -481,20 +701,6 @@ proxies:
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_07e0
-  server: 127.0.0.1
-  port: 35248
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: www.lamer.com.hk
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: IGsSxC0wgn7wLy0NM0QN_yOREDKT_814Y_3_rbgDoTc
-    short-id: c8c0f951
-  client-fingerprint: chrome
 - name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_ca7b
   server: 203.27.106.139
   port: 50000
@@ -505,9 +711,475 @@ proxies:
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_3d0c
-  server: 217.60.248.59
+- cipher: aes-256-cfb
+  name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_7651
+  password: amazonskr05
   port: 443
+  server: 13.217.194.158
+  type: ss
+  udp: true
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_9775
+  network: ws
+  port: 443
+  server: 192.0.54.188
+  servername: snippet.danfeng.kozow.com
+  tls: true
+  type: vless
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.danfeng.kozow.com
+    path: /danfeng
+- alterId: 0
+  cipher: auto
+  name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_0478
+  port: 180
+  server: 82.198.246.250
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: d13fc2f5-3e05-4795-81eb-44143a09e552
+- client-fingerprint: chrome
+  name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_b282
+  network: ws
+  port: 443
+  server: 192.0.63.181
+  servername: snippet.danfeng.loc.cc
+  tls: true
+  type: vless
+  udp: true
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.danfeng.loc.cc
+      User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like
+        Gecko) Chrome/53.0.2785.143 Safari/537.36
+    path: /danfeng?ed=2560
+  xudp: true
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_1b69
+  server: 162.159.35.98
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇬🇧 英国 打倒美帝国主义及其一切走狗_293e
+  server: 140.238.101.15
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: buylite.music.apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: bup-dr56at91n37SQwAMnsNtcmk44UQBGCYN8hkU0nQ
+    short-id: 903a1801
+  client-fingerprint: safari
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_824f
+  server: 192.9.142.185
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: www.mi.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: 1utdJ0YWFpPYbH-bfIkfGgSebhByfttArVtO9iSlwFM
+    short-id: '30194285'
+  client-fingerprint: chrome
+- alterId: 2
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_97e6
+  network: ws
+  port: 80
+  server: e8faf291-tbdts0-tcdmjc-1gevg.hkt.gotochinatown.net
+  servername: 🇭🇰HK-1.36.96.214-0287 | 0.18MB
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: f02ee2b4-d760-11ec-bd7c-f23c913c8d2b
+  ws-opts:
+    headers:
+      Host: e8faf291-tbdts0-tcdmjc-1gevg.hkt.gotochinatown.net
+    path: /
+- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_a02f
+  server: 141.147.33.180
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: music.apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: CxZKPoPJmBg2SSXYFRoasAPw-f_ESjRxr1fySPgrG3g
+    short-id: e3a0f28a
+  client-fingerprint: safari
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_488e
+  network: ws
+  port: 4433
+  server: 138.226.240.199
+  servername: sub.mot.ip-ddns.com
+  tls: true
+  type: vless
+  uuid: 00000000-0000-4000-8000-000000000000
+  ws-opts:
+    headers:
+      Host: sub.mot.ip-ddns.com
+    path: /
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_f303
+  server: 160.202.167.53
+  port: 20000
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- alterId: 2
+  cipher: auto
+  country: 🇭🇰 HK
+  h2-opts: {}
+  http-opts: {}
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_618e
+  network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  skip-cert-verify: true
+  type: vmess
+  uuid: e168c43e-c6d9-11ed-a8bf-f23c91cfbbc9
+  ws-opts:
+    path: /
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_7513
+  server: 62.60.244.168
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- alterId: 2
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_bd9c
+  network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  servername: hkt.gotochinatown.net
+  skip-cert-verify: true
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 45bc25b2-1a10-11ed-91c0-f23c91cfbbc9
+  ws-opts:
+    headers:
+      Host: hkt.gotochinatown.net
+    path: /
+- alterId: 0
+  cipher: auto
+  name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_a6a7
+  port: 180
+  server: 82.198.246.97
+  servername: www.bing.com
+  tls: false
+  type: vmess
+  udp: true
+  uuid: d13fc2f5-3e05-4795-81eb-44143a09e552
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_ca98
+  server: 104.19.44.116
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_ee13
+  network: ws
+  port: 19071
+  server: 220.122.42.198
+  servername: snippet.fgfw.indevs.in
+  tls: true
+  type: vless
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.fgfw.indevs.in
+    path: /danfeng
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_3183
+  server: 104.26.12.225
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_23e1
+  server: 104.19.34.178
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- cipher: aes-256-cfb
+  name: 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_98a6
+  password: amazonskr05
+  port: 443
+  server: 54.195.181.180
+  type: ss
+  udp: true
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_9ea4
+  server: 173.245.59.114
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- client-fingerprint: chrome
+  encryption: none
+  grpc-opts:
+    grpc-service-name: UpdateService
+  name: 🇷🇺 俄罗斯联邦 打倒美帝国主义及其一切走狗_e1ef
+  network: grpc
+  port: 2083
+  reality-opts:
+    public-key: J6NuOlIq3ypdTFc1TMhDDKmF8BWPnNWZq1EkxD7K-lQ
+    short-id: 6da16b1335651b38
+  server: 85.92.111.163
+  servername: ir.ozone.ru
+  tls: true
+  type: vless
+  udp: true
+  uuid: 09b81314-7592-4ffb-9773-6351de8a7f74
+  xudp: true
+- name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_cdea
+  server: 146.56.99.255
+  port: 56789
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_3dd4
+  password: 0f771058-7892-4d46-b77e-a69e811b9cbc
+  port: 443
+  server: 84.200.91.118
+  skip-cert-verify: true
+  sni: hls-svod.itunes.apple.com
+  tls: false
+  type: hysteria2
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_76e3
+  server: 66.135.15.166
+  port: 34237
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_2850
+  password: 9594f8cc-da22-4504-9bcb-b8f219fe28ec
+  port: 60006
+  server: hkaws.ccwink.photos
+  skip-cert-verify: true
+  type: anytls
+  udp: true
+- cipher: aes-256-cfb
+  name: 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_cb48
+  password: amazonskr05
+  port: 443
+  server: 34.244.71.237
+  type: ss
+  udp: true
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_8bc6
+  password: VCYBW8pH4z
+  port: 36735
+  server: 47.238.199.39
+  tls: false
+  type: http
+  username: 2XPTvGKBjj
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_3b2e
+  server: 168.138.184.187
+  port: 20000
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_08b6
+  server: 103.197.71.100
+  port: 20000
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- alterId: 2
+  cipher: auto
+  country: 🇭🇰 HK
+  delay: 2094
+  h2-opts: {}
+  http-opts: {}
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_f92a
+  network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  skip-cert-verify: true
+  type: vmess
+  uuid: d70a9508-5477-11ef-bf61-f23c913c8d2b
+  ws-opts:
+    path: /
+- alterId: 2
+  cipher: auto
+  country: 🇭🇰HK
+  h2-opts: {}
+  http-opts: {}
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_1b5f
+  network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  servername: hkt.gotochinatown.net
+  skip-cert-verify: true
+  type: vmess
+  uuid: b2c6384c-f63d-11ec-b1b3-f23c91cfbbc9
+  ws-opts:
+    headers:
+      HOST: hkt.gotochinatown.net
+    path: /
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_20f3
+  server: 203.10.98.187
+  port: 443
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_dcd8
+  server: 147.45.50.181
+  port: 8080
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_3da3
+  server: 165.1.68.155
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: www.mi.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: 48Fc8APUOtIJDFrpdULD7Sr7Z7NVp_0K1H9u4LcmfmE
+    short-id: 67fed015
+  client-fingerprint: chrome
+- cipher: aes-256-cfb
+  name: 🇫🇷 法国 打倒美帝国主义及其一切走狗_9a16
+  password: amazonskr05
+  port: 443
+  server: 15.237.116.5
+  type: ss
+  udp: true
+- name: 🇨🇦 加拿大 打倒美帝国主义及其一切走狗_929c
+  network: ws
+  password: 13d29042-ab82-4195-9cd4-2bafc518e201
+  port: 443
+  server: 23.227.38.178
+  skip-cert-verify: true
+  sni: q6clkp794liy3y90.hktimecsgo.xyz
+  tls: true
+  type: trojan
+  udp: true
+  ws-opts:
+    headers:
+      Host: q6clkp794liy3y90.hktimecsgo.xyz
+    path: /images
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_fcab
+  server: 134.195.101.75
+  port: 20000
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_da87
+  server: 162.159.32.179
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_b894
+  server: 185.130.225.218
+  port: 14006
   type: vless
   uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
   tls: true
@@ -528,49 +1200,6 @@ proxies:
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_db80
-  server: 162.159.38.242
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_08b6
-  server: 103.197.71.100
-  port: 20000
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_c0cb
-  server: 103.197.71.99
-  port: 20000
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_fcab
-  server: 134.195.101.75
-  port: 20000
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
 - name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_2275
   server: 138.2.2.120
   port: 20000
@@ -581,281 +1210,8 @@ proxies:
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_3b2e
-  server: 168.138.184.187
-  port: 20000
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6f9c
-  server: aws-linkhy15.liangxin1.xyz
-  port: 60000
-  udp: true
-  type: hysteria2
-  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  sni: bilibili-jp.biliimg.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_34ee
-  server: 103.197.71.102
-  port: 20000
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_09e7
-  server: aws-link1.liangxin1.xyz
-  port: 35248
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: www.lamer.com.hk
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: IGsSxC0wgn7wLy0NM0QN_yOREDKT_814Y_3_rbgDoTc
-    short-id: c8c0f951
-  client-fingerprint: chrome
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6d65
-  server: aws-linkhy16.liangxin1.xyz
-  port: 60000
-  udp: true
-  type: hysteria2
-  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  sni: bilibili-jp2.biliimg.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_f61c
-  server: aws-link4.liangxin1.xyz
-  port: 443
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: www.lamer.com.hk
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: 3FPGTaxkfOM3nEUWUyCiqkH5oJGsOx-WxPJfADi1QWY
-    short-id: 7f369e14
-  client-fingerprint: chrome
-- name: 🇫🇷 法国 打倒美帝国主义及其一切走狗_7f48
-  server: 144.24.206.147
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: tv.apple.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: cu2H4WP9LU3ZdD85MNr8w4jUS79Wx6YVUxVeRGVBQyc
-    short-id: be05a235
-  client-fingerprint: safari
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_ac32
-  server: 129.153.70.168
-  port: 4433
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_425c
-  server: 112.218.100.68
-  port: 30012
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_6a4f
-  server: 217.145.79.186
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇬🇧 英国 打倒美帝国主义及其一切走狗_2b70
-  server: 193.123.187.39
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: buylite.music.apple.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: i7DUE1GbZSybS9hVNoLXkNBUOhy_428gM8v5fKfjS0Q
-    short-id: 375cd304
-  client-fingerprint: ios
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_824f
-  server: 192.9.142.185
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: www.mi.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: 1utdJ0YWFpPYbH-bfIkfGgSebhByfttArVtO9iSlwFM
-    short-id: '30194285'
-  client-fingerprint: chrome
-- name: 🇬🇧 英国 打倒美帝国主义及其一切走狗_293e
-  server: 140.238.101.15
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: buylite.music.apple.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: bup-dr56at91n37SQwAMnsNtcmk44UQBGCYN8hkU0nQ
-    short-id: 903a1801
-  client-fingerprint: safari
-- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_ec0a
-  server: 188.226.154.160
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6fb3
-  server: 203.10.98.187
-  port: 443
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_0334
-  server: 203.10.98.187
-  port: 443
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_0d13
-  server: aws-link11.liangxin1.xyz
-  port: 443
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: www.lamer.com.sg
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: 7DC8gg_Ui9i3tScu-60AxeniPPW3h3VWvvQjblOrwEs
-    short-id: 18180d97
-  client-fingerprint: chrome
-- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_a02f
-  server: 141.147.33.180
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: music.apple.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: CxZKPoPJmBg2SSXYFRoasAPw-f_ESjRxr1fySPgrG3g
-    short-id: e3a0f28a
-  client-fingerprint: safari
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_eac7
-  server: yfcfcf.wangpan.shop
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: yfjc-jp3.wangpan.shop
-  network: ws
-  flow: ''
-  client-fingerprint: safari
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_8e3a
-  server: yfcfcf.wangpan.shop
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: yfjc-jp3.wangpan.shop
-  network: ws
-  flow: ''
-  client-fingerprint: chrome
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_3da3
-  server: 165.1.68.155
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: www.mi.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: 48Fc8APUOtIJDFrpdULD7Sr7Z7NVp_0K1H9u4LcmfmE
-    short-id: 67fed015
-  client-fingerprint: chrome
-- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_0007
-  server: 51.195.47.23
-  port: 2087
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_a879
-  server: 31.57.105.242
+- name: 🇬🇧 英国 打倒美帝国主义及其一切走狗_77ce
+  server: 193.219.99.112
   port: 8443
   type: vless
   uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
@@ -867,224 +1223,22 @@ proxies:
     path: /
     headers:
       Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_fe21
-  server: yfcfcf.wangpan.shop
+- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_aa7e
+  server: 204.10.194.86
   port: 443
   udp: true
   type: vless
   uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
   tls: true
-  servername: yfjc-us1.wangpan.shop
-  network: ws
-  flow: ''
+  servername: iosapps.itunes.apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: 9xhRQRC70QdPgNlgB1rLvT382AiRlFi_cEkCAK2BcjI
+    short-id: b5e2e30a
   client-fingerprint: safari
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_6bdf
-  server: 108.181.23.249
-  port: 20000
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_2da0
-  server: aws-linkhy1.liangxin1.xyz
-  port: 60000
-  udp: true
-  type: hysteria2
-  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  sni: iosapps.itunes.apple.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_d8d7
-  server: yfcfcf.wangpan.shop
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: yfjc-jp2.wangpan.shop
-  network: ws
-  flow: ''
-  client-fingerprint: chrome
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8147
-  server: 203.27.106.139
-  port: 50000
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇫🇷 法国 打倒美帝国主义及其一切走狗_ad84
-  server: 89.168.39.19
-  port: 4433
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_0890
-  server: aws-link27.liangxin1.xyz
-  port: 443
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: download-porter.hoyoverse.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: a9I2uA3NNZA6uBAe3Tui9vZ8CG5MrMaYOifWrAdc0zg
-    short-id: a8609be8
-  client-fingerprint: chrome
-- name: 🇬🇧 英国 打倒美帝国主义及其一切走狗_f0e4
-  server: 193.219.99.61
-  port: 8443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_a525
-  server: yfcfcf.wangpan.shop
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: yfjc-jp1.wangpan.shop
-  network: ws
-  flow: ''
-  client-fingerprint: safari
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_cf3c
-  server: 188.166.217.179
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_b18f
-  server: aws-linkhy17.liangxin1.xyz
-  port: 60000
-  udp: true
-  type: hysteria2
-  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  sni: bilibili-jp3.biliimg.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_8cc3
-  server: 144.124.235.107
-  port: 8443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇬🇧 英国 打倒美帝国主义及其一切走狗_aecc
-  server: 193.219.99.132
-  port: 8443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_bc28
-  server: aws-link7.liangxin1.xyz
-  port: 48574
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: www.lamer.com.sg
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: lmxSayN8tUg2Dag2MPXrdqZ2SQK9K3OjlaKk8wVCRnc
-    short-id: f8f18902
-  client-fingerprint: chrome
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_6d3a
-  server: 219.76.13.180
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_44ad
-  server: aws-link14.liangxin1.xyz
-  port: 25485
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: www.apple.com.cn
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: VOFSjjWT0wIH3Q0ntyEZd8WwksrIAb5gPt_3PBnEASg
-    short-id: 9c5b8c53
-  client-fingerprint: chrome
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_fbad
-  server: 108.181.22.153
-  port: 20000
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_9cf7
-  server: 127.0.0.1
-  port: 1234
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇵🇱 波兰 打倒美帝国主义及其一切走狗_4ae7
-  server: 31.133.0.167
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_24ec
+  server: 45.89.244.77
   port: 2053
   type: vless
   uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
@@ -1096,19 +1250,42 @@ proxies:
     path: /
     headers:
       Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_05c1
-  server: yfcfcf.wangpan.shop
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_fbad
+  server: 108.181.22.153
+  port: 20000
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_ab3d
+  network: ws
+  port: 7443
+  server: 222.167.202.23
+  servername: 2026.hhhhh.eu.org
+  skip-cert-verify: true
+  tls: true
+  type: vless
+  udp: true
+  uuid: 06ef598c-1555-4887-b3f9-08214a2f6792
+  ws-opts:
+    headers:
+      Host: 2026.hhhhh.eu.org
+    path: /222.167.202.23:7443
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_0334
+  server: 203.10.98.187
   port: 443
   udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: yf-nl1.wangpan.shop
-  network: ws
-  flow: ''
-  client-fingerprint: ios
-- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_2c1a
-  server: 138.124.89.189
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_5bd9
+  server: 172.67.68.113
   port: 443
   type: vless
   uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
@@ -1120,115 +1297,8 @@ proxies:
     path: /
     headers:
       Host: edt2-lgy.pages.dev
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_41eb
-  server: aws-link8.liangxin1.xyz
-  port: 39645
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: iosapps.itunes.apple.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: x7VqpFP7_PrY4ebNw8hi8Ec5Tm5Upmt5JOdrN1M9VnQ
-    short-id: 2b3b0b93
-  client-fingerprint: chrome
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_7b5e
-  server: yfcfcf.wangpan.shop
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: yfjc-sg1.wangpan.shop
-  network: ws
-  flow: ''
-  client-fingerprint: safari
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_5c49
-  server: 43.245.223.56
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: iosapps.itunes.apple.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: 9G1Wl-72Sn9N5kjgUm4LGPkG1f6EjJUxbpGqIxUChXo
-    short-id: c07250e9
-  client-fingerprint: chrome
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a83
-  server: 203.10.98.187
-  port: 443
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_d5d1
-  server: aws-linkhy2.liangxin1.xyz
-  port: 60000
-  udp: true
-  type: hysteria2
-  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  sni: iosapps.itunes.apple.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_0e96
-  server: 203.10.98.187
-  port: 443
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_0830
-  server: aws-link13.liangxin1.xyz
-  port: 36574
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: www.apple.com.cn
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: sDG-KQk1BF7V83-xnmrWDouXxpPd_ZSxKcHrJJzbols
-    short-id: 32a3650d
-  client-fingerprint: chrome
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_13b8
-  server: 127.0.0.1
-  port: 35248
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: www.lamer.com.hk
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: IGsSxC0wgn7wLy0NM0QN_yOREDKT_814Y_3_rbgDoTc
-    short-id: c8c0f951
-  client-fingerprint: chrome
-- name: 🇧🇷 巴西 打倒美帝国主义及其一切走狗_67ab
-  server: 129.148.39.249
-  port: 20000
-  udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_978b
-  server: 162.159.47.45
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_47e8
+  server: 194.116.215.239
   port: 443
   type: vless
   uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
@@ -1250,22 +1320,88 @@ proxies:
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_2700
-  server: aws-link15.liangxin1.xyz
-  port: 35457
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_c0cb
+  server: 103.197.71.99
+  port: 20000
   udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- alterId: 2
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_2703
+  network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  servername: broadcastlv.chat.bilibili.com
+  skip-cert-verify: true
+  tls: false
+  type: vmess
+  udp: true
+  uuid: d095ecc6-7b69-11eb-b77b-f23c913c8d2b
+  ws-opts:
+    headers:
+      Host: hkt.gotochinatown.net
+    path: /
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_24c9
+  network: ws
+  port: 7443
+  server: 222.167.202.50
+  servername: 2026.hhhhh.eu.org
   tls: true
-  servername: www.apple.com.cn
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: 3gb-aG6qLCJpEOFrEPZ9qKqLvVPA_ovlu0X1PvjcE0k
-    short-id: 05288db3
+  type: vless
+  uuid: 06ef598c-1555-4887-b3f9-08214a2f6792
+  ws-opts:
+    headers:
+      Host: 2026.hhhhh.eu.org
+    path: /222.167.202.50:7443
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_710e
+  server: 203.10.99.59
+  port: 20000
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- client-fingerprint: chrome
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_7139
+  network: ws
+  port: 7443
+  server: 222.167.202.36
+  servername: 2026.hhhhh.eu.org
+  tls: true
+  type: vless
+  uuid: 06ef598c-1555-4887-b3f9-08214a2f6792
+  ws-opts:
+    headers:
+      Host: 2026.hhhhh.eu.org
+    path: /222.167.202.36:7443
+- alpn:
+  - http/1.1
   client-fingerprint: chrome
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_a50d
-  server: 213.188.223.161
+  encryption: none
+  flow: xtls-rprx-vision
+  http-opts:
+    headers: {}
+    path:
+    - /
+  name: 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_df59
+  network: tcp
+  port: 443
+  server: 185.93.105.113
+  servername: sub.sbrf-cdn342.ru
+  tls: true
+  type: vless
+  udp: true
+  uuid: c4f2dee2-14e3-4c02-91e9-31c7917e239c
+  xudp: true
+- name: 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_0cc2
+  server: 31.57.105.90
   port: 443
   type: vless
   uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
@@ -1277,6 +1413,1187 @@ proxies:
     path: /
     headers:
       Host: edt2-lgy.pages.dev
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_e1f1
+  server: 162.159.36.12
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_9cf7
+  server: 127.0.0.1
+  port: 1234
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_68eb
+  network: ws
+  port: 7443
+  server: 222.167.202.2
+  servername: 2026.hhhhh.eu.org
+  skip-cert-verify: false
+  tls: true
+  type: vless
+  udp: true
+  uuid: 06ef598c-1555-4887-b3f9-08214a2f6792
+  ws-opts:
+    headers:
+      Host: 2026.hhhhh.eu.org
+    path: /222.167.202.2:7443
+- client-fingerprint: chrome
+  encryption: none
+  flow: xtls-rprx-vision
+  http-opts:
+    headers: {}
+    path:
+    - /
+  name: 🇺🇦 乌克兰 打倒美帝国主义及其一切走狗_da41
+  network: tcp
+  port: 443
+  reality-opts:
+    public-key: P7XdTB-V3VEV_B5Wenifit6OriVM5YUQ8ir-SSqes0U
+    short-id: 7a4f4b55a899ae1d
+  server: 95.164.36.217
+  servername: www.booking.com
+  tls: true
+  type: vless
+  udp: true
+  uuid: 43488128-319e-f480-64ea-0acdc712e2a8
+  xudp: true
+- cipher: aes-256-cfb
+  name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_a0d0
+  password: amazonskr05
+  port: 443
+  server: 174.129.67.160
+  type: ss
+  udp: true
+- cipher: aes-256-cfb
+  name: 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_4b53
+  password: amazonskr05
+  port: 443
+  server: 34.255.207.62
+  type: ss
+  udp: true
+- client-fingerprint: chrome
+  name: 🇲🇩 摩尔多瓦 打倒美帝国主义及其一切走狗_4f5e
+  password: strong-secret-pass-777
+  port: 4443
+  server: 94.131.105.125
+  skip-cert-verify: true
+  tls: true
+  type: trojan
+  udp: true
+- alterId: 2
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_a5b0
+  network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  servername: 🇭🇰HK-1.36.96.214-4552 | 0.396MB
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: a2b0fd2b-716f-0df8-d4e2-03a1c00e5f1a
+  ws-opts:
+    headers:
+      Host: hkt.gotochinatown.net
+    path: /
+- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_7529
+  server: 148.251.41.50
+  port: 10000
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_54f7
+  server: 103.197.71.101
+  port: 20000
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- cipher: aes-256-cfb
+  name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_b488
+  password: amazonskr05
+  port: 443
+  server: 3.82.65.155
+  type: ss
+  udp: true
+- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_8f07
+  server: 178.128.203.165
+  port: 2087
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_869c
+  server: 154.3.32.164
+  port: 8443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇨🇭 瑞士 打倒美帝国主义及其一切走狗_be1e
+  server: 51.103.222.57
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_6bdf
+  server: 108.181.23.249
+  port: 20000
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- alpn:
+  - http/1.1
+  client-fingerprint: random
+  name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_fe09
+  network: ws
+  port: 15018
+  server: 61.79.126.130
+  servername: snippet.chinav.eu.cc
+  tls: true
+  type: vless
+  udp: true
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.chinav.eu.cc
+    path: /danfeng
+- name: 🇲🇩 摩尔多瓦 打倒美帝国主义及其一切走狗_4803
+  password: strong-secret-pass-777
+  port: 4443
+  server: 94.131.105.125
+  skip-cert-verify: true
+  sni: 94.131.105.125
+  tls: true
+  type: trojan
+  udp: true
+- client-fingerprint: chrome
+  encryption: none
+  flow: xtls-rprx-vision
+  http-opts:
+    headers: {}
+    path:
+    - /
+  name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_f5f9
+  network: tcp
+  port: 59999
+  reality-opts:
+    public-key: x0t1otRGBv62aJKGNbsQRJGtwh-sp6CEScFS6S8y3EM
+    short-id: 7c8d9e0f
+  server: 45.136.129.109
+  servername: yastatic.net
+  tls: true
+  type: vless
+  udp: true
+  uuid: ee6817f6-50fe-4114-b7ff-ce853b144282
+  xudp: true
+- client-fingerprint: chrome
+  name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_41e1
+  network: ws
+  port: 20244
+  server: 211.194.9.159
+  servername: snippet.danfeng.theworkpc.com
+  tls: true
+  type: vless
+  udp: true
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.danfeng.theworkpc.com
+      User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/55.0.2883.87 Safari/537.36
+    path: /danfeng?ed=2560
+  xudp: true
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_6b5b
+  network: ws
+  port: 443
+  server: 192.0.63.18
+  servername: snippet.danfeng.loc.cc
+  tls: true
+  type: vless
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.danfeng.loc.cc
+    path: /danfeng?ed=2560
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8260
+  server: 152.42.234.182
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_325a
+  server: 104.19.52.90
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- cipher: aes-256-cfb
+  name: 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_73ed
+  password: amazonskr05
+  port: 443
+  server: 3.250.70.191
+  type: ss
+  udp: true
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_07e0
+  server: 127.0.0.1
+  port: 35248
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: www.lamer.com.hk
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: IGsSxC0wgn7wLy0NM0QN_yOREDKT_814Y_3_rbgDoTc
+    short-id: c8c0f951
+  client-fingerprint: chrome
+- alpn:
+  - http/1.1
+  client-fingerprint: random
+  name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_207c
+  network: ws
+  port: 443
+  server: 114.33.57.170
+  servername: snippet.fgfw.ndjp.net
+  tls: true
+  type: vless
+  udp: true
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.fgfw.ndjp.net
+      User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/63.0.3239.132 Safari/537.36
+    path: /danfeng
+  xudp: true
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_5c49
+  server: 43.245.223.56
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: iosapps.itunes.apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: 9G1Wl-72Sn9N5kjgUm4LGPkG1f6EjJUxbpGqIxUChXo
+    short-id: c07250e9
+  client-fingerprint: chrome
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_13b8
+  server: 127.0.0.1
+  port: 35248
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: www.lamer.com.hk
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: IGsSxC0wgn7wLy0NM0QN_yOREDKT_814Y_3_rbgDoTc
+    short-id: c8c0f951
+  client-fingerprint: chrome
+- cipher: aes-256-cfb
+  name: 🇻🇳 越南 打倒美帝国主义及其一切走狗_8d49
+  password: Xn8jKdmDM00IeO%#$#fJAMtsEAEUOpH/YWYtYqDFnT0SV
+  port: 38388
+  server: 103.186.155.17
+  type: ss
+- name: 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_aa62
+  server: 65.109.192.28
+  port: 12216
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_c7d0
+  network: ws
+  port: 443
+  server: 192.0.54.225
+  servername: snippet.danfeng.kozow.com
+  tls: true
+  type: vless
+  uuid: 948fac3c-42bf-41a6-a5f9-704d36ff0d8d
+  ws-opts:
+    headers:
+      Host: snippet.danfeng.kozow.com
+    path: /danfeng?ed=2560
+- cipher: aes-256-cfb
+  name: 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_8f20
+  password: amazonskr05
+  port: 443
+  server: 34.252.142.20
+  type: ss
+  udp: true
+- name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_425c
+  server: 112.218.100.68
+  port: 30012
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- alterId: '2'
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_0e90
+  network: ws
+  port: 80
+  server: hkt.gotochinatown.net
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: e1dee7c0-cff7-11eb-a8bf-f23c91cfbbc9
+  ws-opts:
+    headers:
+      Host: hkt.gotochinatown.net
+    path: /
+  xudp: true
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_f783
+  port: 1080
+  server: 161.35.82.57
+  type: socks5
+  udp: true
+- client-fingerprint: chrome
+  flow: xtls-rprx-vision
+  name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6f80
+  network: tcp
+  port: 39975
+  reality-opts:
+    public-key: qhTzYYIgBzDLNYR79oxftqdo1kzL-1_hGJKfqrOliCY
+    short-id: ''
+  server: 116.80.58.239
+  servername: cloudcircus.jp
+  tls: true
+  type: vless
+  udp: true
+  uuid: 15b84012-d261-4b4c-807a-061bb4a901fd
+  xudp: true
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_7cd5
+  network: ws
+  port: 7443
+  server: 222.167.202.16
+  servername: 2026.hhhhh.eu.org
+  tls: true
+  type: vless
+  uuid: 06ef598c-1555-4887-b3f9-08214a2f6792
+  ws-opts:
+    headers:
+      Host: 2026.hhhhh.eu.org
+    path: /222.167.202.16:7443
+- alpn:
+  - h3
+  auth-str: dongtaiwang.com
+  auth_str: dongtaiwang.com
+  down: 1000
+  name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_82d4
+  port: 54177
+  protocol: udp
+  server: 5.83.129.90
+  skip-cert-verify: true
+  sni: apple.com
+  type: hysteria
+  udp: true
+  up: 500
+- alpn:
+  - h3
+  auth-str: dongtaiwang.com
+  auth_str: dongtaiwang.com
+  down: 1000
+  name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_cb96
+  port: 20088
+  protocol: udp
+  server: 5.83.129.153
+  skip-cert-verify: true
+  sni: apple.com
+  type: hysteria
+  udp: true
+  up: 500
+- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_17d8
+  network: ws
+  port: 8088
+  server: 202.61.200.220
+  servername: sni.111000.indevs.in
+  tls: true
+  type: vless
+  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  ws-opts:
+    headers:
+      Host: sni.111000.indevs.in
+    path: /?ed=2560&Telegram🇨🇳@WangCai2
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_a46e
+  server: 43.245.223.34
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: cdn-dynmedia-1.microsoft.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: BiwY7Que5N4TjVfseuMWWC2AO1U8G196O1fEFocOK0w
+    short-id: 8004932d
+  client-fingerprint: ios
+- name: 🇧🇷 巴西 打倒美帝国主义及其一切走狗_67ab
+  server: 129.148.39.249
+  port: 20000
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_fede
+  server: 203.10.99.51
+  port: 20000
+  udp: true
+  type: hysteria2
+  password: e10e10bf-6a37-4733-96b2-97fb0690266c
+  sni: www.bing.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_ad4c
+  server: 127.0.0.1
+  port: 35248
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: www.lamer.com.hk
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: IGsSxC0wgn7wLy0NM0QN_yOREDKT_814Y_3_rbgDoTc
+    short-id: c8c0f951
+  client-fingerprint: chrome
+- name: 🇪🇸 西班牙 打倒美帝国主义及其一切走狗_2efd
+  server: 185.227.144.82
+  port: 443
+  type: vless
+  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
+  tls: true
+  skip-cert-verify: true
+  servername: edt2-lgy.pages.dev
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: edt2-lgy.pages.dev
+- client-fingerprint: chrome
+  encryption: none
+  flow: xtls-rprx-vision
+  http-opts:
+    headers: {}
+    path:
+    - /
+  name: 🇱🇻 拉脱维亚 打倒美帝国主义及其一切走狗_1651
+  network: tcp
+  port: 443
+  reality-opts:
+    public-key: 6OvNu3z9uVh1Br6hIOQOz4Qai7xuykdjcvtqiLqNRUs
+    short-id: 95fe9eef
+  server: 169.40.2.244
+  servername: hls-svod.itunes.apple.com
+  tls: true
+  type: vless
+  udp: true
+  uuid: ec486464-46c8-4f80-acc1-a3ccdcf01744
+  xudp: true
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_4f83
+  password: 9594f8cc-da22-4504-9bcb-b8f219fe28ec
+  port: 60001
+  server: jpaws.ccwink.photos
+  skip-cert-verify: true
+  type: anytls
+  udp: true
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a3e
+  password: 9594f8cc-da22-4504-9bcb-b8f219fe28ec
+  port: 60006
+  server: jpaws.ccwink.photos
+  skip-cert-verify: true
+  type: anytls
+  udp: true
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_b765
+  password: 9594f8cc-da22-4504-9bcb-b8f219fe28ec
+  port: 60005
+  server: jpaws.ccwink.photos
+  skip-cert-verify: true
+  type: anytls
+  udp: true
+- alterId: 2
+  cipher: auto
+  country: 🇭🇰HK
+  delay: 1114
+  h2-opts: {}
+  http-opts: {}
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_b7c8
+  network: ws
+  port: 80
+  server: 9eef437c-t70f40-tiaexf-ufc0.hkt.gotochinatown.net
+  servername: broadcastlv.chat.bilibili.com
+  skip-cert-verify: true
+  type: vmess
+  uuid: 22308988-8548-11ea-a22e-f23c91cfbbc9
+  ws-opts:
+    headers:
+      HOST: broadcastlv.chat.bilibili.com
+    path: /
+- alterId: '2'
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_a3f1
+  network: ws
+  port: 80
+  server: cd5a4e76-t70f40-t7dv8l-1szgv.hkt.gotochinatown.net
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: 448aff24-b2e6-11ef-97e0-f23c9164ca5d
+  ws-opts:
+    headers: {}
+    path: /
+  xudp: true
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_acdc
+  server: yfcfcf.wangpan.shop
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yfjc-us1.wangpan.shop
+  network: ws
+  flow: ''
+  client-fingerprint: ios
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_8879
+  server: yfcfcf.wangpan.shop
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yfjc-jp1.wangpan.shop
+  network: ws
+  flow: ''
+  client-fingerprint: ios
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_77dc
+  server: 127.0.0.1
+  port: 1234
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8e0f
+  server: 43.168.16.112
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_b864
+  server: 65.52.160.128
+  port: 8443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇵🇱 波兰 打倒美帝国主义及其一切走狗_3ea8
+  server: 144.31.101.97
+  port: 8443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_b196
+  server: 152.42.255.28
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_386a
+  server: 195.58.50.128
+  port: 2053
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_6f06
+  server: 37.139.18.208
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_af37
+  server: 62.60.216.60
+  port: 8443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_aefb
+  server: 204.168.163.223
+  port: 8443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_2323
+  server: 188.215.31.36
+  port: 8443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_24ed
+  server: 148.253.210.44
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_5141
+  server: 31.15.18.41
+  port: 8443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_33df
+  server: 46.243.1.9
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇬🇧 英国 打倒美帝国主义及其一切走狗_fad8
+  server: 64.176.180.194
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_cfe5
+  server: 188.166.107.214
+  port: 2096
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_3117
+  server: 150.241.105.17
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_3835
+  server: 178.128.70.6
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_d84b
+  server: 185.125.100.233
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_2df1
+  server: 185.18.52.77
+  port: 8443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_31b6
+  server: 192.9.138.69
+  port: 21009
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇩🇪 德国 打倒美帝国主义及其一切走狗_72e3
+  server: 194.9.6.32
+  port: 48484
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_c37b
+  server: 107.172.100.43
+  port: 26001
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_3717
+  server: 23.94.100.111
+  port: 7443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_268e
+  server: 115.94.98.93
+  port: 50001
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_59b3
+  server: 45.91.203.74
+  port: 4443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_c791
+  server: 129.159.37.19
+  port: 30488
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_a43f
+  server: 27.116.108.61
+  port: 50001
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_5b66
+  server: 198.41.223.93
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_f13d
+  server: 162.159.35.240
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_0cdd
+  server: 198.41.223.115
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_c659
+  server: 8.39.125.49
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_fc60
+  server: 172.67.78.79
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_61e6
+  server: 172.67.77.81
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_4798
+  server: 172.67.66.82
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_a415
+  server: 172.67.67.1
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_2b34
+  server: 104.19.44.151
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_5cf9
+  server: 104.19.32.30
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_2f1f
+  server: 104.19.47.251
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_eac8
+  server: 104.19.46.186
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_a525
+  server: yfcfcf.wangpan.shop
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yfjc-jp1.wangpan.shop
+  network: ws
+  flow: ''
+  client-fingerprint: safari
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_8e3a
+  server: yfcfcf.wangpan.shop
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yfjc-jp3.wangpan.shop
+  network: ws
+  flow: ''
+  client-fingerprint: chrome
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_05c1
+  server: yfcfcf.wangpan.shop
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yf-nl1.wangpan.shop
+  network: ws
+  flow: ''
+  client-fingerprint: ios
 - name: 🌐 未知地区 打倒美帝国主义及其一切走狗_b16c
   server: yfcfcf.wangpan.shop
   port: 443
@@ -1288,38 +2605,85 @@ proxies:
   network: ws
   flow: ''
   client-fingerprint: chrome
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_3398
-  server: 203.10.99.59
-  port: 20000
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_7b5e
+  server: yfcfcf.wangpan.shop
+  port: 443
   udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_710e
-  server: 203.10.99.59
-  port: 20000
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yfjc-sg1.wangpan.shop
+  network: ws
+  flow: ''
+  client-fingerprint: safari
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_9e9b
+  server: yfcfcf.wangpan.shop
+  port: 443
   udp: true
-  type: hysteria2
-  password: e10e10bf-6a37-4733-96b2-97fb0690266c
-  sni: www.bing.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_163a
-  server: aws-linkhy3.liangxin1.xyz
-  port: 60000
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yfjc-us1.wangpan.shop
+  network: ws
+  flow: ''
+  client-fingerprint: safari
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_eac7
+  server: yfcfcf.wangpan.shop
+  port: 443
   udp: true
-  type: hysteria2
-  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  sni: iosapps.itunes.apple.com
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_b7d7
-  server: 43.245.223.80
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yfjc-jp3.wangpan.shop
+  network: ws
+  flow: ''
+  client-fingerprint: safari
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_bd4f
+  server: yfcfcf.wangpan.shop
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yfjc-jp2.wangpan.shop
+  network: ws
+  flow: ''
+  client-fingerprint: ios
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_5e8e
+  server: yfcfcf.wangpan.shop
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yfjc-jp3.wangpan.shop
+  network: ws
+  flow: ''
+  client-fingerprint: chrome
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_9a9c
+  server: yfcfcf.wangpan.shop
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yfjc-sg1.wangpan.shop
+  network: ws
+  flow: ''
+  client-fingerprint: chrome
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_fe21
+  server: yfcfcf.wangpan.shop
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yfjc-us1.wangpan.shop
+  network: ws
+  flow: ''
+  client-fingerprint: safari
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_b809
+  server: 3bd9.55dca.e048.f6-fef1f.yfjcs.com
   port: 443
   udp: true
   type: vless
@@ -1329,113 +2693,47 @@ proxies:
   network: tcp
   flow: xtls-rprx-vision
   reality-opts:
-    public-key: ohHYewuCouiKzI-fFvhKzYY62m_oDtElS23sosvA6Wc
-    short-id: fbb5600c
-  client-fingerprint: safari
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_d43b
-  server: 23.94.213.132
-  port: 27149
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_fc43
-  server: 104.26.8.140
+    public-key: OpOPkgvdODyl87_5Yd4gJlaSD1Bc10TVjLlzKNHx40k
+    short-id: 5ab35065
+  client-fingerprint: ios
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_53da
+  server: 3bd9.55dca.e048.f6-fef1f.yfjcs.com
   port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_8673
-  server: 104.26.3.220
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_5aa8
-  server: 104.19.37.25
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_f05b
-  server: 104.19.44.185
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_9bca
-  server: 104.19.36.82
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_3fe2
-  server: 104.19.59.200
-  port: 443
-  type: vless
-  uuid: 8007e155-622e-4c9d-8a6e-67f49b4678f4
-  tls: true
-  skip-cert-verify: true
-  servername: edt2-lgy.pages.dev
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: edt2-lgy.pages.dev
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_0393
-  server: aws-link9.liangxin1.xyz
-  port: 23587
   udp: true
   type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
   tls: true
-  servername: iosapps.itunes.apple.com
+  servername: osxapps.itunes.apple.com
   network: tcp
   flow: xtls-rprx-vision
   reality-opts:
-    public-key: H66PLLf6HkZwHk4oFqisfTawIvw2cxkEwk8Ue8sHZgA
-    short-id: 19b580ae
+    public-key: OpOPkgvdODyl87_5Yd4gJlaSD1Bc10TVjLlzKNHx40k
+    short-id: 5ab35065
+  client-fingerprint: ios
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_01e8
+  server: 3bd9.55dca.e048.f6-fef1f.yfjcs.com
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: osxapps.itunes.apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: OpOPkgvdODyl87_5Yd4gJlaSD1Bc10TVjLlzKNHx40k
+    short-id: 5ab35065
+  client-fingerprint: ios
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_d8d7
+  server: yfcfcf.wangpan.shop
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: yfjc-jp2.wangpan.shop
+  network: ws
+  flow: ''
   client-fingerprint: chrome
 - name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_d3fa
   server: 3bd9.55dca.e048.f1-fef1f.yfjcs.com
@@ -1479,178 +2777,223 @@ proxies:
     public-key: egq3FRi4oqkJ-iJ40r-pk10g7tawGg6o9c4UDGOPDU4
     short-id: 9824e11ad3a632f8
   client-fingerprint: chrome
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_465d
-  server: 3bd9.55dca.e048.f7-fef1f.yfjcs.com
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_ac47
+  server: www.wto.org
+  port: 8443
+  type: trojan
+  password: 1q242455
+  sni: trojanalt.962048.xyz
+  client-fingerprint: randomized
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojanalt.962048.xyz
+- alterId: 2
+  cipher: auto
+  country: 🇭🇰HK
+  h2-opts: {}
+  http-opts: {}
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_4bd1
+  network: ws
+  port: 80
+  server: e12c25e8-t70f40-t87m8y-1pr35.hkt.gotochinatown.net
+  servername: broadcastlv.chat.bilibili.com
+  skip-cert-verify: true
+  type: vmess
+  uuid: 6b7c1278-ff9d-11ee-84ca-f23c913c8d2b
+  ws-opts:
+    headers:
+      HOST: broadcastlv.chat.bilibili.com
+    path: /
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_0d13
+  server: aws-link11.liangxin1.xyz
   port: 443
   udp: true
   type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
   tls: true
-  servername: updates.cdn-apple.com
+  servername: www.lamer.com.sg
   network: tcp
   flow: xtls-rprx-vision
   reality-opts:
-    public-key: SMnrjqT7vDwVYRL05E6qgSFkNpEyLpyZtWMHvhHr9BM
-    short-id: ab2909fe
-  client-fingerprint: safari
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_5533
-  server: 3bd9.55dca.e048.f7-fef1f.yfjcs.com
+    public-key: 7DC8gg_Ui9i3tScu-60AxeniPPW3h3VWvvQjblOrwEs
+    short-id: 18180d97
+  client-fingerprint: chrome
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_798a
+  server: aws-link3.liangxin1.xyz
+  port: 27758
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: www.lamer.com.hk
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: EYa4ic3GAxqznV61U-OOww-WKsu5wuQQptyS3fw7czM
+    short-id: c50db39f
+  client-fingerprint: chrome
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_41eb
+  server: aws-link8.liangxin1.xyz
+  port: 39645
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: iosapps.itunes.apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: x7VqpFP7_PrY4ebNw8hi8Ec5Tm5Upmt5JOdrN1M9VnQ
+    short-id: 2b3b0b93
+  client-fingerprint: chrome
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_09e7
+  server: aws-link1.liangxin1.xyz
+  port: 35248
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: www.lamer.com.hk
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: IGsSxC0wgn7wLy0NM0QN_yOREDKT_814Y_3_rbgDoTc
+    short-id: c8c0f951
+  client-fingerprint: chrome
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_f61c
+  server: aws-link4.liangxin1.xyz
   port: 443
   udp: true
   type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
   tls: true
-  servername: updates.cdn-apple.com
+  servername: www.lamer.com.hk
   network: tcp
   flow: xtls-rprx-vision
   reality-opts:
-    public-key: SMnrjqT7vDwVYRL05E6qgSFkNpEyLpyZtWMHvhHr9BM
-    short-id: ab2909fe
-  client-fingerprint: ios
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_95b8
-  server: 3bd9.55dca.e048.f7-fef1f.yfjcs.com
+    public-key: 3FPGTaxkfOM3nEUWUyCiqkH5oJGsOx-WxPJfADi1QWY
+    short-id: 7f369e14
+  client-fingerprint: chrome
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_0393
+  server: aws-link9.liangxin1.xyz
+  port: 23587
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: iosapps.itunes.apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: H66PLLf6HkZwHk4oFqisfTawIvw2cxkEwk8Ue8sHZgA
+    short-id: 19b580ae
+  client-fingerprint: chrome
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_5bd4
+  server: aws-link19.liangxin1.xyz
   port: 443
   udp: true
   type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
   tls: true
-  servername: updates.cdn-apple.com
+  servername: download-porter.hoyoverse.com
   network: tcp
   flow: xtls-rprx-vision
   reality-opts:
-    public-key: SMnrjqT7vDwVYRL05E6qgSFkNpEyLpyZtWMHvhHr9BM
-    short-id: ab2909fe
-  client-fingerprint: ios
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_53da
-  server: 3bd9.55dca.e048.f6-fef1f.yfjcs.com
-  port: 443
+    public-key: QE5l0RUqs4OsH3j3u_xHm06-4NlILmQivZUJqiEx11o
+    short-id: 6314e825
+  client-fingerprint: chrome
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_44ad
+  server: aws-link14.liangxin1.xyz
+  port: 25485
   udp: true
   type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
   tls: true
-  servername: osxapps.itunes.apple.com
+  servername: www.apple.com.cn
   network: tcp
   flow: xtls-rprx-vision
   reality-opts:
-    public-key: OpOPkgvdODyl87_5Yd4gJlaSD1Bc10TVjLlzKNHx40k
-    short-id: 5ab35065
-  client-fingerprint: ios
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_01e8
-  server: 3bd9.55dca.e048.f6-fef1f.yfjcs.com
-  port: 443
+    public-key: VOFSjjWT0wIH3Q0ntyEZd8WwksrIAb5gPt_3PBnEASg
+    short-id: 9c5b8c53
+  client-fingerprint: chrome
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_0830
+  server: aws-link13.liangxin1.xyz
+  port: 36574
   udp: true
   type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
   tls: true
-  servername: osxapps.itunes.apple.com
+  servername: www.apple.com.cn
   network: tcp
   flow: xtls-rprx-vision
   reality-opts:
-    public-key: OpOPkgvdODyl87_5Yd4gJlaSD1Bc10TVjLlzKNHx40k
-    short-id: 5ab35065
-  client-fingerprint: ios
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_b809
-  server: 3bd9.55dca.e048.f6-fef1f.yfjcs.com
-  port: 443
+    public-key: sDG-KQk1BF7V83-xnmrWDouXxpPd_ZSxKcHrJJzbols
+    short-id: 32a3650d
+  client-fingerprint: chrome
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_2700
+  server: aws-link15.liangxin1.xyz
+  port: 35457
   udp: true
   type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
   tls: true
-  servername: osxapps.itunes.apple.com
+  servername: www.apple.com.cn
   network: tcp
   flow: xtls-rprx-vision
   reality-opts:
-    public-key: OpOPkgvdODyl87_5Yd4gJlaSD1Bc10TVjLlzKNHx40k
-    short-id: 5ab35065
-  client-fingerprint: ios
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_fa3d
-  server: 3bd9.55dba.e048.f65-fef1f.yfjcs.com
-  port: 443
-  udp: true
-  type: vless
-  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
-  tls: true
-  servername: cdn-dynmedia-1.microsoft.com
-  network: tcp
-  flow: xtls-rprx-vision
-  reality-opts:
-    public-key: N6xp9sw9ALhLxOtVRt_8PNI2e2q1vf0Ay6MaoP3l6Hw
-    short-id: be823fa3
-  client-fingerprint: ios
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_1427
-  server: aws-linkhy27.liangxin1.xyz
+    public-key: 3gb-aG6qLCJpEOFrEPZ9qKqLvVPA_ovlu0X1PvjcE0k
+    short-id: 05288db3
+  client-fingerprint: chrome
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_2da0
+  server: aws-linkhy1.liangxin1.xyz
   port: 60000
   udp: true
   type: hysteria2
   password: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  sni: www.apple.com
+  sni: iosapps.itunes.apple.com
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
-- name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_2a47
-  server: aws-linkhy21.liangxin1.xyz
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_4ddc
+  server: aws-link10.liangxin1.xyz
+  port: 443
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: www.lamer.com.sg
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: xQO7CBh6ymSW9qfw9OGHykh7PLTzWQZjxDT-H4ul2AE
+    short-id: 2bb6da88
+  client-fingerprint: chrome
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8a7d
+  server: aws-linkhy10.liangxin1.xyz
   port: 60000
   udp: true
   type: hysteria2
   password: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  sni: bilibili-kr.biliimg.com
+  sni: iosapps.itunes.apple.com
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_58a7
-  server: cfyes.lxy1015.top
+- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_0890
+  server: aws-link27.liangxin1.xyz
   port: 443
   udp: true
   type: vless
   uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
   tls: true
-  servername: lxs1jp.lxy1015.top
-  network: ws
-  flow: ''
-  client-fingerprint: chrome
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_6ca9
-  server: cfyes.lxy1015.top
-  port: 443
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: lx-us1.lxy1015.top
-  network: ws
-  flow: ''
-  client-fingerprint: chrome
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_f9b9
-  server: cfyes.lxy1015.top
-  port: 443
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: lx-us1.lxy1015.top
-  network: ws
-  flow: ''
-  client-fingerprint: chrome
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_dbbb
-  server: cfyes.lxy1015.top
-  port: 443
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: lxs1jp.lxy1015.top
-  network: ws
-  flow: ''
-  client-fingerprint: chrome
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_29ec
-  server: cfyes.lxy1015.top
-  port: 443
-  udp: true
-  type: vless
-  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
-  tls: true
-  servername: lxs1jp.lxy1015.top
-  network: ws
-  flow: ''
+  servername: download-porter.hoyoverse.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: a9I2uA3NNZA6uBAe3Tui9vZ8CG5MrMaYOifWrAdc0zg
+    short-id: a8609be8
   client-fingerprint: chrome
 - name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_e8fc
   server: aws-link2.liangxin1.xyz
@@ -1666,6 +3009,169 @@ proxies:
     public-key: HvwnLBMMKsmvghGX5yVPq3J2HWxwr1GGQB2WIvbPvAY
     short-id: 8f6ca378
   client-fingerprint: chrome
+- name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_2a47
+  server: aws-linkhy21.liangxin1.xyz
+  port: 60000
+  udp: true
+  type: hysteria2
+  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  sni: bilibili-kr.biliimg.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_1427
+  server: aws-linkhy27.liangxin1.xyz
+  port: 60000
+  udp: true
+  type: hysteria2
+  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  sni: www.apple.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_93d5
+  server: aws-linkhy23.liangxin1.xyz
+  port: 60000
+  udp: true
+  type: hysteria2
+  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  sni: bilibili-tw.biliimg.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🇰🇷 韩国 打倒美帝国主义及其一切走狗_cc4a
+  server: aws-link25.liangxin1.xyz
+  port: 34578
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: download-porter.hoyoverse.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: PSn2s5TN4e7n0LkzPunu2IA1hSmOoPYFu3d_psl2Nmc
+    short-id: e534c8be
+  client-fingerprint: chrome
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_f9b9
+  server: cfyes.lxy1015.top
+  port: 443
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: lx-us1.lxy1015.top
+  network: ws
+  flow: ''
+  client-fingerprint: chrome
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_6ca9
+  server: cfyes.lxy1015.top
+  port: 443
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: lx-us1.lxy1015.top
+  network: ws
+  flow: ''
+  client-fingerprint: chrome
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_29ec
+  server: cfyes.lxy1015.top
+  port: 443
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: lxs1jp.lxy1015.top
+  network: ws
+  flow: ''
+  client-fingerprint: chrome
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_dbbb
+  server: cfyes.lxy1015.top
+  port: 443
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: lxs1jp.lxy1015.top
+  network: ws
+  flow: ''
+  client-fingerprint: chrome
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_58a7
+  server: cfyes.lxy1015.top
+  port: 443
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: lxs1jp.lxy1015.top
+  network: ws
+  flow: ''
+  client-fingerprint: chrome
+- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_bc28
+  server: aws-link7.liangxin1.xyz
+  port: 48574
+  udp: true
+  type: vless
+  uuid: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  tls: true
+  servername: www.lamer.com.sg
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: lmxSayN8tUg2Dag2MPXrdqZ2SQK9K3OjlaKk8wVCRnc
+    short-id: f8f18902
+  client-fingerprint: chrome
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6f9c
+  server: aws-linkhy15.liangxin1.xyz
+  port: 60000
+  udp: true
+  type: hysteria2
+  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  sni: bilibili-jp.biliimg.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6d65
+  server: aws-linkhy16.liangxin1.xyz
+  port: 60000
+  udp: true
+  type: hysteria2
+  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  sni: bilibili-jp2.biliimg.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_8dcc
+  server: uttyipf-g04.jp07-sh-vm0.entry.fr0528.art
+  port: 28786
+  type: vmess
+  uuid: 7100bb64-2c3d-3818-bdd9-ff369b59577c
+  alterId: 1
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  udp: true
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_12c4
+  server: re05lpd-g04.jp06-jz-vm0.entry.fr0528.art
+  port: 28786
+  type: vmess
+  uuid: 7100bb64-2c3d-3818-bdd9-ff369b59577c
+  alterId: 1
+  cipher: auto
+  tls: true
+  skip-cert-verify: false
+  udp: true
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_b18f
+  server: aws-linkhy17.liangxin1.xyz
+  port: 60000
+  udp: true
+  type: hysteria2
+  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  sni: bilibili-jp3.biliimg.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
 - name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_761e
   server: aws-linkhy11.liangxin1.xyz
   port: 60000
@@ -1676,7 +3182,304 @@ proxies:
   skip-cert-verify: true
   obfs: ''
   obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_fe90
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_163a
+  server: aws-linkhy3.liangxin1.xyz
+  port: 60000
+  udp: true
+  type: hysteria2
+  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  sni: iosapps.itunes.apple.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_d5d1
+  server: aws-linkhy2.liangxin1.xyz
+  port: 60000
+  udp: true
+  type: hysteria2
+  password: 6dc90be2-db13-45aa-946c-cd0040739ab9
+  sni: iosapps.itunes.apple.com
+  skip-cert-verify: true
+  obfs: ''
+  obfs-password: ''
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_8a8d
+  server: fbi.gov
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojanalt.962048.xyz
+  client-fingerprint: randomized
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojanalt.962048.xyz
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_9d94
+  server: ctv2j4b-g04.jp02-e3-vm0.entry.fr0528.art
+  port: 11776
+  type: vmess
+  uuid: 7100bb64-2c3d-3818-bdd9-ff369b59577c
+  alterId: 1
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  udp: true
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_0834
+  server: r8t2jpf-g04.jp05-h6-vm0.entry.fr0528.art
+  port: 46485
+  type: vmess
+  uuid: 7100bb64-2c3d-3818-bdd9-ff369b59577c
+  alterId: 1
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  udp: true
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_1d05
+  server: um02ipb-g04.jp01-nn-vm0.entry.fr0528.art
+  port: 21584
+  type: vmess
+  uuid: 7100bb64-2c3d-3818-bdd9-ff369b59577c
+  alterId: 1
+  cipher: auto
+  tls: true
+  skip-cert-verify: false
+  udp: true
+- alterId: 2
+  cipher: auto
+  name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_1d12
+  network: ws
+  port: 80
+  server: f8c38428-t6r5s0-t8jzg2-1hd7v.hkt.gotochinatown.net
+  servername: 🇭🇰HK-1.36.96.214-0280 | 0.361MB
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  uuid: f73c64bc-9e8c-11ec-bd7c-f23c913c8d2b
+  ws-opts:
+    headers:
+      Host: f8c38428-t6r5s0-t8jzg2-1hd7v.hkt.gotochinatown.net
+    path: /
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_3662
+  server: utvyixb-g04.jp03-j7-vm0.entry.fr0528.art
+  port: 21584
+  type: vmess
+  uuid: 7100bb64-2c3d-3818-bdd9-ff369b59577c
+  alterId: 1
+  cipher: auto
+  tls: true
+  skip-cert-verify: false
+  udp: true
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_465d
+  server: 3bd9.55dca.e048.f7-fef1f.yfjcs.com
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: updates.cdn-apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: SMnrjqT7vDwVYRL05E6qgSFkNpEyLpyZtWMHvhHr9BM
+    short-id: ab2909fe
+  client-fingerprint: safari
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_95b8
+  server: 3bd9.55dca.e048.f7-fef1f.yfjcs.com
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: updates.cdn-apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: SMnrjqT7vDwVYRL05E6qgSFkNpEyLpyZtWMHvhHr9BM
+    short-id: ab2909fe
+  client-fingerprint: ios
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_5533
+  server: 3bd9.55dca.e048.f7-fef1f.yfjcs.com
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: updates.cdn-apple.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: SMnrjqT7vDwVYRL05E6qgSFkNpEyLpyZtWMHvhHr9BM
+    short-id: ab2909fe
+  client-fingerprint: ios
+- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_fa3d
+  server: 3bd9.55dba.e048.f65-fef1f.yfjcs.com
+  port: 443
+  udp: true
+  type: vless
+  uuid: e10e10bf-6a37-4733-96b2-97fb0690266c
+  tls: true
+  servername: cdn-dynmedia-1.microsoft.com
+  network: tcp
+  flow: xtls-rprx-vision
+  reality-opts:
+    public-key: N6xp9sw9ALhLxOtVRt_8PNI2e2q1vf0Ay6MaoP3l6Hw
+    short-id: be823fa3
+  client-fingerprint: ios
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_53b6
+  server: cmv5lxf-g04.jp04-1d-vm0.entry.fr0528.art
+  port: 447
+  type: vmess
+  uuid: 7100bb64-2c3d-3818-bdd9-ff369b59577c
+  alterId: 1
+  cipher: auto
+  tls: false
+  skip-cert-verify: false
+  udp: true
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_10ad
+  server: au.lyhycloud.org
+  port: 12001
+  udp: true
+  type: vless
+  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
+  tls: true
+  servername: www.bing.com
+  skip-cert-verify: true
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_859d
+  server: au.lyhycloud.org
+  port: 12001
+  udp: true
+  type: vless
+  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
+  tls: true
+  servername: www.bing.com
+  skip-cert-verify: true
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_753f
+  server: lu.lyhycloud.org
+  port: 12004
+  udp: true
+  type: vless
+  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
+  tls: true
+  servername: www.bing.com
+  skip-cert-verify: true
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_01aa
+  server: lu.lyhycloud.org
+  port: 12004
+  udp: true
+  type: vless
+  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
+  tls: true
+  servername: www.bing.com
+  skip-cert-verify: true
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_d797
+  server: sg.lyhycloud.org
+  port: 12002
+  udp: true
+  type: vless
+  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
+  tls: true
+  servername: www.bing.com
+  skip-cert-verify: true
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_e828
+  server: sg.lyhycloud.org
+  port: 12002
+  udp: true
+  type: vless
+  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
+  tls: true
+  servername: www.bing.com
+  skip-cert-verify: true
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_68cf
+  server: sg.lyhycloud.org
+  port: 12002
+  udp: true
+  type: vless
+  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
+  tls: true
+  servername: www.bing.com
+  skip-cert-verify: true
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_9219
+  server: sg.lyhycloud.org
+  port: 12002
+  udp: true
+  type: vless
+  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
+  tls: true
+  servername: www.bing.com
+  skip-cert-verify: true
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_d8e8
+  server: sg.lyhycloud.org
+  port: 12002
+  udp: true
+  type: vless
+  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
+  tls: true
+  servername: www.bing.com
+  skip-cert-verify: true
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_91f7
+  server: gw.lydwan.com
+  port: 35601
+  udp: true
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_86bf
+  server: gw.lydwan.com
+  port: 35603
+  udp: true
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_3088
+  server: gw.lydwan.com
+  port: 35607
+  udp: true
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_adc2
+  server: gw.lydwan.com
+  port: 35608
+  udp: true
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_5b21
+  server: gw.lydwan.com
+  port: 35602
+  udp: true
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_4053
+  server: gw.lydwan.com
+  port: 35604
+  udp: true
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
+- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_caca
+  server: gw.lydwan.com
+  port: 35606
+  udp: true
+  type: ss
+  cipher: chacha20-ietf-poly1305
+  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_7117
+  server: ct.090227.xyz
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojanalt.962048.xyz
+  client-fingerprint: randomized
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojanalt.962048.xyz
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_b941
   server: usa.lyhycloud.org
   port: 12003
   udp: true
@@ -1685,7 +3488,7 @@ proxies:
   tls: true
   servername: www.bing.com
   skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_b941
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_fe90
   server: usa.lyhycloud.org
   port: 12003
   udp: true
@@ -1712,15 +3515,32 @@ proxies:
   tls: true
   servername: www.bing.com
   skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_7dce
-  server: jp.lyhycloud.org
-  port: 12006
-  udp: true
-  type: vless
-  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
-  tls: true
-  servername: www.bing.com
+- alterId: 2
+  cipher: auto
+  name: 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_58f0
+  network: tcp
+  port: 30829
+  server: v29.hdacd.com
   skip-cert-verify: true
+  tls: false
+  type: vmess
+  uuid: cbb3f877-d1fb-344c-87a9-d153bffd5484
+  ws-opts:
+    headers:
+      Host: v29.hdacd.com
+    path: /
+- alterId: '2'
+  cipher: auto
+  name: 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_39e1
+  network: tcp
+  port: 30829
+  server: v29.hdacd.com
+  skip-cert-verify: false
+  tls: false
+  type: vmess
+  udp: true
+  uuid: cbb3f877-d1fb-344c-87a9-d153bffd5484
+  xudp: true
 - name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_94ae
   server: jp.lyhycloud.org
   port: 12006
@@ -1730,136 +3550,113 @@ proxies:
   tls: true
   servername: www.bing.com
   skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_753f
-  server: lu.lyhycloud.org
-  port: 12004
+- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_7dce
+  server: jp.lyhycloud.org
+  port: 12006
   udp: true
   type: vless
   uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
   tls: true
   servername: www.bing.com
   skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_01aa
-  server: lu.lyhycloud.org
-  port: 12004
+- alterId: '2'
+  cipher: auto
+  name: 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_2b73
+  network: tcp
+  port: 30808
+  server: v8.hdacd.com
+  skip-cert-verify: false
+  tls: false
+  type: vmess
   udp: true
-  type: vless
-  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
-  tls: true
-  servername: www.bing.com
+  uuid: cbb3f877-d1fb-344c-87a9-d153bffd5484
+  xudp: true
+- alterId: 2
+  cipher: auto
+  client-fingerprint: chrome
+  name: 🇲🇾 马来西亚 打倒美帝国主义及其一切走狗_49e6
+  network: tcp
+  port: 30845
+  server: v45.hdacd.com
   skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_10ad
-  server: au.lyhycloud.org
-  port: 12001
+  tls: false
+  type: vmess
   udp: true
-  type: vless
-  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
-  tls: true
-  servername: www.bing.com
+  uuid: cbb3f877-d1fb-344c-87a9-d153bffd5484
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_fbaa
+  server: cf.090227.xyz
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojanalt.962048.xyz
+  client-fingerprint: randomized
   skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_859d
-  server: au.lyhycloud.org
-  port: 12001
-  udp: true
-  type: vless
-  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
-  tls: true
-  servername: www.bing.com
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojanalt.962048.xyz
+- alterId: 0
+  cipher: auto
+  name: 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_ba05
+  network: tcp
+  port: 30812
+  server: v12.hdacd.com
   skip-cert-verify: true
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_5b21
-  server: gw.lydwan.com
-  port: 35602
+  tls: false
+  type: vmess
+  uuid: cbb3f877-d1fb-344c-87a9-d153bffd5484
+  ws-opts:
+    headers:
+      Host: dDdCCVFg.922922.SHOP
+    path: /RkUUbqhA9GJZBROjL3Q5vTymr
+- alterId: 0
+  cipher: auto
+  name: 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_5285
+  network: tcp
+  port: 30812
+  server: v12.hdacd.com
+  servername: vc.fly.dev
+  type: vmess
+  uuid: cbb3f877-d1fb-344c-87a9-d153bffd5484
+- alterId: 0
+  cipher: auto
+  name: 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_f7e5
+  port: 30812
+  server: v12.hdacd.com
+  servername: t.me%252Fripaojiedian
+  skip-cert-verify: false
+  tls: false
+  type: vmess
   udp: true
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_caca
-  server: gw.lydwan.com
-  port: 35606
-  udp: true
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_91f7
-  server: gw.lydwan.com
-  port: 35601
-  udp: true
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_adc2
-  server: gw.lydwan.com
-  port: 35608
-  udp: true
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_3088
-  server: gw.lydwan.com
-  port: 35607
-  udp: true
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_4053
-  server: gw.lydwan.com
-  port: 35604
-  udp: true
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_86bf
-  server: gw.lydwan.com
-  port: 35603
-  udp: true
-  type: ss
-  cipher: chacha20-ietf-poly1305
-  password: dac78ecb-a55f-4727-9c40-01d617aa43c4
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_9219
-  server: sg.lyhycloud.org
-  port: 12002
-  udp: true
-  type: vless
-  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
-  tls: true
-  servername: www.bing.com
+  uuid: cbb3f877-d1fb-344c-87a9-d153bffd5484
+- alterId: 0
+  cipher: auto
+  name: 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_9075
+  network: tcp
+  port: 30812
+  server: v12.hdacd.com
   skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_e828
-  server: sg.lyhycloud.org
-  port: 12002
-  udp: true
-  type: vless
-  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
-  tls: true
-  servername: www.bing.com
+  tls: false
+  type: vmess
+  uuid: cbb3f877-d1fb-344c-87a9-d153bffd5484
+  ws-opts:
+    headers:
+      Host: AZERB.NET
+    path: /?BIA_TELEGRAM@AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1_AZARBAYJAB1
+- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_4b50
+  server: Join.my.Telegram.channel.CMLiussss.to.unlock.more.premium.nodes.cf.090227.xyz
+  port: 443
+  type: trojan
+  password: 1q242455
+  sni: trojan.962048.xyz
+  client-fingerprint: random
   skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_d8e8
-  server: sg.lyhycloud.org
-  port: 12002
-  udp: true
-  type: vless
-  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
-  tls: true
-  servername: www.bing.com
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_d797
-  server: sg.lyhycloud.org
-  port: 12002
-  udp: true
-  type: vless
-  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
-  tls: true
-  servername: www.bing.com
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_68cf
-  server: sg.lyhycloud.org
-  port: 12002
-  udp: true
-  type: vless
-  uuid: dac78ecb-a55f-4727-9c40-01d617aa43c4
-  tls: true
-  servername: www.bing.com
-  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: trojan.962048.xyz
 - name: 🌐 未知地区 打倒美帝国主义及其一切走狗_7f18
   server: Join.my.Telegram.channel.CMLiussss.to.unlock.more.premium.nodes.cf.090227.xyz
   port: 443
@@ -1873,334 +3670,636 @@ proxies:
     path: /
     headers:
       Host: edt2-lgy.pages.dev
+- alterId: 0
+  cipher: auto
+  name: 🇲🇾 马来西亚 打倒美帝国主义及其一切走狗_ef95
+  network: tcp
+  port: 30830
+  server: v30.hdacd.com
+  skip-cert-verify: true
+  tls: false
+  type: vmess
+  uuid: cbb3f877-d1fb-344c-87a9-d153bffd5484
+  ws-opts:
+    headers:
+      Host: v30.hdacd.com
+    path: /
 proxy-groups:
 - name: 🔰 节点选择
   type: select
   proxies:
   - 🚀 自动测速
   - DIRECT
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_93d5
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5d2c
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_0ac5
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_f303
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_aa7e
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_cfeb
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8879
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9e9b
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9a9c
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_4ddc
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5e61
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_5bd4
-  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_8e36
-  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_1dbb
-  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_cc4a
-  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_101c
-  - 🇦🇺 澳大利亚 打倒美帝国主义及其一切走狗_3485
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_4a8d
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_20f3
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_bd4f
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_a46e
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_f5c8
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5e8e
-  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_05c0
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_798a
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5b0a
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_fede
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_2609
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_27fa
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_8cba
-  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_0f74
-  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_0e1c
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8fa6
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3ccc
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_acdc
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_2e26
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8a7d
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_54f7
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_07e0
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_ca7b
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_3d0c
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_3102
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_db80
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_08b6
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_c0cb
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_fcab
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2275
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_3b2e
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6f9c
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_34ee
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_09e7
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6d65
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_f61c
-  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_7f48
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_ac32
-  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_425c
-  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_6a4f
-  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_2b70
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_824f
-  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_293e
-  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_ec0a
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6fb3
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0334
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_0d13
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_a02f
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_eac7
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8e3a
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3da3
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_0007
-  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_a879
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fe21
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_6bdf
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_2da0
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_d8d7
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_610a
   - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8147
-  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_ad84
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_0890
-  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_f0e4
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_a525
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_cf3c
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_b18f
-  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_8cc3
-  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_aecc
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_bc28
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_6d3a
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_44ad
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_fbad
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9cf7
-  - 🇵🇱 波兰 打倒美帝国主义及其一切走狗_4ae7
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_05c1
-  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_2c1a
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_41eb
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_7b5e
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5c49
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a83
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_d5d1
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0e96
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0830
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_13b8
-  - 🇧🇷 巴西 打倒美帝国主义及其一切走狗_67ab
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_978b
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_b21a
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2700
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_a50d
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_b16c
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_3398
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_710e
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_163a
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_2e26
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_3b9e
+  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_101c
+  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_6a50
+  - 🇻🇳 越南 打倒美帝国主义及其一切走狗_04e6
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5d2c
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_4a18
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_dfa8
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_24dc
+  - 🇨🇦 加拿大 打倒美帝国主义及其一切走狗_e084
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_0359
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5b6f
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_e927
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_d767
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_13b6
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_b7d7
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_d43b
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fc43
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8673
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5aa8
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_f05b
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9bca
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_3fe2
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_0393
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_4334
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_d6cb
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_e4fb
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_ffc5
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_34ee
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6fb3
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_f6c7
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_0ceb
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_7132
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_2f3d
+  - 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_c611
+  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_7f48
+  - 🇦🇹 奥地利 打倒美帝国主义及其一切走狗_7289
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_ee6f
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_a50f
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_eac9
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_2b82
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_a67e
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_0e20
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_0f74
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_3645
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_61af
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_f536
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_b365
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_c5b2
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_02bc
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0e96
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_1cc7
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a83
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3ccc
+  - 🇻🇳 越南 打倒美帝国主义及其一切走狗_c130
+  - 🇹🇷 土耳其 打倒美帝国主义及其一切走狗_7812
+  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_2b70
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_8cba
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_f5e8
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_3398
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_ca7b
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_7651
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_9775
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_0478
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_b282
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_1b69
+  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_293e
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_824f
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_97e6
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_a02f
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_488e
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_f303
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_618e
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_7513
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_bd9c
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_a6a7
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_ca98
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_ee13
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_3183
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_23e1
+  - 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_98a6
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9ea4
+  - 🇷🇺 俄罗斯联邦 打倒美帝国主义及其一切走狗_e1ef
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_cdea
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_3dd4
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_76e3
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_2850
+  - 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_cb48
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_8bc6
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_3b2e
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_08b6
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_f92a
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_1b5f
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_20f3
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_dcd8
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3da3
+  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_9a16
+  - 🇨🇦 加拿大 打倒美帝国主义及其一切走狗_929c
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_fcab
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_da87
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_b894
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_3102
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2275
+  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_77ce
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_aa7e
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_24ec
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_fbad
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_ab3d
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0334
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5bd9
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_47e8
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_b21a
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_c0cb
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_2703
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_24c9
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_710e
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_7139
+  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_df59
+  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_0cc2
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_e1f1
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9cf7
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_68eb
+  - 🇺🇦 乌克兰 打倒美帝国主义及其一切走狗_da41
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_a0d0
+  - 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_4b53
+  - 🇲🇩 摩尔多瓦 打倒美帝国主义及其一切走狗_4f5e
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_a5b0
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_7529
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_54f7
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_b488
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_8f07
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_869c
+  - 🇨🇭 瑞士 打倒美帝国主义及其一切走狗_be1e
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_6bdf
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_fe09
+  - 🇲🇩 摩尔多瓦 打倒美帝国主义及其一切走狗_4803
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_f5f9
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_41e1
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_6b5b
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8260
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_325a
+  - 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_73ed
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_07e0
+  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_207c
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5c49
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_13b8
+  - 🇻🇳 越南 打倒美帝国主义及其一切走狗_8d49
+  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_aa62
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_c7d0
+  - 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_8f20
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_425c
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_0e90
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_f783
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6f80
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_7cd5
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_82d4
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_cb96
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_17d8
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_a46e
+  - 🇧🇷 巴西 打倒美帝国主义及其一切走狗_67ab
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_fede
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_ad4c
+  - 🇪🇸 西班牙 打倒美帝国主义及其一切走狗_2efd
+  - 🇱🇻 拉脱维亚 打倒美帝国主义及其一切走狗_1651
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_4f83
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a3e
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_b765
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_b7c8
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_a3f1
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_acdc
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8879
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_77dc
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8e0f
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_b864
+  - 🇵🇱 波兰 打倒美帝国主义及其一切走狗_3ea8
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_b196
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_386a
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_6f06
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_af37
+  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_aefb
+  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_2323
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_24ed
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_5141
+  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_33df
+  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_fad8
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_cfe5
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3117
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3835
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_d84b
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_2df1
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_31b6
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_72e3
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_c37b
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3717
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_268e
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_59b3
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_c791
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_a43f
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5b66
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_f13d
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_0cdd
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_c659
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fc60
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_61e6
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_4798
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_a415
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_2b34
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5cf9
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_2f1f
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_eac8
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_a525
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8e3a
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_05c1
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_b16c
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_7b5e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9e9b
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_eac7
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_bd4f
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5e8e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9a9c
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fe21
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_b809
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_53da
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_01e8
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_d8d7
   - 🇯🇵 日本 打倒美帝国主义及其一切走狗_d3fa
   - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0c2a
   - 🇯🇵 日本 打倒美帝国主义及其一切走狗_02cc
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_465d
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_5533
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_95b8
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_53da
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_01e8
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_b809
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_fa3d
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_1427
-  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_2a47
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_58a7
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_6ca9
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_f9b9
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_dbbb
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_29ec
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_ac47
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_4bd1
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_0d13
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_798a
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_41eb
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_09e7
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_f61c
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_0393
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_5bd4
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_44ad
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0830
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2700
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_2da0
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_4ddc
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8a7d
+  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_0890
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_e8fc
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_2a47
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_1427
+  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_93d5
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_cc4a
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_f9b9
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_6ca9
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_29ec
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_dbbb
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_58a7
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_bc28
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6f9c
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6d65
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_8dcc
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_12c4
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_b18f
   - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_761e
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_fe90
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_b941
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_ae53
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_9160
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_7dce
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_94ae
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_753f
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_01aa
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_163a
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_d5d1
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8a8d
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_9d94
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0834
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_1d05
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_1d12
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_3662
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_465d
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_95b8
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_5533
+  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_fa3d
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_53b6
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_10ad
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_859d
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_5b21
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_caca
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_91f7
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_adc2
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_3088
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_4053
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_86bf
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_9219
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_e828
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_d8e8
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_753f
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_01aa
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_d797
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_e828
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_68cf
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_9219
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_d8e8
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_91f7
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_86bf
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_3088
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_adc2
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_5b21
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_4053
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_caca
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_7117
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_b941
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_fe90
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_ae53
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_9160
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_58f0
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_39e1
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_94ae
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_7dce
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_2b73
+  - 🇲🇾 马来西亚 打倒美帝国主义及其一切走狗_49e6
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fbaa
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_ba05
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_5285
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_f7e5
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_9075
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_4b50
   - 🌐 未知地区 打倒美帝国主义及其一切走狗_7f18
+  - 🇲🇾 马来西亚 打倒美帝国主义及其一切走狗_ef95
 - name: 🚀 自动测速
   type: url-test
   url: http://www.gstatic.com/generate_204
   interval: 300
   proxies:
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_93d5
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5d2c
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_0ac5
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_f303
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_aa7e
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_cfeb
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8879
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9e9b
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9a9c
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_4ddc
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5e61
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_5bd4
-  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_8e36
-  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_1dbb
-  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_cc4a
-  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_101c
-  - 🇦🇺 澳大利亚 打倒美帝国主义及其一切走狗_3485
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_4a8d
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_20f3
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_bd4f
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_a46e
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_f5c8
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5e8e
-  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_05c0
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_798a
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5b0a
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_fede
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_2609
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_27fa
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_8cba
-  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_0f74
-  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_0e1c
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8fa6
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3ccc
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_acdc
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_2e26
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8a7d
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_54f7
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_07e0
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_ca7b
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_3d0c
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_3102
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_db80
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_08b6
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_c0cb
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_fcab
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2275
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_3b2e
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6f9c
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_34ee
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_09e7
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6d65
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_f61c
-  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_7f48
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_ac32
-  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_425c
-  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_6a4f
-  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_2b70
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_824f
-  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_293e
-  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_ec0a
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6fb3
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0334
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_0d13
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_a02f
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_eac7
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8e3a
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3da3
-  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_0007
-  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_a879
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fe21
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_6bdf
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_2da0
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_d8d7
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_610a
   - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8147
-  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_ad84
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_0890
-  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_f0e4
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_a525
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_cf3c
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_b18f
-  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_8cc3
-  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_aecc
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_bc28
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_6d3a
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_44ad
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_fbad
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9cf7
-  - 🇵🇱 波兰 打倒美帝国主义及其一切走狗_4ae7
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_05c1
-  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_2c1a
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_41eb
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_7b5e
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5c49
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a83
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_d5d1
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0e96
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0830
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_13b8
-  - 🇧🇷 巴西 打倒美帝国主义及其一切走狗_67ab
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_978b
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_b21a
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2700
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_a50d
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_b16c
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_3398
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_710e
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_163a
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_2e26
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_3b9e
+  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_101c
+  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_6a50
+  - 🇻🇳 越南 打倒美帝国主义及其一切走狗_04e6
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5d2c
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_4a18
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_dfa8
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_24dc
+  - 🇨🇦 加拿大 打倒美帝国主义及其一切走狗_e084
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_0359
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5b6f
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_e927
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_d767
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_13b6
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_b7d7
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_d43b
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fc43
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8673
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5aa8
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_f05b
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9bca
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_3fe2
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_0393
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_4334
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_d6cb
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_e4fb
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_ffc5
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_34ee
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6fb3
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_f6c7
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_0ceb
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_7132
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_2f3d
+  - 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_c611
+  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_7f48
+  - 🇦🇹 奥地利 打倒美帝国主义及其一切走狗_7289
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_ee6f
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_a50f
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_eac9
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_2b82
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_a67e
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_0e20
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_0f74
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_3645
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_61af
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_f536
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_b365
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_c5b2
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_02bc
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0e96
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_1cc7
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a83
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3ccc
+  - 🇻🇳 越南 打倒美帝国主义及其一切走狗_c130
+  - 🇹🇷 土耳其 打倒美帝国主义及其一切走狗_7812
+  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_2b70
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_8cba
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_f5e8
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_3398
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_ca7b
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_7651
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_9775
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_0478
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_b282
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_1b69
+  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_293e
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_824f
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_97e6
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_a02f
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_488e
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_f303
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_618e
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_7513
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_bd9c
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_a6a7
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_ca98
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_ee13
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_3183
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_23e1
+  - 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_98a6
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9ea4
+  - 🇷🇺 俄罗斯联邦 打倒美帝国主义及其一切走狗_e1ef
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_cdea
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_3dd4
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_76e3
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_2850
+  - 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_cb48
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_8bc6
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_3b2e
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_08b6
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_f92a
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_1b5f
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_20f3
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_dcd8
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3da3
+  - 🇫🇷 法国 打倒美帝国主义及其一切走狗_9a16
+  - 🇨🇦 加拿大 打倒美帝国主义及其一切走狗_929c
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_fcab
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_da87
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_b894
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_3102
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2275
+  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_77ce
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_aa7e
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_24ec
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_fbad
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_ab3d
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0334
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5bd9
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_47e8
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_b21a
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_c0cb
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_2703
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_24c9
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_710e
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_7139
+  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_df59
+  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_0cc2
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_e1f1
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9cf7
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_68eb
+  - 🇺🇦 乌克兰 打倒美帝国主义及其一切走狗_da41
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_a0d0
+  - 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_4b53
+  - 🇲🇩 摩尔多瓦 打倒美帝国主义及其一切走狗_4f5e
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_a5b0
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_7529
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_54f7
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_b488
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_8f07
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_869c
+  - 🇨🇭 瑞士 打倒美帝国主义及其一切走狗_be1e
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_6bdf
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_fe09
+  - 🇲🇩 摩尔多瓦 打倒美帝国主义及其一切走狗_4803
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_f5f9
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_41e1
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_6b5b
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8260
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_325a
+  - 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_73ed
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_07e0
+  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_207c
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_5c49
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_13b8
+  - 🇻🇳 越南 打倒美帝国主义及其一切走狗_8d49
+  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_aa62
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_c7d0
+  - 🇮🇪 爱尔兰 打倒美帝国主义及其一切走狗_8f20
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_425c
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_0e90
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_f783
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6f80
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_7cd5
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_82d4
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_cb96
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_17d8
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_a46e
+  - 🇧🇷 巴西 打倒美帝国主义及其一切走狗_67ab
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_fede
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_ad4c
+  - 🇪🇸 西班牙 打倒美帝国主义及其一切走狗_2efd
+  - 🇱🇻 拉脱维亚 打倒美帝国主义及其一切走狗_1651
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_4f83
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6a3e
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_b765
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_b7c8
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_a3f1
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_acdc
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8879
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_77dc
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8e0f
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_b864
+  - 🇵🇱 波兰 打倒美帝国主义及其一切走狗_3ea8
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_b196
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_386a
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_6f06
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_af37
+  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_aefb
+  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_2323
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_24ed
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_5141
+  - 🇫🇮 芬兰 打倒美帝国主义及其一切走狗_33df
+  - 🇬🇧 英国 打倒美帝国主义及其一切走狗_fad8
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_cfe5
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3117
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3835
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_d84b
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_2df1
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_31b6
+  - 🇩🇪 德国 打倒美帝国主义及其一切走狗_72e3
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_c37b
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_3717
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_268e
+  - 🇳🇱 荷兰 打倒美帝国主义及其一切走狗_59b3
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_c791
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_a43f
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5b66
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_f13d
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_0cdd
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_c659
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fc60
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_61e6
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_4798
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_a415
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_2b34
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5cf9
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_2f1f
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_eac8
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_a525
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8e3a
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_05c1
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_b16c
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_7b5e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9e9b
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_eac7
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_bd4f
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_5e8e
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9a9c
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fe21
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_b809
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_53da
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_01e8
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_d8d7
   - 🇯🇵 日本 打倒美帝国主义及其一切走狗_d3fa
   - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0c2a
   - 🇯🇵 日本 打倒美帝国主义及其一切走狗_02cc
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_465d
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_5533
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_95b8
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_53da
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_01e8
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_b809
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_fa3d
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_1427
-  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_2a47
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_58a7
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_6ca9
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_f9b9
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_dbbb
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_29ec
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_ac47
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_4bd1
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_0d13
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_798a
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_41eb
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_09e7
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_f61c
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_0393
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_5bd4
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_44ad
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0830
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2700
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_2da0
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_4ddc
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8a7d
+  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_0890
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_e8fc
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_2a47
+  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_1427
+  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_93d5
+  - 🇰🇷 韩国 打倒美帝国主义及其一切走狗_cc4a
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_f9b9
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_6ca9
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_29ec
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_dbbb
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_58a7
+  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_bc28
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6f9c
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6d65
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_8dcc
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_12c4
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_b18f
   - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_761e
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_fe90
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_b941
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_ae53
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_9160
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_7dce
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_94ae
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_753f
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_01aa
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_163a
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_d5d1
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_8a8d
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_9d94
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0834
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_1d05
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_1d12
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_3662
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_465d
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_95b8
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_5533
+  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_fa3d
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_53b6
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_10ad
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_859d
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_5b21
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_caca
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_91f7
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_adc2
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_3088
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_4053
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_86bf
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_9219
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_e828
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_d8e8
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_753f
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_01aa
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_d797
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_e828
   - 🇭🇰 香港 打倒美帝国主义及其一切走狗_68cf
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_9219
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_d8e8
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_91f7
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_86bf
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_3088
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_adc2
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_5b21
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_4053
+  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_caca
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_7117
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_b941
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_fe90
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_ae53
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_9160
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_58f0
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_39e1
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_94ae
+  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_7dce
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_2b73
+  - 🇲🇾 马来西亚 打倒美帝国主义及其一切走狗_49e6
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_fbaa
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_ba05
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_5285
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_f7e5
+  - 🇮🇩 印度尼西亚 打倒美帝国主义及其一切走狗_9075
+  - 🌐 未知地区 打倒美帝国主义及其一切走狗_4b50
   - 🌐 未知地区 打倒美帝国主义及其一切走狗_7f18
+  - 🇲🇾 马来西亚 打倒美帝国主义及其一切走狗_ef95
 rules:
 - MATCH,🔰 节点选择
