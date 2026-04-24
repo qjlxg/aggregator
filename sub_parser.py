@@ -1,8 +1,10 @@
 import os, requests, base64, re, socket, maxminddb, concurrent.futures, json, yaml, hashlib, time, functools
 from urllib.parse import urlparse, unquote, quote
 from datetime import datetime
-# 插入逻辑：导入 urllib3 并在全局禁用安全警告
+# 插入逻辑：导入 urllib3 用于禁用安全警告
 import urllib3
+
+# 插入逻辑：禁用 InsecureRequestWarning 警告
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # ================= 配置区 =================
@@ -34,7 +36,7 @@ def decode_base64(data):
     if not data: return ""
     try:
         data = data.replace("-", "+").replace("_", "/").strip()
-        # 插入逻辑：清洗掉可能存在的非 Base64 字符（如网页杂质）
+        # 插入逻辑：清洗掉可能干扰解码的非法字符
         data = re.sub(r'[^a-zA-Z0-9+/=]', '', data)
         missing_padding = len(data) % 4
         if missing_padding: data += '=' * (4 - missing_padding)
@@ -145,23 +147,24 @@ def parse_uri_to_clash(uri):
 def fetch_source(url):
     try:
         headers = {'User-Agent': 'ClashMeta/1.16.0 v2rayN/6.23'}
-        # 插入逻辑：增加 verify=False 忽略证书安全警告
-        resp = requests.get(url, headers=headers, timeout=5, verify=False)
+        # 插入逻辑：添加 verify=False 并增加超时容错
+        resp = requests.get(url, headers=headers, timeout=10, verify=False)
         if resp.status_code != 200: return []
         content = resp.text.strip()
         
-        # 插入逻辑：即便存在 :// 也要尝试解码，处理那种“整体内容是 Base64”的情况
+        # 插入逻辑：并发尝试。合并原始内容和解码后的内容，确保覆盖混合源
         decoded = decode_base64(content)
-        all_content = content + "\n" + (decoded if decoded else "")
-        
-        if "proxies:" in all_content or ("port:" in all_content and "mode:" in all_content):
+        combined_content = content + "\n" + decoded
+
+        if "proxies:" in combined_content or ("port:" in combined_content and "mode:" in combined_content):
             try:
-                data = yaml.safe_load(all_content)
+                data = yaml.safe_load(combined_content)
                 if isinstance(data, dict) and 'proxies' in data: return data['proxies']
             except: pass
-            
+        
+        # 使用正则提取所有可能的 URI
         pattern = r'(?:anytls|vmess|vless|ss|ssr|trojan|hysteria2|hy2|tuic|socks)://[^\s\'"<>]+'
-        return re.findall(pattern, all_content, re.IGNORECASE)
+        return re.findall(pattern, combined_content, re.IGNORECASE)
     except: return []
 
 def process_node_full(item, reader):
