@@ -1,6 +1,11 @@
 import os, requests, base64, re, socket, maxminddb, concurrent.futures, json, yaml, hashlib, time, functools
 from urllib.parse import urlparse, unquote, quote
 from datetime import datetime
+# 插入逻辑：导入 urllib3 用于禁用安全警告
+import urllib3
+
+# 插入逻辑：禁用 InsecureRequestWarning 警告
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # ================= 配置区 =================
 CLASH_BASE_CONFIG = {
@@ -140,7 +145,8 @@ def parse_uri_to_clash(uri):
 def fetch_source(url):
     try:
         headers = {'User-Agent': 'ClashMeta/1.16.0 v2rayN/6.23'}
-        resp = requests.get(url, headers=headers, timeout=5)
+        # 插入逻辑：添加 verify=False 跳过 SSL 证书校验
+        resp = requests.get(url, headers=headers, timeout=5, verify=False)
         if resp.status_code != 200: return []
         content = resp.text.strip()
         if "proxies:" in content or ("port:" in content and "mode:" in content):
