@@ -89,9 +89,7 @@ def parse_nodes(content, reader):
     nodes = []
     for link in found_links:
         protocol = link.split("://")[0].lower()
-        
-        # --- 核心过滤：不把订阅地址 URL 当作节点输出 ---
-        # 如果是 http(s) 协议，且文件名包含 sub/parser/config 等订阅关键字，或者是你那个特定的隐藏地址，则跳过输出
+    
         if protocol in ['http', 'https']:
             if any(k in link.lower() for k in ['github', 'raw', 'txt', 'sub', '.php', '.yaml']):
                 continue
