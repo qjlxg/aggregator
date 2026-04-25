@@ -68,20 +68,24 @@ def get_node_details(line, protocol):
         return {"server": host, "port": int(u.port or 443)}
     except: return None
 
-def parse_nodes(content, reader):
-    # 扩展了更全面的协议列表，确保 vless, hy2, hysteria2, tuic 等都能识别
+def parse_nodes(content, reader, exclude_http=False):
+    # 完整协议列表
     protocols = [
         'vmess', 'vless', 'trojan', 'ss', 'ssr', 'hysteria2', 'hy2', 
         'tuic', 'juicity', 'snell', 'socks', 'http', 'https', 'shadowsocks'
     ]
-    # 改进正则，防止解析带端口和复杂参数的链接时截断
-    pattern = r'(?:' + '|'.join(protocols) + r')://[^\s\"\'<>#\\]+(?:#[^\s\"\'<>\\]*)?'
     
-    # 尝试直接解析
+    # 如果 exclude_http 为 True，则从匹配协议中移除 http 和 https
+    # 这样在解析 LINK 变量时，就不会把你的订阅 URL 当做节点抓出来
+    current_protocols = protocols
+    if exclude_http:
+        current_protocols = [p for p in protocols if p not in ['http', 'https']]
+
+    pattern = r'(?:' + '|'.join(current_protocols) + r')://[^\s\"\'<>#\\]+(?:#[^\s\"\'<>\\]*)?'
+    
     found_links = re.findall(pattern, content, re.IGNORECASE)
     
-    # 如果内容是纯 Base64（如订阅返回体），则解码后再解析一次
-    if not found_links:
+    if not found_links and not exclude_http:
         decoded = decode_base64(content)
         if decoded:
             found_links = re.findall(pattern, decoded, re.IGNORECASE)
@@ -90,13 +94,10 @@ def parse_nodes(content, reader):
     for link in found_links:
         protocol = link.split("://")[0].lower()
         try:
-            # 提取 Host 进行过滤和 GeoIP 查询
             if protocol == 'vmess':
-                raw_v = link.split("://")[1]
-                v_data = json.loads(decode_base64(raw_v))
+                v_data = json.loads(decode_base64(link.split("://")[1]))
                 host = v_data.get('add')
             else:
-                # 兼容带 @ 的各种协议格式
                 match = re.search(r'@([^:/#?]+)', link)
                 host = match.group(1).split(':')[0] if match else urlparse(link).hostname
             
@@ -112,9 +113,9 @@ async def fetch_with_retry(session, url, reader, semaphore):
             try:
                 async with session.get(url, timeout=15, ssl=False) as res:
                     if res.status != 200: continue
-                    # 订阅地址可能返回 Base64 文本
                     text = await res.text()
-                    nodes = parse_nodes(text, reader)
+                    # 抓取回来的内容如果是 Base64，在这里会进行解码解析，所以这里不能排除 http 节点（防止嵌套订阅）
+                    nodes = parse_nodes(text, reader, exclude_http=False)
                     if nodes: return url, nodes, len(nodes)
             except: pass
         return url, [], 0
@@ -132,15 +133,15 @@ async def main():
     if os.path.exists(GEOIP_DB):
         reader = geoip2.database.Reader(GEOIP_DB)
 
-    # 第一步：解析 LINK 变量
-    # 1. 识别并提取所有的 HTTP/HTTPS 订阅地址
+    # --- 修正逻辑开始 ---
+    # 1. 提取变量中的 URL 用于后续抓取
     urls_in_env = re.findall(r'https?://[^\s,]+', link_env)
     links_to_fetch.extend(urls_in_env)
     
-    # 2. 直接提取 LINK 变量中粘贴的明文节点（不影响后续抓取）
-    raw_node_objs.extend(parse_nodes(link_env, reader))
+    # 2. 解析变量中的明文节点，但排除 http/https 协议头，防止订阅地址被当成节点输出
+    raw_node_objs.extend(parse_nodes(link_env, reader, exclude_http=True))
+    # --- 修正逻辑结束 ---
 
-    # 第二步：抓取远程地址
     if links_to_fetch:
         semaphore = asyncio.Semaphore(MAX_CONCURRENT_TASKS)
         async with aiohttp.ClientSession(headers={'User-Agent': 'v2rayN/6.23'}) as session:
@@ -152,14 +153,9 @@ async def main():
     final_uris = []
     clash_proxies = []
     
-    # 第三步：处理节点输出（完全不去重）
     for i, obj in enumerate(raw_node_objs):
         line, protocol, flag, country = obj["line"], obj["protocol"], obj["flag"], obj["country"]
-        
-        # 移除原有的备注名，准备重新命名
         base_link = line.split('#')[0] if protocol != 'vmess' else line
-
-        # 生成唯一 ID 防止 Clash 配置文件因重名冲突
         short_id = get_md5_short(f"{line}_{i}_{datetime.now().timestamp()}")
         new_name = f"{flag} {country} {short_id}"
         
@@ -174,10 +170,8 @@ async def main():
                 new_rem = encode_base64(new_name).replace('=', '').replace('+', '-').replace('/', '_')
                 final_uris.append(f"ssr://{encode_base64(main_part + '&remarks=' + new_rem)}")
             else:
-                # 重新拼接 URI，加入新备注
                 final_uris.append(f"{base_link}#{quote(new_name)}")
 
-            # 构造 Clash 配置项
             d = get_node_details(line, protocol)
             if d:
                 proxy_item = {
@@ -195,10 +189,8 @@ async def main():
     if reader:
         reader.close()
 
-    # 第四步：保存文件
     update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # Clash YAML 格式
     full_config = {
         "port": 7890,
         "mode": "Rule",
@@ -209,11 +201,9 @@ async def main():
         f.write(f'# Last Updated: {update_time}\n# Total Nodes: {len(clash_proxies)}\n\n')
         yaml.safe_dump(full_config, f, allow_unicode=True, sort_keys=False, indent=2)
     
-    # 明文 nodes.txt
     with open(os.path.join(OUTPUT_DIR, 'nodes.txt'), 'w', encoding='utf-8') as f:
         f.write(f"# Updated: {update_time}\n" + "\n".join(final_uris) + "\n")
     
-    # Base64 v2ray.txt 订阅格式
     b64_content = base64.b64encode(("\n".join(final_uris) + "\n").encode('utf-8')).decode('utf-8')
     with open(os.path.join(OUTPUT_DIR, 'v2ray.txt'), 'w', encoding='utf-8') as f:
         f.write(b64_content)
