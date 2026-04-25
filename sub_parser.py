@@ -9,7 +9,7 @@ import json
 import yaml
 import hashlib
 from datetime import datetime
-from urllib.parse import urlparse, quote
+from urllib.parse import urlparse, quote, unquote
 import geoip2.database
 
 OUTPUT_DIR = "data"  
@@ -59,13 +59,29 @@ def get_node_details(line, protocol):
         if protocol == 'vmess':
             v = json.loads(decode_base64(line.split("://")[1]))
             return {"server": v.get('add'), "port": int(v.get('port', 443)), "uuid": v.get('id'), "tls": v.get('tls') == "tls"}
-        match = re.search(r'@([^:/#?]+):(\d+)', line)
-        if match: return {"server": match.group(1), "port": int(match.group(2))}
+        
+        if protocol in ['ssr', 'ss']:
+            body = line.split("://")[1]
+            if protocol == 'ssr':
+                decoded = decode_base64(body)
+                parts = decoded.split(':')
+                return {"server": parts[0], "port": int(parts[1])}
+            else:
+                if "@" in body:
+                    info = body.split('@')[1].split('#')[0].split('?')[0]
+                    return {"server": info.split(':')[0], "port": int(info.split(':')[1])}
+                else:
+                    decoded = decode_base64(body.split('#')[0])
+                    return {"server": decoded.split('@')[1].split(':')[0], "port": int(decoded.split('@')[1].split(':')[1])}
+
         u = urlparse(line)
         host = u.hostname
+        port = u.port
         if not host and "@" in u.netloc:
             host = u.netloc.split("@")[-1].split(":")[0]
-        return {"server": host, "port": int(u.port or 443)}
+            try: port = int(u.netloc.split("@")[-1].split(":")[1])
+            except: port = 443
+        return {"server": host, "port": int(port or 443)}
     except: return None
 
 def parse_nodes(content, reader, is_subscription_body=False):
