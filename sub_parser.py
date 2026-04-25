@@ -22,7 +22,7 @@ MAX_RETRIES = 1
 # --- 排除过滤名单 ---
 BLACKLIST_KEYWORDS = ["ly.ba000.cc", "wocao.su7.me", "jiasu01.vip", "louwangzhiyu", "mojie"]
 
-# --- 工具函数 (保持不变) ---
+# --- 工具函数 ---
 def decode_base64(data):
     if not data: return ""
     try:
@@ -74,10 +74,15 @@ def get_node_details(line, protocol):
 def parse_nodes(content, reader):
     protocols = ['vmess', 'vless', 'trojan', 'ss', 'ssr', 'hysteria2', 'hy2']
     pattern = r'(?:' + '|'.join(protocols) + r')://[^\s\"\'<>#]+(?:#[^\s\"\'<>]*)?'
+    
+    # 首先尝试直接解析内容中的节点
     found_links = re.findall(pattern, content, re.IGNORECASE)
+    
+    # 如果没直接找到节点，且内容看起来像 Base64（订阅文件常用格式），解码后再试一次
     if not found_links:
         decoded = decode_base64(content)
-        found_links = re.findall(pattern, decoded, re.IGNORECASE)
+        if decoded:
+            found_links = re.findall(pattern, decoded, re.IGNORECASE)
     
     nodes = []
     for link in found_links:
@@ -112,34 +117,34 @@ async def main():
     if not os.path.exists(GEOIP_DB):
         print(f"缺失 {GEOIP_DB} 库文件"); return
     
-    if not os.path.exists(OUTPUT_DIR):
-        os.makedirs(OUTPUT_DIR)
+    if not os.path.exists(OUTPUT_DIR): os.makedirs(OUTPUT_DIR)
 
-    # 1. 从环境变量获取输入内容
+    # 1. 获取环境变量
     link_env = os.environ.get('LINK', '').strip()
     if not link_env:
-        print("未检测到环境变量 LINK，请设置后运行。")
+        print("未检测到环境变量 LINK。")
         return
 
-    links_to_fetch = []  # 存储 HTTP 订阅链接
-    raw_node_objs = []   # 存储直接提供的节点
+    raw_node_objs = [] 
+    links_to_fetch = []
 
     with geoip2.database.Reader(GEOIP_DB) as reader:
-        # 解析环境变量内容
-        for line in link_env.split('\n'):
+        # 2. 预处理：解析 LINK 中的 URL 和 直接节点内容
+        lines = link_env.split('\n')
+        for line in lines:
             line = line.strip()
             if not line: continue
-            
+            # 如果是 http 开头的网址，加入待抓取列表
             if line.startswith('http'):
                 links_to_fetch.append(line)
-            elif '://' in line:
-                # 如果是直接的节点字符串，调用 parse_nodes 处理
-                local_nodes = parse_nodes(line, reader)
-                raw_node_objs.extend(local_nodes)
+        
+        # 无论是否有 URL，都把整个 link_env 丢进 parse_nodes 
+        # 这样可以直接提取出变量中粘贴的明文节点或 Base64 节点内容
+        raw_node_objs.extend(parse_nodes(link_env, reader))
 
-        # 2. 处理远程 URL 订阅
+        # 3. 处理远程订阅 URL
         if links_to_fetch:
-            print(f"--- 正在处理 {len(links_to_fetch)} 个订阅源 ---")
+            print(f"--- 正在从 {len(links_to_fetch)} 个订阅源获取节点 ---")
             semaphore = asyncio.Semaphore(MAX_CONCURRENT_TASKS)
             async with aiohttp.ClientSession(headers={'User-Agent': 'v2rayN/6.23'}) as session:
                 tasks = [fetch_with_retry(session, url, reader, semaphore) for url in links_to_fetch]
@@ -148,24 +153,23 @@ async def main():
                     raw_node_objs.extend(nodes)
 
     if not raw_node_objs:
-        print("未发现有效节点。")
+        print("未发现任何有效节点。")
         return
 
-    # --- 节点处理与去重 ---
+    # --- 节点处理（无去重） ---
     final_uris = []
     clash_proxies = []
-    seen_lines = set()
     
-    for obj in raw_node_objs:
+    for index, obj in enumerate(raw_node_objs):
         line, protocol, flag, country = obj["line"], obj["protocol"], obj["flag"], obj["country"]
         base_link = line.split('#')[0] if protocol != 'vmess' else line
-        if base_link in seen_lines: continue
-        seen_lines.add(base_link)
 
-        short_id = get_md5_short(base_link)
-        new_name = f"{flag} {country} 节点_{short_id}"
+        # 使用 index 和 时间戳生成唯一后缀，确保即使节点内容完全一样，在 Clash 配置文件里也不会冲突
+        unique_id = get_md5_short(f"{line}_{index}_{datetime.now().timestamp()}")
+        new_name = f"{flag} {country} {unique_id}"
         
         try:
+            # 更新节点备注名
             if protocol == 'vmess':
                 v_json = json.loads(decode_base64(line.split("://")[1]))
                 v_json['ps'] = new_name
@@ -178,6 +182,7 @@ async def main():
             else:
                 final_uris.append(f"{base_link}#{quote(new_name)}")
 
+            # 转换为 Clash 代理项
             d = get_node_details(line, protocol)
             if d:
                 proxy_item = {
@@ -192,7 +197,7 @@ async def main():
                 clash_proxies.append(proxy_item)
         except: continue
 
-    # --- 保存文件 ---
+    # --- 保存结果 ---
     update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     # Clash YAML
@@ -206,16 +211,16 @@ async def main():
         f.write(f'# Last Updated: {update_time}\n# Total Nodes: {len(clash_proxies)}\n\n')
         yaml.safe_dump(full_config, f, allow_unicode=True, sort_keys=False, indent=2)
     
-    # 明文 Nodes
+    # 明文 nodes.txt
     with open(os.path.join(OUTPUT_DIR, 'nodes.txt'), 'w', encoding='utf-8') as f:
         f.write(f"# Updated: {update_time}\n" + "\n".join(final_uris) + "\n")
     
-    # Base64 V2Ray
+    # Base64 v2ray.txt
     b64_content = base64.b64encode(("\n".join(final_uris) + "\n").encode('utf-8')).decode('utf-8')
     with open(os.path.join(OUTPUT_DIR, 'v2ray.txt'), 'w', encoding='utf-8') as f:
         f.write(b64_content)
 
-    print(f"--- 任务完成！总计节点: {len(final_uris)}，已保存至 {OUTPUT_DIR} ---")
+    print(f"--- 处理完成！节点总数: {len(final_uris)}，已保存至 {OUTPUT_DIR} ---")
 
 if __name__ == "__main__":
     if os.name == 'nt': asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
