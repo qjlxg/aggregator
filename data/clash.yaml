@@ -1,527 +1,535 @@
-# Nodes: 105
-# Update: 2026-04-25 22:05:53
+# Last Updated: 2026-04-25 22:07:57
+# Total Nodes: 105
+
+port: 7890
+mode: Rule
+dns:
+  enable: true
+  nameserver:
+  - 119.29.29.29
+  - 223.5.5.5
 proxies:
-- name: 🇺🇸 美国 | HTTPS_1_cff7
+- name: 🇺🇸 美国 f526
   type: https
   server: raw.githubusercontent.com
   port: 443
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_2_0170
+- name: 🇹🇼 台湾 1eb0
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53401
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_3_2b4c
+- name: 🇹🇼 台湾 4d42
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53402
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_4_49e1
+- name: 🇹🇼 台湾 1a5f
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53403
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_5_1a81
+- name: 🇹🇼 台湾 6227
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53404
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_6_d0e8
+- name: 🇹🇼 台湾 10b3
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53405
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_7_6d35
+- name: 🇹🇼 台湾 58d4
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53406
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_8_0d41
+- name: 🇹🇼 台湾 2e05
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53407
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_9_fa42
+- name: 🇹🇼 台湾 56d5
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53408
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_10_c3fc
+- name: 🇹🇼 台湾 9436
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53409
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_11_a0f3
+- name: 🇹🇼 台湾 196f
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53410
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_12_6301
+- name: 🇹🇼 台湾 45c9
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53411
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_13_2700
+- name: 🇹🇼 台湾 0986
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53412
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_14_6a6c
+- name: 🇹🇼 台湾 e6bc
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53413
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_15_7865
+- name: 🇹🇼 台湾 8e36
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53414
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_16_cbb5
+- name: 🇹🇼 台湾 68cd
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53415
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_17_0a3c
+- name: 🇹🇼 台湾 29db
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53416
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_18_91cb
+- name: 🇹🇼 台湾 ec72
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53417
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_19_ef84
+- name: 🇹🇼 台湾 0b21
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53418
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_20_86bb
+- name: 🇹🇼 台湾 2cb6
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53419
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_21_fc25
+- name: 🇹🇼 台湾 596d
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53420
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_22_0aac
+- name: 🇹🇼 台湾 078e
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
   port: 53421
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_23_c450
+- name: 🇹🇼 台湾 0c34
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
   port: 53422
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_24_a25e
+- name: 🇹🇼 台湾 e116
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
   port: 53423
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_25_af0e
+- name: 🇹🇼 台湾 dea1
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
   port: 53424
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_26_28e5
+- name: 🇹🇼 台湾 9771
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
   port: 53425
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_27_bb6a
+- name: 🇹🇼 台湾 2153
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
   port: 53426
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_28_ba0d
+- name: 🇹🇼 台湾 6133
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
   port: 53427
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_29_6fac
+- name: 🇹🇼 台湾 4995
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
   port: 53428
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_30_fb8d
+- name: 🇹🇼 台湾 9806
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
   port: 53429
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_31_517f
+- name: 🇹🇼 台湾 63d0
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
   port: 53430
   udp: true
-- name: 🇭🇰 香港 | TROJAN_32_be20
+- name: 🇭🇰 香港 7c98
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
   port: 53431
   udp: true
-- name: 🇭🇰 香港 | TROJAN_33_8c7d
+- name: 🇭🇰 香港 7840
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
   port: 53432
   udp: true
-- name: 🇭🇰 香港 | TROJAN_34_2fe3
+- name: 🇭🇰 香港 0604
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
   port: 53433
   udp: true
-- name: 🇭🇰 香港 | TROJAN_35_ddba
+- name: 🇭🇰 香港 aaa1
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
   port: 53434
   udp: true
-- name: 🇭🇰 香港 | TROJAN_36_a5e2
+- name: 🇭🇰 香港 9d5c
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
   port: 53435
   udp: true
-- name: 🇭🇰 香港 | TROJAN_37_49e2
+- name: 🇭🇰 香港 8147
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
   port: 53436
   udp: true
-- name: 🇭🇰 香港 | TROJAN_38_1361
+- name: 🇭🇰 香港 8953
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
   port: 53437
   udp: true
-- name: 🇭🇰 香港 | TROJAN_39_1fdb
+- name: 🇭🇰 香港 49e8
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
   port: 53438
   udp: true
-- name: 🇭🇰 香港 | TROJAN_40_6638
+- name: 🇭🇰 香港 8593
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
   port: 53439
   udp: true
-- name: 🇭🇰 香港 | TROJAN_41_d1cd
+- name: 🇭🇰 香港 468b
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
   port: 53440
   udp: true
-- name: 🇭🇰 香港 | TROJAN_42_cbcc
+- name: 🇹🇼 台湾 7030
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
   port: 53441
   udp: true
-- name: 🇭🇰 香港 | TROJAN_43_2a53
+- name: 🇹🇼 台湾 c879
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
   port: 53442
   udp: true
-- name: 🇭🇰 香港 | TROJAN_44_5d75
+- name: 🇹🇼 台湾 03ca
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
   port: 53443
   udp: true
-- name: 🇭🇰 香港 | TROJAN_45_c16b
+- name: 🇹🇼 台湾 9015
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
   port: 53444
   udp: true
-- name: 🇭🇰 香港 | TROJAN_46_aab2
+- name: 🇹🇼 台湾 abcb
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
   port: 53445
   udp: true
-- name: 🇭🇰 香港 | TROJAN_47_a8f1
+- name: 🇹🇼 台湾 d44d
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
   port: 53446
   udp: true
-- name: 🇭🇰 香港 | TROJAN_48_7151
+- name: 🇹🇼 台湾 e626
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
   port: 53447
   udp: true
-- name: 🇭🇰 香港 | TROJAN_49_e071
+- name: 🇹🇼 台湾 deec
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
   port: 53448
   udp: true
-- name: 🇭🇰 香港 | TROJAN_50_955a
+- name: 🇹🇼 台湾 7021
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
   port: 53449
   udp: true
-- name: 🇭🇰 香港 | TROJAN_51_2572
+- name: 🇹🇼 台湾 f912
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
   port: 53450
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_52_4a41
+- name: 🇹🇼 台湾 9504
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
   port: 53451
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_53_b41d
+- name: 🇹🇼 台湾 b6e2
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
   port: 53452
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_54_7449
+- name: 🇹🇼 台湾 ff25
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
   port: 53453
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_55_15e3
+- name: 🇹🇼 台湾 260b
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
   port: 53454
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_56_0ff8
+- name: 🇹🇼 台湾 2d73
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
   port: 53455
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_57_b6db
+- name: 🇹🇼 台湾 3c6e
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
   port: 53456
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_58_a12d
+- name: 🇹🇼 台湾 4d72
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
   port: 53457
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_59_b25b
+- name: 🇹🇼 台湾 210f
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
   port: 53458
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_60_427e
+- name: 🇹🇼 台湾 681b
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
   port: 53459
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_61_d951
+- name: 🇹🇼 台湾 9456
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
   port: 53460
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_62_b436
+- name: 🇹🇼 台湾 4938
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
   port: 53466
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_63_f785
+- name: 🇹🇼 台湾 36f1
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
   port: 53467
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_64_093a
+- name: 🇹🇼 台湾 5deb
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
   port: 53468
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_65_f238
+- name: 🇹🇼 台湾 c20f
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
   port: 53469
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_66_c164
+- name: 🇹🇼 台湾 8a49
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
   port: 53470
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_67_13dc
+- name: 🇹🇼 台湾 b63b
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmtr.lma1b2.com
   port: 53496
   udp: true
-- name: 🇹🇼 台湾 | TROJAN_68_844b
+- name: 🇹🇼 台湾 6727
   type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmar.lma1b2.com
   port: 53498
   udp: true
-- name: 🇸🇬 新加坡 | HY2_69_08e6
+- name: 🇸🇬 新加坡 cfc1
   type: hysteria2
   server: 1sg001.476579.xyz
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_70_2c28
+- name: 🇸🇬 新加坡 ae21
   type: hysteria2
   server: hkmax02.352343.cc
   port: 8080
   udp: true
-- name: 🇹🇼 台湾 | HY2_71_7bda
+- name: 🇹🇼 台湾 1386
   type: hysteria2
   server: 5gzdx.233235.xyz
   port: 8080
   udp: true
-- name: 🇹🇼 台湾 | HY2_72_a8c0
+- name: 🇹🇼 台湾 6d70
   type: hysteria2
   server: tw60.233235.xyz
   port: 8080
   udp: true
-- name: 🇹🇼 台湾 | HY2_73_54f8
+- name: 🇹🇼 台湾 47e0
   type: hysteria2
   server: tw3.757866.xyz
   port: 8080
   udp: true
-- name: 🇹🇼 台湾 | HY2_74_a949
+- name: 🇹🇼 台湾 e4b3
   type: hysteria2
   server: tw40.453521.xyz
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_75_5f5a
+- name: 🇸🇬 新加坡 ec3f
   type: hysteria2
   server: vsg05.344233.cc
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_76_94f1
+- name: 🇸🇬 新加坡 aa2d
   type: hysteria2
   server: sg03.344233.cc
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_77_9ca9
+- name: 🇸🇬 新加坡 fac0
   type: hysteria2
   server: sg04.352343.cc
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_78_950b
+- name: 🇸🇬 新加坡 3f66
   type: hysteria2
   server: sg05.453521.xyz
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_79_790c
+- name: 🇸🇬 新加坡 294f
   type: hysteria2
   server: sg06.453521.xyz
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_80_764a
+- name: 🇸🇬 新加坡 6cfe
   type: hysteria2
   server: sg07.344233.cc
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_81_f8b7
+- name: 🇸🇬 新加坡 854a
   type: hysteria2
   server: vsg04.344233.cc
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_82_d4b5
+- name: 🇸🇬 新加坡 d18b
   type: hysteria2
   server: sg09.453521.xyz
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_83_055c
+- name: 🇸🇬 新加坡 b121
   type: hysteria2
   server: sg10.352343.cc
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_84_756b
+- name: 🇸🇬 新加坡 0849
   type: hysteria2
   server: sg11.352343.cc
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_85_a593
+- name: 🇸🇬 新加坡 55db
   type: hysteria2
   server: sg12.352343.cc
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_86_38f2
+- name: 🇸🇬 新加坡 4307
   type: hysteria2
   server: sg13.352343.cc
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_87_a5a1
+- name: 🇸🇬 新加坡 543c
   type: hysteria2
   server: sg14.352343.cc
   port: 8080
   udp: true
-- name: 🇸🇬 新加坡 | HY2_88_ac30
+- name: 🇸🇬 新加坡 df7b
   type: hysteria2
   server: sg18.352343.cc
   port: 8080
   udp: true
-- name: 🇭🇰 香港 | HY2_89_b6b9
+- name: 🇭🇰 香港 6f71
   type: hysteria2
   server: hkmax01.376897.xyz
   port: 8080
   udp: true
-- name: 🇭🇰 香港 | HY2_90_1624
+- name: 🇭🇰 香港 c412
   type: hysteria2
   server: hkmax02.344233.cc
   port: 8080
   udp: true
-- name: 🇯🇵 日本 | HY2_91_dfd7
+- name: 🇯🇵 日本 91e2
   type: hysteria2
   server: 1jp003.156786.xyz
   port: 8081
   udp: true
-- name: 🇯🇵 日本 | HY2_92_698f
+- name: 🇯🇵 日本 3175
   type: hysteria2
   server: hyfnjp01.156786.xyz
   port: 8081
   udp: true
-- name: 🇯🇵 日本 | HY2_93_cfb0
+- name: 🇯🇵 日本 3f03
   type: hysteria2
   server: jp03.344233.cc
   port: 8080
   udp: true
-- name: 🇯🇵 日本 | HY2_94_3bb3
+- name: 🇯🇵 日本 05ef
   type: hysteria2
   server: hyfnjp03.352343.cc
   port: 8080
   udp: true
-- name: 🇯🇵 日本 | HY2_95_d7d4
+- name: 🇯🇵 日本 bf4b
   type: hysteria2
   server: hyfnjp04.344233.cc
   port: 8080
   udp: true
-- name: 🇯🇵 日本 | HY2_96_62b6
+- name: 🇯🇵 日本 01f8
   type: hysteria2
   server: hyfnjp07.156786.xyz
   port: 8080
   udp: true
-- name: 🇯🇵 日本 | HY2_97_2b69
+- name: 🇯🇵 日本 6d39
   type: hysteria2
   server: 1jp001.476579.xyz
   port: 8080
   udp: true
-- name: 🇯🇵 日本 | HY2_98_9549
+- name: 🇯🇵 日本 3d71
   type: hysteria2
   server: hyfnjp06.376897.xyz
   port: 8080
   udp: true
-- name: 🇯🇵 日本 | HY2_99_b0bf
+- name: 🇯🇵 日本 463b
   type: hysteria2
   server: 1jp01.352343.cc
   port: 8080
   udp: true
-- name: 🇯🇵 日本 | HY2_100_00f2
+- name: 🇯🇵 日本 a0f9
   type: hysteria2
   server: jp06.476579.xyz
   port: 8080
   udp: true
-- name: 🇯🇵 日本 | HY2_101_d50e
+- name: 🇯🇵 日本 4057
   type: hysteria2
   server: jp07.476579.xyz
   port: 8080
   udp: true
-- name: 🇯🇵 日本 | HY2_102_3263
+- name: 🇯🇵 日本 9b51
   type: hysteria2
   server: jp08.476579.xyz
   port: 8080
   udp: true
-- name: 🌐 未知国家 | HY2_103_1505
+- name: 🌐 未知国家 3dc4
   type: hysteria2
   server: hyfnus01.595780.xyz
   port: 8080
   udp: true
-- name: 🇺🇸 美国 | HY2_104_a771
+- name: 🇺🇸 美国 cbf6
   type: hysteria2
   server: hyfnus02.767887.xyz
   port: 8080
   udp: true
-- name: 🇺🇸 美国 | HY2_105_80d1
+- name: 🇺🇸 美国 04b6
   type: hysteria2
   server: hyfnus04.767887.xyz
   port: 8080
