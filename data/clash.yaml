@@ -1,1149 +1,531 @@
-# Last Updated: 2026-04-25 21:50:39
+# Last Updated: 2026-04-25 22:00:27
 # Total Nodes: 104
 
 port: 7890
-socks-port: 7891
-allow-lan: true
 mode: Rule
-log-level: info
-external-controller: :9090
 dns:
   enable: true
-  enhanced-mode: fake-ip
   nameserver:
   - 119.29.29.29
   - 223.5.5.5
-  fallback:
-  - 8.8.8.8
-  - 8.8.4.4
-  - 1.1.1.1
-  - tls://1.0.0.1:853
-  - tls://dns.google:853
 proxies:
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8d92
-  server: 1sg001.476579.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: 1sg001.476579.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_b7c7
-  server: tw60.233235.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: tw60.233235.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4b12
-  server: tw40.453521.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: tw40.453521.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_3686
-  server: 5gzdx.233235.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: 5gzdx.233235.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_244e
-  server: tw3.757866.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: tw3.757866.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8701
-  server: sg09.453521.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: sg09.453521.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_f2e5
-  server: hkmax01.376897.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: hkmax01.376897.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_d674
-  server: hyfnjp06.376897.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: hyfnjp06.376897.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_506d
-  server: sg04.352343.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: sg04.352343.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_27eb
-  server: sg05.453521.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: sg05.453521.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_433f
-  server: vsg05.344233.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: vsg05.344233.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_27ff
-  server: vsg04.344233.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: vsg04.344233.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_07c7
-  server: sg03.344233.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: sg03.344233.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_13a4
-  server: hyfnus04.767887.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: hyfnus04.767887.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🌐 未知地区 打倒美帝国主义及其一切走狗_9784
-  server: hyfnus01.595780.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: hyfnus01.595780.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_ea23
-  server: sg06.453521.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: sg06.453521.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_2e95
-  server: 1jp003.156786.xyz
-  port: 8081
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: 1jp003.156786.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_a208
-  server: jp07.476579.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: jp07.476579.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_94d0
-  server: sg13.352343.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: sg13.352343.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_5f3f
-  server: hyfnjp01.156786.xyz
-  port: 8081
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: hyfnjp01.156786.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_2a6d
-  server: 1jp001.476579.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: 1jp001.476579.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_6179
-  server: hyfnjp03.352343.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: hyfnjp03.352343.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_bcef
-  server: hyfnjp07.156786.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: hyfnjp07.156786.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_2a26
-  server: jp06.476579.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: jp06.476579.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇺🇸 美国 打倒美帝国主义及其一切走狗_f904
-  server: hyfnus02.767887.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: hyfnus02.767887.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_95b1
-  server: jp08.476579.xyz
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: jp08.476579.xyz
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_4c38
-  server: hkmax02.352343.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: hkmax02.352343.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_b0d3
-  server: sg14.352343.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: sg14.352343.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_704e
-  server: 1jp01.352343.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: 1jp01.352343.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_9dba
-  server: sg18.352343.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: sg18.352343.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_8c6c
-  server: hyfnjp04.344233.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: hyfnjp04.344233.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_edf9
-  server: sg07.344233.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: sg07.344233.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_2b86
-  server: sg10.352343.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: sg10.352343.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇯🇵 日本 打倒美帝国主义及其一切走狗_0c06
-  server: jp03.344233.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: jp03.344233.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_7cb7
-  server: sg12.352343.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: sg12.352343.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_2259
-  server: sg11.352343.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: sg11.352343.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_6abc
-  server: hkmax02.344233.cc
-  port: 8080
-  udp: true
-  type: hysteria2
-  password: 748f9f2b-0b3a-4480-87c4-4bdefa909757
-  sni: hkmax02.344233.cc
-  skip-cert-verify: true
-  obfs: ''
-  obfs-password: ''
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4edf
-  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
-  port: 53442
-  udp: true
+- name: 🇭🇰 香港 节点_7177
   type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_d17a
-  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
-  port: 53443
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_e8b5
-  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
-  port: 53444
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ba65
-  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
-  port: 53447
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_62d6
-  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
-  port: 53446
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_e6ee
-  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
-  port: 53445
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_31fd
-  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
-  port: 53448
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ee6c
-  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
-  port: 53441
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_abe5
-  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
-  port: 53449
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_6c66
-  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
-  port: 53450
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ab88
-  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
-  port: 53423
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_685b
-  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
-  port: 53430
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4920
-  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
-  port: 53422
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ea07
-  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
-  port: 53425
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_bf35
-  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
-  port: 53426
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_fcc7
-  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
-  port: 53429
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_e690
-  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
-  port: 53428
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ace3
-  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
-  port: 53421
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ee41
-  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
-  port: 53427
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_af26
-  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
-  port: 53424
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_a3f7
-  server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
-  port: 53466
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_67d2
-  server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
-  port: 53469
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_35eb
-  server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
-  port: 53468
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4fe6
-  server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
-  port: 53467
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_c39d
-  server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
-  port: 53470
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_7f13
-  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
-  port: 53439
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_3e63
-  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
-  port: 53440
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_7d28
-  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
-  port: 53438
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_d150
-  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
-  port: 53435
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_9e97
-  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
-  port: 53436
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_a8ac
-  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
-  port: 53431
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_5ca5
-  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
-  port: 53437
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_d9aa
-  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
-  port: 53434
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_7e48
-  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
-  port: 53432
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_755b
-  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
-  port: 53433
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_a5f8
-  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
-  port: 53452
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_8b3c
-  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
-  port: 53460
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_341b
-  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
-  port: 53456
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_ada3
-  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
-  port: 53453
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_b793
-  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
-  port: 53455
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_425e
-  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
-  port: 53454
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_f47f
-  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
-  port: 53458
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_05ea
-  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
-  port: 53459
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_bd05
-  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
-  port: 53451
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_8de0
-  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
-  port: 53457
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_9502
-  server: lmnode-ixd2fh5v0uq1v7z-lmar.lma1b2.com
-  port: 53498
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇭🇰 香港 打倒美帝国主义及其一切走狗_7139
-  server: lmnode-ixd2fh5v0uq1v7z-lmtr.lma1b2.com
-  port: 53496
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_fa91
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53420
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_e373
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53406
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_d8fc
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53405
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_f9eb
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53412
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_9617
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53409
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ca2d
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53403
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_7135
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53413
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_cb71
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53416
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_b76e
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53415
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_0dc1
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53402
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_9a26
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53419
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_0358
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53404
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_c4bb
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53411
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_77d3
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53408
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_3e7d
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53414
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_53bd
-  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53407
-  udp: true
-  type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_136c
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53401
   udp: true
+- name: 🇹🇼 台湾 节点_ed4e
   type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_2b84
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
-  port: 53417
+  port: 53402
   udp: true
+- name: 🇹🇼 台湾 节点_f044
   type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ddf7
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53403
+  udp: true
+- name: 🇹🇼 台湾 节点_1057
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53404
+  udp: true
+- name: 🇹🇼 台湾 节点_b1e8
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53405
+  udp: true
+- name: 🇹🇼 台湾 节点_d95e
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53406
+  udp: true
+- name: 🇹🇼 台湾 节点_0377
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53407
+  udp: true
+- name: 🇹🇼 台湾 节点_0600
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53408
+  udp: true
+- name: 🇹🇼 台湾 节点_3b32
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53409
+  udp: true
+- name: 🇹🇼 台湾 节点_143b
+  type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53410
   udp: true
+- name: 🇹🇼 台湾 节点_e2a5
   type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-- name: 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4cc5
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53411
+  udp: true
+- name: 🇹🇼 台湾 节点_764d
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53412
+  udp: true
+- name: 🇹🇼 台湾 节点_7582
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53413
+  udp: true
+- name: 🇹🇼 台湾 节点_3f2b
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53414
+  udp: true
+- name: 🇹🇼 台湾 节点_60bf
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53415
+  udp: true
+- name: 🇹🇼 台湾 节点_2fe8
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53416
+  udp: true
+- name: 🇹🇼 台湾 节点_213d
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53417
+  udp: true
+- name: 🇹🇼 台湾 节点_bb7b
+  type: trojan
   server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
   port: 53418
   udp: true
+- name: 🇹🇼 台湾 节点_f139
   type: trojan
-  password: 78b0b6ca-c827-4dc2-a362-fde350da609a
-  sni: null
-  skip-cert-verify: true
-proxy-groups:
-- name: 🔰 节点选择
-  type: select
-  proxies:
-  - 🚀 自动测速
-  - DIRECT
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8d92
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_b7c7
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4b12
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_3686
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_244e
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8701
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_f2e5
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_d674
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_506d
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_27eb
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_433f
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_27ff
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_07c7
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_13a4
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9784
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_ea23
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2e95
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_a208
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_94d0
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_5f3f
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2a6d
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6179
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_bcef
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2a26
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_f904
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_95b1
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_4c38
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_b0d3
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_704e
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_9dba
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_8c6c
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_edf9
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_2b86
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0c06
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_7cb7
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_2259
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_6abc
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4edf
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_d17a
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_e8b5
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ba65
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_62d6
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_e6ee
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_31fd
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ee6c
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_abe5
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_6c66
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ab88
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_685b
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4920
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ea07
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_bf35
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_fcc7
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_e690
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ace3
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ee41
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_af26
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_a3f7
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_67d2
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_35eb
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4fe6
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_c39d
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_7f13
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_3e63
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_7d28
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_d150
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_9e97
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_a8ac
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_5ca5
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_d9aa
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_7e48
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_755b
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_a5f8
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_8b3c
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_341b
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_ada3
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_b793
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_425e
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_f47f
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_05ea
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_bd05
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_8de0
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_9502
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_7139
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_fa91
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_e373
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_d8fc
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_f9eb
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_9617
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ca2d
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_7135
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_cb71
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_b76e
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_0dc1
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_9a26
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_0358
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_c4bb
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_77d3
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_3e7d
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_53bd
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_136c
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_2b84
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ddf7
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4cc5
-- name: 🚀 自动测速
-  type: url-test
-  url: http://www.gstatic.com/generate_204
-  interval: 300
-  proxies:
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8d92
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_b7c7
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4b12
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_3686
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_244e
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_8701
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_f2e5
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_d674
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_506d
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_27eb
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_433f
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_27ff
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_07c7
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_13a4
-  - 🌐 未知地区 打倒美帝国主义及其一切走狗_9784
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_ea23
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2e95
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_a208
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_94d0
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_5f3f
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2a6d
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_6179
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_bcef
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_2a26
-  - 🇺🇸 美国 打倒美帝国主义及其一切走狗_f904
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_95b1
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_4c38
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_b0d3
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_704e
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_9dba
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_8c6c
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_edf9
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_2b86
-  - 🇯🇵 日本 打倒美帝国主义及其一切走狗_0c06
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_7cb7
-  - 🇸🇬 新加坡 打倒美帝国主义及其一切走狗_2259
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_6abc
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4edf
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_d17a
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_e8b5
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ba65
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_62d6
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_e6ee
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_31fd
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ee6c
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_abe5
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_6c66
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ab88
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_685b
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4920
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ea07
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_bf35
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_fcc7
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_e690
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ace3
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ee41
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_af26
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_a3f7
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_67d2
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_35eb
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4fe6
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_c39d
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_7f13
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_3e63
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_7d28
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_d150
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_9e97
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_a8ac
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_5ca5
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_d9aa
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_7e48
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_755b
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_a5f8
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_8b3c
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_341b
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_ada3
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_b793
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_425e
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_f47f
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_05ea
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_bd05
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_8de0
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_9502
-  - 🇭🇰 香港 打倒美帝国主义及其一切走狗_7139
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_fa91
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_e373
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_d8fc
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_f9eb
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_9617
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ca2d
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_7135
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_cb71
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_b76e
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_0dc1
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_9a26
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_0358
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_c4bb
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_77d3
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_3e7d
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_53bd
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_136c
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_2b84
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_ddf7
-  - 🇹🇼 台湾 打倒美帝国主义及其一切走狗_4cc5
-rules:
-- MATCH,🔰 节点选择
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53419
+  udp: true
+- name: 🇹🇼 台湾 节点_1941
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmhk.lma1b2.com
+  port: 53420
+  udp: true
+- name: 🇹🇼 台湾 节点_792f
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
+  port: 53421
+  udp: true
+- name: 🇹🇼 台湾 节点_b845
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
+  port: 53422
+  udp: true
+- name: 🇹🇼 台湾 节点_d56f
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
+  port: 53423
+  udp: true
+- name: 🇹🇼 台湾 节点_b412
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
+  port: 53424
+  udp: true
+- name: 🇹🇼 台湾 节点_1fa5
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
+  port: 53425
+  udp: true
+- name: 🇹🇼 台湾 节点_9779
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
+  port: 53426
+  udp: true
+- name: 🇹🇼 台湾 节点_455c
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
+  port: 53427
+  udp: true
+- name: 🇹🇼 台湾 节点_1afc
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
+  port: 53428
+  udp: true
+- name: 🇹🇼 台湾 节点_064b
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
+  port: 53429
+  udp: true
+- name: 🇹🇼 台湾 节点_becd
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmtw.lma1b2.com
+  port: 53430
+  udp: true
+- name: 🇭🇰 香港 节点_fd5a
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
+  port: 53431
+  udp: true
+- name: 🇹🇼 台湾 节点_1434
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
+  port: 53432
+  udp: true
+- name: 🇹🇼 台湾 节点_9c71
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
+  port: 53433
+  udp: true
+- name: 🇹🇼 台湾 节点_be6e
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
+  port: 53434
+  udp: true
+- name: 🇹🇼 台湾 节点_ebc5
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
+  port: 53435
+  udp: true
+- name: 🇹🇼 台湾 节点_105e
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
+  port: 53436
+  udp: true
+- name: 🇹🇼 台湾 节点_8135
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
+  port: 53437
+  udp: true
+- name: 🇹🇼 台湾 节点_a498
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
+  port: 53438
+  udp: true
+- name: 🇹🇼 台湾 节点_e8ba
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
+  port: 53439
+  udp: true
+- name: 🇹🇼 台湾 节点_c635
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmsg.lma1b2.com
+  port: 53440
+  udp: true
+- name: 🇭🇰 香港 节点_6854
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
+  port: 53441
+  udp: true
+- name: 🇭🇰 香港 节点_58fb
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
+  port: 53442
+  udp: true
+- name: 🇭🇰 香港 节点_4b90
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
+  port: 53443
+  udp: true
+- name: 🇭🇰 香港 节点_ca5c
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
+  port: 53444
+  udp: true
+- name: 🇭🇰 香港 节点_b269
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
+  port: 53445
+  udp: true
+- name: 🇭🇰 香港 节点_54ab
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
+  port: 53446
+  udp: true
+- name: 🇭🇰 香港 节点_8da6
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
+  port: 53447
+  udp: true
+- name: 🇭🇰 香港 节点_1256
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
+  port: 53448
+  udp: true
+- name: 🇭🇰 香港 节点_2073
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
+  port: 53449
+  udp: true
+- name: 🇭🇰 香港 节点_5457
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmjp.lma1b2.com
+  port: 53450
+  udp: true
+- name: 🇹🇼 台湾 节点_e731
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
+  port: 53451
+  udp: true
+- name: 🇹🇼 台湾 节点_7e10
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
+  port: 53452
+  udp: true
+- name: 🇹🇼 台湾 节点_b60f
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
+  port: 53453
+  udp: true
+- name: 🇹🇼 台湾 节点_f0c5
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
+  port: 53454
+  udp: true
+- name: 🇹🇼 台湾 节点_eb0b
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
+  port: 53455
+  udp: true
+- name: 🇹🇼 台湾 节点_71d9
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
+  port: 53456
+  udp: true
+- name: 🇹🇼 台湾 节点_3be2
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
+  port: 53457
+  udp: true
+- name: 🇹🇼 台湾 节点_63bd
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
+  port: 53458
+  udp: true
+- name: 🇹🇼 台湾 节点_906b
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
+  port: 53459
+  udp: true
+- name: 🇹🇼 台湾 节点_8d3f
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmus.lma1b2.com
+  port: 53460
+  udp: true
+- name: 🇭🇰 香港 节点_e1d7
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
+  port: 53466
+  udp: true
+- name: 🇹🇼 台湾 节点_ebf3
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
+  port: 53467
+  udp: true
+- name: 🇹🇼 台湾 节点_c6ba
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
+  port: 53468
+  udp: true
+- name: 🇹🇼 台湾 节点_2187
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
+  port: 53469
+  udp: true
+- name: 🇹🇼 台湾 节点_f938
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmmy.lma1b2.com
+  port: 53470
+  udp: true
+- name: 🇹🇼 台湾 节点_1cf2
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmtr.lma1b2.com
+  port: 53496
+  udp: true
+- name: 🇭🇰 香港 节点_4e14
+  type: trojan
+  server: lmnode-ixd2fh5v0uq1v7z-lmar.lma1b2.com
+  port: 53498
+  udp: true
+- name: 🇸🇬 新加坡 节点_ad63
+  type: hy2
+  server: 1sg001.476579.xyz
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_a4b6
+  type: hy2
+  server: hkmax02.352343.cc
+  port: 8080
+  udp: true
+- name: 🇹🇼 台湾 节点_73eb
+  type: hy2
+  server: 5gzdx.233235.xyz
+  port: 8080
+  udp: true
+- name: 🇹🇼 台湾 节点_41a0
+  type: hy2
+  server: tw60.233235.xyz
+  port: 8080
+  udp: true
+- name: 🇹🇼 台湾 节点_bc7b
+  type: hy2
+  server: tw3.757866.xyz
+  port: 8080
+  udp: true
+- name: 🇹🇼 台湾 节点_84ac
+  type: hy2
+  server: tw40.453521.xyz
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_33f2
+  type: hy2
+  server: vsg05.344233.cc
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_09f0
+  type: hy2
+  server: sg03.344233.cc
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_4f9f
+  type: hy2
+  server: sg04.352343.cc
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_619a
+  type: hy2
+  server: sg05.453521.xyz
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_f593
+  type: hy2
+  server: sg06.453521.xyz
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_3cb8
+  type: hy2
+  server: sg07.344233.cc
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_75cf
+  type: hy2
+  server: vsg04.344233.cc
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_f421
+  type: hy2
+  server: sg09.453521.xyz
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_66e3
+  type: hy2
+  server: sg10.352343.cc
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_3bd1
+  type: hy2
+  server: sg11.352343.cc
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_b8e2
+  type: hy2
+  server: sg12.352343.cc
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_5384
+  type: hy2
+  server: sg13.352343.cc
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_02df
+  type: hy2
+  server: sg14.352343.cc
+  port: 8080
+  udp: true
+- name: 🇸🇬 新加坡 节点_d0b4
+  type: hy2
+  server: sg18.352343.cc
+  port: 8080
+  udp: true
+- name: 🇭🇰 香港 节点_a4c7
+  type: hy2
+  server: hkmax01.376897.xyz
+  port: 8080
+  udp: true
+- name: 🇭🇰 香港 节点_c1ce
+  type: hy2
+  server: hkmax02.344233.cc
+  port: 8080
+  udp: true
+- name: 🇯🇵 日本 节点_bfbe
+  type: hy2
+  server: 1jp003.156786.xyz
+  port: 8081
+  udp: true
+- name: 🇯🇵 日本 节点_5c2d
+  type: hy2
+  server: hyfnjp01.156786.xyz
+  port: 8081
+  udp: true
+- name: 🇯🇵 日本 节点_8308
+  type: hy2
+  server: jp03.344233.cc
+  port: 8080
+  udp: true
+- name: 🇯🇵 日本 节点_79ce
+  type: hy2
+  server: hyfnjp03.352343.cc
+  port: 8080
+  udp: true
+- name: 🇯🇵 日本 节点_93ec
+  type: hy2
+  server: hyfnjp04.344233.cc
+  port: 8080
+  udp: true
+- name: 🇯🇵 日本 节点_9293
+  type: hy2
+  server: hyfnjp07.156786.xyz
+  port: 8080
+  udp: true
+- name: 🇯🇵 日本 节点_5536
+  type: hy2
+  server: 1jp001.476579.xyz
+  port: 8080
+  udp: true
+- name: 🇯🇵 日本 节点_5d60
+  type: hy2
+  server: hyfnjp06.376897.xyz
+  port: 8080
+  udp: true
+- name: 🇯🇵 日本 节点_5608
+  type: hy2
+  server: 1jp01.352343.cc
+  port: 8080
+  udp: true
+- name: 🇯🇵 日本 节点_0ad1
+  type: hy2
+  server: jp06.476579.xyz
+  port: 8080
+  udp: true
+- name: 🇯🇵 日本 节点_b876
+  type: hy2
+  server: jp07.476579.xyz
+  port: 8080
+  udp: true
+- name: 🇯🇵 日本 节点_60b4
+  type: hy2
+  server: jp08.476579.xyz
+  port: 8080
+  udp: true
+- name: 🌐 未知国家 节点_4dda
+  type: hy2
+  server: hyfnus01.595780.xyz
+  port: 8080
+  udp: true
+- name: 🇺🇸 美国 节点_e7ec
+  type: hy2
+  server: hyfnus02.767887.xyz
+  port: 8080
+  udp: true
+- name: 🇺🇸 美国 节点_75e4
+  type: hy2
+  server: hyfnus04.767887.xyz
+  port: 8080
+  udp: true
