@@ -12,6 +12,7 @@ from datetime import datetime
 from urllib.parse import urlparse, quote
 import geoip2.database
 
+# --- 基础配置 ---
 OUTPUT_DIR = "data"  
 GEOIP_DB = "GeoLite2-Country.mmdb" 
 
@@ -68,24 +69,19 @@ def get_node_details(line, protocol):
         return {"server": host, "port": int(u.port or 443)}
     except: return None
 
-def parse_nodes(content, reader, exclude_http=False):
-    # 完整协议列表
+def parse_nodes(content, reader):
+    # 完整的协议支持列表
     protocols = [
         'vmess', 'vless', 'trojan', 'ss', 'ssr', 'hysteria2', 'hy2', 
         'tuic', 'juicity', 'snell', 'socks', 'http', 'https', 'shadowsocks'
     ]
-    
-    # 如果 exclude_http 为 True，则从匹配协议中移除 http 和 https
-    # 这样在解析 LINK 变量时，就不会把你的订阅 URL 当做节点抓出来
-    current_protocols = protocols
-    if exclude_http:
-        current_protocols = [p for p in protocols if p not in ['http', 'https']]
-
-    pattern = r'(?:' + '|'.join(current_protocols) + r')://[^\s\"\'<>#\\]+(?:#[^\s\"\'<>\\]*)?'
+    # 优化正则，确保包含所有复杂参数
+    pattern = r'(?:' + '|'.join(protocols) + r')://[^\s\"\'<>#\\]+(?:#[^\s\"\'<>\\]*)?'
     
     found_links = re.findall(pattern, content, re.IGNORECASE)
     
-    if not found_links and not exclude_http:
+    # 如果没有找到节点，尝试对整个内容进行一次 base64 解码再找
+    if not found_links:
         decoded = decode_base64(content)
         if decoded:
             found_links = re.findall(pattern, decoded, re.IGNORECASE)
@@ -93,6 +89,13 @@ def parse_nodes(content, reader, exclude_http=False):
     nodes = []
     for link in found_links:
         protocol = link.split("://")[0].lower()
+        
+        # --- 核心过滤：不把订阅地址 URL 当作节点输出 ---
+        # 如果是 http(s) 协议，且文件名包含 sub/parser/config 等订阅关键字，或者是你那个特定的隐藏地址，则跳过输出
+        if protocol in ['http', 'https']:
+            if any(k in link.lower() for k in ['github', 'raw', 'txt', 'sub', '.php', '.yaml']):
+                continue
+
         try:
             if protocol == 'vmess':
                 v_data = json.loads(decode_base64(link.split("://")[1]))
@@ -114,8 +117,8 @@ async def fetch_with_retry(session, url, reader, semaphore):
                 async with session.get(url, timeout=15, ssl=False) as res:
                     if res.status != 200: continue
                     text = await res.text()
-                    # 抓取回来的内容如果是 Base64，在这里会进行解码解析，所以这里不能排除 http 节点（防止嵌套订阅）
-                    nodes = parse_nodes(text, reader, exclude_http=False)
+                    # 抓取回来的内容（可能是 base64）进行全量解析
+                    nodes = parse_nodes(text, reader)
                     if nodes: return url, nodes, len(nodes)
             except: pass
         return url, [], 0
@@ -133,26 +136,32 @@ async def main():
     if os.path.exists(GEOIP_DB):
         reader = geoip2.database.Reader(GEOIP_DB)
 
-    # --- 修正逻辑开始 ---
-    # 1. 提取变量中的 URL 用于后续抓取
-    urls_in_env = re.findall(r'https?://[^\s,]+', link_env)
-    links_to_fetch.extend(urls_in_env)
-    
-    # 2. 解析变量中的明文节点，但排除 http/https 协议头，防止订阅地址被当成节点输出
-    raw_node_objs.extend(parse_nodes(link_env, reader, exclude_http=True))
-    # --- 修正逻辑结束 ---
+    # --- 改进的解析逻辑：确保节点一个不丢 ---
+    # 1. 将 LINK 内容按常见分隔符切分，确保每一个 URL 或 节点 都能独立被识别
+    parts = re.split(r'[\s,\n\r]+', link_env)
+    for part in parts:
+        part = part.strip()
+        if not part: continue
+        if part.startswith('http'):
+            links_to_fetch.append(part)
+        else:
+            # 解析明文节点
+            raw_node_objs.extend(parse_nodes(part, reader))
 
+    # 2. 抓取远程订阅
     if links_to_fetch:
+        print(f"检测到 {len(links_to_fetch)} 个订阅地址，正在抓取...")
         semaphore = asyncio.Semaphore(MAX_CONCURRENT_TASKS)
         async with aiohttp.ClientSession(headers={'User-Agent': 'v2rayN/6.23'}) as session:
             tasks = [fetch_with_retry(session, url, reader, semaphore) for url in links_to_fetch]
             results = await asyncio.gather(*tasks)
-            for url, nodes, count in results:
+            for _, nodes, _ in results:
                 raw_node_objs.extend(nodes)
 
     final_uris = []
     clash_proxies = []
     
+    # 3. 处理转换（不去重）
     for i, obj in enumerate(raw_node_objs):
         line, protocol, flag, country = obj["line"], obj["protocol"], obj["flag"], obj["country"]
         base_link = line.split('#')[0] if protocol != 'vmess' else line
@@ -186,20 +195,12 @@ async def main():
                 clash_proxies.append(proxy_item)
         except: continue
 
-    if reader:
-        reader.close()
+    if reader: reader.close()
 
+    # 4. 保存
     update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    full_config = {
-        "port": 7890,
-        "mode": "Rule",
-        "dns": {"enable": True, "nameserver": ["119.29.29.29", "223.5.5.5"]},
-        "proxies": clash_proxies
-    }
     with open(os.path.join(OUTPUT_DIR, 'clash.yaml'), 'w', encoding='utf-8') as f:
-        f.write(f'# Last Updated: {update_time}\n# Total Nodes: {len(clash_proxies)}\n\n')
-        yaml.safe_dump(full_config, f, allow_unicode=True, sort_keys=False, indent=2)
+        yaml.safe_dump({"proxies": clash_proxies}, f, allow_unicode=True, sort_keys=False, indent=2)
     
     with open(os.path.join(OUTPUT_DIR, 'nodes.txt'), 'w', encoding='utf-8') as f:
         f.write(f"# Updated: {update_time}\n" + "\n".join(final_uris) + "\n")
@@ -208,7 +209,7 @@ async def main():
     with open(os.path.join(OUTPUT_DIR, 'v2ray.txt'), 'w', encoding='utf-8') as f:
         f.write(b64_content)
 
-    print(f"任务完成！成功提取并转换节点总数: {len(final_uris)}")
+    print(f"任务完成！总共解析到节点: {len(final_uris)}")
 
 if __name__ == "__main__":
     if os.name == 'nt': asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
