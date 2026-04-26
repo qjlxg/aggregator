@@ -9,7 +9,7 @@ import geoip2.database
 import socket
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs, unquote
-from concurrent.futures import ThreadPoolExecutor  # 引入并发库
+from concurrent.futures import ThreadPoolExecutor 
 
 # 配置
 LINK = os.environ.get('LINK', '')
@@ -20,8 +20,22 @@ GEOIP_DB_PATH = "GeoLite2-Country.mmdb"
 if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
 
-# 全局 DNS 缓存，避免重复解析同一域名导致卡死
+
 DNS_CACHE = {}
+
+def mask_url(url):
+
+    try:
+        parsed = urlparse(url)
+        host = parsed.netloc
+        if not host:
+            return "***"
+   
+        if len(host) > 4:
+            return f"{host[:2]}***{host[-4:]}"
+        return "***"
+    except:
+        return "***"
 
 def get_country_flag(host, reader):
     try:
@@ -46,7 +60,7 @@ def get_country_flag(host, reader):
         if code:
             return "".join(chr(127397 + ord(c)) for c in code.upper())
         return "🏳️"
-    except Exception as e:
+    except Exception:
         return "🏳️"
 
 def get_md5(content):
@@ -72,7 +86,7 @@ def fetch_content(url):
     if not url: return ""
     try:
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-        # 针对并发，缩短超时到 10 秒更合理
+        # 针对并发，缩短超时
         resp = requests.get(url, headers=headers, timeout=10)
         text = resp.text.strip()
         if "://" not in text and "proxies:" not in text:
@@ -80,7 +94,8 @@ def fetch_content(url):
             if "://" in decoded: return decoded
         return text
     except Exception as e:
-        print(f"Fetch Content Error ({url}): {e}")
+      
+        print(f"Fetch Content Error for [{mask_url(url)}]: Connection Failed")
         return ""
 
 def parse_and_rename():
@@ -107,7 +122,7 @@ def parse_and_rename():
         if not raw_data: continue
 
         current_nodes = []
-        # --- 识别 YAML 格式 ---
+       
         if "proxies:" in raw_data:
             try:
                 y_data = yaml.safe_load(raw_data)
@@ -117,12 +132,12 @@ def parse_and_rename():
             except Exception as e:
                 print(f"YAML Parse Error: {e}")
         
-        # --- 识别 URI 格式 ---
+      
         uris = extract_nodes(raw_data)
         for u in uris:
             current_nodes.append(('uri', u))
 
-        # --- 处理并重命名 ---
+        
         for node_type, data in current_nodes:
             try:
                 proxy_info = {}
@@ -193,7 +208,7 @@ def parse_and_rename():
 
                 if not host: continue
                 
-                # --- 定位与更名 (国旗+MD5) ---
+               
                 index = len(final_uris)
                 flag = get_country_flag(host, reader)
                 md5_tag = get_md5(original_uri + str(index))
@@ -207,7 +222,7 @@ def parse_and_rename():
                 else:
                     final_uris.append(f"{proxy_info['type']}://{host}:{proxy_info['port']}#{new_name}")
 
-            except Exception as e:
+            except Exception:
                 continue
 
     if reader:
