@@ -21,7 +21,7 @@ if not os.path.exists(OUTPUT_DIR):
 
 def download_geoip():
     if not os.path.exists(GEOIP_DB_PATH):
-        print(f"警告: 未找到 {GEOIP_DB_PATH}")
+        print(f"警告: 根目录未找到 {GEOIP_DB_PATH}")
 
 def get_country(host, reader):
     try:
@@ -47,8 +47,9 @@ def safe_base64_decode(s):
         return ""
 
 def extract_nodes(content):
+    # 修改点：使用 (?:...) 非捕获组，确保 findall 返回完整的匹配字符串
     protocols = ['vmess', 'vless', 'trojan', 'ss', 'ssr', 'hysteria2', 'hy2', 'tuic', 'juicity', 'snell', 'socks', 'shadowsocks']
-    pattern = r'(' + '|'.join(protocols) + r')://[^\s\"\'<>]+'
+    pattern = r'(?:' + '|'.join(protocols) + r')://[^\s\"\'<>]+'
     return re.findall(pattern, content, re.IGNORECASE)
 
 def fetch_content(url):
@@ -81,7 +82,7 @@ def parse_and_rename():
     
     for index, uri in enumerate(uris):
         try:
-            # 分离协议和后续内容
+            # 现在 uri 是完整的链接了
             scheme, rest = uri.split('://', 1)
             scheme = scheme.lower()
             
@@ -102,21 +103,31 @@ def parse_and_rename():
                     opt = {"path": v2_data.get('path', '/'), "headers": {"Host": v2_data.get('host', '')}}
                     proxy_info[f"{v2_data['net']}-opts"] = opt
 
-            # --- 2. 其他明文协议解析 (VLESS, Trojan, SS, Hy2) ---
+            # --- 2. VLESS / Trojan / SS 等解析 ---
             else:
-                # 兼容性处理：去除备注部分再解析
+                # 移除备注 # 后面的部分
                 core_part = rest.split('#')[0]
-                # 正则解析格式: uuid@host:port
-                match = re.match(r'^(?P<user>.*)@(?P<host>[^:]+):(?P<port>\d+)', core_part)
-                if not match: continue
                 
+                # 尝试用正则提取 user@host:port
+                # 格式: uuid@ip:port?query
+                match = re.search(r'^(?P<user>.*)@(?P<host>[^:/?]+):(?P<port>\d+)', core_part)
+                if not match:
+                    # 如果匹配不到，可能是某些 SS 链接是 Base64 的
+                    if scheme in ['ss', 'shadowsocks']:
+                        # 尝试解码 ss:// 后面的 base64 内容
+                        decoded_ss = safe_base64_decode(core_part)
+                        if decoded_ss and '@' in decoded_ss:
+                            match = re.search(r'^(?P<user>.*)@(?P<host>[^:]+):(?P<port>\d+)', decoded_ss)
+                    
+                    if not match: continue
+
                 host = match.group('host')
                 port = int(match.group('port'))
                 user = unquote(match.group('user'))
                 
                 proxy_info = {"server": host, "port": port, "udp": True}
                 
-                # 获取查询参数
+                # 提取参数
                 query = {}
                 if '?' in core_part:
                     query = {k: v[0] for k, v in parse_qs(core_part.split('?')[1]).items()}
@@ -128,7 +139,10 @@ def parse_and_rename():
                         "flow": query.get('flow', ''), "servername": query.get('sni', '')
                     })
                     if query.get('type') == 'ws':
-                        proxy_info.update({"network": "ws", "ws-opts": {"path": query.get('path', '/'), "headers": {"Host": query.get('host', '')}}})
+                        proxy_info.update({
+                            "network": "ws", 
+                            "ws-opts": {"path": query.get('path', '/'), "headers": {"Host": query.get('host', '')}}
+                        })
                 
                 elif scheme == 'trojan':
                     proxy_info.update({"type": "trojan", "password": user, "sni": query.get('sni', '')})
@@ -150,10 +164,11 @@ def parse_and_rename():
             
             proxy_info["name"] = new_name
             clash_proxies.append(proxy_info)
-            final_uris.append(f"{uri.split('#')[0]}#{new_name}")
+            # nodes.txt 也要替换备注名
+            base_uri_only = uri.split('#')[0]
+            final_uris.append(f"{base_uri_only}#{new_name}")
 
         except Exception as e:
-            # 打印错误方便在 GitHub Actions 日志中排查
             print(f"解析节点 {index} 失败: {e}")
             continue
 
