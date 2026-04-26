@@ -34,8 +34,8 @@ def get_country(host, reader):
         return "Unknown"
 
 def get_md5(content):
-    # 根据要求改为 3 位
-    return hashlib.md5(content.encode()).hexdigest()[:3]
+    # 根据要求改为 5 位
+    return hashlib.md5(content.encode()).hexdigest()[:5]
 
 def safe_base64_decode(s):
     try:
@@ -92,10 +92,7 @@ def parse_and_rename():
             try:
                 y_data = yaml.safe_load(raw_data)
                 if y_data and 'proxies' in y_data:
-                    # 简单转换：此处由于 YAML 转 URI 非常复杂，通常建议只处理 URI 格式
-                    # 但为了满足需求，我们将 YAML 节点存入待处理列表
                     for p in y_data['proxies']:
-                        # 将简单核心信息存入，后续统一重命名
                         current_nodes.append(('clash_obj', p))
             except: pass
         
@@ -121,7 +118,7 @@ def parse_and_rename():
                         v_data = json.loads(v_json)
                         host = v_data.get('add')
                         proxy_info = {
-                            "type": "vmess", "server": host, "port": int(v_data.get('port', 443)),
+                            "name": "", "type": "vmess", "server": host, "port": int(v_data.get('port', 443)),
                             "uuid": v_data.get('id'), "alterId": int(v_data.get('aid', 0)),
                             "cipher": "auto", "tls": True if v_data.get('tls') == "tls" else False,
                             "network": v_data.get('net', 'tcp'), "servername": v_data.get('sni', ''), "udp": True
@@ -134,8 +131,9 @@ def parse_and_rename():
                         if not match: continue
                         host = match.group('host')
                         user = unquote(match.group('user'))
-                        proxy_info = {"server": host, "port": int(match.group('port')), "udp": True}
-                        query = {k: v[0] for k, v in parse_qs(core.split('?')[1]).items()} if '?' in core else {}
+                        proxy_info = {"name": "", "server": host, "port": int(match.group('port')), "udp": True}
+                        query_part = core.split('?')[1] if '?' in core else ""
+                        query = {k: v[0] for k, v in parse_qs(query_part).items()}
                         
                         if scheme == 'vless':
                             proxy_info.update({"type": "vless", "uuid": user, "tls": True if query.get('security') in ['tls', 'reality'] else False, "flow": query.get('flow', ''), "servername": query.get('sni', '')})
@@ -145,13 +143,13 @@ def parse_and_rename():
                         elif scheme in ['ss', 'shadowsocks']:
                             proxy_info["type"] = "ss"
                             if ':' in user: proxy_info["cipher"], proxy_info["password"] = user.split(':', 1)
+                            else: proxy_info["cipher"], proxy_info["password"] = "auto", user
                         elif scheme in ['hysteria2', 'hy2']:
                             proxy_info.update({"type": "hysteria2", "password": user, "sni": query.get('sni', ''), "alpn": ["h3"]})
                 
                 elif node_type == 'clash_obj':
                     proxy_info = data
                     host = data.get('server')
-                    # 构造一个虚拟 URI 用于 MD5
                     original_uri = f"{data.get('type')}://{host}:{data.get('port')}"
 
                 if not host: continue
@@ -168,7 +166,6 @@ def parse_and_rename():
                 if node_type == 'uri':
                     final_uris.append(f"{data.split('#')[0]}#{new_name}")
                 else:
-                    # YAML 转换回 URI 简化处理，仅供 nodes.txt 展示
                     final_uris.append(f"{proxy_info['type']}://{host}:{proxy_info['port']}#{new_name}")
 
             except: continue
