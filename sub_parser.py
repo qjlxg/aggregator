@@ -9,28 +9,23 @@ import geoip2.database
 import socket
 from datetime import datetime
 from urllib.parse import urlparse, parse_qs, unquote
-from concurrent.futures import ThreadPoolExecutor 
+from concurrent.futures import ThreadPoolExecutor
 
-# 配置
 LINK = os.environ.get('LINK', '')
 OUTPUT_DIR = 'data'
 GEOIP_DB_PATH = "GeoLite2-Country.mmdb"
 
-# 确保输出目录存在
 if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
-
 
 DNS_CACHE = {}
 
 def mask_url(url):
-
     try:
         parsed = urlparse(url)
         host = parsed.netloc
         if not host:
             return "***"
-   
         if len(host) > 4:
             return f"{host[:2]}***{host[-4:]}"
         return "***"
@@ -42,15 +37,12 @@ def get_country_flag(host, reader):
         if not reader:
             return "🏳️"
         
-        # 检查是否已经是 IP 地址
         if re.match(r"^\d{1,3}(\.\d{1,3}){3}$", host):
             ip = host
         else:
-            # 引入缓存逻辑与超时控制
             if host in DNS_CACHE:
                 ip = DNS_CACHE[host]
             else:
-                # 设置全局 socket 超时为 3 秒，防止单个域名解析卡死
                 socket.setdefaulttimeout(3)
                 ip = socket.gethostbyname(host)
                 DNS_CACHE[host] = ip
@@ -86,15 +78,13 @@ def fetch_content(url):
     if not url: return ""
     try:
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-        # 针对并发，缩短超时
         resp = requests.get(url, headers=headers, timeout=10)
         text = resp.text.strip()
         if "://" not in text and "proxies:" not in text:
             decoded = safe_base64_decode(text)
             if "://" in decoded: return decoded
         return text
-    except Exception as e:
-      
+    except Exception:
         print(f"Fetch Content Error for [{mask_url(url)}]: Connection Failed")
         return ""
 
@@ -111,18 +101,14 @@ def parse_and_rename():
     clash_proxies = []
     final_uris = []
 
-    # --- 1. 使用并发线程池下载所有 URL ---
-    # max_workers=20 表示同时下载 20 个链接
     fetched_results = []
     with ThreadPoolExecutor(max_workers=20) as executor:
         fetched_results = list(executor.map(fetch_content, urls))
     
-    # --- 2. 顺序解析下载回来的内容 ---
     for raw_data in fetched_results:
         if not raw_data: continue
 
         current_nodes = []
-       
         if "proxies:" in raw_data:
             try:
                 y_data = yaml.safe_load(raw_data)
@@ -132,12 +118,10 @@ def parse_and_rename():
             except Exception as e:
                 print(f"YAML Parse Error: {e}")
         
-      
         uris = extract_nodes(raw_data)
         for u in uris:
             current_nodes.append(('uri', u))
 
-        
         for node_type, data in current_nodes:
             try:
                 proxy_info = {}
@@ -208,7 +192,6 @@ def parse_and_rename():
 
                 if not host: continue
                 
-               
                 index = len(final_uris)
                 flag = get_country_flag(host, reader)
                 md5_tag = get_md5(original_uri + str(index))
@@ -228,7 +211,6 @@ def parse_and_rename():
     if reader:
         reader.close()
 
-    # --- 写入文件 ---
     update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     proxy_names = [p['name'] for p in clash_proxies]
     
