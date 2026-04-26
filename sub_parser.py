@@ -34,7 +34,8 @@ def get_country(host, reader):
         return "Unknown"
 
 def get_md5(content):
-    return hashlib.md5(content.encode()).hexdigest()[:8]
+    # 根据要求改为 3 位
+    return hashlib.md5(content.encode()).hexdigest()[:3]
 
 def safe_base64_decode(s):
     try:
@@ -47,7 +48,7 @@ def safe_base64_decode(s):
         return ""
 
 def extract_nodes(content):
-    # 修改点：使用 (?:...) 非捕获组，确保 findall 返回完整的匹配字符串
+    # 使用非捕获组确保返回完整 URI
     protocols = ['vmess', 'vless', 'trojan', 'ss', 'ssr', 'hysteria2', 'hy2', 'tuic', 'juicity', 'snell', 'socks', 'shadowsocks']
     pattern = r'(?:' + '|'.join(protocols) + r')://[^\s\"\'<>]+'
     return re.findall(pattern, content, re.IGNORECASE)
@@ -58,7 +59,8 @@ def fetch_content(url):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
         resp = requests.get(url, headers=headers, timeout=15)
         text = resp.text.strip()
-        if "://" not in text:
+        # 自动识别 Base64 列表
+        if "://" not in text and "proxies:" not in text:
             decoded = safe_base64_decode(text)
             if "://" in decoded: return decoded
         return text
@@ -67,10 +69,8 @@ def fetch_content(url):
 
 def parse_and_rename():
     download_geoip()
-    raw_data = fetch_content(LINK)
-    uris = extract_nodes(raw_data)
-    
-    print(f"正则提取到原始 URI 数量: {len(uris)}")
+    # 支持 LINK 中有多个 URL (用空格或逗号分隔)
+    urls = re.split(r'[,\s]+', LINK.strip())
     
     if not os.path.exists(GEOIP_DB_PATH):
         print("缺少数据库文件")
@@ -80,101 +80,102 @@ def parse_and_rename():
     clash_proxies = []
     final_uris = []
     
-    for index, uri in enumerate(uris):
-        try:
-            # 现在 uri 是完整的链接了
-            scheme, rest = uri.split('://', 1)
-            scheme = scheme.lower()
-            
-            proxy_info = {}
-            host = ""
-            
-            # --- 1. VMESS 解析 ---
-            if scheme == 'vmess':
-                v2_data = json.loads(safe_base64_decode(rest))
-                host = v2_data.get('add')
-                proxy_info = {
-                    "type": "vmess", "server": host, "port": int(v2_data.get('port', 443)),
-                    "uuid": v2_data.get('id'), "alterId": int(v2_data.get('aid', 0)),
-                    "cipher": "auto", "tls": True if v2_data.get('tls') == "tls" else False,
-                    "network": v2_data.get('net', 'tcp'), "servername": v2_data.get('sni', ''), "udp": True
-                }
-                if v2_data.get('net') in ['ws', 'grpc']:
-                    opt = {"path": v2_data.get('path', '/'), "headers": {"Host": v2_data.get('host', '')}}
-                    proxy_info[f"{v2_data['net']}-opts"] = opt
+    # 遍历所有 URL
+    for url in urls:
+        if not url: continue
+        raw_data = fetch_content(url)
+        if not raw_data: continue
 
-            # --- 2. VLESS / Trojan / SS 等解析 ---
-            else:
-                # 移除备注 # 后面的部分
-                core_part = rest.split('#')[0]
-                
-                # 尝试用正则提取 user@host:port
-                # 格式: uuid@ip:port?query
-                match = re.search(r'^(?P<user>.*)@(?P<host>[^:/?]+):(?P<port>\d+)', core_part)
-                if not match:
-                    # 如果匹配不到，可能是某些 SS 链接是 Base64 的
-                    if scheme in ['ss', 'shadowsocks']:
-                        # 尝试解码 ss:// 后面的 base64 内容
-                        decoded_ss = safe_base64_decode(core_part)
-                        if decoded_ss and '@' in decoded_ss:
-                            match = re.search(r'^(?P<user>.*)@(?P<host>[^:]+):(?P<port>\d+)', decoded_ss)
+        current_nodes = []
+        # --- 识别 YAML 格式 ---
+        if "proxies:" in raw_data:
+            try:
+                y_data = yaml.safe_load(raw_data)
+                if y_data and 'proxies' in y_data:
+                    # 简单转换：此处由于 YAML 转 URI 非常复杂，通常建议只处理 URI 格式
+                    # 但为了满足需求，我们将 YAML 节点存入待处理列表
+                    for p in y_data['proxies']:
+                        # 将简单核心信息存入，后续统一重命名
+                        current_nodes.append(('clash_obj', p))
+            except: pass
+        
+        # --- 识别 URI 格式 ---
+        uris = extract_nodes(raw_data)
+        for u in uris:
+            current_nodes.append(('uri', u))
+
+        # --- 处理并重命名 ---
+        for node_type, data in current_nodes:
+            try:
+                proxy_info = {}
+                host = ""
+                original_uri = ""
+
+                if node_type == 'uri':
+                    original_uri = data
+                    scheme, rest = data.split('://', 1)
+                    scheme = scheme.lower()
                     
-                    if not match: continue
+                    if scheme == 'vmess':
+                        v_json = safe_base64_decode(rest)
+                        v_data = json.loads(v_json)
+                        host = v_data.get('add')
+                        proxy_info = {
+                            "type": "vmess", "server": host, "port": int(v_data.get('port', 443)),
+                            "uuid": v_data.get('id'), "alterId": int(v_data.get('aid', 0)),
+                            "cipher": "auto", "tls": True if v_data.get('tls') == "tls" else False,
+                            "network": v_data.get('net', 'tcp'), "servername": v_data.get('sni', ''), "udp": True
+                        }
+                        if v_data.get('net') in ['ws', 'grpc']:
+                            proxy_info[f"{v_data['net']}-opts"] = {"path": v_data.get('path', '/'), "headers": {"Host": v_data.get('host', '')}}
+                    else:
+                        core = rest.split('#')[0]
+                        match = re.search(r'^(?P<user>.*)@(?P<host>[^:/?]+):(?P<port>\d+)', core)
+                        if not match: continue
+                        host = match.group('host')
+                        user = unquote(match.group('user'))
+                        proxy_info = {"server": host, "port": int(match.group('port')), "udp": True}
+                        query = {k: v[0] for k, v in parse_qs(core.split('?')[1]).items()} if '?' in core else {}
+                        
+                        if scheme == 'vless':
+                            proxy_info.update({"type": "vless", "uuid": user, "tls": True if query.get('security') in ['tls', 'reality'] else False, "flow": query.get('flow', ''), "servername": query.get('sni', '')})
+                            if query.get('type') == 'ws': proxy_info.update({"network": "ws", "ws-opts": {"path": query.get('path', '/'), "headers": {"Host": query.get('host', '')}}})
+                        elif scheme == 'trojan':
+                            proxy_info.update({"type": "trojan", "password": user, "sni": query.get('sni', '')})
+                        elif scheme in ['ss', 'shadowsocks']:
+                            proxy_info["type"] = "ss"
+                            if ':' in user: proxy_info["cipher"], proxy_info["password"] = user.split(':', 1)
+                        elif scheme in ['hysteria2', 'hy2']:
+                            proxy_info.update({"type": "hysteria2", "password": user, "sni": query.get('sni', ''), "alpn": ["h3"]})
+                
+                elif node_type == 'clash_obj':
+                    proxy_info = data
+                    host = data.get('server')
+                    # 构造一个虚拟 URI 用于 MD5
+                    original_uri = f"{data.get('type')}://{host}:{data.get('port')}"
 
-                host = match.group('host')
-                port = int(match.group('port'))
-                user = unquote(match.group('user'))
+                if not host: continue
                 
-                proxy_info = {"server": host, "port": port, "udp": True}
+                # --- 定位与更名 ---
+                index = len(final_uris)
+                country = get_country(host, reader)
+                md5_tag = get_md5(original_uri + str(index))
+                new_name = f"{country}_{index + 1}_{md5_tag}"
                 
-                # 提取参数
-                query = {}
-                if '?' in core_part:
-                    query = {k: v[0] for k, v in parse_qs(core_part.split('?')[1]).items()}
+                proxy_info["name"] = new_name
+                clash_proxies.append(proxy_info)
+                
+                if node_type == 'uri':
+                    final_uris.append(f"{data.split('#')[0]}#{new_name}")
+                else:
+                    # YAML 转换回 URI 简化处理，仅供 nodes.txt 展示
+                    final_uris.append(f"{proxy_info['type']}://{host}:{proxy_info['port']}#{new_name}")
 
-                if scheme == 'vless':
-                    proxy_info.update({
-                        "type": "vless", "uuid": user, 
-                        "tls": True if query.get('security') in ['tls', 'reality'] else False,
-                        "flow": query.get('flow', ''), "servername": query.get('sni', '')
-                    })
-                    if query.get('type') == 'ws':
-                        proxy_info.update({
-                            "network": "ws", 
-                            "ws-opts": {"path": query.get('path', '/'), "headers": {"Host": query.get('host', '')}}
-                        })
-                
-                elif scheme == 'trojan':
-                    proxy_info.update({"type": "trojan", "password": user, "sni": query.get('sni', '')})
-                
-                elif scheme in ['ss', 'shadowsocks']:
-                    proxy_info["type"] = "ss"
-                    if ':' in user:
-                        proxy_info["cipher"], proxy_info["password"] = user.split(':', 1)
-                
-                elif scheme in ['hysteria2', 'hy2']:
-                    proxy_info.update({"type": "hysteria2", "password": user, "sni": query.get('sni', ''), "alpn": ["h3"]})
-
-            # --- 3. 定位与命名 ---
-            if not host or not proxy_info: continue
-            
-            country = get_country(host, reader)
-            md5_tag = get_md5(uri + str(index))
-            new_name = f"{country}_{index + 1}_{md5_tag}"
-            
-            proxy_info["name"] = new_name
-            clash_proxies.append(proxy_info)
-            # nodes.txt 也要替换备注名
-            base_uri_only = uri.split('#')[0]
-            final_uris.append(f"{base_uri_only}#{new_name}")
-
-        except Exception as e:
-            print(f"解析节点 {index} 失败: {e}")
-            continue
+            except: continue
 
     reader.close()
 
-    # --- 4. 写入文件 ---
+    # --- 写入文件 ---
     update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(os.path.join(OUTPUT_DIR, 'clash.yaml'), 'w', encoding='utf-8') as f:
         yaml.safe_dump({"proxies": clash_proxies}, f, allow_unicode=True, sort_keys=False, indent=2)
@@ -186,7 +187,7 @@ def parse_and_rename():
     with open(os.path.join(OUTPUT_DIR, 'v2ray.txt'), 'w', encoding='utf-8') as f:
         f.write(b64_content)
 
-    print(f"成功！提取节点: {len(final_uris)}")
+    print(f"任务完成！总计提取节点: {len(final_uris)}")
 
 if __name__ == "__main__":
     parse_and_rename()
