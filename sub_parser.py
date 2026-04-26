@@ -38,15 +38,18 @@ def get_country_flag(host, reader):
             else:
                 # 设置全局 socket 超时为 3 秒，防止单个域名解析卡死
                 socket.setdefaulttimeout(3)
-                ip = socket.gethostbyname(host)
-                DNS_CACHE[host] = ip
+                try:
+                    ip = socket.gethostbyname(host)
+                    DNS_CACHE[host] = ip
+                except:
+                    return "🏳️"
         
         response = reader.country(ip)
         code = response.country.iso_code
         if code:
             return "".join(chr(127397 + ord(c)) for c in code.upper())
         return "🏳️"
-    except Exception as e:
+    except Exception:
         return "🏳️"
 
 def get_md5(content):
@@ -59,8 +62,7 @@ def safe_base64_decode(s):
         if missing_padding:
             s += '=' * (4 - missing_padding)
         return base64.b64decode(s).decode('utf-8', errors='ignore')
-    except Exception as e:
-        print(f"Base64 Decode Error: {e}")
+    except Exception:
         return ""
 
 def extract_nodes(content):
@@ -114,8 +116,7 @@ def parse_and_rename():
                 if y_data and 'proxies' in y_data:
                     for p in y_data['proxies']:
                         current_nodes.append(('clash_obj', p))
-            except Exception as e:
-                print(f"YAML Parse Error: {e}")
+            except Exception: pass
         
         # --- 识别 URI 格式 ---
         uris = extract_nodes(raw_data)
@@ -167,6 +168,7 @@ def parse_and_rename():
                             })
                             if query.get('security') == 'reality':
                                 proxy_info['reality-opts'] = {"public-key": query.get('pbk', ''), "short-id": query.get('sid', '')}
+                                if query.get('fp'): proxy_info['client-fingerprint'] = query.get('fp')
                             if query.get('type') == 'ws': 
                                 proxy_info.update({"network": "ws", "ws-opts": {"path": query.get('path', '/'), "headers": {"Host": query.get('host', '')}}})
                         
@@ -181,7 +183,12 @@ def parse_and_rename():
                                 proxy_info["cipher"], proxy_info["password"] = "auto", user
                             if query.get('plugin'):
                                 proxy_info['plugin'] = query.get('plugin').split(';')[0]
-                                proxy_info['plugin-opts'] = {kv.split('=')[0]: kv.split('=')[1] for kv in query.get('plugin').split(';')[1:] if '=' in kv}
+                                plugin_opts = {}
+                                for kv in query.get('plugin').split(';')[1:]:
+                                    if '=' in kv:
+                                        k, v = kv.split('=', 1)
+                                        plugin_opts[k] = v
+                                proxy_info['plugin-opts'] = plugin_opts
                                 
                         elif scheme in ['hysteria2', 'hy2']:
                             proxy_info.update({"type": "hysteria2", "password": user, "sni": query.get('sni', ''), "alpn": ["h3"]})
@@ -207,7 +214,7 @@ def parse_and_rename():
                 else:
                     final_uris.append(f"{proxy_info['type']}://{host}:{proxy_info['port']}#{new_name}")
 
-            except Exception as e:
+            except Exception:
                 continue
 
     if reader:
@@ -217,6 +224,7 @@ def parse_and_rename():
     update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     proxy_names = [p['name'] for p in clash_proxies]
     
+    # 策略组逻辑优化：只有当存在节点时才创建完整的策略组
     clash_full_config = {
         "port": 7890,
         "socks-port": 7891,
@@ -228,7 +236,7 @@ def parse_and_rename():
             {
                 "name": "🚀 节点选择",
                 "type": "select",
-                "proxies": ["⚡ 自动选择", "DIRECT"] + proxy_names
+                "proxies": (["⚡ 自动选择", "DIRECT"] + proxy_names) if proxy_names else ["DIRECT"]
             },
             {
                 "name": "⚡ 自动选择",
@@ -236,7 +244,7 @@ def parse_and_rename():
                 "url": "http://www.gstatic.com/generate_204",
                 "interval": 300,
                 "tolerance": 50,
-                "proxies": proxy_names
+                "proxies": proxy_names if proxy_names else ["DIRECT"]
             }
         ],
         "rules": [
