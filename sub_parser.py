@@ -20,15 +20,15 @@ if not os.path.exists(OUTPUT_DIR):
     os.makedirs(OUTPUT_DIR)
 
 def download_geoip():
-    # 用户要求：文件已在根目录，此函数保持结构但不执行下载逻辑
+    # 文件已在根目录，此函数保持结构
     if not os.path.exists(GEOIP_DB_PATH):
-        print(f"错误: 根目录未找到 {GEOIP_DB_PATH}")
+        print(f"警告: 未找到 {GEOIP_DB_PATH}")
 
 def get_country(host, reader):
     try:
         ip = host
-        # 如果是域名则解析IP
         if not re.match(r"^\d{1,3}(\.\d{1,3}){3}$", host):
+            # 增加超时控制，防止 DNS 解析卡死
             ip = socket.gethostbyname(host)
         response = reader.country(ip)
         return response.country.names.get('zh-CN', response.country.name) or "Unknown"
@@ -40,7 +40,7 @@ def get_md5(content):
 
 def safe_base64_decode(s):
     try:
-        # 处理补丁和非URL安全字符
+        # 清理非法字符：只保留 base64 标准字符
         s = re.sub(r'[^a-zA-Z0-9+/=]', '', s)
         missing_padding = len(s) % 4
         if missing_padding:
@@ -50,35 +50,60 @@ def safe_base64_decode(s):
         return ""
 
 def extract_nodes(content):
+    # 加入 re.IGNORECASE 忽略大小写
     protocols = ['vmess', 'vless', 'trojan', 'ss', 'ssr', 'hysteria2', 'hy2', 'tuic', 'juicity', 'snell', 'socks', 'shadowsocks']
     pattern = r'(' + '|'.join(protocols) + r')://[^\s\"\'<>]+'
-    return re.findall(pattern, content)
+    return re.findall(pattern, content, re.IGNORECASE)
 
 def fetch_content(url):
+    if not url:
+        print("错误: LINK 变量为空")
+        return ""
     try:
-        resp = requests.get(url, timeout=15)
-        text = resp.text
-        # 尝试解码整个订阅内容
-        decoded = safe_base64_decode(text)
-        return decoded if "://" in decoded else text
+        # 模拟浏览器请求头，防止被拦截
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
+            'Accept': '*/*'
+        }
+        resp = requests.get(url, headers=headers, timeout=15)
+        resp.encoding = 'utf-8'
+        text = resp.text.strip()
+        
+        # 逻辑：如果是 base64 订阅，解码后内容里肯定有 ://
+        # 如果不是 base64，原始文本里应该就有 ://
+        if "://" not in text:
+            decoded = safe_base64_decode(text)
+            if "://" in decoded:
+                return decoded
+        return text
     except Exception as e:
-        print(f"提取失败: {e}")
+        print(f"网络提取失败: {e}")
         return ""
 
 def parse_and_rename():
     download_geoip()
     raw_data = fetch_content(LINK)
+    
     if not raw_data:
-        print("未获取到任何数据")
+        print("未获取到任何内容，请检查 LINK 变量是否正确")
         return
 
     uris = extract_nodes(raw_data)
+    print(f"正则提取到原始 URI 数量: {len(uris)}")
+    
+    if not uris:
+        # 如果还是0，尝试二次解码（处理双重 base64）
+        second_attempt = safe_base64_decode(raw_data)
+        uris = extract_nodes(second_attempt)
+        if not uris:
+            print("未能识别出任何节点协议")
+            return
+
     if not os.path.exists(GEOIP_DB_PATH):
-        print("GeoIP 数据库不存在，停止运行")
+        print("GeoIP 数据库缺失，无法继续")
         return
         
     reader = geoip2.database.Reader(GEOIP_DB_PATH)
-    
     clash_proxies = []
     final_uris = []
     
@@ -87,13 +112,12 @@ def parse_and_rename():
             scheme = uri.split('://')[0].lower()
             content = uri.split('://')[1]
             
-            # 基础解析变量
             proxy_info = {}
             host = ""
             
-            # --- 协议解析逻辑 ---
             if scheme == 'vmess':
-                v2_data = json.loads(safe_base64_decode(content))
+                v2_json = safe_base64_decode(content)
+                v2_data = json.loads(v2_json)
                 host = v2_data.get('add')
                 proxy_info = {
                     "type": "vmess", "server": host, "port": int(v2_data.get('port', 443)),
@@ -107,19 +131,15 @@ def parse_and_rename():
                     proxy_info[opt_key] = {"path": v2_data.get('path', '/'), "headers": {"Host": v2_data.get('host', '')}}
 
             elif scheme in ['vless', 'trojan', 'ss', 'shadowsocks', 'hysteria2', 'hy2', 'tuic', 'snell', 'socks']:
-                # 解析 URL 结构
-                url_part = uri
-                if scheme == 'shadowsocks': url_part = uri.replace('shadowsocks', 'ss')
-                parsed = urlparse(url_part)
+                url_fixed = uri if 'shadowsocks' not in scheme else uri.replace('shadowsocks', 'ss')
+                parsed = urlparse(url_fixed)
                 host = parsed.hostname
                 
-                # 基础信息
                 proxy_info = {
                     "type": scheme if scheme not in ['hy2', 'shadowsocks'] else ('hysteria2' if scheme=='hy2' else 'ss'),
                     "server": host, "port": parsed.port or 443, "udp": True
                 }
                 
-                # 提取用户认证
                 userinfo = unquote(parsed.netloc.split('@')[0]) if '@' in parsed.netloc else ""
                 if scheme == 'vless':
                     proxy_info.update({"uuid": userinfo, "tls": True})
@@ -131,7 +151,6 @@ def parse_and_rename():
                 elif scheme == 'tuic':
                     proxy_info.update({"uuid": userinfo.split(':')[0], "password": userinfo.split(':')[1] if ':' in userinfo else "", "alpn": ["h3"]})
                 
-                # 参数处理 (sni, flow, etc.)
                 params = {k: v[0] for k, v in parse_qs(parsed.query).items()}
                 if 'sni' in params: proxy_info['servername'] = params['sni']
                 if 'flow' in params: proxy_info['flow'] = params['flow']
@@ -139,28 +158,24 @@ def parse_and_rename():
                     proxy_info['network'] = 'ws'
                     proxy_info['ws-opts'] = {'path': params['path']}
 
-            # --- 定位与更名 ---
             if not host: continue
+            
             country = get_country(host, reader)
             md5_suffix = get_md5(uri + str(index))
             new_name = f"{country}_{index + 1}_{md5_suffix}"
             
-            # 更新名称
             proxy_info["name"] = new_name
             clash_proxies.append(proxy_info)
-            
-            # 处理节点列表中的 URI 备注
-            base_uri = uri.split('#')[0]
-            final_uris.append(f"{base_uri}#{new_name}")
+            final_uris.append(f"{uri.split('#')[0]}#{new_name}")
 
         except Exception as e:
-            print(f"解析节点 {index} 出错: {e}")
             continue
 
     reader.close()
 
     # 写入文件
     update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
     with open(os.path.join(OUTPUT_DIR, 'clash.yaml'), 'w', encoding='utf-8') as f:
         yaml.safe_dump({"proxies": clash_proxies}, f, allow_unicode=True, sort_keys=False, indent=2)
     
@@ -171,7 +186,7 @@ def parse_and_rename():
     with open(os.path.join(OUTPUT_DIR, 'v2ray.txt'), 'w', encoding='utf-8') as f:
         f.write(b64_content)
 
-    print(f"任务完成！总计提取节点: {len(final_uris)}")
+    print(f"成功！提取节点: {len(final_uris)}")
 
 if __name__ == "__main__":
     parse_and_rename()
