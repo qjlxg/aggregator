@@ -1,39 +1,9 @@
-import os
-import yaml
-import json
-import re
-import base64
-from datetime import datetime
-from concurrent.futures import ThreadPoolExecutor
-from urllib.parse import urlparse, parse_qs, unquote
-import geoip2.database
-
 reader = None
 try:
     if os.path.exists(GEOIP_DB_PATH):
         reader = geoip2.database.Reader(GEOIP_DB_PATH)
 except Exception as e:
     print(f"GeoIP Reader Init Error: {e}")
-
-def get_country_info(host, reader):
-    """获取国旗和中文国家名称"""
-    flag = "🏁"
-    country_name = "未知地点"
-    if not reader:
-        return flag, country_name
-    
-    try:
-        # geoip2 自动支持通过 .names.get('zh-CN') 获取中文名
-        response = reader.country(host)
-        iso_code = response.country.iso_code
-        if iso_code:
-            # 转换 ISO 代码为国旗 Emoji
-            flag = "".join(chr(127397 + ord(c)) for c in iso_code.upper())
-            # 直接从数据库读取中文名称
-            country_name = response.country.names.get('zh-CN', iso_code)
-    except Exception:
-        pass
-    return flag, country_name
 
 clash_proxies = []
 final_uris = []
@@ -133,10 +103,9 @@ for raw_data in fetched_results:
             if not host: continue
             
             index = len(final_uris)
-            # 核心命名逻辑变更：国旗_中文国家名_MD5
-            flag, country_cn = get_country_info(host, reader)
+            flag = get_country_flag(host, reader)
             md5_tag = get_md5(original_uri + str(index))
-            new_name = f"{flag}_{country_cn}_{md5_tag}"
+            new_name = f"{flag}_{md5_tag}"
             
             proxy_info["name"] = new_name
             clash_proxies.append(proxy_info)
