@@ -32,10 +32,11 @@ def mask_url(url):
     except:
         return "***"
 
-def get_country_flag(host, reader):
+def get_country_info(host, reader):
+    """获取国旗和中文国家名称"""
     try:
         if not reader:
-            return "🏳️"
+            return "🏳️", "未知"
         
         if re.match(r"^\d{1,3}(\.\d{1,3}){3}$", host):
             ip = host
@@ -49,11 +50,16 @@ def get_country_flag(host, reader):
         
         response = reader.country(ip)
         code = response.country.iso_code
+        # 使用库自带的国际化支持获取中文名称
+        name_zh = response.country.names.get('zh-CN', '未知')
+        
+        flag = "🏳️"
         if code:
-            return "".join(chr(127397 + ord(c)) for c in code.upper())
-        return "🏳️"
+            flag = "".join(chr(127397 + ord(c)) for c in code.upper())
+        
+        return flag, name_zh
     except Exception:
-        return "🏳️"
+        return "🏳️", "未知"
 
 def get_md5(content):
     return hashlib.md5(content.encode()).hexdigest()[:5]
@@ -208,9 +214,12 @@ def parse_and_rename():
                 if not host: continue
                 
                 index = len(final_uris)
-                flag = get_country_flag(host, reader)
+                # 获取国旗和中文名
+                flag, country_name = get_country_info(host, reader)
                 md5_tag = get_md5(original_uri + str(index))
-                new_name = f"{flag}_{md5_tag}"
+                
+                # 拼接新名称：国旗_中文名_MD5
+                new_name = f"{flag}{country_name}_{md5_tag}"
                 
                 proxy_info["name"] = new_name
                 clash_proxies.append(proxy_info)
