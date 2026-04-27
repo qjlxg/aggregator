@@ -60,13 +60,24 @@ def get_md5(content):
 
 def safe_base64_decode(s):
     try:
-        s = re.sub(r'[^a-zA-Z0-9+/=]', '', s)
+        # 处理 URL-safe base64 字符
+        s = s.replace('-', '+').replace('_', '/')
+        # 移除所有非 base64 标准字符（如换行、空格等）
+        s = re.sub(r'[^a-zA-Z0-9+/]', '', s)
+        
+        # Base64 长度规律：不能是 4n+1。如果是 4n+1，说明最后一个字符是多余的或者是噪声
+        if len(s) % 4 == 1:
+            s = s[:-1]
+            
+        # 补齐填充符
         missing_padding = len(s) % 4
         if missing_padding:
             s += '=' * (4 - missing_padding)
+            
         return base64.b64decode(s).decode('utf-8', errors='ignore')
     except Exception as e:
-        print(f"Base64 Decode Error: {e}")
+        # 打印错误时包含简短摘要，避免刷屏
+        print(f"Base64 Decode Error: {str(e)}")
         return ""
 
 def extract_nodes(content):
@@ -80,6 +91,7 @@ def fetch_content(url):
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
         resp = requests.get(url, headers=headers, timeout=10)
         text = resp.text.strip()
+        # 如果不是明显的节点列表或 Clash 配置，尝试 Base64 解码
         if "://" not in text and "proxies:" not in text:
             decoded = safe_base64_decode(text)
             if "://" in decoded: return decoded
@@ -109,6 +121,7 @@ def parse_and_rename():
         if not raw_data: continue
 
         current_nodes = []
+        # 处理 Clash YAML 格式
         if "proxies:" in raw_data:
             try:
                 y_data = yaml.safe_load(raw_data)
@@ -118,6 +131,7 @@ def parse_and_rename():
             except Exception as e:
                 print(f"YAML Parse Error: {e}")
         
+        # 处理 URI 格式
         uris = extract_nodes(raw_data)
         for u in uris:
             current_nodes.append(('uri', u))
@@ -135,6 +149,7 @@ def parse_and_rename():
                     
                     if scheme == 'vmess':
                         v_json = safe_base64_decode(data.split('://', 1)[1])
+                        if not v_json: continue
                         v_data = json.loads(v_json)
                         host = v_data.get('add')
                         proxy_info = {
