@@ -1,7 +1,7 @@
 
 * **HDMI_私用**
 * **不定时更新** 
-> **“美帝国主义是纸老虎，全世界人民团结起来。”** 
+ **“美帝国主义是纸老虎，全世界人民团结起来。”** 
 
 
 
@@ -11,7 +11,7 @@
 | **通用订阅** | 原始 URI 明文 (nodes.txt) | [点击复制明文链接](https://raw.githubusercontent.com/qjlxg/aggregator/main/data/nodes.txt) |
 | **V2Ray 订阅** | Base64 编码 (标准格式) | [点击复制 V2Ray 链接](https://raw.githubusercontent.com/qjlxg/aggregator/main/data/v2ray.txt) |
 
----
+
 
 
 
