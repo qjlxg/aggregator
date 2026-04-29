@@ -1,9 +1,9 @@
 # 🚫 PRIVATE / 个人私用仓库 (INTERNAL USE ONLY)
 
 > [!CAUTION]
-> **ENGLISH:** This is NOT a public project. If you have come across this repository by accident, please leave immediately.
+> ** ** This is NOT a public project. If you have come across this repository by accident, please leave immediately.
 >
-> **中文：** 这不是一个公开项目。如果你误入此仓库，请自觉绕道。
+> ** ** 这不是一个公开项目。如果你误入此仓库，请自觉绕道。
 
 ---
 
