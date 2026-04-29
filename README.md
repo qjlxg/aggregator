@@ -1,18 +1,25 @@
-# 🚫 个人私用仓库 (INTERNAL USE ONLY)
+# 🚫 PRIVATE / 个人私用仓库 (INTERNAL USE ONLY)
 
 > [!CAUTION]
-> **这不是一个公开项目。如果你误入此仓库，请自觉绕道。**
+> **ENGLISH:** This is NOT a public project. If you have come across this repository by accident, please leave immediately.
+>
+> **中文：** 这不是一个公开项目。如果你误入此仓库，请自觉绕道。
 
 ---
 
-### ⚠️ 访问规则 (Access Rules)
+### ⚠️ 规则与限制 | Access Rules & Restrictions
 
-* **严禁 Fork / Star**：本项目不需要流量，不需要任何形式的关注。
-* **严禁 转发订阅地址**
-* **后果自负**：
-    * 内容抓取自公网，极度不稳定。
-    * 可能存在潜在的安全风险。
-    * 仅供本人研究逻辑使用。
-    * **任何他人强行使用导致的问题，本人概不负责。**
+* **严禁 Fork / Star (FORBIDDEN)**
+  本项目不需要流量、关注或任何形式的公开互动。
+  This project is not intended for public use, exposure, or any form of social engagement.
+
+* **严禁转发链接 (STRICTLY PROHIBITED)**
+
+* **后果自负 (USE AT YOUR OWN RISK)**
+  * 内容抓取自公网，极度不稳定，且可能存在不可预知的安全风险。
+  * 仅供本人技术研究使用，任何他人未经授权使用导致的问题，本人概不负责。
+  * Content is collected from public sources; it is highly unstable and carries potential security risks.
+  * For personal research only. I assume zero liability for any issues arising from unauthorized access or use.
 
 ---
+
