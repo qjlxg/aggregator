@@ -6,8 +6,8 @@ on:
     paths:
       - 'sub_parser.py'
       - '.github/workflows/sub_parser.yml'
-  schedule:
-    - cron: '0 16 * * *'
+#  schedule:
+  #  - cron: '0 16 * * *'
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
