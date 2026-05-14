@@ -4,153 +4,91 @@ allow-lan: true
 mode: rule
 log-level: info
 proxies:
-- name: 🇯🇵日本_e8782
+- name: 🇯🇵日本_222da
   server: jplic.osaip.net
   port: 25055
   udp: true
   type: trojan
   password: aeabae7e-a055-4505-85a6-b4cd4982b76a
   sni: ''
-- name: 🇯🇵日本_875ef
+- name: 🇯🇵日本_6b4ff
   server: jplic.osaip.net
   port: 25055
   udp: true
   type: trojan
   password: aeabae7e-a055-4505-85a6-b4cd4982b76a
   sni: ''
-- name: 🇯🇵日本_19f03
+- name: 🇯🇵日本_d19e6
   server: jplic.osaip.net
   port: 25055
   udp: true
   type: trojan
   password: aeabae7e-a055-4505-85a6-b4cd4982b76a
   sni: ''
-- name: 🇯🇵日本_e77cd
+- name: 🇯🇵日本_a373f
   server: jplic.osaip.net
   port: 25055
   udp: true
   type: trojan
   password: aeabae7e-a055-4505-85a6-b4cd4982b76a
   sni: ''
-- name: 🇺🇸美国_56ae5
+- name: 🇺🇸美国_8e60b
   server: usrna.osaip.net
   port: 25055
   udp: true
   type: trojan
   password: aeabae7e-a055-4505-85a6-b4cd4982b76a
   sni: ''
-- name: 🇭🇰香港_abb1f
+- name: 🇭🇰香港_c7ff4
   server: hkzoa.osaip.net
   port: 443
   udp: true
   type: trojan
   password: aeabae7e-a055-4505-85a6-b4cd4982b76a
   sni: ''
-- name: 🇺🇸美国_075c4
-  server: 144.31.207.111
-  port: 443
-  udp: true
-  type: vless
-  uuid: 2001daf3-5c56-4bef-8ea6-8dd0493c5a4c
-  tls: true
-  flow: xtls-rprx-vision
-  servername: www.deepl.com
-  reality-opts:
-    public-key: ZHEMPjSWslk6_qD2JNQzd5enUPz8nY9mYRRuM6NkZmU
-    short-id: 1a
-- name: 🇬🇧英国_cd7d9
-  server: 2.27.63.99
-  port: 443
-  udp: true
-  type: vless
-  uuid: 76713d07-5a6b-49c2-abd8-bc450a2fa7fc
-  tls: true
-  flow: xtls-rprx-vision
-  servername: download.spectrum.vu
-  reality-opts:
-    public-key: sXC7sPCzHG_uYfvk3GSUdYQKfHAwirOVWMhO50Y9Pn8
-    short-id: ad8c7a6ace2f
-- name: 🇭🇰香港_5b486
-  server: 103.123.162.50
-  port: 10011
-  udp: true
-  type: vless
-  uuid: dd68f08d-366f-478d-bed0-5e12b5451487
-  tls: true
-  flow: xtls-rprx-vision
-  servername: www.microsoft.com
-  reality-opts:
-    public-key: 82bbZIdU-0s8fydncIhp9_sNDYQQH9ZY_7RVI5apXnk
-    short-id: 447f3a05ace2b748
-- name: 🇭🇰香港_8a063
-  server: 103.123.162.50
-  port: 10011
-  udp: true
-  type: vless
-  uuid: 17011a43-97e2-44b0-b0da-a2ea151ad75c
-  tls: true
-  flow: xtls-rprx-vision
-  servername: www.microsoft.com
-  reality-opts:
-    public-key: 82bbZIdU-0s8fydncIhp9_sNDYQQH9ZY_7RVI5apXnk
-    short-id: 447f3a05ace2b748
-- name: 🇳🇱荷兰_2871d
-  server: 45.130.22.70
-  port: 32914
-  udp: true
-  type: trojan
-  password: 1BARPLkaLl
-  sni: ''
-- name: 🇯🇵日本_22c62
-  server: jplic.osaip.net
-  port: 25055
-  udp: true
-  type: trojan
-  password: aeabae7e-a055-4505-85a6-b4cd4982b76a
-  sni: ''
-- name: 🇯🇵日本_6e04a
+- name: 🇯🇵日本_5ea4a
   server: jplic.osaip.net
   port: 25055
   udp: true
   type: trojan
   password: f7d06c85-4a73-4687-bf1d-0c140406c248
   sni: ''
-- name: 🇯🇵日本_958d7
+- name: 🇯🇵日本_5df73
   server: jplic.osaip.net
   port: 25055
   udp: true
   type: trojan
   password: f7d06c85-4a73-4687-bf1d-0c140406c248
   sni: ''
-- name: 🇯🇵日本_5e5ea
+- name: 🇯🇵日本_83bed
   server: jplic.osaip.net
   port: 25055
   udp: true
   type: trojan
   password: f7d06c85-4a73-4687-bf1d-0c140406c248
   sni: ''
-- name: 🇯🇵日本_15ff0
+- name: 🇯🇵日本_eb0ce
   server: jplic.osaip.net
   port: 25055
   udp: true
   type: trojan
   password: f7d06c85-4a73-4687-bf1d-0c140406c248
   sni: ''
-- name: 🇺🇸美国_08a64
+- name: 🇺🇸美国_55da1
   server: usrna.osaip.net
   port: 25055
   udp: true
   type: trojan
   password: f7d06c85-4a73-4687-bf1d-0c140406c248
   sni: ''
-- name: 🇭🇰香港_04eb8
+- name: 🇭🇰香港_e497a
   server: hkzoa.osaip.net
   port: 443
   udp: true
   type: trojan
   password: f7d06c85-4a73-4687-bf1d-0c140406c248
   sni: ''
-- name: 🇸🇬新加坡_8acf1
+- name: 🇸🇬新加坡_403a0
   type: vmess
   server: tls.suyun8.xyz
   port: 10086
@@ -161,7 +99,7 @@ proxies:
   network: tcp
   servername: ''
   udp: true
-- name: 🇸🇬新加坡_30f61
+- name: 🇸🇬新加坡_c32e2
   type: vmess
   server: tls.suyun8.xyz
   port: 10086
@@ -172,7 +110,7 @@ proxies:
   network: tcp
   servername: ''
   udp: true
-- name: 🇸🇬新加坡_cc193
+- name: 🇸🇬新加坡_1b092
   type: vmess
   server: tls.suyun8.xyz
   port: 10086
@@ -183,7 +121,7 @@ proxies:
   network: tcp
   servername: ''
   udp: true
-- name: 🇸🇬新加坡_157f5
+- name: 🇸🇬新加坡_44d34
   type: vmess
   server: tls.suyun8.xyz
   port: 10086
@@ -194,7 +132,7 @@ proxies:
   network: tcp
   servername: ''
   udp: true
-- name: 🇺🇸美国_fca0d
+- name: 🇺🇸美国_02dd6
   type: vmess
   server: 104.168.1.102
   port: 8443
@@ -209,7 +147,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_660df
+- name: 🇺🇸美国_0de6d
   type: vmess
   server: 104.168.1.102
   port: 8222
@@ -224,7 +162,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_875f7
+- name: 🇺🇸美国_a1835
   type: vmess
   server: 13.58.50.121
   port: 80
@@ -239,7 +177,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_5a506
+- name: 🇺🇸美国_97ba1
   type: vmess
   server: 104.168.1.102
   port: 8443
@@ -254,7 +192,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_95438
+- name: 🇺🇸美国_9bf37
   type: vmess
   server: 104.168.1.102
   port: 8222
@@ -269,7 +207,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_a5926
+- name: 🇺🇸美国_89a37
   type: vmess
   server: 13.58.50.121
   port: 80
@@ -284,7 +222,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_4e644
+- name: 🇺🇸美国_a46d6
   type: vmess
   server: 104.168.1.102
   port: 8443
@@ -299,7 +237,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_899c7
+- name: 🇺🇸美国_f7739
   type: vmess
   server: 104.168.1.102
   port: 8222
@@ -314,7 +252,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_0187d
+- name: 🇺🇸美国_c2a08
   type: vmess
   server: 13.58.50.121
   port: 80
@@ -329,7 +267,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_822ed
+- name: 🇺🇸美国_a9127
   type: vmess
   server: 104.168.1.102
   port: 8443
@@ -344,7 +282,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_764fe
+- name: 🇺🇸美国_33575
   type: vmess
   server: 104.168.1.102
   port: 8222
@@ -359,7 +297,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_1e878
+- name: 🇺🇸美国_272e3
   type: vmess
   server: 13.58.50.121
   port: 80
@@ -374,7 +312,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_58ed6
+- name: 🇺🇸美国_5d954
   type: vmess
   server: 104.168.1.102
   port: 8443
@@ -389,7 +327,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_8b8f9
+- name: 🇺🇸美国_d7646
   type: vmess
   server: 104.168.1.102
   port: 8222
@@ -404,7 +342,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_e11f7
+- name: 🇺🇸美国_20247
   type: vmess
   server: 13.58.50.121
   port: 80
@@ -419,7 +357,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_476c0
+- name: 🇺🇸美国_b3102
   type: vmess
   server: 104.168.1.102
   port: 8443
@@ -434,7 +372,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_efda8
+- name: 🇺🇸美国_83dfc
   type: vmess
   server: 104.168.1.102
   port: 8222
@@ -449,7 +387,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_edf34
+- name: 🇺🇸美国_338fe
   type: vmess
   server: 13.58.50.121
   port: 80
@@ -464,7 +402,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_dc8c3
+- name: 🇺🇸美国_b6ca8
   type: vmess
   server: 104.168.1.102
   port: 8443
@@ -479,7 +417,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_cc8eb
+- name: 🇺🇸美国_bdec0
   type: vmess
   server: 104.168.1.102
   port: 8222
@@ -494,7 +432,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_36968
+- name: 🇺🇸美国_dc628
   type: vmess
   server: 13.58.50.121
   port: 80
@@ -509,7 +447,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_87262
+- name: 🇺🇸美国_2ae46
   type: vmess
   server: 104.168.1.102
   port: 8443
@@ -524,7 +462,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_63e8e
+- name: 🇺🇸美国_62a92
   type: vmess
   server: 104.168.1.102
   port: 8222
@@ -539,7 +477,7 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_36c05
+- name: 🇺🇸美国_e4c4f
   type: vmess
   server: 13.58.50.121
   port: 80
@@ -554,56 +492,63 @@ proxies:
     path: ''
     headers:
       Host: ''
-- name: 🇺🇸美国_9aa64
+- name: 🏳️未知_af4ca
+  server: 127.0.0.1
+  port: 1181
+  udp: true
+  type: trojan
+  password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
+  sni: windows11.dpdns.org
+- name: 🇺🇸美国_2213c
   server: ikuai.404.mn
   port: 14555
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: ikuai.404.mn
-- name: 🇺🇸美国_ded5a
+- name: 🇺🇸美国_8ed20
   server: ikuai.404.mn
   port: 10777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇺🇸美国_1f5eb
+- name: 🇺🇸美国_c3469
   server: ikuai.404.mn
   port: 12777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: ikuai.404.mn
-- name: 🏳️未知_8299a
+- name: 🏳️未知_d90bd
   server: ikuai.uk.to
   port: 711
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_18b33
+- name: 🏳️未知_9bd94
   server: ikuai.uk.to
   port: 11777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: ikuai.uk.to
-- name: 🇭🇰香港_4cba2
+- name: 🇭🇰香港_45c29
   server: apple.1337.cx
   port: 13555
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇭🇰香港_7da5b
+- name: 🇭🇰香港_88442
   server: apple.1337.cx
   port: 13777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_91555
+- name: 🏳️未知_86aea
   type: vmess
   server: www.visa.com
   port: 443
@@ -618,238 +563,245 @@ proxies:
     path: /data
     headers:
       Host: download.windows11.dpdns.org
-- name: 🇺🇸美国_45fcf
+- name: 🇺🇸美国_7f8e6
   server: ikuai.bot.nu
   port: 14555
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇺🇸美国_ca4bf
+- name: 🇺🇸美国_62be2
   server: ikuai.bot.nu
   port: 21777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇺🇸美国_e2978
+- name: 🇺🇸美国_e08d4
   server: ikuai.bot.nu
   port: 11777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇺🇸美国_f092a
+- name: 🇺🇸美国_eac9e
   server: ikuai.bot.nu
   port: 50852
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: ikuai.bot.nu
-- name: 🇭🇰香港_cdf49
+- name: 🇭🇰香港_52e37
   server: strawberry.joe.dj
   port: 10777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇭🇰香港_47643
+- name: 🇭🇰香港_12136
   server: strawberry.joe.dj
   port: 711
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇭🇰香港_bca4e
+- name: 🇭🇰香港_182d0
   server: strawberry.joe.dj
   port: 11777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_6d19f
+- name: 🏳️未知_45f44
   server: shct1.v6.navy
   port: 711
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_3b01c
+- name: 🏳️未知_17d84
   server: ikuai.k.vu
   port: 10777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_ba5b0
+- name: 🏳️未知_4ebb5
   server: ikuai.k.vu
   port: 711
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_fc97d
+- name: 🏳️未知_46f8f
   server: ikuai.k.vu
   port: 11777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_ed62a
+- name: 🏳️未知_9469b
   server: ikuai.uk.to
   port: 50852
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: ikuai.uk.to
-- name: 🏳️未知_e9124
+- name: 🏳️未知_d61bc
   server: ikuai.k.vu
   port: 771
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇺🇸美国_70632
+- name: 🏳️未知_79436
+  server: 127.0.0.1
+  port: 1181
+  udp: true
+  type: trojan
+  password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
+  sni: windows11.dpdns.org
+- name: 🇺🇸美国_ca894
   server: ikuai.404.mn
   port: 14555
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: ikuai.404.mn
-- name: 🇺🇸美国_67c2b
+- name: 🇺🇸美国_d3677
   server: ikuai.404.mn
   port: 10777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇺🇸美国_55c8f
+- name: 🇺🇸美国_ec526
   server: ikuai.404.mn
   port: 12777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: ikuai.404.mn
-- name: 🏳️未知_ffedc
+- name: 🏳️未知_6ac65
   server: ikuai.uk.to
   port: 711
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_8b8b4
+- name: 🏳️未知_6abd6
   server: ikuai.uk.to
   port: 11777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: ikuai.uk.to
-- name: 🇭🇰香港_80436
+- name: 🇭🇰香港_312ac
   server: apple.1337.cx
   port: 13555
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇭🇰香港_c36de
+- name: 🇭🇰香港_4c335
   server: apple.1337.cx
   port: 13777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇺🇸美国_a647d
+- name: 🇺🇸美国_0f3ec
   server: ikuai.bot.nu
   port: 14555
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇺🇸美国_f88e4
+- name: 🇺🇸美国_40fe9
   server: ikuai.bot.nu
   port: 21777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇺🇸美国_7dfd7
+- name: 🇺🇸美国_20358
   server: ikuai.bot.nu
   port: 11777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇺🇸美国_42518
+- name: 🇺🇸美国_82c1f
   server: ikuai.bot.nu
   port: 50852
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: ikuai.bot.nu
-- name: 🇭🇰香港_b95c1
+- name: 🇭🇰香港_c4e7f
   server: strawberry.joe.dj
   port: 10777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇭🇰香港_92fbf
+- name: 🇭🇰香港_0baf5
   server: strawberry.joe.dj
   port: 711
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🇭🇰香港_def52
+- name: 🇭🇰香港_16b6c
   server: strawberry.joe.dj
   port: 11777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_36e2e
+- name: 🏳️未知_a66aa
   server: shct1.v6.navy
   port: 711
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_72bc0
+- name: 🏳️未知_029da
   server: ikuai.k.vu
   port: 10777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_9dd3b
+- name: 🏳️未知_13ad8
   server: ikuai.k.vu
   port: 711
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_b7183
+- name: 🏳️未知_6f615
   server: ikuai.k.vu
   port: 11777
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_dddc1
+- name: 🏳️未知_76b3c
   server: ikuai.uk.to
   port: 50852
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: ikuai.uk.to
-- name: 🏳️未知_12866
+- name: 🏳️未知_7b438
   server: ikuai.k.vu
   port: 771
   udp: true
   type: trojan
   password: 67f4b8ff-15cf-3ec9-b09d-c31a4728c652
   sni: windows11.dpdns.org
-- name: 🏳️未知_aa28b
+- name: 🏳️未知_194de
   server: apple.ikuai.cloud
   port: 10086
   udp: true
@@ -858,7 +810,7 @@ proxies:
   tls: false
   flow: ''
   servername: ''
-- name: 🏳️未知_374e3
+- name: 🏳️未知_a92b8
   server: apple.ikuai.cloud
   port: 10086
   udp: true
@@ -873,189 +825,181 @@ proxy-groups:
   proxies:
   - ⚡ 自动选择
   - DIRECT
-  - 🇯🇵日本_e8782
-  - 🇯🇵日本_875ef
-  - 🇯🇵日本_19f03
-  - 🇯🇵日本_e77cd
-  - 🇺🇸美国_56ae5
-  - 🇭🇰香港_abb1f
-  - 🇺🇸美国_075c4
-  - 🇬🇧英国_cd7d9
-  - 🇭🇰香港_5b486
-  - 🇭🇰香港_8a063
-  - 🇳🇱荷兰_2871d
-  - 🇯🇵日本_22c62
-  - 🇯🇵日本_6e04a
-  - 🇯🇵日本_958d7
-  - 🇯🇵日本_5e5ea
-  - 🇯🇵日本_15ff0
-  - 🇺🇸美国_08a64
-  - 🇭🇰香港_04eb8
-  - 🇸🇬新加坡_8acf1
-  - 🇸🇬新加坡_30f61
-  - 🇸🇬新加坡_cc193
-  - 🇸🇬新加坡_157f5
-  - 🇺🇸美国_fca0d
-  - 🇺🇸美国_660df
-  - 🇺🇸美国_875f7
-  - 🇺🇸美国_5a506
-  - 🇺🇸美国_95438
-  - 🇺🇸美国_a5926
-  - 🇺🇸美国_4e644
-  - 🇺🇸美国_899c7
-  - 🇺🇸美国_0187d
-  - 🇺🇸美国_822ed
-  - 🇺🇸美国_764fe
-  - 🇺🇸美国_1e878
-  - 🇺🇸美国_58ed6
-  - 🇺🇸美国_8b8f9
-  - 🇺🇸美国_e11f7
-  - 🇺🇸美国_476c0
-  - 🇺🇸美国_efda8
-  - 🇺🇸美国_edf34
-  - 🇺🇸美国_dc8c3
-  - 🇺🇸美国_cc8eb
-  - 🇺🇸美国_36968
-  - 🇺🇸美国_87262
-  - 🇺🇸美国_63e8e
-  - 🇺🇸美国_36c05
-  - 🇺🇸美国_9aa64
-  - 🇺🇸美国_ded5a
-  - 🇺🇸美国_1f5eb
-  - 🏳️未知_8299a
-  - 🏳️未知_18b33
-  - 🇭🇰香港_4cba2
-  - 🇭🇰香港_7da5b
-  - 🏳️未知_91555
-  - 🇺🇸美国_45fcf
-  - 🇺🇸美国_ca4bf
-  - 🇺🇸美国_e2978
-  - 🇺🇸美国_f092a
-  - 🇭🇰香港_cdf49
-  - 🇭🇰香港_47643
-  - 🇭🇰香港_bca4e
-  - 🏳️未知_6d19f
-  - 🏳️未知_3b01c
-  - 🏳️未知_ba5b0
-  - 🏳️未知_fc97d
-  - 🏳️未知_ed62a
-  - 🏳️未知_e9124
-  - 🇺🇸美国_70632
-  - 🇺🇸美国_67c2b
-  - 🇺🇸美国_55c8f
-  - 🏳️未知_ffedc
-  - 🏳️未知_8b8b4
-  - 🇭🇰香港_80436
-  - 🇭🇰香港_c36de
-  - 🇺🇸美国_a647d
-  - 🇺🇸美国_f88e4
-  - 🇺🇸美国_7dfd7
-  - 🇺🇸美国_42518
-  - 🇭🇰香港_b95c1
-  - 🇭🇰香港_92fbf
-  - 🇭🇰香港_def52
-  - 🏳️未知_36e2e
-  - 🏳️未知_72bc0
-  - 🏳️未知_9dd3b
-  - 🏳️未知_b7183
-  - 🏳️未知_dddc1
-  - 🏳️未知_12866
-  - 🏳️未知_aa28b
-  - 🏳️未知_374e3
+  - 🇯🇵日本_222da
+  - 🇯🇵日本_6b4ff
+  - 🇯🇵日本_d19e6
+  - 🇯🇵日本_a373f
+  - 🇺🇸美国_8e60b
+  - 🇭🇰香港_c7ff4
+  - 🇯🇵日本_5ea4a
+  - 🇯🇵日本_5df73
+  - 🇯🇵日本_83bed
+  - 🇯🇵日本_eb0ce
+  - 🇺🇸美国_55da1
+  - 🇭🇰香港_e497a
+  - 🇸🇬新加坡_403a0
+  - 🇸🇬新加坡_c32e2
+  - 🇸🇬新加坡_1b092
+  - 🇸🇬新加坡_44d34
+  - 🇺🇸美国_02dd6
+  - 🇺🇸美国_0de6d
+  - 🇺🇸美国_a1835
+  - 🇺🇸美国_97ba1
+  - 🇺🇸美国_9bf37
+  - 🇺🇸美国_89a37
+  - 🇺🇸美国_a46d6
+  - 🇺🇸美国_f7739
+  - 🇺🇸美国_c2a08
+  - 🇺🇸美国_a9127
+  - 🇺🇸美国_33575
+  - 🇺🇸美国_272e3
+  - 🇺🇸美国_5d954
+  - 🇺🇸美国_d7646
+  - 🇺🇸美国_20247
+  - 🇺🇸美国_b3102
+  - 🇺🇸美国_83dfc
+  - 🇺🇸美国_338fe
+  - 🇺🇸美国_b6ca8
+  - 🇺🇸美国_bdec0
+  - 🇺🇸美国_dc628
+  - 🇺🇸美国_2ae46
+  - 🇺🇸美国_62a92
+  - 🇺🇸美国_e4c4f
+  - 🏳️未知_af4ca
+  - 🇺🇸美国_2213c
+  - 🇺🇸美国_8ed20
+  - 🇺🇸美国_c3469
+  - 🏳️未知_d90bd
+  - 🏳️未知_9bd94
+  - 🇭🇰香港_45c29
+  - 🇭🇰香港_88442
+  - 🏳️未知_86aea
+  - 🇺🇸美国_7f8e6
+  - 🇺🇸美国_62be2
+  - 🇺🇸美国_e08d4
+  - 🇺🇸美国_eac9e
+  - 🇭🇰香港_52e37
+  - 🇭🇰香港_12136
+  - 🇭🇰香港_182d0
+  - 🏳️未知_45f44
+  - 🏳️未知_17d84
+  - 🏳️未知_4ebb5
+  - 🏳️未知_46f8f
+  - 🏳️未知_9469b
+  - 🏳️未知_d61bc
+  - 🏳️未知_79436
+  - 🇺🇸美国_ca894
+  - 🇺🇸美国_d3677
+  - 🇺🇸美国_ec526
+  - 🏳️未知_6ac65
+  - 🏳️未知_6abd6
+  - 🇭🇰香港_312ac
+  - 🇭🇰香港_4c335
+  - 🇺🇸美国_0f3ec
+  - 🇺🇸美国_40fe9
+  - 🇺🇸美国_20358
+  - 🇺🇸美国_82c1f
+  - 🇭🇰香港_c4e7f
+  - 🇭🇰香港_0baf5
+  - 🇭🇰香港_16b6c
+  - 🏳️未知_a66aa
+  - 🏳️未知_029da
+  - 🏳️未知_13ad8
+  - 🏳️未知_6f615
+  - 🏳️未知_76b3c
+  - 🏳️未知_7b438
+  - 🏳️未知_194de
+  - 🏳️未知_a92b8
 - name: ⚡ 自动选择
   type: url-test
   url: http://www.gstatic.com/generate_204
   interval: 300
   tolerance: 50
   proxies:
-  - 🇯🇵日本_e8782
-  - 🇯🇵日本_875ef
-  - 🇯🇵日本_19f03
-  - 🇯🇵日本_e77cd
-  - 🇺🇸美国_56ae5
-  - 🇭🇰香港_abb1f
-  - 🇺🇸美国_075c4
-  - 🇬🇧英国_cd7d9
-  - 🇭🇰香港_5b486
-  - 🇭🇰香港_8a063
-  - 🇳🇱荷兰_2871d
-  - 🇯🇵日本_22c62
-  - 🇯🇵日本_6e04a
-  - 🇯🇵日本_958d7
-  - 🇯🇵日本_5e5ea
-  - 🇯🇵日本_15ff0
-  - 🇺🇸美国_08a64
-  - 🇭🇰香港_04eb8
-  - 🇸🇬新加坡_8acf1
-  - 🇸🇬新加坡_30f61
-  - 🇸🇬新加坡_cc193
-  - 🇸🇬新加坡_157f5
-  - 🇺🇸美国_fca0d
-  - 🇺🇸美国_660df
-  - 🇺🇸美国_875f7
-  - 🇺🇸美国_5a506
-  - 🇺🇸美国_95438
-  - 🇺🇸美国_a5926
-  - 🇺🇸美国_4e644
-  - 🇺🇸美国_899c7
-  - 🇺🇸美国_0187d
-  - 🇺🇸美国_822ed
-  - 🇺🇸美国_764fe
-  - 🇺🇸美国_1e878
-  - 🇺🇸美国_58ed6
-  - 🇺🇸美国_8b8f9
-  - 🇺🇸美国_e11f7
-  - 🇺🇸美国_476c0
-  - 🇺🇸美国_efda8
-  - 🇺🇸美国_edf34
-  - 🇺🇸美国_dc8c3
-  - 🇺🇸美国_cc8eb
-  - 🇺🇸美国_36968
-  - 🇺🇸美国_87262
-  - 🇺🇸美国_63e8e
-  - 🇺🇸美国_36c05
-  - 🇺🇸美国_9aa64
-  - 🇺🇸美国_ded5a
-  - 🇺🇸美国_1f5eb
-  - 🏳️未知_8299a
-  - 🏳️未知_18b33
-  - 🇭🇰香港_4cba2
-  - 🇭🇰香港_7da5b
-  - 🏳️未知_91555
-  - 🇺🇸美国_45fcf
-  - 🇺🇸美国_ca4bf
-  - 🇺🇸美国_e2978
-  - 🇺🇸美国_f092a
-  - 🇭🇰香港_cdf49
-  - 🇭🇰香港_47643
-  - 🇭🇰香港_bca4e
-  - 🏳️未知_6d19f
-  - 🏳️未知_3b01c
-  - 🏳️未知_ba5b0
-  - 🏳️未知_fc97d
-  - 🏳️未知_ed62a
-  - 🏳️未知_e9124
-  - 🇺🇸美国_70632
-  - 🇺🇸美国_67c2b
-  - 🇺🇸美国_55c8f
-  - 🏳️未知_ffedc
-  - 🏳️未知_8b8b4
-  - 🇭🇰香港_80436
-  - 🇭🇰香港_c36de
-  - 🇺🇸美国_a647d
-  - 🇺🇸美国_f88e4
-  - 🇺🇸美国_7dfd7
-  - 🇺🇸美国_42518
-  - 🇭🇰香港_b95c1
-  - 🇭🇰香港_92fbf
-  - 🇭🇰香港_def52
-  - 🏳️未知_36e2e
-  - 🏳️未知_72bc0
-  - 🏳️未知_9dd3b
-  - 🏳️未知_b7183
-  - 🏳️未知_dddc1
-  - 🏳️未知_12866
-  - 🏳️未知_aa28b
-  - 🏳️未知_374e3
+  - 🇯🇵日本_222da
+  - 🇯🇵日本_6b4ff
+  - 🇯🇵日本_d19e6
+  - 🇯🇵日本_a373f
+  - 🇺🇸美国_8e60b
+  - 🇭🇰香港_c7ff4
+  - 🇯🇵日本_5ea4a
+  - 🇯🇵日本_5df73
+  - 🇯🇵日本_83bed
+  - 🇯🇵日本_eb0ce
+  - 🇺🇸美国_55da1
+  - 🇭🇰香港_e497a
+  - 🇸🇬新加坡_403a0
+  - 🇸🇬新加坡_c32e2
+  - 🇸🇬新加坡_1b092
+  - 🇸🇬新加坡_44d34
+  - 🇺🇸美国_02dd6
+  - 🇺🇸美国_0de6d
+  - 🇺🇸美国_a1835
+  - 🇺🇸美国_97ba1
+  - 🇺🇸美国_9bf37
+  - 🇺🇸美国_89a37
+  - 🇺🇸美国_a46d6
+  - 🇺🇸美国_f7739
+  - 🇺🇸美国_c2a08
+  - 🇺🇸美国_a9127
+  - 🇺🇸美国_33575
+  - 🇺🇸美国_272e3
+  - 🇺🇸美国_5d954
+  - 🇺🇸美国_d7646
+  - 🇺🇸美国_20247
+  - 🇺🇸美国_b3102
+  - 🇺🇸美国_83dfc
+  - 🇺🇸美国_338fe
+  - 🇺🇸美国_b6ca8
+  - 🇺🇸美国_bdec0
+  - 🇺🇸美国_dc628
+  - 🇺🇸美国_2ae46
+  - 🇺🇸美国_62a92
+  - 🇺🇸美国_e4c4f
+  - 🏳️未知_af4ca
+  - 🇺🇸美国_2213c
+  - 🇺🇸美国_8ed20
+  - 🇺🇸美国_c3469
+  - 🏳️未知_d90bd
+  - 🏳️未知_9bd94
+  - 🇭🇰香港_45c29
+  - 🇭🇰香港_88442
+  - 🏳️未知_86aea
+  - 🇺🇸美国_7f8e6
+  - 🇺🇸美国_62be2
+  - 🇺🇸美国_e08d4
+  - 🇺🇸美国_eac9e
+  - 🇭🇰香港_52e37
+  - 🇭🇰香港_12136
+  - 🇭🇰香港_182d0
+  - 🏳️未知_45f44
+  - 🏳️未知_17d84
+  - 🏳️未知_4ebb5
+  - 🏳️未知_46f8f
+  - 🏳️未知_9469b
+  - 🏳️未知_d61bc
+  - 🏳️未知_79436
+  - 🇺🇸美国_ca894
+  - 🇺🇸美国_d3677
+  - 🇺🇸美国_ec526
+  - 🏳️未知_6ac65
+  - 🏳️未知_6abd6
+  - 🇭🇰香港_312ac
+  - 🇭🇰香港_4c335
+  - 🇺🇸美国_0f3ec
+  - 🇺🇸美国_40fe9
+  - 🇺🇸美国_20358
+  - 🇺🇸美国_82c1f
+  - 🇭🇰香港_c4e7f
+  - 🇭🇰香港_0baf5
+  - 🇭🇰香港_16b6c
+  - 🏳️未知_a66aa
+  - 🏳️未知_029da
+  - 🏳️未知_13ad8
+  - 🏳️未知_6f615
+  - 🏳️未知_76b3c
+  - 🏳️未知_7b438
+  - 🏳️未知_194de
+  - 🏳️未知_a92b8
 rules:
 - MATCH,🚀 节点选择
