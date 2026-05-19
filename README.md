@@ -4,4 +4,4 @@
 
 🚫 请勿 Fork / Star / 转发 / 测速
 
-https://pastee.dev/d/6tZR2MWQ  有效期一年  
+https://pastee.dev/d/6tZR2MWQ  
