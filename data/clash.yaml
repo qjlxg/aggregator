@@ -1,22 +1,158 @@
 # owner=qjlxg
-# Total: 0 | Updated: 2026-06-02 17:06:41
+# Total: 13 | Updated: 2026-06-02 17:08:14
 port: 7890
 socks-port: 7891
 allow-lan: true
 mode: rule
 log-level: info
-proxies: []
+proxies:
+- name: 🇸🇬新加坡_60f2a_ESET_NOD32_Symantec_Endpoint_McAfee Security_89
+  server: 138.2.94.44
+  port: 8899
+  udp: true
+  type: vless
+  uuid: d95e62f8-b961-4362-bb07-e1e421b02274
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.lovelive-anime.jp
+  reality-opts:
+    public-key: -kGaCYGM_MImDMVkOsFp4yvv4dLy3FXe9gqAtf4eYF8
+    short-id: 905ae32a
+- name: 🇭🇰香港_ebeee_ESET_NOD32_Symantec_Endpoint_McAfee Security_32
+  server: node2-vpn.hrzy.me
+  port: 443
+  udp: true
+  type: trojan
+  password: 9974ef8f-5fc7-4b71-84d5-7b88812dc59f
+  sni: ''
+- name: 🇹🇼台湾_37aa5_ESET_NOD32_Symantec_Endpoint_McAfee Security_59
+  server: tuntro001.instconn.com
+  port: 40621
+  udp: true
+  type: trojan
+  password: e916d944-1a25-443a-b10f-b362995a3c2e
+  sni: tvmost.jasmine-douyin.top
+- name: 🇺🇸美国_92634_ESET_NOD32_Symantec_Endpoint_McAfee Security_9f
+  server: f010862dus.jasmine-douyin.top
+  port: 443
+  udp: true
+  type: vless
+  uuid: e916d944-1a25-443a-b10f-b362995a3c2e
+  tls: true
+  flow: xtls-rprx-vision
+  servername: qorvak.online
+  reality-opts:
+    public-key: SJ5crCJ05wuitOxsdNbF7Gf16RXpZniQcPwW_RNVvhk
+    short-id: c3
+- name: 🇯🇵日本_2bb8d_ESET_NOD32_Symantec_Endpoint_McAfee Security_12
+  server: 979.4722.bd7-as.jasmine-douyin.top
+  port: 443
+  udp: true
+  type: vless
+  uuid: e916d944-1a25-443a-b10f-b362995a3c2e
+  tls: true
+  flow: xtls-rprx-vision
+  servername: class.gzcd.eu.org
+  reality-opts:
+    public-key: RI0E2tEhj4XX6EJcYIeEb5yXYT9TyMwQlJDaLHKDQwQ
+    short-id: 3ce3
+- name: 🇹🇼台湾_089d8_ESET_NOD32_Symantec_Endpoint_McAfee Security_85
+  server: tuntro002.instconn.com
+  port: 20253
+  udp: true
+  type: trojan
+  password: e916d944-1a25-443a-b10f-b362995a3c2e
+  sni: bing.3668989.xyz
+- name: 🇩🇪德国_855c1_ESET_NOD32_Symantec_Endpoint_McAfee Security_a0
+  server: tuntro010.instconn.com
+  port: 443
+  udp: true
+  type: trojan
+  password: e916d944-1a25-443a-b10f-b362995a3c2e
+  sni: frankfurtrm2.686911.xyz
+- name: 🇹🇼台湾_d45a8_ESET_NOD32_Symantec_Endpoint_McAfee Security_95
+  server: tuntro013.instconn.com
+  port: 10431
+  udp: true
+  type: trojan
+  password: e916d944-1a25-443a-b10f-b362995a3c2e
+  sni: souer.jasmine-douyin.top
+- name: 🇹🇼台湾_92055_ESET_NOD32_Symantec_Endpoint_McAfee Security_9a
+  server: tuntro020.instconn.com
+  port: 41056
+  udp: true
+  type: trojan
+  password: e916d944-1a25-443a-b10f-b362995a3c2e
+  sni: bing.686911.xyz
+- name: 🇬🇧英国_ebb29_ESET_NOD32_Symantec_Endpoint_McAfee Security_b0
+  server: raw-hy10.instconn.com
+  port: 52321
+  udp: true
+  type: hysteria2
+  password: e916d944-1a25-443a-b10f-b362995a3c2e
+  sni: www.apple.com
+  alpn:
+  - h3
+- name: 🇭🇰香港_13b84_ESET_NOD32_Symantec_Endpoint_McAfee Security_49
+  server: node2-vpn.hrzy.me
+  port: 443
+  udp: true
+  type: trojan
+  password: 25e79950-3a80-46ac-9b6f-7acb173aeae5
+  sni: ''
+- name: 🇭🇰香港_279b7_ESET_NOD32_Symantec_Endpoint_McAfee Security_61
+  server: node1-vpn.hrzy.me
+  port: 443
+  udp: true
+  type: trojan
+  password: 25e79950-3a80-46ac-9b6f-7acb173aeae5
+  sni: ''
+- name: 🇸🇬新加坡_21432_ESET_NOD32_Symantec_Endpoint_McAfee Security_80
+  server: 13.229.46.36
+  port: 8443
+  udp: true
+  type: hysteria2
+  password: 25e79950-3a80-46ac-9b6f-7acb173aeae5
+  sni: ''
+  alpn:
+  - h3
 proxy-groups:
 - name: 🚀 节点选择
   type: select
   proxies:
   - ⚡ 自动选择
   - DIRECT
+  - 🇸🇬新加坡_60f2a_ESET_NOD32_Symantec_Endpoint_McAfee Security_89
+  - 🇭🇰香港_ebeee_ESET_NOD32_Symantec_Endpoint_McAfee Security_32
+  - 🇹🇼台湾_37aa5_ESET_NOD32_Symantec_Endpoint_McAfee Security_59
+  - 🇺🇸美国_92634_ESET_NOD32_Symantec_Endpoint_McAfee Security_9f
+  - 🇯🇵日本_2bb8d_ESET_NOD32_Symantec_Endpoint_McAfee Security_12
+  - 🇹🇼台湾_089d8_ESET_NOD32_Symantec_Endpoint_McAfee Security_85
+  - 🇩🇪德国_855c1_ESET_NOD32_Symantec_Endpoint_McAfee Security_a0
+  - 🇹🇼台湾_d45a8_ESET_NOD32_Symantec_Endpoint_McAfee Security_95
+  - 🇹🇼台湾_92055_ESET_NOD32_Symantec_Endpoint_McAfee Security_9a
+  - 🇬🇧英国_ebb29_ESET_NOD32_Symantec_Endpoint_McAfee Security_b0
+  - 🇭🇰香港_13b84_ESET_NOD32_Symantec_Endpoint_McAfee Security_49
+  - 🇭🇰香港_279b7_ESET_NOD32_Symantec_Endpoint_McAfee Security_61
+  - 🇸🇬新加坡_21432_ESET_NOD32_Symantec_Endpoint_McAfee Security_80
 - name: ⚡ 自动选择
   type: url-test
   url: http://www.gstatic.com/generate_204
   interval: 300
   tolerance: 50
-  proxies: []
+  proxies:
+  - 🇸🇬新加坡_60f2a_ESET_NOD32_Symantec_Endpoint_McAfee Security_89
+  - 🇭🇰香港_ebeee_ESET_NOD32_Symantec_Endpoint_McAfee Security_32
+  - 🇹🇼台湾_37aa5_ESET_NOD32_Symantec_Endpoint_McAfee Security_59
+  - 🇺🇸美国_92634_ESET_NOD32_Symantec_Endpoint_McAfee Security_9f
+  - 🇯🇵日本_2bb8d_ESET_NOD32_Symantec_Endpoint_McAfee Security_12
+  - 🇹🇼台湾_089d8_ESET_NOD32_Symantec_Endpoint_McAfee Security_85
+  - 🇩🇪德国_855c1_ESET_NOD32_Symantec_Endpoint_McAfee Security_a0
+  - 🇹🇼台湾_d45a8_ESET_NOD32_Symantec_Endpoint_McAfee Security_95
+  - 🇹🇼台湾_92055_ESET_NOD32_Symantec_Endpoint_McAfee Security_9a
+  - 🇬🇧英国_ebb29_ESET_NOD32_Symantec_Endpoint_McAfee Security_b0
+  - 🇭🇰香港_13b84_ESET_NOD32_Symantec_Endpoint_McAfee Security_49
+  - 🇭🇰香港_279b7_ESET_NOD32_Symantec_Endpoint_McAfee Security_61
+  - 🇸🇬新加坡_21432_ESET_NOD32_Symantec_Endpoint_McAfee Security_80
 rules:
 - MATCH,🚀 节点选择
