@@ -1,5 +1,5 @@
 # owner=qjlxg
-# Total: 61 | Updated: 2026-06-03 15:27:49
+# Total: 64 | Updated: 2026-06-03 15:40:00
 port: 7890
 socks-port: 7891
 allow-lan: true
@@ -175,6 +175,42 @@ proxies:
   type: trojan
   password: 9974ef8f-5fc7-4b71-84d5-7b88812dc59f
   sni: ''
+- name: 🇸🇬新加坡_c5282_ESET_NOD32_Symantec_Endpoint_McAfee Security_30
+  server: 168.138.166.89
+  port: 8899
+  udp: true
+  type: vless
+  uuid: ca9cec48-bc34-4d6e-92d5-d0cd56150e51
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.lovelive-anime.jp
+  reality-opts:
+    public-key: 4ciiQdZe4F8wyoRKpNzW5xwmQzGyIJnlPHrK70iU6DQ
+    short-id: f0cce996
+- name: 🇸🇬新加坡_13143_ESET_NOD32_Symantec_Endpoint_McAfee Security_a7
+  server: 138.2.94.44
+  port: 8899
+  udp: true
+  type: vless
+  uuid: ca9cec48-bc34-4d6e-92d5-d0cd56150e51
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.lovelive-anime.jp
+  reality-opts:
+    public-key: -kGaCYGM_MImDMVkOsFp4yvv4dLy3FXe9gqAtf4eYF8
+    short-id: 905ae32a
+- name: 🇰🇷韩国_a8d17_ESET_NOD32_Symantec_Endpoint_McAfee Security_d5
+  server: 152.67.211.233
+  port: 8899
+  udp: true
+  type: vless
+  uuid: ca9cec48-bc34-4d6e-92d5-d0cd56150e51
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.lovelive-anime.jp
+  reality-opts:
+    public-key: B7eELUOn0QM6fKSrr5v_AE4JPHQIxvb9-xX3WLqnLAk
+    short-id: 11d27eb4
 - name: 🇩🇪德国_855c1_ESET_NOD32_Symantec_Endpoint_McAfee Security_a0
   server: tuntro010.instconn.com
   port: 443
@@ -550,6 +586,9 @@ proxy-groups:
   - 🇰🇷韩国_24061_ESET_NOD32_Symantec_Endpoint_McAfee Security_cc
   - 🇸🇬新加坡_60f2a_ESET_NOD32_Symantec_Endpoint_McAfee Security_89
   - 🇭🇰香港_ebeee_ESET_NOD32_Symantec_Endpoint_McAfee Security_32
+  - 🇸🇬新加坡_c5282_ESET_NOD32_Symantec_Endpoint_McAfee Security_30
+  - 🇸🇬新加坡_13143_ESET_NOD32_Symantec_Endpoint_McAfee Security_a7
+  - 🇰🇷韩国_a8d17_ESET_NOD32_Symantec_Endpoint_McAfee Security_d5
   - 🇩🇪德国_855c1_ESET_NOD32_Symantec_Endpoint_McAfee Security_a0
   - 🇭🇰香港_13b84_ESET_NOD32_Symantec_Endpoint_McAfee Security_49
   - 🇭🇰香港_102b1_ESET_NOD32_Symantec_Endpoint_McAfee Security_79
@@ -617,6 +656,9 @@ proxy-groups:
   - 🇰🇷韩国_24061_ESET_NOD32_Symantec_Endpoint_McAfee Security_cc
   - 🇸🇬新加坡_60f2a_ESET_NOD32_Symantec_Endpoint_McAfee Security_89
   - 🇭🇰香港_ebeee_ESET_NOD32_Symantec_Endpoint_McAfee Security_32
+  - 🇸🇬新加坡_c5282_ESET_NOD32_Symantec_Endpoint_McAfee Security_30
+  - 🇸🇬新加坡_13143_ESET_NOD32_Symantec_Endpoint_McAfee Security_a7
+  - 🇰🇷韩国_a8d17_ESET_NOD32_Symantec_Endpoint_McAfee Security_d5
   - 🇩🇪德国_855c1_ESET_NOD32_Symantec_Endpoint_McAfee Security_a0
   - 🇭🇰香港_13b84_ESET_NOD32_Symantec_Endpoint_McAfee Security_49
   - 🇭🇰香港_102b1_ESET_NOD32_Symantec_Endpoint_McAfee Security_79
