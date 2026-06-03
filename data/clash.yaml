@@ -1,11 +1,275 @@
 # owner=qjlxg
-# Total: 64 | Updated: 2026-06-03 15:40:00
+# Total: 83 | Updated: 2026-06-03 16:25:48
 port: 7890
 socks-port: 7891
 allow-lan: true
 mode: rule
 log-level: info
 proxies:
+- name: 🇸🇬新加坡_13143_ESET_NOD32_Symantec_Endpoint_McAfee Security_a7
+  server: 138.2.94.44
+  port: 8899
+  udp: true
+  type: vless
+  uuid: ca9cec48-bc34-4d6e-92d5-d0cd56150e51
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.lovelive-anime.jp
+  reality-opts:
+    public-key: -kGaCYGM_MImDMVkOsFp4yvv4dLy3FXe9gqAtf4eYF8
+    short-id: 905ae32a
+- name: 🏳️未知_0bb24_ESET_NOD32_Symantec_Endpoint_McAfee Security_f1
+  server: 104.16.0.1
+  port: 8080
+  udp: true
+  type: vless
+  uuid: ab41bb33-ad5b-4a2f-ae03-dfb4112b48f3
+  tls: true
+  flow: ''
+  servername: node3.oscarsia.com
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node3.oscarsia.com
+- name: 🏳️未知_e763a_ESET_NOD32_Symantec_Endpoint_McAfee Security_98
+  server: 104.16.0.1
+  port: 80
+  udp: true
+  type: vless
+  uuid: ab41bb33-ad5b-4a2f-ae03-dfb4112b48f3
+  tls: true
+  flow: ''
+  servername: node2.oscarsia.com
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_9d801_ESET_NOD32_Symantec_Endpoint_McAfee Security_0b
+  server: 104.16.0.1
+  port: 2052
+  udp: true
+  type: vless
+  uuid: ab41bb33-ad5b-4a2f-ae03-dfb4112b48f3
+  tls: true
+  flow: ''
+  servername: node2.oscarsia.com
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_7b74b_ESET_NOD32_Symantec_Endpoint_McAfee Security_9e
+  server: 104.16.0.1
+  port: 2082
+  udp: true
+  type: vless
+  uuid: ab41bb33-ad5b-4a2f-ae03-dfb4112b48f3
+  tls: true
+  flow: ''
+  servername: node2.oscarsia.com
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_1526b_ESET_NOD32_Symantec_Endpoint_McAfee Security_97
+  server: 104.16.0.1
+  port: 2086
+  udp: true
+  type: vless
+  uuid: ab41bb33-ad5b-4a2f-ae03-dfb4112b48f3
+  tls: true
+  flow: ''
+  servername: node2.oscarsia.com
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_9a90a_ESET_NOD32_Symantec_Endpoint_McAfee Security_16
+  server: 104.16.0.1
+  port: 2095
+  udp: true
+  type: vless
+  uuid: ab41bb33-ad5b-4a2f-ae03-dfb4112b48f3
+  tls: true
+  flow: ''
+  servername: node2.oscarsia.com
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_316e8_ESET_NOD32_Symantec_Endpoint_McAfee Security_c1
+  server: 104.16.0.1
+  port: 8080
+  udp: true
+  type: vless
+  uuid: e7746161-8ac1-4fa4-a756-f7d6ebfdcb4f
+  tls: false
+  flow: ''
+  servername: ''
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node3.oscarsia.com
+- name: 🏳️未知_84df9_ESET_NOD32_Symantec_Endpoint_McAfee Security_cf
+  server: 104.16.0.1
+  port: 80
+  udp: true
+  type: vless
+  uuid: e7746161-8ac1-4fa4-a756-f7d6ebfdcb4f
+  tls: false
+  flow: ''
+  servername: ''
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_fb8ae_ESET_NOD32_Symantec_Endpoint_McAfee Security_75
+  server: 104.16.0.1
+  port: 2052
+  udp: true
+  type: vless
+  uuid: e7746161-8ac1-4fa4-a756-f7d6ebfdcb4f
+  tls: false
+  flow: ''
+  servername: ''
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_637cc_ESET_NOD32_Symantec_Endpoint_McAfee Security_8e
+  server: 104.16.0.1
+  port: 2082
+  udp: true
+  type: vless
+  uuid: e7746161-8ac1-4fa4-a756-f7d6ebfdcb4f
+  tls: false
+  flow: ''
+  servername: ''
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_3bd83_ESET_NOD32_Symantec_Endpoint_McAfee Security_b6
+  server: 104.16.0.1
+  port: 2086
+  udp: true
+  type: vless
+  uuid: e7746161-8ac1-4fa4-a756-f7d6ebfdcb4f
+  tls: false
+  flow: ''
+  servername: ''
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_87445_ESET_NOD32_Symantec_Endpoint_McAfee Security_b6
+  server: 104.16.0.1
+  port: 2095
+  udp: true
+  type: vless
+  uuid: e7746161-8ac1-4fa4-a756-f7d6ebfdcb4f
+  tls: false
+  flow: ''
+  servername: ''
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_f8de6_ESET_NOD32_Symantec_Endpoint_McAfee Security_eb
+  server: 104.16.0.1
+  port: 8080
+  udp: true
+  type: vless
+  uuid: 21f152de-9ae3-47d8-a9f4-9aaa0dd6c311
+  tls: false
+  flow: ''
+  servername: ''
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node3.oscarsia.com
+- name: 🏳️未知_9238a_ESET_NOD32_Symantec_Endpoint_McAfee Security_ef
+  server: 104.16.0.1
+  port: 80
+  udp: true
+  type: vless
+  uuid: 21f152de-9ae3-47d8-a9f4-9aaa0dd6c311
+  tls: false
+  flow: ''
+  servername: ''
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_97a42_ESET_NOD32_Symantec_Endpoint_McAfee Security_37
+  server: 104.16.0.1
+  port: 2052
+  udp: true
+  type: vless
+  uuid: 21f152de-9ae3-47d8-a9f4-9aaa0dd6c311
+  tls: false
+  flow: ''
+  servername: ''
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_d5df3_ESET_NOD32_Symantec_Endpoint_McAfee Security_a9
+  server: 104.16.0.1
+  port: 2082
+  udp: true
+  type: vless
+  uuid: 21f152de-9ae3-47d8-a9f4-9aaa0dd6c311
+  tls: false
+  flow: ''
+  servername: ''
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_cb55e_ESET_NOD32_Symantec_Endpoint_McAfee Security_4a
+  server: 104.16.0.1
+  port: 2086
+  udp: true
+  type: vless
+  uuid: 21f152de-9ae3-47d8-a9f4-9aaa0dd6c311
+  tls: false
+  flow: ''
+  servername: ''
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
+- name: 🏳️未知_99b51_ESET_NOD32_Symantec_Endpoint_McAfee Security_aa
+  server: 104.16.0.1
+  port: 2095
+  udp: true
+  type: vless
+  uuid: 21f152de-9ae3-47d8-a9f4-9aaa0dd6c311
+  tls: false
+  flow: ''
+  servername: ''
+  network: ws
+  ws-opts:
+    path: /jinyou1234
+    headers:
+      Host: node2.oscarsia.com
 - name: 🇷🇺俄罗斯联邦_a050b_ESET_NOD32_Symantec_Endpoint_McAfee Security_93
   server: 158.160.103.206
   port: 443
@@ -440,14 +704,14 @@ proxies:
   type: trojan
   password: 80b629f1-9897-4d01-9250-0b2c5ca5a9d7
   sni: www.bing.com
-- name: 🇭🇰香港_c6d97_ESET_NOD32_Symantec_Endpoint_McAfee Security_72
+- name: 🇲🇾马来西亚_c6d97_ESET_NOD32_Symantec_Endpoint_McAfee Security_72
   server: pokemonjp-01.yunjnet.com
   port: 54032
   udp: true
   type: trojan
   password: 80b629f1-9897-4d01-9250-0b2c5ca5a9d7
   sni: www.apple.com.cn
-- name: 🇭🇰香港_52ff5_ESET_NOD32_Symantec_Endpoint_McAfee Security_5d
+- name: 🇲🇾马来西亚_52ff5_ESET_NOD32_Symantec_Endpoint_McAfee Security_5d
   server: pokemonjp-01.yunjnet.com
   port: 54032
   udp: true
@@ -510,14 +774,14 @@ proxies:
   type: trojan
   password: 80b629f1-9897-4d01-9250-0b2c5ca5a9d7
   sni: www.lamer.com.hk
-- name: 🇭🇰香港_96e73_ESET_NOD32_Symantec_Endpoint_McAfee Security_4a
+- name: 🇲🇾马来西亚_96e73_ESET_NOD32_Symantec_Endpoint_McAfee Security_4a
   server: pokemonus-01.yunjnet.com
   port: 56115
   udp: true
   type: trojan
   password: 80b629f1-9897-4d01-9250-0b2c5ca5a9d7
   sni: iosapps.itunes.apple.com
-- name: 🇭🇰香港_9e354_ESET_NOD32_Symantec_Endpoint_McAfee Security_b7
+- name: 🇲🇾马来西亚_9e354_ESET_NOD32_Symantec_Endpoint_McAfee Security_b7
   server: pokemonus-01.yunjnet.com
   port: 56115
   udp: true
@@ -572,6 +836,25 @@ proxy-groups:
   proxies:
   - ⚡ 自动选择
   - DIRECT
+  - 🇸🇬新加坡_13143_ESET_NOD32_Symantec_Endpoint_McAfee Security_a7
+  - 🏳️未知_0bb24_ESET_NOD32_Symantec_Endpoint_McAfee Security_f1
+  - 🏳️未知_e763a_ESET_NOD32_Symantec_Endpoint_McAfee Security_98
+  - 🏳️未知_9d801_ESET_NOD32_Symantec_Endpoint_McAfee Security_0b
+  - 🏳️未知_7b74b_ESET_NOD32_Symantec_Endpoint_McAfee Security_9e
+  - 🏳️未知_1526b_ESET_NOD32_Symantec_Endpoint_McAfee Security_97
+  - 🏳️未知_9a90a_ESET_NOD32_Symantec_Endpoint_McAfee Security_16
+  - 🏳️未知_316e8_ESET_NOD32_Symantec_Endpoint_McAfee Security_c1
+  - 🏳️未知_84df9_ESET_NOD32_Symantec_Endpoint_McAfee Security_cf
+  - 🏳️未知_fb8ae_ESET_NOD32_Symantec_Endpoint_McAfee Security_75
+  - 🏳️未知_637cc_ESET_NOD32_Symantec_Endpoint_McAfee Security_8e
+  - 🏳️未知_3bd83_ESET_NOD32_Symantec_Endpoint_McAfee Security_b6
+  - 🏳️未知_87445_ESET_NOD32_Symantec_Endpoint_McAfee Security_b6
+  - 🏳️未知_f8de6_ESET_NOD32_Symantec_Endpoint_McAfee Security_eb
+  - 🏳️未知_9238a_ESET_NOD32_Symantec_Endpoint_McAfee Security_ef
+  - 🏳️未知_97a42_ESET_NOD32_Symantec_Endpoint_McAfee Security_37
+  - 🏳️未知_d5df3_ESET_NOD32_Symantec_Endpoint_McAfee Security_a9
+  - 🏳️未知_cb55e_ESET_NOD32_Symantec_Endpoint_McAfee Security_4a
+  - 🏳️未知_99b51_ESET_NOD32_Symantec_Endpoint_McAfee Security_aa
   - 🇷🇺俄罗斯联邦_a050b_ESET_NOD32_Symantec_Endpoint_McAfee Security_93
   - 🇷🇺俄罗斯联邦_317d7_ESET_NOD32_Symantec_Endpoint_McAfee Security_91
   - 🇷🇺俄罗斯联邦_f7162_ESET_NOD32_Symantec_Endpoint_McAfee Security_f8
@@ -618,8 +901,8 @@ proxy-groups:
   - 🇨🇭瑞士_58e98_ESET_NOD32_Symantec_Endpoint_McAfee Security_6d
   - 🏳️未知_224d1_ESET_NOD32_Symantec_Endpoint_McAfee Security_65
   - 🏳️未知_9310c_ESET_NOD32_Symantec_Endpoint_McAfee Security_45
-  - 🇭🇰香港_c6d97_ESET_NOD32_Symantec_Endpoint_McAfee Security_72
-  - 🇭🇰香港_52ff5_ESET_NOD32_Symantec_Endpoint_McAfee Security_5d
+  - 🇲🇾马来西亚_c6d97_ESET_NOD32_Symantec_Endpoint_McAfee Security_72
+  - 🇲🇾马来西亚_52ff5_ESET_NOD32_Symantec_Endpoint_McAfee Security_5d
   - 🇲🇾马来西亚_3380c_ESET_NOD32_Symantec_Endpoint_McAfee Security_96
   - 🇲🇾马来西亚_9db4a_ESET_NOD32_Symantec_Endpoint_McAfee Security_5f
   - 🏳️未知_757e7_ESET_NOD32_Symantec_Endpoint_McAfee Security_11
@@ -628,8 +911,8 @@ proxy-groups:
   - 🇨🇭瑞士_51b34_ESET_NOD32_Symantec_Endpoint_McAfee Security_1b
   - 🇭🇰香港_40f3e_ESET_NOD32_Symantec_Endpoint_McAfee Security_93
   - 🇭🇰香港_3720c_ESET_NOD32_Symantec_Endpoint_McAfee Security_52
-  - 🇭🇰香港_96e73_ESET_NOD32_Symantec_Endpoint_McAfee Security_4a
-  - 🇭🇰香港_9e354_ESET_NOD32_Symantec_Endpoint_McAfee Security_b7
+  - 🇲🇾马来西亚_96e73_ESET_NOD32_Symantec_Endpoint_McAfee Security_4a
+  - 🇲🇾马来西亚_9e354_ESET_NOD32_Symantec_Endpoint_McAfee Security_b7
   - 🇲🇾马来西亚_5f1df_ESET_NOD32_Symantec_Endpoint_McAfee Security_2a
   - 🇲🇾马来西亚_6a91b_ESET_NOD32_Symantec_Endpoint_McAfee Security_78
   - 🏳️未知_74f99_ESET_NOD32_Symantec_Endpoint_McAfee Security_bb
@@ -642,6 +925,25 @@ proxy-groups:
   interval: 300
   tolerance: 50
   proxies:
+  - 🇸🇬新加坡_13143_ESET_NOD32_Symantec_Endpoint_McAfee Security_a7
+  - 🏳️未知_0bb24_ESET_NOD32_Symantec_Endpoint_McAfee Security_f1
+  - 🏳️未知_e763a_ESET_NOD32_Symantec_Endpoint_McAfee Security_98
+  - 🏳️未知_9d801_ESET_NOD32_Symantec_Endpoint_McAfee Security_0b
+  - 🏳️未知_7b74b_ESET_NOD32_Symantec_Endpoint_McAfee Security_9e
+  - 🏳️未知_1526b_ESET_NOD32_Symantec_Endpoint_McAfee Security_97
+  - 🏳️未知_9a90a_ESET_NOD32_Symantec_Endpoint_McAfee Security_16
+  - 🏳️未知_316e8_ESET_NOD32_Symantec_Endpoint_McAfee Security_c1
+  - 🏳️未知_84df9_ESET_NOD32_Symantec_Endpoint_McAfee Security_cf
+  - 🏳️未知_fb8ae_ESET_NOD32_Symantec_Endpoint_McAfee Security_75
+  - 🏳️未知_637cc_ESET_NOD32_Symantec_Endpoint_McAfee Security_8e
+  - 🏳️未知_3bd83_ESET_NOD32_Symantec_Endpoint_McAfee Security_b6
+  - 🏳️未知_87445_ESET_NOD32_Symantec_Endpoint_McAfee Security_b6
+  - 🏳️未知_f8de6_ESET_NOD32_Symantec_Endpoint_McAfee Security_eb
+  - 🏳️未知_9238a_ESET_NOD32_Symantec_Endpoint_McAfee Security_ef
+  - 🏳️未知_97a42_ESET_NOD32_Symantec_Endpoint_McAfee Security_37
+  - 🏳️未知_d5df3_ESET_NOD32_Symantec_Endpoint_McAfee Security_a9
+  - 🏳️未知_cb55e_ESET_NOD32_Symantec_Endpoint_McAfee Security_4a
+  - 🏳️未知_99b51_ESET_NOD32_Symantec_Endpoint_McAfee Security_aa
   - 🇷🇺俄罗斯联邦_a050b_ESET_NOD32_Symantec_Endpoint_McAfee Security_93
   - 🇷🇺俄罗斯联邦_317d7_ESET_NOD32_Symantec_Endpoint_McAfee Security_91
   - 🇷🇺俄罗斯联邦_f7162_ESET_NOD32_Symantec_Endpoint_McAfee Security_f8
@@ -688,8 +990,8 @@ proxy-groups:
   - 🇨🇭瑞士_58e98_ESET_NOD32_Symantec_Endpoint_McAfee Security_6d
   - 🏳️未知_224d1_ESET_NOD32_Symantec_Endpoint_McAfee Security_65
   - 🏳️未知_9310c_ESET_NOD32_Symantec_Endpoint_McAfee Security_45
-  - 🇭🇰香港_c6d97_ESET_NOD32_Symantec_Endpoint_McAfee Security_72
-  - 🇭🇰香港_52ff5_ESET_NOD32_Symantec_Endpoint_McAfee Security_5d
+  - 🇲🇾马来西亚_c6d97_ESET_NOD32_Symantec_Endpoint_McAfee Security_72
+  - 🇲🇾马来西亚_52ff5_ESET_NOD32_Symantec_Endpoint_McAfee Security_5d
   - 🇲🇾马来西亚_3380c_ESET_NOD32_Symantec_Endpoint_McAfee Security_96
   - 🇲🇾马来西亚_9db4a_ESET_NOD32_Symantec_Endpoint_McAfee Security_5f
   - 🏳️未知_757e7_ESET_NOD32_Symantec_Endpoint_McAfee Security_11
@@ -698,8 +1000,8 @@ proxy-groups:
   - 🇨🇭瑞士_51b34_ESET_NOD32_Symantec_Endpoint_McAfee Security_1b
   - 🇭🇰香港_40f3e_ESET_NOD32_Symantec_Endpoint_McAfee Security_93
   - 🇭🇰香港_3720c_ESET_NOD32_Symantec_Endpoint_McAfee Security_52
-  - 🇭🇰香港_96e73_ESET_NOD32_Symantec_Endpoint_McAfee Security_4a
-  - 🇭🇰香港_9e354_ESET_NOD32_Symantec_Endpoint_McAfee Security_b7
+  - 🇲🇾马来西亚_96e73_ESET_NOD32_Symantec_Endpoint_McAfee Security_4a
+  - 🇲🇾马来西亚_9e354_ESET_NOD32_Symantec_Endpoint_McAfee Security_b7
   - 🇲🇾马来西亚_5f1df_ESET_NOD32_Symantec_Endpoint_McAfee Security_2a
   - 🇲🇾马来西亚_6a91b_ESET_NOD32_Symantec_Endpoint_McAfee Security_78
   - 🏳️未知_74f99_ESET_NOD32_Symantec_Endpoint_McAfee Security_bb
