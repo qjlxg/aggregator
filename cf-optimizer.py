@@ -1,13 +1,14 @@
-import requests
-import urllib3
 import ipaddress
 import random
 import time
+import socket
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+import httpx
 
-# ========== 默认备用 IP ==========
+# ======================
+# 默认备用 IP
+# ======================
 DEFAULT_IPS = [
     '104.16.0.1',
     '104.17.0.1',
@@ -18,35 +19,38 @@ DEFAULT_IPS = [
     '104.17.146.56',
 ]
 
-# ========== Cloudflare 官方网段 ==========
+# ======================
+# Cloudflare 官方网段 (去掉错误的 1.0.0.0/8)
+# ======================
 CF_RANGES = [
-    "1.0.0.0/8",    # 覆盖 Cloudflare DNS 基础段
-    "104.16.0.0/12",# 核心中的核心段 (覆盖 104.16.x.x - 104.31.x.x)
-    "172.64.0.0/13",       # 核心负载均衡段
-    "162.158.0.0/15",      # 全球通用边缘节点
-    "162.159.0.0/16",      # 核心骨干节点
-    "188.114.96.0/20",     # 欧洲/中东常用优化段
-    "141.101.64.0/18",     # 边缘流量清洗段
-    "198.41.128.0/17",     # 美国骨干节点
-    "173.245.48.0/20",     # 全球 Anycast 基础段
-    "103.21.244.0/22",     # 亚太地区关键节点
-    "103.22.200.0/22",     # 亚太地区扩展段
-    "103.31.4.0/22",       # 亚太地区扩展段
+    "104.16.0.0/12",
+    "172.64.0.0/13",
+    "162.158.0.0/15",
+    "162.159.0.0/16",
+    "188.114.96.0/20",
+    "141.101.64.0/18",
+    "198.41.128.0/17",
+    "173.245.48.0/20",
+    "103.21.244.0/22",
+    "103.22.200.0/22",
+    "103.31.4.0/22",
 ]
 
-# ========== 获取 ip.164746.xyz ==========
-def get_ips_from_api():
+# ======================
+# TCP 存活检查
+# ======================
+def tcp_check(ip, port=443, timeout=1):
     try:
-        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
-        r = requests.get("https://ip.164746.xyz/ipTop.html", headers=headers, timeout=10)
-        if r.status_code == 200 and r.text.strip():
-            return [x.strip() for x in r.text.replace("\n", ",").split(",") if x.strip()]
+        s = socket.create_connection((ip, port), timeout=timeout)
+        s.close()
+        return True
     except:
-        pass
-    return []
+        return False
 
-# ========== 随机生成 CF 官方 IP ==========
-def generate_cf_ips(per_range=20):
+# ======================
+# 随机生成 CF 官方 IP
+# ======================
+def generate_cf_ips(per_range=10):
     ips = set()
     for cidr in CF_RANGES:
         net = ipaddress.ip_network(cidr)
@@ -55,13 +59,21 @@ def generate_cf_ips(per_range=20):
             ips.add(ip)
     return list(ips)
 
-# ========== HTTP 测 colo + 延迟 ==========
+# ======================
+# 测试 IP 延迟 + Colo
+# ======================
 def check_ip(ip):
     try:
         start = time.time()
-        r = requests.get(f"https://{ip}/cdn-cgi/trace", headers={"Host":"cloudflare.com"}, timeout=5, verify=False)
+        with httpx.Client(
+            verify=False,
+            timeout=5,
+            http2=True,
+            headers={"Host": "cloudflare.com"}
+        ) as client:
+            r = client.get(f"https://{ip}/cdn-cgi/trace", headers={"Host": "cloudflare.com"})
         latency = int((time.time() - start) * 1000)
-        if r.status_code == 200 and "colo=" in r.text:
+        if "colo=" in r.text:
             colo = None
             for line in r.text.splitlines():
                 if line.startswith("colo="):
@@ -69,21 +81,26 @@ def check_ip(ip):
                     break
             return {"ip": ip, "latency": latency, "colo": colo}
     except:
-        pass
-    return None
+        return None
 
-# ========== 主程序 ==========
+# ======================
+# 主程序
+# ======================
 def main():
-    api_ips = get_ips_from_api()
-    candidates = set(api_ips + DEFAULT_IPS)
-    if len(candidates) < 50:
-        candidates.update(generate_cf_ips(20))
-    candidates = list(candidates)
-    print(f"待检测 IP 数量: {len(candidates)}")
+    # 1️⃣ 生成候选 IP
+    candidates = set(DEFAULT_IPS + generate_cf_ips(20))
+    print(f"[INFO] 候选 IP 数量: {len(candidates)}")
 
+    # 2️⃣ TCP 预筛选
+    print("[INFO] 正在进行 TCP 存活检测 ...")
+    alive_ips = [ip for ip in candidates if tcp_check(ip)]
+    print(f"[INFO] 存活 IP 数量: {len(alive_ips)}")
+
+    # 3️⃣ 并发 HTTPS 检测
+    print("[INFO] 正在测速 COLO 和延迟 ...")
     results = []
     with ThreadPoolExecutor(max_workers=100) as executor:
-        futures = {executor.submit(check_ip, ip): ip for ip in candidates}
+        futures = {executor.submit(check_ip, ip): ip for ip in alive_ips}
         for future in as_completed(futures):
             res = future.result()
             if res:
@@ -91,10 +108,10 @@ def main():
                 print(f"[OK] {res['ip']:15} {res['latency']:4}ms {res['colo']}")
 
     if not results:
-        print("没有检测到有效IP，使用默认库")
+        print("[WARN] 没有检测到有效 IP，使用默认备用库")
         results = [{"ip": ip, "latency": 9999, "colo": "fallback"} for ip in DEFAULT_IPS]
 
-    # ========== Colo 优化：每个 colo 保留最多2个最低延迟 ==========
+    # 4️⃣ Colo 优化: 每个 colo 保留 2 个最低延迟
     colo_map = {}
     for r in sorted(results, key=lambda x: x["latency"]):
         c = r["colo"]
@@ -109,16 +126,17 @@ def main():
 
     optimized_results.sort(key=lambda x: x["latency"])
 
-    # ========== 写入文件 ==========
+    # 5️⃣ 写入文件
     with open("candidate_ips.txt", "w") as f:
         for item in optimized_results:
-            f.write(item["ip"] + "\n")
+            f.write(item['ip'] + "\n")
 
     with open("candidate_ips_detail.txt", "w") as f:
         for item in optimized_results:
             f.write(f"{item['ip']},{item['latency']}ms,{item['colo']}\n")
 
-    print("\n===== TOP 20 Colo 优化 IP =====")
+    # 6️⃣ 输出 TOP20
+    print("\n===== TOP 20 COLO 优化 IP =====")
     for item in optimized_results[:20]:
         print(f"{item['ip']:15} {item['latency']:4}ms {item['colo']}")
     print(f"\n最终存活 IP 数量: {len(optimized_results)}")
