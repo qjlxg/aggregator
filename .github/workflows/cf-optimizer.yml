@@ -7,6 +7,9 @@ on:
     paths:
       - 'cf-optimizer.py'
       - '.github/workflows/cf-optimizer.yml'
+    # 彻底解决 CI 循环风暴：忽略结果目录的变动
+    paths-ignore:
+      - 'results/**'
   schedule:
     - cron: '0 16 * * *'
   workflow_dispatch:
@@ -29,10 +32,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-         
+          cache: "pip" # 开启 pip 缓存
 
       - name: Install Dependencies
-        run: pip install requests
+        run: |
+          pip install requests
 
       - name: Fetch and Filter IPs
         timeout-minutes: 5
@@ -47,9 +51,10 @@ jobs:
 
           mkdir -p results/history
           cp candidate_ips.txt results/latest.txt
-          # 强制指定北京时间生成历史文件名
           cp candidate_ips.txt results/history/$(TZ=Asia/Shanghai date +'%Y-%m-%d').txt
-          find results/history -type f -mtime +90 -delete
+          
+          # 修正历史文件清理逻辑：只保留最近 90 个文件，不受文件 mtime 影响
+          ls -t results/history/* 2>/dev/null | tail -n +91 | xargs -r rm -f
 
       - name: Commit and Push
         run: |
