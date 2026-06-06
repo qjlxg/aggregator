@@ -2,9 +2,9 @@ name: CF Optimizer Pipeline
 
 on:
   schedule:
-    - cron: '0 16 * * *'
+    - cron: '0 16 * * *' # 每天北京时间凌晨运行
   push:
-    paths-ignore: ['sub.yaml']
+    paths-ignore: ['sub.yaml', 'candidate_ips.txt']
   workflow_dispatch:
 
 permissions: {contents: write}
@@ -14,10 +14,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: pip install requests pyyaml
       
       - name: Generate Subscription
-        run: python3 cf-optimizer.py
+        run: |
+          # 1. 运行你那个稳定的测速脚本
+          python3 cf-optimizer.py
+          
+          # 2. 读取第一个最佳 IP
+          BEST_IP=$(head -n 1 candidate_ips.txt)
+          echo "Selected Best IP: $BEST_IP"
+          
+          # 3. 构造精准复刻的 VLESS 链接
+          # 对应参数：UUID=82d277fb... 端口=80 路径=/7ed=2560
+          LINK="vless://82d277fb-db97-4daf-a071-c88a10e4393e@$BEST_IP:80?type=ws&host=and.qjlxg.workers.dev&path=/7ed=2560#CF-优选-$BEST_IP"
+          
+          # 4. 生成 Base64 订阅并输出到 sub.yaml
+          echo -n "$LINK" | base64 > sub.yaml
 
       - name: Deploy to gh-pages
         run: |
@@ -25,5 +37,5 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git checkout -b gh-pages
           git add sub.yaml
-          git commit -m "Update subscription [skip ci]"
+          git commit -m "Update subscription $(date +'%Y-%m-%d')"
           git push origin gh-pages --force
