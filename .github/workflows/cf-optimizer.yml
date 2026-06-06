@@ -29,7 +29,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip"
+         
 
       - name: Install Dependencies
         run: pip install requests
@@ -38,7 +38,7 @@ jobs:
         timeout-minutes: 5
         run: |
           set -e
-          python3 script.py 
+          python3 cf-optimizer.py 
           
           if [ ! -f candidate_ips.txt ]; then
             echo "Error: candidate_ips.txt not generated"
