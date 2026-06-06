@@ -1,23 +1,29 @@
-name: IP Optimizer
+name: CF Optimizer Pipeline
 
 on:
-  push:
-  workflow_dispatch:
   schedule:
     - cron: '0 16 * * *'
+  push:
+    paths-ignore: ['sub.yaml']
+  workflow_dispatch:
+
+permissions: {contents: write}
 
 jobs:
-  run:
+  run-pipeline:
     runs-on: ubuntu-latest
-    permissions: {contents: write}
     steps:
       - uses: actions/checkout@v4
-      - run: pip install requests
-      - run: python3 cf-optimizer.py
+      - run: pip install requests pyyaml
       
-      - name: Save to Repo
+      - name: Generate Subscription
+        run: python3 cf-optimizer.py
+
+      - name: Deploy to gh-pages
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add candidate_ips.txt
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update IPs" && git push)
+          git checkout -b gh-pages
+          git add sub.yaml
+          git commit -m "Update subscription [skip ci]"
+          git push origin gh-pages --force
