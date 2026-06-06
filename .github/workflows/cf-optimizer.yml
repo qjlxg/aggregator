@@ -17,12 +17,14 @@ jobs:
       - run: pip install requests
 
       - name: Generate Subscription
+        env:
+          TEMPLATE: ${{ secrets.VLESS_LINK_TEMPLATE }}
         run: |
           python3 cf-optimizer.py
           sub_content=""
           while read -r IP; do
             if [ -n "$IP" ]; then
-              LINK="vless://82d277fb-db97-4daf-a071-c88a10e4393e@$IP:80?type=ws&host=and.qjlxg.workers.dev&path=%2F7ed%3D2560#CF-优选-$IP"
+              LINK=$(echo "$TEMPLATE" | sed "s/IP_PLACEHOLDER/$IP/g")
               sub_content+="$LINK\n"
             fi
           done < candidate_ips.txt
