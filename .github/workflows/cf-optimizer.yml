@@ -1,62 +1,23 @@
-name: Cloudflare Optimizer Pro MAX
+name: IP Optimizer
 
 on:
   push:
-    branches: [main]
-    paths: ['cf-optimizer-max.py', '.github/workflows/cf-optimizer-max.yml']
-    paths-ignore: ['results/**', 'README.md']
+  workflow_dispatch:
   schedule:
     - cron: '0 16 * * *'
-  workflow_dispatch:
-
-permissions: {contents: write}
-concurrency: {group: cloudflare-optimizer, cancel-in-progress: true}
 
 jobs:
-  run-analysis:
+  run:
     runs-on: ubuntu-latest
+    permissions: {contents: write}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: {python-version: "3.11", cache: "pip"}
+      - run: pip install requests
+      - run: python3 cf-optimizer.py
       
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update && sudo apt-get install -y jq
-          echo "requests==2.32.3" > requirements.txt
-          pip install -r requirements.txt
-
-      - name: Run Analysis
-        run: |
-          set -e
-          mkdir -p results/history
-          
-          # 1. 运行核心分析
-          python3 cf-optimizer-max.py | tee results/run.log
-          
-          # 2. JSON 合法性校验
-          if ! jq empty results/latest.json; then
-            echo "Error: JSON invalid" && exit 1
-          fi
-          
-          # 3. 生成 Markdown 报表
-          echo "## 每日优选报告 ($(TZ=Asia/Shanghai date +'%Y-%m-%d'))" > results/summary.md
-          echo "| IP | 延迟(ms) | 健康分 | 节点 |" >> results/summary.md
-          echo "|---|---|---|---|" >> results/summary.md
-          jq -r '.data[:5] | .[] | "| \(.ip) | \(.latency) | \(.score) | \(.colo) |"' results/latest.json >> results/summary.md
-          
-          # 4. 安全的历史清理
-          cp results/latest.json results/history/$(TZ=Asia/Shanghai date +'%Y-%m-%d').json
-          find results/history -name "*.json" | sort | head -n -90 | xargs -r rm -f
-
-      - name: Commit and Push
+      - name: Save to Repo
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git fetch origin
-          # 使用更温和的同步策略，避免强行覆盖导致的冲突
-          git pull --rebase origin ${{ github.ref_name }} || true
-          git add -- results/
-          if ! git diff --cached --quiet; then
-            git commit -m "Update MAX metrics [skip ci]" && git push
-          fi
+          git add candidate_ips.txt
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update IPs" && git push)
