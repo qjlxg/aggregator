@@ -2,40 +2,27 @@ name: Cloudflare Optimizer Pro MAX
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - 'cf-optimizer_max.py'
-      - '.github/workflows/cf-optimizer.yml'
-    paths-ignore:
-      - 'results/**'
-      - 'README.md'
+    branches: [main]
+    paths: ['cf-optimizer-max.py', '.github/workflows/cf-optimizer-max.yml']
+    paths-ignore: ['results/**', 'README.md']
   schedule:
     - cron: '0 16 * * *'
   workflow_dispatch:
 
-permissions:
-  contents: write
-
-concurrency:
-  group: cloudflare-optimizer
-  cancel-in-progress: true
+permissions: {contents: write}
+concurrency: {group: cloudflare-optimizer, cancel-in-progress: true}
 
 jobs:
   run-analysis:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: "pip"
-
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11", cache: "pip"}
+      
       - name: Install Dependencies
         run: |
+          sudo apt-get update && sudo apt-get install -y jq
           echo "requests==2.32.3" > requirements.txt
           pip install -r requirements.txt
 
@@ -44,45 +31,32 @@ jobs:
           set -e
           mkdir -p results/history
           
-          # 1. 运行核心分析脚本
-          python3 cf-optimizer_max.py | tee results/run.log
+          # 1. 运行核心分析
+          python3 cf-optimizer-max.py | tee results/run.log
           
-          # 2. 使用 jq 生成 Markdown 摘要
+          # 2. JSON 合法性校验
+          if ! jq empty results/latest.json; then
+            echo "Error: JSON invalid" && exit 1
+          fi
+          
+          # 3. 生成 Markdown 报表
           echo "## 每日优选报告 ($(TZ=Asia/Shanghai date +'%Y-%m-%d'))" > results/summary.md
           echo "| IP | 延迟(ms) | 健康分 | 节点 |" >> results/summary.md
           echo "|---|---|---|---|" >> results/summary.md
+          jq -r '.data[:5] | .[] | "| \(.ip) | \(.latency) | \(.score) | \(.colo) |"' results/latest.json >> results/summary.md
           
-          if [ -f results/latest.json ]; then
-            jq -r '.data[:5] | .[] | "| \(.ip) | \(.latency) | \(.score) | \(.colo) |"' results/latest.json >> results/summary.md
-          else
-            echo "Error: results/latest.json not found!"
-            exit 1
-          fi
-          
-          # 3. 历史数据留存：只保留最近 90 个历史文件
+          # 4. 安全的历史清理
           cp results/latest.json results/history/$(TZ=Asia/Shanghai date +'%Y-%m-%d').json
-          ls -t results/history/*.json 2>/dev/null | tail -n +91 | xargs -r rm -f
+          find results/history -name "*.json" | sort | head -n -90 | xargs -r rm -f
 
       - name: Commit and Push
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          
-          # 强制同步远程分支，确保 CI 环境清洁
           git fetch origin
-          git reset --hard origin/${{ github.ref_name }}
-          
+          # 使用更温和的同步策略，避免强行覆盖导致的冲突
+          git pull --rebase origin ${{ github.ref_name }} || true
           git add -- results/
-          
           if ! git diff --cached --quiet; then
-            git commit -m "Update MAX metrics [skip ci]"
-            git push origin HEAD:${{ github.ref_name }}
+            git commit -m "Update MAX metrics [skip ci]" && git push
           fi
-
-      - name: Upload Artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: optimizer-data
-          path: results/
-          if-no-files-found: warn
