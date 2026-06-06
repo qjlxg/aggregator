@@ -1,24 +1,48 @@
-import base64
+import requests
+import urllib3
+import time
 
-# 使用你截图中的真实参数
-UUID = "82d277fb-db97-4daf-a071-c88a10e4393e"
-DOMAIN = "and.qjlxg.workers.dev"
-PATH = "/7ed=2560"  # 你的真实路径
-PORT = 80            # 你的真实端口
-# 你的节点 Security 为空，意味着不使用 TLS 加密
-TLS = "" 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-TOP_IPS = ['104.16.123.1', '104.18.25.1', '172.67.140.1']
+ips = [
+    '104.16.0.1', '104.17.0.1', '104.18.0.1',
+    '172.64.0.1', '172.66.0.1',
+    '188.114.96.1'
+]
 
-sub_links = ""
-for ip in TOP_IPS:
-    # 构造复刻版链接
-    # 注意：这里我们去掉了 security=tls，完全模拟你那个“能用”的节点
-    link = f"vless://{UUID}@{ip}:{PORT}?type=ws&host={DOMAIN}&path={PATH}#CF-优选-{ip}"
-    sub_links += link + "\n"
+valid_ips = []
 
-encoded_sub = base64.b64encode(sub_links.encode()).decode()
-with open("sub.yaml", "w") as f:
-    f.write(encoded_sub)
+for ip in ips:
+    try:
+        start = time.time()
 
-print("生成成功！已精准复刻节点参数。")
+        r = requests.get(
+            f"https://{ip}/cdn-cgi/trace",
+            headers={"Host": "cloudflare.com"},
+            timeout=3,
+            verify=False
+        )
+
+        cost = int((time.time() - start) * 1000)
+
+        # ✔ 稳定判断三条件
+        if (
+            r.status_code == 200
+            and "colo=" in r.text
+            and cost < 3000
+        ):
+            valid_ips.append((cost, ip))
+
+    except:
+        continue
+
+# ✔ 按稳定性排序（不是“假测速”）
+valid_ips.sort()
+
+# ✔ 至少保证有 fallback
+output = [ip for _, ip in valid_ips] or ips[:3]
+
+with open("candidate_ips.txt", "w") as f:
+    f.write("\n".join(output))
+
+print("valid:", len(output)) 哪 一版好
