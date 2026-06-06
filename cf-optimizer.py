@@ -1,15 +1,15 @@
-import requests
-import urllib3
-import time
+import socket
+import ssl
 import ipaddress
 import random
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import requests
+import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# =========================
-# 固定备用库
-# =========================
+# ========== 默认备用 IP ==========
 DEFAULT_IPS = [
     '104.16.0.1',
     '104.17.0.1',
@@ -20,200 +20,93 @@ DEFAULT_IPS = [
     '104.17.146.56',
 ]
 
-# =========================
-# Cloudflare 官方网段
-# =========================
+# ========== Cloudflare 官方网段 ==========
 CF_RANGES = [
-    "173.245.48.0/20",
-    "103.21.244.0/22",
-    "103.22.200.0/22",
-    "103.31.4.0/22",
-    "141.101.64.0/18",
-    "108.162.192.0/18",
-    "190.93.240.0/20",
-    "188.114.96.0/20",
-    "197.234.240.0/22",
-    "198.41.128.0/17",
-    "162.158.0.0/15",
     "104.16.0.0/13",
     "104.24.0.0/14",
     "172.64.0.0/13",
-    "131.0.72.0/22",
+    "188.114.96.0/20",
+    "162.158.0.0/15",
+    "141.101.64.0/18",
+    "198.41.128.0/17",
+    "173.245.48.0/20",
 ]
 
-# =========================
-# 获取优选IP
-# =========================
+# ========== 获取 ip.164746.xyz ==========
 def get_ips_from_api():
     try:
         headers = {
-            "User-Agent": (
-                "Mozilla/5.0 "
-                "(Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 "
-                "(KHTML, like Gecko) "
-                "Chrome/120.0 Safari/537.36"
-            )
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
         }
-
-        response = requests.get(
-            "https://ip.164746.xyz/ipTop.html",
-            timeout=10,
-            headers=headers,
-        )
-
-        if response.status_code == 200 and response.text.strip():
-            ips = [
-                x.strip()
-                for x in response.text.replace("\n", ",").split(",")
-                if x.strip()
-            ]
-
-            print(f"接口返回 {len(ips)} 个IP")
-            return ips
-
-    except Exception as e:
-        print("接口获取失败:", e)
-
-    return []
-
-# =========================
-# 随机补充CF IP
-# =========================
-def generate_cf_ips(per_range=10):
-    result = []
-
-    for cidr in CF_RANGES:
-        net = ipaddress.ip_network(cidr)
-
-        for _ in range(per_range):
-            ip = str(
-                net.network_address
-                + random.randint(1, net.num_addresses - 2)
-            )
-            result.append(ip)
-
-    return result
-
-# =========================
-# 检测IP
-# =========================
-def check_ip(ip):
-    try:
-        start = time.time()
-
-        r = requests.get(
-            f"https://{ip}/cdn-cgi/trace",
-            headers={
-                "Host": "cloudflare.com",
-                "User-Agent": "Mozilla/5.0"
-            },
-            timeout=5,
-            verify=False,
-        )
-
-        latency = int((time.time() - start) * 1000)
-
-        if (
-            r.status_code == 200
-            and "colo=" in r.text
-        ):
-            colo = "unknown"
-
-            for line in r.text.splitlines():
-                if line.startswith("colo="):
-                    colo = line.split("=")[1]
-                    break
-
-            return {
-                "ip": ip,
-                "latency": latency,
-                "colo": colo,
-            }
-
+        r = requests.get("https://ip.164746.xyz/ipTop.html", headers=headers, timeout=10)
+        if r.status_code == 200 and r.text.strip():
+            return [x.strip() for x in r.text.replace("\n", ",").split(",") if x.strip()]
     except:
         pass
+    return []
 
-    return None
+# ========== 随机生成 CF 官方 IP ==========
+def generate_cf_ips(per_range=20):
+    ips = set()
+    for cidr in CF_RANGES:
+        net = ipaddress.ip_network(cidr)
+        for _ in range(per_range):
+            ip = str(net.network_address + random.randint(1, net.num_addresses - 2))
+            ips.add(ip)
+    return list(ips)
 
-# =========================
-# 主程序
-# =========================
+# ========== TCP/SNI 探测 ==========
+def check_ip(ip, port=443, timeout=3):
+    start = time.time()
+    try:
+        context = ssl.create_default_context()
+        with socket.create_connection((ip, port), timeout=timeout) as sock:
+            with context.wrap_socket(sock, server_hostname="cloudflare.com"):
+                latency = int((time.time() - start) * 1000)
+                return {"ip": ip, "latency": latency}
+    except:
+        return None
+
+# ========== 主程序 ==========
 def main():
-
     api_ips = get_ips_from_api()
+    candidates = set(api_ips + DEFAULT_IPS)
 
-    # API + 默认库
-    candidates = set(api_ips)
-    candidates.update(DEFAULT_IPS)
-
-    # 如果数量太少自动补充
+    # 如果候选太少自动补充
     if len(candidates) < 50:
-        print("优选IP不足，自动补充官方网段")
         candidates.update(generate_cf_ips(20))
 
     candidates = list(candidates)
-
-    print(f"待检测IP数量: {len(candidates)}")
+    print(f"待检测 IP 数量: {len(candidates)}")
 
     results = []
-
     with ThreadPoolExecutor(max_workers=100) as executor:
-        futures = {
-            executor.submit(check_ip, ip): ip
-            for ip in candidates
-        }
-
+        futures = {executor.submit(check_ip, ip): ip for ip in candidates}
         for future in as_completed(futures):
-            result = future.result()
-
-            if result:
-                results.append(result)
-
-                print(
-                    f"[OK] "
-                    f"{result['ip']} "
-                    f"{result['latency']}ms "
-                    f"{result['colo']}"
-                )
+            res = future.result()
+            if res:
+                results.append(res)
+                print(f"[OK] {res['ip']} {res['latency']}ms")
 
     if not results:
-        print("没有检测到有效IP，回退默认库")
-        results = [
-            {
-                "ip": ip,
-                "latency": 9999,
-                "colo": "fallback"
-            }
-            for ip in DEFAULT_IPS
-        ]
+        print("没有检测到可用 IP，直接使用默认库")
+        results = [{"ip": ip, "latency": 9999} for ip in DEFAULT_IPS]
 
     results.sort(key=lambda x: x["latency"])
 
-    # 保存全部结果
+    # 写入 candidate_ips.txt
     with open("candidate_ips.txt", "w") as f:
         for item in results:
             f.write(item["ip"] + "\n")
 
-    # 保存详细结果
+    # 写入详细结果
     with open("candidate_ips_detail.txt", "w") as f:
         for item in results:
-            f.write(
-                f"{item['ip']},"
-                f"{item['latency']}ms,"
-                f"{item['colo']}\n"
-            )
+            f.write(f"{item['ip']},{item['latency']}ms\n")
 
-    print("\n===== TOP 20 =====")
-
+    print("\n===== TOP 20 IP =====")
     for item in results[:20]:
-        print(
-            f"{item['ip']:15} "
-            f"{item['latency']:4}ms "
-            f"{item['colo']}"
-        )
-
-    print(f"\n最终存活IP数量: {len(results)}")
+        print(f"{item['ip']:15} {item['latency']}ms")
 
 if __name__ == "__main__":
     main()
