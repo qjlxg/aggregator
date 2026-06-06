@@ -1,15 +1,15 @@
-name: Cloudflare IP Optimizer & Sync
+name: Cloudflare Optimizer Pro MAX
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'cf-optimizer.py'
+      - 'cf-optimizer_max.py'
       - '.github/workflows/cf-optimizer.yml'
-    # 彻底解决 CI 循环风暴：忽略结果目录的变动
     paths-ignore:
       - 'results/**'
+      - 'README.md'
   schedule:
     - cron: '0 16 * * *'
   workflow_dispatch:
@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  filter:
+  run-analysis:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,43 +32,51 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip" # 开启 pip 缓存
+          cache: "pip"
 
       - name: Install Dependencies
         run: |
-          pip install requests
+          echo "requests==2.32.3" > requirements.txt
+          pip install -r requirements.txt
 
-      - name: Fetch and Filter IPs
-        timeout-minutes: 5
+      - name: Run Analysis
         run: |
           set -e
-          python3 cf-optimizer.py 
+          mkdir -p results/history
           
-          if [ ! -f candidate_ips.txt ]; then
-            echo "Error: candidate_ips.txt not generated"
+          # 1. 运行核心分析脚本
+          python3 cf-optimizer_max.py | tee results/run.log
+          
+          # 2. 使用 jq 生成 Markdown 摘要
+          echo "## 每日优选报告 ($(TZ=Asia/Shanghai date +'%Y-%m-%d'))" > results/summary.md
+          echo "| IP | 延迟(ms) | 健康分 | 节点 |" >> results/summary.md
+          echo "|---|---|---|---|" >> results/summary.md
+          
+          if [ -f results/latest.json ]; then
+            jq -r '.data[:5] | .[] | "| \(.ip) | \(.latency) | \(.score) | \(.colo) |"' results/latest.json >> results/summary.md
+          else
+            echo "Error: results/latest.json not found!"
             exit 1
           fi
-
-          mkdir -p results/history
-          cp candidate_ips.txt results/latest.txt
-          cp candidate_ips.txt results/history/$(TZ=Asia/Shanghai date +'%Y-%m-%d').txt
           
-          # 修正历史文件清理逻辑：只保留最近 90 个文件，不受文件 mtime 影响
-          ls -t results/history/* 2>/dev/null | tail -n +91 | xargs -r rm -f
+          # 3. 历史数据留存：只保留最近 90 个历史文件
+          cp results/latest.json results/history/$(TZ=Asia/Shanghai date +'%Y-%m-%d').json
+          ls -t results/history/*.json 2>/dev/null | tail -n +91 | xargs -r rm -f
 
       - name: Commit and Push
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
           
-          git pull --rebase origin "${GITHUB_REF_NAME}"
+          # 强制同步远程分支，确保 CI 环境清洁
+          git fetch origin
+          git reset --hard origin/${{ github.ref_name }}
+          
           git add -- results/
           
-          if git diff --cached --quiet; then
-            echo 'No changes detected.'
-          else
-            git commit -m "Update results [skip ci]"
-            git push
+          if ! git diff --cached --quiet; then
+            git commit -m "Update MAX metrics [skip ci]"
+            git push origin HEAD:${{ github.ref_name }}
           fi
 
       - name: Upload Artifact
