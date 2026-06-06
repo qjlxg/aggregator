@@ -1,8 +1,14 @@
-name: Cloudflare IP Optimizer Pro
+name: Cloudflare IP Optimizer & Sync
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'cf-optimizer.py'
+      - '.github/workflows/cf-optimizer.yml'
   schedule:
-    - cron: '0 16 * * *' # 北京时间 00:00 执行
+    - cron: '0 16 * * *'
   workflow_dispatch:
 
 permissions:
@@ -23,31 +29,26 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-        
+          cache: "pip"
 
       - name: Install Dependencies
-        run: |
-          pip install requests
-         
+        run: pip install requests
 
       - name: Fetch and Filter IPs
         timeout-minutes: 5
         run: |
-          set -e # 建议5：脚本失败立即终止
+          set -e
           python3 script.py 
           
-          # 检查输出是否存在
           if [ ! -f candidate_ips.txt ]; then
             echo "Error: candidate_ips.txt not generated"
             exit 1
           fi
 
-          # 建议4/6：整理目录结构并适配北京时间
           mkdir -p results/history
           cp candidate_ips.txt results/latest.txt
+          # 强制指定北京时间生成历史文件名
           cp candidate_ips.txt results/history/$(TZ=Asia/Shanghai date +'%Y-%m-%d').txt
-
-          # 建议3：保留策略（仅保留最近 90 天）
           find results/history -type f -mtime +90 -delete
 
       - name: Commit and Push
@@ -55,7 +56,6 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           
-          # 建议2：先 pull 再 add，避免冲突
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git add -- results/
           
@@ -67,7 +67,7 @@ jobs:
           fi
 
       - name: Upload Artifact
-        if: always() # 建议4：即使失败也上传
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: optimizer-data
