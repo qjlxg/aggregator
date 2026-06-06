@@ -45,4 +45,4 @@ output = [ip for _, ip in valid_ips] or ips[:3]
 with open("candidate_ips.txt", "w") as f:
     f.write("\n".join(output))
 
-print("valid:", len(output)) 哪 一版好
+print("valid:", len(output))
