@@ -4,44 +4,42 @@ on:
   push:
   workflow_dispatch:
 
-permissions: {contents: write}
-
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - run: pip install requests
+
       - name: Generate Subscription
         run: |
-          # 1. 运行你的测速脚本，确保它生成 candidate_ips.txt
           python3 cf-optimizer.py
-          
-          # 2. 拼接节点字符串
           sub_content=""
           while read -r IP; do
             if [ -n "$IP" ]; then
-              # 使用你确认过能用的精准模板
-              LINK="vless://82d277fb-db97-4daf-a071-c88a10e4393e@$IP:80?type=ws&host=and.qjlxg.workers.dev&path=/7ed=2560#CF-优选-$IP"
+              LINK="vless://82d277fb-db97-4daf-a071-c88a10e4393e@$IP:80?type=ws&host=and.qjlxg.workers.dev&path=%2F7ed%3D2560#CF-优选-$IP"
               sub_content+="$LINK\n"
             fi
           done < candidate_ips.txt
-          
-          # 3. 如果 sub_content 不为空，进行 base64 编码并保存
-          if [ -n "$sub_content" ]; then
-            echo -n -e "$sub_content" | base64 > sub.yaml
-          else
-            echo "Error: No IPs found!"
-            exit 1
-          fi
+          echo -n -e "$sub_content" | base64 -w 0 > sub.txt
 
-      - name: Deploy to gh-pages
+      - name: Push to Private Repo
         run: |
+          git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/qjlxg/362.git private_repo
+          cp sub.txt candidate_ips.txt private_repo/
+          cd private_repo
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          # 创建或切换到 gh-pages 分支
-          git checkout -B gh-pages
-          # 强制将 sub.yaml 移动到根目录（因为 Pages 通常读根目录）
-          git add -f sub.yaml
-          git commit -m "Update subscription $(date +'%Y-%m-%d')"
-          git push origin gh-pages --force
+          git add sub.txt candidate_ips.txt
+          if ! git diff --cached --quiet; then
+            git commit -m "Update subscription $(date +'%Y-%m-%d %H:%M:%S')"
+            git push origin main
+            echo "同步成功"
+          else
+            echo "内容未变化，无需更新"
+          fi
