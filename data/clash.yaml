@@ -1,5 +1,5 @@
 # owner=qjlxg
-# Total: 313 | Updated: 2026-06-12 18:13:59
+# Total: 330 | Updated: 2026-06-12 21:04:06
 port: 7890
 socks-port: 7891
 allow-lan: true
@@ -96,6 +96,20 @@ proxies:
   sni: flc.ydns.eu
   alpn:
   - h3
+- name: 🇭🇰香港_19bf3_ESET_NOD32_Symantec_Endpoint_McAfee Security_2a
+  server: 154.219.122.196
+  port: 5656
+  udp: true
+  type: ss
+  cipher: auto
+  password: Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTo3ODVjYmY0My1hNGQ5LTRmYjktYmU0MS00M2FlYzcyMmNkYjk=
+- name: 🇯🇵日本_870f6_ESET_NOD32_Symantec_Endpoint_McAfee Security_fe
+  server: 57.180.96.31
+  port: 8388
+  udp: true
+  type: ss
+  cipher: auto
+  password: YWVzLTI1Ni1nY206UHhibm4rMDkwbkljQWl5L2d3RnZ6dz09
 - name: 🇯🇵日本_66410_ESET_NOD32_Symantec_Endpoint_McAfee Security_15
   server: 202.182.120.175
   port: 23456
@@ -252,6 +266,18 @@ proxies:
   reality-opts:
     public-key: WrPShaEtQUXeKeyWDuELzBsd_ygDsU-k2bL1Avi13xI
     short-id: ''
+- name: 🇫🇷法国_66e17_ESET_NOD32_Symantec_Endpoint_McAfee Security_89
+  server: 89.208.113.157
+  port: 443
+  udp: true
+  type: vless
+  uuid: 1f4c983e-382c-d2fa-b2dc-7981f02b34de
+  tls: true
+  flow: xtls-rprx-vision
+  servername: parisjetaime.com
+  reality-opts:
+    public-key: 2dgS9vJTywAfGZmlkuzDIIXLUR-E1A-0na8_W--ruUc
+    short-id: 5be8210215
 - name: 🇸🇪瑞典_c5871_ESET_NOD32_Symantec_Endpoint_McAfee Security_66
   server: 2.27.23.139
   port: 9443
@@ -369,6 +395,18 @@ proxies:
   reality-opts:
     public-key: fqtdkiWzUhucuGd-Kb6-6205A45asbxfZs7SVsDdDAg
     short-id: ''
+- name: 🇪🇸西班牙_c013c_ESET_NOD32_Symantec_Endpoint_McAfee Security_26
+  server: 212.46.38.14
+  port: 443
+  udp: true
+  type: vless
+  uuid: 3bb03d0d-d44d-47e9-9611-0f4a3a29498f
+  tls: true
+  flow: xtls-rprx-vision
+  servername: technology.proektblog.space
+  reality-opts:
+    public-key: 97Crozt42QmVeBWA-HT2th6U33_x-gwo6qXQV-EjfxM
+    short-id: bc4da5d1b3e128e6
 - name: 🇺🇸美国_87e2a_ESET_NOD32_Symantec_Endpoint_McAfee Security_b3
   server: 31.77.196.103
   port: 443
@@ -1387,7 +1425,7 @@ proxies:
   tls: true
   flow: ''
   servername: cdn7-09.vk-cdnvideo.com
-- name: 🇷🇴罗马尼亚_66e97_ESET_NOD32_Symantec_Endpoint_McAfee Security_a6
+- name: 🇳🇱荷兰_66e97_ESET_NOD32_Symantec_Endpoint_McAfee Security_a6
   server: cdn3-87.vk-cdnvideo.com
   port: 8443
   udp: true
@@ -2380,6 +2418,144 @@ proxies:
   reality-opts:
     public-key: 5QAO98ot2U7TcGs_f6EEaQjCzNOJLNHqPf6smYsdFVI
     short-id: be0ce047
+- name: 🇺🇸美国_3f735_ESET_NOD32_Symantec_Endpoint_McAfee Security_41
+  server: 144.31.243.96
+  port: 8443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.microsoft.com
+  reality-opts:
+    public-key: Ucl1yzZEDKXJGE6DVhHU7zYVLpU5bvJNtqywmyK_yxQ
+    short-id: b1b2b3a4
+- name: 🇸🇪瑞典_e80ed_ESET_NOD32_Symantec_Endpoint_McAfee Security_8d
+  server: 176.124.207.194
+  port: 8443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: ''
+  servername: 'null'
+- name: 🇺🇸美国_53adc_ESET_NOD32_Symantec_Endpoint_McAfee Security_b7
+  server: 2.26.88.221
+  port: 8443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.microsoft.com
+  reality-opts:
+    public-key: Ucl1yzZEDKXJGE6DVhHU7zYVLpU5bvJNtqywmyK_yxQ
+    short-id: b1b2b3a4
+- name: 🇩🇪德国_31975_ESET_NOD32_Symantec_Endpoint_McAfee Security_d5
+  server: 78.17.74.105
+  port: 8443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.microsoft.com
+  reality-opts:
+    public-key: xPEGOkemuDiyFtsONindkZogpEo8HC-Zs_puF-0GbUA
+    short-id: b1b7b3a4
+- name: 🇦🇪阿联酋_cf632_ESET_NOD32_Symantec_Endpoint_McAfee Security_e9
+  server: 78.17.98.36
+  port: 8443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.microsoft.com
+  reality-opts:
+    public-key: HA772VN0jk_nXjzMj2O1vxR4Ibr2OyS-rfMb6VJggnU
+    short-id: d5e7f1a2
+- name: 🇳🇱荷兰_c7448_ESET_NOD32_Symantec_Endpoint_McAfee Security_f7
+  server: 87.58.216.192
+  port: 8443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.microsoft.com
+  reality-opts:
+    public-key: bLUwhE1Gik9d9Woyk3RvGwEnPVs767CEetApHt8unSY
+    short-id: e2b4c6f5
+- name: 🇦🇪阿联酋_12e7c_ESET_NOD32_Symantec_Endpoint_McAfee Security_95
+  server: 89.125.212.104
+  port: 8443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.microsoft.com
+  reality-opts:
+    public-key: 05cbXg151A4Ip3uNCeSvtWE1Fl_JoDAwqZ-JfFZxlH8
+    short-id: a3f7c2e1
+- name: 🇦🇪阿联酋_d906c_ESET_NOD32_Symantec_Endpoint_McAfee Security_57
+  server: 94.183.239.13
+  port: 8443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: ''
+  servername: 'null'
+- name: 🇦🇪阿联酋_2d838_ESET_NOD32_Symantec_Endpoint_McAfee Security_d3
+  server: cdn-de.tgflovv.ru
+  port: 443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: ''
+  servername: 'null'
+- name: 🇦🇪阿联酋_41ec8_ESET_NOD32_Symantec_Endpoint_McAfee Security_a5
+  server: cdn-fin.tgflovv.ru
+  port: 443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: ''
+  servername: 'null'
+- name: 🇦🇪阿联酋_aa929_ESET_NOD32_Symantec_Endpoint_McAfee Security_c8
+  server: cdn-nl.tgflovv.ru
+  port: 443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: ''
+  servername: 'null'
+- name: 🇦🇪阿联酋_6d4ad_ESET_NOD32_Symantec_Endpoint_McAfee Security_31
+  server: cdn-us.tgflovv.ru
+  port: 443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: ''
+  servername: 'null'
+- name: 🇫🇮芬兰_678ad_ESET_NOD32_Symantec_Endpoint_McAfee Security_7f
+  server: origin-fin.tgflovv.ru
+  port: 8443
+  udp: true
+  type: vless
+  uuid: b6a3cf09-1c4f-4d29-8688-1afca647ce30
+  tls: true
+  flow: xtls-rprx-vision
+  servername: www.microsoft.com
+  reality-opts:
+    public-key: Ucl1yzZEDKXJGE6DVhHU7zYVLpU5bvJNtqywmyK_yxQ
+    short-id: b1b2b3a4
 - name: 🏳️未知_0283a_ESET_NOD32_Symantec_Endpoint_McAfee Security_fb
   server: 162.159.153.235
   port: 2053
@@ -3701,6 +3877,8 @@ proxy-groups:
   - 🇨🇿捷克_d9e0c_ESET_NOD32_Symantec_Endpoint_McAfee Security_b3
   - 🇩🇪德国_c44dc_ESET_NOD32_Symantec_Endpoint_McAfee Security_cb
   - 🇺🇸美国_bc405_ESET_NOD32_Symantec_Endpoint_McAfee Security_a9
+  - 🇭🇰香港_19bf3_ESET_NOD32_Symantec_Endpoint_McAfee Security_2a
+  - 🇯🇵日本_870f6_ESET_NOD32_Symantec_Endpoint_McAfee Security_fe
   - 🇯🇵日本_66410_ESET_NOD32_Symantec_Endpoint_McAfee Security_15
   - 🇺🇸美国_2dbcc_ESET_NOD32_Symantec_Endpoint_McAfee Security_d8
   - 🇺🇸美国_cf7e1_ESET_NOD32_Symantec_Endpoint_McAfee Security_92
@@ -3714,6 +3892,7 @@ proxy-groups:
   - 🇸🇬新加坡_6d915_ESET_NOD32_Symantec_Endpoint_McAfee Security_c4
   - 🇺🇸美国_437f6_ESET_NOD32_Symantec_Endpoint_McAfee Security_8f
   - 🇷🇺俄罗斯联邦_ae4cf_ESET_NOD32_Symantec_Endpoint_McAfee Security_89
+  - 🇫🇷法国_66e17_ESET_NOD32_Symantec_Endpoint_McAfee Security_89
   - 🇸🇪瑞典_c5871_ESET_NOD32_Symantec_Endpoint_McAfee Security_66
   - 🇩🇪德国_d67e8_ESET_NOD32_Symantec_Endpoint_McAfee Security_e8
   - 🇷🇺俄罗斯联邦_b6bbe_ESET_NOD32_Symantec_Endpoint_McAfee Security_b5
@@ -3724,6 +3903,7 @@ proxy-groups:
   - 🇩🇪德国_cbeac_ESET_NOD32_Symantec_Endpoint_McAfee Security_8c
   - 🇷🇺俄罗斯联邦_9b7c9_ESET_NOD32_Symantec_Endpoint_McAfee Security_ce
   - 🇷🇺俄罗斯联邦_50724_ESET_NOD32_Symantec_Endpoint_McAfee Security_54
+  - 🇪🇸西班牙_c013c_ESET_NOD32_Symantec_Endpoint_McAfee Security_26
   - 🇺🇸美国_87e2a_ESET_NOD32_Symantec_Endpoint_McAfee Security_b3
   - 🇵🇱波兰_6fecb_ESET_NOD32_Symantec_Endpoint_McAfee Security_cf
   - 🇭🇰香港_369d4_ESET_NOD32_Symantec_Endpoint_McAfee Security_d9
@@ -3816,7 +3996,7 @@ proxy-groups:
   - 🇷🇴罗马尼亚_e2742_ESET_NOD32_Symantec_Endpoint_McAfee Security_45
   - 🇷🇴罗马尼亚_fed2e_ESET_NOD32_Symantec_Endpoint_McAfee Security_d8
   - 🇷🇴罗马尼亚_3d45e_ESET_NOD32_Symantec_Endpoint_McAfee Security_bf
-  - 🇷🇴罗马尼亚_66e97_ESET_NOD32_Symantec_Endpoint_McAfee Security_a6
+  - 🇳🇱荷兰_66e97_ESET_NOD32_Symantec_Endpoint_McAfee Security_a6
   - 🇷🇴罗马尼亚_47dfe_ESET_NOD32_Symantec_Endpoint_McAfee Security_98
   - 🇷🇴罗马尼亚_a3dc0_ESET_NOD32_Symantec_Endpoint_McAfee Security_a4
   - 🇨🇿捷克_7f011_ESET_NOD32_Symantec_Endpoint_McAfee Security_b4
@@ -3898,6 +4078,19 @@ proxy-groups:
   - 🇳🇱荷兰_93ea7_ESET_NOD32_Symantec_Endpoint_McAfee Security_7b
   - 🇫🇷法国_2037c_ESET_NOD32_Symantec_Endpoint_McAfee Security_ed
   - 🇦🇺澳大利亚_8d6af_ESET_NOD32_Symantec_Endpoint_McAfee Security_73
+  - 🇺🇸美国_3f735_ESET_NOD32_Symantec_Endpoint_McAfee Security_41
+  - 🇸🇪瑞典_e80ed_ESET_NOD32_Symantec_Endpoint_McAfee Security_8d
+  - 🇺🇸美国_53adc_ESET_NOD32_Symantec_Endpoint_McAfee Security_b7
+  - 🇩🇪德国_31975_ESET_NOD32_Symantec_Endpoint_McAfee Security_d5
+  - 🇦🇪阿联酋_cf632_ESET_NOD32_Symantec_Endpoint_McAfee Security_e9
+  - 🇳🇱荷兰_c7448_ESET_NOD32_Symantec_Endpoint_McAfee Security_f7
+  - 🇦🇪阿联酋_12e7c_ESET_NOD32_Symantec_Endpoint_McAfee Security_95
+  - 🇦🇪阿联酋_d906c_ESET_NOD32_Symantec_Endpoint_McAfee Security_57
+  - 🇦🇪阿联酋_2d838_ESET_NOD32_Symantec_Endpoint_McAfee Security_d3
+  - 🇦🇪阿联酋_41ec8_ESET_NOD32_Symantec_Endpoint_McAfee Security_a5
+  - 🇦🇪阿联酋_aa929_ESET_NOD32_Symantec_Endpoint_McAfee Security_c8
+  - 🇦🇪阿联酋_6d4ad_ESET_NOD32_Symantec_Endpoint_McAfee Security_31
+  - 🇫🇮芬兰_678ad_ESET_NOD32_Symantec_Endpoint_McAfee Security_7f
   - 🏳️未知_0283a_ESET_NOD32_Symantec_Endpoint_McAfee Security_fb
   - 🏳️未知_613ad_ESET_NOD32_Symantec_Endpoint_McAfee Security_a8
   - 🇷🇺俄罗斯联邦_17172_ESET_NOD32_Symantec_Endpoint_McAfee Security_61
@@ -4020,6 +4213,8 @@ proxy-groups:
   - 🇨🇿捷克_d9e0c_ESET_NOD32_Symantec_Endpoint_McAfee Security_b3
   - 🇩🇪德国_c44dc_ESET_NOD32_Symantec_Endpoint_McAfee Security_cb
   - 🇺🇸美国_bc405_ESET_NOD32_Symantec_Endpoint_McAfee Security_a9
+  - 🇭🇰香港_19bf3_ESET_NOD32_Symantec_Endpoint_McAfee Security_2a
+  - 🇯🇵日本_870f6_ESET_NOD32_Symantec_Endpoint_McAfee Security_fe
   - 🇯🇵日本_66410_ESET_NOD32_Symantec_Endpoint_McAfee Security_15
   - 🇺🇸美国_2dbcc_ESET_NOD32_Symantec_Endpoint_McAfee Security_d8
   - 🇺🇸美国_cf7e1_ESET_NOD32_Symantec_Endpoint_McAfee Security_92
@@ -4033,6 +4228,7 @@ proxy-groups:
   - 🇸🇬新加坡_6d915_ESET_NOD32_Symantec_Endpoint_McAfee Security_c4
   - 🇺🇸美国_437f6_ESET_NOD32_Symantec_Endpoint_McAfee Security_8f
   - 🇷🇺俄罗斯联邦_ae4cf_ESET_NOD32_Symantec_Endpoint_McAfee Security_89
+  - 🇫🇷法国_66e17_ESET_NOD32_Symantec_Endpoint_McAfee Security_89
   - 🇸🇪瑞典_c5871_ESET_NOD32_Symantec_Endpoint_McAfee Security_66
   - 🇩🇪德国_d67e8_ESET_NOD32_Symantec_Endpoint_McAfee Security_e8
   - 🇷🇺俄罗斯联邦_b6bbe_ESET_NOD32_Symantec_Endpoint_McAfee Security_b5
@@ -4043,6 +4239,7 @@ proxy-groups:
   - 🇩🇪德国_cbeac_ESET_NOD32_Symantec_Endpoint_McAfee Security_8c
   - 🇷🇺俄罗斯联邦_9b7c9_ESET_NOD32_Symantec_Endpoint_McAfee Security_ce
   - 🇷🇺俄罗斯联邦_50724_ESET_NOD32_Symantec_Endpoint_McAfee Security_54
+  - 🇪🇸西班牙_c013c_ESET_NOD32_Symantec_Endpoint_McAfee Security_26
   - 🇺🇸美国_87e2a_ESET_NOD32_Symantec_Endpoint_McAfee Security_b3
   - 🇵🇱波兰_6fecb_ESET_NOD32_Symantec_Endpoint_McAfee Security_cf
   - 🇭🇰香港_369d4_ESET_NOD32_Symantec_Endpoint_McAfee Security_d9
@@ -4135,7 +4332,7 @@ proxy-groups:
   - 🇷🇴罗马尼亚_e2742_ESET_NOD32_Symantec_Endpoint_McAfee Security_45
   - 🇷🇴罗马尼亚_fed2e_ESET_NOD32_Symantec_Endpoint_McAfee Security_d8
   - 🇷🇴罗马尼亚_3d45e_ESET_NOD32_Symantec_Endpoint_McAfee Security_bf
-  - 🇷🇴罗马尼亚_66e97_ESET_NOD32_Symantec_Endpoint_McAfee Security_a6
+  - 🇳🇱荷兰_66e97_ESET_NOD32_Symantec_Endpoint_McAfee Security_a6
   - 🇷🇴罗马尼亚_47dfe_ESET_NOD32_Symantec_Endpoint_McAfee Security_98
   - 🇷🇴罗马尼亚_a3dc0_ESET_NOD32_Symantec_Endpoint_McAfee Security_a4
   - 🇨🇿捷克_7f011_ESET_NOD32_Symantec_Endpoint_McAfee Security_b4
@@ -4217,6 +4414,19 @@ proxy-groups:
   - 🇳🇱荷兰_93ea7_ESET_NOD32_Symantec_Endpoint_McAfee Security_7b
   - 🇫🇷法国_2037c_ESET_NOD32_Symantec_Endpoint_McAfee Security_ed
   - 🇦🇺澳大利亚_8d6af_ESET_NOD32_Symantec_Endpoint_McAfee Security_73
+  - 🇺🇸美国_3f735_ESET_NOD32_Symantec_Endpoint_McAfee Security_41
+  - 🇸🇪瑞典_e80ed_ESET_NOD32_Symantec_Endpoint_McAfee Security_8d
+  - 🇺🇸美国_53adc_ESET_NOD32_Symantec_Endpoint_McAfee Security_b7
+  - 🇩🇪德国_31975_ESET_NOD32_Symantec_Endpoint_McAfee Security_d5
+  - 🇦🇪阿联酋_cf632_ESET_NOD32_Symantec_Endpoint_McAfee Security_e9
+  - 🇳🇱荷兰_c7448_ESET_NOD32_Symantec_Endpoint_McAfee Security_f7
+  - 🇦🇪阿联酋_12e7c_ESET_NOD32_Symantec_Endpoint_McAfee Security_95
+  - 🇦🇪阿联酋_d906c_ESET_NOD32_Symantec_Endpoint_McAfee Security_57
+  - 🇦🇪阿联酋_2d838_ESET_NOD32_Symantec_Endpoint_McAfee Security_d3
+  - 🇦🇪阿联酋_41ec8_ESET_NOD32_Symantec_Endpoint_McAfee Security_a5
+  - 🇦🇪阿联酋_aa929_ESET_NOD32_Symantec_Endpoint_McAfee Security_c8
+  - 🇦🇪阿联酋_6d4ad_ESET_NOD32_Symantec_Endpoint_McAfee Security_31
+  - 🇫🇮芬兰_678ad_ESET_NOD32_Symantec_Endpoint_McAfee Security_7f
   - 🏳️未知_0283a_ESET_NOD32_Symantec_Endpoint_McAfee Security_fb
   - 🏳️未知_613ad_ESET_NOD32_Symantec_Endpoint_McAfee Security_a8
   - 🇷🇺俄罗斯联邦_17172_ESET_NOD32_Symantec_Endpoint_McAfee Security_61
